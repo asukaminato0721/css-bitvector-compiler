@@ -165,51 +165,6 @@ fn process_node_generated_inplace(
     child_states
 }
 
-fn process_node_generated(
-    node: &HtmlNode,
-    parent_state: u64,
-) -> (u64, u64) { // (current_matches, child_states)
-    let mut current_matches: u64 = 0;
-    let mut child_states: u64 = 0;
-
-    // Instruction 0: CheckAndSetBit { selector: Type("div"), bit_pos: 0 }
-    if node_matches_selector(node, &SimpleSelector::Type("div".to_string())) {
-        current_matches |= 1 << 0; // match_Type("div")
-    }
-
-    // Instruction 1: PropagateToChildren { match_bit: 0, active_bit: 1 }
-    if (current_matches & (1 << 0)) != 0 {
-        child_states |= 1 << 1; // active_Type("div")
-    }
-
-    // Instruction 2: CheckAndSetBit { selector: Class("item"), bit_pos: 2 }
-    if node_matches_selector(node, &SimpleSelector::Class("item".to_string())) {
-        current_matches |= 1 << 2; // match_Class("item")
-    }
-
-    // Instruction 3: PropagateToChildren { match_bit: 2, active_bit: 3 }
-    if (current_matches & (1 << 2)) != 0 {
-        child_states |= 1 << 3; // active_Class("item")
-    }
-
-    // Instruction 4: CheckAndSetBit { selector: Id("specific"), bit_pos: 4 }
-    if node_matches_selector(node, &SimpleSelector::Id("specific".to_string())) {
-        current_matches |= 1 << 4; // match_Id("specific")
-    }
-
-    // Instruction 5: PropagateToChildren { match_bit: 4, active_bit: 5 }
-    if (current_matches & (1 << 4)) != 0 {
-        child_states |= 1 << 5; // active_Id("specific")
-    }
-
-    // Instruction 6: CheckParentAndSetBit { parent_state_bit: 1, child_selector: Class("item"), result_bit: 6 }
-    if (parent_state & (1 << 1)) != 0 && node_matches_selector(node, &SimpleSelector::Class("item".to_string())) {
-        current_matches |= 1 << 6; // match_Type("div")_gt_Class("item")
-    }
-
-    (current_matches, child_states)
-}
-
 fn process_tree_generated(root: &mut HtmlNode) {
     process_tree_recursive_generated(root, BitVector::new());
 }

@@ -292,92 +292,6 @@ impl TreeNFAProgram {
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
-        // Also generate legacy u64 version for compatibility
-        code.push_str("fn process_node_generated(\n");
-        code.push_str("    node: &HtmlNode,\n");
-        code.push_str("    parent_state: u64,\n");
-        code.push_str(") -> (u64, u64) { // (current_matches, child_states)\n");
-        code.push_str("    let mut current_matches: u64 = 0;\n");
-        code.push_str("    let mut child_states: u64 = 0;\n\n");
-
-        for (i, instruction) in self.instructions.iter().enumerate() {
-            code.push_str(&format!("    // Instruction {}: {:?}\n", i, instruction));
-            match instruction {
-                NFAInstruction::CheckAndSetBit { selector, bit_pos } => {
-                    let selector_str = match selector {
-                        SimpleSelector::Type(tag) => {
-                            format!("SimpleSelector::Type(\"{}\".to_string())", tag)
-                        }
-                        SimpleSelector::Class(class) => {
-                            format!("SimpleSelector::Class(\"{}\".to_string())", class)
-                        }
-                        SimpleSelector::Id(id) => {
-                            format!("SimpleSelector::Id(\"{}\".to_string())", id)
-                        }
-                    };
-                    code.push_str(&format!(
-                        "    if node_matches_selector(node, &{}) {{\n",
-                        selector_str
-                    ));
-                    code.push_str(&format!(
-                        "        current_matches |= 1 << {}; // {}\n",
-                        bit_pos,
-                        self.state_names
-                            .get(bit_pos)
-                            .unwrap_or(&format!("bit_{}", bit_pos))
-                    ));
-                    code.push_str("    }\n\n");
-                }
-                NFAInstruction::CheckParentAndSetBit {
-                    parent_state_bit,
-                    child_selector,
-                    result_bit,
-                } => {
-                    let child_selector_str = match child_selector {
-                        SimpleSelector::Type(tag) => {
-                            format!("SimpleSelector::Type(\"{}\".to_string())", tag)
-                        }
-                        SimpleSelector::Class(class) => {
-                            format!("SimpleSelector::Class(\"{}\".to_string())", class)
-                        }
-                        SimpleSelector::Id(id) => {
-                            format!("SimpleSelector::Id(\"{}\".to_string())", id)
-                        }
-                    };
-                    code.push_str(&format!("    if (parent_state & (1 << {})) != 0 && node_matches_selector(node, &{}) {{\n", 
-                        parent_state_bit, child_selector_str));
-                    code.push_str(&format!(
-                        "        current_matches |= 1 << {}; // {}\n",
-                        result_bit,
-                        self.state_names
-                            .get(result_bit)
-                            .unwrap_or(&format!("bit_{}", result_bit))
-                    ));
-                    code.push_str("    }\n\n");
-                }
-                NFAInstruction::PropagateToChildren {
-                    match_bit,
-                    active_bit,
-                } => {
-                    code.push_str(&format!(
-                        "    if (current_matches & (1 << {})) != 0 {{\n",
-                        match_bit
-                    ));
-                    code.push_str(&format!(
-                        "        child_states |= 1 << {}; // {}\n",
-                        active_bit,
-                        self.state_names
-                            .get(active_bit)
-                            .unwrap_or(&format!("bit_{}", active_bit))
-                    ));
-                    code.push_str("    }\n\n");
-                }
-            }
-        }
-
-        code.push_str("    (current_matches, child_states)\n");
-        code.push_str("}\n\n");
-
         // Generate driver function
         code.push_str("fn process_tree_generated(root: &mut HtmlNode) {\n");
         code.push_str("    process_tree_recursive_generated(root, BitVector::new());\n");
@@ -616,12 +530,7 @@ impl TreeNFAVM {
         child_states
     }
 
-    // Legacy method for backward compatibility with u64
-    fn execute_on_node(&self, node: &mut HtmlNode, parent_state: u64) -> u64 {
-        let parent_bitvec = BitVector::from_u64(parent_state);
-        let child_states = self.process_node_inplace(node, parent_bitvec);
-        child_states.as_u64()
-    }
+
 
     fn node_matches_selector(&self, node: &HtmlNode, selector: &SimpleSelector) -> bool {
         match selector {
@@ -676,10 +585,7 @@ impl TreeNFAVM {
         }
     }
 
-    // Legacy method for backward compatibility
-    fn dfs_execute(&self, node: &mut HtmlNode, parent_state: u64, path: String) {
-        self.dfs_execute_verbose(node, BitVector::from_u64(parent_state), path);
-    }
+
 
     // Incremental processing: only recompute when inputs change
     fn process_node_incremental(&self, node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
@@ -1168,17 +1074,17 @@ mod tests {
             );
 
         // Execute on root (div)
-        let child_states = vm.execute_on_node(&mut root, 0);
+        let child_states = vm.process_node_inplace(&mut root, BitVector::new());
 
         // Root should match "div" selector
         assert_ne!(root.css_match_bitvector.as_u64(), 0);
 
         // Root should provide active states for children
-        assert_ne!(child_states, 0);
+        assert!(!child_states.is_empty());
 
         // Execute on child (p.item)
         let mut child = HtmlNode::new("p").with_class("item");
-        let _child_child_states = vm.execute_on_node(&mut child, child_states);
+        let _child_child_states = vm.process_node_inplace(&mut child, child_states);
 
         // Child should match both ".item" and "div > .item"
         assert_ne!(child.css_match_bitvector.as_u64(), 0);
@@ -1193,7 +1099,7 @@ mod tests {
         let generated_code = program.generate_rust_code();
 
         // Check that the generated code contains expected elements
-        assert!(generated_code.contains("fn process_node_generated"));
+        assert!(generated_code.contains("fn process_node_generated_inplace"));
         assert!(generated_code.contains("current_matches"));
         assert!(generated_code.contains("child_states"));
         assert!(generated_code.contains("node_matches_selector"));
@@ -1233,28 +1139,28 @@ mod tests {
             );
 
         // Execute on root div
-        let child_states_root = vm.execute_on_node(&mut root, 0);
+        let child_states_root = vm.process_node_inplace(&mut root, BitVector::new());
 
         // Root div should match "div" rule
         assert_ne!(root.css_match_bitvector.as_u64(), 0);
 
         // Test first child (p.item)
         let mut p_item = HtmlNode::new("p").with_class("item");
-        let _child_states_p = vm.execute_on_node(&mut p_item, child_states_root);
+        let _child_states_p = vm.process_node_inplace(&mut p_item, child_states_root);
 
         // Should match: p, .item, div > p, div > .item
         assert_ne!(p_item.css_match_bitvector.as_u64(), 0);
 
         // Test span.item
         let mut span_item = HtmlNode::new("span").with_class("item");
-        let child_states_span = vm.execute_on_node(&mut span_item, child_states_root);
+        let child_states_span = vm.process_node_inplace(&mut span_item, child_states_root);
 
         // Should match: .item, div > .item
         assert_ne!(span_item.css_match_bitvector.as_u64(), 0);
 
         // Test final p#specific under span.item
         let mut p_specific = HtmlNode::new("p").with_id("specific");
-        let _final_states = vm.execute_on_node(&mut p_specific, child_states_span);
+        let _final_states = vm.process_node_inplace(&mut p_specific, child_states_span);
 
         // Should match: p, #specific, .item > #specific
         assert_ne!(p_specific.css_match_bitvector.as_u64(), 0);
@@ -1318,9 +1224,9 @@ mod tests {
         let generated_code = program.generate_rust_code();
 
         // Verify the generated code has the expected structure
-        assert!(generated_code.contains("fn process_node_generated"));
-        assert!(generated_code.contains("current_matches: u64 = 0"));
-        assert!(generated_code.contains("child_states: u64 = 0"));
+        assert!(generated_code.contains("fn process_node_generated_inplace"));
+        assert!(generated_code.contains("current_matches = BitVector::new()"));
+        assert!(generated_code.contains("child_states = BitVector::new()"));
 
         // Verify instruction generation
         assert!(generated_code.contains("CheckAndSetBit"));
@@ -1337,18 +1243,18 @@ mod tests {
 
         // Test case: div.item > span#specific
         let mut root = HtmlNode::new("div").with_class("item");
-        let child_states = vm.execute_on_node(&mut root, 0);
+        let child_states = vm.process_node_inplace(&mut root, BitVector::new());
 
         // Root should match both "div" and ".item"
         let matches = root.css_match_bitvector.as_u64();
         assert_ne!(matches, 0);
 
         // Should propagate states for children
-        assert_ne!(child_states, 0);
+        assert!(!child_states.is_empty());
 
         // Test child element
         let mut child = HtmlNode::new("span").with_id("specific");
-        let _child_child_states = vm.execute_on_node(&mut child, child_states);
+        let _child_child_states = vm.process_node_inplace(&mut child, child_states);
 
         // Child should match "#specific" and ".item > #specific"
         assert_ne!(child.css_match_bitvector.as_u64(), 0);
@@ -1686,12 +1592,12 @@ fn main() {{
                                 // Test case 1: div.item#test
                                 let mut div_node =
                                     HtmlNode::new("div").with_id("test").with_class("item");
-                                let vm_child_states = vm.execute_on_node(&mut div_node, 0);
+                                let vm_child_states = vm.process_node_inplace(&mut div_node, BitVector::new());
                                 let vm_matches = div_node.css_match_bitvector.as_u64();
 
                                 println!(
                                     "VM results for div.item#test - matches: {:016b}, child_states: {:016b}",
-                                    vm_matches, vm_child_states
+                                    vm_matches, vm_child_states.as_u64()
                                 );
 
                                 // The generated code should produce the same results as the VM
