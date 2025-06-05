@@ -342,14 +342,14 @@ fn run_test(css_file: &str, html_file: &str) {
     let bit_indices = get_bit_indices_from_rules(&rules);
 
     println!("Parsed CSS Rules: {:#?}", rules);
-    
+
     // Print bit indices map with binary values
     println!("Bit Indices Map: {{");
     for (key, &value) in &bit_indices {
         println!("    \"{}\": {:04b} ({}),", key, value, value);
     }
     println!("}}");
-    
+
     println!("Total bit states used: {}", bit_indices.len());
 
     if bit_indices.len() > 64 {
