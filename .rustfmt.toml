@@ -1,0 +1,9 @@
+# rustfmt configuration
+# Use with: cargo +nightly fmt
+# For stable version, rustfmt will format the temp_generated_test.rs file
+
+# Files to ignore (requires nightly)
+# ignore = ["temp_generated_test.rs"]
+
+# Alternative: use skip_children for directories containing generated files
+# This is more stable but less precise 
