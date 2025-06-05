@@ -1390,7 +1390,7 @@ fn main() {{
         .with_class("item")
         .add_child(HtmlNode::new("span").with_id("specific"));
     
-    println!("\\nTesting tree processing...");
+    println!("\nTesting tree processing...");
     process_tree_generated(&mut tree);
     
     fn print_tree_results(node: &HtmlNode, depth: usize) {{
