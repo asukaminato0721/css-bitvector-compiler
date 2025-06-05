@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Rust Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
