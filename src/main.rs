@@ -70,6 +70,12 @@ struct HtmlNode {
     children: Vec<HtmlNode>,
     // Stores the bitvector of *final* matching rules for this node
     css_match_bitvector: BitVector,
+
+    // Incremental processing state
+    cached_parent_state: Option<BitVector>, // Input: parent state from last computation
+    cached_node_intrinsic: Option<BitVector>, // Input: node's own selector matches (computed once)
+    cached_child_states: Option<BitVector>, // Output: states to propagate to children
+    is_dirty: bool,                         // Whether this node needs recomputation
 }
 
 impl HtmlNode {
@@ -80,22 +86,48 @@ impl HtmlNode {
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
+            cached_parent_state: None,
+            cached_node_intrinsic: None,
+            cached_child_states: None,
+            is_dirty: true,
         }
     }
 
     fn with_id(mut self, id: &str) -> Self {
         self.id = Some(id.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }
 
     fn with_class(mut self, class: &str) -> Self {
         self.classes.insert(class.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }
 
     fn add_child(mut self, child: HtmlNode) -> Self {
         self.children.push(child);
         self
+    }
+
+    // Mark this node and all descendants as needing recomputation
+    fn mark_dirty(&mut self) {
+        self.is_dirty = true;
+        self.cached_parent_state = None;
+        self.cached_node_intrinsic = None;
+        self.cached_child_states = None;
+
+        // Propagate dirtiness to children since parent state will change
+        for child in &mut self.children {
+            child.mark_dirty();
+        }
+    }
+
+    // Check if inputs have changed and we need to recompute
+    fn needs_recomputation(&self, new_parent_state: BitVector) -> bool {
+        self.is_dirty
+            || self.cached_parent_state.is_none()
+            || self.cached_parent_state.unwrap() != new_parent_state
     }
 }
 
@@ -502,6 +534,40 @@ impl CssCompiler {
 }
 
 // --- 6. Tree NFA Virtual Machine ---
+#[derive(Debug, Default)]
+struct IncrementalStats {
+    total_nodes: usize,
+    cache_hits: usize,
+    cache_misses: usize,
+}
+
+impl IncrementalStats {
+    fn new() -> Self {
+        IncrementalStats {
+            total_nodes: 0,
+            cache_hits: 0,
+            cache_misses: 0,
+        }
+    }
+
+    fn cache_hit_rate(&self) -> f64 {
+        if self.total_nodes == 0 {
+            0.0
+        } else {
+            self.cache_hits as f64 / self.total_nodes as f64
+        }
+    }
+
+    fn print_summary(&self) {
+        println!("=== Incremental Processing Stats ===");
+        println!("Total nodes processed: {}", self.total_nodes);
+        println!("Cache hits: {}", self.cache_hits);
+        println!("Cache misses: {}", self.cache_misses);
+        println!("Cache hit rate: {:.2}%", self.cache_hit_rate() * 100.0);
+        println!("=====================================");
+    }
+}
+
 struct TreeNFAVM {
     program: TreeNFAProgram,
 }
@@ -613,6 +679,112 @@ impl TreeNFAVM {
     // Legacy method for backward compatibility
     fn dfs_execute(&self, node: &mut HtmlNode, parent_state: u64, path: String) {
         self.dfs_execute_verbose(node, BitVector::from_u64(parent_state), path);
+    }
+
+    // Incremental processing: only recompute when inputs change
+    fn process_node_incremental(&self, node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
+        // Check if we need to recompute
+        if !node.needs_recomputation(parent_state) {
+            // Return cached result
+            return node.cached_child_states.unwrap_or(BitVector::new());
+        }
+
+        // Recompute node intrinsic matches if needed (this is stable unless node attributes change)
+        if node.cached_node_intrinsic.is_none() || node.is_dirty {
+            let mut intrinsic_matches = BitVector::new();
+
+            for instruction in &self.program.instructions {
+                if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
+                    if self.node_matches_selector(node, selector) {
+                        intrinsic_matches.set_bit(*bit_pos);
+                    }
+                }
+            }
+
+            node.cached_node_intrinsic = Some(intrinsic_matches);
+        }
+
+        // Compute final matches and child states
+        let mut current_matches = node.cached_node_intrinsic.unwrap();
+        let mut child_states = BitVector::new();
+
+        // Apply parent-dependent rules
+        for instruction in &self.program.instructions {
+            match instruction {
+                NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector,
+                    result_bit,
+                } => {
+                    if parent_state.is_bit_set(*parent_state_bit)
+                        && self.node_matches_selector(node, child_selector)
+                    {
+                        current_matches.set_bit(*result_bit);
+                    }
+                }
+                NFAInstruction::PropagateToChildren {
+                    match_bit,
+                    active_bit,
+                } => {
+                    if current_matches.is_bit_set(*match_bit) {
+                        child_states.set_bit(*active_bit);
+                    }
+                }
+                _ => {} // CheckAndSetBit already handled above
+            }
+        }
+
+        // Cache results
+        node.css_match_bitvector = current_matches;
+        node.cached_parent_state = Some(parent_state);
+        node.cached_child_states = Some(child_states);
+        node.is_dirty = false;
+
+        child_states
+    }
+
+    // Incremental tree processing driver
+    fn process_tree_incremental(&self, root: &mut HtmlNode) {
+        self.process_tree_incremental_recursive(root, BitVector::new());
+    }
+
+    fn process_tree_incremental_recursive(&self, node: &mut HtmlNode, parent_state: BitVector) {
+        let child_states = self.process_node_incremental(node, parent_state);
+
+        // Recursively process children
+        for child in node.children.iter_mut() {
+            self.process_tree_incremental_recursive(child, child_states);
+        }
+    }
+
+    // Debug version with statistics
+    fn process_tree_incremental_with_stats(&self, root: &mut HtmlNode) -> IncrementalStats {
+        let mut stats = IncrementalStats::new();
+        self.process_tree_incremental_recursive_with_stats(root, BitVector::new(), &mut stats);
+        stats
+    }
+
+    fn process_tree_incremental_recursive_with_stats(
+        &self,
+        node: &mut HtmlNode,
+        parent_state: BitVector,
+        stats: &mut IncrementalStats,
+    ) {
+        stats.total_nodes += 1;
+
+        let was_cached = !node.needs_recomputation(parent_state);
+        if was_cached {
+            stats.cache_hits += 1;
+        } else {
+            stats.cache_misses += 1;
+        }
+
+        let child_states = self.process_node_incremental(node, parent_state);
+
+        // Recursively process children
+        for child in node.children.iter_mut() {
+            self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
+        }
     }
 }
 
@@ -749,6 +921,29 @@ fn compile_and_run(css_file: &str, html_file: &str) {
         // Show final results
         println!("=== Final Results ===");
         print_css_results(&root_node, &vm.program.state_names, 0);
+
+        // Demonstrate incremental processing
+        println!("\n=== Incremental Processing Demo ===");
+
+        // First run - everything will be computed
+        println!("First incremental run (all cache misses expected):");
+        let stats1 = vm.process_tree_incremental_with_stats(&mut root_node);
+        stats1.print_summary();
+
+        // Second run - everything should be cached
+        println!("\nSecond incremental run (all cache hits expected):");
+        let stats2 = vm.process_tree_incremental_with_stats(&mut root_node);
+        stats2.print_summary();
+
+        // Modify one node and run again
+        if !root_node.children.is_empty() {
+            println!("\nModifying first child node...");
+            root_node.children[0].mark_dirty();
+
+            println!("Third incremental run (some cache misses expected):");
+            let stats3 = vm.process_tree_incremental_with_stats(&mut root_node);
+            stats3.print_summary();
+        }
     } else {
         println!("Failed to parse HTML file");
     }
@@ -963,7 +1158,14 @@ mod tests {
         let vm = TreeNFAVM::new(program);
 
         // Create test HTML structure: div > p.item
-        let mut root = HtmlNode::new("div").add_child(HtmlNode::new("p").with_class("item"));
+        let mut root = HtmlNode::new("div")
+            .with_id("outer")
+            .add_child(HtmlNode::new("p").with_class("item"))
+            .add_child(
+                HtmlNode::new("span")
+                    .with_class("item")
+                    .add_child(HtmlNode::new("p").with_id("specific")),
+            );
 
         // Execute on root (div)
         let child_states = vm.execute_on_node(&mut root, 0);
@@ -1019,12 +1221,15 @@ mod tests {
 
         // Create HTML structure similar to t1.html: div > p.item > span > p#specific
         let mut root = HtmlNode::new("div")
-            .with_id("outer")
-            .add_child(HtmlNode::new("p").with_class("item"))
+            .with_id("main")
+            .with_class("container")
             .add_child(
-                HtmlNode::new("span")
+                HtmlNode::new("p")
                     .with_class("item")
-                    .add_child(HtmlNode::new("p").with_id("specific")),
+                    .add_child(HtmlNode::new("span").with_id("specific")),
+            )
+            .add_child(
+                HtmlNode::new("div").add_child(HtmlNode::new("p").add_child(HtmlNode::new("span"))),
             );
 
         // Execute on root div
@@ -1331,6 +1536,12 @@ struct HtmlNode {{
     classes: HashSet<String>,
     children: Vec<HtmlNode>,
     css_match_bitvector: BitVector,
+    
+    // Incremental processing state
+    cached_parent_state: Option<BitVector>,     // Input: parent state from last computation
+    cached_node_intrinsic: Option<BitVector>,   // Input: node's own selector matches (computed once)
+    cached_child_states: Option<BitVector>,     // Output: states to propagate to children
+    is_dirty: bool,                             // Whether this node needs recomputation
 }}
 
 impl HtmlNode {{
@@ -1341,22 +1552,48 @@ impl HtmlNode {{
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
+            cached_parent_state: None,
+            cached_node_intrinsic: None,
+            cached_child_states: None,
+            is_dirty: true,
         }}
     }}
 
     fn with_id(mut self, id: &str) -> Self {{
         self.id = Some(id.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }}
 
     fn with_class(mut self, class: &str) -> Self {{
         self.classes.insert(class.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }}
 
     fn add_child(mut self, child: HtmlNode) -> Self {{
         self.children.push(child);
         self
+    }}
+    
+    // Mark this node and all descendants as needing recomputation
+    fn mark_dirty(&mut self) {{
+        self.is_dirty = true;
+        self.cached_parent_state = None;
+        self.cached_node_intrinsic = None;
+        self.cached_child_states = None;
+        
+        // Propagate dirtiness to children since parent state will change
+        for child in &mut self.children {{
+            child.mark_dirty();
+        }}
+    }}
+    
+    // Check if inputs have changed and we need to recompute
+    fn needs_recomputation(&self, new_parent_state: BitVector) -> bool {{
+        self.is_dirty || 
+        self.cached_parent_state.is_none() ||
+        self.cached_parent_state.unwrap() != new_parent_state
     }}
 }}
 
@@ -1496,75 +1733,239 @@ fn main() {{
     }
 
     #[test]
-    fn test_performance_benchmark() {
-        use std::time::Instant;
+    fn test_incremental_processing() {
+        println!("\n=== TESTING INCREMENTAL PROCESSING ===");
 
-        println!("\n=== PERFORMANCE BENCHMARK ===");
+        // Create test CSS rules
+        let rules = vec![
+            CssRule::Simple(SimpleSelector::Type("div".to_string())),
+            CssRule::Simple(SimpleSelector::Class("item".to_string())),
+            CssRule::Simple(SimpleSelector::Id("specific".to_string())),
+            CssRule::Child {
+                parent_selector: SimpleSelector::Type("div".to_string()),
+                child_selector: SimpleSelector::Class("item".to_string()),
+            },
+        ];
 
-        // Create a larger CSS rule set for performance testing
-        let css_content = r#"
-/* Rule 0 (R0) */ div {}
-/* Rule 1 (R1) */ .item {}
-/* Rule 2 (R2) */ #specific {}
-/* Rule 3 (R3) */ p {}
-/* Rule 4 (R4) */ span {}
-/* Rule 5 (R5) */ .container {}
-/* Rule 6 (R6) */ #main {}
-/* Rule 7 (R7) */ div > p {}
-/* Rule 8 (R8) */ .item > #specific {}
-/* Rule 9 (R9) */ div > .item {}
-/* Rule 10 (R10) */ .container > span {}
-/* Rule 11 (R11) */ div > #main {}
-/* Rule 12 (R12) */ p > span {}
-        "#;
-
-        // Benchmark CSS parsing
-        let start = Instant::now();
-        let rules = parse_css_file(css_content);
-        let parse_time = start.elapsed();
-        println!("CSS parsing: {:?} ({} rules)", parse_time, rules.len());
-
-        // Benchmark compilation
-        let start = Instant::now();
         let mut compiler = CssCompiler::new();
         let program = compiler.compile_css_rules(&rules);
-        let compile_time = start.elapsed();
-        println!(
-            "Compilation: {:?} ({} instructions, {} bits)",
-            compile_time,
-            program.instructions.len(),
-            program.total_bits
-        );
+        let vm = TreeNFAVM::new(program);
 
-        // Benchmark code generation
-        let start = Instant::now();
-        let _generated_code = program.generate_rust_code();
-        let codegen_time = start.elapsed();
-        println!("Code generation: {:?}", codegen_time);
-
-        // Create a complex HTML structure for testing
+        // Create test HTML structure
         let mut root = HtmlNode::new("div")
-            .with_id("main")
-            .with_class("container")
+            .with_id("container")
             .add_child(
                 HtmlNode::new("p")
                     .with_class("item")
                     .add_child(HtmlNode::new("span").with_id("specific")),
             )
+            .add_child(HtmlNode::new("div").with_class("other"));
+
+        // Test 1: First run should compute everything
+        println!("Test 1: Initial computation");
+        let stats1 = vm.process_tree_incremental_with_stats(&mut root);
+        assert_eq!(stats1.cache_hits, 0);
+        assert!(stats1.cache_misses > 0);
+        println!(
+            "✓ All nodes computed (cache misses: {})",
+            stats1.cache_misses
+        );
+
+        // Store initial results for comparison
+        let initial_root_matches = root.css_match_bitvector;
+        let initial_child1_matches = root.children[0].css_match_bitvector;
+
+        // Test 2: Second run should use cache
+        println!("\nTest 2: Cache utilization");
+        let stats2 = vm.process_tree_incremental_with_stats(&mut root);
+        assert_eq!(stats2.cache_misses, 0);
+        assert!(stats2.cache_hits > 0);
+        println!("✓ All results cached (cache hits: {})", stats2.cache_hits);
+
+        // Verify results didn't change
+        assert_eq!(root.css_match_bitvector, initial_root_matches);
+        assert_eq!(root.children[0].css_match_bitvector, initial_child1_matches);
+        println!("✓ Results consistent with cached version");
+
+        // Test 3: Modify node and verify selective recomputation
+        println!("\nTest 3: Selective recomputation after modification");
+        root.children[0].mark_dirty();
+
+        let stats3 = vm.process_tree_incremental_with_stats(&mut root);
+        assert!(stats3.cache_hits > 0, "Some nodes should still be cached");
+        assert!(stats3.cache_misses > 0, "Some nodes should be recomputed");
+        println!(
+            "✓ Selective recomputation (hits: {}, misses: {})",
+            stats3.cache_hits, stats3.cache_misses
+        );
+
+        // Test 4: Compare with non-incremental version for correctness
+        println!("\nTest 4: Correctness verification");
+        let mut root_copy = HtmlNode::new("div")
+            .with_id("container")
             .add_child(
-                HtmlNode::new("div").add_child(HtmlNode::new("p").add_child(HtmlNode::new("span"))),
+                HtmlNode::new("p")
+                    .with_class("item")
+                    .add_child(HtmlNode::new("span").with_id("specific")),
+            )
+            .add_child(HtmlNode::new("div").with_class("other"));
+
+        vm.process_tree(&mut root_copy);
+
+        // Compare results
+        assert_eq!(root.css_match_bitvector, root_copy.css_match_bitvector);
+        assert_eq!(
+            root.children[0].css_match_bitvector,
+            root_copy.children[0].css_match_bitvector
+        );
+        assert_eq!(
+            root.children[1].css_match_bitvector,
+            root_copy.children[1].css_match_bitvector
+        );
+        println!("✓ Incremental results match non-incremental results");
+
+        println!("=== INCREMENTAL PROCESSING TESTS PASSED ===\n");
+    }
+
+    #[test]
+    fn test_incremental_node_modification() {
+        // Test that modifying node attributes correctly invalidates cache
+        let rules = vec![
+            CssRule::Simple(SimpleSelector::Type("div".to_string())),
+            CssRule::Simple(SimpleSelector::Class("highlight".to_string())),
+        ];
+
+        let mut compiler = CssCompiler::new();
+        let program = compiler.compile_css_rules(&rules);
+        let vm = TreeNFAVM::new(program);
+
+        let mut node = HtmlNode::new("div");
+
+        // Initial processing
+        vm.process_tree_incremental(&mut node);
+        let initial_matches = node.css_match_bitvector;
+
+        // Add a class (this should mark the node dirty)
+        node = node.with_class("highlight");
+
+        // Reprocess
+        vm.process_tree_incremental(&mut node);
+        let updated_matches = node.css_match_bitvector;
+
+        // Results should be different
+        assert_ne!(
+            initial_matches, updated_matches,
+            "Adding class should change CSS matches"
+        );
+
+        // Find the correct bit position for .highlight class
+        let mut highlight_bit = None;
+        for (bit_pos, name) in &vm.program.state_names {
+            if name.contains("highlight") && name.contains("match") {
+                highlight_bit = Some(*bit_pos);
+                break;
+            }
+        }
+
+        if let Some(bit) = highlight_bit {
+            assert!(
+                updated_matches.is_bit_set(bit),
+                "Should match .highlight class at bit {}",
+                bit
+            );
+        } else {
+            panic!("Could not find bit position for .highlight class");
+        }
+    }
+
+    #[test]
+    fn test_performance_comparison() {
+        use std::time::Instant;
+
+        println!("\n=== PERFORMANCE COMPARISON ===");
+
+        // Create a larger CSS rule set
+        let rules = vec![
+            CssRule::Simple(SimpleSelector::Type("div".to_string())),
+            CssRule::Simple(SimpleSelector::Class("item".to_string())),
+            CssRule::Simple(SimpleSelector::Id("specific".to_string())),
+            CssRule::Simple(SimpleSelector::Type("p".to_string())),
+            CssRule::Simple(SimpleSelector::Type("span".to_string())),
+            CssRule::Child {
+                parent_selector: SimpleSelector::Type("div".to_string()),
+                child_selector: SimpleSelector::Type("p".to_string()),
+            },
+            CssRule::Child {
+                parent_selector: SimpleSelector::Class("item".to_string()),
+                child_selector: SimpleSelector::Id("specific".to_string()),
+            },
+            CssRule::Child {
+                parent_selector: SimpleSelector::Type("div".to_string()),
+                child_selector: SimpleSelector::Class("item".to_string()),
+            },
+        ];
+
+        let mut compiler = CssCompiler::new();
+        let program = compiler.compile_css_rules(&rules);
+        let vm = TreeNFAVM::new(program);
+
+        // Create a complex HTML structure
+        let mut root = HtmlNode::new("div")
+            .with_id("main")
+            .with_class("container")
+            .add_child(
+                HtmlNode::new("div")
+                    .with_class("item")
+                    .add_child(
+                        HtmlNode::new("p").add_child(HtmlNode::new("span").with_id("specific")),
+                    )
+                    .add_child(HtmlNode::new("div").add_child(HtmlNode::new("p"))),
+            )
+            .add_child(HtmlNode::new("p").with_class("item"))
+            .add_child(
+                HtmlNode::new("div")
+                    .add_child(HtmlNode::new("span"))
+                    .add_child(HtmlNode::new("p").with_id("specific")),
             );
 
-        // Benchmark VM execution
-        let vm = TreeNFAVM::new(program);
+        // Benchmark regular processing (multiple runs)
+        let iterations = 1000;
         let start = Instant::now();
-        for _ in 0..1000 {
-            let _child_states = vm.execute_on_node(&mut root, 0);
+        for _ in 0..iterations {
+            vm.process_tree(&mut root.clone());
         }
-        let execution_time = start.elapsed();
-        println!("VM execution (1000 iterations): {:?}", execution_time);
-        println!("Average per execution: {:?}", execution_time / 1000);
+        let regular_time = start.elapsed();
 
-        println!("=== BENCHMARK COMPLETE ===\n");
+        // Benchmark incremental processing (first run + cached runs)
+        let start = Instant::now();
+
+        // First run (cache miss)
+        vm.process_tree_incremental(&mut root);
+
+        // Subsequent runs (cache hits)
+        for _ in 1..iterations {
+            vm.process_tree_incremental(&mut root);
+        }
+        let incremental_time = start.elapsed();
+
+        println!(
+            "Regular processing ({} iterations): {:?}",
+            iterations, regular_time
+        );
+        println!(
+            "Incremental processing ({} iterations): {:?}",
+            iterations, incremental_time
+        );
+
+        let speedup = regular_time.as_nanos() as f64 / incremental_time.as_nanos() as f64;
+        println!("Speedup: {:.2}x", speedup);
+
+        // Incremental should be significantly faster for repeated computations
+        assert!(
+            incremental_time < regular_time,
+            "Incremental should be faster"
+        );
+
+        println!("=== PERFORMANCE COMPARISON COMPLETE ===\n");
     }
 }

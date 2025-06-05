@@ -47,6 +47,12 @@ struct HtmlNode {
     classes: HashSet<String>,
     children: Vec<HtmlNode>,
     css_match_bitvector: BitVector,
+    
+    // Incremental processing state
+    cached_parent_state: Option<BitVector>,     // Input: parent state from last computation
+    cached_node_intrinsic: Option<BitVector>,   // Input: node's own selector matches (computed once)
+    cached_child_states: Option<BitVector>,     // Output: states to propagate to children
+    is_dirty: bool,                             // Whether this node needs recomputation
 }
 
 impl HtmlNode {
@@ -57,22 +63,48 @@ impl HtmlNode {
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
+            cached_parent_state: None,
+            cached_node_intrinsic: None,
+            cached_child_states: None,
+            is_dirty: true,
         }
     }
 
     fn with_id(mut self, id: &str) -> Self {
         self.id = Some(id.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }
 
     fn with_class(mut self, class: &str) -> Self {
         self.classes.insert(class.to_string());
+        self.mark_dirty(); // Changing attributes makes node dirty
         self
     }
 
     fn add_child(mut self, child: HtmlNode) -> Self {
         self.children.push(child);
         self
+    }
+    
+    // Mark this node and all descendants as needing recomputation
+    fn mark_dirty(&mut self) {
+        self.is_dirty = true;
+        self.cached_parent_state = None;
+        self.cached_node_intrinsic = None;
+        self.cached_child_states = None;
+        
+        // Propagate dirtiness to children since parent state will change
+        for child in &mut self.children {
+            child.mark_dirty();
+        }
+    }
+    
+    // Check if inputs have changed and we need to recompute
+    fn needs_recomputation(&self, new_parent_state: BitVector) -> bool {
+        self.is_dirty || 
+        self.cached_parent_state.is_none() ||
+        self.cached_parent_state.unwrap() != new_parent_state
     }
 }
 
