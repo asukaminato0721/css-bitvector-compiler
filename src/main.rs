@@ -202,9 +202,129 @@ impl TreeNFAProgram {
     fn generate_rust_code(&self) -> String {
         let mut code = String::new();
 
-        code.push_str("// Generated Tree NFA Program\n");
-        code.push_str("// This program processes HTML nodes and computes CSS matches\n\n");
+        code.push_str("// Generated Tree NFA Program with Incremental Processing\n");
+        code.push_str(
+            "// This program processes HTML nodes and computes CSS matches with caching\n\n",
+        );
 
+        // Generate incremental processing function
+        code.push_str("fn process_node_generated_incremental(\n");
+        code.push_str("    node: &mut HtmlNode,\n");
+        code.push_str("    parent_state: BitVector,\n");
+        code.push_str(") -> BitVector { // returns child_states\n");
+        code.push_str("    // Check if we need to recompute\n");
+        code.push_str("    if !needs_recomputation_generated(node, parent_state) {\n");
+        code.push_str("        // Return cached result\n");
+        code.push_str("        return node.cached_child_states.unwrap_or(BitVector::new());\n");
+        code.push_str("    }\n\n");
+
+        code.push_str("    // Recompute node intrinsic matches if needed\n");
+        code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_dirty {\n");
+        code.push_str("        let mut intrinsic_matches = BitVector::new();\n\n");
+
+        // Generate intrinsic selector checks
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
+                code.push_str(&format!(
+                    "        // Instruction {}: {:?}\n",
+                    i, instruction
+                ));
+                let selector_str = match selector {
+                    SimpleSelector::Type(tag) => {
+                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                    }
+                    SimpleSelector::Class(class) => {
+                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                    }
+                    SimpleSelector::Id(id) => {
+                        format!("SimpleSelector::Id(\"{}\".to_string())", id)
+                    }
+                };
+                code.push_str(&format!(
+                    "        if node_matches_selector_generated(node, &{}) {{\n",
+                    selector_str
+                ));
+                code.push_str(&format!(
+                    "            intrinsic_matches.set_bit({}); // {}\n",
+                    bit_pos,
+                    self.state_names
+                        .get(bit_pos)
+                        .unwrap_or(&format!("bit_{}", bit_pos))
+                ));
+                code.push_str("        }\n\n");
+            }
+        }
+
+        code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
+        code.push_str("    }\n\n");
+
+        code.push_str("    // Start with cached intrinsic matches\n");
+        code.push_str("    let mut current_matches = node.cached_node_intrinsic.unwrap();\n");
+        code.push_str("    let mut child_states = BitVector::new();\n\n");
+
+        // Generate parent-dependent rules
+        code.push_str("    // Apply parent-dependent rules\n");
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            match instruction {
+                NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector,
+                    result_bit,
+                } => {
+                    code.push_str(&format!("    // Instruction {}: {:?}\n", i, instruction));
+                    let child_selector_str = match child_selector {
+                        SimpleSelector::Type(tag) => {
+                            format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                        }
+                        SimpleSelector::Class(class) => {
+                            format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                        }
+                        SimpleSelector::Id(id) => {
+                            format!("SimpleSelector::Id(\"{}\".to_string())", id)
+                        }
+                    };
+                    code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector_generated(node, &{}) {{\n", 
+                        parent_state_bit, child_selector_str));
+                    code.push_str(&format!(
+                        "        current_matches.set_bit({}); // {}\n",
+                        result_bit,
+                        self.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("    }\n\n");
+                }
+                NFAInstruction::PropagateToChildren {
+                    match_bit,
+                    active_bit,
+                } => {
+                    code.push_str(&format!("    // Instruction {}: {:?}\n", i, instruction));
+                    code.push_str(&format!(
+                        "    if current_matches.is_bit_set({}) {{\n",
+                        match_bit
+                    ));
+                    code.push_str(&format!(
+                        "        child_states.set_bit({}); // {}\n",
+                        active_bit,
+                        self.state_names
+                            .get(active_bit)
+                            .unwrap_or(&format!("bit_{}", active_bit))
+                    ));
+                    code.push_str("    }\n\n");
+                }
+                _ => {} // CheckAndSetBit already handled above in intrinsic section
+            }
+        }
+
+        code.push_str("    // Cache results\n");
+        code.push_str("    node.css_match_bitvector = current_matches;\n");
+        code.push_str("    node.cached_parent_state = Some(parent_state);\n");
+        code.push_str("    node.cached_child_states = Some(child_states);\n");
+        code.push_str("    node.is_dirty = false;\n\n");
+        code.push_str("    child_states\n");
+        code.push_str("}\n\n");
+
+        // Generate basic non-incremental version for compatibility
         code.push_str("fn process_node_generated_inplace(\n");
         code.push_str("    node: &mut HtmlNode,\n");
         code.push_str("    parent_state: BitVector,\n");
@@ -228,7 +348,7 @@ impl TreeNFAProgram {
                         }
                     };
                     code.push_str(&format!(
-                        "    if node_matches_selector(node, &{}) {{\n",
+                        "    if node_matches_selector_generated(node, &{}) {{\n",
                         selector_str
                     ));
                     code.push_str(&format!(
@@ -256,7 +376,7 @@ impl TreeNFAProgram {
                             format!("SimpleSelector::Id(\"{}\".to_string())", id)
                         }
                     };
-                    code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector(node, &{}) {{\n", 
+                    code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector_generated(node, &{}) {{\n", 
                         parent_state_bit, child_selector_str));
                     code.push_str(&format!(
                         "        current_matches.set_bit({}); // {}\n",
@@ -292,7 +412,34 @@ impl TreeNFAProgram {
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
-        // Generate driver function
+        // Generate helper function for cache checking
+        code.push_str("fn needs_recomputation_generated(node: &HtmlNode, new_parent_state: BitVector) -> bool {\n");
+        code.push_str("    node.is_dirty ||\n");
+        code.push_str("    node.cached_parent_state.is_none() ||\n");
+        code.push_str("    node.cached_parent_state.unwrap() != new_parent_state\n");
+        code.push_str("}\n\n");
+
+        // Generate incremental tree processing driver
+        code.push_str("fn process_tree_generated_incremental(root: &mut HtmlNode) {\n");
+        code.push_str(
+            "    process_tree_recursive_generated_incremental(root, BitVector::new());\n",
+        );
+        code.push_str("}\n\n");
+
+        code.push_str("fn process_tree_recursive_generated_incremental(node: &mut HtmlNode, parent_state: BitVector) {\n");
+        code.push_str(
+            "    let child_states = process_node_generated_incremental(node, parent_state);\n",
+        );
+        code.push_str("    \n");
+        code.push_str("    // Recursively process children\n");
+        code.push_str("    for child in node.children.iter_mut() {\n");
+        code.push_str(
+            "        process_tree_recursive_generated_incremental(child, child_states);\n",
+        );
+        code.push_str("    }\n");
+        code.push_str("}\n\n");
+
+        // Generate basic driver function
         code.push_str("fn process_tree_generated(root: &mut HtmlNode) {\n");
         code.push_str("    process_tree_recursive_generated(root, BitVector::new());\n");
         code.push_str("}\n\n");
@@ -310,8 +457,9 @@ impl TreeNFAProgram {
         code.push_str("    }\n");
         code.push_str("}\n\n");
 
+        // Generate selector matching function
         code.push_str(
-            "fn node_matches_selector(node: &HtmlNode, selector: &SimpleSelector) -> bool {\n",
+            "fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {\n",
         );
         code.push_str("    match selector {\n");
         code.push_str("        SimpleSelector::Type(tag) => node.tag_name == *tag,\n");
@@ -1095,10 +1243,10 @@ mod tests {
         let generated_code = program.generate_rust_code();
 
         // Check that the generated code contains expected elements
-        assert!(generated_code.contains("fn process_node_generated_inplace"));
+        assert!(generated_code.contains("fn process_node_generated_incremental"));
         assert!(generated_code.contains("current_matches"));
         assert!(generated_code.contains("child_states"));
-        assert!(generated_code.contains("node_matches_selector"));
+        assert!(generated_code.contains("node_matches_selector_generated"));
         assert!(generated_code.contains("SimpleSelector::Type"));
     }
 
@@ -1220,7 +1368,7 @@ mod tests {
         let generated_code = program.generate_rust_code();
 
         // Verify the generated code has the expected structure
-        assert!(generated_code.contains("fn process_node_generated_inplace"));
+        assert!(generated_code.contains("fn process_node_generated_incremental"));
         assert!(generated_code.contains("current_matches = BitVector::new()"));
         assert!(generated_code.contains("child_states = BitVector::new()"));
 
@@ -1511,17 +1659,17 @@ enum SimpleSelector {{
 fn main() {{
     // Test case 1: div node
     let mut div_node = HtmlNode::new("div").with_id("test").with_class("item");
-    let child_states = process_node_generated_inplace(&mut div_node, BitVector::new());
+    let child_states = process_node_generated_incremental(&mut div_node, BitVector::new());
     println!("div.item#test - matches: {{:b}}, child_states: {{:b}}", div_node.css_match_bitvector, child_states);
     
     // Test case 2: span node with class
     let mut span_node = HtmlNode::new("span").with_class("item");
-    let child_states2 = process_node_generated_inplace(&mut span_node, child_states);
+    let child_states2 = process_node_generated_incremental(&mut span_node, child_states);
     println!("span.item (child of div) - matches: {{:b}}, child_states: {{:b}}", span_node.css_match_bitvector, child_states2);
     
     // Test case 3: node with specific id
     let mut specific_node = HtmlNode::new("p").with_id("specific");
-    let child_states3 = process_node_generated_inplace(&mut specific_node, BitVector::new());
+    let child_states3 = process_node_generated_incremental(&mut specific_node, BitVector::new());
     println!("p#specific - matches: {{:b}}, child_states: {{:b}}", specific_node.css_match_bitvector, child_states3);
     
     // Test case 4: driver function test
@@ -1530,7 +1678,7 @@ fn main() {{
         .add_child(HtmlNode::new("span").with_id("specific"));
     
     println!("\nTesting tree processing...");
-    process_tree_generated(&mut tree);
+    process_tree_generated_incremental(&mut tree);
     
     fn print_tree_results(node: &HtmlNode, depth: usize) {{
         let indent = "  ".repeat(depth);
@@ -1871,5 +2019,111 @@ fn main() {{
         );
 
         println!("=== PERFORMANCE COMPARISON COMPLETE ===\n");
+    }
+
+    #[test]
+    fn test_generated_incremental_code_has_caching() {
+        println!("\n=== TESTING GENERATED INCREMENTAL CODE ===");
+
+        // Create test CSS rules
+        let rules = vec![
+            CssRule::Simple(SimpleSelector::Type("div".to_string())),
+            CssRule::Simple(SimpleSelector::Class("item".to_string())),
+            CssRule::Child {
+                parent_selector: SimpleSelector::Type("div".to_string()),
+                child_selector: SimpleSelector::Class("item".to_string()),
+            },
+        ];
+
+        let mut compiler = CssCompiler::new();
+        let program = compiler.compile_css_rules(&rules);
+        let generated_code = program.generate_rust_code();
+
+        // Verify that the generated code contains incremental processing logic
+        println!("Checking generated code for incremental features...");
+
+        // Should contain incremental function
+        assert!(
+            generated_code.contains("process_node_generated_incremental"),
+            "Generated code should contain incremental processing function"
+        );
+
+        // Should contain cache checking
+        assert!(
+            generated_code.contains("needs_recomputation_generated"),
+            "Generated code should contain cache checking function"
+        );
+
+        // Should contain cache return logic
+        assert!(
+            generated_code.contains("return node.cached_child_states.unwrap_or"),
+            "Generated code should return cached results when possible"
+        );
+
+        // Should contain intrinsic computation caching
+        assert!(
+            generated_code.contains("node.cached_node_intrinsic.is_none() || node.is_dirty"),
+            "Generated code should cache intrinsic matches"
+        );
+
+        // Should contain cache updates
+        assert!(
+            generated_code.contains("node.cached_parent_state = Some(parent_state)"),
+            "Generated code should update parent state cache"
+        );
+        assert!(
+            generated_code.contains("node.cached_child_states = Some(child_states)"),
+            "Generated code should update child states cache"
+        );
+        assert!(
+            generated_code.contains("node.is_dirty = false"),
+            "Generated code should mark node as clean"
+        );
+
+        // Should contain incremental tree driver
+        assert!(
+            generated_code.contains("process_tree_generated_incremental"),
+            "Generated code should contain incremental tree processing driver"
+        );
+
+        // Should also contain non-incremental version for compatibility
+        assert!(
+            generated_code.contains("process_node_generated_inplace"),
+            "Generated code should contain non-incremental version for compatibility"
+        );
+
+        println!("✓ All incremental features found in generated code");
+
+        // Also verify specific structure patterns
+        assert!(
+            generated_code.contains("// Check if we need to recompute"),
+            "Generated code should have cache check comments"
+        );
+        assert!(
+            generated_code.contains("// Recompute node intrinsic matches if needed"),
+            "Generated code should have intrinsic computation comments"
+        );
+        assert!(
+            generated_code.contains("// Start with cached intrinsic matches"),
+            "Generated code should use cached intrinsic matches"
+        );
+        assert!(
+            generated_code.contains("// Cache results"),
+            "Generated code should have cache update comments"
+        );
+
+        println!("✓ Code structure and comments verify incremental logic");
+
+        // Test that the generated code separates intrinsic from parent-dependent computation
+        let intrinsic_section = generated_code.contains("if node.cached_node_intrinsic.is_none()");
+        let parent_dependent_section = generated_code.contains("Apply parent-dependent rules");
+        assert!(
+            intrinsic_section && parent_dependent_section,
+            "Generated code should separate intrinsic and parent-dependent computation"
+        );
+
+        println!("✓ Generated code properly separates intrinsic and parent-dependent computation");
+
+        println!("=== GENERATED INCREMENTAL CODE TEST PASSED ===\n");
     }
 }
