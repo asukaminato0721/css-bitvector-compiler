@@ -445,10 +445,8 @@ fn parse_css_file(css_content: &str) -> Vec<CssRule> {
                     child_selector: child_sel,
                 });
             }
-        } else {
-            if let Some(simple_sel) = parse_simple_selector(selector_str) {
-                rules.push(CssRule::Simple(simple_sel));
-            }
+        } else if let Some(simple_sel) = parse_simple_selector(selector_str) {
+            rules.push(CssRule::Simple(simple_sel));
         }
     }
 
@@ -1140,7 +1138,7 @@ fn main() {{
         // Compile the generated Rust code
         println!("Compiling generated Rust code...");
         let compile_output = Command::new("rustc")
-            .args(&[temp_file, "-o", "temp_generated_test"])
+            .args([temp_file, "-o", "temp_generated_test"])
             .output();
 
         match compile_output {
