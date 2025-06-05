@@ -4,6 +4,63 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::Path;
 
+// --- 0. BitVector Abstraction ---
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct BitVector {
+    bits: u64,
+}
+
+impl BitVector {
+    fn new() -> Self {
+        BitVector { bits: 0 }
+    }
+
+    fn from_u64(bits: u64) -> Self {
+        BitVector { bits }
+    }
+
+    fn set_bit(&mut self, pos: usize) {
+        self.bits |= 1 << pos;
+    }
+
+    fn clear_bit(&mut self, pos: usize) {
+        self.bits &= !(1 << pos);
+    }
+
+    fn is_bit_set(&self, pos: usize) -> bool {
+        (self.bits & (1 << pos)) != 0
+    }
+
+    fn or_assign(&mut self, other: BitVector) {
+        self.bits |= other.bits;
+    }
+
+    fn and(&self, other: BitVector) -> BitVector {
+        BitVector {
+            bits: self.bits & other.bits,
+        }
+    }
+
+    fn is_empty(&self) -> bool {
+        self.bits == 0
+    }
+
+    fn as_u64(&self) -> u64 {
+        self.bits
+    }
+
+    // Check if any of the specified bits are set
+    fn has_any_bits(&self, mask: BitVector) -> bool {
+        (self.bits & mask.bits) != 0
+    }
+}
+
+impl std::fmt::Binary for BitVector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:016b}", self.bits)
+    }
+}
+
 // --- 1. HTML Node Structure ---
 #[derive(Debug, Clone)]
 struct HtmlNode {
@@ -12,7 +69,7 @@ struct HtmlNode {
     classes: HashSet<String>,
     children: Vec<HtmlNode>,
     // Stores the bitvector of *final* matching rules for this node
-    css_match_bitvector: u64,
+    css_match_bitvector: BitVector,
 }
 
 impl HtmlNode {
@@ -22,7 +79,7 @@ impl HtmlNode {
             id: None,
             classes: HashSet::new(),
             children: Vec::new(),
-            css_match_bitvector: 0,
+            css_match_bitvector: BitVector::new(),
         }
     }
 
@@ -116,6 +173,94 @@ impl TreeNFAProgram {
         code.push_str("// Generated Tree NFA Program\n");
         code.push_str("// This program processes HTML nodes and computes CSS matches\n\n");
 
+        code.push_str("fn process_node_generated_inplace(\n");
+        code.push_str("    node: &mut HtmlNode,\n");
+        code.push_str("    parent_state: BitVector,\n");
+        code.push_str(") -> BitVector { // returns child_states\n");
+        code.push_str("    let mut current_matches = BitVector::new();\n");
+        code.push_str("    let mut child_states = BitVector::new();\n\n");
+
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            code.push_str(&format!("    // Instruction {}: {:?}\n", i, instruction));
+            match instruction {
+                NFAInstruction::CheckAndSetBit { selector, bit_pos } => {
+                    let selector_str = match selector {
+                        SimpleSelector::Type(tag) => {
+                            format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                        }
+                        SimpleSelector::Class(class) => {
+                            format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                        }
+                        SimpleSelector::Id(id) => {
+                            format!("SimpleSelector::Id(\"{}\".to_string())", id)
+                        }
+                    };
+                    code.push_str(&format!(
+                        "    if node_matches_selector(node, &{}) {{\n",
+                        selector_str
+                    ));
+                    code.push_str(&format!(
+                        "        current_matches.set_bit({}); // {}\n",
+                        bit_pos,
+                        self.state_names
+                            .get(bit_pos)
+                            .unwrap_or(&format!("bit_{}", bit_pos))
+                    ));
+                    code.push_str("    }\n\n");
+                }
+                NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector,
+                    result_bit,
+                } => {
+                    let child_selector_str = match child_selector {
+                        SimpleSelector::Type(tag) => {
+                            format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                        }
+                        SimpleSelector::Class(class) => {
+                            format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                        }
+                        SimpleSelector::Id(id) => {
+                            format!("SimpleSelector::Id(\"{}\".to_string())", id)
+                        }
+                    };
+                    code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector(node, &{}) {{\n", 
+                        parent_state_bit, child_selector_str));
+                    code.push_str(&format!(
+                        "        current_matches.set_bit({}); // {}\n",
+                        result_bit,
+                        self.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("    }\n\n");
+                }
+                NFAInstruction::PropagateToChildren {
+                    match_bit,
+                    active_bit,
+                } => {
+                    code.push_str(&format!(
+                        "    if current_matches.is_bit_set({}) {{\n",
+                        match_bit
+                    ));
+                    code.push_str(&format!(
+                        "        child_states.set_bit({}); // {}\n",
+                        active_bit,
+                        self.state_names
+                            .get(active_bit)
+                            .unwrap_or(&format!("bit_{}", active_bit))
+                    ));
+                    code.push_str("    }\n\n");
+                }
+            }
+        }
+
+        code.push_str("    // Store result in node (in-place)\n");
+        code.push_str("    node.css_match_bitvector = current_matches;\n");
+        code.push_str("    child_states\n");
+        code.push_str("}\n\n");
+
+        // Also generate legacy u64 version for compatibility
         code.push_str("fn process_node_generated(\n");
         code.push_str("    node: &HtmlNode,\n");
         code.push_str("    parent_state: u64,\n");
@@ -199,6 +344,24 @@ impl TreeNFAProgram {
         }
 
         code.push_str("    (current_matches, child_states)\n");
+        code.push_str("}\n\n");
+
+        // Generate driver function
+        code.push_str("fn process_tree_generated(root: &mut HtmlNode) {\n");
+        code.push_str("    process_tree_recursive_generated(root, BitVector::new());\n");
+        code.push_str("}\n\n");
+
+        code.push_str(
+            "fn process_tree_recursive_generated(node: &mut HtmlNode, parent_state: BitVector) {\n",
+        );
+        code.push_str(
+            "    let child_states = process_node_generated_inplace(node, parent_state);\n",
+        );
+        code.push_str("    \n");
+        code.push_str("    // Recursively process children\n");
+        code.push_str("    for child in node.children.iter_mut() {\n");
+        code.push_str("        process_tree_recursive_generated(child, child_states);\n");
+        code.push_str("    }\n");
         code.push_str("}\n\n");
 
         code.push_str(
@@ -348,15 +511,15 @@ impl TreeNFAVM {
         TreeNFAVM { program }
     }
 
-    fn execute_on_node(&self, node: &mut HtmlNode, parent_state: u64) -> u64 {
-        let mut current_matches: u64 = 0;
-        let mut child_states: u64 = 0;
+    fn process_node_inplace(&self, node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
+        let mut current_matches = BitVector::new();
+        let mut child_states = BitVector::new();
 
         for instruction in &self.program.instructions {
             match instruction {
                 NFAInstruction::CheckAndSetBit { selector, bit_pos } => {
                     if self.node_matches_selector(node, selector) {
-                        current_matches |= 1 << bit_pos;
+                        current_matches.set_bit(*bit_pos);
                     }
                 }
                 NFAInstruction::CheckParentAndSetBit {
@@ -364,27 +527,34 @@ impl TreeNFAVM {
                     child_selector,
                     result_bit,
                 } => {
-                    if (parent_state & (1 << parent_state_bit)) != 0
+                    if parent_state.is_bit_set(*parent_state_bit)
                         && self.node_matches_selector(node, child_selector)
                     {
-                        current_matches |= 1 << result_bit;
+                        current_matches.set_bit(*result_bit);
                     }
                 }
                 NFAInstruction::PropagateToChildren {
                     match_bit,
                     active_bit,
                 } => {
-                    if (current_matches & (1 << match_bit)) != 0 {
-                        child_states |= 1 << active_bit;
+                    if current_matches.is_bit_set(*match_bit) {
+                        child_states.set_bit(*active_bit);
                     }
                 }
             }
         }
 
-        // Store result in node
+        // Store result in node (in-place)
         node.css_match_bitvector = current_matches;
 
         child_states
+    }
+
+    // Legacy method for backward compatibility with u64
+    fn execute_on_node(&self, node: &mut HtmlNode, parent_state: u64) -> u64 {
+        let parent_bitvec = BitVector::from_u64(parent_state);
+        let child_states = self.process_node_inplace(node, parent_bitvec);
+        child_states.as_u64()
     }
 
     fn node_matches_selector(&self, node: &HtmlNode, selector: &SimpleSelector) -> bool {
@@ -395,21 +565,40 @@ impl TreeNFAVM {
         }
     }
 
-    fn dfs_execute(&self, node: &mut HtmlNode, parent_state: u64, path: String) {
-        let child_states = self.execute_on_node(node, parent_state);
+    // Driver function: recursively process entire tree
+    fn process_tree(&self, root: &mut HtmlNode) {
+        self.process_tree_recursive(root, BitVector::new(), "root".to_string());
+    }
+
+    fn process_tree_recursive(&self, node: &mut HtmlNode, parent_state: BitVector, path: String) {
+        let child_states = self.process_node_inplace(node, parent_state);
+
+        // Recursively process children
+        for (i, child) in node.children.iter_mut().enumerate() {
+            self.process_tree_recursive(child, child_states, format!("{}/{}", path, i));
+        }
+    }
+
+    // Driver function with verbose output (for debugging)
+    fn process_tree_verbose(&self, root: &mut HtmlNode) {
+        self.dfs_execute_verbose(root, BitVector::new(), "root".to_string());
+    }
+
+    fn dfs_execute_verbose(&self, node: &mut HtmlNode, parent_state: BitVector, path: String) {
+        let child_states = self.process_node_inplace(node, parent_state);
 
         println!(
             "Node: {} (Tag: {}, ID: {:?}, Classes: {:?})",
             path, node.tag_name, node.id, node.classes
         );
-        println!("  Parent state: {:016b}", parent_state);
-        println!("  Match result: {:016b}", node.css_match_bitvector);
-        println!("  Child states: {:016b}", child_states);
+        println!("  Parent state: {:b}", parent_state);
+        println!("  Match result: {:b}", node.css_match_bitvector);
+        println!("  Child states: {:b}", child_states);
 
         // Decode matches
         println!("  Matches:");
         for (bit_pos, name) in &self.program.state_names {
-            if (node.css_match_bitvector & (1 << bit_pos)) != 0 {
+            if node.css_match_bitvector.is_bit_set(*bit_pos) {
                 println!("    - {}", name);
             }
         }
@@ -417,8 +606,13 @@ impl TreeNFAVM {
 
         // Recursively process children
         for (i, child) in node.children.iter_mut().enumerate() {
-            self.dfs_execute(child, child_states, format!("{}/{}", path, i));
+            self.dfs_execute_verbose(child, child_states, format!("{}/{}", path, i));
         }
+    }
+
+    // Legacy method for backward compatibility
+    fn dfs_execute(&self, node: &mut HtmlNode, parent_state: u64, path: String) {
+        self.dfs_execute_verbose(node, BitVector::from_u64(parent_state), path);
     }
 }
 
@@ -548,7 +742,13 @@ fn compile_and_run(css_file: &str, html_file: &str) {
         println!("=== Executing Tree NFA Program on {} ===", html_file);
 
         let vm = TreeNFAVM::new(program);
-        vm.dfs_execute(&mut root_node, 0, "root".to_string());
+
+        // Use the new driver function
+        vm.process_tree_verbose(&mut root_node);
+
+        // Show final results
+        println!("=== Final Results ===");
+        print_css_results(&root_node, &vm.program.state_names, 0);
     } else {
         println!("Failed to parse HTML file");
     }
@@ -565,6 +765,34 @@ fn print_html_structure(node: &HtmlNode, depth: usize) {
 
     for child in &node.children {
         print_html_structure(child, depth + 1);
+    }
+}
+
+fn print_css_results(node: &HtmlNode, state_names: &HashMap<usize, String>, depth: usize) {
+    let indent = "  ".repeat(depth);
+    println!(
+        "{}[{}] {} (ID: {:?}, Classes: {:?})",
+        indent,
+        if node.css_match_bitvector.is_empty() {
+            "No matches"
+        } else {
+            "MATCHES"
+        },
+        node.tag_name,
+        node.id,
+        node.classes
+    );
+
+    if !node.css_match_bitvector.is_empty() {
+        for (bit_pos, name) in state_names {
+            if node.css_match_bitvector.is_bit_set(*bit_pos) {
+                println!("{}    - {}", indent, name);
+            }
+        }
+    }
+
+    for child in &node.children {
+        print_css_results(child, state_names, depth + 1);
     }
 }
 
@@ -741,7 +969,7 @@ mod tests {
         let child_states = vm.execute_on_node(&mut root, 0);
 
         // Root should match "div" selector
-        assert_ne!(root.css_match_bitvector, 0);
+        assert_ne!(root.css_match_bitvector.as_u64(), 0);
 
         // Root should provide active states for children
         assert_ne!(child_states, 0);
@@ -751,7 +979,7 @@ mod tests {
         let _child_child_states = vm.execute_on_node(&mut child, child_states);
 
         // Child should match both ".item" and "div > .item"
-        assert_ne!(child.css_match_bitvector, 0);
+        assert_ne!(child.css_match_bitvector.as_u64(), 0);
     }
 
     #[test]
@@ -803,28 +1031,28 @@ mod tests {
         let child_states_root = vm.execute_on_node(&mut root, 0);
 
         // Root div should match "div" rule
-        assert_ne!(root.css_match_bitvector, 0);
+        assert_ne!(root.css_match_bitvector.as_u64(), 0);
 
         // Test first child (p.item)
         let mut p_item = HtmlNode::new("p").with_class("item");
         let _child_states_p = vm.execute_on_node(&mut p_item, child_states_root);
 
         // Should match: p, .item, div > p, div > .item
-        assert_ne!(p_item.css_match_bitvector, 0);
+        assert_ne!(p_item.css_match_bitvector.as_u64(), 0);
 
         // Test span.item
         let mut span_item = HtmlNode::new("span").with_class("item");
         let child_states_span = vm.execute_on_node(&mut span_item, child_states_root);
 
         // Should match: .item, div > .item
-        assert_ne!(span_item.css_match_bitvector, 0);
+        assert_ne!(span_item.css_match_bitvector.as_u64(), 0);
 
         // Test final p#specific under span.item
         let mut p_specific = HtmlNode::new("p").with_id("specific");
         let _final_states = vm.execute_on_node(&mut p_specific, child_states_span);
 
         // Should match: p, #specific, .item > #specific
-        assert_ne!(p_specific.css_match_bitvector, 0);
+        assert_ne!(p_specific.css_match_bitvector.as_u64(), 0);
     }
 
     #[test]
@@ -907,7 +1135,7 @@ mod tests {
         let child_states = vm.execute_on_node(&mut root, 0);
 
         // Root should match both "div" and ".item"
-        let matches = root.css_match_bitvector;
+        let matches = root.css_match_bitvector.as_u64();
         assert_ne!(matches, 0);
 
         // Should propagate states for children
@@ -918,7 +1146,7 @@ mod tests {
         let _child_child_states = vm.execute_on_node(&mut child, child_states);
 
         // Child should match "#specific" and ".item > #specific"
-        assert_ne!(child.css_match_bitvector, 0);
+        assert_ne!(child.css_match_bitvector.as_u64(), 0);
     }
 
     #[test]
@@ -1059,13 +1287,50 @@ mod tests {
 use std::collections::HashSet;
 
 // Copy necessary types and structs
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct BitVector {{
+    bits: u64,
+}}
+
+impl BitVector {{
+    fn new() -> Self {{
+        BitVector {{ bits: 0 }}
+    }}
+
+    fn from_u64(bits: u64) -> Self {{
+        BitVector {{ bits }}
+    }}
+
+    fn set_bit(&mut self, pos: usize) {{
+        self.bits |= 1 << pos;
+    }}
+
+    fn is_bit_set(&self, pos: usize) -> bool {{
+        (self.bits & (1 << pos)) != 0
+    }}
+
+    fn is_empty(&self) -> bool {{
+        self.bits == 0
+    }}
+
+    fn as_u64(&self) -> u64 {{
+        self.bits
+    }}
+}}
+
+impl std::fmt::Binary for BitVector {{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {{
+        write!(f, "{{:016b}}", self.bits)
+    }}
+}}
+
 #[derive(Debug, Clone)]
 struct HtmlNode {{
     tag_name: String,
     id: Option<String>,
     classes: HashSet<String>,
     children: Vec<HtmlNode>,
-    css_match_bitvector: u64,
+    css_match_bitvector: BitVector,
 }}
 
 impl HtmlNode {{
@@ -1075,7 +1340,7 @@ impl HtmlNode {{
             id: None,
             classes: HashSet::new(),
             children: Vec::new(),
-            css_match_bitvector: 0,
+            css_match_bitvector: BitVector::new(),
         }}
     }}
 
@@ -1086,6 +1351,11 @@ impl HtmlNode {{
 
     fn with_class(mut self, class: &str) -> Self {{
         self.classes.insert(class.to_string());
+        self
+    }}
+
+    fn add_child(mut self, child: HtmlNode) -> Self {{
+        self.children.push(child);
         self
     }}
 }}
@@ -1101,27 +1371,37 @@ enum SimpleSelector {{
 
 fn main() {{
     // Test case 1: div node
-    let div_node = HtmlNode::new("div").with_id("test").with_class("item");
-    let (matches, child_states) = process_node_generated(&div_node, 0);
-    println!("div.item#test - matches: {{:016b}}, child_states: {{:016b}}", matches, child_states);
+    let mut div_node = HtmlNode::new("div").with_id("test").with_class("item");
+    let child_states = process_node_generated_inplace(&mut div_node, BitVector::new());
+    println!("div.item#test - matches: {{:b}}, child_states: {{:b}}", div_node.css_match_bitvector, child_states);
     
     // Test case 2: span node with class
-    let span_node = HtmlNode::new("span").with_class("item");
-    let (matches2, child_states2) = process_node_generated(&span_node, child_states);
-    println!("span.item (child of div) - matches: {{:016b}}, child_states: {{:016b}}", matches2, child_states2);
+    let mut span_node = HtmlNode::new("span").with_class("item");
+    let child_states2 = process_node_generated_inplace(&mut span_node, child_states);
+    println!("span.item (child of div) - matches: {{:b}}, child_states: {{:b}}", span_node.css_match_bitvector, child_states2);
     
     // Test case 3: node with specific id
-    let specific_node = HtmlNode::new("p").with_id("specific");
-    let (matches3, child_states3) = process_node_generated(&specific_node, 0);
-    println!("p#specific - matches: {{:016b}}, child_states: {{:016b}}", matches3, child_states3);
+    let mut specific_node = HtmlNode::new("p").with_id("specific");
+    let child_states3 = process_node_generated_inplace(&mut specific_node, BitVector::new());
+    println!("p#specific - matches: {{:b}}, child_states: {{:b}}", specific_node.css_match_bitvector, child_states3);
     
-    // Test case 4: child selector test
-    let item_node = HtmlNode::new("div").with_class("item");
-    let (matches4, child_states4) = process_node_generated(&item_node, 0);
-    let specific_child = HtmlNode::new("span").with_id("specific");
-    let (matches5, _) = process_node_generated(&specific_child, child_states4);
-    println!("div.item parent - matches: {{:016b}}, child_states: {{:016b}}", matches4, child_states4);
-    println!("span#specific (under div.item) - matches: {{:016b}}", matches5);
+    // Test case 4: driver function test
+    let mut tree = HtmlNode::new("div")
+        .with_class("item")
+        .add_child(HtmlNode::new("span").with_id("specific"));
+    
+    println!("\nTesting tree processing...");
+    process_tree_generated(&mut tree);
+    
+    fn print_tree_results(node: &HtmlNode, depth: usize) {{
+        let indent = "  ".repeat(depth);
+        println!("{{}}{{}} (matches: {{:b}})", indent, node.tag_name, node.css_match_bitvector);
+        for child in &node.children {{
+            print_tree_results(child, depth + 1);
+        }}
+    }}
+    
+    print_tree_results(&tree, 0);
     
     println!("SUCCESS: Generated Rust code executed successfully!");
 }}
@@ -1170,7 +1450,7 @@ fn main() {{
                                 let mut div_node =
                                     HtmlNode::new("div").with_id("test").with_class("item");
                                 let vm_child_states = vm.execute_on_node(&mut div_node, 0);
-                                let vm_matches = div_node.css_match_bitvector;
+                                let vm_matches = div_node.css_match_bitvector.as_u64();
 
                                 println!(
                                     "VM results for div.item#test - matches: {:016b}, child_states: {:016b}",
