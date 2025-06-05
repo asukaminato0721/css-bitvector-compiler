@@ -530,8 +530,6 @@ impl TreeNFAVM {
         child_states
     }
 
-
-
     fn node_matches_selector(&self, node: &HtmlNode, selector: &SimpleSelector) -> bool {
         match selector {
             SimpleSelector::Type(tag) => node.tag_name == *tag,
@@ -584,8 +582,6 @@ impl TreeNFAVM {
             self.dfs_execute_verbose(child, child_states, format!("{}/{}", path, i));
         }
     }
-
-
 
     // Incremental processing: only recompute when inputs change
     fn process_node_incremental(&self, node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
@@ -1592,12 +1588,14 @@ fn main() {{
                                 // Test case 1: div.item#test
                                 let mut div_node =
                                     HtmlNode::new("div").with_id("test").with_class("item");
-                                let vm_child_states = vm.process_node_inplace(&mut div_node, BitVector::new());
+                                let vm_child_states =
+                                    vm.process_node_inplace(&mut div_node, BitVector::new());
                                 let vm_matches = div_node.css_match_bitvector.as_u64();
 
                                 println!(
                                     "VM results for div.item#test - matches: {:016b}, child_states: {:016b}",
-                                    vm_matches, vm_child_states.as_u64()
+                                    vm_matches,
+                                    vm_child_states.as_u64()
                                 );
 
                                 // The generated code should produce the same results as the VM
