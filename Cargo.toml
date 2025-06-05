@@ -1,0 +1,12 @@
+[package]
+name = "css-bitvector-compiler"
+version = "0.0.1"
+edition = "2024"
+license = "MIT"
+readme = "README.md"
+description = "CSS Compiler with HTML/CSS parsing capabilities"
+
+[dependencies]
+scraper = "0.17"
+cssparser = "0.29"
+regex = "1.7"
