@@ -314,13 +314,13 @@ impl HtmlNode {
 
     pub fn with_id(mut self, id: &str) -> Self {
         self.id = Some(id.to_string());
-        self.mark_self_dirty();
+        self.mark_dirty();
         self
     }
 
     pub fn with_class(mut self, class: &str) -> Self {
         self.classes.insert(class.to_string());
-        self.mark_self_dirty();
+        self.mark_dirty();
         self
     }
 
@@ -340,23 +340,89 @@ impl HtmlNode {
         }
     }
 
-    pub fn mark_self_dirty(&mut self) {
+    /// Mark this node as dirty and notify ancestors
+    pub fn mark_dirty(&mut self) {
         self.is_self_dirty = true;
         self.cached_node_intrinsic = None;
-
-        self.propagate_dirty_upward_auto();
+        self.set_summary_bit_on_ancestors();
     }
 
-    pub fn mark_descendant_dirty(&mut self) {
-        self.has_dirty_descendant = true;
+    /// Notify ancestors that they have a dirty descendant
+    fn set_summary_bit_on_ancestors(&mut self) {
+        if let Some(parent_ptr) = self.parent {
+            unsafe {
+                let parent = &mut *parent_ptr;
+                parent.set_summary_bit();
+            }
+        }
     }
 
-    pub fn mark_dirty_complete(&mut self) {
-        self.is_self_dirty = true;
+    /// Set summary bit and propagate upward
+    pub fn set_summary_bit(&mut self) {
+        if self.has_dirty_descendant {
+            return;
+        }
+
         self.has_dirty_descendant = true;
-        self.cached_parent_state = None;
-        self.cached_node_intrinsic = None;
-        self.cached_child_states = None;
+
+        if let Some(parent_ptr) = self.parent {
+            unsafe {
+                let parent = &mut *parent_ptr;
+                parent.set_summary_bit();
+            }
+        }
+    }
+
+    /// Find all dirty nodes in subtree and clean them up
+    pub fn find_dirty_nodes(&mut self, dirty_nodes: &mut Vec<*mut HtmlNode>) {
+        if self.is_self_dirty {
+            dirty_nodes.push(self as *mut HtmlNode);
+            self.is_self_dirty = false;
+        }
+
+        if self.has_dirty_descendant {
+            for child in &mut self.children {
+                child.find_dirty_nodes(dirty_nodes);
+            }
+            self.has_dirty_descendant = false;
+        }
+    }
+
+    /// Recursively find all dirty nodes regardless of summary bits
+    pub fn find_all_dirty_nodes_recursive(&mut self, dirty_nodes: &mut Vec<*mut HtmlNode>) {
+        if self.is_self_dirty {
+            dirty_nodes.push(self as *mut HtmlNode);
+            self.is_self_dirty = false;
+        }
+
+        for child in &mut self.children {
+            child.find_all_dirty_nodes_recursive(dirty_nodes);
+        }
+
+        self.has_dirty_descendant = false;
+    }
+
+    /// Collect all dirty nodes
+    pub fn collect_dirty_nodes(&mut self) -> Vec<*mut HtmlNode> {
+        let mut dirty_nodes = Vec::new();
+        self.find_dirty_nodes(&mut dirty_nodes);
+        dirty_nodes
+    }
+
+    /// Process all dirty nodes with a closure
+    pub fn process_dirty_nodes<F>(&mut self, mut processor: F)
+    where
+        F: FnMut(*mut HtmlNode),
+    {
+        let dirty_nodes = self.collect_dirty_nodes();
+        for node_ptr in dirty_nodes {
+            processor(node_ptr);
+        }
+    }
+
+    /// Check if subtree has dirty nodes
+    pub fn has_dirty_nodes(&self) -> bool {
+        self.is_self_dirty || self.has_dirty_descendant
     }
 
     pub fn needs_any_recomputation(&self, new_parent_state: BitVector) -> bool {
@@ -366,37 +432,8 @@ impl HtmlNode {
             || self.cached_parent_state.unwrap() != new_parent_state
     }
 
-    pub fn needs_self_recomputation(&self, new_parent_state: BitVector) -> bool {
-        self.is_self_dirty
-            || self.cached_parent_state.is_none()
-            || self.cached_parent_state.unwrap() != new_parent_state
-    }
-
     pub fn mark_clean(&mut self) {
         self.is_self_dirty = false;
-    }
-
-    pub fn mark_descendants_clean(&mut self) {
-        self.has_dirty_descendant = false;
-    }
-
-    pub fn propagate_dirty_upward(&mut self, path_to_root: &mut [&mut HtmlNode]) {
-        self.mark_self_dirty();
-        for ancestor in path_to_root.iter_mut() {
-            ancestor.mark_descendant_dirty();
-        }
-    }
-
-    fn propagate_dirty_upward_auto(&mut self) {
-        if let Some(parent_ptr) = self.parent {
-            unsafe {
-                let parent = &mut *parent_ptr;
-                if !parent.has_dirty_descendant {
-                    parent.has_dirty_descendant = true;
-                    parent.propagate_dirty_upward_auto();
-                }
-            }
-        }
     }
 
     pub fn mark_child_dirty_by_index(&mut self, child_index: usize) -> bool {
@@ -404,13 +441,13 @@ impl HtmlNode {
             return false;
         }
 
-        self.children[child_index].mark_self_dirty();
+        self.children[child_index].mark_dirty();
         true
     }
 
     pub fn mark_node_dirty_by_path(&mut self, path: &[usize]) -> bool {
         if path.is_empty() {
-            self.mark_self_dirty();
+            self.mark_dirty();
             return true;
         }
 
@@ -891,5 +928,156 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
         SimpleSelector::Type(tag) => node.tag_name == *tag,
         SimpleSelector::Class(class) => node.classes.contains(class),
         SimpleSelector::Id(id) => node.id.as_deref() == Some(id),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dirty_marking_python_style() {
+        // Create a tree: root -> child1 -> grandchild
+        let mut root = HtmlNode::new("div");
+        let mut child1 = HtmlNode::new("span");
+        let grandchild = HtmlNode::new("p");
+
+        child1 = child1.add_child(grandchild);
+        root = root.add_child(child1);
+        root.init_parent_pointers();
+
+        // Clean all initial dirty state (nodes are dirty from construction)
+        let mut initial_dirty = Vec::new();
+        root.find_all_dirty_nodes_recursive(&mut initial_dirty);
+
+        // Now nothing should be dirty
+        assert!(!root.has_dirty_nodes());
+        assert!(!root.is_self_dirty);
+        assert!(!root.has_dirty_descendant);
+
+        // Mark the grandchild as dirty
+        if let Some(grandchild) = root.children[0].children.get_mut(0) {
+            grandchild.mark_dirty();
+        }
+
+        // Check that summary bits propagated correctly:
+        // - root should have dirty descendant (because child1 has dirty descendant)
+        // - child1 should have dirty descendant (because grandchild is dirty)
+        // - grandchild should be self dirty (but not have dirty descendant)
+        assert!(!root.is_self_dirty);
+        assert!(root.has_dirty_descendant);
+        assert!(!root.children[0].is_self_dirty);
+        assert!(root.children[0].has_dirty_descendant);
+        assert!(root.children[0].children[0].is_self_dirty);
+        assert!(!root.children[0].children[0].has_dirty_descendant);
+
+        // Collect dirty nodes
+        let dirty_nodes = root.collect_dirty_nodes();
+        assert_eq!(dirty_nodes.len(), 1);
+
+        // After collection, tree should be clean
+        assert!(!root.has_dirty_nodes());
+        assert!(!root.has_dirty_descendant);
+        assert!(!root.children[0].has_dirty_descendant);
+        assert!(!root.children[0].children[0].is_self_dirty);
+    }
+
+    #[test]
+    fn test_multiple_dirty_nodes() {
+        let mut root = HtmlNode::new("div");
+        let child1 = HtmlNode::new("span");
+        let child2 = HtmlNode::new("p");
+
+        root = root.add_child(child1).add_child(child2);
+        root.init_parent_pointers();
+
+        // Clean initial dirty state
+        let mut initial_dirty = Vec::new();
+        root.find_all_dirty_nodes_recursive(&mut initial_dirty);
+
+        // Mark root and second child as dirty
+        root.mark_dirty();
+        root.children[1].mark_dirty();
+
+        // Check state after marking:
+        // - root is self dirty and has dirty descendant
+        // - child1 is not dirty
+        // - child2 is self dirty but has no dirty descendant
+        assert!(root.is_self_dirty);
+        assert!(root.has_dirty_descendant);
+        assert!(!root.children[0].is_self_dirty);
+        assert!(!root.children[0].has_dirty_descendant);
+        assert!(root.children[1].is_self_dirty);
+        assert!(!root.children[1].has_dirty_descendant);
+
+        // Collect dirty nodes
+        let dirty_nodes = root.collect_dirty_nodes();
+        assert_eq!(dirty_nodes.len(), 2);
+
+        // Tree should be clean after collection
+        assert!(!root.has_dirty_nodes());
+    }
+
+    #[test]
+    fn test_ancestor_summary_propagation() {
+        // Create deeper tree: root -> child -> grandchild -> great_grandchild
+        let mut root = HtmlNode::new("div");
+        let mut child = HtmlNode::new("span");
+        let mut grandchild = HtmlNode::new("p");
+        let great_grandchild = HtmlNode::new("a");
+
+        grandchild = grandchild.add_child(great_grandchild);
+        child = child.add_child(grandchild);
+        root = root.add_child(child);
+        root.init_parent_pointers();
+
+        // Clean initial dirty state
+        let mut initial_dirty = Vec::new();
+        root.find_all_dirty_nodes_recursive(&mut initial_dirty);
+
+        // Mark the deepest node as dirty
+        root.children[0].children[0].children[0].mark_dirty();
+
+        // Check that summary bits propagated all the way up
+        assert!(!root.is_self_dirty);
+        assert!(root.has_dirty_descendant);
+        assert!(!root.children[0].is_self_dirty);
+        assert!(root.children[0].has_dirty_descendant);
+        assert!(!root.children[0].children[0].is_self_dirty);
+        assert!(root.children[0].children[0].has_dirty_descendant);
+        assert!(root.children[0].children[0].children[0].is_self_dirty);
+        assert!(!root.children[0].children[0].children[0].has_dirty_descendant);
+
+        // Collect dirty nodes
+        let dirty_nodes = root.collect_dirty_nodes();
+        assert_eq!(dirty_nodes.len(), 1);
+
+        // All summary bits should be cleared
+        assert!(!root.has_dirty_descendant);
+        assert!(!root.children[0].has_dirty_descendant);
+        assert!(!root.children[0].children[0].has_dirty_descendant);
+    }
+
+    #[test]
+    fn test_process_dirty_nodes() {
+        let mut root = HtmlNode::new("div");
+        let child = HtmlNode::new("span");
+        root = root.add_child(child);
+        root.init_parent_pointers();
+
+        // Clean initial dirty state
+        let mut initial_dirty = Vec::new();
+        root.find_all_dirty_nodes_recursive(&mut initial_dirty);
+
+        // Mark child as dirty
+        root.children[0].mark_dirty();
+
+        let mut processed_count = 0;
+        root.process_dirty_nodes(|_node_ptr| {
+            processed_count += 1;
+        });
+
+        assert_eq!(processed_count, 1);
+        assert!(!root.has_dirty_nodes());
     }
 }

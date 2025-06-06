@@ -1,4 +1,5 @@
 use css_bitvector_compiler::*;
+use serde_json;
 use std::fs;
 
 // Generated CSS processing function
@@ -10,7 +11,7 @@ fn process_node_generated_incremental(node: &mut HtmlNode, parent_state: BitVect
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or_default();
+        return node.cached_child_states.unwrap_or(BitVector::new());
     }
 
     // Recompute node intrinsic matches if needed
@@ -66,7 +67,7 @@ fn process_node_generated_incremental(node: &mut HtmlNode, parent_state: BitVect
     }
 
     // Start with cached intrinsic matches
-    let current_matches = node.cached_node_intrinsic.unwrap();
+    let mut current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Optimized selector matching using hash tables (conceptual)
@@ -225,39 +226,6 @@ fn process_node_generated_inplace(node: &mut HtmlNode, parent_state: BitVector) 
     // Store result in node (in-place)
     node.css_match_bitvector = current_matches;
     child_states
-}
-
-fn needs_recomputation_generated(node: &HtmlNode, new_parent_state: BitVector) -> bool {
-    node.is_self_dirty
-        || node.has_dirty_descendant
-        || node.cached_parent_state.is_none()
-        || node.cached_parent_state.unwrap() != new_parent_state
-}
-
-fn process_tree_generated_incremental(root: &mut HtmlNode) {
-    process_tree_recursive_generated_incremental(root, BitVector::new());
-}
-
-fn process_tree_recursive_generated_incremental(node: &mut HtmlNode, parent_state: BitVector) {
-    let child_states = process_node_generated_incremental(node, parent_state);
-
-    // Recursively process children
-    for child in node.children.iter_mut() {
-        process_tree_recursive_generated_incremental(child, child_states);
-    }
-}
-
-fn process_tree_generated(root: &mut HtmlNode) {
-    process_tree_recursive_generated(root, BitVector::new());
-}
-
-fn process_tree_recursive_generated(node: &mut HtmlNode, parent_state: BitVector) {
-    let child_states = process_node_generated_inplace(node, parent_state);
-
-    // Recursively process children
-    for child in node.children.iter_mut() {
-        process_tree_recursive_generated(child, child_states);
-    }
 }
 
 fn load_dom_from_file() -> HtmlNode {
@@ -442,7 +410,7 @@ fn main() {
 
     // Test 3: Mark a deep node dirty and test incremental processing
     if let Some(deep_node) = find_deep_node(&mut root, 5) {
-        deep_node.mark_self_dirty();
+        deep_node.mark_dirty();
         println!("\n📝 Marked a deep node dirty...");
 
         println!("\n📊 Test 3: After deep node modification");
@@ -549,8 +517,6 @@ fn main() {
         "⏱️  Total program execution: {} CPU cycles",
         total_program_cycles
     );
-
-    println!("\nSUCCESS: Generated CSS engine with comprehensive performance testing completed!");
 }
 
 // Helper function to reset cache state for benchmarking

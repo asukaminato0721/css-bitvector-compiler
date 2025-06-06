@@ -195,7 +195,6 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
 
         // Verify success
         if stdout.contains("SUCCESS") {
-            println!("🎉 CodeGen Google trace test completed successfully!");
         } else {
             return Err("Generated example did not complete successfully".into());
         }
@@ -404,7 +403,7 @@ where
     
     // Test 3: Mark a deep node dirty and test incremental processing
     if let Some(deep_node) = find_deep_node(&mut root, 5) {
-        deep_node.mark_self_dirty();
+        deep_node.mark_dirty();
         println!("\n📝 Marked a deep node dirty...");
 
         println!("\n📊 Test 3: After deep node modification");
@@ -471,8 +470,6 @@ where
     let program_end_cycles = rdtsc();
     let total_program_cycles = cycles_to_duration(program_start_cycles, program_end_cycles);
     println!("⏱️  Total program execution: {} CPU cycles", total_program_cycles);
-    
-    println!("\nSUCCESS: Generated CSS engine with comprehensive performance testing completed!");
 }
 
 // Helper function to reset cache state for benchmarking
@@ -1167,53 +1164,6 @@ impl TreeNFAProgram {
         code.push_str("    node.css_match_bitvector = current_matches;\n");
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
-
-        // Generate helper function for cache checking
-        code.push_str("fn needs_recomputation_generated(node: &HtmlNode, new_parent_state: BitVector) -> bool {\n");
-        code.push_str("    node.is_self_dirty ||\n");
-        code.push_str("    node.has_dirty_descendant ||\n");
-        code.push_str("    node.cached_parent_state.is_none() ||\n");
-        code.push_str("    node.cached_parent_state.unwrap() != new_parent_state\n");
-        code.push_str("}\n\n");
-
-        // Generate incremental tree processing driver
-        code.push_str("fn process_tree_generated_incremental(root: &mut HtmlNode) {\n");
-        code.push_str(
-            "    process_tree_recursive_generated_incremental(root, BitVector::new());\n",
-        );
-        code.push_str("}\n\n");
-
-        code.push_str("fn process_tree_recursive_generated_incremental(node: &mut HtmlNode, parent_state: BitVector) {\n");
-        code.push_str(
-            "    let child_states = process_node_generated_incremental(node, parent_state);\n",
-        );
-        code.push_str("    \n");
-        code.push_str("    // Recursively process children\n");
-        code.push_str("    for child in node.children.iter_mut() {\n");
-        code.push_str(
-            "        process_tree_recursive_generated_incremental(child, child_states);\n",
-        );
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
-
-        // Generate basic driver function
-        code.push_str("fn process_tree_generated(root: &mut HtmlNode) {\n");
-        code.push_str("    process_tree_recursive_generated(root, BitVector::new());\n");
-        code.push_str("}\n\n");
-
-        code.push_str(
-            "fn process_tree_recursive_generated(node: &mut HtmlNode, parent_state: BitVector) {\n",
-        );
-        code.push_str(
-            "    let child_states = process_node_generated_inplace(node, parent_state);\n",
-        );
-        code.push_str("    \n");
-        code.push_str("    // Recursively process children\n");
-        code.push_str("    for child in node.children.iter_mut() {\n");
-        code.push_str("        process_tree_recursive_generated(child, child_states);\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
-
         code
     }
 
@@ -1873,7 +1823,6 @@ fn main() {
         println!("Google trace test failed: {}", e);
         println!("This is expected if css-gen-op files are not available");
     } else {
-        println!("✓ Google trace test completed successfully!");
     }
 }
 
