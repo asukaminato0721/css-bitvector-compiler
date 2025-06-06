@@ -48,11 +48,14 @@ struct HtmlNode {
     children: Vec<HtmlNode>,
     css_match_bitvector: BitVector,
     
+    // Double Dirty Bit Algorithm state
+    is_self_dirty: bool,           // This node's own attributes changed
+    has_dirty_descendant: bool,    // Some descendant needs recomputation (summary bit)
+    
     // Incremental processing state
     cached_parent_state: Option<BitVector>,     // Input: parent state from last computation
     cached_node_intrinsic: Option<BitVector>,   // Input: node's own selector matches (computed once)
     cached_child_states: Option<BitVector>,     // Output: states to propagate to children
-    is_dirty: bool,                             // Whether this node needs recomputation
 }
 
 impl HtmlNode {
@@ -63,22 +66,23 @@ impl HtmlNode {
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
+            is_self_dirty: true,  // New nodes need computation
+            has_dirty_descendant: false,
             cached_parent_state: None,
             cached_node_intrinsic: None,
             cached_child_states: None,
-            is_dirty: true,
         }
     }
 
     fn with_id(mut self, id: &str) -> Self {
         self.id = Some(id.to_string());
-        self.mark_dirty(); // Changing attributes makes node dirty
+        self.mark_self_dirty(); // Only mark self as dirty, not children
         self
     }
 
     fn with_class(mut self, class: &str) -> Self {
         self.classes.insert(class.to_string());
-        self.mark_dirty(); // Changing attributes makes node dirty
+        self.mark_self_dirty(); // Only mark self as dirty, not children
         self
     }
 
@@ -87,24 +91,55 @@ impl HtmlNode {
         self
     }
     
-    // Mark this node and all descendants as needing recomputation
-    fn mark_dirty(&mut self) {
-        self.is_dirty = true;
+    // Mark only this node as dirty (attributes changed)
+    fn mark_self_dirty(&mut self) {
+        self.is_self_dirty = true;
+        self.cached_node_intrinsic = None; // Invalidate intrinsic cache
+        // Don't clear parent/child state - they may still be valid
+    }
+    
+    // Mark this node as having dirty descendants and propagate summary bit upward
+    fn mark_descendant_dirty(&mut self) {
+        self.has_dirty_descendant = true;
+        // Propagate summary bit would happen here in a real implementation
+        // For now, we'll handle this in the processing logic
+    }
+    
+    // Complete dirty marking (for structural changes)
+    fn mark_dirty_complete(&mut self) {
+        self.is_self_dirty = true;
+        self.has_dirty_descendant = true;
         self.cached_parent_state = None;
         self.cached_node_intrinsic = None;
         self.cached_child_states = None;
-        
-        // Propagate dirtiness to children since parent state will change
-        for child in &mut self.children {
-            child.mark_dirty();
-        }
+        // Still don't recursively dirty children
     }
     
-    // Check if inputs have changed and we need to recompute
-    fn needs_recomputation(&self, new_parent_state: BitVector) -> bool {
-        self.is_dirty || 
+    // Check if this node or any descendant needs recomputation
+    fn needs_any_recomputation(&self, new_parent_state: BitVector) -> bool {
+        self.is_self_dirty || 
+        self.has_dirty_descendant ||
         self.cached_parent_state.is_none() ||
         self.cached_parent_state.unwrap() != new_parent_state
+    }
+    
+    // Check if only this node needs recomputation
+    fn needs_self_recomputation(&self, new_parent_state: BitVector) -> bool {
+        self.is_self_dirty ||
+        self.cached_parent_state.is_none() ||
+        self.cached_parent_state.unwrap() != new_parent_state
+    }
+    
+    // Clean dirty flags after processing
+    fn mark_clean(&mut self) {
+        self.is_self_dirty = false;
+        // Don't clear has_dirty_descendant here - it will be cleared
+        // when all descendants are processed
+    }
+    
+    // Clean descendant dirty flag when all children are processed
+    fn mark_descendants_clean(&mut self) {
+        self.has_dirty_descendant = false;
     }
 }
 
@@ -122,9 +157,9 @@ fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
 ) -> BitVector { // returns child_states
-    // Check if we need to recompute
-    if !needs_recomputation_generated(node, parent_state) {
-        // Return cached result
+    // Double dirty bit optimization: skip if no recomputation needed
+    if !node.needs_any_recomputation(parent_state) {
+        // Return cached result - entire subtree can be skipped
         return node.cached_child_states.unwrap_or(BitVector::new());
     }
 
@@ -154,6 +189,9 @@ fn process_node_generated_incremental(
     let mut current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
+    // Optimized selector matching using hash tables (conceptual)
+    // In practice, rules would be pre-indexed by tag/class/id
+
     // Apply parent-dependent rules
     // Instruction 1: PropagateToChildren { match_bit: 0, active_bit: 1 }
     if current_matches.is_bit_set(0) {
@@ -175,11 +213,11 @@ fn process_node_generated_incremental(
         current_matches.set_bit(6); // match_Type("div")_gt_Class("item")
     }
 
-    // Cache results
+    // Cache results and mark clean
     node.css_match_bitvector = current_matches;
     node.cached_parent_state = Some(parent_state);
     node.cached_child_states = Some(child_states);
-    node.is_dirty = false;
+    node.mark_clean(); // Use double dirty bit cleanup
 
     child_states
 }

@@ -111,7 +111,6 @@ def regularize_dom(j: Dict[str, Any]) -> Optional[Dict[str, Any]]:
             j["children"] = []
         tmp: List[Dict[str, Any]] = []
         for c in j["children"]:
-        for c in j["children"]:
             c = regularize_dom(c)
             if c is not None:
                 tmp.append(c)
