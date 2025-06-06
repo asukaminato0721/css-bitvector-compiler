@@ -4,13 +4,7 @@
 python3 generate.py google.trace
 ```
 
-get command.json, record the html change op , then
-
-```
-python3 incremental_css_engine.py command.json
-```
-
-
+get command.json, record the html change op
 
 ---
 
