@@ -1,6 +1,4 @@
 use css_bitvector_compiler::*;
-use serde_json;
-use std::fs;
 
 // Generated CSS processing function
 // Generated Tree NFA Program with Incremental Processing
@@ -136,34 +134,6 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
-fn load_dom_from_file() -> HtmlNode {
-    // Try to read Google trace data from file
-    let json_data =
-        fs::read_to_string("css-gen-op/command.json").expect("fail to read command.json");
-
-    // Get the first line which should be the init command
-    let first_line = json_data
-        .lines()
-        .next()
-        .expect("File is empty or cannot read first line");
-
-    // Parse the JSON to get the DOM tree
-    let trace_data: serde_json::Value =
-        serde_json::from_str(first_line).expect("Failed to parse command.json");
-
-    // Check if it's an init command
-    if trace_data["name"] != "init" {
-        println!("⚠️ Expected init command, using mock data");
-    }
-
-    // Extract the node from init command
-    let google_node_data = &trace_data["node"];
-
-    // Convert JSON DOM to HtmlNode and initialize parent pointers
-    let mut root = convert_json_dom_to_html_node(google_node_data);
-    root.init_parent_pointers();
-    root
-}
 // Real incremental processing with statistics tracking
 fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;

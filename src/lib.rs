@@ -434,6 +434,7 @@ impl HtmlNode {
 
     pub fn mark_clean(&mut self) {
         self.is_self_dirty = false;
+        self.has_dirty_descendant = false;
     }
 
     pub fn mark_child_dirty_by_index(&mut self, child_index: usize) -> bool {
@@ -456,7 +457,12 @@ impl HtmlNode {
             return false;
         }
 
-        self.children[first_index].mark_node_dirty_by_path(&path[1..])
+        let success = self.children[first_index].mark_node_dirty_by_path(&path[1..]);
+        if success {
+            // Mark this node as having dirty descendant
+            self.has_dirty_descendant = true;
+        }
+        success
     }
 
     pub fn init_parent_pointers(&mut self) {
@@ -871,8 +877,32 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
 
 // DOM creation helper functions
 pub fn load_dom_from_file() -> HtmlNode {
-    // This will be replaced in generated examples with direct module loading
-    HtmlNode::new("div").with_id("placeholder")
+    // Try to read Google trace data from file
+    let json_data =
+        std::fs::read_to_string("css-gen-op/command.json").expect("fail to read command.json");
+
+    // Get the first line which should be the init command
+    let first_line = json_data
+        .lines()
+        .next()
+        .expect("File is empty or cannot read first line");
+
+    // Parse the JSON to get the DOM tree
+    let trace_data: serde_json::Value =
+        serde_json::from_str(first_line).expect("Failed to parse command.json");
+
+    // Check if it's an init command
+    if trace_data["name"] != "init" {
+        println!("⚠️ Expected init command, using mock data");
+    }
+
+    // Extract the node from init command
+    let google_node_data = &trace_data["node"];
+
+    // Convert JSON DOM to HtmlNode and initialize parent pointers
+    let mut root = convert_json_dom_to_html_node(google_node_data);
+    root.init_parent_pointers();
+    root
 }
 
 pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode {
