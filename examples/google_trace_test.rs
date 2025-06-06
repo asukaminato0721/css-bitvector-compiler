@@ -1,5 +1,4 @@
 use css_bitvector_compiler::*;
-use serde_json;
 use std::fs;
 
 // Generated CSS processing function
@@ -11,7 +10,7 @@ fn process_node_generated_incremental(node: &mut HtmlNode, parent_state: BitVect
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or(BitVector::new());
+        return node.cached_child_states.unwrap_or_default();
     }
 
     // Recompute node intrinsic matches if needed
@@ -67,7 +66,7 @@ fn process_node_generated_incremental(node: &mut HtmlNode, parent_state: BitVect
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Optimized selector matching using hash tables (conceptual)
