@@ -145,27 +145,27 @@ def regularize_layout(j: Dict[str, Any]) -> Dict[str, Any]:
     return j
 
 
-trace_list: List[str] = []
-
-trace_list.append("aliyun")
-trace_list.append("amazon")
-trace_list.append("anydesk")
-trace_list.append("apple")
-trace_list.append("archive")
-trace_list.append("arxiv")
-trace_list.append("bananaspace")
-trace_list.append("bilibili")
-trace_list.append("booking")
-trace_list.append("chess")
-trace_list.append("coursera")
-trace_list.append("cppreference")
-trace_list.append("discord_nologin")
-trace_list.append("espn")
-trace_list.append("expedia")
-trace_list.append("firefox")
-trace_list.append("github_commits")
-trace_list.append("github_nologin")
-trace_list.append("github_repo")
+trace_list: List[str] = [
+    "aliyun",
+    "amazon",
+    "anydesk",
+    "apple",
+    "archive",
+    "arxiv",
+    "bananaspace",
+    "bilibili",
+    "booking",
+    "chess",
+    "coursera",
+    "cppreference",
+    "discord_nologin",
+    "espn",
+    "expedia",
+    "firefox",
+    "github_commits",
+    "github_nologin",
+    "github_repo",
+]
 trace_list.append("gmail_nologin")
 trace_list.append("google_hover")
 trace_list.append("google_play")
