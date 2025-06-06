@@ -117,7 +117,7 @@ fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
 ) -> BitVector { // returns child_states
-    // Double dirty bit optimization: skip if no recomputation needed
+    // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
         return node.cached_child_states.unwrap_or(BitVector::new());
@@ -228,11 +228,11 @@ fn process_node_generated_incremental(
         child_states.set_bit(17); // active_Id("gbz")
     }
 
-    // Cache results and mark clean
+    // Cache results
     node.css_match_bitvector = current_matches;
     node.cached_parent_state = Some(parent_state);
     node.cached_child_states = Some(child_states);
-    node.mark_clean(); // Use double dirty bit cleanup
+    node.mark_clean();
 
     child_states
 }

@@ -860,7 +860,7 @@ impl TreeNFAProgram {
         code.push_str("    node: &mut HtmlNode,\n");
         code.push_str("    parent_state: BitVector,\n");
         code.push_str(") -> BitVector { // returns child_states\n");
-        code.push_str("    // Double dirty bit optimization: skip if no recomputation needed\n");
+        code.push_str("    // Check if we need to recompute\n");
         code.push_str("    if !node.needs_any_recomputation(parent_state) {\n");
         code.push_str("        // Return cached result - entire subtree can be skipped\n");
         code.push_str("        return node.cached_child_states.unwrap_or(BitVector::new());\n");
@@ -966,11 +966,11 @@ impl TreeNFAProgram {
             }
         }
 
-        code.push_str("    // Cache results and mark clean\n");
+        code.push_str("    // Cache results\n");
         code.push_str("    node.css_match_bitvector = current_matches;\n");
         code.push_str("    node.cached_parent_state = Some(parent_state);\n");
         code.push_str("    node.cached_child_states = Some(child_states);\n");
-        code.push_str("    node.mark_clean(); // Use double dirty bit cleanup\n\n");
+        code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
@@ -1498,35 +1498,56 @@ impl TreeNFAVM {
         parent_state: BitVector,
         stats: &mut IncrementalStats,
     ) {
-        // Only process if this node or its descendants need recomputation
-        if !node.needs_any_recomputation(parent_state) {
+        stats.total_nodes += 1;
+        
+        // Check if this node needs any recomputation
+        let needs_recomputation = node.needs_any_recomputation(parent_state);
+        
+        if !needs_recomputation {
+            stats.cache_hits += 1;
             return; // Skip entire subtree - this is a cache hit for the whole subtree
         }
 
-        stats.total_nodes += 1;
+        // Check if the node itself needs recomputation vs just traversal for descendants
+        let needs_self_recomputation = node.is_self_dirty 
+            || node.cached_parent_state.is_none()
+            || node.cached_parent_state.unwrap() != parent_state;
 
-        let was_cached = !node.needs_any_recomputation(parent_state);
-        if was_cached {
-            stats.cache_hits += 1;
-        } else {
+        if needs_self_recomputation {
             stats.cache_misses += 1;
-        }
-
-        let child_states = self.process_node_incremental(node, parent_state);
-
-        // Process all children - in first run, all will be processed
-        // In subsequent runs, only dirty paths will be processed
-        let mut any_child_was_dirty = false;
-        for child in node.children.iter_mut() {
-            if child.needs_any_recomputation(child_states) {
-                any_child_was_dirty = true;
-                self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
+            let child_states = self.process_node_incremental(node, parent_state);
+            
+            // Process all children
+            let mut any_child_was_dirty = false;
+            for child in node.children.iter_mut() {
+                if child.needs_any_recomputation(child_states) {
+                    any_child_was_dirty = true;
+                    self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
+                }
             }
-        }
-        
-        // Clear the summary bit since we've processed all dirty descendants
-        if any_child_was_dirty || node.has_dirty_descendant {
-            node.mark_descendants_clean();
+            
+            // Clear the summary bit since we've processed all dirty descendants
+            if any_child_was_dirty || node.has_dirty_descendant {
+                node.mark_descendants_clean();
+            }
+        } else {
+            // This node doesn't need recomputation, but descendants do
+            stats.cache_hits += 1;
+            let child_states = node.cached_child_states.unwrap_or(BitVector::new());
+            
+            // Process children that need recomputation
+            let mut any_child_was_dirty = false;
+            for child in node.children.iter_mut() {
+                if child.needs_any_recomputation(child_states) {
+                    any_child_was_dirty = true;
+                    self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
+                }
+            }
+            
+            // Clear the summary bit since we've processed all dirty descendants
+            if any_child_was_dirty || node.has_dirty_descendant {
+                node.mark_descendants_clean();
+            }
         }
     }
 }
@@ -2579,6 +2600,8 @@ fn main() {{
         // Test 3: Modify node and verify selective recomputation
         println!("\nTest 3: Selective recomputation after modification");
         root.children[0].mark_self_dirty();
+        // Also need to mark parent as having dirty descendants
+        root.mark_descendant_dirty();
 
         let stats3 = vm.process_tree_incremental_with_stats(&mut root);
         assert!(stats3.cache_hits > 0, "Some nodes should still be cached");

@@ -157,14 +157,14 @@ fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
 ) -> BitVector { // returns child_states
-    // Double dirty bit optimization: skip if no recomputation needed
+    // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
         return node.cached_child_states.unwrap_or(BitVector::new());
     }
 
     // Recompute node intrinsic matches if needed
-    if node.cached_node_intrinsic.is_none() || node.is_dirty {
+    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
         let mut intrinsic_matches = BitVector::new();
 
         // Instruction 0: CheckAndSetBit { selector: Type("div"), bit_pos: 0 }
@@ -213,11 +213,11 @@ fn process_node_generated_incremental(
         current_matches.set_bit(6); // match_Type("div")_gt_Class("item")
     }
 
-    // Cache results and mark clean
+    // Cache results
     node.css_match_bitvector = current_matches;
     node.cached_parent_state = Some(parent_state);
     node.cached_child_states = Some(child_states);
-    node.mark_clean(); // Use double dirty bit cleanup
+    node.mark_clean();
 
     child_states
 }
@@ -270,7 +270,8 @@ fn process_node_generated_inplace(
 }
 
 fn needs_recomputation_generated(node: &HtmlNode, new_parent_state: BitVector) -> bool {
-    node.is_dirty ||
+    node.is_self_dirty ||
+    node.has_dirty_descendant ||
     node.cached_parent_state.is_none() ||
     node.cached_parent_state.unwrap() != new_parent_state
 }
