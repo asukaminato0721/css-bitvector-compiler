@@ -6,23 +6,31 @@ from common import *
 TOTAL_DIFF_SIZE: int = 0
 TOTAL_SIZE: int = 0
 
+
 def report_diff(x: Dict[str, Any]) -> None:
     global TOTAL_DIFF_SIZE
     TOTAL_DIFF_SIZE += size(x)
 
+
 trace_path: str = sys.argv[1]
 
 output: TextIO = open("command.json", "w")
+
+
 def out(x: Dict[str, Any]) -> None:
-    output.write(json.dumps(x) + "\n")    
+    output.write(json.dumps(x) + "\n")
+
 
 class Counter:
     def __init__(self) -> None:
         self.cnt: int = 0
+
     def count(self) -> None:
         self.cnt += 1
+
     def num(self) -> int:
         return self.cnt
+
 
 INSERT_COUNT: Counter = Counter()
 REMOVE_COUNT: Counter = Counter()
@@ -31,7 +39,10 @@ REPLACE_VALUE_COUNT: Counter = Counter()
 INSERT_VALUE_COUNT: Counter = Counter()
 DELETE_VALUE_COUNT: Counter = Counter()
 
-def diff_simple_dict(l_dict: Dict[str, Any], r_dict: Dict[str, Any], path: List[int], on: str, type_: str) -> None:
+
+def diff_simple_dict(
+    l_dict: Dict[str, Any], r_dict: Dict[str, Any], path: List[int], on: str, type_: str
+) -> None:
     for k in l_dict.keys():
         if k in r_dict:
             if l_dict[k] != r_dict[k]:
@@ -58,9 +69,13 @@ def diff_dom_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> 
         out(command_replace(path, lhs, rhs))
     else:
         if lhs["attributes"] != rhs["attributes"]:
-            diff_simple_dict(lhs["attributes"], rhs["attributes"], path, str(lhs)[:120], "attributes")
+            diff_simple_dict(
+                lhs["attributes"], rhs["attributes"], path, str(lhs)[:120], "attributes"
+            )
         if lhs["properties"] != rhs["properties"]:
-            diff_simple_dict(lhs["properties"], rhs["properties"], path, str(lhs)[:120], "properties")
+            diff_simple_dict(
+                lhs["properties"], rhs["properties"], path, str(lhs)[:120], "properties"
+            )
         l_children: List[Dict[str, Any]] = lhs["children"]
         r_children: List[Dict[str, Any]] = rhs["children"]
 
@@ -84,11 +99,13 @@ def diff_dom_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> 
                     break
             if not found:
                 INSERT_COUNT.count()
-                out(command_add(path + [r_i], r_children[r_i]))                
+                out(command_add(path + [r_i], r_children[r_i]))
+
 
 def layout_info(node: Dict[str, Any]) -> Dict[str, Any]:
     key: List[str] = ["type", "x", "y", "width", "height"]
     return {k: node[k] for k in key}
+
 
 def diff_layout_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> None:
     if layout_info(lhs) != layout_info(rhs):
@@ -96,18 +113,25 @@ def diff_layout_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) 
     l_children: List[Dict[str, Any]] = lhs["children"]
     r_children: List[Dict[str, Any]] = rhs["children"]
     if len(l_children) > len(r_children):
-        extra: List[Dict[str, Any]] = list(l_children[len(r_children):])
+        extra: List[Dict[str, Any]] = list(l_children[len(r_children) :])
         for i in range(len(extra)):
-            out(command_layout_remove(path + [len(l_children) - 1 - i], l_children[len(l_children) - 1 - i]))
+            out(
+                command_layout_remove(
+                    path + [len(l_children) - 1 - i],
+                    l_children[len(l_children) - 1 - i],
+                )
+            )
     elif len(l_children) < len(r_children):
-        extra = list(r_children[len(l_children):])
+        extra = list(r_children[len(l_children) :])
         for i in range(len(extra)):
             out(command_layout_add(path + [len(l_children) + i], extra[i]))
     for i in range(min(len(l_children), len(r_children))):
         diff_layout_tree(l_children[i], r_children[i], path + [i])
-    
+
+
 def semantic_check(j: Dict[str, Any]) -> None:
     enforce_unique_id(j, set())
+
 
 def enforce_unique_id(j: Dict[str, Any], s: Set[Any]) -> None:
     if "id" in j:
@@ -116,7 +140,8 @@ def enforce_unique_id(j: Dict[str, Any], s: Set[Any]) -> None:
     if "children" in j:
         for c in j["children"]:
             enforce_unique_id(c, s)
-    
+
+
 with open(trace_path) as f:
     dom_tree_old: Optional[Dict[str, Any]] = None
     layout_tree_old: Optional[Dict[str, Any]] = None
@@ -140,5 +165,13 @@ with open(trace_path) as f:
 
 print((TOTAL_DIFF_SIZE, TOTAL_SIZE))
 
-print((INSERT_COUNT.num(), REMOVE_COUNT.num(), REPLACE_COUNT.num(), REPLACE_VALUE_COUNT.num(), INSERT_VALUE_COUNT.num(), DELETE_VALUE_COUNT.num()))
-
+print(
+    (
+        INSERT_COUNT.num(),
+        REMOVE_COUNT.num(),
+        REPLACE_COUNT.num(),
+        REPLACE_VALUE_COUNT.num(),
+        INSERT_VALUE_COUNT.num(),
+        DELETE_VALUE_COUNT.num(),
+    )
+)

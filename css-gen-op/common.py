@@ -1,44 +1,92 @@
 # path is a list of int.
 from typing import List, Dict, Any, Optional, Union
 
+
 def command_init(node: Dict[str, Any], time: Union[int, float]) -> Dict[str, Any]:
-    return { "name": "init", "node": node, "time": time }
+    return {"name": "init", "node": node, "time": time}
+
 
 def command_layout_init(node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "layout_init", "node": node }
+    return {"name": "layout_init", "node": node}
+
 
 def command_recalculate(time: Union[int, float]) -> Dict[str, Any]:
-    return { "name": "recalculate", "time": time }
+    return {"name": "recalculate", "time": time}
+
 
 def command_add(path: List[int], node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "add", "path": path, "node": node }
+    return {"name": "add", "path": path, "node": node}
+
 
 def command_remove(path: List[int], old_node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "remove", "path": path, "old_node": old_node }
+    return {"name": "remove", "path": path, "old_node": old_node}
+
 
 def command_layout_add(path: List[int], node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "layout_add", "path": path, "node": node }
+    return {"name": "layout_add", "path": path, "node": node}
+
 
 def command_layout_remove(path: List[int], old_node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "layout_remove", "path": path, "old_node": old_node }
+    return {"name": "layout_remove", "path": path, "old_node": old_node}
 
-def command_replace(path: List[int], old_node: Dict[str, Any], node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "replace", "path": path, "old_node": old_node, "node": node }
 
-def command_layout_replace(path: List[int], old_node: Dict[str, Any], node: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "layout_replace", "path": path, "old_node": old_node, "node": node }
+def command_replace(
+    path: List[int], old_node: Dict[str, Any], node: Dict[str, Any]
+) -> Dict[str, Any]:
+    return {"name": "replace", "path": path, "old_node": old_node, "node": node}
 
-def command_replace_value(path: List[int], on: str, type_: str, k: str, old_value: Any, v: Any) -> Dict[str, Any]:
-    return { "name": "replace_value", "path": path, "on": on, "type": type_, "key": k, "old_value": old_value, "value": v }
 
-def command_insert_value(path: List[int], on: str, type_: str, k: str, v: Any) -> Dict[str, Any]:
-    return { "name": "insert_value", "path": path, "on": on, "type": type_, "key": k, "value": v }
+def command_layout_replace(
+    path: List[int], old_node: Dict[str, Any], node: Dict[str, Any]
+) -> Dict[str, Any]:
+    return {"name": "layout_replace", "path": path, "old_node": old_node, "node": node}
 
-def command_delete_value(path: List[int], on: str, type_: str, k: str, old_value: Any) -> Dict[str, Any]:
-    return { "name": "delete_value", "path": path, "on": on, "type": type_, "key": k, "old_value": old_value }
 
-def command_layout_info_changed(path: List[int], old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
-    return { "name": "layout_info_changed", "path": path, "old": old, "new": new }
+def command_replace_value(
+    path: List[int], on: str, type_: str, k: str, old_value: Any, v: Any
+) -> Dict[str, Any]:
+    return {
+        "name": "replace_value",
+        "path": path,
+        "on": on,
+        "type": type_,
+        "key": k,
+        "old_value": old_value,
+        "value": v,
+    }
+
+
+def command_insert_value(
+    path: List[int], on: str, type_: str, k: str, v: Any
+) -> Dict[str, Any]:
+    return {
+        "name": "insert_value",
+        "path": path,
+        "on": on,
+        "type": type_,
+        "key": k,
+        "value": v,
+    }
+
+
+def command_delete_value(
+    path: List[int], on: str, type_: str, k: str, old_value: Any
+) -> Dict[str, Any]:
+    return {
+        "name": "delete_value",
+        "path": path,
+        "on": on,
+        "type": type_,
+        "key": k,
+        "old_value": old_value,
+    }
+
+
+def command_layout_info_changed(
+    path: List[int], old: Dict[str, Any], new: Dict[str, Any]
+) -> Dict[str, Any]:
+    return {"name": "layout_info_changed", "path": path, "old": old, "new": new}
+
 
 def size(j: Dict[str, Any]) -> int:
     ret: int = 1
@@ -47,6 +95,7 @@ def size(j: Dict[str, Any]) -> int:
     for c in j["children"]:
         ret += size(c)
     return ret
+
 
 def regularize_dom(j: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if "id" not in j:
@@ -77,6 +126,7 @@ def regularize_dom(j: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
         return j
 
+
 def regularize_layout(j: Dict[str, Any]) -> Dict[str, Any]:
     if "children" not in j:
         j["children"] = []
@@ -95,6 +145,7 @@ def regularize_layout(j: Dict[str, Any]) -> Dict[str, Any]:
     if "height" not in j:
         j["height"] = 0
     return j
+
 
 trace_list: List[str] = []
 
@@ -149,4 +200,4 @@ trace_list.append("windows")
 trace_list.append("yahoo")
 trace_list.append("youtube")
 
-#trace_list=["wikipedia_hover", "twitter_main"]
+# trace_list=["wikipedia_hover", "twitter_main"]
