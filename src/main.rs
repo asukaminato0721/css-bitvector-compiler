@@ -20,51 +20,59 @@ pub struct GoogleNode {
 impl GoogleNode {
     pub fn from_json(value: &serde_json::Value) -> Option<Self> {
         let obj = value.as_object()?;
-        
+
         Some(GoogleNode {
             id: obj.get("id").and_then(|v| v.as_u64()).map(|v| v as u32),
-            name: obj.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-            node_type: obj.get("type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-            namespace: obj.get("namespace").and_then(|v| v.as_str()).map(|s| s.to_string()),
-            attributes: obj.get("attributes")
+            name: obj
+                .get("name")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string(),
+            node_type: obj
+                .get("type")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string(),
+            namespace: obj
+                .get("namespace")
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string()),
+            attributes: obj
+                .get("attributes")
                 .and_then(|v| v.as_object())
                 .map(|attrs| {
-                    attrs.iter()
-                        .filter_map(|(k, v)| {
-                            v.as_str().map(|s| (k.clone(), s.to_string()))
-                        })
+                    attrs
+                        .iter()
+                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
                         .collect()
                 })
                 .unwrap_or_default(),
-            properties: obj.get("properties")
+            properties: obj
+                .get("properties")
                 .and_then(|v| v.as_object())
                 .map(|props| {
-                    props.iter()
-                        .filter_map(|(k, v)| {
-                            v.as_str().map(|s| (k.clone(), s.to_string()))
-                        })
+                    props
+                        .iter()
+                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
                         .collect()
                 })
                 .unwrap_or_default(),
             visible: obj.get("visible").and_then(|v| v.as_bool()).unwrap_or(true),
-            children: obj.get("children")
+            children: obj
+                .get("children")
                 .and_then(|v| v.as_array())
-                .map(|children| {
-                    children.iter()
-                        .filter_map(|child| GoogleNode::from_json(child))
-                        .collect()
-                })
+                .map(|children| children.iter().filter_map(GoogleNode::from_json).collect())
                 .unwrap_or_default(),
         })
     }
-    
+
     pub fn to_html_node(&self) -> HtmlNode {
         let mut node = HtmlNode::new(&self.name);
-        
+
         if let Some(id) = &self.id {
             node.id = Some(id.to_string());
         }
-        
+
         // Extract classes from attributes
         if let Some(class_attr) = self.attributes.get("class") {
             node.classes = class_attr
@@ -72,88 +80,98 @@ impl GoogleNode {
                 .map(|s| s.to_string())
                 .collect();
         }
-        
+
         // Convert children
         for child in &self.children {
             node.children.push(child.to_html_node());
         }
-        
+
         node
     }
-    
+
     pub fn count_nodes(&self) -> usize {
-        1 + self.children.iter().map(|child| child.count_nodes()).sum::<usize>()
+        1 + self
+            .children
+            .iter()
+            .map(|child| child.count_nodes())
+            .sum::<usize>()
     }
 }
 
 pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔍 Testing Google Trace with Rust CSS Engine (CodeGen Mode)\n");
-    
-    // Load Google CSS rules  
+
+    // Load Google CSS rules
     let css_content = std::fs::read_to_string("css-gen-op/https___www.google.com_.css")
         .unwrap_or_else(|_| {
             println!("⚠️ Could not load Google CSS file, using basic rules");
             "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
         });
-    
+
     let css_rules = parse_basic_css(&css_content);
     println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
-    
+
     // Compile CSS rules and generate Rust code
     let mut compiler = CssCompiler::new();
     let program = compiler.compile_css_rules(&css_rules);
-    
+
     println!("🔧 Generating optimized Rust code...");
     let generated_code = program.generate_rust_code();
-    
+
     // Read the first command from command.json to get initial DOM
     let commands_content = std::fs::read_to_string("css-gen-op/command.json")?;
-    let first_line = commands_content.lines().next().ok_or("Empty command file")?;
+    let first_line = commands_content
+        .lines()
+        .next()
+        .ok_or("Empty command file")?;
     let command: serde_json::Value = serde_json::from_str(first_line)?;
-    
+
     if command["name"] != "init" {
         return Err("First command should be init".into());
     }
-    
-    let google_node = GoogleNode::from_json(&command["node"])
-        .ok_or("Failed to parse Google node")?;
-    
-    println!("🌳 Google DOM tree contains {} nodes", google_node.count_nodes());
-    
+
+    let google_node =
+        GoogleNode::from_json(&command["node"]).ok_or("Failed to parse Google node")?;
+
+    println!(
+        "🌳 Google DOM tree contains {} nodes",
+        google_node.count_nodes()
+    );
+
     // Generate complete Rust program for Google trace testing
     let complete_program = generate_google_trace_program(&generated_code, &google_node)?;
-    
+
     // Write to temporary file
     let temp_file = "temp_google_trace_test.rs";
     std::fs::write(temp_file, &complete_program)
         .map_err(|e| format!("Failed to write generated code: {}", e))?;
-    
+
     println!("💾 Generated complete program: {}", temp_file);
-    
+
     // Compile the generated program
     println!("🔨 Compiling generated Rust code...");
     let compile_output = std::process::Command::new("rustc")
         .args([temp_file, "-o", "temp_google_trace_test", "-O"]) // Enable optimizations
         .output()
         .map_err(|e| format!("Failed to run rustc: {}", e))?;
-    
+
     if !compile_output.status.success() {
         let stderr = String::from_utf8_lossy(&compile_output.stderr);
         return Err(format!("Compilation failed: {}", stderr).into());
     }
-    
+
     println!("✅ Compilation successful!");
-    
+
     // Run the compiled program
     println!("🚀 Running generated code with Google trace data...\n");
     let run_output = std::process::Command::new("./temp_google_trace_test")
         .output()
         .map_err(|e| format!("Failed to run generated program: {}", e))?;
-    
+
     if run_output.status.success() {
         let stdout = String::from_utf8_lossy(&run_output.stdout);
         println!("{}", stdout);
-        
+
         // Verify success
         if stdout.contains("SUCCESS") {
             println!("🎉 CodeGen Google trace test completed successfully!");
@@ -164,11 +182,11 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
         let stderr = String::from_utf8_lossy(&run_output.stderr);
         return Err(format!("Generated program failed: {}", stderr).into());
     }
-    
+
     // Clean up
     // let _ = std::fs::remove_file(temp_file);
     let _ = std::fs::remove_file("temp_google_trace_test");
-    
+
     Ok(())
 }
 
@@ -176,25 +194,33 @@ fn find_deep_node(node: &mut HtmlNode, target_depth: usize) -> Option<&mut HtmlN
     if target_depth == 0 {
         return Some(node);
     }
-    
+
     for child in &mut node.children {
         if let Some(found) = find_deep_node(child, target_depth - 1) {
             return Some(found);
         }
     }
-    
+
     None
 }
 
 fn count_css_matches(node: &HtmlNode) -> usize {
-    let current_matches = if node.css_match_bitvector.bits != 0 { 1 } else { 0 };
-    current_matches + node.children.iter().map(|child| count_css_matches(child)).sum::<usize>()
+    let current_matches = if node.css_match_bitvector.bits != 0 {
+        1
+    } else {
+        0
+    };
+    current_matches + node.children.iter().map(count_css_matches).sum::<usize>()
 }
 
-fn generate_google_trace_program(generated_fn_code: &str, google_node: &GoogleNode) -> Result<String, Box<dyn std::error::Error>> {
+fn generate_google_trace_program(
+    generated_fn_code: &str,
+    google_node: &GoogleNode,
+) -> Result<String, Box<dyn std::error::Error>> {
     let node_data = serialize_google_node_to_rust_code(google_node);
-    
-    let complete_program = format!(r##"
+
+    let complete_program = format!(
+        r##"
 // Generated Google Trace Test Program
 use std::collections::HashSet;
 
@@ -407,11 +433,11 @@ fn main() {{
     
     println!("\n✅ SUCCESS: CodeGen Google trace test completed!");
 }}
-"##, 
+"##,
         generated_fn_code = generated_fn_code,
         node_data = node_data
     );
-    
+
     Ok(complete_program)
 }
 
@@ -419,52 +445,53 @@ fn serialize_google_node_to_rust_code(node: &GoogleNode) -> String {
     fn serialize_node(node: &GoogleNode, depth: usize) -> String {
         let indent = "    ".repeat(depth + 1);
         let mut code = format!("{}HtmlNode::new(\"{}\")", indent, escape_string(&node.name));
-        
+
         if let Some(id) = &node.id {
             code.push_str(&format!(".with_id(\"{}\")", escape_string(&id.to_string())));
         }
-        
+
         if let Some(class_attr) = node.attributes.get("class") {
             for class in class_attr.split_whitespace() {
                 code.push_str(&format!(".with_class(\"{}\")", escape_string(class)));
             }
         }
-        
+
         for child in &node.children {
-            code.push_str(&format!("\n{}.add_child(\n{}\n{})", 
-                indent, 
+            code.push_str(&format!(
+                "\n{}.add_child(\n{}\n{})",
+                indent,
                 serialize_node(child, depth + 1),
                 indent
             ));
         }
-        
+
         code
     }
-    
+
     serialize_node(node, 0)
 }
 
 fn escape_string(s: &str) -> String {
     s.replace("\\", "\\\\")
-     .replace("\"", "\\\"")
-     .replace("\n", "\\n")
-     .replace("\r", "\\r")
-     .replace("\t", "\\t")
+        .replace("\"", "\\\"")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\t", "\\t")
 }
 
 fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
-    
+
     // Very basic CSS parser for testing - just extract simple selectors
     let lines: Vec<&str> = css_content.lines().collect();
     let mut current_selector = String::new();
-    
+
     for line in lines {
         let line = line.trim();
         if line.is_empty() || line.starts_with("/*") {
             continue;
         }
-        
+
         if line.contains('{') && !line.contains('}') {
             // Start of a rule
             current_selector = line.split('{').next().unwrap_or("").trim().to_string();
@@ -480,14 +507,20 @@ fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
                 if !id_name.contains(' ') && !id_name.contains(':') {
                     rules.push(CssRule::Simple(SimpleSelector::Id(id_name)));
                 }
-            } else if !current_selector.contains(' ') && !current_selector.contains(':') && !current_selector.contains('.') && !current_selector.contains('#') {
+            } else if !current_selector.contains(' ')
+                && !current_selector.contains(':')
+                && !current_selector.contains('.')
+                && !current_selector.contains('#')
+            {
                 // Simple tag selector
-                rules.push(CssRule::Simple(SimpleSelector::Type(current_selector.to_lowercase())));
+                rules.push(CssRule::Simple(SimpleSelector::Type(
+                    current_selector.to_lowercase(),
+                )));
             }
             current_selector.clear();
         }
     }
-    
+
     // Add some common Google selectors we know exist
     rules.extend([
         CssRule::Simple(SimpleSelector::Type("div".to_string())),
@@ -500,7 +533,7 @@ fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
         CssRule::Simple(SimpleSelector::Id("gb".to_string())),
         CssRule::Simple(SimpleSelector::Id("gbz".to_string())),
     ]);
-    
+
     rules
 }
 
@@ -584,19 +617,26 @@ impl SelectorMatchingIndex {
 
     fn add_rule(&mut self, rule_id: usize, instruction: NFAInstruction) {
         match &instruction {
-            NFAInstruction::CheckAndSetBit { selector, .. } => {
-                match selector {
-                    SimpleSelector::Type(tag) => {
-                        self.tag_rules.entry(tag.clone()).or_default().push((rule_id, instruction));
-                    }
-                    SimpleSelector::Class(class) => {
-                        self.class_rules.entry(class.clone()).or_default().push((rule_id, instruction));
-                    }
-                    SimpleSelector::Id(id) => {
-                        self.id_rules.entry(id.clone()).or_default().push((rule_id, instruction));
-                    }
+            NFAInstruction::CheckAndSetBit { selector, .. } => match selector {
+                SimpleSelector::Type(tag) => {
+                    self.tag_rules
+                        .entry(tag.clone())
+                        .or_default()
+                        .push((rule_id, instruction));
                 }
-            }
+                SimpleSelector::Class(class) => {
+                    self.class_rules
+                        .entry(class.clone())
+                        .or_default()
+                        .push((rule_id, instruction));
+                }
+                SimpleSelector::Id(id) => {
+                    self.id_rules
+                        .entry(id.clone())
+                        .or_default()
+                        .push((rule_id, instruction));
+                }
+            },
             NFAInstruction::CheckParentAndSetBit { .. } => {
                 self.parent_dependent_rules.push((rule_id, instruction));
             }
@@ -653,9 +693,9 @@ struct HtmlNode {
     css_match_bitvector: BitVector,
 
     // Double Dirty Bit Algorithm state
-    is_self_dirty: bool,           // This node's own attributes changed
-    has_dirty_descendant: bool,    // Some descendant needs recomputation (summary bit)
-    
+    is_self_dirty: bool,        // This node's own attributes changed
+    has_dirty_descendant: bool, // Some descendant needs recomputation (summary bit)
+
     // Incremental processing state
     cached_parent_state: Option<BitVector>, // Input: parent state from last computation
     cached_node_intrinsic: Option<BitVector>, // Input: node's own selector matches (computed once)
@@ -670,7 +710,7 @@ impl HtmlNode {
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
-            is_self_dirty: true,  // New nodes need computation
+            is_self_dirty: true, // New nodes need computation
             has_dirty_descendant: false,
             cached_parent_state: None,
             cached_node_intrinsic: None,
@@ -721,7 +761,7 @@ impl HtmlNode {
 
     // Check if this node or any descendant needs recomputation
     fn needs_any_recomputation(&self, new_parent_state: BitVector) -> bool {
-        self.is_self_dirty 
+        self.is_self_dirty
             || self.has_dirty_descendant
             || self.cached_parent_state.is_none()
             || self.cached_parent_state.unwrap() != new_parent_state
@@ -750,7 +790,7 @@ impl HtmlNode {
     fn propagate_dirty_upward(&mut self, path_to_root: &mut [&mut HtmlNode]) {
         // Mark this node as dirty
         self.mark_self_dirty();
-        
+
         // Mark all ancestors as having dirty descendants
         for ancestor in path_to_root.iter_mut() {
             ancestor.mark_descendant_dirty();
@@ -1289,13 +1329,13 @@ struct TreeNFAVM {
 impl TreeNFAVM {
     fn new(program: TreeNFAProgram) -> Self {
         let mut selector_index = SelectorMatchingIndex::new();
-        
+
         // Build index for fast selector matching
         for (i, instruction) in program.instructions.iter().enumerate() {
             selector_index.add_rule(i, instruction.clone());
         }
-        
-        TreeNFAVM { 
+
+        TreeNFAVM {
             program,
             selector_index,
         }
@@ -1426,7 +1466,8 @@ impl TreeNFAVM {
                 parent_state_bit,
                 child_selector,
                 result_bit,
-            } = instruction {
+            } = instruction
+            {
                 if parent_state.is_bit_set(*parent_state_bit)
                     && self.node_matches_selector(node, child_selector)
                 {
@@ -1440,7 +1481,8 @@ impl TreeNFAVM {
             if let NFAInstruction::PropagateToChildren {
                 match_bit,
                 active_bit,
-            } = instruction {
+            } = instruction
+            {
                 if current_matches.is_bit_set(*match_bit) {
                     child_states.set_bit(*active_bit);
                 }
@@ -1478,7 +1520,7 @@ impl TreeNFAVM {
                 self.process_tree_incremental_recursive(child, child_states);
             }
         }
-        
+
         // Clear the summary bit since we've processed all dirty descendants
         if any_child_was_dirty || node.has_dirty_descendant {
             node.mark_descendants_clean();
@@ -1499,24 +1541,24 @@ impl TreeNFAVM {
         stats: &mut IncrementalStats,
     ) {
         stats.total_nodes += 1;
-        
+
         // Check if this node needs any recomputation
         let needs_recomputation = node.needs_any_recomputation(parent_state);
-        
+
         if !needs_recomputation {
             stats.cache_hits += 1;
             return; // Skip entire subtree - this is a cache hit for the whole subtree
         }
 
         // Check if the node itself needs recomputation vs just traversal for descendants
-        let needs_self_recomputation = node.is_self_dirty 
+        let needs_self_recomputation = node.is_self_dirty
             || node.cached_parent_state.is_none()
             || node.cached_parent_state.unwrap() != parent_state;
 
         if needs_self_recomputation {
             stats.cache_misses += 1;
             let child_states = self.process_node_incremental(node, parent_state);
-            
+
             // Process all children
             let mut any_child_was_dirty = false;
             for child in node.children.iter_mut() {
@@ -1525,7 +1567,7 @@ impl TreeNFAVM {
                     self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
                 }
             }
-            
+
             // Clear the summary bit since we've processed all dirty descendants
             if any_child_was_dirty || node.has_dirty_descendant {
                 node.mark_descendants_clean();
@@ -1534,7 +1576,7 @@ impl TreeNFAVM {
             // This node doesn't need recomputation, but descendants do
             stats.cache_hits += 1;
             let child_states = node.cached_child_states.unwrap_or(BitVector::new());
-            
+
             // Process children that need recomputation
             let mut any_child_was_dirty = false;
             for child in node.children.iter_mut() {
@@ -1543,7 +1585,7 @@ impl TreeNFAVM {
                     self.process_tree_incremental_recursive_with_stats(child, child_states, stats);
                 }
             }
-            
+
             // Clear the summary bit since we've processed all dirty descendants
             if any_child_was_dirty || node.has_dirty_descendant {
                 node.mark_descendants_clean();
@@ -1769,7 +1811,7 @@ fn main() {
             println!("Missing test files: {} or {}", css_file, html_file);
         }
     }
-    
+
     // Test Google trace integration
     println!("\n=== GOOGLE TRACE INTEGRATION TEST ===");
     if let Err(e) = process_google_trace_with_rust() {
@@ -2794,18 +2836,13 @@ fn main() {{
         let vm = TreeNFAVM::new(program);
 
         // Build deep tree: root -> child1 -> child2 -> child3
-        let mut root = HtmlNode::new("div")
-            .add_child(
-                HtmlNode::new("div")
-                    .add_child(
-                        HtmlNode::new("div")
-                            .add_child(HtmlNode::new("span").with_class("highlight"))
-                    )
-            );
+        let mut root = HtmlNode::new("div").add_child(HtmlNode::new("div").add_child(
+            HtmlNode::new("div").add_child(HtmlNode::new("span").with_class("highlight")),
+        ));
 
         // Initial processing
         vm.process_tree_incremental(&mut root);
-        
+
         // Verify everything is initially clean
         assert!(!root.is_self_dirty);
         assert!(!root.has_dirty_descendant);
@@ -2830,17 +2867,17 @@ fn main() {{
 
         // Process incrementally - should only process nodes on the dirty path
         let stats = vm.process_tree_incremental_with_stats(&mut root);
-        
+
         // With optimization, we should have fewer cache misses than total nodes
-        // Only the dirty path should be recomputed, but our current implementation 
+        // Only the dirty path should be recomputed, but our current implementation
         // still visits all nodes to check if they need recomputation
         println!("Double dirty bit stats: {:?}", stats);
-        
+
         // Verify that the dirty marking worked correctly
         assert!(!root.is_self_dirty); // Root was processed and cleaned
         assert!(!root.has_dirty_descendant); // Summary bit cleared after processing
         assert!(!root.children[0].children[0].children[0].is_self_dirty); // Deep node processed and cleaned
-        
+
         // The key optimization is that only nodes on the dirty path needed recomputation
         // This is more of a conceptual test for now
         assert!(stats.total_nodes > 0, "Should have processed some nodes");
@@ -2865,27 +2902,28 @@ fn main() {{
         // Test that selector index correctly identifies matching rules
         let test_node = HtmlNode::new("div").with_class("highlight");
         let matching_rules = vm.selector_index.get_matching_rules(&test_node);
-        
+
         // Should find exactly 2 matching rules (div tag and highlight class)
-        assert_eq!(matching_rules.len(), 2, "Should find exactly 2 matching rules");
-        
+        assert_eq!(
+            matching_rules.len(),
+            2,
+            "Should find exactly 2 matching rules"
+        );
+
         // Verify the rules are correct
         let mut found_tag_rule = false;
         let mut found_class_rule = false;
-        
+
         for rule in matching_rules {
-            match rule {
-                NFAInstruction::CheckAndSetBit { selector, .. } => {
-                    match selector {
-                        SimpleSelector::Type(tag) if tag == "div" => found_tag_rule = true,
-                        SimpleSelector::Class(class) if class == "highlight" => found_class_rule = true,
-                        _ => {}
-                    }
+            if let NFAInstruction::CheckAndSetBit { selector, .. } = rule {
+                match selector {
+                    SimpleSelector::Type(tag) if tag == "div" => found_tag_rule = true,
+                    SimpleSelector::Class(class) if class == "highlight" => found_class_rule = true,
+                    _ => {}
                 }
-                _ => {}
             }
         }
-        
+
         assert!(found_tag_rule, "Should find div tag rule");
         assert!(found_class_rule, "Should find highlight class rule");
     }
