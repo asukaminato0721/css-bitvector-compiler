@@ -105,6 +105,12 @@ pub struct BitVector {
     pub bits: u64,
 }
 
+impl Default for BitVector {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BitVector {
     pub fn new() -> Self {
         BitVector { bits: 0 }
@@ -162,6 +168,12 @@ pub struct SelectorMatchingIndex {
     pub class_rules: HashMap<String, Vec<(usize, NFAInstruction)>>,
     pub id_rules: HashMap<String, Vec<(usize, NFAInstruction)>>,
     pub parent_dependent_rules: Vec<(usize, NFAInstruction)>,
+}
+
+impl Default for SelectorMatchingIndex {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SelectorMatchingIndex {
@@ -395,6 +407,12 @@ pub struct TreeNFAProgram {
     pub total_bits: usize,
 }
 
+impl Default for TreeNFAProgram {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TreeNFAProgram {
     pub fn new() -> Self {
         TreeNFAProgram {
@@ -576,6 +594,12 @@ pub struct CssCompiler {
     pub state_mapping: HashMap<String, usize>,
 }
 
+impl Default for CssCompiler {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CssCompiler {
     pub fn new() -> Self {
         CssCompiler {
@@ -740,12 +764,12 @@ pub fn load_dom_from_file() -> HtmlNode {
 pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode {
     let name = json_node["name"].as_str().unwrap_or("unknown");
     let mut node = HtmlNode::new(name);
-    
+
     // Set ID if present
     if let Some(id) = json_node["id"].as_u64() {
         node = node.with_id(&id.to_string());
     }
-    
+
     // Add classes from attributes
     if let Some(attributes) = json_node["attributes"].as_object() {
         if let Some(class_attr) = attributes.get("class") {
@@ -756,7 +780,7 @@ pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode 
             }
         }
     }
-    
+
     // Add children recursively
     if let Some(children) = json_node["children"].as_array() {
         for child_json in children {
@@ -764,18 +788,22 @@ pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode 
             node = node.add_child(child_node);
         }
     }
-    
+
     node
 }
 
 // Utility functions
 pub fn count_matches(node: &HtmlNode) -> usize {
-    let current = if node.css_match_bitvector.as_u64() != 0 { 1 } else { 0 };
-    current + node.children.iter().map(|child| count_matches(child)).sum::<usize>()
+    let current = if node.css_match_bitvector.as_u64() != 0 {
+        1
+    } else {
+        0
+    };
+    current + node.children.iter().map(count_matches).sum::<usize>()
 }
 
 pub fn count_total_nodes(node: &HtmlNode) -> usize {
-    1 + node.children.iter().map(|child| count_total_nodes(child)).sum::<usize>()
+    1 + node.children.iter().map(count_total_nodes).sum::<usize>()
 }
 
 // Helper function for generated code
@@ -785,4 +813,4 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
         SimpleSelector::Class(class) => node.classes.contains(class),
         SimpleSelector::Id(id) => node.id.as_deref() == Some(id),
     }
-} 
+}

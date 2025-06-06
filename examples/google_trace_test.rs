@@ -1,19 +1,16 @@
 use css_bitvector_compiler::*;
-use serde_json;
 use std::fs;
 
 // Generated CSS processing function
 // Generated Tree NFA Program with Incremental Processing
 // This program processes HTML nodes and computes CSS matches with caching
 
-fn process_node_generated_incremental(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-) -> BitVector { // returns child_states
+fn process_node_generated_incremental(node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
+    // returns child_states
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or(BitVector::new());
+        return node.cached_child_states.unwrap_or_default();
     }
 
     // Recompute node intrinsic matches if needed
@@ -69,7 +66,7 @@ fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Optimized selector matching using hash tables (conceptual)
@@ -130,10 +127,8 @@ fn process_node_generated_incremental(
     child_states
 }
 
-fn process_node_generated_inplace(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-) -> BitVector { // returns child_states
+fn process_node_generated_inplace(node: &mut HtmlNode, parent_state: BitVector) -> BitVector {
+    // returns child_states
     let mut current_matches = BitVector::new();
     let mut child_states = BitVector::new();
 
@@ -233,10 +228,10 @@ fn process_node_generated_inplace(
 }
 
 fn needs_recomputation_generated(node: &HtmlNode, new_parent_state: BitVector) -> bool {
-    node.is_self_dirty ||
-    node.has_dirty_descendant ||
-    node.cached_parent_state.is_none() ||
-    node.cached_parent_state.unwrap() != new_parent_state
+    node.is_self_dirty
+        || node.has_dirty_descendant
+        || node.cached_parent_state.is_none()
+        || node.cached_parent_state.unwrap() != new_parent_state
 }
 
 fn process_tree_generated_incremental(root: &mut HtmlNode) {
@@ -245,7 +240,7 @@ fn process_tree_generated_incremental(root: &mut HtmlNode) {
 
 fn process_tree_recursive_generated_incremental(node: &mut HtmlNode, parent_state: BitVector) {
     let child_states = process_node_generated_incremental(node, parent_state);
-    
+
     // Recursively process children
     for child in node.children.iter_mut() {
         process_tree_recursive_generated_incremental(child, child_states);
@@ -258,14 +253,12 @@ fn process_tree_generated(root: &mut HtmlNode) {
 
 fn process_tree_recursive_generated(node: &mut HtmlNode, parent_state: BitVector) {
     let child_states = process_node_generated_inplace(node, parent_state);
-    
+
     // Recursively process children
     for child in node.children.iter_mut() {
         process_tree_recursive_generated(child, child_states);
     }
 }
-
-
 
 fn load_dom_from_file() -> HtmlNode {
     // Try to read Google trace data from file
@@ -276,24 +269,26 @@ fn load_dom_from_file() -> HtmlNode {
             return create_mock_google_dom();
         }
     };
-    
+
     // Get the first line which should be the init command
-    let first_line = json_data.lines().next()
+    let first_line = json_data
+        .lines()
+        .next()
         .expect("File is empty or cannot read first line");
-    
+
     // Parse the JSON to get the DOM tree
-    let trace_data: serde_json::Value = serde_json::from_str(first_line)
-        .expect("Failed to parse command.json");
-    
+    let trace_data: serde_json::Value =
+        serde_json::from_str(first_line).expect("Failed to parse command.json");
+
     // Check if it's an init command
     if trace_data["name"] != "init" {
         println!("⚠️ Expected init command, using mock data");
         return create_mock_google_dom();
     }
-    
+
     // Extract the node from init command
     let google_node_data = &trace_data["node"];
-    
+
     // Convert JSON DOM to HtmlNode
     convert_json_dom_to_html_node(google_node_data)
 }
@@ -304,26 +299,24 @@ fn create_mock_google_dom() -> HtmlNode {
         .with_id("gb")
         .with_class("gbts")
         .add_child(
-            HtmlNode::new("div")
-                .with_class("gbmt")
-                .add_child(
-                    HtmlNode::new("span")
-                        .with_class("lsb")
-                        .add_child(HtmlNode::new("a").with_id("gbz"))
-                )
+            HtmlNode::new("div").with_class("gbmt").add_child(
+                HtmlNode::new("span")
+                    .with_class("lsb")
+                    .add_child(HtmlNode::new("a").with_id("gbz")),
+            ),
         )
         .add_child(
             HtmlNode::new("div")
                 .with_class("gbm")
-                .add_child(HtmlNode::new("input").with_class("gbqfif"))
+                .add_child(HtmlNode::new("input").with_class("gbqfif")),
         )
 }
 fn process_tree_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let total_nodes = count_total_nodes(root);
-    
+
     // Process with generated function (if available)
     let _result = process_css_tree(root);
-    
+
     // Return mock stats: (total, cache_hits, cache_misses)
     (total_nodes, total_nodes / 2, total_nodes / 2)
 }
@@ -334,7 +327,7 @@ fn process_css_tree(root: &mut HtmlNode) -> BitVector {
     if let Some(generated_fn) = get_generated_css_function() {
         return generated_fn(root);
     }
-    
+
     // Fallback: return empty bitvector
     BitVector::new()
 }
@@ -346,13 +339,13 @@ fn get_generated_css_function() -> Option<fn(&mut HtmlNode) -> BitVector> {
 }
 fn main() {
     println!("🚀 CodeGen Google Trace Performance Test (Module Reference Approach)\n");
-    
+
     // Create the Google DOM tree from file-based data
     let mut root = load_dom_from_file();
-    
+
     let total_nodes = count_total_nodes(&root);
     println!("🌳 DOM tree loaded: {} nodes", total_nodes);
-    
+
     // Test 1: Process with generated CSS engine
     println!("\n📊 CSS Processing Test");
     let (total1, hits1, misses1) = process_tree_with_stats(&mut root);
@@ -360,7 +353,7 @@ fn main() {
     println!("  Mock cache hits: {}", hits1);
     println!("  Mock cache misses: {}", misses1);
     println!("  Total CSS matches: {}", count_matches(&root));
-    
+
     println!("\n✅ Benefits of Module Reference approach:");
     println!("  • Clean separation: library vs examples");
     println!("  • Reusable types and functions across examples");
@@ -368,6 +361,6 @@ fn main() {
     println!("  • Easy to maintain and extend");
     println!("  • Better compile times (shared library)");
     println!("  • Type safety guaranteed by compiler");
-    
+
     println!("\nSUCCESS: Generated CSS engine with module references completed!");
 }

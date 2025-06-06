@@ -204,19 +204,20 @@ fn generate_google_trace_program(
 ) -> Result<String, Box<dyn std::error::Error>> {
     // 使用模块引用方法 - 直接使用库中定义的类型和函数
     let mut program = String::new();
-    
+
     // 1. 导入库中的所有类型和函数
     program.push_str("use css_bitvector_compiler::*;\n");
     program.push_str("use serde_json;\n");
     program.push_str("use std::fs;\n\n");
-    
+
     // 2. 添加生成的 CSS 处理函数
     program.push_str("// Generated CSS processing function\n");
     program.push_str(generated_fn_code);
     program.push_str("\n\n");
-    
+
     // 3. 创建 DOM 数据加载函数
-    program.push_str(r#"fn load_dom_from_file() -> HtmlNode {
+    program.push_str(
+        r#"fn load_dom_from_file() -> HtmlNode {
     // Try to read Google trace data from file
     let json_data = match fs::read_to_string("css-gen-op/command.json") {
         Ok(content) => content,
@@ -267,10 +268,12 @@ fn create_mock_google_dom() -> HtmlNode {
                 .add_child(HtmlNode::new("input").with_class("gbqfif"))
         )
 }
-"#);
-    
+"#,
+    );
+
     // 4. 添加测试和分析函数
-    program.push_str(r#"fn process_tree_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+    program.push_str(
+        r#"fn process_tree_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let total_nodes = count_total_nodes(root);
     
     // Process with generated function (if available)
@@ -296,10 +299,12 @@ fn get_generated_css_function() -> Option<fn(&mut HtmlNode) -> BitVector> {
     // For now, return None to use fallback
     None
 }
-"#);
-    
+"#,
+    );
+
     // 5. 主函数
-    program.push_str(r#"fn main() {
+    program.push_str(
+        r#"fn main() {
     println!("🚀 CodeGen Google Trace Performance Test (Module Reference Approach)\n");
     
     // Create the Google DOM tree from file-based data
@@ -326,7 +331,8 @@ fn get_generated_css_function() -> Option<fn(&mut HtmlNode) -> BitVector> {
     
     println!("\nSUCCESS: Generated CSS engine with module references completed!");
 }
-"#);
+"#,
+    );
 
     Ok(program)
 }
