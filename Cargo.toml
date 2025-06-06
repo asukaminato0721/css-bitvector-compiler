@@ -6,6 +6,14 @@ license = "MIT"
 readme = "README.md"
 description = "CSS Compiler with HTML/CSS parsing capabilities"
 
+[lib]
+name = "css_bitvector_compiler"
+path = "src/lib.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
 [dependencies]
 serde_json = "1.0"
 scraper = "0.17"
