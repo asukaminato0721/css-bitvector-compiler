@@ -3,7 +3,6 @@ use scraper::{Html, Selector as HtmlSelector};
 use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::Path;
-use std::time::Instant;
 
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
