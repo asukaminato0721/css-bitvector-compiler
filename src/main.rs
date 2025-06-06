@@ -1822,7 +1822,6 @@ fn main() {
     if let Err(e) = process_google_trace_with_rust() {
         println!("Google trace test failed: {}", e);
         println!("This is expected if css-gen-op files are not available");
-    } else {
     }
 }
 
