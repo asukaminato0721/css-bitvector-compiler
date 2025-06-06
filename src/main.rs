@@ -219,13 +219,7 @@ fn generate_google_trace_program(
     program.push_str(
         r#"fn load_dom_from_file() -> HtmlNode {
     // Try to read Google trace data from file
-    let json_data = match fs::read_to_string("css-gen-op/command.json") {
-        Ok(content) => content,
-        Err(_) => {
-            println!("⚠️ Could not load css-gen-op/command.json, using mock data");
-            return create_mock_google_dom();
-        }
-    };
+    let json_data = fs::read_to_string("css-gen-op/command.json").expect("fail to read command.json");
     
     // Get the first line which should be the init command
     let first_line = json_data.lines().next()
@@ -238,7 +232,6 @@ fn generate_google_trace_program(
     // Check if it's an init command
     if trace_data["name"] != "init" {
         println!("⚠️ Expected init command, using mock data");
-        return create_mock_google_dom();
     }
     
     // Extract the node from init command
@@ -246,27 +239,6 @@ fn generate_google_trace_program(
     
     // Convert JSON DOM to HtmlNode
     convert_json_dom_to_html_node(google_node_data)
-}
-
-fn create_mock_google_dom() -> HtmlNode {
-    // Create a mock Google-like DOM structure for testing
-    HtmlNode::new("div")
-        .with_id("gb")
-        .with_class("gbts")
-        .add_child(
-            HtmlNode::new("div")
-                .with_class("gbmt")
-                .add_child(
-                    HtmlNode::new("span")
-                        .with_class("lsb")
-                        .add_child(HtmlNode::new("a").with_id("gbz"))
-                )
-        )
-        .add_child(
-            HtmlNode::new("div")
-                .with_class("gbm")
-                .add_child(HtmlNode::new("input").with_class("gbqfif"))
-        )
 }
 "#,
     );
@@ -304,9 +276,7 @@ fn get_generated_css_function() -> Option<fn(&mut HtmlNode) -> BitVector> {
 
     // 5. 主函数
     program.push_str(
-        r#"fn main() {
-    println!("🚀 CodeGen Google Trace Performance Test (Module Reference Approach)\n");
-    
+        r#"fn main() {    
     // Create the Google DOM tree from file-based data
     let mut root = load_dom_from_file();
     
@@ -320,14 +290,7 @@ fn get_generated_css_function() -> Option<fn(&mut HtmlNode) -> BitVector> {
     println!("  Mock cache hits: {}", hits1);
     println!("  Mock cache misses: {}", misses1);
     println!("  Total CSS matches: {}", count_matches(&root));
-    
-    println!("\n✅ Benefits of Module Reference approach:");
-    println!("  • Clean separation: library vs examples");
-    println!("  • Reusable types and functions across examples");
-    println!("  • No template duplication");
-    println!("  • Easy to maintain and extend");
-    println!("  • Better compile times (shared library)");
-    println!("  • Type safety guaranteed by compiler");
+
     
     println!("\nSUCCESS: Generated CSS engine with module references completed!");
 }
