@@ -3,6 +3,32 @@
 
 use std::collections::{HashMap, HashSet};
 
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::_rdtsc;
+
+// RDTSC 时间测量工具
+#[inline(always)]
+pub fn rdtsc() -> u64 {
+    #[cfg(target_arch = "x86_64")]
+    unsafe {
+        _rdtsc()
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        // 对于非 x86_64 架构，回退到 nanos
+        use std::time::{SystemTime, UNIX_EPOCH};
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos() as u64
+    }
+}
+
+// 计算两个 RDTSC 读数之间的 CPU 周期数
+pub fn cycles_to_duration(start_cycles: u64, end_cycles: u64) -> u64 {
+    end_cycles.saturating_sub(start_cycles)
+}
+
 // All types are now defined directly in this file
 
 // Export Google trace types
@@ -266,6 +292,7 @@ pub struct HtmlNode {
     pub cached_parent_state: Option<BitVector>,
     pub cached_node_intrinsic: Option<BitVector>,
     pub cached_child_states: Option<BitVector>,
+    pub parent: Option<*mut HtmlNode>,
 }
 
 impl HtmlNode {
@@ -281,6 +308,7 @@ impl HtmlNode {
             cached_parent_state: None,
             cached_node_intrinsic: None,
             cached_child_states: None,
+            parent: None,
         }
     }
 
@@ -301,9 +329,22 @@ impl HtmlNode {
         self
     }
 
+    fn fix_parent_pointers(&mut self) {
+        let self_ptr = self as *mut HtmlNode;
+        for child in self.children.iter_mut() {
+            child.parent = Some(self_ptr);
+        }
+        // Fix children's parent pointers recursively in a separate loop
+        for child in self.children.iter_mut() {
+            child.fix_parent_pointers();
+        }
+    }
+
     pub fn mark_self_dirty(&mut self) {
         self.is_self_dirty = true;
         self.cached_node_intrinsic = None;
+
+        self.propagate_dirty_upward_auto();
     }
 
     pub fn mark_descendant_dirty(&mut self) {
@@ -346,6 +387,27 @@ impl HtmlNode {
         }
     }
 
+    fn propagate_dirty_upward_auto(&mut self) {
+        if let Some(parent_ptr) = self.parent {
+            unsafe {
+                let parent = &mut *parent_ptr;
+                if !parent.has_dirty_descendant {
+                    parent.has_dirty_descendant = true;
+                    parent.propagate_dirty_upward_auto();
+                }
+            }
+        }
+    }
+
+    pub fn mark_child_dirty_by_index(&mut self, child_index: usize) -> bool {
+        if child_index >= self.children.len() {
+            return false;
+        }
+
+        self.children[child_index].mark_self_dirty();
+        true
+    }
+
     pub fn mark_node_dirty_by_path(&mut self, path: &[usize]) -> bool {
         if path.is_empty() {
             self.mark_self_dirty();
@@ -357,11 +419,26 @@ impl HtmlNode {
             return false;
         }
 
-        if self.children[first_index].mark_node_dirty_by_path(&path[1..]) {
-            self.mark_descendant_dirty();
-            return true;
+        self.children[first_index].mark_node_dirty_by_path(&path[1..])
+    }
+
+    pub fn init_parent_pointers(&mut self) {
+        self.parent = None;
+        self.fix_parent_pointers();
+    }
+
+    pub fn find_deep_node_mut(&mut self, target_depth: usize) -> Option<&mut HtmlNode> {
+        if target_depth == 0 {
+            return Some(self);
         }
-        false
+
+        for child in &mut self.children {
+            if let Some(found) = child.find_deep_node_mut(target_depth - 1) {
+                return Some(found);
+            }
+        }
+
+        None
     }
 }
 
@@ -789,6 +866,8 @@ pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode 
         }
     }
 
+    // Initialize parent pointers for the complete tree
+    node.init_parent_pointers();
     node
 }
 
