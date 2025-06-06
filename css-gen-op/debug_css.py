@@ -4,10 +4,18 @@
 """
 
 from incremental_css_engine import parse_css_file
-
+import argparse
 
 def main():
-    css_file_path = "https___www.google.com_.css"
+    parser = argparse.ArgumentParser(description="Debug script to display parsed CSS rule details.")
+    parser.add_argument(
+        "css_file_path",
+        nargs="?",
+        default="https___www.google.com_.css",
+        help="Path to the CSS file to parse (default: https___www.google.com_.css)."
+    )
+    args = parser.parse_args()
+    css_file_path = args.css_file_path
     rules = parse_css_file(css_file_path)
 
     print(f"\n🔍 显示前20条解析出的CSS规则：\n")
