@@ -1,6 +1,6 @@
 use regex::Regex;
 use scraper::{Html, Selector as HtmlSelector};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
@@ -788,7 +788,7 @@ impl TreeNFAVM {
         } else {
             // This node doesn't need recomputation, but descendants do
             stats.cache_hits += 1;
-            let child_states = node.cached_child_states.unwrap_or(BitVector::new());
+            let child_states = node.cached_child_states.unwrap_or_default();
 
             // Process children that need recomputation
             let mut any_child_was_dirty = false;

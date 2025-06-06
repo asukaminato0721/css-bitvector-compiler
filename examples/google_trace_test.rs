@@ -12,7 +12,7 @@ pub fn process_node_generated_incremental(
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or(BitVector::new());
+        return node.cached_child_states.unwrap_or_default();
     }
 
     // Recompute node intrinsic matches if needed
@@ -68,7 +68,7 @@ pub fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Apply parent-dependent rules
