@@ -12,7 +12,7 @@ pub fn process_node_generated_incremental(
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or(BitVector::new());
+        return node.cached_child_states.unwrap_or_default();
     }
 
     // Recompute node intrinsic matches if needed
@@ -68,7 +68,7 @@ pub fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Apply parent-dependent rules
@@ -504,7 +504,7 @@ fn main() {
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
 
-                                if path.len() > 0 {
+                                if !path.is_empty() {
                                     let parent_path = &path[..path.len() - 1];
                                     let child_index = path[path.len() - 1];
 
@@ -689,11 +689,7 @@ fn load_dom_from_file() -> HtmlNode {
 
 // Helper function to count total nodes in DOM tree
 fn count_total_nodes(node: &HtmlNode) -> usize {
-    1 + node
-        .children
-        .iter()
-        .map(|child| count_total_nodes(child))
-        .sum::<usize>()
+    1 + node.children.iter().map(count_total_nodes).sum::<usize>()
 }
 
 // Helper function to count CSS matches
