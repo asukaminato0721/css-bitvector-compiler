@@ -527,10 +527,10 @@ where
     );
 
     // 6. 生成 load_dom_from_file 函数和帮助函数
-    program.push_str(&format!(
+    program.push_str(
         r#"
 // Helper function to load DOM from the command.json file
-fn load_dom_from_file() -> HtmlNode {{
+fn load_dom_from_file() -> HtmlNode {
     let command_file_path = "css-gen-op/command.json";
     let content = std::fs::read_to_string(command_file_path)
         .expect("Failed to read command.json");
@@ -539,43 +539,43 @@ fn load_dom_from_file() -> HtmlNode {{
     let command: serde_json::Value = serde_json::from_str(first_line)
         .expect("Failed to parse first command");
     
-    if command["name"] != "init" {{
+    if command["name"] != "init" {
         panic!("First command should be init");
-    }}
+    }
     
     let google_node = GoogleNode::from_json(&command["node"])
         .expect("Failed to parse Google node");
     
     google_node.to_html_node()
-}}
+}
 
 // Helper function to count total nodes in DOM tree
-fn count_total_nodes(node: &HtmlNode) -> usize {{
+fn count_total_nodes(node: &HtmlNode) -> usize {
     1 + node.children.iter().map(|child| count_total_nodes(child)).sum::<usize>()
-}}
+}
 
 // Helper function to count CSS matches 
-fn count_matches(node: &HtmlNode) -> usize {{
-    let current_matches = if node.css_match_bitvector.bits != 0 {{ 1 }} else {{ 0 }};
+fn count_matches(node: &HtmlNode) -> usize {
+    let current_matches = if node.css_match_bitvector.bits != 0 { 1 } else { 0 };
     current_matches + node.children.iter().map(count_matches).sum::<usize>()
-}}
+}
 
 // Helper function to reset cache state for benchmarking
-fn reset_cache_state(node: &mut HtmlNode) {{
+fn reset_cache_state(node: &mut HtmlNode) {
     node.is_self_dirty = true;
     node.has_dirty_descendant = false;
     node.cached_parent_state = None;
     node.cached_node_intrinsic = None;
     node.cached_child_states = Some(BitVector::new());
     
-    for child in node.children.iter_mut() {{
+    for child in node.children.iter_mut() {
         reset_cache_state(child);
-    }}
-}}
+    }
+}
 
 // GoogleNode definitions - copied from lib
 #[derive(Debug, Clone)]
-pub struct GoogleNode {{
+pub struct GoogleNode {
     pub id: Option<u32>,
     pub name: String,
     pub node_type: String,
@@ -584,13 +584,13 @@ pub struct GoogleNode {{
     pub properties: std::collections::HashMap<String, String>,
     pub visible: bool,
     pub children: Vec<GoogleNode>,
-}}
+}
 
-impl GoogleNode {{
-    pub fn from_json(value: &serde_json::Value) -> Option<Self> {{
+impl GoogleNode {
+    pub fn from_json(value: &serde_json::Value) -> Option<Self> {
         let obj = value.as_object()?;
 
-        Some(GoogleNode {{
+        Some(GoogleNode {
             id: obj.get("id").and_then(|v| v.as_u64()).map(|v| v as u32),
             name: obj
                 .get("name")
@@ -609,22 +609,22 @@ impl GoogleNode {{
             attributes: obj
                 .get("attributes")
                 .and_then(|v| v.as_object())
-                .map(|attrs| {{
+                .map(|attrs| {
                     attrs
                         .iter()
                         .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
                         .collect()
-                }})
+                })
                 .unwrap_or_default(),
             properties: obj
                 .get("properties")
                 .and_then(|v| v.as_object())
-                .map(|props| {{
+                .map(|props| {
                     props
                         .iter()
                         .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
                         .collect()
-                }})
+                })
                 .unwrap_or_default(),
             visible: obj.get("visible").and_then(|v| v.as_bool()).unwrap_or(true),
             children: obj
@@ -632,42 +632,42 @@ impl GoogleNode {{
                 .and_then(|v| v.as_array())
                 .map(|children| children.iter().filter_map(GoogleNode::from_json).collect())
                 .unwrap_or_default(),
-        }})
-    }}
+        })
+    }
 
-    pub fn to_html_node(&self) -> HtmlNode {{
+    pub fn to_html_node(&self) -> HtmlNode {
         let mut node = HtmlNode::new(&self.name);
 
-        if let Some(id) = &self.id {{
+        if let Some(id) = &self.id {
             node.id = Some(id.to_string());
-        }}
+        }
 
         // Extract classes from attributes
-        if let Some(class_attr) = self.attributes.get("class") {{
+        if let Some(class_attr) = self.attributes.get("class") {
             node.classes = class_attr
                 .split_whitespace()
                 .map(|s| s.to_string())
                 .collect();
-        }}
+        }
 
         // Convert children
-        for child in &self.children {{
+        for child in &self.children {
             node.children.push(child.to_html_node());
-        }}
+        }
 
         node
-    }}
+    }
 
-    pub fn count_nodes(&self) -> usize {{
+    pub fn count_nodes(&self) -> usize {
         1 + self
             .children
             .iter()
             .map(|child| child.count_nodes())
             .sum::<usize>()
-    }}
-}}
+    }
+}
 "#,
-    ));
+    );
 
     Ok(program)
 }

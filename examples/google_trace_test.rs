@@ -7,11 +7,12 @@ use css_bitvector_compiler::*;
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector { // returns child_states
+) -> BitVector {
+    // returns child_states
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or(BitVector::new());
+        return node.cached_child_states.unwrap_or_default();
     }
 
     // Recompute node intrinsic matches if needed
@@ -67,7 +68,7 @@ pub fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Apply parent-dependent rules
@@ -133,30 +134,39 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
-
-
 // Real incremental processing with statistics tracking
 fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
-    
-    process_tree_recursive_with_stats(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
-    
+
+    process_tree_recursive_with_stats(
+        root,
+        BitVector::new(),
+        &mut total_nodes,
+        &mut cache_hits,
+        &mut cache_misses,
+    );
+
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_with_stats(node: &mut HtmlNode, parent_state: BitVector, 
-                                    total: &mut usize, hits: &mut usize, misses: &mut usize) {
+fn process_tree_recursive_with_stats(
+    node: &mut HtmlNode,
+    parent_state: BitVector,
+    total: &mut usize,
+    hits: &mut usize,
+    misses: &mut usize,
+) {
     *total += 1;
-    
+
     // Check if we need to recompute using the real incremental logic
     if node.needs_any_recomputation(parent_state) {
         *misses += 1;
-        
+
         // Use the actual generated incremental processing function
         let child_states = process_node_generated_incremental(node, parent_state);
-        
+
         // Process children recursively
         for child in node.children.iter_mut() {
             process_tree_recursive_with_stats(child, child_states, total, hits, misses);
@@ -172,20 +182,24 @@ fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let cache_hits = 0; // No caching in full recompute
     let mut cache_misses = 0;
-    
+
     process_tree_recursive_full(root, BitVector::new(), &mut total_nodes, &mut cache_misses);
-    
+
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_full(node: &mut HtmlNode, parent_state: BitVector, 
-                              total: &mut usize, misses: &mut usize) {
+fn process_tree_recursive_full(
+    node: &mut HtmlNode,
+    parent_state: BitVector,
+    total: &mut usize,
+    misses: &mut usize,
+) {
     *total += 1;
     *misses += 1;
-    
+
     // Always use the non-incremental (in-place) processing - no caching
     let child_states = process_node_generated_incremental(node, parent_state);
-    
+
     // Process all children
     for child in node.children.iter_mut() {
         process_tree_recursive_full(child, child_states, total, misses);
@@ -199,8 +213,8 @@ fn find_deep_node(node: &mut HtmlNode, target_depth: usize) -> Option<&mut HtmlN
     node.find_deep_node_mut(target_depth)
 }
 
-fn time_processing<F>(mut func: F, iterations: usize) -> u64 
-where 
+fn time_processing<F>(mut func: F, iterations: usize) -> u64
+where
     F: FnMut(),
 {
     let start_cycles = rdtsc();
@@ -210,15 +224,15 @@ where
     let end_cycles = rdtsc();
     cycles_to_duration(start_cycles, end_cycles)
 }
-fn main() {    
+fn main() {
     // 使用 RDTSC 指令测量程序启动时间
     let program_start_cycles = rdtsc();
     println!("🚀 Program started at CPU cycle: {}", program_start_cycles);
-    
+
     // Read and process command.json file
     let command_file_path = "css-gen-op/command.json";
     println!("📄 Reading commands from: {}", command_file_path);
-    
+
     let content = match std::fs::read_to_string(command_file_path) {
         Ok(content) => content,
         Err(e) => {
@@ -255,7 +269,11 @@ fn main() {
         };
 
         let command_name = command["name"].as_str().unwrap_or("unknown");
-        println!("\n🔧 Processing command {}: '{}'", line_num + 1, command_name);
+        println!(
+            "\n🔧 Processing command {}: '{}'",
+            line_num + 1,
+            command_name
+        );
 
         match command_name {
             "init" => {
@@ -288,24 +306,34 @@ fn main() {
                 // Process DOM modification commands
                 if let Some(ref mut root_node) = root {
                     println!("🔄 Applying DOM modification command: {}", command_name);
-                    
+
                     // Apply the command based on type
                     let modification_applied = match command_name {
                         "add" | "insert_value" => {
                             // For add/insert commands, mark a node at varying depth as dirty
-                            if let Some(deep_node) = find_deep_node(root_node, 3 + current_step % 7) {
+                            if let Some(deep_node) = find_deep_node(root_node, 3 + current_step % 7)
+                            {
                                 deep_node.mark_dirty();
-                                println!("🎯 Added/Modified node at depth {}", 3 + current_step % 7);
+                                println!(
+                                    "🎯 Added/Modified node at depth {}",
+                                    3 + current_step % 7
+                                );
                                 true
-                            } else { false }
+                            } else {
+                                false
+                            }
                         }
                         "replace_value" => {
                             // For replace commands, mark a shallower node as dirty
-                            if let Some(shallow_node) = find_deep_node(root_node, 2 + current_step % 3) {
+                            if let Some(shallow_node) =
+                                find_deep_node(root_node, 2 + current_step % 3)
+                            {
                                 shallow_node.mark_dirty();
                                 println!("🔄 Replaced value at depth {}", 2 + current_step % 3);
                                 true
-                            } else { false }
+                            } else {
+                                false
+                            }
                         }
                         "recalculate" => {
                             // For recalculate, just note it but don't mark anything dirty
@@ -318,15 +346,24 @@ fn main() {
                                 parent_node.mark_dirty();
                                 println!("🗑️  Removed node (parent marked dirty)");
                                 true
-                            } else { false }
+                            } else {
+                                false
+                            }
                         }
                         _ => {
                             // For any other command type, mark a random node as dirty
-                            if let Some(random_node) = find_deep_node(root_node, 4 + current_step % 5) {
+                            if let Some(random_node) =
+                                find_deep_node(root_node, 4 + current_step % 5)
+                            {
                                 random_node.mark_dirty();
-                                println!("🔀 Generic modification at depth {}", 4 + current_step % 5);
+                                println!(
+                                    "🔀 Generic modification at depth {}",
+                                    4 + current_step % 5
+                                );
                                 true
-                            } else { false }
+                            } else {
+                                false
+                            }
                         }
                     };
 
@@ -372,7 +409,10 @@ fn main() {
                         println!("  ⚠️  Could not apply modification - target node not found");
                     }
                 } else {
-                    eprintln!("❌ No DOM root available for modification command: {}", command_name);
+                    eprintln!(
+                        "❌ No DOM root available for modification command: {}",
+                        command_name
+                    );
                 }
             }
         }
@@ -384,11 +424,11 @@ fn main() {
         println!("\n📊 Final Summary:");
         println!("🌳 Total DOM nodes: {}", total_nodes);
         println!("🔧 Commands processed: {}", current_step);
-        
+
         // Final performance benchmark
         println!("\n🏁 Final Performance Benchmark");
         let iterations = 50;
-        
+
         // Benchmark incremental processing
         let cached_time = time_processing(
             || {
@@ -413,12 +453,18 @@ fn main() {
             iterations, cached_time
         );
         println!(
-            "  Full recompute ({} iterations): {} cycles", 
+            "  Full recompute ({} iterations): {} cycles",
             iterations, full_time
         );
-        println!("  Average per iteration (incremental): {} cycles", cached_time / iterations as u64);
-        println!("  Average per iteration (full): {} cycles", full_time / iterations as u64);
-        
+        println!(
+            "  Average per iteration (incremental): {} cycles",
+            cached_time / iterations as u64
+        );
+        println!(
+            "  Average per iteration (full): {} cycles",
+            full_time / iterations as u64
+        );
+
         if full_time > 0 && cached_time > 0 {
             let speedup = full_time as f64 / cached_time as f64;
             println!("  📈 Incremental vs Full speedup: {:.2}x", speedup);
@@ -438,31 +484,33 @@ fn main() {
 // Helper function to load DOM from the command.json file
 fn load_dom_from_file() -> HtmlNode {
     let command_file_path = "css-gen-op/command.json";
-    let content = std::fs::read_to_string(command_file_path)
-        .expect("Failed to read command.json");
-    
+    let content = std::fs::read_to_string(command_file_path).expect("Failed to read command.json");
+
     let first_line = content.lines().next().expect("Empty command file");
-    let command: serde_json::Value = serde_json::from_str(first_line)
-        .expect("Failed to parse first command");
-    
+    let command: serde_json::Value =
+        serde_json::from_str(first_line).expect("Failed to parse first command");
+
     if command["name"] != "init" {
         panic!("First command should be init");
     }
-    
-    let google_node = GoogleNode::from_json(&command["node"])
-        .expect("Failed to parse Google node");
-    
+
+    let google_node = GoogleNode::from_json(&command["node"]).expect("Failed to parse Google node");
+
     google_node.to_html_node()
 }
 
 // Helper function to count total nodes in DOM tree
 fn count_total_nodes(node: &HtmlNode) -> usize {
-    1 + node.children.iter().map(|child| count_total_nodes(child)).sum::<usize>()
+    1 + node.children.iter().map(count_total_nodes).sum::<usize>()
 }
 
-// Helper function to count CSS matches 
+// Helper function to count CSS matches
 fn count_matches(node: &HtmlNode) -> usize {
-    let current_matches = if node.css_match_bitvector.bits != 0 { 1 } else { 0 };
+    let current_matches = if node.css_match_bitvector.bits != 0 {
+        1
+    } else {
+        0
+    };
     current_matches + node.children.iter().map(count_matches).sum::<usize>()
 }
 
@@ -473,7 +521,7 @@ fn reset_cache_state(node: &mut HtmlNode) {
     node.cached_parent_state = None;
     node.cached_node_intrinsic = None;
     node.cached_child_states = Some(BitVector::new());
-    
+
     for child in node.children.iter_mut() {
         reset_cache_state(child);
     }
