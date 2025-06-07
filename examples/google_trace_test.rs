@@ -7,12 +7,11 @@ use css_bitvector_compiler::*;
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector {
-    // returns child_states
+) -> BitVector { // returns child_states
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.unwrap_or_default();
+        return node.cached_child_states.unwrap_or(BitVector::new());
     }
 
     // Recompute node intrinsic matches if needed
@@ -68,7 +67,7 @@ pub fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let current_matches = node.cached_node_intrinsic.unwrap();
+    let mut current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Apply parent-dependent rules
@@ -134,39 +133,30 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
+
+
 // Real incremental processing with statistics tracking
 fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
-
-    process_tree_recursive_with_stats(
-        root,
-        BitVector::new(),
-        &mut total_nodes,
-        &mut cache_hits,
-        &mut cache_misses,
-    );
-
+    
+    process_tree_recursive_with_stats(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_with_stats(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-    hits: &mut usize,
-    misses: &mut usize,
-) {
+fn process_tree_recursive_with_stats(node: &mut HtmlNode, parent_state: BitVector, 
+                                    total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
-
+    
     // Check if we need to recompute using the real incremental logic
     if node.needs_any_recomputation(parent_state) {
         *misses += 1;
-
+        
         // Use the actual generated incremental processing function
         let child_states = process_node_generated_incremental(node, parent_state);
-
+        
         // Process children recursively
         for child in node.children.iter_mut() {
             process_tree_recursive_with_stats(child, child_states, total, hits, misses);
@@ -182,24 +172,20 @@ fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let cache_hits = 0; // No caching in full recompute
     let mut cache_misses = 0;
-
+    
     process_tree_recursive_full(root, BitVector::new(), &mut total_nodes, &mut cache_misses);
-
+    
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_full(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-    misses: &mut usize,
-) {
+fn process_tree_recursive_full(node: &mut HtmlNode, parent_state: BitVector, 
+                              total: &mut usize, misses: &mut usize) {
     *total += 1;
     *misses += 1;
-
+    
     // Always use the non-incremental (in-place) processing - no caching
     let child_states = process_node_generated_incremental(node, parent_state);
-
+    
     // Process all children
     for child in node.children.iter_mut() {
         process_tree_recursive_full(child, child_states, total, misses);
@@ -213,8 +199,18 @@ fn find_deep_node(node: &mut HtmlNode, target_depth: usize) -> Option<&mut HtmlN
     node.find_deep_node_mut(target_depth)
 }
 
-fn time_processing<F>(mut func: F, iterations: usize) -> u64
-where
+// Helper function to extract value from JSON (handles both string and number)
+fn extract_value_as_string(value: &serde_json::Value) -> Option<String> {
+    match value {
+        serde_json::Value::String(s) => Some(s.clone()),
+        serde_json::Value::Number(n) => Some(n.to_string()),
+        serde_json::Value::Bool(b) => Some(b.to_string()),
+        _ => None,
+    }
+}
+
+fn time_processing<F>(mut func: F, iterations: usize) -> u64 
+where 
     F: FnMut(),
 {
     let start_cycles = rdtsc();
@@ -228,7 +224,7 @@ where
 // Navigate to a specific node using a path array
 fn navigate_to_path<'a>(root: &'a mut HtmlNode, path: &[usize]) -> Option<&'a mut HtmlNode> {
     let mut current = root;
-
+    
     for &index in path {
         if index < current.children.len() {
             current = &mut current.children[index];
@@ -236,7 +232,7 @@ fn navigate_to_path<'a>(root: &'a mut HtmlNode, path: &[usize]) -> Option<&'a mu
             return None;
         }
     }
-
+    
     Some(current)
 }
 
@@ -265,33 +261,19 @@ fn insert_node_value(_node: &mut HtmlNode, command: &serde_json::Value, key: &st
 }
 
 // Replace an existing attribute/property value in a node
-fn replace_node_value(
-    _node: &mut HtmlNode,
-    command: &serde_json::Value,
-    key: &str,
-    new_value: &str,
-) {
+fn replace_node_value(_node: &mut HtmlNode, command: &serde_json::Value, key: &str, new_value: &str) {
     // Check the type field to determine what to replace
     if let Some(value_type) = command.get("type").and_then(|t| t.as_str()) {
-        let old_value = command
-            .get("old_value")
-            .and_then(|v| v.as_str())
-            .unwrap_or("unknown");
-
+        let old_value = command.get("old_value").and_then(|v| v.as_str()).unwrap_or("unknown");
+        
         match value_type {
             "attributes" => {
                 // Replace node's attribute (simulate)
-                println!(
-                    "  🔄 Would replace attribute: {} = {} -> {}",
-                    key, old_value, new_value
-                );
+                println!("  🔄 Would replace attribute: {} = {} -> {}", key, old_value, new_value);
             }
             "properties" => {
                 // Replace node's property (simulate)
-                println!(
-                    "  🔄 Would replace property: {} = {} -> {}",
-                    key, old_value, new_value
-                );
+                println!("  🔄 Would replace property: {} = {} -> {}", key, old_value, new_value);
             }
             _ => {
                 println!("  ⚠️  Unknown replace type: {}", value_type);
@@ -299,21 +281,18 @@ fn replace_node_value(
         }
     } else {
         // Default to attributes if no type specified
-        println!(
-            "  🔄 Would replace attribute (default): {} = {}",
-            key, new_value
-        );
+        println!("  🔄 Would replace attribute (default): {} = {}", key, new_value);
     }
 }
-fn main() {
+fn main() {    
     // 使用 RDTSC 指令测量程序启动时间
     let program_start_cycles = rdtsc();
     println!("🚀 Program started at CPU cycle: {}", program_start_cycles);
-
+    
     // Read and process command.json file
     let command_file_path = "css-gen-op/command.json";
     println!("📄 Reading commands from: {}", command_file_path);
-
+    
     let content = match std::fs::read_to_string(command_file_path) {
         Ok(content) => content,
         Err(e) => {
@@ -350,11 +329,7 @@ fn main() {
         };
 
         let command_name = command["name"].as_str().unwrap_or("unknown");
-        println!(
-            "\n🔧 Processing command {}: '{}'",
-            line_num + 1,
-            command_name
-        );
+        println!("\n🔧 Processing command {}: '{}'", line_num + 1, command_name);
 
         match command_name {
             "init" => {
@@ -387,55 +362,41 @@ fn main() {
                 // Process DOM modification commands
                 if let Some(ref mut root_node) = root {
                     println!("🔄 Applying DOM modification command: {}", command_name);
-
+                    
                     // Apply the command based on type
                     let modification_applied = match command_name {
                         "add" => {
-                            if let (Some(path_array), Some(node_data)) = (
-                                command.get("path").and_then(|p| p.as_array()),
-                                command.get("node"),
-                            ) {
+                            if let (Some(path_array), Some(node_data)) = (command.get("path").and_then(|p| p.as_array()), command.get("node")) {
                                 let path: Vec<usize> = path_array
                                     .iter()
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
-
+                                
                                 if !path.is_empty() {
                                     // Split path: all but last element navigate to parent, last element is insert position
                                     let parent_path = &path[..path.len() - 1];
                                     let insert_index = path[path.len() - 1];
 
-                                    if let Some(parent_node) =
-                                        navigate_to_path(root_node, parent_path)
-                                    {
+                                    if let Some(parent_node) = navigate_to_path(root_node, parent_path) {
                                         // Create new HTML node from the provided node data
-                                        if let Some(google_node) = GoogleNode::from_json(node_data)
-                                        {
+                                        if let Some(google_node) = GoogleNode::from_json(node_data) {
                                             let new_html_node = google_node.to_html_node();
-
+                                            
                                             // Insert at specified position (or append if index == children.len())
                                             if insert_index <= parent_node.children.len() {
-                                                parent_node
-                                                    .children
-                                                    .insert(insert_index, new_html_node);
+                                                parent_node.children.insert(insert_index, new_html_node);
                                                 parent_node.mark_dirty();
-                                                println!(
-                                                    "✅ Added new node at path {:?} (insert position {})",
-                                                    path, insert_index
-                                                );
+                                                println!("✅ Added new node at path {:?} (insert position {})", path, insert_index);
                                                 true
                                             } else {
                                                 println!(
                                                     "❌ Insert index {} out of bounds (max: {}) for add command",
-                                                    insert_index,
-                                                    parent_node.children.len()
+                                                    insert_index, parent_node.children.len()
                                                 );
                                                 false
                                             }
                                         } else {
-                                            println!(
-                                                "❌ Failed to parse node data for add command"
-                                            );
+                                            println!("❌ Failed to parse node data for add command");
                                             false
                                         }
                                     } else {
@@ -458,24 +419,21 @@ fn main() {
                             if let (Some(path_array), Some(key), Some(value)) = (
                                 command.get("path").and_then(|p| p.as_array()),
                                 command.get("key").and_then(|k| k.as_str()),
-                                command.get("value").and_then(|v| v.as_str()),
+                                command.get("value").and_then(extract_value_as_string)
                             ) {
                                 let path: Vec<usize> = path_array
                                     .iter()
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
-
+                                
                                 if let Some(target_node) = navigate_to_path(root_node, &path) {
                                     // Insert new attribute/property
-                                    insert_node_value(target_node, &command, key, value);
+                                    insert_node_value(target_node, &command, key, &value);
                                     target_node.mark_dirty();
                                     println!("✅ Inserted {} = {} at path {:?}", key, value, path);
                                     true
                                 } else {
-                                    println!(
-                                        "❌ Could not navigate to path {:?} for insert_value command",
-                                        path
-                                    );
+                                    println!("❌ Could not navigate to path {:?} for insert_value command", path);
                                     false
                                 }
                             } else {
@@ -487,27 +445,21 @@ fn main() {
                             if let (Some(path_array), Some(key), Some(new_value)) = (
                                 command.get("path").and_then(|p| p.as_array()),
                                 command.get("key").and_then(|k| k.as_str()),
-                                command.get("value").and_then(|v| v.as_str()),
+                                command.get("value").and_then(extract_value_as_string)
                             ) {
                                 let path: Vec<usize> = path_array
                                     .iter()
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
-
+                                
                                 if let Some(target_node) = navigate_to_path(root_node, &path) {
                                     // Replace existing value
-                                    replace_node_value(target_node, &command, key, new_value);
+                                    replace_node_value(target_node, &command, key, &new_value);
                                     target_node.mark_dirty();
-                                    println!(
-                                        "✅ Replaced {} = {} at path {:?}",
-                                        key, new_value, path
-                                    );
+                                    println!("✅ Replaced {} = {} at path {:?}", key, new_value, path);
                                     true
                                 } else {
-                                    println!(
-                                        "❌ Could not navigate to path {:?} for replace_value command",
-                                        path
-                                    );
+                                    println!("❌ Could not navigate to path {:?} for replace_value command", path);
                                     false
                                 }
                             } else {
@@ -526,36 +478,28 @@ fn main() {
                             true
                         }
                         "remove" => {
-                            if let Some(path_array) = command.get("path").and_then(|p| p.as_array())
-                            {
+                            if let Some(path_array) = command.get("path").and_then(|p| p.as_array()) {
                                 let path: Vec<usize> = path_array
                                     .iter()
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
-
-                                if !path.is_empty() {
-                                    let parent_path = &path[..path.len() - 1];
-                                    let child_index = path[path.len() - 1];
-
-                                    if let Some(parent_node) =
-                                        navigate_to_path(root_node, parent_path)
-                                    {
+                                
+                                if path.len() > 0 {
+                                    let parent_path = &path[..path.len()-1];
+                                    let child_index = path[path.len()-1];
+                                    
+                                    if let Some(parent_node) = navigate_to_path(root_node, parent_path) {
                                         if child_index < parent_node.children.len() {
                                             parent_node.children.remove(child_index);
-                                            parent_node.mark_dirty();
+                                parent_node.mark_dirty();
                                             println!("✅ Removed node at path {:?}", path);
-                                            true
+                                true
                                         } else {
-                                            println!(
-                                                "❌ Child index {} out of bounds for remove command",
-                                                child_index
-                                            );
+                                            println!("❌ Child index {} out of bounds for remove command", child_index);
                                             false
                                         }
                                     } else {
-                                        println!(
-                                            "❌ Could not navigate to parent path for remove command"
-                                        );
+                                        println!("❌ Could not navigate to parent path for remove command");
                                         false
                                     }
                                 } else {
@@ -569,18 +513,11 @@ fn main() {
                         }
                         _ => {
                             // For any other command type, mark a random node as dirty
-                            if let Some(random_node) =
-                                find_deep_node(root_node, 4 + current_step % 5)
-                            {
+                            if let Some(random_node) = find_deep_node(root_node, 4 + current_step % 5) {
                                 random_node.mark_dirty();
-                                println!(
-                                    "🔀 Generic modification at depth {}",
-                                    4 + current_step % 5
-                                );
+                                println!("🔀 Generic modification at depth {}", 4 + current_step % 5);
                                 true
-                            } else {
-                                false
-                            }
+                            } else { false }
                         }
                     };
 
@@ -626,10 +563,7 @@ fn main() {
                         println!("  ⚠️  Could not apply modification - target node not found");
                     }
                 } else {
-                    eprintln!(
-                        "❌ No DOM root available for modification command: {}",
-                        command_name
-                    );
+                    eprintln!("❌ No DOM root available for modification command: {}", command_name);
                 }
             }
         }
@@ -641,11 +575,11 @@ fn main() {
         println!("\n📊 Final Summary:");
         println!("🌳 Total DOM nodes: {}", total_nodes);
         println!("🔧 Commands processed: {}", current_step);
-
+        
         // Final performance benchmark
         println!("\n🏁 Final Performance Benchmark");
         let iterations = 50;
-
+        
         // Benchmark incremental processing
         let cached_time = time_processing(
             || {
@@ -670,18 +604,12 @@ fn main() {
             iterations, cached_time
         );
         println!(
-            "  Full recompute ({} iterations): {} cycles",
+            "  Full recompute ({} iterations): {} cycles", 
             iterations, full_time
         );
-        println!(
-            "  Average per iteration (incremental): {} cycles",
-            cached_time / iterations as u64
-        );
-        println!(
-            "  Average per iteration (full): {} cycles",
-            full_time / iterations as u64
-        );
-
+        println!("  Average per iteration (incremental): {} cycles", cached_time / iterations as u64);
+        println!("  Average per iteration (full): {} cycles", full_time / iterations as u64);
+        
         if full_time > 0 && cached_time > 0 {
             let speedup = full_time as f64 / cached_time as f64;
             println!("  📈 Incremental vs Full speedup: {:.2}x", speedup);
@@ -701,33 +629,31 @@ fn main() {
 // Helper function to load DOM from the command.json file
 fn load_dom_from_file() -> HtmlNode {
     let command_file_path = "css-gen-op/command.json";
-    let content = std::fs::read_to_string(command_file_path).expect("Failed to read command.json");
-
+    let content = std::fs::read_to_string(command_file_path)
+        .expect("Failed to read command.json");
+    
     let first_line = content.lines().next().expect("Empty command file");
-    let command: serde_json::Value =
-        serde_json::from_str(first_line).expect("Failed to parse first command");
-
+    let command: serde_json::Value = serde_json::from_str(first_line)
+        .expect("Failed to parse first command");
+    
     if command["name"] != "init" {
         panic!("First command should be init");
     }
-
-    let google_node = GoogleNode::from_json(&command["node"]).expect("Failed to parse Google node");
-
+    
+    let google_node = GoogleNode::from_json(&command["node"])
+        .expect("Failed to parse Google node");
+    
     google_node.to_html_node()
 }
 
 // Helper function to count total nodes in DOM tree
 fn count_total_nodes(node: &HtmlNode) -> usize {
-    1 + node.children.iter().map(count_total_nodes).sum::<usize>()
+    1 + node.children.iter().map(|child| count_total_nodes(child)).sum::<usize>()
 }
 
-// Helper function to count CSS matches
+// Helper function to count CSS matches 
 fn count_matches(node: &HtmlNode) -> usize {
-    let current_matches = if node.css_match_bitvector.bits != 0 {
-        1
-    } else {
-        0
-    };
+    let current_matches = if node.css_match_bitvector.bits != 0 { 1 } else { 0 };
     current_matches + node.children.iter().map(count_matches).sum::<usize>()
 }
 
@@ -738,7 +664,7 @@ fn reset_cache_state(node: &mut HtmlNode) {
     node.cached_parent_state = None;
     node.cached_node_intrinsic = None;
     node.cached_child_states = Some(BitVector::new());
-
+    
     for child in node.children.iter_mut() {
         reset_cache_state(child);
     }
