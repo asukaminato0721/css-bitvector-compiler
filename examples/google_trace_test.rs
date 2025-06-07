@@ -310,12 +310,9 @@ fn main() {
         }
 
         // Parse JSON command
-        let command: serde_json::Value = match serde_json::from_str(line) {
-            Ok(cmd) => cmd,
-            Err(e) => {
-                eprintln!("❌ Failed to parse command on line {}: {}", line_num + 1, e);
-                continue;
-            }
+        let Ok(command): Result<serde_json::Value, _> = serde_json::from_str(line) else {
+            eprintln!("❌ Failed to parse command on line {}: {}", line_num + 1, serde_json::from_str::<serde_json::Value>(line).unwrap_err());
+            continue;
         };
 
         let command_name = command["name"].as_str().unwrap_or("unknown");
@@ -325,21 +322,19 @@ fn main() {
             "init" => {
                 // Initialize DOM from first command
                 let dom_load_start = rdtsc();
-                if let Some(node_data) = command.get("node") {
-                    match GoogleNode::from_json(node_data) {
-                        Some(google_node) => {
-                            root = Some(google_node.to_html_node());
-                            if let Some(ref mut root_node) = root {
-                                root_node.init_parent_pointers();
-                            }
-                            println!("✅ DOM initialized with root node");
-                        }
-                        None => {
-                            eprintln!("❌ Failed to parse init node");
-                            continue;
-                        }
-                    }
+                let Some(node_data) = command.get("node") else {
+                    eprintln!("❌ Failed to get node data from init command");
+                    continue;
+                };
+                let Some(google_node) = GoogleNode::from_json(node_data) else {
+                    eprintln!("❌ Failed to parse init node");
+                    continue;
+                };
+                root = Some(google_node.to_html_node());
+                if let Some(ref mut root_node) = root {
+                    root_node.init_parent_pointers();
                 }
+                println!("✅ DOM initialized with root node");
                 let dom_load_end = rdtsc();
                 let dom_load_cycles = cycles_to_duration(dom_load_start, dom_load_end);
                 println!("📊 DOM loading took: {} CPU cycles", dom_load_cycles);
@@ -363,7 +358,6 @@ fn main() {
                                     .collect();
                                 
                                 if let Some(target_node) = navigate_to_path(root_node, &path) {
-                                    // Create new HTML node from the provided node data
                                     if let Some(google_node) = GoogleNode::from_json(node_data) {
                                         let new_html_node = google_node.to_html_node();
                                         target_node.children.push(new_html_node);
@@ -452,27 +446,27 @@ fn main() {
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
                                 
-                                if path.len() > 0 {
+                                if path.is_empty() {
+                                    println!("❌ Cannot remove root node");
+                                    false
+                                } else {
                                     let parent_path = &path[..path.len()-1];
                                     let child_index = path[path.len()-1];
                                     
                                     if let Some(parent_node) = navigate_to_path(root_node, parent_path) {
-                                        if child_index < parent_node.children.len() {
+                                        if child_index >= parent_node.children.len() {
+                                            println!("❌ Child index {} out of bounds for remove command", child_index);
+                                            false
+                                        } else {
                                             parent_node.children.remove(child_index);
                                             parent_node.mark_dirty();
                                             println!("✅ Removed node at path {:?}", path);
                                             true
-                                        } else {
-                                            println!("❌ Child index {} out of bounds for remove command", child_index);
-                                            false
                                         }
                                     } else {
                                         println!("❌ Could not navigate to parent path for remove command");
                                         false
                                     }
-                                } else {
-                                    println!("❌ Cannot remove root node");
-                                    false
                                 }
                             } else {
                                 println!("❌ Remove command missing path");
@@ -485,7 +479,9 @@ fn main() {
                                 random_node.mark_dirty();
                                 println!("🔀 Generic modification at depth {}", 4 + current_step % 5);
                                 true
-                            } else { false }
+                            } else {
+                                false
+                            }
                         }
                     };
 
