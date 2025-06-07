@@ -520,26 +520,16 @@ pub enum NFAInstruction {
 }
 
 // Export TreeNFAProgram
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct TreeNFAProgram {
     pub instructions: Vec<NFAInstruction>,
     pub state_names: HashMap<usize, String>,
     pub total_bits: usize,
 }
 
-impl Default for TreeNFAProgram {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl TreeNFAProgram {
     pub fn new() -> Self {
-        TreeNFAProgram {
-            instructions: Vec::new(),
-            state_names: HashMap::new(),
-            total_bits: 0,
-        }
+        Default::default()
     }
 
     pub fn add_instruction(&mut self, instruction: NFAInstruction) {
