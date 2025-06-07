@@ -13,31 +13,8 @@ use css_bitvector_compiler::SelectorMatchingIndex;
 use css_bitvector_compiler::SimpleSelector;
 use css_bitvector_compiler::TreeNFAProgram;
 use css_bitvector_compiler::parse_basic_css;
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::_rdtsc;
-
-// RDTSC 时间测量工具
-#[inline(always)]
-fn rdtsc() -> u64 {
-    #[cfg(target_arch = "x86_64")]
-    unsafe {
-        _rdtsc()
-    }
-    #[cfg(not(target_arch = "x86_64"))]
-    {
-        // 对于非 x86_64 架构，回退到 nanos
-        use std::time::{SystemTime, UNIX_EPOCH};
-        SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos() as u64
-    }
-}
-
-// 计算两个 RDTSC 读数之间的 CPU 周期数
-fn cycles_to_duration(start_cycles: u64, end_cycles: u64) -> u64 {
-    end_cycles.saturating_sub(start_cycles)
-}
+use css_bitvector_compiler::rdtsc;
+use css_bitvector_compiler::cycles_to_duration;
 
 // All types are now defined in lib.rs and imported from there
 
