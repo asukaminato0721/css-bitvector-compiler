@@ -297,6 +297,75 @@ where
 "#,
     );
 
+    // 4. Add helper functions for enhanced command processing
+    program.push_str(
+        r#"
+// Navigate to a specific node using a path array
+fn navigate_to_path<'a>(root: &'a mut HtmlNode, path: &[usize]) -> Option<&'a mut HtmlNode> {
+    let mut current = root;
+    
+    for &index in path {
+        if index < current.children.len() {
+            current = &mut current.children[index];
+        } else {
+            return None;
+        }
+    }
+    
+    Some(current)
+}
+
+// Insert a new attribute/property value into a node
+fn insert_node_value(_node: &mut HtmlNode, command: &serde_json::Value, key: &str, value: &str) {
+    // Check the type field to determine where to insert
+    if let Some(value_type) = command.get("type").and_then(|t| t.as_str()) {
+        match value_type {
+            "attributes" => {
+                // Insert into node's attributes (simulate)
+                // For now, we'll just mark as dirty since HtmlNode doesn't have attributes HashMap
+                println!("  📝 Would insert attribute: {} = {}", key, value);
+            }
+            "properties" => {
+                // Insert into node's properties (simulate)
+                println!("  📝 Would insert property: {} = {}", key, value);
+            }
+            _ => {
+                println!("  ⚠️  Unknown insert type: {}", value_type);
+            }
+        }
+    } else {
+        // Default to attributes if no type specified
+        println!("  📝 Would insert attribute (default): {} = {}", key, value);
+    }
+}
+
+// Replace an existing attribute/property value in a node
+fn replace_node_value(_node: &mut HtmlNode, command: &serde_json::Value, key: &str, new_value: &str) {
+    // Check the type field to determine what to replace
+    if let Some(value_type) = command.get("type").and_then(|t| t.as_str()) {
+        let old_value = command.get("old_value").and_then(|v| v.as_str()).unwrap_or("unknown");
+        
+        match value_type {
+            "attributes" => {
+                // Replace node's attribute (simulate)
+                println!("  🔄 Would replace attribute: {} = {} -> {}", key, old_value, new_value);
+            }
+            "properties" => {
+                // Replace node's property (simulate)
+                println!("  🔄 Would replace property: {} = {} -> {}", key, old_value, new_value);
+            }
+            _ => {
+                println!("  ⚠️  Unknown replace type: {}", value_type);
+            }
+        }
+    } else {
+        // Default to attributes if no type specified
+        println!("  🔄 Would replace attribute (default): {} = {}", key, new_value);
+    }
+}
+"#,
+    );
+
     // 5. 主函数 with enhanced command.json processing
     program.push_str(
         r#"fn main() {    
@@ -380,34 +449,129 @@ where
                     
                     // Apply the command based on type
                     let modification_applied = match command_name {
-                        "add" | "insert_value" => {
-                            // For add/insert commands, mark a node at varying depth as dirty
-                            if let Some(deep_node) = find_deep_node(root_node, 3 + current_step % 7) {
-                                deep_node.mark_dirty();
-                                println!("🎯 Added/Modified node at depth {}", 3 + current_step % 7);
-                                true
-                            } else { false }
+                        "add" => {
+                            if let (Some(path_array), Some(node_data)) = (command.get("path").and_then(|p| p.as_array()), command.get("node")) {
+                                let path: Vec<usize> = path_array
+                                    .iter()
+                                    .filter_map(|v| v.as_u64().map(|n| n as usize))
+                                    .collect();
+                                
+                                if let Some(target_node) = navigate_to_path(root_node, &path) {
+                                    // Create new HTML node from the provided node data
+                                    if let Some(google_node) = GoogleNode::from_json(node_data) {
+                                        let new_html_node = google_node.to_html_node();
+                                        target_node.children.push(new_html_node);
+                                        target_node.mark_dirty();
+                                        println!("✅ Added new node at path {:?}", path);
+                                        true
+                                    } else {
+                                        println!("❌ Failed to parse node data for add command");
+                                        false
+                                    }
+                                } else {
+                                    println!("❌ Could not navigate to path {:?} for add command", path);
+                                    false
+                                }
+                            } else {
+                                println!("❌ Add command missing path or node data");
+                                false
+                            }
+                        }
+                        "insert_value" => {
+                            if let (Some(path_array), Some(key), Some(value)) = (
+                                command.get("path").and_then(|p| p.as_array()),
+                                command.get("key").and_then(|k| k.as_str()),
+                                command.get("value").and_then(|v| v.as_str())
+                            ) {
+                                let path: Vec<usize> = path_array
+                                    .iter()
+                                    .filter_map(|v| v.as_u64().map(|n| n as usize))
+                                    .collect();
+                                
+                                if let Some(target_node) = navigate_to_path(root_node, &path) {
+                                    // Insert new attribute/property
+                                    insert_node_value(target_node, &command, key, value);
+                                    target_node.mark_dirty();
+                                    println!("✅ Inserted {} = {} at path {:?}", key, value, path);
+                                    true
+                                } else {
+                                    println!("❌ Could not navigate to path {:?} for insert_value command", path);
+                                    false
+                                }
+                            } else {
+                                println!("❌ Insert_value command missing required fields");
+                                false
+                            }
                         }
                         "replace_value" => {
-                            // For replace commands, mark a shallower node as dirty
-                            if let Some(shallow_node) = find_deep_node(root_node, 2 + current_step % 3) {
-                                shallow_node.mark_dirty();
-                                println!("🔄 Replaced value at depth {}", 2 + current_step % 3);
-                                true
-                            } else { false }
+                            if let (Some(path_array), Some(key), Some(new_value)) = (
+                                command.get("path").and_then(|p| p.as_array()),
+                                command.get("key").and_then(|k| k.as_str()),
+                                command.get("value").and_then(|v| v.as_str())
+                            ) {
+                                let path: Vec<usize> = path_array
+                                    .iter()
+                                    .filter_map(|v| v.as_u64().map(|n| n as usize))
+                                    .collect();
+                                
+                                if let Some(target_node) = navigate_to_path(root_node, &path) {
+                                    // Replace existing value
+                                    replace_node_value(target_node, &command, key, new_value);
+                                    target_node.mark_dirty();
+                                    println!("✅ Replaced {} = {} at path {:?}", key, new_value, path);
+                                    true
+                                } else {
+                                    println!("❌ Could not navigate to path {:?} for replace_value command", path);
+                                    false
+                                }
+                            } else {
+                                println!("❌ Replace_value command missing required fields");
+                                false
+                            }
                         }
                         "recalculate" => {
-                            // For recalculate, just note it but don't mark anything dirty
-                            println!("🧮 Recalculation triggered (no new dirty nodes)");
+                            if let Some(time) = command.get("time").and_then(|t| t.as_str()) {
+                                println!("🧮 Recalculation triggered at time: {}", time);
+                            } else {
+                                println!("🧮 Recalculation triggered (no timestamp)");
+                            }
+                            // Force a full recomputation by marking root dirty
+                            root_node.mark_dirty();
                             true
                         }
                         "remove" => {
-                            // For remove commands, mark parent node as dirty
-                            if let Some(parent_node) = find_deep_node(root_node, 2) {
-                                parent_node.mark_dirty();
-                                println!("🗑️  Removed node (parent marked dirty)");
-                                true
-                            } else { false }
+                            if let Some(path_array) = command.get("path").and_then(|p| p.as_array()) {
+                                let path: Vec<usize> = path_array
+                                    .iter()
+                                    .filter_map(|v| v.as_u64().map(|n| n as usize))
+                                    .collect();
+                                
+                                if path.len() > 0 {
+                                    let parent_path = &path[..path.len()-1];
+                                    let child_index = path[path.len()-1];
+                                    
+                                    if let Some(parent_node) = navigate_to_path(root_node, parent_path) {
+                                        if child_index < parent_node.children.len() {
+                                            parent_node.children.remove(child_index);
+                                            parent_node.mark_dirty();
+                                            println!("✅ Removed node at path {:?}", path);
+                                            true
+                                        } else {
+                                            println!("❌ Child index {} out of bounds for remove command", child_index);
+                                            false
+                                        }
+                                    } else {
+                                        println!("❌ Could not navigate to parent path for remove command");
+                                        false
+                                    }
+                                } else {
+                                    println!("❌ Cannot remove root node");
+                                    false
+                                }
+                            } else {
+                                println!("❌ Remove command missing path");
+                                false
+                            }
                         }
                         _ => {
                             // For any other command type, mark a random node as dirty
