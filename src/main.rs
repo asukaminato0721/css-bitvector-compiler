@@ -456,20 +456,42 @@ fn replace_node_value(_node: &mut HtmlNode, command: &serde_json::Value, key: &s
                                     .filter_map(|v| v.as_u64().map(|n| n as usize))
                                     .collect();
                                 
-                                if let Some(target_node) = navigate_to_path(root_node, &path) {
-                                    // Create new HTML node from the provided node data
-                                    if let Some(google_node) = GoogleNode::from_json(node_data) {
-                                        let new_html_node = google_node.to_html_node();
-                                        target_node.children.push(new_html_node);
-                                        target_node.mark_dirty();
-                                        println!("✅ Added new node at path {:?}", path);
-                                        true
+                                if !path.is_empty() {
+                                    // Split path: all but last element navigate to parent, last element is insert position
+                                    let parent_path = &path[..path.len() - 1];
+                                    let insert_index = path[path.len() - 1];
+
+                                    if let Some(parent_node) = navigate_to_path(root_node, parent_path) {
+                                        // Create new HTML node from the provided node data
+                                        if let Some(google_node) = GoogleNode::from_json(node_data) {
+                                            let new_html_node = google_node.to_html_node();
+                                            
+                                            // Insert at specified position (or append if index == children.len())
+                                            if insert_index <= parent_node.children.len() {
+                                                parent_node.children.insert(insert_index, new_html_node);
+                                                parent_node.mark_dirty();
+                                                println!("✅ Added new node at path {:?} (insert position {})", path, insert_index);
+                                                true
+                                            } else {
+                                                println!(
+                                                    "❌ Insert index {} out of bounds (max: {}) for add command",
+                                                    insert_index, parent_node.children.len()
+                                                );
+                                                false
+                                            }
+                                        } else {
+                                            println!("❌ Failed to parse node data for add command");
+                                            false
+                                        }
                                     } else {
-                                        println!("❌ Failed to parse node data for add command");
+                                        println!(
+                                            "❌ Could not navigate to parent path {:?} for add command",
+                                            parent_path
+                                        );
                                         false
                                     }
                                 } else {
-                                    println!("❌ Could not navigate to path {:?} for add command", path);
+                                    println!("❌ Add command requires non-empty path");
                                     false
                                 }
                             } else {
