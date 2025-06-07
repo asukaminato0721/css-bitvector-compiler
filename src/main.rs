@@ -13,8 +13,6 @@ use css_bitvector_compiler::SelectorMatchingIndex;
 use css_bitvector_compiler::SimpleSelector;
 use css_bitvector_compiler::TreeNFAProgram;
 use css_bitvector_compiler::parse_basic_css;
-use css_bitvector_compiler::rdtsc;
-use css_bitvector_compiler::cycles_to_duration;
 
 // All types are now defined in lib.rs and imported from there
 
