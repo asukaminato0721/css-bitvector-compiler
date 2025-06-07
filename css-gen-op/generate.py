@@ -68,13 +68,12 @@ def diff_dom_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> 
         REPLACE_COUNT.count()
         out(command_replace(path, lhs, rhs))
     else:
+        # Create a safer node identifier instead of truncating the full str representation
+        node_identifier = f"{{id:{lhs.get('id', 'None')}, name:'{lhs.get('name', '')}', type:'{lhs.get('type', '')}'}}"
+        
         if lhs["attributes"] != rhs["attributes"]:
             diff_simple_dict(
-                lhs["attributes"], rhs["attributes"], path, str(lhs)[:120], "attributes"
-            )
-        if lhs["properties"] != rhs["properties"]:
-            diff_simple_dict(
-                lhs["properties"], rhs["properties"], path, str(lhs)[:120], "properties"
+                lhs["attributes"], rhs["attributes"], path, node_identifier, "attributes"
             )
         l_children: List[Dict[str, Any]] = lhs["children"]
         r_children: List[Dict[str, Any]] = rhs["children"]

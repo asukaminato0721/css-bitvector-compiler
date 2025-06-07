@@ -213,6 +213,16 @@ fn find_deep_node(node: &mut HtmlNode, target_depth: usize) -> Option<&mut HtmlN
     node.find_deep_node_mut(target_depth)
 }
 
+// Helper function to extract value from JSON (handles both string and number)
+fn extract_value_as_string(value: &serde_json::Value) -> Option<String> {
+    match value {
+        serde_json::Value::String(s) => Some(s.clone()),
+        serde_json::Value::Number(n) => Some(n.to_string()),
+        serde_json::Value::Bool(b) => Some(b.to_string()),
+        _ => None,
+    }
+}
+
 fn time_processing<F>(mut func: F, iterations: usize) -> u64
 where
     F: FnMut(),
@@ -458,7 +468,7 @@ fn main() {
                             if let (Some(path_array), Some(key), Some(value)) = (
                                 command.get("path").and_then(|p| p.as_array()),
                                 command.get("key").and_then(|k| k.as_str()),
-                                command.get("value").and_then(|v| v.as_str()),
+                                command.get("value").and_then(extract_value_as_string),
                             ) {
                                 let path: Vec<usize> = path_array
                                     .iter()
@@ -467,7 +477,7 @@ fn main() {
 
                                 if let Some(target_node) = navigate_to_path(root_node, &path) {
                                     // Insert new attribute/property
-                                    insert_node_value(target_node, &command, key, value);
+                                    insert_node_value(target_node, &command, key, &value);
                                     target_node.mark_dirty();
                                     println!("✅ Inserted {} = {} at path {:?}", key, value, path);
                                     true
@@ -487,7 +497,7 @@ fn main() {
                             if let (Some(path_array), Some(key), Some(new_value)) = (
                                 command.get("path").and_then(|p| p.as_array()),
                                 command.get("key").and_then(|k| k.as_str()),
-                                command.get("value").and_then(|v| v.as_str()),
+                                command.get("value").and_then(extract_value_as_string),
                             ) {
                                 let path: Vec<usize> = path_array
                                     .iter()
@@ -496,7 +506,7 @@ fn main() {
 
                                 if let Some(target_node) = navigate_to_path(root_node, &path) {
                                     // Replace existing value
-                                    replace_node_value(target_node, &command, key, new_value);
+                                    replace_node_value(target_node, &command, key, &new_value);
                                     target_node.mark_dirty();
                                     println!(
                                         "✅ Replaced {} = {} at path {:?}",

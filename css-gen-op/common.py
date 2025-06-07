@@ -119,9 +119,6 @@ def regularize_dom(j: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         if "attributes" not in j:
             j["attributes"] = {}
 
-        if "properties" not in j:
-            j["properties"] = {}
-
         return j
 
 
