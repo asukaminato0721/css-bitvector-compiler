@@ -1,6 +1,12 @@
 # CSS Bitvector Compiler
 
-A high-performance CSS selector matching engine that compiles CSS rules into optimized bitvector operations for efficient DOM tree processing.
+```
+cargo run -r
+cargo run --features generated-css -r
+cargo run benchmark --features generated-css
+python3 create_performance_comparison_plot.py
+```
+
 
 ## 🎯 Project Overview
 

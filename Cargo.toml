@@ -15,7 +15,7 @@ name = "main"
 path = "src/main.rs"
 
 [features]
-default = []
+default = ["generated-css"]
 generated-css = []
 
 [dependencies]
