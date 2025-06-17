@@ -70,7 +70,7 @@ fn count_nodes(node: &HtmlNode) -> usize {
     1 + node
         .children
         .iter()
-        .map(|child| count_nodes(child))
+        .map(count_nodes)
         .sum::<usize>()
 }
 
@@ -590,7 +590,7 @@ mod tests {
         let benchmark_result = run_web_browser_layout_trace_benchmark();
         
         // Check that we have valid results
-        assert!(benchmark_result.len() > 0, "Should have processed frames");
+        assert!(!benchmark_result.is_empty(), "Should have processed frames");
         assert!(benchmark_result.iter().filter(|r| r.operation_type != "init").count() > 0, "Should have operations");
         assert!(benchmark_result.iter().filter(|r| r.speedup > 0.0).count() > 0, "Should have positive speedup");
         

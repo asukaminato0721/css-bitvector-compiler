@@ -68,7 +68,7 @@ pub fn process_node_generated_incremental(
     }
 
     // Start with cached intrinsic matches
-    let mut current_matches = node.cached_node_intrinsic.unwrap();
+    let current_matches = node.cached_node_intrinsic.unwrap();
     let mut child_states = BitVector::new();
 
     // Apply parent-dependent rules
