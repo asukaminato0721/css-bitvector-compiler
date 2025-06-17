@@ -1,6 +1,7 @@
 import json
 import sys
-from typing import Dict, Any, List, Set, Optional, Union, TextIO
+from typing import Any, Dict, List, Optional, Set, TextIO
+
 from common import *
 
 TOTAL_DIFF_SIZE: int = 0
@@ -70,10 +71,14 @@ def diff_dom_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> 
     else:
         # Create a safer node identifier instead of truncating the full str representation
         node_identifier = f"{{id:{lhs.get('id', 'None')}, name:'{lhs.get('name', '')}', type:'{lhs.get('type', '')}'}}"
-        
+
         if lhs["attributes"] != rhs["attributes"]:
             diff_simple_dict(
-                lhs["attributes"], rhs["attributes"], path, node_identifier, "attributes"
+                lhs["attributes"],
+                rhs["attributes"],
+                path,
+                node_identifier,
+                "attributes",
             )
         l_children: List[Dict[str, Any]] = lhs["children"]
         r_children: List[Dict[str, Any]] = rhs["children"]

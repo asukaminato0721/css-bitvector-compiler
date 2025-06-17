@@ -12,7 +12,10 @@ use css_bitvector_compiler::NFAInstruction;
 use css_bitvector_compiler::SelectorMatchingIndex;
 use css_bitvector_compiler::SimpleSelector;
 use css_bitvector_compiler::TreeNFAProgram;
+use css_bitvector_compiler::count_total_nodes;
+use css_bitvector_compiler::cycles_to_duration;
 use css_bitvector_compiler::parse_basic_css;
+use css_bitvector_compiler::rdtsc;
 
 // All types are now defined in lib.rs and imported from there
 
@@ -1417,7 +1420,442 @@ fn print_css_results(node: &HtmlNode, state_names: &HashMap<usize, String>, dept
     }
 }
 
+// Add benchmark functionality
+#[derive(Debug, Clone)]
+pub struct BenchmarkResult {
+    pub test_name: String,
+    pub nodes_count: usize,
+    pub incremental_cycles: u64,
+    pub fromscratch_cycles: u64,
+    pub cache_hit_rate: f64,
+    pub speedup: f64,
+}
+
+pub fn run_performance_benchmark() -> Vec<BenchmarkResult> {
+    println!("🚀 Starting Performance Benchmark: Incremental vs From-Scratch");
+    println!("================================================================\n");
+
+    let mut results = Vec::new();
+
+    // Test 1: Different tree scales (more data points)
+    let scale_factors = vec![
+        0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5,
+    ];
+
+    for &scale in &scale_factors {
+        if let Ok(mut tree) = create_scaled_google_tree(scale) {
+            let nodes_count = count_total_nodes(&tree);
+
+            if nodes_count < 5 {
+                continue;
+            }
+
+            println!("🌳 Testing scale {:.1} ({} nodes)...", scale, nodes_count);
+
+            let result = benchmark_tree_performance(&mut tree, &format!("scale_{:.1}", scale));
+            results.push(result);
+        }
+    }
+
+    // Test 2: Multiple iterations with different modification patterns
+    if let Ok(base_tree) = create_scaled_google_tree(1.0) {
+        let patterns = vec![
+            ("no_change", 0),
+            ("single_leaf", 1),
+            ("few_nodes", 3),
+            ("small_subtree", 8),
+            ("medium_subtree", 15),
+            ("large_subtree", 30),
+            ("major_change", 50),
+        ];
+
+        for (pattern_name, _) in patterns {
+            // Test each pattern multiple times with different random seeds
+            for i in 0..5 {
+                let mut test_tree = base_tree.clone();
+                apply_test_modification_with_seed(&mut test_tree, pattern_name, i);
+
+                let test_name = format!("{}_{}", pattern_name, i);
+                println!("🔧 Testing {}: {}...", i + 1, test_name);
+                let result = benchmark_tree_performance(&mut test_tree, &test_name);
+                results.push(result);
+            }
+        }
+    }
+
+    // Test 3: Simulate real-world scenarios with Google trace data
+    if let Ok(base_tree) = create_scaled_google_tree(1.0) {
+        for iteration in 0..20 {
+            let mut test_tree = base_tree.clone();
+
+            // Simulate DOM modifications like those in Google trace
+            simulate_dom_modifications(&mut test_tree, iteration);
+
+            let test_name = format!("realistic_{}", iteration);
+            println!("🌐 Testing realistic scenario {}...", iteration + 1);
+            let result = benchmark_tree_performance(&mut test_tree, &test_name);
+            results.push(result);
+        }
+    }
+
+    results
+}
+
+fn apply_test_modification_with_seed(tree: &mut HtmlNode, pattern: &str, seed: usize) {
+    match pattern {
+        "no_change" => {
+            // Do nothing - test pure cache performance
+        }
+        "single_leaf" => {
+            if let Some(node) = find_node_at_test_depth(tree, 2 + (seed % 3)) {
+                node.mark_dirty();
+            }
+        }
+        "few_nodes" => {
+            for i in 0..(2 + seed % 3) {
+                if let Some(node) = find_node_at_test_depth(tree, 1 + i) {
+                    node.mark_dirty();
+                }
+            }
+        }
+        "small_subtree" => {
+            if seed < tree.children.len() {
+                tree.children[seed].mark_dirty();
+            }
+        }
+        "medium_subtree" => {
+            for i in 0..tree.children.len().min(2 + seed) {
+                tree.children[i].mark_dirty();
+            }
+        }
+        "large_subtree" => {
+            for i in 0..tree.children.len().min(3 + seed) {
+                tree.children[i].mark_dirty();
+                if i < tree.children[i].children.len() {
+                    tree.children[i].children[0].mark_dirty();
+                }
+            }
+        }
+        "major_change" => {
+            tree.mark_dirty();
+            if seed % 2 == 0 {
+                // Also mark some children to simulate cascading changes
+                for i in 0..tree.children.len().min(seed + 1) {
+                    tree.children[i].mark_dirty();
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+fn simulate_dom_modifications(tree: &mut HtmlNode, scenario: usize) {
+    // Simulate different realistic DOM modification patterns
+    match scenario % 6 {
+        0 => {
+            // Style changes - single node
+            if let Some(node) = find_node_at_test_depth(tree, 2) {
+                node.mark_dirty();
+            }
+        }
+        1 => {
+            // Content changes - small subtree
+            if !tree.children.is_empty() {
+                let len = tree.children.len();
+                tree.children[scenario % len].mark_dirty();
+            }
+        }
+        2 => {
+            // Layout changes - medium impact
+            for i in 0..tree.children.len().min(3) {
+                if (i + scenario) % 3 == 0 {
+                    tree.children[i].mark_dirty();
+                }
+            }
+        }
+        3 => {
+            // Major restructuring
+            tree.mark_dirty();
+        }
+        4 => {
+            // Cascading changes
+            mark_cascading_changes(tree, scenario % 3);
+        }
+        5 => {
+            // Mixed changes
+            if scenario % 2 == 0 {
+                if let Some(node) = find_node_at_test_depth(tree, 1) {
+                    node.mark_dirty();
+                }
+            }
+            if !tree.children.is_empty() {
+                tree.children[0].mark_dirty();
+            }
+        }
+        _ => {}
+    }
+}
+
+fn mark_cascading_changes(tree: &mut HtmlNode, depth: usize) {
+    if depth == 0 {
+        return;
+    }
+
+    tree.mark_dirty();
+
+    for (i, child) in tree.children.iter_mut().enumerate() {
+        if i < depth {
+            mark_cascading_changes(child, depth - 1);
+        }
+    }
+}
+
+fn create_scaled_google_tree(scale: f64) -> Result<HtmlNode, Box<dyn std::error::Error>> {
+    let command_file_path = "css-gen-op/command.json";
+    let content = std::fs::read_to_string(command_file_path)?;
+    let first_line = content.lines().next().ok_or("Empty command file")?;
+    let command: serde_json::Value = serde_json::from_str(first_line)?;
+
+    if command["name"] != "init" {
+        return Err("First command should be init".into());
+    }
+
+    let google_node =
+        GoogleNode::from_json(&command["node"]).ok_or("Failed to parse Google node")?;
+
+    let mut html_node = google_node.to_html_node();
+
+    if scale != 1.0 {
+        scale_tree_by_factor(&mut html_node, scale, 0, 2);
+    }
+
+    html_node.init_parent_pointers();
+    Ok(html_node)
+}
+
+fn scale_tree_by_factor(node: &mut HtmlNode, scale: f64, depth: usize, max_depth: usize) {
+    if depth >= max_depth {
+        return;
+    }
+
+    if scale < 1.0 {
+        let keep_count = (node.children.len() as f64 * scale).ceil() as usize;
+        node.children.truncate(keep_count);
+    } else if scale > 1.0 && !node.children.is_empty() {
+        let original_children = node.children.clone();
+        let extra_count = ((node.children.len() as f64 * (scale - 1.0)).ceil() as usize).min(3);
+
+        for i in 0..extra_count {
+            if i < original_children.len() {
+                node.children.push(original_children[i].clone());
+            }
+        }
+    }
+
+    for child in &mut node.children {
+        scale_tree_by_factor(child, scale, depth + 1, max_depth);
+    }
+}
+
+fn apply_test_modification(tree: &mut HtmlNode, pattern: &str) {
+    match pattern {
+        "no_change" => {
+            // Do nothing - test pure cache performance
+        }
+        "single_node" => {
+            if let Some(node) = find_node_at_test_depth(tree, 2) {
+                node.mark_dirty();
+            }
+        }
+        "small_subtree" => {
+            if !tree.children.is_empty() {
+                tree.children[0].mark_dirty();
+            }
+        }
+        "large_subtree" => {
+            tree.mark_dirty();
+        }
+        _ => {}
+    }
+}
+
+fn find_node_at_test_depth(node: &mut HtmlNode, depth: usize) -> Option<&mut HtmlNode> {
+    if depth == 0 {
+        return Some(node);
+    }
+
+    for child in &mut node.children {
+        if let Some(found) = find_node_at_test_depth(child, depth - 1) {
+            return Some(found);
+        }
+    }
+
+    None
+}
+
+fn benchmark_tree_performance(tree: &mut HtmlNode, test_name: &str) -> BenchmarkResult {
+    let nodes_count = count_total_nodes(tree);
+    let iterations = if nodes_count > 100 { 10 } else { 30 };
+
+    // Load CSS rules
+    let css_content = std::fs::read_to_string("css-gen-op/https___www.google.com_.css")
+        .unwrap_or_else(|_| "div { display: block; }".to_string());
+    let css_rules = parse_basic_css(&css_content);
+    let mut compiler = CssCompiler::new();
+    let program = compiler.compile_css_rules(&css_rules);
+    let vm = TreeNFAVM::new(program);
+
+    // Benchmark incremental processing
+    let mut incremental_total = 0u64;
+    let mut cache_hit_rates = Vec::new();
+
+    for _ in 0..iterations {
+        let mut inc_tree = tree.clone();
+
+        let start = rdtsc();
+        let stats = vm.process_tree_incremental_with_stats(&mut inc_tree);
+        let end = rdtsc();
+
+        incremental_total += cycles_to_duration(start, end);
+
+        if stats.total_nodes > 0 {
+            cache_hit_rates.push(stats.cache_hits as f64 / stats.total_nodes as f64);
+        }
+    }
+
+    // Benchmark from-scratch processing (clear cache each time)
+    let mut fromscratch_total = 0u64;
+
+    for _ in 0..iterations {
+        let mut fs_tree = tree.clone();
+        clear_tree_cache(&mut fs_tree);
+
+        let start = rdtsc();
+        let _ = vm.process_tree_incremental_with_stats(&mut fs_tree);
+        let end = rdtsc();
+
+        fromscratch_total += cycles_to_duration(start, end);
+    }
+
+    let avg_incremental = incremental_total / iterations as u64;
+    let avg_fromscratch = fromscratch_total / iterations as u64;
+    let avg_cache_hit_rate = if cache_hit_rates.is_empty() {
+        0.0
+    } else {
+        cache_hit_rates.iter().sum::<f64>() / cache_hit_rates.len() as f64
+    };
+    let speedup = if avg_incremental > 0 {
+        avg_fromscratch as f64 / avg_incremental as f64
+    } else {
+        1.0
+    };
+
+    println!(
+        "  📊 {} nodes: {:.2}x speedup, {:.1}% cache hits",
+        nodes_count,
+        speedup,
+        avg_cache_hit_rate * 100.0
+    );
+
+    BenchmarkResult {
+        test_name: test_name.to_string(),
+        nodes_count,
+        incremental_cycles: avg_incremental,
+        fromscratch_cycles: avg_fromscratch,
+        cache_hit_rate: avg_cache_hit_rate,
+        speedup,
+    }
+}
+
+fn clear_tree_cache(node: &mut HtmlNode) {
+    node.is_self_dirty = true;
+    node.has_dirty_descendant = false;
+    node.cached_parent_state = None;
+    node.cached_node_intrinsic = None;
+    node.cached_child_states = None;
+
+    for child in &mut node.children {
+        clear_tree_cache(child);
+    }
+}
+
+pub fn export_benchmark_results(results: &[BenchmarkResult]) -> std::io::Result<()> {
+    use std::io::Write;
+
+    let filename = "performance_benchmark.csv";
+    let mut file = std::fs::File::create(filename)?;
+
+    writeln!(
+        file,
+        "test_name,nodes_count,incremental_cycles,fromscratch_cycles,cache_hit_rate,speedup"
+    )?;
+
+    for result in results {
+        writeln!(
+            file,
+            "{},{},{},{},{:.4},{:.4}",
+            result.test_name,
+            result.nodes_count,
+            result.incremental_cycles,
+            result.fromscratch_cycles,
+            result.cache_hit_rate,
+            result.speedup
+        )?;
+    }
+
+    println!("📁 Benchmark results exported to {}", filename);
+    Ok(())
+}
+
+pub fn print_performance_summary(results: &[BenchmarkResult]) {
+    println!("\n📊 PERFORMANCE BENCHMARK SUMMARY");
+    println!("=================================");
+
+    if results.is_empty() {
+        println!("No benchmark results available.");
+        return;
+    }
+
+    let avg_speedup = results.iter().map(|r| r.speedup).sum::<f64>() / results.len() as f64;
+    let max_speedup = results.iter().map(|r| r.speedup).fold(0.0, f64::max);
+    let avg_cache_hit_rate =
+        results.iter().map(|r| r.cache_hit_rate).sum::<f64>() / results.len() as f64;
+
+    println!("Total tests: {}", results.len());
+    println!("Average speedup: {:.2}x", avg_speedup);
+    println!("Maximum speedup: {:.2}x", max_speedup);
+    println!("Average cache hit rate: {:.1}%", avg_cache_hit_rate * 100.0);
+
+    println!("\nDetailed Results:");
+    for result in results {
+        println!(
+            "{:15} | {:4} nodes | {:6} vs {:8} cycles | {:.2}x speedup | {:.1}% cache",
+            result.test_name,
+            result.nodes_count,
+            result.incremental_cycles,
+            result.fromscratch_cycles,
+            result.speedup,
+            result.cache_hit_rate * 100.0
+        );
+    }
+}
+
 fn main() {
+    // Check if we should run benchmarks
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() > 1 && args[1] == "benchmark" {
+        println!("🚀 Running Performance Benchmark Mode\n");
+
+        let results = run_performance_benchmark();
+        print_performance_summary(&results);
+
+        if let Err(e) = export_benchmark_results(&results) {
+            println!("Failed to export benchmark results: {}", e);
+        }
+
+        return;
+    }
+
     let tests_dir = "tests";
     let css_file = format!("{}/test.css", tests_dir);
 

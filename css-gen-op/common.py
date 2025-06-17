@@ -1,5 +1,5 @@
 # path is a list of int.
-from typing import List, Dict, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 def command_init(node: Dict[str, Any], time: Union[int, float]) -> Dict[str, Any]:

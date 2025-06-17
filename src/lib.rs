@@ -559,7 +559,7 @@ impl TreeNFAProgram {
         code.push_str("    // Check if we need to recompute\n");
         code.push_str("    if !node.needs_any_recomputation(parent_state) {\n");
         code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.unwrap_or(BitVector::new());\n");
+        code.push_str("        return node.cached_child_states.unwrap_or_default();\n");
         code.push_str("    }\n\n");
 
         code.push_str("    // Recompute node intrinsic matches if needed\n");
