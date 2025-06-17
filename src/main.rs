@@ -17,6 +17,8 @@ use css_bitvector_compiler::cycles_to_duration;
 use css_bitvector_compiler::parse_basic_css;
 use css_bitvector_compiler::rdtsc;
 
+mod benchmark;
+
 // All types are now defined in lib.rs and imported from there
 
 // Google Trace Testing Integration
@@ -1844,14 +1846,9 @@ fn main() {
     // Check if we should run benchmarks
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 && args[1] == "benchmark" {
-        println!("🚀 Running Performance Benchmark Mode\n");
+        println!("🚀 Running Web Browser Layout Trace Benchmark Mode\n");
 
-        let results = run_performance_benchmark();
-        print_performance_summary(&results);
-
-        if let Err(e) = export_benchmark_results(&results) {
-            println!("Failed to export benchmark results: {}", e);
-        }
+        benchmark::run_web_browser_layout_trace_benchmark();
 
         return;
     }
