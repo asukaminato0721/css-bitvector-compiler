@@ -170,6 +170,14 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
         .map_err(|e| format!("Failed to write generated code: {}", e))?;
 
     println!("💾 Generated example: {}", example_file);
+    
+    // Also generate functions for benchmark usage
+    let functions_code = generate_css_functions_for_benchmark(&generated_code)?;
+    let functions_file = "src/generated_css_functions.rs";
+    std::fs::write(functions_file, &functions_code)
+        .map_err(|e| format!("Failed to write generated functions: {}", e))?;
+    
+    println!("💾 Generated functions: {}", functions_file);
 
     // Run the generated example
     println!("🚀 Running generated example with Google trace data...\n");
@@ -187,6 +195,104 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
     }
 
     Ok(())
+}
+
+// Generate CSS functions for benchmark usage (to be included with include! macro)
+fn generate_css_functions_for_benchmark(
+    generated_fn_code: &str,
+) -> Result<String, Box<dyn std::error::Error>> {
+    let mut code = String::new();
+
+    // 1. Header comment
+    code.push_str("// Generated CSS processing functions for benchmark usage\n");
+    code.push_str("// This file is included by benchmark.rs using include! macro\n\n");
+
+    // 2. Add generated CSS processing function
+    code.push_str("// Generated CSS processing function\n");
+    code.push_str(generated_fn_code);
+    code.push_str("\n\n");
+
+    // 3. Add public incremental processing functions
+    code.push_str(
+        r#"/// Real incremental processing with statistics tracking
+pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+    let mut total_nodes = 0;
+    let mut cache_hits = 0;
+    let mut cache_misses = 0;
+    
+    process_tree_recursive_with_stats(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    
+    (total_nodes, cache_hits, cache_misses)
+}
+
+fn process_tree_recursive_with_stats(node: &mut HtmlNode, parent_state: BitVector, 
+                                    total: &mut usize, hits: &mut usize, misses: &mut usize) {
+    *total += 1;
+    
+    // Check if we need to recompute using the real incremental logic
+    if node.needs_any_recomputation(parent_state) {
+        *misses += 1;
+        
+        // Use the actual generated incremental processing function
+        let child_states = process_node_generated_incremental(node, parent_state);
+        
+        // Process children recursively
+        for child in node.children.iter_mut() {
+            process_tree_recursive_with_stats(child, child_states, total, hits, misses);
+        }
+    } else {
+        *hits += 1;
+        // Skip entire subtree when cached - this is the power of incremental processing
+    }
+}
+
+/// Non-incremental processing for comparison (always recomputes everything)
+pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
+    let mut total_nodes = 0;
+    let cache_hits = 0; // No caching in full recompute
+    let mut cache_misses = 0;
+    
+    process_tree_recursive_full(root, BitVector::new(), &mut total_nodes, &mut cache_misses);
+    
+    (total_nodes, cache_hits, cache_misses)
+}
+
+fn process_tree_recursive_full(node: &mut HtmlNode, parent_state: BitVector, 
+                              total: &mut usize, misses: &mut usize) {
+    *total += 1;
+    *misses += 1;
+    
+    // Always recompute - clear caches first
+    node.cached_node_intrinsic = None;
+    node.cached_parent_state = None;
+    node.cached_child_states = None;
+    node.mark_dirty();
+    
+    // Force recomputation by using the generated incremental function
+    let child_states = process_node_generated_incremental(node, parent_state);
+    
+    // Process all children
+    for child in node.children.iter_mut() {
+        process_tree_recursive_full(child, child_states, total, misses);
+    }
+}
+
+/// Helper function to reset cache state for benchmarking
+pub fn reset_cache_state(node: &mut HtmlNode) {
+    node.is_self_dirty = true;
+    node.has_dirty_descendant = false;
+    node.cached_parent_state = None;
+    node.cached_node_intrinsic = None;
+    node.cached_child_states = Some(BitVector::new());
+
+    for child in node.children.iter_mut() {
+        reset_cache_state(child);
+    }
+}
+"#,
+    );
+
+    Ok(code)
 }
 
 fn find_deep_node(node: &mut HtmlNode, target_depth: usize) -> Option<&mut HtmlNode> {
@@ -220,7 +326,7 @@ fn generate_google_trace_program(
     // 3. Add real incremental processing with stats tracking
     program.push_str(
         r#"// Real incremental processing with statistics tracking
-fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
@@ -252,7 +358,7 @@ fn process_tree_recursive_with_stats(node: &mut HtmlNode, parent_state: BitVecto
 }
 
 // Non-incremental processing for comparison (always recomputes everything)
-fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let cache_hits = 0; // No caching in full recompute
     let mut cache_misses = 0;
