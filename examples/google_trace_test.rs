@@ -7,7 +7,8 @@ use css_bitvector_compiler::*;
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector { // returns child_states
+) -> BitVector {
+    // returns child_states
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
@@ -133,6 +134,4 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
-
-
-fn main(){}
+fn main() {}

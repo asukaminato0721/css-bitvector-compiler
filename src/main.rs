@@ -164,13 +164,13 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
         .map_err(|e| format!("Failed to write generated code: {}", e))?;
 
     println!("💾 Generated example: {}", example_file);
-    
+
     // Also generate functions for benchmark usage
     let functions_code = generate_css_functions_for_benchmark(&generated_code)?;
     let functions_file = "src/generated_css_functions.rs";
     std::fs::write(functions_file, &functions_code)
         .map_err(|e| format!("Failed to write generated functions: {}", e))?;
-    
+
     println!("💾 Generated functions: {}", functions_file);
 
     // Run the generated example
@@ -1178,8 +1178,6 @@ mod tests {
         println!("\nTest 3: Selective recomputation after modification");
         root.children[0].mark_dirty();
 
-
-
         // Test 4: Compare with non-incremental version for correctness
         println!("\nTest 4: Correctness verification");
         let root_copy = HtmlNode::new("div")
@@ -1384,7 +1382,6 @@ mod tests {
 
     #[test]
     fn test_optimized_selector_matching() {
-        
         // Test hash table vs linear search performance conceptually
         let css_rules = vec![
             CssRule::Simple(SimpleSelector::Type("div".to_string())),

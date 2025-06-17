@@ -1,6 +1,6 @@
 use crate::*;
-use serde_json::{self, Value};
 use css_bitvector_compiler::BitVector;
+use serde_json::{self, Value};
 #[derive(Debug, Clone)]
 pub struct WebLayoutFrameResult {
     pub frame_id: usize,
@@ -41,7 +41,7 @@ include!("generated_css_functions.rs");
 #[cfg(not(feature = "generated-css"))]
 mod fallback_css_processing {
     use crate::*;
-    
+
     fn count_nodes(node: &HtmlNode) -> usize {
         1 + node
             .children
@@ -49,13 +49,13 @@ mod fallback_css_processing {
             .map(|child| count_nodes(child))
             .sum::<usize>()
     }
-    
+
     pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
         // Fallback: simple processing without actual CSS matching
         let total = count_nodes(root);
         (total, 0, total) // All cache misses
     }
-    
+
     pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
         // Fallback: same as incremental for now
         let total = count_nodes(root);
@@ -64,14 +64,10 @@ mod fallback_css_processing {
 }
 
 #[cfg(not(feature = "generated-css"))]
-use fallback_css_processing::{process_tree_incremental_with_stats, process_tree_full_recompute};
+use fallback_css_processing::{process_tree_full_recompute, process_tree_incremental_with_stats};
 
 fn count_nodes(node: &HtmlNode) -> usize {
-    1 + node
-        .children
-        .iter()
-        .map(count_nodes)
-        .sum::<usize>()
+    1 + node.children.iter().map(count_nodes).sum::<usize>()
 }
 
 fn find_node_by_path_mut<'a>(node: &'a mut HtmlNode, path: &[usize]) -> Option<&'a mut HtmlNode> {
@@ -308,7 +304,7 @@ fn benchmark_layout_frame(initial_tree: &HtmlNode, frame: &LayoutFrame) -> WebLa
     // Run incremental layout once to populate caches, then clear dirty flags
     let _ = invoke_incremental_layout(&mut tree_incremental);
     clear_dirty_flags(&mut tree_incremental);
-    
+
     // Re-apply modifications to create realistic dirty state
     apply_frame_modifications(&mut tree_incremental, frame);
 
@@ -586,23 +582,43 @@ mod tests {
     fn test_benchmark_with_generated_css() {
         // This test verifies that the benchmark uses actual generated CSS processing
         println!("🧪 Testing benchmark with generated CSS functions");
-        
+
         let benchmark_result = run_web_browser_layout_trace_benchmark();
-        
+
         // Check that we have valid results
         assert!(!benchmark_result.is_empty(), "Should have processed frames");
-        assert!(benchmark_result.iter().filter(|r| r.operation_type != "init").count() > 0, "Should have operations");
-        assert!(benchmark_result.iter().filter(|r| r.speedup > 0.0).count() > 0, "Should have positive speedup");
-        
+        assert!(
+            benchmark_result
+                .iter()
+                .filter(|r| r.operation_type != "init")
+                .count()
+                > 0,
+            "Should have operations"
+        );
+        assert!(
+            benchmark_result.iter().filter(|r| r.speedup > 0.0).count() > 0,
+            "Should have positive speedup"
+        );
+
         println!("✅ Benchmark test passed:");
         println!("   Total frames: {}", benchmark_result.len());
-        println!("   Total operations: {}", benchmark_result.iter().filter(|r| r.operation_type != "init").count());
-        println!("   Average speedup: {:.3}x", benchmark_result.iter().filter(|r| r.speedup > 0.0).count() as f64 / benchmark_result.len() as f64);
-        
+        println!(
+            "   Total operations: {}",
+            benchmark_result
+                .iter()
+                .filter(|r| r.operation_type != "init")
+                .count()
+        );
+        println!(
+            "   Average speedup: {:.3}x",
+            benchmark_result.iter().filter(|r| r.speedup > 0.0).count() as f64
+                / benchmark_result.len() as f64
+        );
+
         // The fact that we get here means the generated CSS functions are working
         #[cfg(feature = "generated-css")]
         println!("🎯 Using real generated CSS processing functions!");
-        
+
         #[cfg(not(feature = "generated-css"))]
         println!("⚠️  Using fallback CSS processing functions");
     }
