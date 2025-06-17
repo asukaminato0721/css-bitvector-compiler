@@ -906,7 +906,6 @@ mod tests {
 
         // Execute on root div
 
-
         // Test first child (p.item)
         let p_item = HtmlNode::new("p").with_class("item");
 
