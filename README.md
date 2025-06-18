@@ -1,10 +1,7 @@
 # CSS Bitvector Compiler
 
 ```
-cargo run -r
-cargo run --features generated-css -r
-cargo run benchmark --features generated-css
-python3 create_performance_comparison_plot.py
+./run.sh
 ```
 
 
