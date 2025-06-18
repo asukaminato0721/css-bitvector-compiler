@@ -1,5 +1,4 @@
-use crate::*;
-use css_bitvector_compiler::BitVector;
+use css_bitvector_compiler::rdtsc;
 use serde_json::{self, Value};
 #[derive(Debug, Clone)]
 pub struct WebLayoutFrameResult {
@@ -325,12 +324,19 @@ fn benchmark_layout_frame(initial_tree: &HtmlNode, frame: &LayoutFrame) -> WebLa
     let end_full = rdtsc();
     let full_layout_cycles = end_full - start_full;
 
+    // Correctness check: ensure both layout methods produce the same result
+    assert!(
+        tree_incremental.compare_css_matches(&tree_full_layout),
+        "Mismatch between incremental and full layout results for frame {}",
+        frame.frame_id
+    );
+ 
     let speedup = if full_layout_cycles > 0 {
         incremental_cycles as f64 / full_layout_cycles as f64
     } else {
         1.0
     };
-
+ 
     WebLayoutFrameResult {
         frame_id: frame.frame_id,
         operation_type: frame.command_name.clone(),

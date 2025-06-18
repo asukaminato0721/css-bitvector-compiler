@@ -15,8 +15,9 @@ name = "main"
 path = "src/main.rs"
 
 [features]
-default = ["generated-css"]
+default = []
 generated-css = []
+run-benchmark = ["generated-css"]
 
 [dependencies]
 serde_json = "1.0"
