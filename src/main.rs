@@ -99,7 +99,6 @@ impl GoogleNode {
             .map(|child| child.count_nodes())
             .sum::<usize>()
     }
-
 }
 
 pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>> {
@@ -207,7 +206,6 @@ fn main() {
         }
         return;
     }
-
 
     // Test Google trace integration
     println!("\n=== GOOGLE TRACE INTEGRATION TEST ===");
@@ -456,7 +454,6 @@ mod tests {
         assert_eq!(parse_simple_selector("123invalid"), None);
         assert_eq!(parse_simple_selector(""), None);
     }
-
 
     #[test]
     fn test_instruction_order_and_correctness() {
@@ -769,5 +766,4 @@ mod tests {
         // Test that selector index correctly identifies matching rules
         let test_node = HtmlNode::new("div").with_class("highlight");
     }
-
 }

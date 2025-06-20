@@ -634,8 +634,12 @@ impl TreeNFAProgram {
                     i, instruction
                 ));
                 let selector_str = match selector {
-                    SimpleSelector::Type(tag) => format!("SimpleSelector::Type(\"{}\".to_string())", tag),
-                    SimpleSelector::Class(class) => format!("SimpleSelector::Class(\"{}\".to_string())", class),
+                    SimpleSelector::Type(tag) => {
+                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                    }
+                    SimpleSelector::Class(class) => {
+                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                    }
                     SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
                 };
                 code.push_str(&format!(
@@ -645,7 +649,9 @@ impl TreeNFAProgram {
                 code.push_str(&format!(
                     "            intrinsic_matches.set_bit({}); // {}\n",
                     bit_pos,
-                    self.state_names.get(bit_pos).unwrap_or(&format!("bit_{}", bit_pos))
+                    self.state_names
+                        .get(bit_pos)
+                        .unwrap_or(&format!("bit_{}", bit_pos))
                 ));
                 code.push_str("        }\n\n");
             }
@@ -656,17 +662,28 @@ impl TreeNFAProgram {
     fn generate_parent_dependent_rules_code(&self) -> String {
         let mut code = String::new();
         for instruction in &self.instructions {
-            if let NFAInstruction::CheckParentAndSetBit { parent_state_bit, child_selector, result_bit } = instruction {
+            if let NFAInstruction::CheckParentAndSetBit {
+                parent_state_bit,
+                child_selector,
+                result_bit,
+            } = instruction
+            {
                 let child_selector_str = match child_selector {
-                    SimpleSelector::Type(tag) => format!("SimpleSelector::Type(\"{}\".to_string())", tag),
-                    SimpleSelector::Class(class) => format!("SimpleSelector::Class(\"{}\".to_string())", class),
+                    SimpleSelector::Type(tag) => {
+                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                    }
+                    SimpleSelector::Class(class) => {
+                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                    }
                     SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
                 };
                 code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector_generated(node, &{}) {{\n", parent_state_bit, child_selector_str));
                 code.push_str(&format!(
                     "        current_matches.set_bit({}); // {}\n",
                     result_bit,
-                    self.state_names.get(result_bit).unwrap_or(&format!("bit_{}", result_bit))
+                    self.state_names
+                        .get(result_bit)
+                        .unwrap_or(&format!("bit_{}", result_bit))
                 ));
                 code.push_str("    }\n");
             }
@@ -677,12 +694,21 @@ impl TreeNFAProgram {
     fn generate_propagation_rules_code(&self) -> String {
         let mut code = String::new();
         for instruction in &self.instructions {
-            if let NFAInstruction::PropagateToChildren { match_bit, active_bit } = instruction {
-                code.push_str(&format!("    if current_matches.is_bit_set({}) {{\n", match_bit));
+            if let NFAInstruction::PropagateToChildren {
+                match_bit,
+                active_bit,
+            } = instruction
+            {
+                code.push_str(&format!(
+                    "    if current_matches.is_bit_set({}) {{\n",
+                    match_bit
+                ));
                 code.push_str(&format!(
                     "        child_states.set_bit({}); // {}\n",
                     active_bit,
-                    self.state_names.get(active_bit).unwrap_or(&format!("bit_{}", active_bit))
+                    self.state_names
+                        .get(active_bit)
+                        .unwrap_or(&format!("bit_{}", active_bit))
                 ));
                 code.push_str("    }\n");
             }
