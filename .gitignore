@@ -3,5 +3,4 @@ result
 __pycache__
 .ruff_cache
 *.csv
-*.png
 guide.txt
