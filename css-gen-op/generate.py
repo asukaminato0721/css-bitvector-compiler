@@ -153,15 +153,18 @@ with open(trace_path) as f:
         j: Dict[str, Any] = json.loads(l)
         dom_tree: Optional[Dict[str, Any]] = regularize_dom(j["dom_tree"])
         layout_tree: Dict[str, Any] = regularize_layout(j["layout_tree"])
-        semantic_check(dom_tree)
-        TOTAL_SIZE += size(dom_tree)
+        if dom_tree is not None:
+            semantic_check(dom_tree)
+            TOTAL_SIZE += size(dom_tree)
         if dom_tree_old is None:
             assert layout_tree_old is None
-            out(command_init(dom_tree, j["time"]))
+            if dom_tree is not None:
+                out(command_init(dom_tree, j["time"]))
             out(command_layout_init(layout_tree))
         else:
             assert layout_tree_old is not None
-            diff_dom_tree(dom_tree_old, dom_tree, [])
+            if dom_tree is not None:
+                diff_dom_tree(dom_tree_old, dom_tree, [])
             diff_layout_tree(layout_tree_old, layout_tree, [])
             out(command_recalculate(j["time"]))
         dom_tree_old = dom_tree

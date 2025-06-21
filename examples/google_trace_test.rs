@@ -7,8 +7,7 @@ use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector {
-    // returns child_states
+) -> BitVector { // returns child_states
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
@@ -108,54 +107,53 @@ pub fn process_node_generated_incremental(
 pub fn process_node_generated_from_scratch(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector {
-    // returns child_states
-    let mut intrinsic_matches = BitVector::new();
+) -> BitVector { // returns child_states
+        let mut intrinsic_matches = BitVector::new();
 
-    // Instruction 0: CheckAndSetBit { selector: Type("div"), bit_pos: 0 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
-        intrinsic_matches.set_bit(0); // match_Type("div")
-    }
+        // Instruction 0: CheckAndSetBit { selector: Type("div"), bit_pos: 0 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
+            intrinsic_matches.set_bit(0); // match_Type("div")
+        }
 
-    // Instruction 2: CheckAndSetBit { selector: Type("span"), bit_pos: 2 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
-        intrinsic_matches.set_bit(2); // match_Type("span")
-    }
+        // Instruction 2: CheckAndSetBit { selector: Type("span"), bit_pos: 2 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
+            intrinsic_matches.set_bit(2); // match_Type("span")
+        }
 
-    // Instruction 4: CheckAndSetBit { selector: Type("a"), bit_pos: 4 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
-        intrinsic_matches.set_bit(4); // match_Type("a")
-    }
+        // Instruction 4: CheckAndSetBit { selector: Type("a"), bit_pos: 4 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
+            intrinsic_matches.set_bit(4); // match_Type("a")
+        }
 
-    // Instruction 6: CheckAndSetBit { selector: Type("input"), bit_pos: 6 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
-        intrinsic_matches.set_bit(6); // match_Type("input")
-    }
+        // Instruction 6: CheckAndSetBit { selector: Type("input"), bit_pos: 6 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
+            intrinsic_matches.set_bit(6); // match_Type("input")
+        }
 
-    // Instruction 8: CheckAndSetBit { selector: Class("gbts"), bit_pos: 8 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
-        intrinsic_matches.set_bit(8); // match_Class("gbts")
-    }
+        // Instruction 8: CheckAndSetBit { selector: Class("gbts"), bit_pos: 8 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
+            intrinsic_matches.set_bit(8); // match_Class("gbts")
+        }
 
-    // Instruction 10: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 10 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
-        intrinsic_matches.set_bit(10); // match_Class("gbmt")
-    }
+        // Instruction 10: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 10 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
+            intrinsic_matches.set_bit(10); // match_Class("gbmt")
+        }
 
-    // Instruction 12: CheckAndSetBit { selector: Class("lsb"), bit_pos: 12 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
-        intrinsic_matches.set_bit(12); // match_Class("lsb")
-    }
+        // Instruction 12: CheckAndSetBit { selector: Class("lsb"), bit_pos: 12 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
+            intrinsic_matches.set_bit(12); // match_Class("lsb")
+        }
 
-    // Instruction 14: CheckAndSetBit { selector: Id("gb"), bit_pos: 14 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
-        intrinsic_matches.set_bit(14); // match_Id("gb")
-    }
+        // Instruction 14: CheckAndSetBit { selector: Id("gb"), bit_pos: 14 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+            intrinsic_matches.set_bit(14); // match_Id("gb")
+        }
 
-    // Instruction 16: CheckAndSetBit { selector: Id("gbz"), bit_pos: 16 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
-        intrinsic_matches.set_bit(16); // match_Id("gbz")
-    }
+        // Instruction 16: CheckAndSetBit { selector: Id("gbz"), bit_pos: 16 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
+            intrinsic_matches.set_bit(16); // match_Id("gbz")
+        }
 
     let mut current_matches = intrinsic_matches;
     let mut child_states = BitVector::new();
@@ -198,35 +196,25 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
+
 /// Incremental processing driver with statistics tracking
 pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
-    process_tree_recursive_incremental(
-        root,
-        BitVector::new(),
-        &mut total_nodes,
-        &mut cache_hits,
-        &mut cache_misses,
-    );
+    process_tree_recursive_incremental(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_incremental(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-    hits: &mut usize,
-    misses: &mut usize,
-) {
+fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: BitVector,
+                                    total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     if !node.needs_any_recomputation(parent_state) {
         *hits += 1;
         // Skip entire subtree when cached
         return;
     }
-
+    
     *misses += 1;
     let child_states = process_node_generated_incremental(node, parent_state);
     for child in node.children.iter_mut() {
@@ -241,11 +229,7 @@ pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize)
     (total_nodes, 0, total_nodes) // 0 hits, all misses
 }
 
-fn process_tree_recursive_from_scratch(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-) {
+fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: BitVector, total: &mut usize) {
     *total += 1;
     let child_states = process_node_generated_from_scratch(node, parent_state);
     for child in node.children.iter_mut() {
@@ -253,4 +237,5 @@ fn process_tree_recursive_from_scratch(
     }
 }
 
-fn main() {}
+
+fn main(){}
