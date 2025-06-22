@@ -141,13 +141,15 @@ impl HtmlNode {
     // }
 }
 
-
 // DOM creation helper functions (specific to lib.rs runtime)
 // These use HtmlNode, GoogleNode from shared.
 pub fn load_dom_from_file() -> HtmlNode {
     let json_data =
         std::fs::read_to_string("css-gen-op/command.json").expect("fail to read command.json");
-    let first_line = json_data.lines().next().expect("File is empty or cannot read first line");
+    let first_line = json_data
+        .lines()
+        .next()
+        .expect("File is empty or cannot read first line");
     let trace_data: serde_json::Value =
         serde_json::from_str(first_line).expect("Failed to parse command.json");
 
@@ -217,10 +219,13 @@ impl HtmlNode {
     // If runtime tests fail, these methods might need to be reinstated here.
 }
 
-
 // Utility functions (specific to lib.rs runtime)
 pub fn count_matches(node: &HtmlNode) -> usize {
-    let current = if node.css_match_bitvector.as_u64() != 0 { 1 } else { 0 };
+    let current = if node.css_match_bitvector.as_u64() != 0 {
+        1
+    } else {
+        0
+    };
     current + node.children.iter().map(count_matches).sum::<usize>()
 }
 
@@ -238,7 +243,6 @@ pub fn node_matches_selector_generated_lib(node: &HtmlNode, selector: &SimpleSel
         SimpleSelector::Id(id) => node.id.as_deref() == Some(id),
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -287,7 +291,9 @@ pub struct SelectorMatchingIndex {
 }
 
 impl Default for SelectorMatchingIndex {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SelectorMatchingIndex {
@@ -335,14 +341,16 @@ impl HtmlNode {
 
     // mark_dirty is in shared_codegen_logic.rs (simplified version).
     // If a more complex one is needed for lib.rs runtime:
-    pub fn lib_mark_dirty(&mut self) { // Renamed to avoid conflict
+    pub fn lib_mark_dirty(&mut self) {
+        // Renamed to avoid conflict
         self.is_self_dirty = true;
         self.cached_node_intrinsic = None; // Assuming this field exists from shared
         self.set_summary_bit_on_ancestors();
     }
 
     fn set_summary_bit_on_ancestors(&mut self) {
-        if let Some(parent_ptr) = self.parent { // parent field from shared
+        if let Some(parent_ptr) = self.parent {
+            // parent field from shared
             unsafe {
                 let parent = &mut *parent_ptr;
                 parent.lib_set_summary_bit(); // Call lib-specific version
@@ -350,8 +358,11 @@ impl HtmlNode {
         }
     }
 
-    pub fn lib_set_summary_bit(&mut self) { // Renamed
-        if self.has_dirty_descendant { return; } // field from shared
+    pub fn lib_set_summary_bit(&mut self) {
+        // Renamed
+        if self.has_dirty_descendant {
+            return;
+        } // field from shared
         self.has_dirty_descendant = true;
         if let Some(parent_ptr) = self.parent {
             unsafe {
@@ -391,7 +402,10 @@ impl HtmlNode {
         dirty_nodes
     }
 
-    pub fn process_dirty_nodes<F>(&mut self, mut processor: F) where F: FnMut(*mut HtmlNode), {
+    pub fn process_dirty_nodes<F>(&mut self, mut processor: F)
+    where
+        F: FnMut(*mut HtmlNode),
+    {
         let dirty_nodes = self.collect_dirty_nodes();
         for node_ptr in dirty_nodes {
             processor(node_ptr);

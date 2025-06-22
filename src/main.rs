@@ -34,20 +34,25 @@ fn main() {
     // This main binary no longer triggers that process.
     println!("css-bitvector-compiler main executable.");
     println!("Use 'cargo run --features run-benchmark -- benchmark' to run benchmarks.");
-    println!("Use 'cargo run --example google_trace_test' to run the generated Google Trace example (after a build).");
+    println!(
+        "Use 'cargo run --example google_trace_test' to run the generated Google Trace example (after a build)."
+    );
 }
 
 #[cfg(test)]
 mod tests {
     // Re-import necessary items for tests, now from the library crate
     use css_bitvector_compiler::{
-        CssCompiler, CssRule, HtmlNode, NFAInstruction, SimpleSelector,
-        parse_basic_css // Assuming parse_basic_css is made public in lib.rs or moved here
-                        // If parse_basic_css was specific to main.rs logic, tests using it might need adjustment
-                        // or the function needs to be part of the library's public API.
-                        // For now, let's assume it's available via css_bitvector_compiler::*
+        CssCompiler,
+        CssRule,
+        HtmlNode,
+        NFAInstruction,
+        SimpleSelector,
+        parse_basic_css, // Assuming parse_basic_css is made public in lib.rs or moved here
+                         // If parse_basic_css was specific to main.rs logic, tests using it might need adjustment
+                         // or the function needs to be part of the library's public API.
+                         // For now, let's assume it's available via css_bitvector_compiler::*
     };
-
 
     // Helper function to create test HTML nodes
     #[allow(dead_code)]
@@ -71,11 +76,19 @@ mod tests {
     // Example test for simple selector creation (if parse_simple_selector is not available)
     #[test]
     fn test_simple_selector_creation() {
-        assert_eq!(SimpleSelector::Type("div".to_string()), SimpleSelector::Type("div".to_string()));
-        assert_eq!(SimpleSelector::Class("item".to_string()), SimpleSelector::Class("item".to_string()));
-        assert_eq!(SimpleSelector::Id("specific".to_string()), SimpleSelector::Id("specific".to_string()));
+        assert_eq!(
+            SimpleSelector::Type("div".to_string()),
+            SimpleSelector::Type("div".to_string())
+        );
+        assert_eq!(
+            SimpleSelector::Class("item".to_string()),
+            SimpleSelector::Class("item".to_string())
+        );
+        assert_eq!(
+            SimpleSelector::Id("specific".to_string()),
+            SimpleSelector::Id("specific".to_string())
+        );
     }
-
 
     #[test]
     fn test_css_parsing() {
@@ -104,7 +117,9 @@ mod tests {
         assert!(rules_item.contains(&CssRule::Simple(SimpleSelector::Class("item".to_string()))));
 
         let rules_specific = parse_basic_css("#specific {}");
-        assert!(rules_specific.contains(&CssRule::Simple(SimpleSelector::Id("specific".to_string()))));
+        assert!(
+            rules_specific.contains(&CssRule::Simple(SimpleSelector::Id("specific".to_string())))
+        );
 
         // The child selector test needs a parser that supports it. parse_basic_css does not.
         // If CssRule::Child is a valid enum variant, the test for it would look like:
@@ -165,7 +180,8 @@ mod tests {
     }
 
     #[test]
-    fn test_generated_rust_code_structure() { // Renamed from test_generated_rust_code
+    fn test_generated_rust_code_structure() {
+        // Renamed from test_generated_rust_code
         let rules = vec![CssRule::Simple(SimpleSelector::Type("div".to_string()))];
 
         let mut compiler = CssCompiler::new();

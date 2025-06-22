@@ -21,19 +21,44 @@ impl GoogleNode {
         let obj = value.as_object()?;
         Some(GoogleNode {
             id: obj.get("id").and_then(|v| v.as_u64()).map(|v| v as u32),
-            name: obj.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-            node_type: obj.get("type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-            namespace: obj.get("namespace").and_then(|v| v.as_str()).map(|s| s.to_string()),
-            attributes: obj.get("attributes").and_then(|v| v.as_object())
+            name: obj
+                .get("name")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string(),
+            node_type: obj
+                .get("type")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string(),
+            namespace: obj
+                .get("namespace")
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string()),
+            attributes: obj
+                .get("attributes")
+                .and_then(|v| v.as_object())
                 .map(|attrs| {
-                    attrs.iter().filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string()))).collect()
-                }).unwrap_or_default(),
-            properties: obj.get("properties").and_then(|v| v.as_object())
+                    attrs
+                        .iter()
+                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
+                        .collect()
+                })
+                .unwrap_or_default(),
+            properties: obj
+                .get("properties")
+                .and_then(|v| v.as_object())
                 .map(|props| {
-                    props.iter().filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string()))).collect()
-                }).unwrap_or_default(),
+                    props
+                        .iter()
+                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
+                        .collect()
+                })
+                .unwrap_or_default(),
             visible: obj.get("visible").and_then(|v| v.as_bool()).unwrap_or(true),
-            children: obj.get("children").and_then(|v| v.as_array())
+            children: obj
+                .get("children")
+                .and_then(|v| v.as_array())
                 .map(|children| children.iter().filter_map(GoogleNode::from_json).collect())
                 .unwrap_or_default(),
         })
@@ -45,7 +70,10 @@ impl GoogleNode {
             node.id = Some(id.to_string());
         }
         if let Some(class_attr) = self.attributes.get("class") {
-            node.classes = class_attr.split_whitespace().map(|s| s.to_string()).collect();
+            node.classes = class_attr
+                .split_whitespace()
+                .map(|s| s.to_string())
+                .collect();
         }
         for child in &self.children {
             node.children.push(child.to_html_node());
@@ -54,7 +82,11 @@ impl GoogleNode {
     }
 
     pub fn count_nodes(&self) -> usize {
-        1 + self.children.iter().map(|child| child.count_nodes()).sum::<usize>()
+        1 + self
+            .children
+            .iter()
+            .map(|child| child.count_nodes())
+            .sum::<usize>()
     }
 }
 
@@ -65,20 +97,44 @@ pub struct BitVector {
 }
 
 impl Default for BitVector {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl BitVector {
-    pub fn new() -> Self { BitVector { bits: 0 } }
-    pub fn from_u64(bits: u64) -> Self { BitVector { bits } }
-    pub fn set_bit(&mut self, pos: usize) { self.bits |= 1 << pos; }
-    pub fn clear_bit(&mut self, pos: usize) { self.bits &= !(1 << pos); }
-    pub fn is_bit_set(&self, pos: usize) -> bool { (self.bits & (1 << pos)) != 0 }
-    pub fn or_assign(&mut self, other: BitVector) { self.bits |= other.bits; }
-    pub fn and(&self, other: BitVector) -> BitVector { BitVector { bits: self.bits & other.bits } }
-    pub fn is_empty(&self) -> bool { self.bits == 0 }
-    pub fn as_u64(&self) -> u64 { self.bits }
-    pub fn has_any_bits(&self, mask: BitVector) -> bool { (self.bits & mask.bits) != 0 }
+    pub fn new() -> Self {
+        BitVector { bits: 0 }
+    }
+    pub fn from_u64(bits: u64) -> Self {
+        BitVector { bits }
+    }
+    pub fn set_bit(&mut self, pos: usize) {
+        self.bits |= 1 << pos;
+    }
+    pub fn clear_bit(&mut self, pos: usize) {
+        self.bits &= !(1 << pos);
+    }
+    pub fn is_bit_set(&self, pos: usize) -> bool {
+        (self.bits & (1 << pos)) != 0
+    }
+    pub fn or_assign(&mut self, other: BitVector) {
+        self.bits |= other.bits;
+    }
+    pub fn and(&self, other: BitVector) -> BitVector {
+        BitVector {
+            bits: self.bits & other.bits,
+        }
+    }
+    pub fn is_empty(&self) -> bool {
+        self.bits == 0
+    }
+    pub fn as_u64(&self) -> u64 {
+        self.bits
+    }
+    pub fn has_any_bits(&self, mask: BitVector) -> bool {
+        (self.bits & mask.bits) != 0
+    }
 }
 
 impl std::fmt::Binary for BitVector {
@@ -122,9 +178,20 @@ impl HtmlNode {
         }
     }
 
-    pub fn with_id(mut self, id: &str) -> Self { self.id = Some(id.to_string()); self.mark_dirty(); self }
-    pub fn with_class(mut self, class: &str) -> Self { self.classes.insert(class.to_string()); self.mark_dirty(); self }
-    pub fn add_child(mut self, child: HtmlNode) -> Self { self.children.push(child); self }
+    pub fn with_id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
+        self.mark_dirty();
+        self
+    }
+    pub fn with_class(mut self, class: &str) -> Self {
+        self.classes.insert(class.to_string());
+        self.mark_dirty();
+        self
+    }
+    pub fn add_child(mut self, child: HtmlNode) -> Self {
+        self.children.push(child);
+        self
+    }
 
     // Methods related to dirty tracking and parent pointers are mostly for runtime use in the library,
     // but their presence defines the HtmlNode struct that generated code will interact with.
@@ -134,12 +201,13 @@ impl HtmlNode {
     // And `to_html_node` (on GoogleNode) creates HtmlNodes.
 
     // Keeping a few essential methods for node manipulation if GoogleNode::to_html_node needs them.
-    pub fn mark_dirty(&mut self) { self.is_self_dirty = true; /* Simplified, full dirty propagation not needed for basic structure */ }
+    pub fn mark_dirty(&mut self) {
+        self.is_self_dirty = true; /* Simplified, full dirty propagation not needed for basic structure */
+    }
 
     // init_parent_pointers and other complex methods can be omitted if build.rs doesn't call them.
     // GoogleNode::to_html_node does not call init_parent_pointers. lib.rs calls it after conversion.
 }
-
 
 // Definition of SimpleSelector, CssRule, NFAInstruction (copied from original lib.rs)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -160,9 +228,19 @@ pub enum CssRule {
 
 #[derive(Debug, Clone)]
 pub enum NFAInstruction {
-    CheckAndSetBit { selector: SimpleSelector, bit_pos: usize },
-    CheckParentAndSetBit { parent_state_bit: usize, child_selector: SimpleSelector, result_bit: usize },
-    PropagateToChildren { match_bit: usize, active_bit: usize },
+    CheckAndSetBit {
+        selector: SimpleSelector,
+        bit_pos: usize,
+    },
+    CheckParentAndSetBit {
+        parent_state_bit: usize,
+        child_selector: SimpleSelector,
+        result_bit: usize,
+    },
+    PropagateToChildren {
+        match_bit: usize,
+        active_bit: usize,
+    },
 }
 
 // Definition of TreeNFAProgram (copied from original lib.rs)
@@ -174,11 +252,17 @@ pub struct TreeNFAProgram {
 }
 
 impl TreeNFAProgram {
-    pub fn new() -> Self { Default::default() }
-    pub fn add_instruction(&mut self, instruction: NFAInstruction) { self.instructions.push(instruction); }
+    pub fn new() -> Self {
+        Default::default()
+    }
+    pub fn add_instruction(&mut self, instruction: NFAInstruction) {
+        self.instructions.push(instruction);
+    }
     pub fn set_state_name(&mut self, bit_pos: usize, name: String) {
         self.state_names.insert(bit_pos, name.clone()); // Use name.clone() here
-        if bit_pos >= self.total_bits { self.total_bits = bit_pos + 1; }
+        if bit_pos >= self.total_bits {
+            self.total_bits = bit_pos + 1;
+        }
     }
 
     // generate_rust_code and its helpers are fairly large.
@@ -243,14 +327,30 @@ impl TreeNFAProgram {
         code.push_str("        let mut intrinsic_matches = BitVector::new();\n\n");
         for (i, instruction) in self.instructions.iter().enumerate() {
             if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
-                code.push_str(&format!("        // Instruction {}: {:?}\n", i, instruction));
+                code.push_str(&format!(
+                    "        // Instruction {}: {:?}\n",
+                    i, instruction
+                ));
                 let selector_str = match selector {
-                    SimpleSelector::Type(tag) => format!("SimpleSelector::Type(\"{}\".to_string())", tag),
-                    SimpleSelector::Class(class) => format!("SimpleSelector::Class(\"{}\".to_string())", class),
+                    SimpleSelector::Type(tag) => {
+                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                    }
+                    SimpleSelector::Class(class) => {
+                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                    }
                     SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
                 };
-                code.push_str(&format!("        if node_matches_selector_generated(node, &{}) {{\n", selector_str));
-                code.push_str(&format!("            intrinsic_matches.set_bit({}); // {}\n", bit_pos, self.state_names.get(bit_pos).unwrap_or(&format!("bit_{}", bit_pos))));
+                code.push_str(&format!(
+                    "        if node_matches_selector_generated(node, &{}) {{\n",
+                    selector_str
+                ));
+                code.push_str(&format!(
+                    "            intrinsic_matches.set_bit({}); // {}\n",
+                    bit_pos,
+                    self.state_names
+                        .get(bit_pos)
+                        .unwrap_or(&format!("bit_{}", bit_pos))
+                ));
                 code.push_str("        }\n\n");
             }
         }
@@ -260,14 +360,29 @@ impl TreeNFAProgram {
     fn generate_parent_dependent_rules_code(&self) -> String {
         let mut code = String::new();
         for instruction in &self.instructions {
-            if let NFAInstruction::CheckParentAndSetBit { parent_state_bit, child_selector, result_bit } = instruction {
+            if let NFAInstruction::CheckParentAndSetBit {
+                parent_state_bit,
+                child_selector,
+                result_bit,
+            } = instruction
+            {
                 let child_selector_str = match child_selector {
-                    SimpleSelector::Type(tag) => format!("SimpleSelector::Type(\"{}\".to_string())", tag),
-                    SimpleSelector::Class(class) => format!("SimpleSelector::Class(\"{}\".to_string())", class),
+                    SimpleSelector::Type(tag) => {
+                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                    }
+                    SimpleSelector::Class(class) => {
+                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                    }
                     SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
                 };
                 code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector_generated(node, &{}) {{\n", parent_state_bit, child_selector_str));
-                code.push_str(&format!("        current_matches.set_bit({}); // {}\n", result_bit, self.state_names.get(result_bit).unwrap_or(&format!("bit_{}", result_bit))));
+                code.push_str(&format!(
+                    "        current_matches.set_bit({}); // {}\n",
+                    result_bit,
+                    self.state_names
+                        .get(result_bit)
+                        .unwrap_or(&format!("bit_{}", result_bit))
+                ));
                 code.push_str("    }\n");
             }
         }
@@ -277,9 +392,22 @@ impl TreeNFAProgram {
     fn generate_propagation_rules_code(&self) -> String {
         let mut code = String::new();
         for instruction in &self.instructions {
-            if let NFAInstruction::PropagateToChildren { match_bit, active_bit } = instruction {
-                code.push_str(&format!("    if current_matches.is_bit_set({}) {{\n", match_bit));
-                code.push_str(&format!("        child_states.set_bit({}); // {}\n", active_bit, self.state_names.get(active_bit).unwrap_or(&format!("bit_{}", active_bit))));
+            if let NFAInstruction::PropagateToChildren {
+                match_bit,
+                active_bit,
+            } = instruction
+            {
+                code.push_str(&format!(
+                    "    if current_matches.is_bit_set({}) {{\n",
+                    match_bit
+                ));
+                code.push_str(&format!(
+                    "        child_states.set_bit({}); // {}\n",
+                    active_bit,
+                    self.state_names
+                        .get(active_bit)
+                        .unwrap_or(&format!("bit_{}", active_bit))
+                ));
                 code.push_str("    }\n");
             }
         }
@@ -331,17 +459,25 @@ fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: BitVec
     // print_program method is not strictly needed for codegen, can be omitted from shared.
 }
 
-
 // Definition of CssCompiler (copied from original lib.rs)
 pub struct CssCompiler {
     pub bit_counter: usize,
     pub state_mapping: HashMap<String, usize>,
 }
 
-impl Default for CssCompiler { fn default() -> Self { Self::new() } }
+impl Default for CssCompiler {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl CssCompiler {
-    pub fn new() -> Self { CssCompiler { bit_counter: 0, state_mapping: HashMap::new() } }
+    pub fn new() -> Self {
+        CssCompiler {
+            bit_counter: 0,
+            state_mapping: HashMap::new(),
+        }
+    }
     pub fn allocate_bit(&mut self, state_name: String) -> usize {
         if let Some(&existing_bit) = self.state_mapping.get(&state_name) {
             existing_bit
@@ -364,11 +500,15 @@ impl CssCompiler {
                     program.set_state_name(match_bit, match_state);
                     program.set_state_name(active_bit, active_state);
                 }
-                CssRule::Child { parent_selector, child_selector } => {
+                CssRule::Child {
+                    parent_selector,
+                    child_selector,
+                } => {
                     let parent_active_state = format!("active_{:?}", parent_selector);
                     let parent_active_bit = self.allocate_bit(parent_active_state.clone());
                     program.set_state_name(parent_active_bit, parent_active_state);
-                    let child_match_state = format!("match_{:?}_gt_{:?}", parent_selector, child_selector);
+                    let child_match_state =
+                        format!("match_{:?}_gt_{:?}", parent_selector, child_selector);
                     let child_match_bit = self.allocate_bit(child_match_state.clone());
                     program.set_state_name(child_match_bit, child_match_state);
                 }
@@ -381,12 +521,22 @@ impl CssCompiler {
                     let active_state = format!("active_{:?}", selector);
                     let match_bit = self.state_mapping[&match_state];
                     let active_bit = self.state_mapping[&active_state];
-                    program.add_instruction(NFAInstruction::CheckAndSetBit { selector: selector.clone(), bit_pos: match_bit });
-                    program.add_instruction(NFAInstruction::PropagateToChildren { match_bit, active_bit });
+                    program.add_instruction(NFAInstruction::CheckAndSetBit {
+                        selector: selector.clone(),
+                        bit_pos: match_bit,
+                    });
+                    program.add_instruction(NFAInstruction::PropagateToChildren {
+                        match_bit,
+                        active_bit,
+                    });
                 }
-                CssRule::Child { parent_selector, child_selector } => {
+                CssRule::Child {
+                    parent_selector,
+                    child_selector,
+                } => {
                     let parent_active_state = format!("active_{:?}", parent_selector);
-                    let child_match_state = format!("match_{:?}_gt_{:?}", parent_selector, child_selector);
+                    let child_match_state =
+                        format!("match_{:?}_gt_{:?}", parent_selector, child_selector);
                     let parent_active_bit = self.state_mapping[&parent_active_state];
                     let child_match_bit = self.state_mapping[&child_match_state];
                     program.add_instruction(NFAInstruction::CheckParentAndSetBit {
@@ -417,14 +567,24 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
 
         if line_trimmed.contains('{') && line_trimmed.contains('}') {
             // Case: Full rule on one line, e.g., "div {}" or ".item {}"
-            current_selector_text = line_trimmed.split('{').next().unwrap_or("").trim().to_string();
+            current_selector_text = line_trimmed
+                .split('{')
+                .next()
+                .unwrap_or("")
+                .trim()
+                .to_string();
             if !current_selector_text.is_empty() {
                 selector_to_parse = Some(current_selector_text.clone());
             }
             current_selector_text.clear(); // Parsed or not, selector is consumed
         } else if line_trimmed.contains('{') {
             // Case: Selector and opening brace, e.g., "div {"
-            current_selector_text = line_trimmed.split('{').next().unwrap_or("").trim().to_string();
+            current_selector_text = line_trimmed
+                .split('{')
+                .next()
+                .unwrap_or("")
+                .trim()
+                .to_string();
             // Selector will be parsed when '}' is found on a subsequent line
         } else if line_trimmed.contains('}') {
             // Case: Closing brace '}'
@@ -432,19 +592,22 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
                 selector_to_parse = Some(current_selector_text.clone());
                 current_selector_text.clear();
             }
-        } else if current_selector_text.is_empty() && !line_trimmed.contains('{') && !line_trimmed.contains('}') {
-             // Case: Selector on its own line, without braces yet. e.g. "div"
-             // This case is tricky if not followed by "{" on next line.
-             // parse_basic_css seems to expect selector immediately before "{" or "{}".
-             // For simplicity, we assume this case is not standard for this basic parser,
-             // or it's handled if the next line brings a "{".
+        } else if current_selector_text.is_empty()
+            && !line_trimmed.contains('{')
+            && !line_trimmed.contains('}')
+        {
+            // Case: Selector on its own line, without braces yet. e.g. "div"
+            // This case is tricky if not followed by "{" on next line.
+            // parse_basic_css seems to expect selector immediately before "{" or "{}".
+            // For simplicity, we assume this case is not standard for this basic parser,
+            // or it's handled if the next line brings a "{".
         }
-
 
         if let Some(selector_str) = selector_to_parse {
             if selector_str.starts_with('.') {
                 let class_name = selector_str[1..].to_string();
-                if !class_name.contains(' ') && !class_name.contains(':') && !class_name.is_empty() {
+                if !class_name.contains(' ') && !class_name.contains(':') && !class_name.is_empty()
+                {
                     rules.push(CssRule::Simple(SimpleSelector::Class(class_name)));
                 }
             } else if selector_str.starts_with('#') {
@@ -452,8 +615,15 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
                 if !id_name.contains(' ') && !id_name.contains(':') && !id_name.is_empty() {
                     rules.push(CssRule::Simple(SimpleSelector::Id(id_name)));
                 }
-            } else if !selector_str.contains(' ') && !selector_str.contains(':') && !selector_str.contains('.') && !selector_str.contains('#') && !selector_str.is_empty() {
-                rules.push(CssRule::Simple(SimpleSelector::Type(selector_str.to_lowercase())));
+            } else if !selector_str.contains(' ')
+                && !selector_str.contains(':')
+                && !selector_str.contains('.')
+                && !selector_str.contains('#')
+                && !selector_str.is_empty()
+            {
+                rules.push(CssRule::Simple(SimpleSelector::Type(
+                    selector_str.to_lowercase(),
+                )));
             }
         }
     }

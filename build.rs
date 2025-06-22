@@ -10,7 +10,8 @@ mod shared_codegen_logic;
 
 // Use the necessary items from the shared module.
 use shared_codegen_logic::{
-    CssCompiler, GoogleNode, parse_basic_css, TreeNFAProgram, HtmlNode, BitVector, SimpleSelector, CssRule, NFAInstruction
+    BitVector, CssCompiler, CssRule, GoogleNode, HtmlNode, NFAInstruction, SimpleSelector,
+    TreeNFAProgram, parse_basic_css,
 };
 // Note: serde_json::Value is used by GoogleNode::from_json, so build.rs needs serde_json in its own build-deps.
 // std::collections::{HashMap, HashSet} are used by shared types.
@@ -71,7 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let css_gen_op_dir = Path::new("css-gen-op");
     let status_py = Command::new(python_executable)
         .arg("generate.py") // script name relative to its directory
-        .arg("google.trace")  // trace file relative to its directory
+        .arg("google.trace") // trace file relative to its directory
         .current_dir(css_gen_op_dir)
         .status()?;
 
@@ -83,14 +84,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Step 2: Porting logic from process_google_trace_with_rust
     println!("build.rs: 🔍 Processing Google Trace for CSS CodeGen Mode\n");
 
-    let css_content = fs::read_to_string("css-gen-op/https___www.google.com_.css")
-        .unwrap_or_else(|_| {
+    let css_content =
+        fs::read_to_string("css-gen-op/https___www.google.com_.css").unwrap_or_else(|_| {
             println!("build.rs: ⚠️ Could not load Google CSS file, using basic rules");
             "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
         });
 
     let css_rules = parse_basic_css(&css_content);
-    println!("build.rs: 📋 Loaded {} CSS rules from Google CSS", css_rules.len());
+    println!(
+        "build.rs: 📋 Loaded {} CSS rules from Google CSS",
+        css_rules.len()
+    );
 
     let mut compiler = CssCompiler::new();
     let program = compiler.compile_css_rules(&css_rules);
@@ -112,8 +116,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Use the GoogleNode from the library crate
-    let google_node =
-        GoogleNode::from_json(&command_json_value["node"]).ok_or("Failed to parse Google node from command.json")?;
+    let google_node = GoogleNode::from_json(&command_json_value["node"])
+        .ok_or("Failed to parse Google node from command.json")?;
 
     println!(
         "build.rs: 🌳 Google DOM tree contains {} nodes",
@@ -122,22 +126,39 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate complete Rust program for Google trace testing (examples/google_trace_test.rs)
     // This reuses the generate_google_trace_program logic, which needs to be defined or ported.
-    let complete_example_program = build_generate_google_trace_program(&generated_code, &google_node)?;
+    let complete_example_program =
+        build_generate_google_trace_program(&generated_code, &google_node)?;
 
     let example_file_path = Path::new("examples").join("google_trace_test.rs");
     fs::create_dir_all(example_file_path.parent().unwrap())?; // Ensure examples dir exists
-    fs::write(&example_file_path, complete_example_program)
-        .map_err(|e| format!("build.rs: Failed to write generated example {}: {}", example_file_path.display(), e))?;
+    fs::write(&example_file_path, complete_example_program).map_err(|e| {
+        format!(
+            "build.rs: Failed to write generated example {}: {}",
+            example_file_path.display(),
+            e
+        )
+    })?;
 
-    println!("build.rs: 💾 Generated example: {}", example_file_path.display());
+    println!(
+        "build.rs: 💾 Generated example: {}",
+        example_file_path.display()
+    );
 
     // Generate functions for benchmark usage (src/generated_css_functions.rs)
     let functions_file_path = Path::new("src").join("generated_css_functions.rs");
     fs::create_dir_all(functions_file_path.parent().unwrap())?; // Ensure src dir exists
-    fs::write(&functions_file_path, &generated_code)
-        .map_err(|e| format!("build.rs: Failed to write generated functions {}: {}", functions_file_path.display(), e))?;
+    fs::write(&functions_file_path, &generated_code).map_err(|e| {
+        format!(
+            "build.rs: Failed to write generated functions {}: {}",
+            functions_file_path.display(),
+            e
+        )
+    })?;
 
-    println!("build.rs: 💾 Generated functions: {}", functions_file_path.display());
+    println!(
+        "build.rs: 💾 Generated functions: {}",
+        functions_file_path.display()
+    );
 
     // The original main.rs also ran the example. build.rs should not run examples.
     // It just generates files. The test or run step will execute it.
@@ -171,9 +192,11 @@ fn build_generate_google_trace_program(
     // For now, an empty main is fine if the purpose is to check compilation of generated code.
     program_content.push_str("fn main() {\n");
     program_content.push_str("    // This is the main function for the generated example.\n");
-    program_content.push_str("    // It can be used to run tests or benchmarks with the generated code.\n");
+    program_content
+        .push_str("    // It can be used to run tests or benchmarks with the generated code.\n");
     program_content.push_str("    // For now, it's empty, ensuring the generated code compiles.\n");
-    program_content.push_str("    println!(\"Generated example google_trace_test.rs executed.\");\n");
+    program_content
+        .push_str("    println!(\"Generated example google_trace_test.rs executed.\");\n");
     // To actually use the DOM, we'd need to serialize google_node or reconstruct it.
     // The original `process_google_trace_with_rust` didn't pass the DOM to the *example's main*.
     // It was used to generate `complete_program`. The example itself was minimal.
