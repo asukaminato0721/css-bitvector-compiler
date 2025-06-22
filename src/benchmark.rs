@@ -290,68 +290,6 @@ fn get_frame_description(frame: &LayoutFrame) -> String {
     }
 }
 
-fn benchmark_layout_frame(initial_tree: &HtmlNode, frame: &LayoutFrame) -> WebLayoutFrameResult {
-    let mut tree_incremental = initial_tree.clone();
-    let mut tree_full_layout = initial_tree.clone();
-
-    // Apply modifications to both trees
-    let nodes_affected = apply_frame_modifications(&mut tree_incremental, frame);
-    apply_frame_modifications(&mut tree_full_layout, frame);
-
-    // WARM-UP PHASE: Establish cached state for incremental processing
-    // This is crucial for realistic incremental performance measurement
-    // Run incremental layout once to populate caches, then clear dirty flags
-    let _ = invoke_incremental_layout(&mut tree_incremental);
-    clear_dirty_flags(&mut tree_incremental);
-
-    // Re-apply modifications to create realistic dirty state
-    apply_frame_modifications(&mut tree_incremental, frame);
-
-    let total_nodes = count_nodes(&tree_incremental);
-
-    // Now measure incremental performance with proper cached state
-    let start_incremental = rdtsc();
-    let (_, cache_hits, cache_misses) = invoke_incremental_layout(&mut tree_incremental);
-    let end_incremental = rdtsc();
-    let incremental_cycles = end_incremental - start_incremental;
-
-    // For full layout comparison, clear caches and mark all dirty
-    clear_all_layout_cache(&mut tree_full_layout);
-    mark_all_dirty_for_layout(&mut tree_full_layout);
-
-    let start_full = rdtsc();
-    let _ = invoke_full_layout(&mut tree_full_layout);
-    let end_full = rdtsc();
-    let full_layout_cycles = end_full - start_full;
-
-    // Correctness check: ensure both layout methods produce the same result
-    assert!(
-        tree_incremental.compare_css_matches(&tree_full_layout),
-        "Mismatch between incremental and full layout results for frame {}",
-        frame.frame_id
-    );
-
-    let speedup = if full_layout_cycles > 0 {
-        incremental_cycles as f64 / full_layout_cycles as f64
-    } else {
-        1.0
-    };
-
-    WebLayoutFrameResult {
-        frame_id: frame.frame_id,
-        operation_type: frame.command_name.clone(),
-        frame_description: get_frame_description(frame),
-        nodes_affected,
-        total_nodes,
-        incremental_cycles,
-        full_layout_cycles,
-        speedup,
-        incremental_cache_hits: cache_hits,
-        incremental_cache_misses: cache_misses,
-        modification_type: frame.modification_type.clone(),
-    }
-}
-
 fn invoke_incremental_layout(tree: &mut HtmlNode) -> (usize, usize, usize) {
     // Use the generated incremental CSS processing code for realistic benchmarks
     process_tree_incremental_with_stats(tree)
@@ -383,16 +321,19 @@ fn clear_dirty_flags(node: &mut HtmlNode) {
 
 pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
     println!("🌐 Starting Web Browser Layout Trace Benchmark");
-    println!("📊 Simulating Ladybird-style layout trace methodology...");
+    println!("📊 Simulating corrected layout methodology...");
     println!("Loading layout trace from css-gen-op/command.json...");
 
     let frames = parse_web_layout_trace("css-gen-op/command.json");
-    println!("🎬 Found {} layout frames to benchmark", frames.len());
-    println!(
-        "📈 Each frame represents one data point (like Ladybird's 2216 frames from 50 websites)"
-    );
+    println!("🎬 Found {} layout frames to process", frames.len());
+    println!("📈 Only recalculate operations create data points");
 
     let mut current_layout_tree = HtmlNode::new("html");
+    let mut pending_modifications = Vec::new();
+    let mut results = Vec::new();
+    let mut data_point_counter = 0;
+
+    // Initialize tree with first init command if present
     if let Some(init_frame) = frames.first() {
         if init_frame.command_name == "init" {
             apply_frame_modifications(&mut current_layout_tree, init_frame);
@@ -403,8 +344,6 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
         }
     }
 
-    let mut results = Vec::new();
-
     for (i, frame) in frames.iter().enumerate() {
         println!(
             "🎬 Processing frame {}/{}: {} ({})",
@@ -414,21 +353,71 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
             get_frame_description(frame)
         );
 
-        let result = benchmark_layout_frame(&current_layout_tree, frame);
+        match frame.command_name.as_str() {
+            "init" => {
+                // Already handled above
+                if i > 0 {
+                    apply_frame_modifications(&mut current_layout_tree, frame);
+                }
+            }
+            "recalculate" => {
+                // This is when we actually benchmark!
+                data_point_counter += 1;
+                println!(
+                    "  🔄 RECALCULATE - Creating data point #{}",
+                    data_point_counter
+                );
 
-        println!(
-            "  📊 Incremental: {} cycles, Full: {} cycles, Speedup: {:.3}x, Cache hits: {}/{}",
-            result.incremental_cycles,
-            result.full_layout_cycles,
-            result.speedup,
-            result.incremental_cache_hits,
-            result.incremental_cache_hits + result.incremental_cache_misses
-        );
+                // First apply all pending modifications
+                let mut total_nodes_affected = 0;
+                for pending_frame in &pending_modifications {
+                    let affected =
+                        apply_frame_modifications(&mut current_layout_tree, pending_frame);
+                    total_nodes_affected += affected;
+                    println!(
+                        "    ↳ Applied pending: {} (affected {} nodes)",
+                        pending_frame.command_name, affected
+                    );
+                }
 
-        results.push(result);
+                // Now benchmark this accumulated state
+                let result = benchmark_accumulated_modifications(
+                    &current_layout_tree,
+                    &pending_modifications,
+                    frame,
+                    data_point_counter,
+                );
 
-        apply_frame_modifications(&mut current_layout_tree, frame);
+                println!(
+                    "  📊 Data point #{}: Incremental {} cycles, Full {} cycles, Speedup {:.3}x",
+                    data_point_counter,
+                    result.incremental_cycles,
+                    result.full_layout_cycles,
+                    result.speedup
+                );
+
+                results.push(result);
+
+                // Clear pending modifications after recalculate
+                pending_modifications.clear();
+            }
+            _ => {
+                // Other operations (add, replace_value, etc.) - just mark for later
+                println!(
+                    "  📝 Marking for recalculate: {} ({})",
+                    frame.command_name,
+                    get_frame_description(frame)
+                );
+                pending_modifications.push(frame.clone());
+            }
+        }
     }
+
+    println!(
+        "\n🎯 Benchmark completed with {} data points from {} total frames",
+        results.len(),
+        frames.len()
+    );
 
     print_web_layout_trace_summary(&results);
 
@@ -442,9 +431,105 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
     results
 }
 
+fn benchmark_accumulated_modifications(
+    base_tree: &HtmlNode,
+    pending_modifications: &[LayoutFrame],
+    recalculate_frame: &LayoutFrame,
+    data_point_id: usize,
+) -> WebLayoutFrameResult {
+    // Create trees for benchmarking
+    let mut tree_incremental = base_tree.clone();
+    let mut tree_full_layout = base_tree.clone();
+
+    // Apply accumulated modifications to both trees
+    let mut total_nodes_affected = 0;
+    for modification in pending_modifications {
+        total_nodes_affected += apply_frame_modifications(&mut tree_incremental, modification);
+        apply_frame_modifications(&mut tree_full_layout, modification);
+    }
+
+    let total_nodes = count_nodes(&tree_incremental);
+
+    // WARM-UP PHASE for incremental layout
+    let _ = invoke_incremental_layout(&mut tree_incremental);
+    clear_dirty_flags(&mut tree_incremental);
+
+    // Re-apply modifications to create proper dirty state
+    for modification in pending_modifications {
+        apply_frame_modifications(&mut tree_incremental, modification);
+    }
+
+    // Measure incremental layout performance
+    let start_incremental = rdtsc();
+    let (_, cache_hits, cache_misses) = invoke_incremental_layout(&mut tree_incremental);
+    let end_incremental = rdtsc();
+    let incremental_cycles = end_incremental - start_incremental;
+
+    // Prepare full layout tree
+    clear_all_layout_cache(&mut tree_full_layout);
+    mark_all_dirty_for_layout(&mut tree_full_layout);
+
+    // Measure full layout performance
+    let start_full = rdtsc();
+    let _ = invoke_full_layout(&mut tree_full_layout);
+    let end_full = rdtsc();
+    let full_layout_cycles = end_full - start_full;
+
+    // Correctness check
+    assert!(
+        tree_incremental.compare_css_matches(&tree_full_layout),
+        "Mismatch between incremental and full layout results for data point {}",
+        data_point_id
+    );
+
+    let speedup = if full_layout_cycles > 0 {
+        incremental_cycles as f64 / full_layout_cycles as f64
+    } else {
+        1.0
+    };
+
+    // Create summary description of accumulated modifications
+    let accumulated_description = if pending_modifications.is_empty() {
+        "recalculate (no pending changes)".to_string()
+    } else {
+        let ops: Vec<String> = pending_modifications
+            .iter()
+            .map(|f| f.command_name.clone())
+            .collect();
+        format!("recalculate after [{}]", ops.join(", "))
+    };
+
+    WebLayoutFrameResult {
+        frame_id: data_point_id,
+        operation_type: "recalculate".to_string(),
+        frame_description: accumulated_description,
+        nodes_affected: total_nodes_affected,
+        total_nodes,
+        incremental_cycles,
+        full_layout_cycles,
+        speedup,
+        incremental_cache_hits: cache_hits,
+        incremental_cache_misses: cache_misses,
+        modification_type: ModificationType::LayoutRecalculation,
+    }
+}
+
 fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     let total_frames = results.len();
     let avg_speedup = results.iter().map(|r| r.speedup).sum::<f64>() / total_frames as f64;
+
+    // Calculate geometric mean of speedup ratios
+    let geometric_mean_speedup = if total_frames > 0 {
+        let product: f64 = results
+            .iter()
+            .map(|r| r.speedup)
+            .filter(|&x| x > 0.0) // Avoid log(0)
+            .map(|x| x.ln())
+            .sum();
+        (product / total_frames as f64).exp()
+    } else {
+        1.0
+    };
 
     let insertions = results
         .iter()
@@ -487,8 +572,9 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
 
     println!("\n🌐 Web Browser Layout Trace Benchmark Summary:");
     println!("════════════════════════════════════════════════");
-    println!("Total layout frames analyzed: {}", total_frames);
+    println!("Total recalculate data points: {}", total_frames);
     println!("Average speedup (incremental/full): {:.3}x", avg_speedup);
+    println!("Geometric mean speedup: {:.3}x", geometric_mean_speedup);
 
     println!("\n📊 Frame Types (like real web browsing):");
     println!(

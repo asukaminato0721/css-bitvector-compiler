@@ -37,10 +37,14 @@ def main():
     plt.xscale('log')
     plt.yscale('log')
     
+    # Calculate geometric mean for display
+    positive_speedups = df[df['speedup'] > 0]['speedup']
+    geometric_mean_speedup = np.exp(np.log(positive_speedups).mean()) if len(positive_speedups) > 0 else 1.0
+    
     # Set labels and title
     plt.xlabel('Cycles for Full Layout', fontsize=14, fontweight='bold')
     plt.ylabel('Cycles for Incremental Layout', fontsize=14, fontweight='bold')
-    plt.title('Layout Engine Performance Comparison\n(Web Browser Trace Benchmark)', 
+    plt.title(f'Layout Engine Performance Comparison\n(Corrected Recalculate-based Benchmark, Geomean: {geometric_mean_speedup:.3f}x)', 
               fontsize=16, fontweight='bold', pad=20)
     
     # Add grid
@@ -81,8 +85,13 @@ def main():
     avg_speedup = df['speedup'].mean()
     median_speedup = df['speedup'].median()
     
+    # Calculate geometric mean
+    positive_speedups = df[df['speedup'] > 0]['speedup']
+    geometric_mean_speedup = np.exp(np.log(positive_speedups).mean()) if len(positive_speedups) > 0 else 1.0
+    
     print(f'\n⚡ Average performance ratio: {avg_speedup:.3f}x')
     print(f'📊 Median performance ratio: {median_speedup:.3f}x')
+    print(f'📈 Geometric mean performance ratio: {geometric_mean_speedup:.3f}x')
     
     # Range analysis
     min_full = df['full_layout_cycles'].min()
