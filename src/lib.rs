@@ -1,8 +1,8 @@
 // Library exports for css-bitvector-compiler
 // This allows examples to use the types and functions as a library
 
-use std::collections::{HashMap, HashSet};
 use cssparser::{Parser, ParserInput, Token};
+use std::collections::{HashMap, HashSet};
 
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
@@ -141,7 +141,7 @@ impl Default for BitVector {
 
 impl BitVector {
     pub fn new() -> Self {
-        BitVector { 
+        BitVector {
             bits: vec![0; 32], // Start with 256 bits (32 * 8)
             capacity: 256,
         }
@@ -168,7 +168,7 @@ impl BitVector {
         if pos >= self.capacity {
             let new_capacity = ((pos + 8) / 8) * 8; // Round up to nearest 8 bits
             let new_len = (new_capacity + 7) / 8;
-            
+
             self.bits.resize(new_len, 0);
             self.capacity = new_capacity;
         }
@@ -211,7 +211,7 @@ impl BitVector {
             let max_bit = (other.bits.len() * 8) - 1;
             self.ensure_capacity(max_bit);
         }
-        
+
         let min_len = std::cmp::min(self.bits.len(), other.bits.len());
         for i in 0..min_len {
             self.bits[i] |= other.bits[i];
@@ -221,14 +221,14 @@ impl BitVector {
     pub fn and(&self, other: &BitVector) -> BitVector {
         let mut result = BitVector::new();
         let min_len = std::cmp::min(self.bits.len(), other.bits.len());
-        
+
         if min_len > 0 {
             result.bits.resize(min_len, 0);
             for i in 0..min_len {
                 result.bits[i] = self.bits[i] & other.bits[i];
             }
         }
-        
+
         result
     }
 
@@ -255,7 +255,10 @@ impl BitVector {
     }
 
     pub fn count_set_bits(&self) -> usize {
-        self.bits.iter().map(|&byte| byte.count_ones() as usize).sum()
+        self.bits
+            .iter()
+            .map(|&byte| byte.count_ones() as usize)
+            .sum()
     }
 
     pub fn first_set_bit(&self) -> Option<usize> {
@@ -661,9 +664,12 @@ impl TreeNFAProgram {
 
         // Add necessary imports for the generated code to be self-contained
         code.push_str("use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n\n");
-        
+
         // Add capacity constant for the generated BitVectors
-        code.push_str(&format!("const BITVECTOR_CAPACITY: usize = {};\n\n", self.total_bits));
+        code.push_str(&format!(
+            "const BITVECTOR_CAPACITY: usize = {};\n\n",
+            self.total_bits
+        ));
 
         // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
@@ -686,7 +692,9 @@ impl TreeNFAProgram {
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");
-        code.push_str("    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n");
+        code.push_str(
+            "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
+        );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
@@ -729,7 +737,9 @@ impl TreeNFAProgram {
 
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
-        code.push_str("        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);\n\n");
+        code.push_str(
+            "        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);\n\n",
+        );
         for (i, instruction) in self.instructions.iter().enumerate() {
             if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
                 code.push_str(&format!(
@@ -998,7 +1008,7 @@ impl CssCompiler {
 // Helper functions for parsing using external cssparser library
 pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
-    
+
     // Try to parse with cssparser, fall back to regex if needed
     match parse_css_with_cssparser(css_content) {
         Ok(parsed_rules) => {
@@ -1009,7 +1019,7 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
             rules.extend(parse_css_with_regex_fallback(css_content));
         }
     }
-    
+
     // Add some common Google selectors as before for completeness
     rules.extend([
         CssRule::Simple(SimpleSelector::Type("div".to_string())),
@@ -1026,7 +1036,7 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
     // Remove duplicates
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
-    
+
     rules
 }
 
@@ -1065,7 +1075,12 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
                         Token::Ident(name) => {
                             let type_name = name.to_string().to_lowercase();
                             // Only accept common HTML elements
-                            if ["div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3", "ul", "li", "table", "tr", "td"].contains(&type_name.as_str()) {
+                            if [
+                                "div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3",
+                                "ul", "li", "table", "tr", "td",
+                            ]
+                            .contains(&type_name.as_str())
+                            {
                                 current_selector = Some(SimpleSelector::Type(type_name));
                                 expecting_rule_body = true;
                             }
@@ -1078,7 +1093,8 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
                         // Class selector (e.g., ".container", ".item")
                         Token::Delim('.') => {
                             if let Ok(Token::Ident(class_name)) = parser.next() {
-                                current_selector = Some(SimpleSelector::Class(class_name.to_string()));
+                                current_selector =
+                                    Some(SimpleSelector::Class(class_name.to_string()));
                                 expecting_rule_body = true;
                             }
                         }
@@ -1108,14 +1124,18 @@ fn parse_css_with_regex_fallback(css_content: &str) -> Vec<CssRule> {
     // Find all class selectors
     for captures in class_regex.captures_iter(css_content) {
         if let Some(class_name) = captures.get(1) {
-            rules.push(CssRule::Simple(SimpleSelector::Class(class_name.as_str().to_string())));
+            rules.push(CssRule::Simple(SimpleSelector::Class(
+                class_name.as_str().to_string(),
+            )));
         }
     }
 
     // Find all ID selectors
     for captures in id_regex.captures_iter(css_content) {
         if let Some(id_name) = captures.get(1) {
-            rules.push(CssRule::Simple(SimpleSelector::Id(id_name.as_str().to_string())));
+            rules.push(CssRule::Simple(SimpleSelector::Id(
+                id_name.as_str().to_string(),
+            )));
         }
     }
 
@@ -1126,7 +1146,11 @@ fn parse_css_with_regex_fallback(css_content: &str) -> Vec<CssRule> {
             if let Some(type_name) = captures.get(1) {
                 let type_str = type_name.as_str().to_lowercase();
                 // Only add common HTML elements
-                if ["div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3"].contains(&type_str.as_str()) {
+                if [
+                    "div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3",
+                ]
+                .contains(&type_str.as_str())
+                {
                     rules.push(CssRule::Simple(SimpleSelector::Type(type_str)));
                 }
             }

@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{CssCompiler, HtmlNode, parse_basic_css, CssRule, SimpleSelector};
+use css_bitvector_compiler::{CssCompiler, CssRule, HtmlNode, SimpleSelector, parse_basic_css};
 
 #[cfg(feature = "run-benchmark")]
 mod benchmark;
@@ -220,21 +220,27 @@ fn parse_simple_selector(input: &str) -> Option<SimpleSelector> {
     if input.is_empty() {
         return None;
     }
-    
+
     if input.starts_with('.') {
         let class_name = &input[1..];
-        if class_name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+        if class_name
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '-' || c == '_')
+        {
             return Some(SimpleSelector::Class(class_name.to_string()));
         }
     } else if input.starts_with('#') {
         let id_name = &input[1..];
-        if id_name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+        if id_name
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '-' || c == '_')
+        {
             return Some(SimpleSelector::Id(id_name.to_string()));
         }
     } else if input.chars().all(|c| c.is_alphabetic()) {
         return Some(SimpleSelector::Type(input.to_lowercase()));
     }
-    
+
     None
 }
 
@@ -451,7 +457,7 @@ mod tests {
     #[test]
     fn test_bitvector_operations() {
         use css_bitvector_compiler::BitVector;
-        
+
         // Test basic bitvector operations used in the CSS matching
         let mut bitvector = BitVector::new();
 
@@ -464,29 +470,29 @@ mod tests {
 
         // Set bit 0
         bitvector.set_bit(0);
-        
+
         // Test multiple bits
         assert!(bitvector.is_bit_set(0));
         assert!(bitvector.is_bit_set(3));
         assert!(!bitvector.is_bit_set(1));
-        
+
         // Test high bit positions (beyond 64)
         bitvector.set_bit(100);
         assert!(bitvector.is_bit_set(100));
-        
+
         // Test count_set_bits
         assert_eq!(bitvector.count_set_bits(), 3); // bits 0, 3, and 100
-        
+
         // Test clear_bit
         bitvector.clear_bit(3);
         assert!(!bitvector.is_bit_set(3));
         assert_eq!(bitvector.count_set_bits(), 2); // bits 0 and 100
-        
+
         // Test is_empty
         let empty_bv = BitVector::new();
         assert!(empty_bv.is_empty());
         assert!(!bitvector.is_empty());
-        
+
         // Test or_assign
         let mut other = BitVector::new();
         other.set_bit(5);
