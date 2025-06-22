@@ -1,6 +1,4 @@
-use css_bitvector_compiler::CssCompiler;
-use css_bitvector_compiler::HtmlNode;
-use css_bitvector_compiler::parse_basic_css;
+use css_bitvector_compiler::{CssCompiler, HtmlNode, parse_basic_css, CssRule, SimpleSelector};
 
 #[cfg(feature = "run-benchmark")]
 mod benchmark;
@@ -215,6 +213,37 @@ fn main() {
     }
 }
 
+/// Parse a simple CSS selector string into a SimpleSelector enum
+/// For backward compatibility with tests
+fn parse_simple_selector(input: &str) -> Option<SimpleSelector> {
+    let input = input.trim();
+    if input.is_empty() {
+        return None;
+    }
+    
+    if input.starts_with('.') {
+        let class_name = &input[1..];
+        if class_name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+            return Some(SimpleSelector::Class(class_name.to_string()));
+        }
+    } else if input.starts_with('#') {
+        let id_name = &input[1..];
+        if id_name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+            return Some(SimpleSelector::Id(id_name.to_string()));
+        }
+    } else if input.chars().all(|c| c.is_alphabetic()) {
+        return Some(SimpleSelector::Type(input.to_lowercase()));
+    }
+    
+    None
+}
+
+/// Parse CSS file content into CSS rules
+/// For backward compatibility with tests - delegates to the new parser
+fn parse_css_file(css_content: &str) -> Vec<CssRule> {
+    parse_basic_css(css_content)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -421,26 +450,49 @@ mod tests {
 
     #[test]
     fn test_bitvector_operations() {
+        use css_bitvector_compiler::BitVector;
+        
         // Test basic bitvector operations used in the CSS matching
-        let mut bitvector: u64 = 0;
+        let mut bitvector = BitVector::new();
 
         // Set bit 3
-        bitvector |= 1 << 3;
-        assert_eq!(bitvector, 8); // 2^3 = 8
-
-        // Check bit 3 is set
-        assert_ne!(bitvector & (1 << 3), 0);
+        bitvector.set_bit(3);
+        assert!(bitvector.is_bit_set(3));
 
         // Check bit 2 is not set
-        assert_eq!(bitvector & (1 << 2), 0);
+        assert!(!bitvector.is_bit_set(2));
 
         // Set bit 0
-        bitvector |= 1 << 0;
-        assert_eq!(bitvector, 9); // 8 + 1 = 9
-
+        bitvector.set_bit(0);
+        
         // Test multiple bits
-        assert_ne!(bitvector & (1 << 0), 0);
-        assert_ne!(bitvector & (1 << 3), 0);
+        assert!(bitvector.is_bit_set(0));
+        assert!(bitvector.is_bit_set(3));
+        assert!(!bitvector.is_bit_set(1));
+        
+        // Test high bit positions (beyond 64)
+        bitvector.set_bit(100);
+        assert!(bitvector.is_bit_set(100));
+        
+        // Test count_set_bits
+        assert_eq!(bitvector.count_set_bits(), 3); // bits 0, 3, and 100
+        
+        // Test clear_bit
+        bitvector.clear_bit(3);
+        assert!(!bitvector.is_bit_set(3));
+        assert_eq!(bitvector.count_set_bits(), 2); // bits 0 and 100
+        
+        // Test is_empty
+        let empty_bv = BitVector::new();
+        assert!(empty_bv.is_empty());
+        assert!(!bitvector.is_empty());
+        
+        // Test or_assign
+        let mut other = BitVector::new();
+        other.set_bit(5);
+        bitvector.or_assign(&other);
+        assert!(bitvector.is_bit_set(5));
+        assert_eq!(bitvector.count_set_bits(), 3); // bits 0, 5, and 100
     }
 
     #[test]
@@ -592,8 +644,8 @@ mod tests {
 
         // Test 1: First run should compute everything
         // Store initial results for comparison
-        let initial_root_matches = root.css_match_bitvector;
-        let initial_child1_matches = root.children[0].css_match_bitvector;
+        let initial_root_matches = root.css_match_bitvector.clone();
+        let initial_child1_matches = root.children[0].css_match_bitvector.clone();
 
         // Verify results didn't change
         assert_eq!(root.css_match_bitvector, initial_root_matches);
@@ -615,10 +667,10 @@ mod tests {
             )
             .add_child(HtmlNode::new("div").with_class("other"));
         // Compare results
-        assert_eq!(root.css_match_bitvector, root_copy.css_match_bitvector);
+        assert_eq!(&root.css_match_bitvector, &root_copy.css_match_bitvector);
         assert_eq!(
-            root.children[0].css_match_bitvector,
-            root_copy.children[0].css_match_bitvector
+            &root.children[0].css_match_bitvector,
+            &root_copy.children[0].css_match_bitvector
         );
         assert_eq!(
             root.children[1].css_match_bitvector,
