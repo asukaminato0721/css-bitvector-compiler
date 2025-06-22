@@ -546,39 +546,16 @@ fn benchmark_accumulated_modifications(
         data_point_id
     );
 
-    let speedup = if incremental_cycles > 0 && full_layout_cycles > 0 {
-        incremental_cycles as f64 / full_layout_cycles as f64
+    let speedup = if incremental_cycles > 0 {
+        full_layout_cycles as f64 / incremental_cycles as f64
     } else if full_layout_cycles > 0 {
-        0.0 // Incremental was free
+        f64::INFINITY // Incremental was effectively infinitely faster
     } else {
-        1.0 // No work done in either case
+        1.0 // No work done in either case, so they are equal
     };
 
-    // Determine the dominant modification type for this data point
-    let modification_type = if pending_modifications.is_empty() {
-        ModificationType::LayoutRecalculation
-    } else {
-        // Prioritize more impactful changes for classification
-        if pending_modifications
-            .iter()
-            .any(|f| f.modification_type == ModificationType::Insertion)
-        {
-            ModificationType::Insertion
-        } else if pending_modifications
-            .iter()
-            .any(|f| f.modification_type == ModificationType::Deletion)
-        {
-            ModificationType::Deletion
-        } else if pending_modifications
-            .iter()
-            .any(|f| f.modification_type == ModificationType::AttributeChange)
-        {
-            ModificationType::AttributeChange
-        } else {
-            // Fallback for any other accumulated change types
-            ModificationType::LayoutRecalculation
-        }
-    };
+    // All data points are now considered 'recalculate'
+    let modification_type = ModificationType::LayoutRecalculation;
 
     // Create summary description of accumulated modifications
     let accumulated_description = if pending_modifications.is_empty() {
