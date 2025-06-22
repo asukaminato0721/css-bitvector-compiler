@@ -1,6 +1,7 @@
 // Library exports for css-bitvector-compiler
 // This allows examples to use the types and functions as a library
 
+use cssparser::{Parser, ParserInput, Token};
 use std::collections::{HashMap, HashSet};
 
 #[cfg(target_arch = "x86_64")]
@@ -126,9 +127,10 @@ impl GoogleNode {
 }
 
 // Export BitVector
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BitVector {
-    pub bits: u64,
+    pub bits: Vec<u8>,
+    pub capacity: usize, // Total number of bits this vector can hold
 }
 
 impl Default for BitVector {
@@ -139,51 +141,152 @@ impl Default for BitVector {
 
 impl BitVector {
     pub fn new() -> Self {
-        BitVector { bits: 0 }
-    }
-
-    pub fn from_u64(bits: u64) -> Self {
-        BitVector { bits }
-    }
-
-    pub fn set_bit(&mut self, pos: usize) {
-        self.bits |= 1 << pos;
-    }
-
-    pub fn clear_bit(&mut self, pos: usize) {
-        self.bits &= !(1 << pos);
-    }
-
-    pub fn is_bit_set(&self, pos: usize) -> bool {
-        (self.bits & (1 << pos)) != 0
-    }
-
-    pub fn or_assign(&mut self, other: BitVector) {
-        self.bits |= other.bits;
-    }
-
-    pub fn and(&self, other: BitVector) -> BitVector {
         BitVector {
-            bits: self.bits & other.bits,
+            bits: vec![0; 32], // Start with 256 bits (32 * 8)
+            capacity: 256,
         }
     }
 
+    pub fn with_capacity(capacity: usize) -> Self {
+        let num_bytes = (capacity + 7) / 8; // Round up to nearest byte
+        BitVector {
+            bits: vec![0; num_bytes],
+            capacity,
+        }
+    }
+
+    pub fn from_u64(bits: u64) -> Self {
+        let mut bv = Self::with_capacity(64);
+        // Convert u64 to bytes (little-endian)
+        for i in 0..8 {
+            bv.bits[i] = ((bits >> (i * 8)) & 0xFF) as u8;
+        }
+        bv
+    }
+
+    fn ensure_capacity(&mut self, pos: usize) {
+        if pos >= self.capacity {
+            let new_capacity = ((pos + 8) / 8) * 8; // Round up to nearest 8 bits
+            let new_len = (new_capacity + 7) / 8;
+
+            self.bits.resize(new_len, 0);
+            self.capacity = new_capacity;
+        }
+    }
+
+    pub fn set_bit(&mut self, pos: usize) {
+        self.ensure_capacity(pos);
+        let byte_index = pos / 8;
+        let bit_index = pos % 8;
+        self.bits[byte_index] |= 1u8 << bit_index;
+    }
+
+    pub fn clear_bit(&mut self, pos: usize) {
+        if pos >= self.capacity {
+            return; // Bit is already 0 if out of capacity
+        }
+        let byte_index = pos / 8;
+        let bit_index = pos % 8;
+        if byte_index < self.bits.len() {
+            self.bits[byte_index] &= !(1u8 << bit_index);
+        }
+    }
+
+    pub fn is_bit_set(&self, pos: usize) -> bool {
+        if pos >= self.capacity {
+            return false;
+        }
+        let byte_index = pos / 8;
+        let bit_index = pos % 8;
+        if byte_index < self.bits.len() {
+            (self.bits[byte_index] & (1u8 << bit_index)) != 0
+        } else {
+            false
+        }
+    }
+
+    pub fn or_assign(&mut self, other: &BitVector) {
+        // Ensure we have capacity for all bits in other
+        if !other.bits.is_empty() {
+            let max_bit = (other.bits.len() * 8) - 1;
+            self.ensure_capacity(max_bit);
+        }
+
+        let min_len = std::cmp::min(self.bits.len(), other.bits.len());
+        for i in 0..min_len {
+            self.bits[i] |= other.bits[i];
+        }
+    }
+
+    pub fn and(&self, other: &BitVector) -> BitVector {
+        let mut result = BitVector::new();
+        let min_len = std::cmp::min(self.bits.len(), other.bits.len());
+
+        if min_len > 0 {
+            result.bits.resize(min_len, 0);
+            for i in 0..min_len {
+                result.bits[i] = self.bits[i] & other.bits[i];
+            }
+        }
+
+        result
+    }
+
     pub fn is_empty(&self) -> bool {
-        self.bits == 0
+        self.bits.iter().all(|&byte| byte == 0)
     }
 
     pub fn as_u64(&self) -> u64 {
-        self.bits
+        let mut result = 0u64;
+        for (i, &byte) in self.bits.iter().take(8).enumerate() {
+            result |= (byte as u64) << (i * 8);
+        }
+        result
     }
 
-    pub fn has_any_bits(&self, mask: BitVector) -> bool {
-        (self.bits & mask.bits) != 0
+    pub fn has_any_bits(&self, mask: &BitVector) -> bool {
+        let min_len = std::cmp::min(self.bits.len(), mask.bits.len());
+        for i in 0..min_len {
+            if (self.bits[i] & mask.bits[i]) != 0 {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn count_set_bits(&self) -> usize {
+        self.bits
+            .iter()
+            .map(|&byte| byte.count_ones() as usize)
+            .sum()
+    }
+
+    pub fn first_set_bit(&self) -> Option<usize> {
+        for (byte_idx, &byte) in self.bits.iter().enumerate() {
+            if byte != 0 {
+                return Some(byte_idx * 8 + byte.trailing_zeros() as usize);
+            }
+        }
+        None
     }
 }
 
 impl std::fmt::Binary for BitVector {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:016b}", self.bits)
+        // Display first 64 bits for compatibility, but indicate if there are more
+        if self.bits.is_empty() {
+            write!(f, "0")
+        } else {
+            // Show first 8 bytes (64 bits) in binary
+            let bits_to_show = std::cmp::min(8, self.bits.len());
+            for i in (0..bits_to_show).rev() {
+                write!(f, "{:08b}", self.bits[i])?;
+            }
+            if self.bits.len() > 8 {
+                write!(f, "...")?;
+            }
+            Ok(())
+        }
     }
 }
 
@@ -425,11 +528,11 @@ impl HtmlNode {
         self.is_self_dirty || self.has_dirty_descendant
     }
 
-    pub fn needs_any_recomputation(&self, new_parent_state: BitVector) -> bool {
+    pub fn needs_any_recomputation(&self, new_parent_state: &BitVector) -> bool {
         self.is_self_dirty
             || self.has_dirty_descendant
             || self.cached_parent_state.is_none()
-            || self.cached_parent_state.unwrap() != new_parent_state
+            || self.cached_parent_state.as_ref().unwrap() != new_parent_state
     }
 
     pub fn mark_clean(&mut self) {
@@ -562,6 +665,12 @@ impl TreeNFAProgram {
         // Add necessary imports for the generated code to be self-contained
         code.push_str("use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n\n");
 
+        // Add capacity constant for the generated BitVectors
+        code.push_str(&format!(
+            "const BITVECTOR_CAPACITY: usize = {};\n\n",
+            self.total_bits
+        ));
+
         // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
         let parent_dependent_rules_code = self.generate_parent_dependent_rules_code();
@@ -571,25 +680,27 @@ impl TreeNFAProgram {
         code.push_str("// --- Incremental Processing Functions ---\n");
         code.push_str("pub fn process_node_generated_incremental(\n");
         code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: BitVector,\n");
+        code.push_str("    parent_state: &BitVector,\n");
         code.push_str(") -> BitVector { // returns child_states\n");
         code.push_str("    // Check if we need to recompute\n");
         code.push_str("    if !node.needs_any_recomputation(parent_state) {\n");
         code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.unwrap_or_default();\n");
+        code.push_str("        return node.cached_child_states.clone().unwrap_or_default();\n");
         code.push_str("    }\n\n");
         code.push_str("    // Recompute node intrinsic matches if needed\n");
         code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");
-        code.push_str("    let mut current_matches = node.cached_node_intrinsic.unwrap();\n");
+        code.push_str(
+            "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
+        );
         code.push_str(&parent_dependent_rules_code);
-        code.push_str("    let mut child_states = BitVector::new();\n");
+        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    node.cached_parent_state = Some(parent_state);\n");
-        code.push_str("    node.cached_child_states = Some(child_states);\n");
+        code.push_str("    node.cached_parent_state = Some(parent_state.clone());\n");
+        code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
@@ -598,12 +709,12 @@ impl TreeNFAProgram {
         code.push_str("// --- From-Scratch Processing Functions ---\n");
         code.push_str("pub fn process_node_generated_from_scratch(\n");
         code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: BitVector,\n");
+        code.push_str("    parent_state: &BitVector,\n");
         code.push_str(") -> BitVector { // returns child_states\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("    let mut current_matches = intrinsic_matches;\n");
         code.push_str(&parent_dependent_rules_code);
-        code.push_str("    let mut child_states = BitVector::new();\n");
+        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
         code.push_str("    child_states\n");
@@ -626,7 +737,9 @@ impl TreeNFAProgram {
 
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
-        code.push_str("        let mut intrinsic_matches = BitVector::new();\n\n");
+        code.push_str(
+            "        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);\n\n",
+        );
         for (i, instruction) in self.instructions.iter().enumerate() {
             if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
                 code.push_str(&format!(
@@ -723,11 +836,12 @@ pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
-    process_tree_recursive_incremental(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    process_tree_recursive_incremental(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: BitVector,
+fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVector,
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     if !node.needs_any_recomputation(parent_state) {
@@ -739,22 +853,23 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: BitVect
     *misses += 1;
     let child_states = process_node_generated_incremental(node, parent_state);
     for child in node.children.iter_mut() {
-        process_tree_recursive_incremental(child, child_states, total, hits, misses);
+        process_tree_recursive_incremental(child, &child_states, total, hits, misses);
     }
 }
 
 /// From-scratch processing driver for comparison
 pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
-    process_tree_recursive_from_scratch(root, BitVector::new(), &mut total_nodes);
+    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    process_tree_recursive_from_scratch(root, &initial_state, &mut total_nodes);
     (total_nodes, 0, total_nodes) // 0 hits, all misses
 }
 
-fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: BitVector, total: &mut usize) {
+fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVector, total: &mut usize) {
     *total += 1;
     let child_states = process_node_generated_from_scratch(node, parent_state);
     for child in node.children.iter_mut() {
-        process_tree_recursive_from_scratch(child, child_states, total);
+        process_tree_recursive_from_scratch(child, &child_states, total);
     }
 }
 "#.to_string()
@@ -890,46 +1005,22 @@ impl CssCompiler {
     }
 }
 
-// Helper functions for parsing
+// Helper functions for parsing using external cssparser library
 pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
 
-    let lines: Vec<&str> = css_content.lines().collect();
-    let mut current_selector = String::new();
-
-    for line in lines {
-        let line = line.trim();
-        if line.is_empty() || line.starts_with("/*") {
-            continue;
+    // Try to parse with cssparser, fall back to regex if needed
+    match parse_css_with_cssparser(css_content) {
+        Ok(parsed_rules) => {
+            rules.extend(parsed_rules);
         }
-
-        if line.contains('{') && !line.contains('}') {
-            current_selector = line.split('{').next().unwrap_or("").trim().to_string();
-        } else if line.contains('}') && !current_selector.is_empty() {
-            if current_selector.starts_with('.') {
-                let class_name = current_selector[1..].to_string();
-                if !class_name.contains(' ') && !class_name.contains(':') {
-                    rules.push(CssRule::Simple(SimpleSelector::Class(class_name)));
-                }
-            } else if current_selector.starts_with('#') {
-                let id_name = current_selector[1..].to_string();
-                if !id_name.contains(' ') && !id_name.contains(':') {
-                    rules.push(CssRule::Simple(SimpleSelector::Id(id_name)));
-                }
-            } else if !current_selector.contains(' ')
-                && !current_selector.contains(':')
-                && !current_selector.contains('.')
-                && !current_selector.contains('#')
-            {
-                rules.push(CssRule::Simple(SimpleSelector::Type(
-                    current_selector.to_lowercase(),
-                )));
-            }
-            current_selector.clear();
+        Err(e) => {
+            eprintln!("⚠️ CSS parsing error, falling back to basic parsing: {}", e);
+            rules.extend(parse_css_with_regex_fallback(css_content));
         }
     }
 
-    // Add some common Google selectors
+    // Add some common Google selectors as before for completeness
     rules.extend([
         CssRule::Simple(SimpleSelector::Type("div".to_string())),
         CssRule::Simple(SimpleSelector::Type("span".to_string())),
@@ -941,6 +1032,130 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
         CssRule::Simple(SimpleSelector::Id("gb".to_string())),
         CssRule::Simple(SimpleSelector::Id("gbz".to_string())),
     ]);
+
+    // Remove duplicates
+    rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
+    rules.dedup();
+
+    rules
+}
+
+/// Parse CSS using the cssparser library for robust CSS parsing
+fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn std::error::Error>> {
+    let mut rules = Vec::new();
+    let mut input = ParserInput::new(css_content);
+    let mut parser = Parser::new(&mut input);
+
+    // Simple state machine for CSS parsing
+    let mut expecting_rule_body = false;
+    let mut current_selector: Option<SimpleSelector> = None;
+
+    // Parse the CSS content
+    while !parser.is_exhausted() {
+        match parser.next() {
+            Ok(token) => {
+                if expecting_rule_body {
+                    match token {
+                        Token::CurlyBracketBlock => {
+                            // Found rule body, add the selector if we have one
+                            if let Some(selector) = current_selector.take() {
+                                rules.push(CssRule::Simple(selector));
+                            }
+                            expecting_rule_body = false;
+                        }
+                        _ => {
+                            // Reset if we didn't find the expected rule body
+                            expecting_rule_body = false;
+                            current_selector = None;
+                        }
+                    }
+                } else {
+                    match token {
+                        // Type selector (e.g., "div", "p", "span")
+                        Token::Ident(name) => {
+                            let type_name = name.to_string().to_lowercase();
+                            // Only accept common HTML elements
+                            if [
+                                "div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3",
+                                "ul", "li", "table", "tr", "td",
+                            ]
+                            .contains(&type_name.as_str())
+                            {
+                                current_selector = Some(SimpleSelector::Type(type_name));
+                                expecting_rule_body = true;
+                            }
+                        }
+                        // ID selector (e.g., "#main", "#header")
+                        Token::IDHash(id) => {
+                            current_selector = Some(SimpleSelector::Id(id.to_string()));
+                            expecting_rule_body = true;
+                        }
+                        // Class selector (e.g., ".container", ".item")
+                        Token::Delim('.') => {
+                            if let Ok(Token::Ident(class_name)) = parser.next() {
+                                current_selector =
+                                    Some(SimpleSelector::Class(class_name.to_string()));
+                                expecting_rule_body = true;
+                            }
+                        }
+                        _ => {
+                            // Skip other tokens
+                        }
+                    }
+                }
+            }
+            Err(_) => break, // End of input or parse error
+        }
+    }
+
+    Ok(rules)
+}
+
+/// Fallback regex-based CSS parser (simplified version of the original)
+fn parse_css_with_regex_fallback(css_content: &str) -> Vec<CssRule> {
+    use regex::Regex;
+    let mut rules = Vec::new();
+
+    // Regex patterns for CSS selectors
+    let class_regex = Regex::new(r"\.([a-zA-Z_\-][a-zA-Z0-9_\-]*)\s*\{").unwrap();
+    let id_regex = Regex::new(r"#([a-zA-Z_\-][a-zA-Z0-9_\-]*)\s*\{").unwrap();
+    let type_regex = Regex::new(r"^([a-zA-Z][a-zA-Z0-9]*)\s*\{").unwrap();
+
+    // Find all class selectors
+    for captures in class_regex.captures_iter(css_content) {
+        if let Some(class_name) = captures.get(1) {
+            rules.push(CssRule::Simple(SimpleSelector::Class(
+                class_name.as_str().to_string(),
+            )));
+        }
+    }
+
+    // Find all ID selectors
+    for captures in id_regex.captures_iter(css_content) {
+        if let Some(id_name) = captures.get(1) {
+            rules.push(CssRule::Simple(SimpleSelector::Id(
+                id_name.as_str().to_string(),
+            )));
+        }
+    }
+
+    // Find type selectors (simplified - just looking at line beginnings)
+    for line in css_content.lines() {
+        let line = line.trim();
+        if let Some(captures) = type_regex.captures(line) {
+            if let Some(type_name) = captures.get(1) {
+                let type_str = type_name.as_str().to_lowercase();
+                // Only add common HTML elements
+                if [
+                    "div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3",
+                ]
+                .contains(&type_str.as_str())
+                {
+                    rules.push(CssRule::Simple(SimpleSelector::Type(type_str)));
+                }
+            }
+        }
+    }
 
     rules
 }
