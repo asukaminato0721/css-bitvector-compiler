@@ -1,6 +1,18 @@
 # CSS Bitvector Compiler
 
-A high-performance CSS selector matching engine that compiles CSS rules into optimized bitvector operations for efficient DOM tree processing.
+launch ladybird, visit google.com, type something
+
+get csslog and trace file
+
+rename csslog to css, trace to google.trace
+
+put into css-gen-op folder
+
+
+```
+./run.sh
+```
+
 
 ## 🎯 Project Overview
 

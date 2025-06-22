@@ -1,6 +1,7 @@
 import json
 import sys
-from typing import Dict, Any, List, Set, Optional, Union, TextIO
+from typing import Any, Dict, List, Optional, Set, TextIO
+
 from common import *
 
 TOTAL_DIFF_SIZE: int = 0
@@ -70,10 +71,14 @@ def diff_dom_tree(lhs: Dict[str, Any], rhs: Dict[str, Any], path: List[int]) -> 
     else:
         # Create a safer node identifier instead of truncating the full str representation
         node_identifier = f"{{id:{lhs.get('id', 'None')}, name:'{lhs.get('name', '')}', type:'{lhs.get('type', '')}'}}"
-        
+
         if lhs["attributes"] != rhs["attributes"]:
             diff_simple_dict(
-                lhs["attributes"], rhs["attributes"], path, node_identifier, "attributes"
+                lhs["attributes"],
+                rhs["attributes"],
+                path,
+                node_identifier,
+                "attributes",
             )
         l_children: List[Dict[str, Any]] = lhs["children"]
         r_children: List[Dict[str, Any]] = rhs["children"]
@@ -148,15 +153,18 @@ with open(trace_path) as f:
         j: Dict[str, Any] = json.loads(l)
         dom_tree: Optional[Dict[str, Any]] = regularize_dom(j["dom_tree"])
         layout_tree: Dict[str, Any] = regularize_layout(j["layout_tree"])
-        semantic_check(dom_tree)
-        TOTAL_SIZE += size(dom_tree)
+        if dom_tree is not None:
+            semantic_check(dom_tree)
+            TOTAL_SIZE += size(dom_tree)
         if dom_tree_old is None:
             assert layout_tree_old is None
-            out(command_init(dom_tree, j["time"]))
+            if dom_tree is not None:
+                out(command_init(dom_tree, j["time"]))
             out(command_layout_init(layout_tree))
         else:
             assert layout_tree_old is not None
-            diff_dom_tree(dom_tree_old, dom_tree, [])
+            if dom_tree is not None:
+                diff_dom_tree(dom_tree_old, dom_tree, [])
             diff_layout_tree(layout_tree_old, layout_tree, [])
             out(command_recalculate(j["time"]))
         dom_tree_old = dom_tree
