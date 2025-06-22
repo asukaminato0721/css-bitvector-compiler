@@ -290,8 +290,6 @@ fn get_frame_description(frame: &LayoutFrame) -> String {
     }
 }
 
-
-
 fn invoke_incremental_layout(tree: &mut HtmlNode) -> (usize, usize, usize) {
     // Use the generated incremental CSS processing code for realistic benchmarks
     process_tree_incremental_with_stats(tree)
@@ -365,43 +363,61 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
             "recalculate" => {
                 // This is when we actually benchmark!
                 data_point_counter += 1;
-                println!("  🔄 RECALCULATE - Creating data point #{}", data_point_counter);
-                
+                println!(
+                    "  🔄 RECALCULATE - Creating data point #{}",
+                    data_point_counter
+                );
+
                 // First apply all pending modifications
                 let mut total_nodes_affected = 0;
                 for pending_frame in &pending_modifications {
-                    let affected = apply_frame_modifications(&mut current_layout_tree, pending_frame);
+                    let affected =
+                        apply_frame_modifications(&mut current_layout_tree, pending_frame);
                     total_nodes_affected += affected;
-                    println!("    ↳ Applied pending: {} (affected {} nodes)", 
-                             pending_frame.command_name, affected);
+                    println!(
+                        "    ↳ Applied pending: {} (affected {} nodes)",
+                        pending_frame.command_name, affected
+                    );
                 }
 
                 // Now benchmark this accumulated state
                 let result = benchmark_accumulated_modifications(
-                    &current_layout_tree, &pending_modifications, frame, data_point_counter
+                    &current_layout_tree,
+                    &pending_modifications,
+                    frame,
+                    data_point_counter,
                 );
 
                 println!(
                     "  📊 Data point #{}: Incremental {} cycles, Full {} cycles, Speedup {:.3}x",
-                    data_point_counter, result.incremental_cycles, result.full_layout_cycles, result.speedup
+                    data_point_counter,
+                    result.incremental_cycles,
+                    result.full_layout_cycles,
+                    result.speedup
                 );
 
                 results.push(result);
-                
+
                 // Clear pending modifications after recalculate
                 pending_modifications.clear();
             }
             _ => {
                 // Other operations (add, replace_value, etc.) - just mark for later
-                println!("  📝 Marking for recalculate: {} ({})", 
-                         frame.command_name, get_frame_description(frame));
+                println!(
+                    "  📝 Marking for recalculate: {} ({})",
+                    frame.command_name,
+                    get_frame_description(frame)
+                );
                 pending_modifications.push(frame.clone());
             }
         }
     }
 
-    println!("\n🎯 Benchmark completed with {} data points from {} total frames", 
-             results.len(), frames.len());
+    println!(
+        "\n🎯 Benchmark completed with {} data points from {} total frames",
+        results.len(),
+        frames.len()
+    );
 
     print_web_layout_trace_summary(&results);
 
@@ -416,10 +432,10 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
 }
 
 fn benchmark_accumulated_modifications(
-    base_tree: &HtmlNode, 
-    pending_modifications: &[LayoutFrame], 
+    base_tree: &HtmlNode,
+    pending_modifications: &[LayoutFrame],
     recalculate_frame: &LayoutFrame,
-    data_point_id: usize
+    data_point_id: usize,
 ) -> WebLayoutFrameResult {
     // Create trees for benchmarking
     let mut tree_incremental = base_tree.clone();
@@ -476,7 +492,8 @@ fn benchmark_accumulated_modifications(
     let accumulated_description = if pending_modifications.is_empty() {
         "recalculate (no pending changes)".to_string()
     } else {
-        let ops: Vec<String> = pending_modifications.iter()
+        let ops: Vec<String> = pending_modifications
+            .iter()
             .map(|f| f.command_name.clone())
             .collect();
         format!("recalculate after [{}]", ops.join(", "))
@@ -500,12 +517,13 @@ fn benchmark_accumulated_modifications(
 fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     let total_frames = results.len();
     let avg_speedup = results.iter().map(|r| r.speedup).sum::<f64>() / total_frames as f64;
-    
+
     // Calculate geometric mean of speedup ratios
     let geometric_mean_speedup = if total_frames > 0 {
-        let product: f64 = results.iter()
+        let product: f64 = results
+            .iter()
             .map(|r| r.speedup)
-            .filter(|&x| x > 0.0)  // Avoid log(0)
+            .filter(|&x| x > 0.0) // Avoid log(0)
             .map(|x| x.ln())
             .sum();
         (product / total_frames as f64).exp()
