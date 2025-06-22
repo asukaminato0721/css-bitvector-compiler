@@ -7,6 +7,15 @@ def main():
     # Read the data
     df = pd.read_csv('web_layout_trace_benchmark.csv')
     
+    # The 'speedup' column in the CSV is a ratio (incremental/full).
+    # We will recalculate it to be a more intuitive speedup factor (full/incremental).
+    # A small epsilon is added to incremental_cycles to prevent division by zero,
+    # treating cases where incremental is zero as having a very high speedup.
+    epsilon = 1e-9
+    df['speedup'] = df['full_layout_cycles'] / (df['incremental_cycles'] + epsilon)
+    # For cases where both are 0, speedup should be 1, not 0.
+    df.loc[(df['full_layout_cycles'] == 0) & (df['incremental_cycles'] == 0), 'speedup'] = 1.0
+
     # Create the performance comparison plot
     plt.figure(figsize=(10, 10))
     
@@ -44,7 +53,7 @@ def main():
     # Set labels and title
     plt.xlabel('Cycles for Full Layout', fontsize=14, fontweight='bold')
     plt.ylabel('Cycles for Incremental Layout', fontsize=14, fontweight='bold')
-    plt.title(f'Layout Engine Performance Comparison\n(Corrected Recalculate-based Benchmark, Geomean: {geometric_mean_speedup:.3f}x)', 
+    plt.title(f'Layout Engine Performance Comparison\n(Corrected Recalculate-based Benchmark, Geomean Speedup: {geometric_mean_speedup:.3f}x)', 
               fontsize=16, fontweight='bold', pad=20)
     
     # Add grid
@@ -89,9 +98,9 @@ def main():
     positive_speedups = df[df['speedup'] > 0]['speedup']
     geometric_mean_speedup = np.exp(np.log(positive_speedups).mean()) if len(positive_speedups) > 0 else 1.0
     
-    print(f'\n⚡ Average performance ratio: {avg_speedup:.3f}x')
-    print(f'📊 Median performance ratio: {median_speedup:.3f}x')
-    print(f'📈 Geometric mean performance ratio: {geometric_mean_speedup:.3f}x')
+    print(f'\n⚡ Average speedup: {avg_speedup:.3f}x')
+    print(f'📊 Median speedup: {median_speedup:.3f}x')
+    print(f'📈 Geometric mean speedup: {geometric_mean_speedup:.3f}x')
     
     # Range analysis
     min_full = df['full_layout_cycles'].min()
@@ -108,8 +117,8 @@ def main():
         subset = df[df['modification_type'] == mod_type]
         avg_ratio = subset['speedup'].mean()
         count = len(subset)
-        faster_count = len(subset[subset['speedup'] < 1.0])
-        print(f'  • {mod_type}: {count} ops, avg ratio {avg_ratio:.3f}x, faster in {faster_count}/{count} cases')
+        faster_count = len(subset[subset['speedup'] > 1.0])
+        print(f'  • {mod_type}: {count} ops, avg speedup {avg_ratio:.3f}x, faster in {faster_count}/{count} cases')
     
     print('\n📈 Methodology Notes:')
     print('  • Each point represents one layout operation frame')

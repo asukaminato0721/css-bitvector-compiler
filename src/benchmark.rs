@@ -431,19 +431,8 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
                     data_point_counter
                 );
 
-                // First apply all pending modifications
-                let mut total_nodes_affected = 0;
-                for pending_frame in &pending_modifications {
-                    let affected =
-                        apply_frame_modifications(&mut current_layout_tree, pending_frame);
-                    total_nodes_affected += affected;
-                    println!(
-                        "    ↳ Applied pending: {} (affected {} nodes)",
-                        pending_frame.command_name, affected
-                    );
-                }
-
-                // Now benchmark this accumulated state
+                // The benchmark function will apply the modifications to its own tree copies.
+                // We pass the current tree state from *before* this batch of modifications.
                 let result = benchmark_accumulated_modifications(
                     &current_layout_tree,
                     &pending_modifications,
@@ -460,6 +449,11 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
                 );
 
                 results.push(result);
+
+                // Now, apply the modifications to the main tree to advance its state for the next frames.
+                for pending_frame in &pending_modifications {
+                    apply_frame_modifications(&mut current_layout_tree, pending_frame);
+                }
 
                 // Clear pending modifications after recalculate
                 pending_modifications.clear();
@@ -497,76 +491,93 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
 fn benchmark_accumulated_modifications(
     base_tree: &HtmlNode,
     pending_modifications: &[LayoutFrame],
-    recalculate_frame: &LayoutFrame,
+    _recalculate_frame: &LayoutFrame,
     data_point_id: usize,
 ) -> WebLayoutFrameResult {
-    // Create trees for benchmarking - both start from the same base
+    // --- Incremental Layout Path ---
+    // 1. Start with the base tree state from before the modifications.
     let mut tree_incremental = base_tree.clone();
-    let mut tree_full_layout = base_tree.clone();
+    tree_incremental.init_parent_pointers();
 
-    // Apply accumulated modifications to both trees simultaneously
-    // This ensures both trees have the same structure and paths remain valid
+    // 2. Run a "warm-up" layout to ensure caches are populated, simulating a steady state.
+    // This is crucial for a fair comparison, as the incremental approach relies on a previously computed state.
+    let _ = invoke_incremental_layout(&mut tree_incremental);
+    clear_dirty_flags(&mut tree_incremental); // Reset dirty flags after warm-up.
+
+    // 3. Apply the pending modifications. This is what we actually want to measure.
+    // The `apply_frame_modifications` function will mark nodes as dirty.
     let mut total_nodes_affected = 0;
     for modification in pending_modifications {
-        // Apply to both trees simultaneously to keep them in sync
-        let affected_incremental = apply_frame_modifications(&mut tree_incremental, modification);
-        let affected_full = apply_frame_modifications(&mut tree_full_layout, modification);
-
-        // Both should affect the same number of nodes (sanity check)
-        assert_eq!(
-            affected_incremental, affected_full,
-            "Incremental and full trees should be affected equally by modification: {:?}",
-            modification.command_name
-        );
-
-        total_nodes_affected += affected_incremental;
+        total_nodes_affected += apply_frame_modifications(&mut tree_incremental, modification);
     }
 
-    let total_nodes = count_nodes(&tree_incremental);
-
-    // Verify both trees have the same structure after modifications
-    assert_eq!(
-        count_nodes(&tree_incremental),
-        count_nodes(&tree_full_layout),
-        "Trees should have the same number of nodes after applying modifications"
-    );
-
-    // WARM-UP PHASE for incremental layout
-    let _ = invoke_incremental_layout(&mut tree_incremental);
-    clear_dirty_flags(&mut tree_incremental);
-
-    // Re-apply modifications to create proper dirty state for incremental processing
-    for modification in pending_modifications {
-        apply_frame_modifications(&mut tree_incremental, modification);
-    }
-
-    // Measure incremental layout performance
+    // 4. Measure the time taken for the incremental layout to process only the dirty nodes.
     let start_incremental = rdtsc();
     let (_, cache_hits, cache_misses) = invoke_incremental_layout(&mut tree_incremental);
     let end_incremental = rdtsc();
     let incremental_cycles = end_incremental - start_incremental;
 
-    // Prepare full layout tree - clear all caches and mark everything dirty
+    // --- Full Re-layout Path (for comparison) ---
+    // 1. Start with a fresh clone of the base tree.
+    let mut tree_full_layout = base_tree.clone();
+    tree_full_layout.init_parent_pointers();
+
+    // 2. Apply the same modifications to it to ensure it has the identical final structure.
+    for modification in pending_modifications {
+        apply_frame_modifications(&mut tree_full_layout, modification);
+    }
+
+    // 3. Prepare the tree for a full re-layout by clearing all caches and marking every node dirty.
     clear_all_layout_cache(&mut tree_full_layout);
     mark_all_dirty_for_layout(&mut tree_full_layout);
 
-    // Measure full layout performance
+    // 4. Measure the time taken for the full re-layout.
     let start_full = rdtsc();
     let _ = invoke_full_layout(&mut tree_full_layout);
     let end_full = rdtsc();
     let full_layout_cycles = end_full - start_full;
 
-    // Correctness check - temporarily disabled for debugging
-    // assert!(
-    //     tree_incremental.compare_css_matches(&tree_full_layout),
-    //     "Mismatch between incremental and full layout results for data point {}",
-    //     data_point_id
-    // );
+    let total_nodes = count_nodes(&tree_incremental);
 
-    let speedup = if full_layout_cycles > 0 {
+    // Final verification: The CSS matching results from both methods must be identical.
+    assert!(
+        tree_incremental.compare_css_matches(&tree_full_layout),
+        "Mismatch between incremental and full layout results for data point {}",
+        data_point_id
+    );
+
+    let speedup = if incremental_cycles > 0 && full_layout_cycles > 0 {
         incremental_cycles as f64 / full_layout_cycles as f64
+    } else if full_layout_cycles > 0 {
+        0.0 // Incremental was free
     } else {
-        1.0
+        1.0 // No work done in either case
+    };
+
+    // Determine the dominant modification type for this data point
+    let modification_type = if pending_modifications.is_empty() {
+        ModificationType::LayoutRecalculation
+    } else {
+        // Prioritize more impactful changes for classification
+        if pending_modifications
+            .iter()
+            .any(|f| f.modification_type == ModificationType::Insertion)
+        {
+            ModificationType::Insertion
+        } else if pending_modifications
+            .iter()
+            .any(|f| f.modification_type == ModificationType::Deletion)
+        {
+            ModificationType::Deletion
+        } else if pending_modifications
+            .iter()
+            .any(|f| f.modification_type == ModificationType::AttributeChange)
+        {
+            ModificationType::AttributeChange
+        } else {
+            // Fallback for any other accumulated change types
+            ModificationType::LayoutRecalculation
+        }
     };
 
     // Create summary description of accumulated modifications
@@ -591,11 +602,16 @@ fn benchmark_accumulated_modifications(
         speedup,
         incremental_cache_hits: cache_hits,
         incremental_cache_misses: cache_misses,
-        modification_type: ModificationType::LayoutRecalculation,
+        modification_type,
     }
 }
 
 fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
+    if results.is_empty() {
+        println!("\nNo data points to summarize.");
+        return;
+    }
+
     let total_frames = results.len();
     let avg_speedup = results.iter().map(|r| r.speedup).sum::<f64>() / total_frames as f64;
 
@@ -611,27 +627,6 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     } else {
         1.0
     };
-
-    let insertions = results
-        .iter()
-        .filter(|r| r.modification_type == ModificationType::Insertion)
-        .count();
-    let deletions = results
-        .iter()
-        .filter(|r| r.modification_type == ModificationType::Deletion)
-        .count();
-    let attribute_changes = results
-        .iter()
-        .filter(|r| r.modification_type == ModificationType::AttributeChange)
-        .count();
-    let layout_recalcs = results
-        .iter()
-        .filter(|r| r.modification_type == ModificationType::LayoutRecalculation)
-        .count();
-    let tree_inits = results
-        .iter()
-        .filter(|r| r.modification_type == ModificationType::TreeInitialization)
-        .count();
 
     let faster_incremental = results.iter().filter(|r| r.speedup < 1.0).count();
     let slower_incremental = results.iter().filter(|r| r.speedup > 1.0).count();
@@ -657,33 +652,6 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     println!("Average speedup (incremental/full): {:.3}x", avg_speedup);
     println!("Geometric mean speedup: {:.3}x", geometric_mean_speedup);
 
-    println!("\n📊 Frame Types (like real web browsing):");
-    println!(
-        "  Tree initializations: {} ({:.1}%)",
-        tree_inits,
-        100.0 * tree_inits as f64 / total_frames as f64
-    );
-    println!(
-        "  Node insertions: {} ({:.1}%)",
-        insertions,
-        100.0 * insertions as f64 / total_frames as f64
-    );
-    println!(
-        "  Node deletions: {} ({:.1}%)",
-        deletions,
-        100.0 * deletions as f64 / total_frames as f64
-    );
-    println!(
-        "  Attribute changes: {} ({:.1}%)",
-        attribute_changes,
-        100.0 * attribute_changes as f64 / total_frames as f64
-    );
-    println!(
-        "  Layout recalculations: {} ({:.1}%)",
-        layout_recalcs,
-        100.0 * layout_recalcs as f64 / total_frames as f64
-    );
-
     println!("\n⚡ Performance Analysis:");
     println!(
         "  Incremental faster: {} ({:.1}%)",
@@ -705,13 +673,6 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     println!("  Overall cache hit rate: {:.1}%", overall_cache_hit_rate);
     println!("  Total cache hits: {}", total_cache_hits);
     println!("  Total cache attempts: {}", total_cache_attempts);
-
-    println!("\n📈 This benchmark simulates the Ladybird methodology:");
-    println!("  ✓ Layout tree dump per frame");
-    println!("  ✓ Frame-by-frame diff analysis");
-    println!("  ✓ Insertion/deletion/attribute change tracking");
-    println!("  ✓ Incremental vs full layout comparison");
-    println!("  ✓ Each frame as one data point");
 }
 
 fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
