@@ -13,5 +13,6 @@ cargo run -r
 cargo run -r --features run-benchmark -- benchmark
 
 # Step 3: Plot the results.
-python3 create_performance_comparison_plot.py
+uv sync
+uv run create_performance_comparison_plot.py
 
