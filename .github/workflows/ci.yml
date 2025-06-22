@@ -22,6 +22,8 @@ jobs:
             ${{ runner.os }}-rust-release
 
 
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Run checks
         run: ./run.sh

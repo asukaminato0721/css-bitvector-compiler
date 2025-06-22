@@ -7,8 +7,7 @@ use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector {
-    // returns child_states
+) -> BitVector { // returns child_states
     if !node.needs_any_recomputation(parent_state) {
         return node.cached_child_states.unwrap_or_default();
     }
@@ -22,10 +21,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 2: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
             intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
         }
 
@@ -40,12 +36,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 8: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Id(
-                "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-            ),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
             intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
         }
 
@@ -60,10 +51,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 14: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
             intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
         }
 
@@ -78,12 +66,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 20: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Id(
-                "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-            ),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
             intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
         }
 
@@ -98,10 +81,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 26: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
             intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
         }
 
@@ -116,12 +96,7 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 32: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-        if node_matches_selector_generated(
-            node,
-            &SimpleSelector::Id(
-                "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-            ),
-        ) {
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
             intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
         }
 
@@ -273,168 +248,143 @@ pub fn process_node_generated_incremental(
 pub fn process_node_generated_from_scratch(
     node: &mut HtmlNode,
     parent_state: BitVector,
-) -> BitVector {
-    // returns child_states
-    let mut intrinsic_matches = BitVector::new();
+) -> BitVector { // returns child_states
+        let mut intrinsic_matches = BitVector::new();
 
-    // Instruction 0: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
-        intrinsic_matches.set_bit(0); // match_Id("gb")
-    }
+        // Instruction 0: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+            intrinsic_matches.set_bit(0); // match_Id("gb")
+        }
 
-    // Instruction 2: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-    ) {
-        intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
-    }
+        // Instruction 2: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
+            intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
+        }
 
-    // Instruction 4: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
-        intrinsic_matches.set_bit(4); // match_Class("gbprcd")
-    }
+        // Instruction 4: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
+            intrinsic_matches.set_bit(4); // match_Class("gbprcd")
+        }
 
-    // Instruction 6: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
-        intrinsic_matches.set_bit(6); // match_Id("gbmpas")
-    }
+        // Instruction 6: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
+            intrinsic_matches.set_bit(6); // match_Id("gbmpas")
+        }
 
-    // Instruction 8: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Id(
-            "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-        ),
-    ) {
-        intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
-    }
+        // Instruction 8: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
+            intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
+        }
 
-    // Instruction 10: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
-        intrinsic_matches.set_bit(10); // match_Class("gsib_a")
-    }
+        // Instruction 10: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
+            intrinsic_matches.set_bit(10); // match_Class("gsib_a")
+        }
 
-    // Instruction 12: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
-        intrinsic_matches.set_bit(0); // match_Id("gb")
-    }
+        // Instruction 12: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+            intrinsic_matches.set_bit(0); // match_Id("gb")
+        }
 
-    // Instruction 14: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-    ) {
-        intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
-    }
+        // Instruction 14: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
+            intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
+        }
 
-    // Instruction 16: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
-        intrinsic_matches.set_bit(4); // match_Class("gbprcd")
-    }
+        // Instruction 16: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
+            intrinsic_matches.set_bit(4); // match_Class("gbprcd")
+        }
 
-    // Instruction 18: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
-        intrinsic_matches.set_bit(6); // match_Id("gbmpas")
-    }
+        // Instruction 18: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
+            intrinsic_matches.set_bit(6); // match_Id("gbmpas")
+        }
 
-    // Instruction 20: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Id(
-            "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-        ),
-    ) {
-        intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
-    }
+        // Instruction 20: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
+            intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
+        }
 
-    // Instruction 22: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
-        intrinsic_matches.set_bit(10); // match_Class("gsib_a")
-    }
+        // Instruction 22: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
+            intrinsic_matches.set_bit(10); // match_Class("gsib_a")
+        }
 
-    // Instruction 24: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
-        intrinsic_matches.set_bit(0); // match_Id("gb")
-    }
+        // Instruction 24: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+            intrinsic_matches.set_bit(0); // match_Id("gb")
+        }
 
-    // Instruction 26: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string()),
-    ) {
-        intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
-    }
+        // Instruction 26: CheckAndSetBit { selector: Class("gbqfb,.gbqfba,.gbqfbb"), bit_pos: 2 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb,.gbqfba,.gbqfbb".to_string())) {
+            intrinsic_matches.set_bit(2); // match_Class("gbqfb,.gbqfba,.gbqfbb")
+        }
 
-    // Instruction 28: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
-        intrinsic_matches.set_bit(4); // match_Class("gbprcd")
-    }
+        // Instruction 28: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 4 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
+            intrinsic_matches.set_bit(4); // match_Class("gbprcd")
+        }
 
-    // Instruction 30: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
-        intrinsic_matches.set_bit(6); // match_Id("gbmpas")
-    }
+        // Instruction 30: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 6 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
+            intrinsic_matches.set_bit(6); // match_Id("gbmpas")
+        }
 
-    // Instruction 32: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
-    if node_matches_selector_generated(
-        node,
-        &SimpleSelector::Id(
-            "gws-output-pages-elements-homepage_additional_languages__als".to_string(),
-        ),
-    ) {
-        intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
-    }
+        // Instruction 32: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 8 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
+            intrinsic_matches.set_bit(8); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
+        }
 
-    // Instruction 34: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
-        intrinsic_matches.set_bit(10); // match_Class("gsib_a")
-    }
+        // Instruction 34: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 10 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
+            intrinsic_matches.set_bit(10); // match_Class("gsib_a")
+        }
 
-    // Instruction 36: CheckAndSetBit { selector: Type("div"), bit_pos: 12 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
-        intrinsic_matches.set_bit(12); // match_Type("div")
-    }
+        // Instruction 36: CheckAndSetBit { selector: Type("div"), bit_pos: 12 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
+            intrinsic_matches.set_bit(12); // match_Type("div")
+        }
 
-    // Instruction 38: CheckAndSetBit { selector: Type("span"), bit_pos: 14 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
-        intrinsic_matches.set_bit(14); // match_Type("span")
-    }
+        // Instruction 38: CheckAndSetBit { selector: Type("span"), bit_pos: 14 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
+            intrinsic_matches.set_bit(14); // match_Type("span")
+        }
 
-    // Instruction 40: CheckAndSetBit { selector: Type("a"), bit_pos: 16 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
-        intrinsic_matches.set_bit(16); // match_Type("a")
-    }
+        // Instruction 40: CheckAndSetBit { selector: Type("a"), bit_pos: 16 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
+            intrinsic_matches.set_bit(16); // match_Type("a")
+        }
 
-    // Instruction 42: CheckAndSetBit { selector: Type("input"), bit_pos: 18 }
-    if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
-        intrinsic_matches.set_bit(18); // match_Type("input")
-    }
+        // Instruction 42: CheckAndSetBit { selector: Type("input"), bit_pos: 18 }
+        if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
+            intrinsic_matches.set_bit(18); // match_Type("input")
+        }
 
-    // Instruction 44: CheckAndSetBit { selector: Class("gbts"), bit_pos: 20 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
-        intrinsic_matches.set_bit(20); // match_Class("gbts")
-    }
+        // Instruction 44: CheckAndSetBit { selector: Class("gbts"), bit_pos: 20 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
+            intrinsic_matches.set_bit(20); // match_Class("gbts")
+        }
 
-    // Instruction 46: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 22 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
-        intrinsic_matches.set_bit(22); // match_Class("gbmt")
-    }
+        // Instruction 46: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 22 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
+            intrinsic_matches.set_bit(22); // match_Class("gbmt")
+        }
 
-    // Instruction 48: CheckAndSetBit { selector: Class("lsb"), bit_pos: 24 }
-    if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
-        intrinsic_matches.set_bit(24); // match_Class("lsb")
-    }
+        // Instruction 48: CheckAndSetBit { selector: Class("lsb"), bit_pos: 24 }
+        if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
+            intrinsic_matches.set_bit(24); // match_Class("lsb")
+        }
 
-    // Instruction 50: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
-        intrinsic_matches.set_bit(0); // match_Id("gb")
-    }
+        // Instruction 50: CheckAndSetBit { selector: Id("gb"), bit_pos: 0 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+            intrinsic_matches.set_bit(0); // match_Id("gb")
+        }
 
-    // Instruction 52: CheckAndSetBit { selector: Id("gbz"), bit_pos: 26 }
-    if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
-        intrinsic_matches.set_bit(26); // match_Id("gbz")
-    }
+        // Instruction 52: CheckAndSetBit { selector: Id("gbz"), bit_pos: 26 }
+        if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
+            intrinsic_matches.set_bit(26); // match_Id("gbz")
+        }
 
     let mut current_matches = intrinsic_matches;
     let mut child_states = BitVector::new();
@@ -531,31 +481,20 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
     }
 }
 
+
 /// Incremental processing driver with statistics tracking
 pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
-    process_tree_recursive_incremental(
-        root,
-        BitVector::new(),
-        &mut total_nodes,
-        &mut cache_hits,
-        &mut cache_misses,
-    );
+    process_tree_recursive_incremental(root, BitVector::new(), &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_incremental(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-    hits: &mut usize,
-    misses: &mut usize,
-) {
+fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: BitVector,
+                                    total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
-    if !node.needs_any_recomputation(parent_state) {
-        // Assumes HtmlNode has needs_any_recomputation
+    if !node.needs_any_recomputation(parent_state) { // Assumes HtmlNode has needs_any_recomputation
         *hits += 1;
         return;
     }
@@ -573,17 +512,14 @@ pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize)
     (total_nodes, 0, total_nodes) // 0 hits, all misses
 }
 
-fn process_tree_recursive_from_scratch(
-    node: &mut HtmlNode,
-    parent_state: BitVector,
-    total: &mut usize,
-) {
+fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: BitVector, total: &mut usize) {
     *total += 1;
     let child_states = process_node_generated_from_scratch(node, parent_state);
     for child in node.children.iter_mut() {
         process_tree_recursive_from_scratch(child, child_states, total);
     }
 }
+
 
 fn main() {
     // This is the main function for the generated example.

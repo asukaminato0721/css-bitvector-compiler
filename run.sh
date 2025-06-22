@@ -12,5 +12,5 @@ rm -f src/generated_css_functions.rs examples/google_trace_test.rs
 cargo run -r --features run-benchmark -- benchmark
 
 # Step 2: Plot the results.
+uv sync
 python3 create_performance_comparison_plot.py
-
