@@ -49,8 +49,12 @@ fn find_node_by_path_mut<'a>(node: &'a mut HtmlNode, path: &[usize]) -> Option<&
     if next_index < node.children.len() {
         find_node_by_path_mut(&mut node.children[next_index], &path[1..])
     } else {
-        println!("    DEBUG: Path finding failed - node '{}' has {} children, but tried to access index {}", 
-                 node.tag_name, node.children.len(), next_index);
+        println!(
+            "    DEBUG: Path finding failed - node '{}' has {} children, but tried to access index {}",
+            node.tag_name,
+            node.children.len(),
+            next_index
+        );
         None
     }
 }
@@ -149,11 +153,18 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                 if let Some(new_tree) = json_to_html_node(node_data) {
                     *tree = new_tree;
                     tree.init_parent_pointers();
-                    println!("    DEBUG: DOM tree initialized - root: {}, children: {}", 
-                             tree.tag_name, tree.children.len());
+                    println!(
+                        "    DEBUG: DOM tree initialized - root: {}, children: {}",
+                        tree.tag_name,
+                        tree.children.len()
+                    );
                     for (i, child) in tree.children.iter().enumerate() {
-                        println!("    DEBUG: Child {}: {} (has {} children)", 
-                                 i, child.tag_name, child.children.len());
+                        println!(
+                            "    DEBUG: Child {}: {} (has {} children)",
+                            i,
+                            child.tag_name,
+                            child.children.len()
+                        );
                     }
                     return count_nodes(tree);
                 }
@@ -169,20 +180,27 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             println!("    DEBUG: add operation with path {:?}", path);
-            
+
             if path.is_empty() {
                 println!("    DEBUG: Empty path for add operation");
                 return 0;
             }
-            
+
             // For add operations, the last index is the insertion position
             let insertion_index = path[path.len() - 1];
             let parent_path = &path[..path.len() - 1];
-            
-            println!("    DEBUG: Looking for parent at path {:?}, will insert at index {}", parent_path, insertion_index);
-            
+
+            println!(
+                "    DEBUG: Looking for parent at path {:?}, will insert at index {}",
+                parent_path, insertion_index
+            );
+
             if let Some(parent) = find_node_by_path_mut(tree, parent_path) {
-                println!("    DEBUG: Found parent node: {} (has {} children)", parent.tag_name, parent.children.len());
+                println!(
+                    "    DEBUG: Found parent node: {} (has {} children)",
+                    parent.tag_name,
+                    parent.children.len()
+                );
                 if let Some(node_data) = frame.command_data.get("node") {
                     if let Some(new_child) = json_to_html_node(node_data) {
                         // Insert at the specified index (or append if index equals length)
@@ -192,7 +210,11 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                             parent.init_parent_pointers();
                             return 1;
                         } else {
-                            println!("    DEBUG: Insertion index {} out of range for {} children", insertion_index, parent.children.len());
+                            println!(
+                                "    DEBUG: Insertion index {} out of range for {} children",
+                                insertion_index,
+                                parent.children.len()
+                            );
                         }
                     } else {
                         println!("    DEBUG: Failed to create child node from JSON");
@@ -201,14 +223,24 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                     println!("    DEBUG: No 'node' field in command_data");
                 }
             } else {
-                println!("    DEBUG: Failed to find parent node at path {:?}", parent_path);
-                println!("    DEBUG: Tree has {} nodes, root tag: {}", count_nodes(tree), tree.tag_name);
+                println!(
+                    "    DEBUG: Failed to find parent node at path {:?}",
+                    parent_path
+                );
+                println!(
+                    "    DEBUG: Tree has {} nodes, root tag: {}",
+                    count_nodes(tree),
+                    tree.tag_name
+                );
             }
             0
         }
         "replace_value" | "insert_value" => {
             let path = extract_path_from_command(&frame.command_data);
-            println!("    DEBUG: {} operation with path {:?}", frame.command_name, path);
+            println!(
+                "    DEBUG: {} operation with path {:?}",
+                frame.command_name, path
+            );
             if let Some(target_node) = find_node_by_path_mut(tree, &path) {
                 println!("    DEBUG: Found target node: {}", target_node.tag_name);
                 if let Some(key) = frame.command_data.get("key").and_then(|k| k.as_str()) {
@@ -248,7 +280,11 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                 }
             } else {
                 println!("    DEBUG: Failed to find target node at path {:?}", path);
-                println!("    DEBUG: Tree has {} nodes, root tag: {}", count_nodes(tree), tree.tag_name);
+                println!(
+                    "    DEBUG: Tree has {} nodes, root tag: {}",
+                    count_nodes(tree),
+                    tree.tag_name
+                );
             }
             0
         }
@@ -475,20 +511,25 @@ fn benchmark_accumulated_modifications(
         // Apply to both trees simultaneously to keep them in sync
         let affected_incremental = apply_frame_modifications(&mut tree_incremental, modification);
         let affected_full = apply_frame_modifications(&mut tree_full_layout, modification);
-        
+
         // Both should affect the same number of nodes (sanity check)
-        assert_eq!(affected_incremental, affected_full, 
-                   "Incremental and full trees should be affected equally by modification: {:?}", 
-                   modification.command_name);
-        
+        assert_eq!(
+            affected_incremental, affected_full,
+            "Incremental and full trees should be affected equally by modification: {:?}",
+            modification.command_name
+        );
+
         total_nodes_affected += affected_incremental;
     }
 
     let total_nodes = count_nodes(&tree_incremental);
-    
+
     // Verify both trees have the same structure after modifications
-    assert_eq!(count_nodes(&tree_incremental), count_nodes(&tree_full_layout),
-               "Trees should have the same number of nodes after applying modifications");
+    assert_eq!(
+        count_nodes(&tree_incremental),
+        count_nodes(&tree_full_layout),
+        "Trees should have the same number of nodes after applying modifications"
+    );
 
     // WARM-UP PHASE for incremental layout
     let _ = invoke_incremental_layout(&mut tree_incremental);
