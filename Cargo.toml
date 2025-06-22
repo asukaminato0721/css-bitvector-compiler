@@ -24,3 +24,14 @@ serde_json = "1.0"
 scraper = "0.17"
 cssparser = "0.29"
 regex = "1.7"
+
+[build-dependencies]
+serde_json = "1.0"
+# Add other necessary build dependencies here, e.g., cssparser, regex if needed by build script logic
+# For now, only serde_json seems directly needed for command.json parsing in build.rs
+# The actual CSS parsing and code generation logic will be ported from src/lib.rs and src/main.rs,
+# so those dependencies (cssparser, regex) might be needed if that logic is directly used in build.rs
+# or if we call functions from the library that need them.
+# Let's assume the library functions will be called.
+cssparser = "0.29"
+regex = "1.7"
