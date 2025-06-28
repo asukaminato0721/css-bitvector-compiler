@@ -101,6 +101,9 @@ def main():
     print(f'\n⚡ Average speedup: {avg_speedup:.3f}x')
     print(f'📊 Median speedup: {median_speedup:.3f}x')
     print(f'📈 Geometric mean speedup: {geometric_mean_speedup:.3f}x')
+    with open("./geometric_mean_speedup.txt", "a") as f:
+        f.write(f'Geometric mean speedup: {geometric_mean_speedup:.3f}x\n')
+
     
     # Range analysis
     min_full = df['full_layout_cycles'].min()

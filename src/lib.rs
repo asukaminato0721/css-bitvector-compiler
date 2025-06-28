@@ -127,13 +127,17 @@ impl GoogleNode {
 }
 
 /// whether a part of input is: 1, 0, or unused
-#[derive(Debug, Clone, Copy)]
-enum IState {
-    IOne, IZero, IUnused
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IState {
+    IOne,
+    IZero,
+    IUnused,
 }
-#[derive(Debug, Clone, Copy)]
-enum OState {
-    OOne, OZero, OFromParent
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OState {
+    OOne,
+    OZero,
+    OFromParent,
 }
 
 // Export BitVector
@@ -396,7 +400,7 @@ impl SelectorMatchingIndex {
 // (also, you should tag our old commit before today's work, we want the old version to compare in benchmark)  // it's already in the commit.
 // note that not all input state is used, some state are downright ignored.
 // as an example, imagine we have a query A B, saying we should match a node satisfying predicate B,
-// where parent satisfy predicate A
+// where parent satsify predicate A
 // the code will look something like this:
 // if (B(self)) {
 //   if (parent_bitvector.A) {
@@ -405,8 +409,8 @@ impl SelectorMatchingIndex {
 // }
 // in such case, you can see that we are not actually reading A, if branch is not entered
 // so, suppose the parent A changed, we should do 0 work recomputing
-// IMPLEMENTED: We now check child state first in generated code to optimize parent-dependent rules
-// 
+// todo this, we have to update co/pute/ let me explain how this work with an example
+//
 // Export HtmlNode structure
 #[derive(Debug, Clone)]
 pub struct HtmlNode {
@@ -417,13 +421,12 @@ pub struct HtmlNode {
     pub css_match_bitvector: BitVector,
     pub is_self_dirty: bool,
     pub has_dirty_descendant: bool,
-    pub cached_parent_state: Option<BitVector>,
+    pub cached_parent_state: Option<Vec<IState>>,
     pub cached_node_intrinsic: Option<BitVector>,
     pub cached_child_states: Option<BitVector>,
     pub parent: Option<*mut HtmlNode>,
 }
-// IMPLEMENTED: The idea is to check the child state first, so we don't need to check parent if child doesn't meet the condition.
-// This optimization is now implemented in the generated parent-dependent rules code.
+// the idea is that check the child state first. so we dont need check parent if child not meet.
 //
 impl HtmlNode {
     pub fn new(tag_name: &str) -> Self {
@@ -556,10 +559,40 @@ impl HtmlNode {
     }
 
     pub fn needs_any_recomputation(&self, new_parent_state: &BitVector) -> bool {
-        self.is_self_dirty
+        self.has_relevant_parent_state_changed(new_parent_state)
+            || self.is_self_dirty
             || self.has_dirty_descendant
             || self.cached_parent_state.is_none()
-            || self.cached_parent_state.as_ref().unwrap() != new_parent_state
+    }
+
+    /// Check if any relevant part of the parent state has changed
+    pub fn has_relevant_parent_state_changed(&self, new_parent_state: &BitVector) -> bool {
+        if let Some(cached_states) = &self.cached_parent_state {
+            // Check each tracked bit position
+            for (bit_pos, &cached_state) in cached_states.iter().enumerate() {
+                match cached_state {
+                    IState::IOne => {
+                        // We cached that this bit was 1, check if it's still 1
+                        if !new_parent_state.is_bit_set(bit_pos) {
+                            return true; // Changed from 1 to 0
+                        }
+                    }
+                    IState::IZero => {
+                        // We cached that this bit was 0, check if it's still 0
+                        if new_parent_state.is_bit_set(bit_pos) {
+                            return true; // Changed from 0 to 1
+                        }
+                    }
+                    IState::IUnused => {
+                        // We didn't use this bit, so changes don't matter
+                        // No need to check - optimization!
+                    }
+                }
+            }
+            false // No relevant changes detected
+        } else {
+            true // No cached state, need to recompute
+        }
     }
 
     pub fn mark_clean(&mut self) {
@@ -668,6 +701,10 @@ pub struct TreeNFAProgram {
     pub instructions: Vec<NFAInstruction>,
     pub state_names: HashMap<usize, String>,
     pub total_bits: usize,
+    // String interning for optimized selector matching
+    pub string_to_id: HashMap<String, u32>,
+    pub id_to_string: HashMap<u32, String>,
+    pub next_string_id: u32,
 }
 
 impl TreeNFAProgram {
@@ -676,7 +713,35 @@ impl TreeNFAProgram {
     }
 
     pub fn add_instruction(&mut self, instruction: NFAInstruction) {
+        // Intern strings from this instruction
+        match &instruction {
+            NFAInstruction::CheckAndSetBit { selector, .. } => {
+                self.intern_selector_strings(selector);
+            }
+            NFAInstruction::CheckParentAndSetBit { child_selector, .. } => {
+                self.intern_selector_strings(child_selector);
+            }
+            NFAInstruction::PropagateToChildren { .. } => {
+                // No strings to intern
+            }
+        }
+
         self.instructions.push(instruction);
+    }
+
+    fn intern_selector_strings(&mut self, selector: &SimpleSelector) {
+        let string_to_intern = match selector {
+            SimpleSelector::Type(tag) => tag,
+            SimpleSelector::Class(class) => class,
+            SimpleSelector::Id(id) => id,
+        };
+
+        if !self.string_to_id.contains_key(string_to_intern) {
+            let id = self.next_string_id;
+            self.string_to_id.insert(string_to_intern.clone(), id);
+            self.id_to_string.insert(id, string_to_intern.clone());
+            self.next_string_id += 1;
+        }
     }
 
     pub fn set_state_name(&mut self, bit_pos: usize, name: String) {
@@ -690,13 +755,20 @@ impl TreeNFAProgram {
         let mut code = String::new();
 
         // Add necessary imports for the generated code to be self-contained
-        code.push_str("use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n\n");
+        code.push_str(
+            "use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector, IState};\n",
+        );
+        code.push_str("use std::collections::HashMap;\n");
+        code.push_str("use std::sync::OnceLock;\n\n");
 
         // Add capacity constant for the generated BitVectors
         code.push_str(&format!(
             "const BITVECTOR_CAPACITY: usize = {};\n\n",
             self.total_bits
         ));
+
+        // Generate string interning tables and optimized matcher
+        code.push_str(&self.generate_string_interning_code());
 
         // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
@@ -722,11 +794,16 @@ impl TreeNFAProgram {
         code.push_str(
             "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
         );
+        code.push_str("    \n");
+        code.push_str("    // Track which parent state bits we actually use\n");
+        code.push_str(
+            "    let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];\n",
+        );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    node.cached_parent_state = Some(parent_state.clone());\n");
+        code.push_str("    node.cached_parent_state = Some(parent_usage_tracker);\n");
         code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
@@ -749,10 +826,29 @@ impl TreeNFAProgram {
 
         // --- Generate Helper Function ---
         code.push_str("pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {\n");
+        code.push_str("    let string_map = get_string_to_id_map();\n");
         code.push_str("    match selector {\n");
-        code.push_str("        SimpleSelector::Type(tag) => node.tag_name == *tag,\n");
-        code.push_str("        SimpleSelector::Class(class) => node.classes.contains(class),\n");
-        code.push_str("        SimpleSelector::Id(id) => node.id.as_deref() == Some(id),\n");
+        code.push_str("        SimpleSelector::Type(tag) => {\n");
+        code.push_str("            if let Some(tag_id) = string_map.get(tag.as_str()) {\n");
+        code.push_str("                matches_tag_id(node, *tag_id)\n");
+        code.push_str("            } else {\n");
+        code.push_str("                false\n");
+        code.push_str("            }\n");
+        code.push_str("        },\n");
+        code.push_str("        SimpleSelector::Class(class) => {\n");
+        code.push_str("            if let Some(class_id) = string_map.get(class.as_str()) {\n");
+        code.push_str("                matches_class_id(node, *class_id)\n");
+        code.push_str("            } else {\n");
+        code.push_str("                false\n");
+        code.push_str("            }\n");
+        code.push_str("        },\n");
+        code.push_str("        SimpleSelector::Id(id) => {\n");
+        code.push_str("            if let Some(id_id) = string_map.get(id.as_str()) {\n");
+        code.push_str("                matches_id_id(node, *id_id)\n");
+        code.push_str("            } else {\n");
+        code.push_str("                false\n");
+        code.push_str("            }\n");
+        code.push_str("        },\n");
         code.push_str("    }\n");
         code.push_str("}\n\n");
 
@@ -773,19 +869,24 @@ impl TreeNFAProgram {
                     "        // Instruction {}: {:?}\n",
                     i, instruction
                 ));
-                let selector_str = match selector {
+
+                // Use optimized matching with integer IDs
+                let match_condition = match selector {
                     SimpleSelector::Type(tag) => {
-                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                        let tag_id = self.string_to_id[tag];
+                        format!("matches_tag_id(node, {})", tag_id)
                     }
                     SimpleSelector::Class(class) => {
-                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                        let class_id = self.string_to_id[class];
+                        format!("matches_class_id(node, {})", class_id)
                     }
-                    SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
+                    SimpleSelector::Id(id) => {
+                        let id_id = self.string_to_id[id];
+                        format!("matches_id_id(node, {})", id_id)
+                    }
                 };
-                code.push_str(&format!(
-                    "        if node_matches_selector_generated(node, &{}) {{\n",
-                    selector_str
-                ));
+
+                code.push_str(&format!("        if {} {{\n", match_condition));
                 code.push_str(&format!(
                     "            intrinsic_matches.set_bit({}); // {}\n",
                     bit_pos,
@@ -808,18 +909,38 @@ impl TreeNFAProgram {
                 result_bit,
             } = instruction
             {
-                let child_selector_str = match child_selector {
+                // Use optimized matching with integer IDs
+                let match_condition = match child_selector {
                     SimpleSelector::Type(tag) => {
-                        format!("SimpleSelector::Type(\"{}\".to_string())", tag)
+                        let tag_id = self.string_to_id[tag];
+                        format!("matches_tag_id(node, {})", tag_id)
                     }
                     SimpleSelector::Class(class) => {
-                        format!("SimpleSelector::Class(\"{}\".to_string())", class)
+                        let class_id = self.string_to_id[class];
+                        format!("matches_class_id(node, {})", class_id)
                     }
-                    SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
+                    SimpleSelector::Id(id) => {
+                        let id_id = self.string_to_id[id];
+                        format!("matches_id_id(node, {})", id_id)
+                    }
                 };
-                // Optimize: check child state first, so we don't need to check parent if child doesn't meet condition
-                code.push_str(&format!("    if node_matches_selector_generated(node, &{}) {{\n", child_selector_str));
-                code.push_str(&format!("        if parent_state.is_bit_set({}) {{\n", parent_state_bit));
+
+                // First check if child matches (optimization: check child condition first)
+                code.push_str(&format!("    if {} {{\n", match_condition));
+                code.push_str(&format!(
+                    "        // Track that we're using parent state bit {}\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!(
+                    "        if {} < parent_usage_tracker.len() {{\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!("            parent_usage_tracker[{}] = if parent_state.is_bit_set({}) {{ IState::IOne }} else {{ IState::IZero }};\n", parent_state_bit, parent_state_bit));
+                code.push_str("        }\n");
+                code.push_str(&format!(
+                    "        if parent_state.is_bit_set({}) {{\n",
+                    parent_state_bit
+                ));
                 code.push_str(&format!(
                     "            current_matches.set_bit({}); // {}\n",
                     result_bit,
@@ -905,22 +1026,80 @@ fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVe
 "#.to_string()
     }
 
-    pub fn print_program(&self) {
-        println!("=== Generated Tree NFA Program ===");
-        println!("Total bits used: {}", self.total_bits);
-        println!("\nState mapping:");
-        for i in 0..self.total_bits {
-            if let Some(name) = self.state_names.get(&i) {
-                println!("  Bit {}: {}", i, name);
-            }
+    fn generate_string_interning_code(&self) -> String {
+        let mut code = String::new();
+
+        // Generate static hash map for string-to-id lookup using OnceLock
+        code.push_str("// String interning for optimized selector matching\n");
+        code.push_str(
+            "static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();\n\n",
+        );
+        code.push_str("fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {\n");
+        code.push_str("    STRING_TO_ID.get_or_init(|| {\n");
+        code.push_str("        let mut map = HashMap::new();\n");
+
+        for (string, id) in &self.string_to_id {
+            code.push_str(&format!("        map.insert(\"{}\", {});\n", string, id));
         }
 
-        println!("\nInstructions:");
-        for (i, instruction) in self.instructions.iter().enumerate() {
-            println!("  {}: {:?}", i, instruction);
-        }
-        println!("===================================\n");
+        code.push_str("        map\n");
+        code.push_str("    })\n");
+        code.push_str("}\n\n");
+
+        // Generate optimized node matching function using switch on integer IDs
+        code.push_str("// Fast selector matching using integer IDs and switch\n");
+        code.push_str("#[inline]\n");
+        code.push_str("fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {\n");
+        code.push_str("    get_string_to_id_map().get(node.tag_name.as_str()).copied()\n");
+        code.push_str("}\n\n");
+
+        code.push_str("#[inline]\n");
+        code.push_str("fn get_node_id_id(node: &HtmlNode) -> Option<u32> {\n");
+        code.push_str("    node.id.as_ref().and_then(|id| get_string_to_id_map().get(id.as_str()).copied())\n");
+        code.push_str("}\n\n");
+
+        code.push_str("#[inline]\n");
+        code.push_str("fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {\n");
+        code.push_str("    let string_map = get_string_to_id_map();\n");
+        code.push_str("    for class in &node.classes {\n");
+        code.push_str("        if let Some(id) = string_map.get(class.as_str()) {\n");
+        code.push_str("            if *id == class_id {\n");
+        code.push_str("                return true;\n");
+        code.push_str("            }\n");
+        code.push_str("        }\n");
+        code.push_str("    }\n");
+        code.push_str("    false\n");
+        code.push_str("}\n\n");
+
+        // Generate fast selector matching using switch statements
+        code.push_str("// Optimized selector matching with switch on integer IDs\n");
+        code.push_str("#[inline]\n");
+        code.push_str("fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {\n");
+        code.push_str("    if let Some(node_tag_id) = get_node_tag_id(node) {\n");
+        code.push_str("        node_tag_id == tag_id\n");
+        code.push_str("    } else {\n");
+        code.push_str("        false\n");
+        code.push_str("    }\n");
+        code.push_str("}\n\n");
+
+        code.push_str("#[inline]\n");
+        code.push_str("fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {\n");
+        code.push_str("    if let Some(node_id_id) = get_node_id_id(node) {\n");
+        code.push_str("        node_id_id == id_id\n");
+        code.push_str("    } else {\n");
+        code.push_str("        false\n");
+        code.push_str("    }\n");
+        code.push_str("}\n\n");
+
+        code.push_str("#[inline]\n");
+        code.push_str("fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {\n");
+        code.push_str("    node_has_class_id(node, class_id)\n");
+        code.push_str("}\n\n");
+
+        code
     }
+
+    // ...existing code...
 }
 
 // Export CSS Compiler
@@ -1045,8 +1224,8 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
             rules.extend(parsed_rules);
         }
         Err(e) => {
-            eprintln!("⚠️ CSS parsing error, falling back to basic parsing: {}", e);
-            rules.extend(parse_css_with_regex_fallback(css_content));
+            eprintln!("⚠️ CSS parsing error{}", e);
+            panic!("CSS parsing failed");
         }
     }
 
@@ -1139,55 +1318,6 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
     }
 
     Ok(rules)
-}
-
-/// Fallback regex-based CSS parser (simplified version of the original)
-fn parse_css_with_regex_fallback(css_content: &str) -> Vec<CssRule> {
-    use regex::Regex;
-    let mut rules = Vec::new();
-
-    // Regex patterns for CSS selectors
-    let class_regex = Regex::new(r"\.([a-zA-Z_\-][a-zA-Z0-9_\-]*)\s*\{").unwrap();
-    let id_regex = Regex::new(r"#([a-zA-Z_\-][a-zA-Z0-9_\-]*)\s*\{").unwrap();
-    let type_regex = Regex::new(r"^([a-zA-Z][a-zA-Z0-9]*)\s*\{").unwrap();
-
-    // Find all class selectors
-    for captures in class_regex.captures_iter(css_content) {
-        if let Some(class_name) = captures.get(1) {
-            rules.push(CssRule::Simple(SimpleSelector::Class(
-                class_name.as_str().to_string(),
-            )));
-        }
-    }
-
-    // Find all ID selectors
-    for captures in id_regex.captures_iter(css_content) {
-        if let Some(id_name) = captures.get(1) {
-            rules.push(CssRule::Simple(SimpleSelector::Id(
-                id_name.as_str().to_string(),
-            )));
-        }
-    }
-
-    // Find type selectors (simplified - just looking at line beginnings)
-    for line in css_content.lines() {
-        let line = line.trim();
-        if let Some(captures) = type_regex.captures(line) {
-            if let Some(type_name) = captures.get(1) {
-                let type_str = type_name.as_str().to_lowercase();
-                // Only add common HTML elements
-                if [
-                    "div", "span", "p", "a", "input", "body", "html", "h1", "h2", "h3",
-                ]
-                .contains(&type_str.as_str())
-                {
-                    rules.push(CssRule::Simple(SimpleSelector::Type(type_str)));
-                }
-            }
-        }
-    }
-
-    rules
 }
 
 // DOM creation helper functions
