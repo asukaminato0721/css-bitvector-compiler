@@ -126,6 +126,16 @@ impl GoogleNode {
     }
 }
 
+/// whether a part of input is: 1, 0, or unused
+#[derive(Debug, Clone, Copy)]
+enum IState {
+    IOne, IZero, IUnused
+}
+#[derive(Debug, Clone, Copy)]
+enum OState {
+    OOne, OZero, OFromParent
+}
+
 // Export BitVector
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BitVector {
@@ -382,6 +392,21 @@ impl SelectorMatchingIndex {
     }
 }
 
+// lets generalize IState first - this is two separate but very similar optimization
+// (also, you should tag our old commit before today's work, we want the old version to compare in benchmark)  // it's already in the commit.
+// note that not all input state is used, some state are downright ignored.
+// as an example, imagine we have a query A B, saying we should match a node satisfying predicate B,
+// where parent satisfy predicate A
+// the code will look something like this:
+// if (B(self)) {
+//   if (parent_bitvector.A) {
+//     self.out[AB] = 1;
+//   }
+// }
+// in such case, you can see that we are not actually reading A, if branch is not entered
+// so, suppose the parent A changed, we should do 0 work recomputing
+// IMPLEMENTED: We now check child state first in generated code to optimize parent-dependent rules
+// 
 // Export HtmlNode structure
 #[derive(Debug, Clone)]
 pub struct HtmlNode {
@@ -397,7 +422,9 @@ pub struct HtmlNode {
     pub cached_child_states: Option<BitVector>,
     pub parent: Option<*mut HtmlNode>,
 }
-
+// IMPLEMENTED: The idea is to check the child state first, so we don't need to check parent if child doesn't meet the condition.
+// This optimization is now implemented in the generated parent-dependent rules code.
+//
 impl HtmlNode {
     pub fn new(tag_name: &str) -> Self {
         HtmlNode {
@@ -790,14 +817,17 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Id(id) => format!("SimpleSelector::Id(\"{}\".to_string())", id),
                 };
-                code.push_str(&format!("    if parent_state.is_bit_set({}) && node_matches_selector_generated(node, &{}) {{\n", parent_state_bit, child_selector_str));
+                // Optimize: check child state first, so we don't need to check parent if child doesn't meet condition
+                code.push_str(&format!("    if node_matches_selector_generated(node, &{}) {{\n", child_selector_str));
+                code.push_str(&format!("        if parent_state.is_bit_set({}) {{\n", parent_state_bit));
                 code.push_str(&format!(
-                    "        current_matches.set_bit({}); // {}\n",
+                    "            current_matches.set_bit({}); // {}\n",
                     result_bit,
                     self.state_names
                         .get(result_bit)
                         .unwrap_or(&format!("bit_{}", result_bit))
                 ));
+                code.push_str("        }\n");
                 code.push_str("    }\n");
             }
         }
