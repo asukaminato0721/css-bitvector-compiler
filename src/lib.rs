@@ -565,6 +565,13 @@ impl HtmlNode {
             || self.cached_parent_state.is_none()
     }
 
+    /// Check if only the node itself needs recomputation (not including dirty descendants)
+    pub fn needs_self_recomputation(&self, new_parent_state: &BitVector) -> bool {
+        self.has_relevant_parent_state_changed(new_parent_state)
+            || self.is_self_dirty
+            || self.cached_parent_state.is_none()
+    }
+
     /// Check if any relevant part of the parent state has changed
     pub fn has_relevant_parent_state_changed(&self, new_parent_state: &BitVector) -> bool {
         if let Some(cached_states) = &self.cached_parent_state {
@@ -995,17 +1002,26 @@ pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize
 fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVector,
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
-    if !node.needs_any_recomputation(parent_state) {
-        *hits += 1;
-        // Skip entire subtree when cached
-        return;
-    }
     
-    *misses += 1;
-    let child_states = process_node_generated_incremental(node, parent_state);
-    for child in node.children.iter_mut() {
-        process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+    // Logic 1: Check if node itself needs recomputation
+    let child_states = if node.needs_self_recomputation(parent_state) {
+        *misses += 1;
+        // Recompute node and get fresh child_states
+        process_node_generated_incremental(node, parent_state)
+    } else {
+        *hits += 1;
+        // Use cached child_states - major optimization for internal nodes!
+        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+    };
+    
+    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
+    if node.has_dirty_descendant {
+        // Recurse into children only if there are dirty descendants
+        for child in node.children.iter_mut() {
+            process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+        }
     }
+    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 
 /// From-scratch processing driver for comparison

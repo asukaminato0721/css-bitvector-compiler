@@ -10,116 +10,116 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("gbqfbw", 96);
-        map.insert("gbpm", 92);
-        map.insert("gbts", 40);
-        map.insert("gssb_i", 64);
-        map.insert("gbmc", 9);
-        map.insert("gsfs", 47);
-        map.insert("gbpms2", 23);
-        map.insert("gog", 101);
-        map.insert("gbmpid", 89);
-        map.insert("gws-output-pages-elements-homepage_additional_languages__als", 103);
-        map.insert("gbmpala", 13);
-        map.insert("gbg5", 79);
-        map.insert("gsmq_a", 51);
-        map.insert("gb", 75);
-        map.insert("gbqfb-hvr", 30);
-        map.insert("gbqfbb-hvr", 33);
-        map.insert("gbx4", 99);
-        map.insert("gbxv", 44);
-        map.insert("gbmpal", 86);
-        map.insert("H6sW5", 0);
-        map.insert("gbprct", 27);
-        map.insert("gss_ifl", 57);
-        map.insert("gsdd_a", 46);
-        map.insert("lsbb", 70);
-        map.insert("gbi4t", 83);
-        map.insert("gbqfbb", 32);
-        map.insert("gssb_c", 59);
-        map.insert("gbx3", 98);
-        map.insert("gbg", 78);
-        map.insert("gbqfba", 31);
-        map.insert("SIvCob", 74);
-        map.insert("a", 104);
         map.insert("gsn_c", 54);
-        map.insert("gssb_h", 63);
-        map.insert("span", 108);
+        map.insert("gssb_b", 102);
+        map.insert("gbtsa", 41);
+        map.insert("gsib_b", 49);
+        map.insert("gbprcb", 24);
+        map.insert("gbmpdv", 88);
+        map.insert("gbmps", 91);
+        map.insert("sblc", 72);
+        map.insert("gbp0", 21);
+        map.insert("gbqfba", 31);
+        map.insert("gbmpiw", 90);
+        map.insert("gbpmc", 22);
+        map.insert("gbpms2", 23);
+        map.insert("gbmpid", 89);
+        map.insert("gbto", 39);
+        map.insert("gssb_c", 59);
+        map.insert("gbx4", 99);
+        map.insert("gbi4p", 4);
+        map.insert("gbxo", 43);
+        map.insert("gbg", 78);
+        map.insert("gbma", 6);
+        map.insert("gsls_a", 50);
+        map.insert("gbpms", 93);
+        map.insert("gssb_m", 67);
+        map.insert("gbmlbw", 12);
+        map.insert("gbs", 97);
+        map.insert("gws-output-pages-elements-homepage_additional_languages__als", 103);
+        map.insert("gb", 75);
+        map.insert("gbps2", 28);
+        map.insert("a", 104);
+        map.insert("gsdd_a", 46);
+        map.insert("lst", 71);
         map.insert("gbmpnw", 18);
-        map.insert("gbxms", 42);
-        map.insert("gsq_a", 56);
-        map.insert("gbprci", 26);
+        map.insert("gbgt", 3);
+        map.insert("gbqfbb", 32);
+        map.insert("gbqfbb-hvr", 33);
+        map.insert("gbtb2", 37);
         map.insert("gssb_a", 58);
-        map.insert("gbb", 76);
+        map.insert("gbprcs", 95);
+        map.insert("div", 106);
+        map.insert("span", 108);
+        map.insert("body", 105);
+        map.insert("gbmc", 9);
+        map.insert("gssb_g", 62);
+        map.insert("gbx3", 98);
+        map.insert("gssb_i", 64);
+        map.insert("gbz", 100);
+        map.insert("input", 107);
+        map.insert("gbqfbw", 96);
+        map.insert("gssb_e", 60);
+        map.insert("gbt", 36);
+        map.insert("gbmac", 8);
+        map.insert("gbmpiaw", 17);
+        map.insert("gbprci", 26);
+        map.insert("gbg5", 79);
+        map.insert("SIvCob", 74);
+        map.insert("gbm", 5);
+        map.insert("gsn_a", 52);
+        map.insert("gsn_b", 53);
+        map.insert("gsfs", 47);
+        map.insert("gssb_k", 65);
+        map.insert("gbsbic", 35);
+        map.insert("gbi4t", 83);
+        map.insert("gbi5", 84);
+        map.insert("gbgs5", 80);
+        map.insert("gbprca", 94);
+        map.insert("gog", 101);
+        map.insert("gbmh", 11);
+        map.insert("gbts", 40);
+        map.insert("gsq_a", 56);
+        map.insert("gbxx", 45);
+        map.insert("z4hgWe", 73);
         map.insert("gbi4s1", 82);
+        map.insert("H6sW5", 0);
+        map.insert("gbqfb", 29);
+        map.insert("gbmpal", 86);
         map.insert("gssb_f", 61);
         map.insert("ds", 1);
-        map.insert("gbma", 6);
-        map.insert("gbi4p", 4);
-        map.insert("gbpmc", 22);
-        map.insert("gsn_a", 52);
-        map.insert("gbprcd", 25);
-        map.insert("gsn_b", 53);
-        map.insert("gspqs_b", 55);
-        map.insert("gbmac", 8);
-        map.insert("gbsb", 34);
-        map.insert("z4hgWe", 73);
-        map.insert("gbgt", 3);
-        map.insert("gbmab", 7);
-        map.insert("gbxx", 45);
-        map.insert("gsib_a", 48);
-        map.insert("gssb_l", 66);
-        map.insert("gssb_e", 60);
-        map.insert("gbgs5", 80);
-        map.insert("gbg4a", 2);
-        map.insert("gbmh", 11);
-        map.insert("gbqfb", 29);
-        map.insert("gbmm", 85);
-        map.insert("gbmps", 91);
-        map.insert("gbp0", 21);
-        map.insert("gbsbic", 35);
-        map.insert("h", 68);
-        map.insert("gbmlbw", 12);
-        map.insert("gbm", 5);
-        map.insert("gsib_b", 49);
-        map.insert("gssb_m", 67);
-        map.insert("gbpms", 93);
-        map.insert("gssb_g", 62);
-        map.insert("sblc", 72);
-        map.insert("gbt", 36);
-        map.insert("gbi4id", 81);
-        map.insert("gbprcs", 95);
-        map.insert("gbz", 100);
-        map.insert("gbmpalb", 14);
-        map.insert("gbmpdv", 88);
-        map.insert("gssb_k", 65);
         map.insert("gbmt", 19);
-        map.insert("input", 107);
-        map.insert("lst", 71);
-        map.insert("div", 106);
         map.insert("gbmcc", 10);
-        map.insert("lsb", 69);
-        map.insert("gbmpiaa", 16);
-        map.insert("gbmpia", 15);
-        map.insert("gbbw", 77);
-        map.insert("gbxo", 43);
+        map.insert("gbqfb-hvr", 30);
         map.insert("gbtcb", 38);
-        map.insert("gbtb2", 37);
-        map.insert("gbi5", 84);
-        map.insert("gbmpiaw", 17);
-        map.insert("gbmpiw", 90);
-        map.insert("gbs", 97);
-        map.insert("body", 105);
+        map.insert("gbmpalb", 14);
+        map.insert("gbsb", 34);
+        map.insert("gsmq_a", 51);
+        map.insert("gbmpia", 15);
+        map.insert("gbxms", 42);
+        map.insert("gss_ifl", 57);
+        map.insert("gsib_a", 48);
+        map.insert("h", 68);
+        map.insert("gssb_h", 63);
+        map.insert("gbg4a", 2);
+        map.insert("gbmpala", 13);
+        map.insert("gbprct", 27);
+        map.insert("lsb", 69);
+        map.insert("gbb", 76);
+        map.insert("gbprcd", 25);
+        map.insert("gbmm", 85);
+        map.insert("gbpm", 92);
+        map.insert("gspqs_b", 55);
+        map.insert("gbxv", 44);
+        map.insert("gbmab", 7);
         map.insert("gbmtc", 20);
-        map.insert("gbprca", 94);
-        map.insert("gbtsa", 41);
-        map.insert("gbps2", 28);
-        map.insert("td", 109);
-        map.insert("gssb_b", 102);
-        map.insert("gbprcb", 24);
-        map.insert("gbto", 39);
+        map.insert("gssb_l", 66);
+        map.insert("lsbb", 70);
+        map.insert("gbbw", 77);
+        map.insert("gbi4id", 81);
+        map.insert("gbmpiaa", 16);
         map.insert("gbmpas", 87);
-        map.insert("gsls_a", 50);
+        map.insert("td", 109);
         map
     })
 }
@@ -2033,17 +2033,26 @@ pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize
 fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVector,
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
-    if !node.needs_any_recomputation(parent_state) {
-        *hits += 1;
-        // Skip entire subtree when cached
-        return;
-    }
     
-    *misses += 1;
-    let child_states = process_node_generated_incremental(node, parent_state);
-    for child in node.children.iter_mut() {
-        process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+    // Logic 1: Check if node itself needs recomputation
+    let child_states = if node.needs_self_recomputation(parent_state) {
+        *misses += 1;
+        // Recompute node and get fresh child_states
+        process_node_generated_incremental(node, parent_state)
+    } else {
+        *hits += 1;
+        // Use cached child_states - major optimization for internal nodes!
+        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+    };
+    
+    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
+    if node.has_dirty_descendant {
+        // Recurse into children only if there are dirty descendants
+        for child in node.children.iter_mut() {
+            process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+        }
     }
+    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 
 /// From-scratch processing driver for comparison
