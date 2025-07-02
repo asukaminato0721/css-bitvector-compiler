@@ -93,7 +93,8 @@ fn generate_naive_program(
 
     // 2. Add the generated naive CSS processing functions
     program.push_str("// Generated naive CSS processing functions\n");
-    program.push_str("// These functions calculate layout from scratch without any optimization\n\n");
+    program
+        .push_str("// These functions calculate layout from scratch without any optimization\n\n");
     program.push_str(generated_fn_code);
     program.push_str("\n\n");
 
@@ -170,4 +171,4 @@ fn generate_naive_program(
 }"#);
 
     Ok(program)
-} 
+}

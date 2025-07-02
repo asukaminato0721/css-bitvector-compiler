@@ -531,7 +531,8 @@ pub fn matches_rule_206(node: &HtmlNode) -> bool {
 
 // Rule 208: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 208 }
 pub fn matches_rule_208(node: &HtmlNode) -> bool {
-    node.id.as_ref() == Some(&"gws-output-pages-elements-homepage_additional_languages__als".to_string())
+    node.id.as_ref()
+        == Some(&"gws-output-pages-elements-homepage_additional_languages__als".to_string())
 }
 
 // Rule 210: CheckAndSetBit { selector: Type("a"), bit_pos: 210 }
@@ -567,7 +568,7 @@ pub fn matches_rule_220(node: &HtmlNode) -> bool {
 // === MAIN NAIVE PROCESSING FUNCTION ===
 pub fn process_node_naive(node: &mut HtmlNode, parent_matches: &[bool]) -> Vec<bool> {
     let mut matches = vec![false; 222];
-    
+
     // Check all simple selectors
     if matches_rule_0(node) {
         matches[0] = true;
@@ -902,11 +903,11 @@ pub fn process_node_naive(node: &mut HtmlNode, parent_matches: &[bool]) -> Vec<b
     if matches_rule_220(node) {
         matches[220] = true;
     }
-    
+
     // Check all parent-child rules
     // No parent-child rules to check
     let _ = parent_matches; // Suppress unused parameter warning
-    
+
     matches
 }
 
@@ -920,10 +921,10 @@ pub fn process_tree_naive(root: &mut HtmlNode) -> usize {
 
 fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {
     *total += 1;
-    
+
     // Calculate matches for this node from scratch
     let node_matches = process_node_naive(node, parent_matches);
-    
+
     // Process all children with this node's matches as their parent context
     for child in node.children.iter_mut() {
         process_tree_recursive_naive(child, &node_matches, total);
@@ -1172,11 +1173,14 @@ pub fn get_total_rules() -> usize {
     222 // Total number of CSS rules
 }
 
-
-fn collect_all_naive_matches(node: &mut HtmlNode, parent_matches: &[bool], results: &mut Vec<(String, Vec<usize>)>) {
+fn collect_all_naive_matches(
+    node: &mut HtmlNode,
+    parent_matches: &[bool],
+    results: &mut Vec<(String, Vec<usize>)>,
+) {
     // Process this node with naive approach
     let matches = process_node_naive(node, parent_matches);
-    
+
     // Collect rule indices that matched
     let mut matched_rules = Vec::new();
     for (i, &matched) in matches.iter().enumerate() {
@@ -1184,11 +1188,11 @@ fn collect_all_naive_matches(node: &mut HtmlNode, parent_matches: &[bool], resul
             matched_rules.push(i);
         }
     }
-    
+
     // Create node identifier using utility function
     let node_id = create_node_identifier(node);
     results.push((node_id, matched_rules));
-    
+
     // Process children
     for child in &mut node.children {
         collect_all_naive_matches(child, &matches, results);
@@ -1197,46 +1201,58 @@ fn collect_all_naive_matches(node: &mut HtmlNode, parent_matches: &[bool], resul
 
 fn main() {
     println!("🐌 Testing NAIVE Layout Calculation with Google Trace");
-    
+
     // Load Google DOM tree from css-gen-op/command.json
     let mut root = load_dom_from_file();
     println!("✅ Loaded Google DOM tree successfully!");
-    
+
     let mut naive_results = Vec::new();
     let total_rules = get_total_rules();
     let initial_matches = vec![false; total_rules];
-    
+
     // Collect all matching results
     collect_all_naive_matches(&mut root, &initial_matches, &mut naive_results);
-    
+
     println!("📊 NAIVE Results Summary:");
     println!("Total nodes processed: {}", naive_results.len());
-    
+
     // Output first few nodes for verification
     println!("\n🔍 First 10 nodes with their CSS rule matches:");
     for (i, (node_id, matches)) in naive_results.iter().take(10).enumerate() {
-        println!("Node {}: {} -> {} rules matched", i+1, node_id, matches.len());
+        println!(
+            "Node {}: {} -> {} rules matched",
+            i + 1,
+            node_id,
+            matches.len()
+        );
         if !matches.is_empty() {
             let rule_list: Vec<String> = matches.iter().take(5).map(|&r| r.to_string()).collect();
-            println!("  Rules: {} {}", rule_list.join(", "), if matches.len() > 5 { "..." } else { "" });
+            println!(
+                "  Rules: {} {}",
+                rule_list.join(", "),
+                if matches.len() > 5 { "..." } else { "" }
+            );
         }
     }
-    
+
     // Save results to file for comparison
     if let Err(e) = save_results_to_file(&naive_results, "naive_results.txt") {
         println!("Failed to save naive results: {}", e);
         return;
     }
-    
+
     println!("\n💾 Full naive results saved to: naive_results.txt");
-    
+
     // Compare with optimized results if available
     match compare_result_files("optimized_results.txt", "naive_results.txt") {
         Ok(true) => println!("🎉 SUCCESS: Results comparison completed!"),
         Ok(false) => println!("ℹ️  Comparison skipped - run optimized example first"),
         Err(e) => println!("⚠️  Error during comparison: {}", e),
     }
-    
+
     println!("💡 This naive approach recalculates everything from scratch every time.");
-    println!("🔍 Each node was checked against all {} CSS rules without any caching.", total_rules);
+    println!(
+        "🔍 Each node was checked against all {} CSS rules without any caching.",
+        total_rules
+    );
 }

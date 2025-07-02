@@ -188,7 +188,7 @@ fn generate_google_trace_program(
     program.push_str("// Generated CSS processing function\n");
     program.push_str(generated_fn_code);
     program.push_str("\n\n");
-    
+
     // 3. 添加结果收集函数
     program.push_str(r#"fn collect_all_matches(node: &mut HtmlNode, parent_state: &BitVector, results: &mut Vec<(String, Vec<usize>)>) {
     // Process this node
