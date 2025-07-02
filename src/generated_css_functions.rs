@@ -1,6 +1,176 @@
-use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};
+use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector, IState};
+use std::collections::HashMap;
+use std::sync::OnceLock;
 
 const BITVECTOR_CAPACITY: usize = 222;
+
+// String interning for optimized selector matching
+static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
+
+fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
+    STRING_TO_ID.get_or_init(|| {
+        let mut map = HashMap::new();
+        map.insert("gsn_c", 54);
+        map.insert("gssb_b", 102);
+        map.insert("gbtsa", 41);
+        map.insert("gsib_b", 49);
+        map.insert("gbprcb", 24);
+        map.insert("gbmpdv", 88);
+        map.insert("gbmps", 91);
+        map.insert("sblc", 72);
+        map.insert("gbp0", 21);
+        map.insert("gbqfba", 31);
+        map.insert("gbmpiw", 90);
+        map.insert("gbpmc", 22);
+        map.insert("gbpms2", 23);
+        map.insert("gbmpid", 89);
+        map.insert("gbto", 39);
+        map.insert("gssb_c", 59);
+        map.insert("gbx4", 99);
+        map.insert("gbi4p", 4);
+        map.insert("gbxo", 43);
+        map.insert("gbg", 78);
+        map.insert("gbma", 6);
+        map.insert("gsls_a", 50);
+        map.insert("gbpms", 93);
+        map.insert("gssb_m", 67);
+        map.insert("gbmlbw", 12);
+        map.insert("gbs", 97);
+        map.insert("gws-output-pages-elements-homepage_additional_languages__als", 103);
+        map.insert("gb", 75);
+        map.insert("gbps2", 28);
+        map.insert("a", 104);
+        map.insert("gsdd_a", 46);
+        map.insert("lst", 71);
+        map.insert("gbmpnw", 18);
+        map.insert("gbgt", 3);
+        map.insert("gbqfbb", 32);
+        map.insert("gbqfbb-hvr", 33);
+        map.insert("gbtb2", 37);
+        map.insert("gssb_a", 58);
+        map.insert("gbprcs", 95);
+        map.insert("div", 106);
+        map.insert("span", 108);
+        map.insert("body", 105);
+        map.insert("gbmc", 9);
+        map.insert("gssb_g", 62);
+        map.insert("gbx3", 98);
+        map.insert("gssb_i", 64);
+        map.insert("gbz", 100);
+        map.insert("input", 107);
+        map.insert("gbqfbw", 96);
+        map.insert("gssb_e", 60);
+        map.insert("gbt", 36);
+        map.insert("gbmac", 8);
+        map.insert("gbmpiaw", 17);
+        map.insert("gbprci", 26);
+        map.insert("gbg5", 79);
+        map.insert("SIvCob", 74);
+        map.insert("gbm", 5);
+        map.insert("gsn_a", 52);
+        map.insert("gsn_b", 53);
+        map.insert("gsfs", 47);
+        map.insert("gssb_k", 65);
+        map.insert("gbsbic", 35);
+        map.insert("gbi4t", 83);
+        map.insert("gbi5", 84);
+        map.insert("gbgs5", 80);
+        map.insert("gbprca", 94);
+        map.insert("gog", 101);
+        map.insert("gbmh", 11);
+        map.insert("gbts", 40);
+        map.insert("gsq_a", 56);
+        map.insert("gbxx", 45);
+        map.insert("z4hgWe", 73);
+        map.insert("gbi4s1", 82);
+        map.insert("H6sW5", 0);
+        map.insert("gbqfb", 29);
+        map.insert("gbmpal", 86);
+        map.insert("gssb_f", 61);
+        map.insert("ds", 1);
+        map.insert("gbmt", 19);
+        map.insert("gbmcc", 10);
+        map.insert("gbqfb-hvr", 30);
+        map.insert("gbtcb", 38);
+        map.insert("gbmpalb", 14);
+        map.insert("gbsb", 34);
+        map.insert("gsmq_a", 51);
+        map.insert("gbmpia", 15);
+        map.insert("gbxms", 42);
+        map.insert("gss_ifl", 57);
+        map.insert("gsib_a", 48);
+        map.insert("h", 68);
+        map.insert("gssb_h", 63);
+        map.insert("gbg4a", 2);
+        map.insert("gbmpala", 13);
+        map.insert("gbprct", 27);
+        map.insert("lsb", 69);
+        map.insert("gbb", 76);
+        map.insert("gbprcd", 25);
+        map.insert("gbmm", 85);
+        map.insert("gbpm", 92);
+        map.insert("gspqs_b", 55);
+        map.insert("gbxv", 44);
+        map.insert("gbmab", 7);
+        map.insert("gbmtc", 20);
+        map.insert("gssb_l", 66);
+        map.insert("lsbb", 70);
+        map.insert("gbbw", 77);
+        map.insert("gbi4id", 81);
+        map.insert("gbmpiaa", 16);
+        map.insert("gbmpas", 87);
+        map.insert("td", 109);
+        map
+    })
+}
+
+// Fast selector matching using integer IDs and switch
+#[inline]
+fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
+    get_string_to_id_map().get(node.tag_name.as_str()).copied()
+}
+
+#[inline]
+fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
+    node.id.as_ref().and_then(|id| get_string_to_id_map().get(id.as_str()).copied())
+}
+
+#[inline]
+fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
+    let string_map = get_string_to_id_map();
+    for class in &node.classes {
+        if let Some(id) = string_map.get(class.as_str()) {
+            if *id == class_id {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+// Optimized selector matching with switch on integer IDs
+#[inline]
+fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
+    if let Some(node_tag_id) = get_node_tag_id(node) {
+        node_tag_id == tag_id
+    } else {
+        false
+    }
+}
+
+#[inline]
+fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
+    if let Some(node_id_id) = get_node_id_id(node) {
+        node_id_id == id_id
+    } else {
+        false
+    }
+}
+
+#[inline]
+fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
+    node_has_class_id(node, class_id)
+}
 
 // --- Incremental Processing Functions ---
 pub fn process_node_generated_incremental(
@@ -18,557 +188,557 @@ pub fn process_node_generated_incremental(
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 
         // Instruction 0: CheckAndSetBit { selector: Class("H6sW5"), bit_pos: 0 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("H6sW5".to_string())) {
+        if matches_class_id(node, 0) {
             intrinsic_matches.set_bit(0); // match_Class("H6sW5")
         }
 
         // Instruction 2: CheckAndSetBit { selector: Class("ds"), bit_pos: 2 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("ds".to_string())) {
+        if matches_class_id(node, 1) {
             intrinsic_matches.set_bit(2); // match_Class("ds")
         }
 
         // Instruction 4: CheckAndSetBit { selector: Class("gbg4a"), bit_pos: 4 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbg4a".to_string())) {
+        if matches_class_id(node, 2) {
             intrinsic_matches.set_bit(4); // match_Class("gbg4a")
         }
 
         // Instruction 6: CheckAndSetBit { selector: Class("gbgt"), bit_pos: 6 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbgt".to_string())) {
+        if matches_class_id(node, 3) {
             intrinsic_matches.set_bit(6); // match_Class("gbgt")
         }
 
         // Instruction 8: CheckAndSetBit { selector: Class("gbi4p"), bit_pos: 8 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbi4p".to_string())) {
+        if matches_class_id(node, 4) {
             intrinsic_matches.set_bit(8); // match_Class("gbi4p")
         }
 
         // Instruction 10: CheckAndSetBit { selector: Class("gbm"), bit_pos: 10 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbm".to_string())) {
+        if matches_class_id(node, 5) {
             intrinsic_matches.set_bit(10); // match_Class("gbm")
         }
 
         // Instruction 12: CheckAndSetBit { selector: Class("gbma"), bit_pos: 12 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbma".to_string())) {
+        if matches_class_id(node, 6) {
             intrinsic_matches.set_bit(12); // match_Class("gbma")
         }
 
         // Instruction 14: CheckAndSetBit { selector: Class("gbmab"), bit_pos: 14 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmab".to_string())) {
+        if matches_class_id(node, 7) {
             intrinsic_matches.set_bit(14); // match_Class("gbmab")
         }
 
         // Instruction 16: CheckAndSetBit { selector: Class("gbmac"), bit_pos: 16 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmac".to_string())) {
+        if matches_class_id(node, 8) {
             intrinsic_matches.set_bit(16); // match_Class("gbmac")
         }
 
         // Instruction 18: CheckAndSetBit { selector: Class("gbmc"), bit_pos: 18 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmc".to_string())) {
+        if matches_class_id(node, 9) {
             intrinsic_matches.set_bit(18); // match_Class("gbmc")
         }
 
         // Instruction 20: CheckAndSetBit { selector: Class("gbmcc"), bit_pos: 20 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmcc".to_string())) {
+        if matches_class_id(node, 10) {
             intrinsic_matches.set_bit(20); // match_Class("gbmcc")
         }
 
         // Instruction 22: CheckAndSetBit { selector: Class("gbmh"), bit_pos: 22 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmh".to_string())) {
+        if matches_class_id(node, 11) {
             intrinsic_matches.set_bit(22); // match_Class("gbmh")
         }
 
         // Instruction 24: CheckAndSetBit { selector: Class("gbmlbw"), bit_pos: 24 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmlbw".to_string())) {
+        if matches_class_id(node, 12) {
             intrinsic_matches.set_bit(24); // match_Class("gbmlbw")
         }
 
         // Instruction 26: CheckAndSetBit { selector: Class("gbmpala"), bit_pos: 26 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpala".to_string())) {
+        if matches_class_id(node, 13) {
             intrinsic_matches.set_bit(26); // match_Class("gbmpala")
         }
 
         // Instruction 28: CheckAndSetBit { selector: Class("gbmpalb"), bit_pos: 28 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpalb".to_string())) {
+        if matches_class_id(node, 14) {
             intrinsic_matches.set_bit(28); // match_Class("gbmpalb")
         }
 
         // Instruction 30: CheckAndSetBit { selector: Class("gbmpia"), bit_pos: 30 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpia".to_string())) {
+        if matches_class_id(node, 15) {
             intrinsic_matches.set_bit(30); // match_Class("gbmpia")
         }
 
         // Instruction 32: CheckAndSetBit { selector: Class("gbmpiaa"), bit_pos: 32 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpiaa".to_string())) {
+        if matches_class_id(node, 16) {
             intrinsic_matches.set_bit(32); // match_Class("gbmpiaa")
         }
 
         // Instruction 34: CheckAndSetBit { selector: Class("gbmpiaw"), bit_pos: 34 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpiaw".to_string())) {
+        if matches_class_id(node, 17) {
             intrinsic_matches.set_bit(34); // match_Class("gbmpiaw")
         }
 
         // Instruction 36: CheckAndSetBit { selector: Class("gbmpnw"), bit_pos: 36 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpnw".to_string())) {
+        if matches_class_id(node, 18) {
             intrinsic_matches.set_bit(36); // match_Class("gbmpnw")
         }
 
         // Instruction 38: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 38 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
+        if matches_class_id(node, 19) {
             intrinsic_matches.set_bit(38); // match_Class("gbmt")
         }
 
         // Instruction 40: CheckAndSetBit { selector: Class("gbmtc"), bit_pos: 40 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmtc".to_string())) {
+        if matches_class_id(node, 20) {
             intrinsic_matches.set_bit(40); // match_Class("gbmtc")
         }
 
         // Instruction 42: CheckAndSetBit { selector: Class("gbp0"), bit_pos: 42 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbp0".to_string())) {
+        if matches_class_id(node, 21) {
             intrinsic_matches.set_bit(42); // match_Class("gbp0")
         }
 
         // Instruction 44: CheckAndSetBit { selector: Class("gbpmc"), bit_pos: 44 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbpmc".to_string())) {
+        if matches_class_id(node, 22) {
             intrinsic_matches.set_bit(44); // match_Class("gbpmc")
         }
 
         // Instruction 46: CheckAndSetBit { selector: Class("gbpms2"), bit_pos: 46 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbpms2".to_string())) {
+        if matches_class_id(node, 23) {
             intrinsic_matches.set_bit(46); // match_Class("gbpms2")
         }
 
         // Instruction 48: CheckAndSetBit { selector: Class("gbprcb"), bit_pos: 48 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcb".to_string())) {
+        if matches_class_id(node, 24) {
             intrinsic_matches.set_bit(48); // match_Class("gbprcb")
         }
 
         // Instruction 50: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 50 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
+        if matches_class_id(node, 25) {
             intrinsic_matches.set_bit(50); // match_Class("gbprcd")
         }
 
         // Instruction 52: CheckAndSetBit { selector: Class("gbprci"), bit_pos: 52 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprci".to_string())) {
+        if matches_class_id(node, 26) {
             intrinsic_matches.set_bit(52); // match_Class("gbprci")
         }
 
         // Instruction 54: CheckAndSetBit { selector: Class("gbprct"), bit_pos: 54 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprct".to_string())) {
+        if matches_class_id(node, 27) {
             intrinsic_matches.set_bit(54); // match_Class("gbprct")
         }
 
         // Instruction 56: CheckAndSetBit { selector: Class("gbps2"), bit_pos: 56 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbps2".to_string())) {
+        if matches_class_id(node, 28) {
             intrinsic_matches.set_bit(56); // match_Class("gbps2")
         }
 
         // Instruction 58: CheckAndSetBit { selector: Class("gbqfb"), bit_pos: 58 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb".to_string())) {
+        if matches_class_id(node, 29) {
             intrinsic_matches.set_bit(58); // match_Class("gbqfb")
         }
 
         // Instruction 60: CheckAndSetBit { selector: Class("gbqfb-hvr"), bit_pos: 60 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb-hvr".to_string())) {
+        if matches_class_id(node, 30) {
             intrinsic_matches.set_bit(60); // match_Class("gbqfb-hvr")
         }
 
         // Instruction 62: CheckAndSetBit { selector: Class("gbqfba"), bit_pos: 62 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfba".to_string())) {
+        if matches_class_id(node, 31) {
             intrinsic_matches.set_bit(62); // match_Class("gbqfba")
         }
 
         // Instruction 64: CheckAndSetBit { selector: Class("gbqfbb"), bit_pos: 64 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfbb".to_string())) {
+        if matches_class_id(node, 32) {
             intrinsic_matches.set_bit(64); // match_Class("gbqfbb")
         }
 
         // Instruction 66: CheckAndSetBit { selector: Class("gbqfbb-hvr"), bit_pos: 66 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfbb-hvr".to_string())) {
+        if matches_class_id(node, 33) {
             intrinsic_matches.set_bit(66); // match_Class("gbqfbb-hvr")
         }
 
         // Instruction 68: CheckAndSetBit { selector: Class("gbsb"), bit_pos: 68 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbsb".to_string())) {
+        if matches_class_id(node, 34) {
             intrinsic_matches.set_bit(68); // match_Class("gbsb")
         }
 
         // Instruction 70: CheckAndSetBit { selector: Class("gbsbic"), bit_pos: 70 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbsbic".to_string())) {
+        if matches_class_id(node, 35) {
             intrinsic_matches.set_bit(70); // match_Class("gbsbic")
         }
 
         // Instruction 72: CheckAndSetBit { selector: Class("gbt"), bit_pos: 72 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbt".to_string())) {
+        if matches_class_id(node, 36) {
             intrinsic_matches.set_bit(72); // match_Class("gbt")
         }
 
         // Instruction 74: CheckAndSetBit { selector: Class("gbtb2"), bit_pos: 74 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtb2".to_string())) {
+        if matches_class_id(node, 37) {
             intrinsic_matches.set_bit(74); // match_Class("gbtb2")
         }
 
         // Instruction 76: CheckAndSetBit { selector: Class("gbtcb"), bit_pos: 76 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtcb".to_string())) {
+        if matches_class_id(node, 38) {
             intrinsic_matches.set_bit(76); // match_Class("gbtcb")
         }
 
         // Instruction 78: CheckAndSetBit { selector: Class("gbto"), bit_pos: 78 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbto".to_string())) {
+        if matches_class_id(node, 39) {
             intrinsic_matches.set_bit(78); // match_Class("gbto")
         }
 
         // Instruction 80: CheckAndSetBit { selector: Class("gbts"), bit_pos: 80 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
+        if matches_class_id(node, 40) {
             intrinsic_matches.set_bit(80); // match_Class("gbts")
         }
 
         // Instruction 82: CheckAndSetBit { selector: Class("gbtsa"), bit_pos: 82 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtsa".to_string())) {
+        if matches_class_id(node, 41) {
             intrinsic_matches.set_bit(82); // match_Class("gbtsa")
         }
 
         // Instruction 84: CheckAndSetBit { selector: Class("gbxms"), bit_pos: 84 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxms".to_string())) {
+        if matches_class_id(node, 42) {
             intrinsic_matches.set_bit(84); // match_Class("gbxms")
         }
 
         // Instruction 86: CheckAndSetBit { selector: Class("gbxo"), bit_pos: 86 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxo".to_string())) {
+        if matches_class_id(node, 43) {
             intrinsic_matches.set_bit(86); // match_Class("gbxo")
         }
 
         // Instruction 88: CheckAndSetBit { selector: Class("gbxv"), bit_pos: 88 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxv".to_string())) {
+        if matches_class_id(node, 44) {
             intrinsic_matches.set_bit(88); // match_Class("gbxv")
         }
 
         // Instruction 90: CheckAndSetBit { selector: Class("gbxx"), bit_pos: 90 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxx".to_string())) {
+        if matches_class_id(node, 45) {
             intrinsic_matches.set_bit(90); // match_Class("gbxx")
         }
 
         // Instruction 92: CheckAndSetBit { selector: Class("gsdd_a"), bit_pos: 92 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsdd_a".to_string())) {
+        if matches_class_id(node, 46) {
             intrinsic_matches.set_bit(92); // match_Class("gsdd_a")
         }
 
         // Instruction 94: CheckAndSetBit { selector: Class("gsfs"), bit_pos: 94 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsfs".to_string())) {
+        if matches_class_id(node, 47) {
             intrinsic_matches.set_bit(94); // match_Class("gsfs")
         }
 
         // Instruction 96: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 96 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
+        if matches_class_id(node, 48) {
             intrinsic_matches.set_bit(96); // match_Class("gsib_a")
         }
 
         // Instruction 98: CheckAndSetBit { selector: Class("gsib_b"), bit_pos: 98 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_b".to_string())) {
+        if matches_class_id(node, 49) {
             intrinsic_matches.set_bit(98); // match_Class("gsib_b")
         }
 
         // Instruction 100: CheckAndSetBit { selector: Class("gsls_a"), bit_pos: 100 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsls_a".to_string())) {
+        if matches_class_id(node, 50) {
             intrinsic_matches.set_bit(100); // match_Class("gsls_a")
         }
 
         // Instruction 102: CheckAndSetBit { selector: Class("gsmq_a"), bit_pos: 102 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsmq_a".to_string())) {
+        if matches_class_id(node, 51) {
             intrinsic_matches.set_bit(102); // match_Class("gsmq_a")
         }
 
         // Instruction 104: CheckAndSetBit { selector: Class("gsn_a"), bit_pos: 104 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_a".to_string())) {
+        if matches_class_id(node, 52) {
             intrinsic_matches.set_bit(104); // match_Class("gsn_a")
         }
 
         // Instruction 106: CheckAndSetBit { selector: Class("gsn_b"), bit_pos: 106 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_b".to_string())) {
+        if matches_class_id(node, 53) {
             intrinsic_matches.set_bit(106); // match_Class("gsn_b")
         }
 
         // Instruction 108: CheckAndSetBit { selector: Class("gsn_c"), bit_pos: 108 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_c".to_string())) {
+        if matches_class_id(node, 54) {
             intrinsic_matches.set_bit(108); // match_Class("gsn_c")
         }
 
         // Instruction 110: CheckAndSetBit { selector: Class("gspqs_b"), bit_pos: 110 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gspqs_b".to_string())) {
+        if matches_class_id(node, 55) {
             intrinsic_matches.set_bit(110); // match_Class("gspqs_b")
         }
 
         // Instruction 112: CheckAndSetBit { selector: Class("gsq_a"), bit_pos: 112 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsq_a".to_string())) {
+        if matches_class_id(node, 56) {
             intrinsic_matches.set_bit(112); // match_Class("gsq_a")
         }
 
         // Instruction 114: CheckAndSetBit { selector: Class("gss_ifl"), bit_pos: 114 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gss_ifl".to_string())) {
+        if matches_class_id(node, 57) {
             intrinsic_matches.set_bit(114); // match_Class("gss_ifl")
         }
 
         // Instruction 116: CheckAndSetBit { selector: Class("gssb_a"), bit_pos: 116 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_a".to_string())) {
+        if matches_class_id(node, 58) {
             intrinsic_matches.set_bit(116); // match_Class("gssb_a")
         }
 
         // Instruction 118: CheckAndSetBit { selector: Class("gssb_c"), bit_pos: 118 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_c".to_string())) {
+        if matches_class_id(node, 59) {
             intrinsic_matches.set_bit(118); // match_Class("gssb_c")
         }
 
         // Instruction 120: CheckAndSetBit { selector: Class("gssb_e"), bit_pos: 120 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_e".to_string())) {
+        if matches_class_id(node, 60) {
             intrinsic_matches.set_bit(120); // match_Class("gssb_e")
         }
 
         // Instruction 122: CheckAndSetBit { selector: Class("gssb_f"), bit_pos: 122 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_f".to_string())) {
+        if matches_class_id(node, 61) {
             intrinsic_matches.set_bit(122); // match_Class("gssb_f")
         }
 
         // Instruction 124: CheckAndSetBit { selector: Class("gssb_g"), bit_pos: 124 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_g".to_string())) {
+        if matches_class_id(node, 62) {
             intrinsic_matches.set_bit(124); // match_Class("gssb_g")
         }
 
         // Instruction 126: CheckAndSetBit { selector: Class("gssb_h"), bit_pos: 126 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_h".to_string())) {
+        if matches_class_id(node, 63) {
             intrinsic_matches.set_bit(126); // match_Class("gssb_h")
         }
 
         // Instruction 128: CheckAndSetBit { selector: Class("gssb_i"), bit_pos: 128 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_i".to_string())) {
+        if matches_class_id(node, 64) {
             intrinsic_matches.set_bit(128); // match_Class("gssb_i")
         }
 
         // Instruction 130: CheckAndSetBit { selector: Class("gssb_k"), bit_pos: 130 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_k".to_string())) {
+        if matches_class_id(node, 65) {
             intrinsic_matches.set_bit(130); // match_Class("gssb_k")
         }
 
         // Instruction 132: CheckAndSetBit { selector: Class("gssb_l"), bit_pos: 132 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_l".to_string())) {
+        if matches_class_id(node, 66) {
             intrinsic_matches.set_bit(132); // match_Class("gssb_l")
         }
 
         // Instruction 134: CheckAndSetBit { selector: Class("gssb_m"), bit_pos: 134 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_m".to_string())) {
+        if matches_class_id(node, 67) {
             intrinsic_matches.set_bit(134); // match_Class("gssb_m")
         }
 
         // Instruction 136: CheckAndSetBit { selector: Class("h"), bit_pos: 136 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("h".to_string())) {
+        if matches_class_id(node, 68) {
             intrinsic_matches.set_bit(136); // match_Class("h")
         }
 
         // Instruction 138: CheckAndSetBit { selector: Class("lsb"), bit_pos: 138 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
+        if matches_class_id(node, 69) {
             intrinsic_matches.set_bit(138); // match_Class("lsb")
         }
 
         // Instruction 140: CheckAndSetBit { selector: Class("lsbb"), bit_pos: 140 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lsbb".to_string())) {
+        if matches_class_id(node, 70) {
             intrinsic_matches.set_bit(140); // match_Class("lsbb")
         }
 
         // Instruction 142: CheckAndSetBit { selector: Class("lst"), bit_pos: 142 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lst".to_string())) {
+        if matches_class_id(node, 71) {
             intrinsic_matches.set_bit(142); // match_Class("lst")
         }
 
         // Instruction 144: CheckAndSetBit { selector: Class("sblc"), bit_pos: 144 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("sblc".to_string())) {
+        if matches_class_id(node, 72) {
             intrinsic_matches.set_bit(144); // match_Class("sblc")
         }
 
         // Instruction 146: CheckAndSetBit { selector: Class("z4hgWe"), bit_pos: 146 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("z4hgWe".to_string())) {
+        if matches_class_id(node, 73) {
             intrinsic_matches.set_bit(146); // match_Class("z4hgWe")
         }
 
         // Instruction 148: CheckAndSetBit { selector: Id("SIvCob"), bit_pos: 148 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("SIvCob".to_string())) {
+        if matches_id_id(node, 74) {
             intrinsic_matches.set_bit(148); // match_Id("SIvCob")
         }
 
         // Instruction 150: CheckAndSetBit { selector: Id("gb"), bit_pos: 150 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+        if matches_id_id(node, 75) {
             intrinsic_matches.set_bit(150); // match_Id("gb")
         }
 
         // Instruction 152: CheckAndSetBit { selector: Id("gbb"), bit_pos: 152 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbb".to_string())) {
+        if matches_id_id(node, 76) {
             intrinsic_matches.set_bit(152); // match_Id("gbb")
         }
 
         // Instruction 154: CheckAndSetBit { selector: Id("gbbw"), bit_pos: 154 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbbw".to_string())) {
+        if matches_id_id(node, 77) {
             intrinsic_matches.set_bit(154); // match_Id("gbbw")
         }
 
         // Instruction 156: CheckAndSetBit { selector: Id("gbg"), bit_pos: 156 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbg".to_string())) {
+        if matches_id_id(node, 78) {
             intrinsic_matches.set_bit(156); // match_Id("gbg")
         }
 
         // Instruction 158: CheckAndSetBit { selector: Id("gbg5"), bit_pos: 158 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbg5".to_string())) {
+        if matches_id_id(node, 79) {
             intrinsic_matches.set_bit(158); // match_Id("gbg5")
         }
 
         // Instruction 160: CheckAndSetBit { selector: Id("gbgs5"), bit_pos: 160 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbgs5".to_string())) {
+        if matches_id_id(node, 80) {
             intrinsic_matches.set_bit(160); // match_Id("gbgs5")
         }
 
         // Instruction 162: CheckAndSetBit { selector: Id("gbi4id"), bit_pos: 162 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4id".to_string())) {
+        if matches_id_id(node, 81) {
             intrinsic_matches.set_bit(162); // match_Id("gbi4id")
         }
 
         // Instruction 164: CheckAndSetBit { selector: Id("gbi4s1"), bit_pos: 164 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4s1".to_string())) {
+        if matches_id_id(node, 82) {
             intrinsic_matches.set_bit(164); // match_Id("gbi4s1")
         }
 
         // Instruction 166: CheckAndSetBit { selector: Id("gbi4t"), bit_pos: 166 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4t".to_string())) {
+        if matches_id_id(node, 83) {
             intrinsic_matches.set_bit(166); // match_Id("gbi4t")
         }
 
         // Instruction 168: CheckAndSetBit { selector: Id("gbi5"), bit_pos: 168 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi5".to_string())) {
+        if matches_id_id(node, 84) {
             intrinsic_matches.set_bit(168); // match_Id("gbi5")
         }
 
         // Instruction 170: CheckAndSetBit { selector: Id("gbmm"), bit_pos: 170 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmm".to_string())) {
+        if matches_id_id(node, 85) {
             intrinsic_matches.set_bit(170); // match_Id("gbmm")
         }
 
         // Instruction 172: CheckAndSetBit { selector: Id("gbmpal"), bit_pos: 172 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpal".to_string())) {
+        if matches_id_id(node, 86) {
             intrinsic_matches.set_bit(172); // match_Id("gbmpal")
         }
 
         // Instruction 174: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 174 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
+        if matches_id_id(node, 87) {
             intrinsic_matches.set_bit(174); // match_Id("gbmpas")
         }
 
         // Instruction 176: CheckAndSetBit { selector: Id("gbmpdv"), bit_pos: 176 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpdv".to_string())) {
+        if matches_id_id(node, 88) {
             intrinsic_matches.set_bit(176); // match_Id("gbmpdv")
         }
 
         // Instruction 178: CheckAndSetBit { selector: Id("gbmpid"), bit_pos: 178 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpid".to_string())) {
+        if matches_id_id(node, 89) {
             intrinsic_matches.set_bit(178); // match_Id("gbmpid")
         }
 
         // Instruction 180: CheckAndSetBit { selector: Id("gbmpiw"), bit_pos: 180 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpiw".to_string())) {
+        if matches_id_id(node, 90) {
             intrinsic_matches.set_bit(180); // match_Id("gbmpiw")
         }
 
         // Instruction 182: CheckAndSetBit { selector: Id("gbmps"), bit_pos: 182 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmps".to_string())) {
+        if matches_id_id(node, 91) {
             intrinsic_matches.set_bit(182); // match_Id("gbmps")
         }
 
         // Instruction 184: CheckAndSetBit { selector: Id("gbpm"), bit_pos: 184 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbpm".to_string())) {
+        if matches_id_id(node, 92) {
             intrinsic_matches.set_bit(184); // match_Id("gbpm")
         }
 
         // Instruction 186: CheckAndSetBit { selector: Id("gbpms"), bit_pos: 186 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbpms".to_string())) {
+        if matches_id_id(node, 93) {
             intrinsic_matches.set_bit(186); // match_Id("gbpms")
         }
 
         // Instruction 188: CheckAndSetBit { selector: Id("gbprca"), bit_pos: 188 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbprca".to_string())) {
+        if matches_id_id(node, 94) {
             intrinsic_matches.set_bit(188); // match_Id("gbprca")
         }
 
         // Instruction 190: CheckAndSetBit { selector: Id("gbprcs"), bit_pos: 190 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbprcs".to_string())) {
+        if matches_id_id(node, 95) {
             intrinsic_matches.set_bit(190); // match_Id("gbprcs")
         }
 
         // Instruction 192: CheckAndSetBit { selector: Id("gbqfb"), bit_pos: 192 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbqfb".to_string())) {
+        if matches_id_id(node, 29) {
             intrinsic_matches.set_bit(192); // match_Id("gbqfb")
         }
 
         // Instruction 194: CheckAndSetBit { selector: Id("gbqfbw"), bit_pos: 194 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbqfbw".to_string())) {
+        if matches_id_id(node, 96) {
             intrinsic_matches.set_bit(194); // match_Id("gbqfbw")
         }
 
         // Instruction 196: CheckAndSetBit { selector: Id("gbs"), bit_pos: 196 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbs".to_string())) {
+        if matches_id_id(node, 97) {
             intrinsic_matches.set_bit(196); // match_Id("gbs")
         }
 
         // Instruction 198: CheckAndSetBit { selector: Id("gbx3"), bit_pos: 198 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbx3".to_string())) {
+        if matches_id_id(node, 98) {
             intrinsic_matches.set_bit(198); // match_Id("gbx3")
         }
 
         // Instruction 200: CheckAndSetBit { selector: Id("gbx4"), bit_pos: 200 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbx4".to_string())) {
+        if matches_id_id(node, 99) {
             intrinsic_matches.set_bit(200); // match_Id("gbx4")
         }
 
         // Instruction 202: CheckAndSetBit { selector: Id("gbz"), bit_pos: 202 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
+        if matches_id_id(node, 100) {
             intrinsic_matches.set_bit(202); // match_Id("gbz")
         }
 
         // Instruction 204: CheckAndSetBit { selector: Id("gog"), bit_pos: 204 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gog".to_string())) {
+        if matches_id_id(node, 101) {
             intrinsic_matches.set_bit(204); // match_Id("gog")
         }
 
         // Instruction 206: CheckAndSetBit { selector: Id("gssb_b"), bit_pos: 206 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gssb_b".to_string())) {
+        if matches_id_id(node, 102) {
             intrinsic_matches.set_bit(206); // match_Id("gssb_b")
         }
 
         // Instruction 208: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 208 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
+        if matches_id_id(node, 103) {
             intrinsic_matches.set_bit(208); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
         }
 
         // Instruction 210: CheckAndSetBit { selector: Type("a"), bit_pos: 210 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
+        if matches_tag_id(node, 104) {
             intrinsic_matches.set_bit(210); // match_Type("a")
         }
 
         // Instruction 212: CheckAndSetBit { selector: Type("body"), bit_pos: 212 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("body".to_string())) {
+        if matches_tag_id(node, 105) {
             intrinsic_matches.set_bit(212); // match_Type("body")
         }
 
         // Instruction 214: CheckAndSetBit { selector: Type("div"), bit_pos: 214 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
+        if matches_tag_id(node, 106) {
             intrinsic_matches.set_bit(214); // match_Type("div")
         }
 
         // Instruction 216: CheckAndSetBit { selector: Type("input"), bit_pos: 216 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
+        if matches_tag_id(node, 107) {
             intrinsic_matches.set_bit(216); // match_Type("input")
         }
 
         // Instruction 218: CheckAndSetBit { selector: Type("span"), bit_pos: 218 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
+        if matches_tag_id(node, 108) {
             intrinsic_matches.set_bit(218); // match_Type("span")
         }
 
         // Instruction 220: CheckAndSetBit { selector: Type("td"), bit_pos: 220 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("td".to_string())) {
+        if matches_tag_id(node, 109) {
             intrinsic_matches.set_bit(220); // match_Type("td")
         }
 
@@ -576,6 +746,9 @@ pub fn process_node_generated_incremental(
     }
 
     let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+    
+    // Track which parent state bits we actually use
+    let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("H6sW5")
@@ -911,7 +1084,7 @@ pub fn process_node_generated_incremental(
         child_states.set_bit(221); // active_Type("td")
     }
     node.css_match_bitvector = current_matches;
-    node.cached_parent_state = Some(parent_state.clone());
+    node.cached_parent_state = Some(parent_usage_tracker);
     node.cached_child_states = Some(child_states.clone());
     node.mark_clean();
 
@@ -926,557 +1099,557 @@ pub fn process_node_generated_from_scratch(
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 
         // Instruction 0: CheckAndSetBit { selector: Class("H6sW5"), bit_pos: 0 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("H6sW5".to_string())) {
+        if matches_class_id(node, 0) {
             intrinsic_matches.set_bit(0); // match_Class("H6sW5")
         }
 
         // Instruction 2: CheckAndSetBit { selector: Class("ds"), bit_pos: 2 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("ds".to_string())) {
+        if matches_class_id(node, 1) {
             intrinsic_matches.set_bit(2); // match_Class("ds")
         }
 
         // Instruction 4: CheckAndSetBit { selector: Class("gbg4a"), bit_pos: 4 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbg4a".to_string())) {
+        if matches_class_id(node, 2) {
             intrinsic_matches.set_bit(4); // match_Class("gbg4a")
         }
 
         // Instruction 6: CheckAndSetBit { selector: Class("gbgt"), bit_pos: 6 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbgt".to_string())) {
+        if matches_class_id(node, 3) {
             intrinsic_matches.set_bit(6); // match_Class("gbgt")
         }
 
         // Instruction 8: CheckAndSetBit { selector: Class("gbi4p"), bit_pos: 8 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbi4p".to_string())) {
+        if matches_class_id(node, 4) {
             intrinsic_matches.set_bit(8); // match_Class("gbi4p")
         }
 
         // Instruction 10: CheckAndSetBit { selector: Class("gbm"), bit_pos: 10 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbm".to_string())) {
+        if matches_class_id(node, 5) {
             intrinsic_matches.set_bit(10); // match_Class("gbm")
         }
 
         // Instruction 12: CheckAndSetBit { selector: Class("gbma"), bit_pos: 12 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbma".to_string())) {
+        if matches_class_id(node, 6) {
             intrinsic_matches.set_bit(12); // match_Class("gbma")
         }
 
         // Instruction 14: CheckAndSetBit { selector: Class("gbmab"), bit_pos: 14 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmab".to_string())) {
+        if matches_class_id(node, 7) {
             intrinsic_matches.set_bit(14); // match_Class("gbmab")
         }
 
         // Instruction 16: CheckAndSetBit { selector: Class("gbmac"), bit_pos: 16 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmac".to_string())) {
+        if matches_class_id(node, 8) {
             intrinsic_matches.set_bit(16); // match_Class("gbmac")
         }
 
         // Instruction 18: CheckAndSetBit { selector: Class("gbmc"), bit_pos: 18 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmc".to_string())) {
+        if matches_class_id(node, 9) {
             intrinsic_matches.set_bit(18); // match_Class("gbmc")
         }
 
         // Instruction 20: CheckAndSetBit { selector: Class("gbmcc"), bit_pos: 20 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmcc".to_string())) {
+        if matches_class_id(node, 10) {
             intrinsic_matches.set_bit(20); // match_Class("gbmcc")
         }
 
         // Instruction 22: CheckAndSetBit { selector: Class("gbmh"), bit_pos: 22 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmh".to_string())) {
+        if matches_class_id(node, 11) {
             intrinsic_matches.set_bit(22); // match_Class("gbmh")
         }
 
         // Instruction 24: CheckAndSetBit { selector: Class("gbmlbw"), bit_pos: 24 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmlbw".to_string())) {
+        if matches_class_id(node, 12) {
             intrinsic_matches.set_bit(24); // match_Class("gbmlbw")
         }
 
         // Instruction 26: CheckAndSetBit { selector: Class("gbmpala"), bit_pos: 26 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpala".to_string())) {
+        if matches_class_id(node, 13) {
             intrinsic_matches.set_bit(26); // match_Class("gbmpala")
         }
 
         // Instruction 28: CheckAndSetBit { selector: Class("gbmpalb"), bit_pos: 28 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpalb".to_string())) {
+        if matches_class_id(node, 14) {
             intrinsic_matches.set_bit(28); // match_Class("gbmpalb")
         }
 
         // Instruction 30: CheckAndSetBit { selector: Class("gbmpia"), bit_pos: 30 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpia".to_string())) {
+        if matches_class_id(node, 15) {
             intrinsic_matches.set_bit(30); // match_Class("gbmpia")
         }
 
         // Instruction 32: CheckAndSetBit { selector: Class("gbmpiaa"), bit_pos: 32 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpiaa".to_string())) {
+        if matches_class_id(node, 16) {
             intrinsic_matches.set_bit(32); // match_Class("gbmpiaa")
         }
 
         // Instruction 34: CheckAndSetBit { selector: Class("gbmpiaw"), bit_pos: 34 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpiaw".to_string())) {
+        if matches_class_id(node, 17) {
             intrinsic_matches.set_bit(34); // match_Class("gbmpiaw")
         }
 
         // Instruction 36: CheckAndSetBit { selector: Class("gbmpnw"), bit_pos: 36 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmpnw".to_string())) {
+        if matches_class_id(node, 18) {
             intrinsic_matches.set_bit(36); // match_Class("gbmpnw")
         }
 
         // Instruction 38: CheckAndSetBit { selector: Class("gbmt"), bit_pos: 38 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmt".to_string())) {
+        if matches_class_id(node, 19) {
             intrinsic_matches.set_bit(38); // match_Class("gbmt")
         }
 
         // Instruction 40: CheckAndSetBit { selector: Class("gbmtc"), bit_pos: 40 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbmtc".to_string())) {
+        if matches_class_id(node, 20) {
             intrinsic_matches.set_bit(40); // match_Class("gbmtc")
         }
 
         // Instruction 42: CheckAndSetBit { selector: Class("gbp0"), bit_pos: 42 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbp0".to_string())) {
+        if matches_class_id(node, 21) {
             intrinsic_matches.set_bit(42); // match_Class("gbp0")
         }
 
         // Instruction 44: CheckAndSetBit { selector: Class("gbpmc"), bit_pos: 44 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbpmc".to_string())) {
+        if matches_class_id(node, 22) {
             intrinsic_matches.set_bit(44); // match_Class("gbpmc")
         }
 
         // Instruction 46: CheckAndSetBit { selector: Class("gbpms2"), bit_pos: 46 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbpms2".to_string())) {
+        if matches_class_id(node, 23) {
             intrinsic_matches.set_bit(46); // match_Class("gbpms2")
         }
 
         // Instruction 48: CheckAndSetBit { selector: Class("gbprcb"), bit_pos: 48 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcb".to_string())) {
+        if matches_class_id(node, 24) {
             intrinsic_matches.set_bit(48); // match_Class("gbprcb")
         }
 
         // Instruction 50: CheckAndSetBit { selector: Class("gbprcd"), bit_pos: 50 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprcd".to_string())) {
+        if matches_class_id(node, 25) {
             intrinsic_matches.set_bit(50); // match_Class("gbprcd")
         }
 
         // Instruction 52: CheckAndSetBit { selector: Class("gbprci"), bit_pos: 52 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprci".to_string())) {
+        if matches_class_id(node, 26) {
             intrinsic_matches.set_bit(52); // match_Class("gbprci")
         }
 
         // Instruction 54: CheckAndSetBit { selector: Class("gbprct"), bit_pos: 54 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbprct".to_string())) {
+        if matches_class_id(node, 27) {
             intrinsic_matches.set_bit(54); // match_Class("gbprct")
         }
 
         // Instruction 56: CheckAndSetBit { selector: Class("gbps2"), bit_pos: 56 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbps2".to_string())) {
+        if matches_class_id(node, 28) {
             intrinsic_matches.set_bit(56); // match_Class("gbps2")
         }
 
         // Instruction 58: CheckAndSetBit { selector: Class("gbqfb"), bit_pos: 58 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb".to_string())) {
+        if matches_class_id(node, 29) {
             intrinsic_matches.set_bit(58); // match_Class("gbqfb")
         }
 
         // Instruction 60: CheckAndSetBit { selector: Class("gbqfb-hvr"), bit_pos: 60 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfb-hvr".to_string())) {
+        if matches_class_id(node, 30) {
             intrinsic_matches.set_bit(60); // match_Class("gbqfb-hvr")
         }
 
         // Instruction 62: CheckAndSetBit { selector: Class("gbqfba"), bit_pos: 62 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfba".to_string())) {
+        if matches_class_id(node, 31) {
             intrinsic_matches.set_bit(62); // match_Class("gbqfba")
         }
 
         // Instruction 64: CheckAndSetBit { selector: Class("gbqfbb"), bit_pos: 64 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfbb".to_string())) {
+        if matches_class_id(node, 32) {
             intrinsic_matches.set_bit(64); // match_Class("gbqfbb")
         }
 
         // Instruction 66: CheckAndSetBit { selector: Class("gbqfbb-hvr"), bit_pos: 66 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbqfbb-hvr".to_string())) {
+        if matches_class_id(node, 33) {
             intrinsic_matches.set_bit(66); // match_Class("gbqfbb-hvr")
         }
 
         // Instruction 68: CheckAndSetBit { selector: Class("gbsb"), bit_pos: 68 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbsb".to_string())) {
+        if matches_class_id(node, 34) {
             intrinsic_matches.set_bit(68); // match_Class("gbsb")
         }
 
         // Instruction 70: CheckAndSetBit { selector: Class("gbsbic"), bit_pos: 70 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbsbic".to_string())) {
+        if matches_class_id(node, 35) {
             intrinsic_matches.set_bit(70); // match_Class("gbsbic")
         }
 
         // Instruction 72: CheckAndSetBit { selector: Class("gbt"), bit_pos: 72 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbt".to_string())) {
+        if matches_class_id(node, 36) {
             intrinsic_matches.set_bit(72); // match_Class("gbt")
         }
 
         // Instruction 74: CheckAndSetBit { selector: Class("gbtb2"), bit_pos: 74 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtb2".to_string())) {
+        if matches_class_id(node, 37) {
             intrinsic_matches.set_bit(74); // match_Class("gbtb2")
         }
 
         // Instruction 76: CheckAndSetBit { selector: Class("gbtcb"), bit_pos: 76 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtcb".to_string())) {
+        if matches_class_id(node, 38) {
             intrinsic_matches.set_bit(76); // match_Class("gbtcb")
         }
 
         // Instruction 78: CheckAndSetBit { selector: Class("gbto"), bit_pos: 78 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbto".to_string())) {
+        if matches_class_id(node, 39) {
             intrinsic_matches.set_bit(78); // match_Class("gbto")
         }
 
         // Instruction 80: CheckAndSetBit { selector: Class("gbts"), bit_pos: 80 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbts".to_string())) {
+        if matches_class_id(node, 40) {
             intrinsic_matches.set_bit(80); // match_Class("gbts")
         }
 
         // Instruction 82: CheckAndSetBit { selector: Class("gbtsa"), bit_pos: 82 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbtsa".to_string())) {
+        if matches_class_id(node, 41) {
             intrinsic_matches.set_bit(82); // match_Class("gbtsa")
         }
 
         // Instruction 84: CheckAndSetBit { selector: Class("gbxms"), bit_pos: 84 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxms".to_string())) {
+        if matches_class_id(node, 42) {
             intrinsic_matches.set_bit(84); // match_Class("gbxms")
         }
 
         // Instruction 86: CheckAndSetBit { selector: Class("gbxo"), bit_pos: 86 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxo".to_string())) {
+        if matches_class_id(node, 43) {
             intrinsic_matches.set_bit(86); // match_Class("gbxo")
         }
 
         // Instruction 88: CheckAndSetBit { selector: Class("gbxv"), bit_pos: 88 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxv".to_string())) {
+        if matches_class_id(node, 44) {
             intrinsic_matches.set_bit(88); // match_Class("gbxv")
         }
 
         // Instruction 90: CheckAndSetBit { selector: Class("gbxx"), bit_pos: 90 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gbxx".to_string())) {
+        if matches_class_id(node, 45) {
             intrinsic_matches.set_bit(90); // match_Class("gbxx")
         }
 
         // Instruction 92: CheckAndSetBit { selector: Class("gsdd_a"), bit_pos: 92 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsdd_a".to_string())) {
+        if matches_class_id(node, 46) {
             intrinsic_matches.set_bit(92); // match_Class("gsdd_a")
         }
 
         // Instruction 94: CheckAndSetBit { selector: Class("gsfs"), bit_pos: 94 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsfs".to_string())) {
+        if matches_class_id(node, 47) {
             intrinsic_matches.set_bit(94); // match_Class("gsfs")
         }
 
         // Instruction 96: CheckAndSetBit { selector: Class("gsib_a"), bit_pos: 96 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_a".to_string())) {
+        if matches_class_id(node, 48) {
             intrinsic_matches.set_bit(96); // match_Class("gsib_a")
         }
 
         // Instruction 98: CheckAndSetBit { selector: Class("gsib_b"), bit_pos: 98 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsib_b".to_string())) {
+        if matches_class_id(node, 49) {
             intrinsic_matches.set_bit(98); // match_Class("gsib_b")
         }
 
         // Instruction 100: CheckAndSetBit { selector: Class("gsls_a"), bit_pos: 100 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsls_a".to_string())) {
+        if matches_class_id(node, 50) {
             intrinsic_matches.set_bit(100); // match_Class("gsls_a")
         }
 
         // Instruction 102: CheckAndSetBit { selector: Class("gsmq_a"), bit_pos: 102 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsmq_a".to_string())) {
+        if matches_class_id(node, 51) {
             intrinsic_matches.set_bit(102); // match_Class("gsmq_a")
         }
 
         // Instruction 104: CheckAndSetBit { selector: Class("gsn_a"), bit_pos: 104 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_a".to_string())) {
+        if matches_class_id(node, 52) {
             intrinsic_matches.set_bit(104); // match_Class("gsn_a")
         }
 
         // Instruction 106: CheckAndSetBit { selector: Class("gsn_b"), bit_pos: 106 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_b".to_string())) {
+        if matches_class_id(node, 53) {
             intrinsic_matches.set_bit(106); // match_Class("gsn_b")
         }
 
         // Instruction 108: CheckAndSetBit { selector: Class("gsn_c"), bit_pos: 108 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsn_c".to_string())) {
+        if matches_class_id(node, 54) {
             intrinsic_matches.set_bit(108); // match_Class("gsn_c")
         }
 
         // Instruction 110: CheckAndSetBit { selector: Class("gspqs_b"), bit_pos: 110 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gspqs_b".to_string())) {
+        if matches_class_id(node, 55) {
             intrinsic_matches.set_bit(110); // match_Class("gspqs_b")
         }
 
         // Instruction 112: CheckAndSetBit { selector: Class("gsq_a"), bit_pos: 112 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gsq_a".to_string())) {
+        if matches_class_id(node, 56) {
             intrinsic_matches.set_bit(112); // match_Class("gsq_a")
         }
 
         // Instruction 114: CheckAndSetBit { selector: Class("gss_ifl"), bit_pos: 114 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gss_ifl".to_string())) {
+        if matches_class_id(node, 57) {
             intrinsic_matches.set_bit(114); // match_Class("gss_ifl")
         }
 
         // Instruction 116: CheckAndSetBit { selector: Class("gssb_a"), bit_pos: 116 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_a".to_string())) {
+        if matches_class_id(node, 58) {
             intrinsic_matches.set_bit(116); // match_Class("gssb_a")
         }
 
         // Instruction 118: CheckAndSetBit { selector: Class("gssb_c"), bit_pos: 118 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_c".to_string())) {
+        if matches_class_id(node, 59) {
             intrinsic_matches.set_bit(118); // match_Class("gssb_c")
         }
 
         // Instruction 120: CheckAndSetBit { selector: Class("gssb_e"), bit_pos: 120 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_e".to_string())) {
+        if matches_class_id(node, 60) {
             intrinsic_matches.set_bit(120); // match_Class("gssb_e")
         }
 
         // Instruction 122: CheckAndSetBit { selector: Class("gssb_f"), bit_pos: 122 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_f".to_string())) {
+        if matches_class_id(node, 61) {
             intrinsic_matches.set_bit(122); // match_Class("gssb_f")
         }
 
         // Instruction 124: CheckAndSetBit { selector: Class("gssb_g"), bit_pos: 124 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_g".to_string())) {
+        if matches_class_id(node, 62) {
             intrinsic_matches.set_bit(124); // match_Class("gssb_g")
         }
 
         // Instruction 126: CheckAndSetBit { selector: Class("gssb_h"), bit_pos: 126 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_h".to_string())) {
+        if matches_class_id(node, 63) {
             intrinsic_matches.set_bit(126); // match_Class("gssb_h")
         }
 
         // Instruction 128: CheckAndSetBit { selector: Class("gssb_i"), bit_pos: 128 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_i".to_string())) {
+        if matches_class_id(node, 64) {
             intrinsic_matches.set_bit(128); // match_Class("gssb_i")
         }
 
         // Instruction 130: CheckAndSetBit { selector: Class("gssb_k"), bit_pos: 130 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_k".to_string())) {
+        if matches_class_id(node, 65) {
             intrinsic_matches.set_bit(130); // match_Class("gssb_k")
         }
 
         // Instruction 132: CheckAndSetBit { selector: Class("gssb_l"), bit_pos: 132 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_l".to_string())) {
+        if matches_class_id(node, 66) {
             intrinsic_matches.set_bit(132); // match_Class("gssb_l")
         }
 
         // Instruction 134: CheckAndSetBit { selector: Class("gssb_m"), bit_pos: 134 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("gssb_m".to_string())) {
+        if matches_class_id(node, 67) {
             intrinsic_matches.set_bit(134); // match_Class("gssb_m")
         }
 
         // Instruction 136: CheckAndSetBit { selector: Class("h"), bit_pos: 136 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("h".to_string())) {
+        if matches_class_id(node, 68) {
             intrinsic_matches.set_bit(136); // match_Class("h")
         }
 
         // Instruction 138: CheckAndSetBit { selector: Class("lsb"), bit_pos: 138 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lsb".to_string())) {
+        if matches_class_id(node, 69) {
             intrinsic_matches.set_bit(138); // match_Class("lsb")
         }
 
         // Instruction 140: CheckAndSetBit { selector: Class("lsbb"), bit_pos: 140 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lsbb".to_string())) {
+        if matches_class_id(node, 70) {
             intrinsic_matches.set_bit(140); // match_Class("lsbb")
         }
 
         // Instruction 142: CheckAndSetBit { selector: Class("lst"), bit_pos: 142 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("lst".to_string())) {
+        if matches_class_id(node, 71) {
             intrinsic_matches.set_bit(142); // match_Class("lst")
         }
 
         // Instruction 144: CheckAndSetBit { selector: Class("sblc"), bit_pos: 144 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("sblc".to_string())) {
+        if matches_class_id(node, 72) {
             intrinsic_matches.set_bit(144); // match_Class("sblc")
         }
 
         // Instruction 146: CheckAndSetBit { selector: Class("z4hgWe"), bit_pos: 146 }
-        if node_matches_selector_generated(node, &SimpleSelector::Class("z4hgWe".to_string())) {
+        if matches_class_id(node, 73) {
             intrinsic_matches.set_bit(146); // match_Class("z4hgWe")
         }
 
         // Instruction 148: CheckAndSetBit { selector: Id("SIvCob"), bit_pos: 148 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("SIvCob".to_string())) {
+        if matches_id_id(node, 74) {
             intrinsic_matches.set_bit(148); // match_Id("SIvCob")
         }
 
         // Instruction 150: CheckAndSetBit { selector: Id("gb"), bit_pos: 150 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gb".to_string())) {
+        if matches_id_id(node, 75) {
             intrinsic_matches.set_bit(150); // match_Id("gb")
         }
 
         // Instruction 152: CheckAndSetBit { selector: Id("gbb"), bit_pos: 152 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbb".to_string())) {
+        if matches_id_id(node, 76) {
             intrinsic_matches.set_bit(152); // match_Id("gbb")
         }
 
         // Instruction 154: CheckAndSetBit { selector: Id("gbbw"), bit_pos: 154 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbbw".to_string())) {
+        if matches_id_id(node, 77) {
             intrinsic_matches.set_bit(154); // match_Id("gbbw")
         }
 
         // Instruction 156: CheckAndSetBit { selector: Id("gbg"), bit_pos: 156 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbg".to_string())) {
+        if matches_id_id(node, 78) {
             intrinsic_matches.set_bit(156); // match_Id("gbg")
         }
 
         // Instruction 158: CheckAndSetBit { selector: Id("gbg5"), bit_pos: 158 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbg5".to_string())) {
+        if matches_id_id(node, 79) {
             intrinsic_matches.set_bit(158); // match_Id("gbg5")
         }
 
         // Instruction 160: CheckAndSetBit { selector: Id("gbgs5"), bit_pos: 160 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbgs5".to_string())) {
+        if matches_id_id(node, 80) {
             intrinsic_matches.set_bit(160); // match_Id("gbgs5")
         }
 
         // Instruction 162: CheckAndSetBit { selector: Id("gbi4id"), bit_pos: 162 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4id".to_string())) {
+        if matches_id_id(node, 81) {
             intrinsic_matches.set_bit(162); // match_Id("gbi4id")
         }
 
         // Instruction 164: CheckAndSetBit { selector: Id("gbi4s1"), bit_pos: 164 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4s1".to_string())) {
+        if matches_id_id(node, 82) {
             intrinsic_matches.set_bit(164); // match_Id("gbi4s1")
         }
 
         // Instruction 166: CheckAndSetBit { selector: Id("gbi4t"), bit_pos: 166 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi4t".to_string())) {
+        if matches_id_id(node, 83) {
             intrinsic_matches.set_bit(166); // match_Id("gbi4t")
         }
 
         // Instruction 168: CheckAndSetBit { selector: Id("gbi5"), bit_pos: 168 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbi5".to_string())) {
+        if matches_id_id(node, 84) {
             intrinsic_matches.set_bit(168); // match_Id("gbi5")
         }
 
         // Instruction 170: CheckAndSetBit { selector: Id("gbmm"), bit_pos: 170 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmm".to_string())) {
+        if matches_id_id(node, 85) {
             intrinsic_matches.set_bit(170); // match_Id("gbmm")
         }
 
         // Instruction 172: CheckAndSetBit { selector: Id("gbmpal"), bit_pos: 172 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpal".to_string())) {
+        if matches_id_id(node, 86) {
             intrinsic_matches.set_bit(172); // match_Id("gbmpal")
         }
 
         // Instruction 174: CheckAndSetBit { selector: Id("gbmpas"), bit_pos: 174 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpas".to_string())) {
+        if matches_id_id(node, 87) {
             intrinsic_matches.set_bit(174); // match_Id("gbmpas")
         }
 
         // Instruction 176: CheckAndSetBit { selector: Id("gbmpdv"), bit_pos: 176 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpdv".to_string())) {
+        if matches_id_id(node, 88) {
             intrinsic_matches.set_bit(176); // match_Id("gbmpdv")
         }
 
         // Instruction 178: CheckAndSetBit { selector: Id("gbmpid"), bit_pos: 178 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpid".to_string())) {
+        if matches_id_id(node, 89) {
             intrinsic_matches.set_bit(178); // match_Id("gbmpid")
         }
 
         // Instruction 180: CheckAndSetBit { selector: Id("gbmpiw"), bit_pos: 180 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmpiw".to_string())) {
+        if matches_id_id(node, 90) {
             intrinsic_matches.set_bit(180); // match_Id("gbmpiw")
         }
 
         // Instruction 182: CheckAndSetBit { selector: Id("gbmps"), bit_pos: 182 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbmps".to_string())) {
+        if matches_id_id(node, 91) {
             intrinsic_matches.set_bit(182); // match_Id("gbmps")
         }
 
         // Instruction 184: CheckAndSetBit { selector: Id("gbpm"), bit_pos: 184 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbpm".to_string())) {
+        if matches_id_id(node, 92) {
             intrinsic_matches.set_bit(184); // match_Id("gbpm")
         }
 
         // Instruction 186: CheckAndSetBit { selector: Id("gbpms"), bit_pos: 186 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbpms".to_string())) {
+        if matches_id_id(node, 93) {
             intrinsic_matches.set_bit(186); // match_Id("gbpms")
         }
 
         // Instruction 188: CheckAndSetBit { selector: Id("gbprca"), bit_pos: 188 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbprca".to_string())) {
+        if matches_id_id(node, 94) {
             intrinsic_matches.set_bit(188); // match_Id("gbprca")
         }
 
         // Instruction 190: CheckAndSetBit { selector: Id("gbprcs"), bit_pos: 190 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbprcs".to_string())) {
+        if matches_id_id(node, 95) {
             intrinsic_matches.set_bit(190); // match_Id("gbprcs")
         }
 
         // Instruction 192: CheckAndSetBit { selector: Id("gbqfb"), bit_pos: 192 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbqfb".to_string())) {
+        if matches_id_id(node, 29) {
             intrinsic_matches.set_bit(192); // match_Id("gbqfb")
         }
 
         // Instruction 194: CheckAndSetBit { selector: Id("gbqfbw"), bit_pos: 194 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbqfbw".to_string())) {
+        if matches_id_id(node, 96) {
             intrinsic_matches.set_bit(194); // match_Id("gbqfbw")
         }
 
         // Instruction 196: CheckAndSetBit { selector: Id("gbs"), bit_pos: 196 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbs".to_string())) {
+        if matches_id_id(node, 97) {
             intrinsic_matches.set_bit(196); // match_Id("gbs")
         }
 
         // Instruction 198: CheckAndSetBit { selector: Id("gbx3"), bit_pos: 198 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbx3".to_string())) {
+        if matches_id_id(node, 98) {
             intrinsic_matches.set_bit(198); // match_Id("gbx3")
         }
 
         // Instruction 200: CheckAndSetBit { selector: Id("gbx4"), bit_pos: 200 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbx4".to_string())) {
+        if matches_id_id(node, 99) {
             intrinsic_matches.set_bit(200); // match_Id("gbx4")
         }
 
         // Instruction 202: CheckAndSetBit { selector: Id("gbz"), bit_pos: 202 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gbz".to_string())) {
+        if matches_id_id(node, 100) {
             intrinsic_matches.set_bit(202); // match_Id("gbz")
         }
 
         // Instruction 204: CheckAndSetBit { selector: Id("gog"), bit_pos: 204 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gog".to_string())) {
+        if matches_id_id(node, 101) {
             intrinsic_matches.set_bit(204); // match_Id("gog")
         }
 
         // Instruction 206: CheckAndSetBit { selector: Id("gssb_b"), bit_pos: 206 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gssb_b".to_string())) {
+        if matches_id_id(node, 102) {
             intrinsic_matches.set_bit(206); // match_Id("gssb_b")
         }
 
         // Instruction 208: CheckAndSetBit { selector: Id("gws-output-pages-elements-homepage_additional_languages__als"), bit_pos: 208 }
-        if node_matches_selector_generated(node, &SimpleSelector::Id("gws-output-pages-elements-homepage_additional_languages__als".to_string())) {
+        if matches_id_id(node, 103) {
             intrinsic_matches.set_bit(208); // match_Id("gws-output-pages-elements-homepage_additional_languages__als")
         }
 
         // Instruction 210: CheckAndSetBit { selector: Type("a"), bit_pos: 210 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("a".to_string())) {
+        if matches_tag_id(node, 104) {
             intrinsic_matches.set_bit(210); // match_Type("a")
         }
 
         // Instruction 212: CheckAndSetBit { selector: Type("body"), bit_pos: 212 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("body".to_string())) {
+        if matches_tag_id(node, 105) {
             intrinsic_matches.set_bit(212); // match_Type("body")
         }
 
         // Instruction 214: CheckAndSetBit { selector: Type("div"), bit_pos: 214 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("div".to_string())) {
+        if matches_tag_id(node, 106) {
             intrinsic_matches.set_bit(214); // match_Type("div")
         }
 
         // Instruction 216: CheckAndSetBit { selector: Type("input"), bit_pos: 216 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("input".to_string())) {
+        if matches_tag_id(node, 107) {
             intrinsic_matches.set_bit(216); // match_Type("input")
         }
 
         // Instruction 218: CheckAndSetBit { selector: Type("span"), bit_pos: 218 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("span".to_string())) {
+        if matches_tag_id(node, 108) {
             intrinsic_matches.set_bit(218); // match_Type("span")
         }
 
         // Instruction 220: CheckAndSetBit { selector: Type("td"), bit_pos: 220 }
-        if node_matches_selector_generated(node, &SimpleSelector::Type("td".to_string())) {
+        if matches_tag_id(node, 109) {
             intrinsic_matches.set_bit(220); // match_Type("td")
         }
 
@@ -1820,10 +1993,29 @@ pub fn process_node_generated_from_scratch(
 }
 
 pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
+    let string_map = get_string_to_id_map();
     match selector {
-        SimpleSelector::Type(tag) => node.tag_name == *tag,
-        SimpleSelector::Class(class) => node.classes.contains(class),
-        SimpleSelector::Id(id) => node.id.as_deref() == Some(id),
+        SimpleSelector::Type(tag) => {
+            if let Some(tag_id) = string_map.get(tag.as_str()) {
+                matches_tag_id(node, *tag_id)
+            } else {
+                false
+            }
+        },
+        SimpleSelector::Class(class) => {
+            if let Some(class_id) = string_map.get(class.as_str()) {
+                matches_class_id(node, *class_id)
+            } else {
+                false
+            }
+        },
+        SimpleSelector::Id(id) => {
+            if let Some(id_id) = string_map.get(id.as_str()) {
+                matches_id_id(node, *id_id)
+            } else {
+                false
+            }
+        },
     }
 }
 
@@ -1841,17 +2033,26 @@ pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize
 fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVector,
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
-    if !node.needs_any_recomputation(parent_state) {
-        *hits += 1;
-        // Skip entire subtree when cached
-        return;
-    }
     
-    *misses += 1;
-    let child_states = process_node_generated_incremental(node, parent_state);
-    for child in node.children.iter_mut() {
-        process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+    // Logic 1: Check if node itself needs recomputation
+    let child_states = if node.needs_self_recomputation(parent_state) {
+        *misses += 1;
+        // Recompute node and get fresh child_states
+        process_node_generated_incremental(node, parent_state)
+    } else {
+        *hits += 1;
+        // Use cached child_states - major optimization for internal nodes!
+        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+    };
+    
+    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
+    if node.has_dirty_descendant {
+        // Recurse into children only if there are dirty descendants
+        for child in node.children.iter_mut() {
+            process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+        }
     }
+    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 
 /// From-scratch processing driver for comparison
