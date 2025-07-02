@@ -987,7 +987,7 @@ impl TreeNFAProgram {
         code
     }
 
-    fn generate_traversal_wrappers(&self) -> String {
+    pub fn generate_traversal_wrappers(&self) -> String {
         r#"
 /// Incremental processing driver with statistics tracking
 pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
@@ -1040,6 +1040,146 @@ fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVe
     }
 }
 "#.to_string()
+    }
+
+    /// Generate completely naive layout calculation code without any optimization
+    pub fn generate_naive_rust_code(&self) -> String {
+        let mut code = String::new();
+
+        // Add necessary imports for the generated code to be self-contained
+        code.push_str("use css_bitvector_compiler::{HtmlNode, SimpleSelector};\n");
+        code.push_str("use std::collections::HashMap;\n\n");
+
+        // Generate naive CSS matching functions for each rule
+        code.push_str("// === NAIVE CSS MATCHING FUNCTIONS ===\n");
+        code.push_str("// These functions calculate layout from scratch without any caching\n\n");
+
+        // Generate individual matching functions for each CSS rule
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            match instruction {
+                NFAInstruction::CheckAndSetBit { selector, bit_pos } => {
+                    code.push_str(&format!("// Rule {}: {:?}\n", i, instruction));
+                    code.push_str(&format!("pub fn matches_rule_{}(node: &HtmlNode) -> bool {{\n", bit_pos));
+                    
+                    let condition = match selector {
+                        SimpleSelector::Type(tag) => format!("node.tag_name == \"{}\"", tag),
+                        SimpleSelector::Class(class) => format!("node.classes.contains(\"{}\")", class),
+                        SimpleSelector::Id(id) => format!("node.id.as_ref() == Some(&\"{}\".to_string())", id),
+                    };
+                    
+                    code.push_str(&format!("    {}\n", condition));
+                    code.push_str("}\n\n");
+                }
+                NFAInstruction::CheckParentAndSetBit { parent_state_bit, child_selector, result_bit } => {
+                    code.push_str(&format!("// Rule {}: Parent-child rule\n", i));
+                    code.push_str(&format!("pub fn matches_parent_child_rule_{}(node: &HtmlNode, parent_matches: &[bool]) -> bool {{\n", result_bit));
+                    
+                    let child_condition = match child_selector {
+                        SimpleSelector::Type(tag) => format!("node.tag_name == \"{}\"", tag),
+                        SimpleSelector::Class(class) => format!("node.classes.contains(\"{}\")", class),
+                        SimpleSelector::Id(id) => format!("node.id.as_ref() == Some(&\"{}\".to_string())", id),
+                    };
+                    
+                    code.push_str(&format!("    if {} {{\n", child_condition));
+                    code.push_str(&format!("        parent_matches.get({}).copied().unwrap_or(false)\n", parent_state_bit));
+                    code.push_str("    } else {\n");
+                    code.push_str("        false\n");
+                    code.push_str("    }\n");
+                    code.push_str("}\n\n");
+                }
+                _ => {} // Skip propagation rules in naive implementation
+            }
+        }
+
+        // Generate main naive processing function
+        code.push_str("// === MAIN NAIVE PROCESSING FUNCTION ===\n");
+        code.push_str("pub fn process_node_naive(node: &mut HtmlNode, parent_matches: &[bool]) -> Vec<bool> {\n");
+        code.push_str(&format!("    let mut matches = vec![false; {}];\n", self.total_bits));
+        code.push_str("    \n");
+        code.push_str("    // Check all simple selectors\n");
+        
+        for instruction in &self.instructions {
+            if let NFAInstruction::CheckAndSetBit { bit_pos, .. } = instruction {
+                code.push_str(&format!("    if matches_rule_{}(node) {{\n", bit_pos));
+                code.push_str(&format!("        matches[{}] = true;\n", bit_pos));
+                code.push_str("    }\n");
+            }
+        }
+        
+        code.push_str("    \n");
+        code.push_str("    // Check all parent-child rules\n");
+        
+        let has_parent_child_rules = self.instructions.iter().any(|inst| {
+            matches!(inst, NFAInstruction::CheckParentAndSetBit { .. })
+        });
+        
+        if has_parent_child_rules {
+            for instruction in &self.instructions {
+                if let NFAInstruction::CheckParentAndSetBit { result_bit, .. } = instruction {
+                    code.push_str(&format!("    if matches_parent_child_rule_{}(node, parent_matches) {{\n", result_bit));
+                    code.push_str(&format!("        matches[{}] = true;\n", result_bit));
+                    code.push_str("    }\n");
+                }
+            }
+        } else {
+            code.push_str("    // No parent-child rules to check\n");
+            code.push_str("    let _ = parent_matches; // Suppress unused parameter warning\n");
+        }
+        
+        code.push_str("    \n");
+        code.push_str("    matches\n");
+        code.push_str("}\n\n");
+
+        // Generate tree traversal function
+        code.push_str("// === NAIVE TREE TRAVERSAL ===\n");
+        code.push_str("pub fn process_tree_naive(root: &mut HtmlNode) -> usize {\n");
+        code.push_str("    let mut total_nodes = 0;\n");
+        code.push_str(&format!("    let empty_parent = vec![false; {}];\n", self.total_bits));
+        code.push_str("    process_tree_recursive_naive(root, &empty_parent, &mut total_nodes);\n");
+        code.push_str("    total_nodes\n");
+        code.push_str("}\n\n");
+        
+        code.push_str("fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {\n");
+        code.push_str("    *total += 1;\n");
+        code.push_str("    \n");
+        code.push_str("    // Calculate matches for this node from scratch\n");
+        code.push_str("    let node_matches = process_node_naive(node, parent_matches);\n");
+        code.push_str("    \n");
+        code.push_str("    // Process all children with this node's matches as their parent context\n");
+        code.push_str("    for child in node.children.iter_mut() {\n");
+        code.push_str("        process_tree_recursive_naive(child, &node_matches, total);\n");
+        code.push_str("    }\n");
+        code.push_str("}\n\n");
+
+        // Generate helper function to get rule names (simplified to avoid string escaping issues)
+        code.push_str("// === HELPER FUNCTIONS ===\n");
+        code.push_str("pub fn get_rule_name(rule_index: usize) -> String {\n");
+        code.push_str("    format!(\"rule_{}\", rule_index)\n");
+        code.push_str("}\n\n");
+
+        // Add rule documentation as comments
+        code.push_str("// Rule mapping:\n");
+        for (bit_pos, name) in &self.state_names {
+            code.push_str(&format!("// Rule {}: {}\n", bit_pos, name));
+        }
+        code.push_str("\n");
+
+        // Generate function to print all matches for debugging
+        code.push_str("pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {\n");
+        code.push_str("    println!(\"Node '{}' matches:\", node.tag_name);\n");
+        code.push_str("    for (i, &matched) in matches.iter().enumerate() {\n");
+        code.push_str("        if matched {\n");
+        code.push_str("            println!(\"  Rule {}: {}\", i, get_rule_name(i));\n");
+        code.push_str("        }\n");
+        code.push_str("    }\n");
+        code.push_str("}\n\n");
+
+        // Generate function to get total number of rules
+        code.push_str("pub fn get_total_rules() -> usize {\n");
+        code.push_str(&format!("    {} // Total number of CSS rules\n", self.total_bits));
+        code.push_str("}\n");
+
+        code
     }
 
     fn generate_string_interning_code(&self) -> String {
@@ -1114,8 +1254,6 @@ fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVe
 
         code
     }
-
-    // ...existing code...
 }
 
 // Export CSS Compiler
@@ -1364,6 +1502,48 @@ pub fn load_dom_from_file() -> HtmlNode {
     let mut root = convert_json_dom_to_html_node(google_node_data);
     root.init_parent_pointers();
     root
+}
+
+// === RESULT COMPARISON UTILITIES ===
+
+pub fn create_node_identifier(node: &HtmlNode) -> String {
+    if let Some(id) = &node.id {
+        format!("{}#{}", node.tag_name, id)
+    } else if !node.classes.is_empty() {
+        let mut class_vec: Vec<String> = node.classes.iter().cloned().collect();
+        class_vec.sort(); // Sort for consistent ordering
+        format!("{}.{}", node.tag_name, class_vec.join("."))
+    } else {
+        node.tag_name.clone()
+    }
+}
+
+pub fn save_results_to_file(results: &[(String, Vec<usize>)], filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let mut output = String::new();
+    for (node_id, matches) in results {
+        output.push_str(&format!("{}: {:?}\n", node_id, matches));
+    }
+    std::fs::write(filename, output)?;
+    Ok(())
+}
+
+pub fn compare_result_files(optimized_file: &str, naive_file: &str) -> Result<bool, Box<dyn std::error::Error>> {
+    if !std::path::Path::new(optimized_file).exists() {
+        println!("ℹ️  Run the optimized example first to enable result comparison");
+        return Ok(false);
+    }
+    
+    let optimized_content = std::fs::read_to_string(optimized_file)?;
+    let naive_content = std::fs::read_to_string(naive_file)?;
+    
+    if optimized_content == naive_content {
+        println!("🎉 SUCCESS: Naive and optimized results are IDENTICAL!");
+        Ok(true)
+    } else {
+        println!("⚠️  WARNING: Results differ between naive and optimized approaches!");
+        println!("   Check {} vs {} for differences", optimized_file, naive_file);
+        Ok(false)
+    }
 }
 
 pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode {
