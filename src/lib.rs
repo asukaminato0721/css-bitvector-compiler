@@ -426,7 +426,7 @@ pub struct HtmlNode {
     pub cached_child_states: Option<BitVector>,
     pub parent: Option<*mut HtmlNode>,
     // BitVector-only version of parent state tracking (alternative to IState)
-    pub cached_parent_bits_read: Option<BitVector>,  // which parent bits were actually read
+    pub cached_parent_bits_read: Option<BitVector>, // which parent bits were actually read
     pub cached_parent_values_read: Option<BitVector>, // what values those bits had when read
 }
 // the idea is that check the child state first. so we dont need check parent if child not meet.
@@ -625,8 +625,14 @@ impl HtmlNode {
     }
 
     /// BitVector-only version: Check if any relevant part of the parent state has changed
-    pub fn has_relevant_parent_state_changed_bitvector(&self, new_parent_state: &BitVector) -> bool {
-        if let (Some(cached_bits_read), Some(cached_values_read)) = (&self.cached_parent_bits_read, &self.cached_parent_values_read) {
+    pub fn has_relevant_parent_state_changed_bitvector(
+        &self,
+        new_parent_state: &BitVector,
+    ) -> bool {
+        if let (Some(cached_bits_read), Some(cached_values_read)) = (
+            &self.cached_parent_bits_read,
+            &self.cached_parent_values_read,
+        ) {
             // Only check bits that were actually read (optimization: skip unused bits)
             for bit_pos in 0..cached_bits_read.capacity {
                 if cached_bits_read.is_bit_set(bit_pos) {
@@ -676,7 +682,11 @@ impl HtmlNode {
     }
 
     /// Set the complete BitVector-based parent state cache
-    pub fn set_parent_state_cache_bitvector(&mut self, bits_read: BitVector, values_read: BitVector) {
+    pub fn set_parent_state_cache_bitvector(
+        &mut self,
+        bits_read: BitVector,
+        values_read: BitVector,
+    ) {
         self.cached_parent_bits_read = Some(bits_read);
         self.cached_parent_values_read = Some(values_read);
     }
@@ -836,9 +846,7 @@ impl TreeNFAProgram {
         let mut code = String::new();
 
         // Add necessary imports for the generated code to be self-contained
-        code.push_str(
-            "use crate::{BitVector, HtmlNode, SimpleSelector, IState};\n",
-        );
+        code.push_str("use crate::{BitVector, HtmlNode, SimpleSelector, IState};\n");
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
 
@@ -1066,9 +1074,7 @@ impl TreeNFAProgram {
         let mut code = String::new();
 
         // Add necessary imports for the generated code to be self-contained
-        code.push_str(
-            "use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n",
-        );
+        code.push_str("use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n");
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
 
@@ -1107,13 +1113,19 @@ impl TreeNFAProgram {
         );
         code.push_str("    \n");
         code.push_str("    // BitVector-only parent state tracking\n");
-        code.push_str("    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n");
-        code.push_str("    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str(
+            "    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n",
+        );
+        code.push_str(
+            "    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);\n",
+        );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);\n");
+        code.push_str(
+            "    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);\n",
+        );
         code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
@@ -1127,8 +1139,12 @@ impl TreeNFAProgram {
         code.push_str(") -> BitVector { // returns child_states\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("    let mut current_matches = intrinsic_matches;\n");
-        code.push_str("    let mut _parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n");
-        code.push_str("    let mut _parent_values_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str(
+            "    let mut _parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n",
+        );
+        code.push_str(
+            "    let mut _parent_values_read = BitVector::with_capacity(parent_state.capacity);\n",
+        );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
@@ -1181,9 +1197,7 @@ impl TreeNFAProgram {
                     "        let parent_bit_value = parent_state.is_bit_set({});\n",
                     parent_state_bit
                 ));
-                code.push_str(&format!(
-                    "        if parent_bit_value {{\n"
-                ));
+                code.push_str(&format!("        if parent_bit_value {{\n"));
                 code.push_str(&format!(
                     "            parent_values_read.set_bit({});\n",
                     parent_state_bit
@@ -2072,10 +2086,10 @@ mod tests {
     #[test]
     fn test_bitvector_parent_state_tracking() {
         let mut node = HtmlNode::new("div");
-        
+
         // Clean the node first (nodes start dirty from construction)
         node.mark_clean();
-        
+
         // Test recording parent bit reads
         node.record_parent_bit_read(5, true);
         node.record_parent_bit_read(10, false);
@@ -2083,7 +2097,7 @@ mod tests {
 
         // Create a parent state with the same bits set
         let mut parent_state = BitVector::new();
-        parent_state.set_bit(5);  // bit 5 = true (matches)
+        parent_state.set_bit(5); // bit 5 = true (matches)
         // bit 10 = false (matches)
         parent_state.set_bit(15); // bit 15 = true (matches)
 
@@ -2093,7 +2107,7 @@ mod tests {
 
         // Change bit 5 from true to false
         parent_state.clear_bit(5);
-        
+
         // Should need recomputation - tracked bit changed
         assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
         assert!(node.needs_self_recomputation_bitvector(&parent_state));
@@ -2102,16 +2116,16 @@ mod tests {
     #[test]
     fn test_bitvector_unused_bits_optimization() {
         let mut node = HtmlNode::new("div");
-        
+
         // Only record that we read bits 5 and 10
         node.record_parent_bit_read(5, true);
         node.record_parent_bit_read(10, false);
 
         // Create parent state with many bits set
         let mut parent_state = BitVector::new();
-        parent_state.set_bit(5);  // Tracked: true
+        parent_state.set_bit(5); // Tracked: true
         // bit 10 = false (tracked)
-        parent_state.set_bit(1);  // Not tracked - should be ignored
+        parent_state.set_bit(1); // Not tracked - should be ignored
         parent_state.set_bit(20); // Not tracked - should be ignored
         parent_state.set_bit(100); // Not tracked - should be ignored
 
@@ -2122,7 +2136,7 @@ mod tests {
         parent_state.clear_bit(1);
         parent_state.clear_bit(20);
         parent_state.clear_bit(100);
-        
+
         // Should still not need recomputation - untracked bits don't matter
         assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
 
@@ -2134,24 +2148,24 @@ mod tests {
     #[test]
     fn test_bitvector_cache_setting() {
         let mut node = HtmlNode::new("div");
-        
+
         let mut bits_read = BitVector::new();
         bits_read.set_bit(3);
         bits_read.set_bit(7);
-        
+
         let mut values_read = BitVector::new();
         values_read.set_bit(3); // bit 3 was true
         // bit 7 was false (not set)
-        
+
         node.set_parent_state_cache_bitvector(bits_read, values_read);
-        
+
         // Test with matching parent state
         let mut parent_state = BitVector::new();
         parent_state.set_bit(3); // true (matches cached)
         // bit 7 = false (matches cached)
-        
+
         assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
-        
+
         // Test with non-matching parent state
         parent_state.set_bit(7); // Change bit 7 from false to true
         assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));

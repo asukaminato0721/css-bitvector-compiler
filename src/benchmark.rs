@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{rdtsc, HtmlNode, BitVector};
+use css_bitvector_compiler::{BitVector, HtmlNode, rdtsc};
 use serde_json::{self, Value};
 #[derive(Debug, Clone)]
 pub struct WebLayoutFrameResult {

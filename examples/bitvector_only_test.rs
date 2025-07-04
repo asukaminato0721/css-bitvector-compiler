@@ -55,7 +55,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("⚙️  Compiling CSS rules...");
     let mut compiler = CssCompiler::new();
     let program = compiler.compile_css_rules(&css_rules);
-    println!("   ✓ Generated {} NFA instructions", program.instructions.len());
+    println!(
+        "   ✓ Generated {} NFA instructions",
+        program.instructions.len()
+    );
     println!("   ✓ Total state bits: {}", program.total_bits);
 
     // Generate BitVector-only Rust code
@@ -75,17 +78,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📊 Code Statistics:");
     println!("   - BitVector-only code: {} bytes", bitvector_code.len());
     println!("   - IState-based code:   {} bytes", istate_code.len());
-    println!("   - Size difference:     {} bytes", 
+    println!(
+        "   - Size difference:     {} bytes",
         if bitvector_code.len() > istate_code.len() {
             format!("+{}", bitvector_code.len() - istate_code.len())
         } else {
             format!("-{}", istate_code.len() - bitvector_code.len())
-        });
+        }
+    );
 
     // Now test the BitVector-only approach and collect results
     println!();
     println!("🧪 Testing BitVector-Only CSS Processing...");
-    
+
     // Create a fresh copy of the DOM for testing
     let mut test_root = load_dom_from_file();
     let initial_state = BitVector::with_capacity(program.total_bits);
@@ -126,7 +131,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Compare with existing results if available
     println!("\n🔄 Comparing results with other approaches...");
-    
+
     // Compare with naive results
     match compare_result_files("bitvector_results.txt", "naive_results.txt") {
         Ok(true) => println!("   ✅ BitVector-only results MATCH naive results!"),
@@ -156,4 +161,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("   - Potentially better cache locality");
 
     Ok(())
-} 
+}
