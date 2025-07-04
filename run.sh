@@ -39,6 +39,8 @@ cargo run --bin naive-gen
 
 cargo run --example bitvector_only_test
 
+cargo fmt
+
 # Step 3: Compare the results.
 diff naive_results.txt optimized_results.txt
 
