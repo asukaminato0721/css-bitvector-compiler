@@ -425,6 +425,9 @@ pub struct HtmlNode {
     pub cached_node_intrinsic: Option<BitVector>,
     pub cached_child_states: Option<BitVector>,
     pub parent: Option<*mut HtmlNode>,
+    // BitVector-only version of parent state tracking (alternative to IState)
+    pub cached_parent_bits_read: Option<BitVector>,  // which parent bits were actually read
+    pub cached_parent_values_read: Option<BitVector>, // what values those bits had when read
 }
 // the idea is that check the child state first. so we dont need check parent if child not meet.
 //
@@ -442,6 +445,8 @@ impl HtmlNode {
             cached_node_intrinsic: None,
             cached_child_states: None,
             parent: None,
+            cached_parent_bits_read: None,
+            cached_parent_values_read: None,
         }
     }
 
@@ -477,6 +482,8 @@ impl HtmlNode {
     pub fn mark_dirty(&mut self) {
         self.is_self_dirty = true;
         self.cached_node_intrinsic = None;
+        self.cached_parent_bits_read = None;
+        self.cached_parent_values_read = None;
         self.set_summary_bit_on_ancestors();
     }
 
@@ -572,6 +579,21 @@ impl HtmlNode {
             || self.cached_parent_state.is_none()
     }
 
+    /// BitVector-only version: Check if subtree needs recomputation
+    pub fn needs_any_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
+        self.has_relevant_parent_state_changed_bitvector(new_parent_state)
+            || self.is_self_dirty
+            || self.has_dirty_descendant
+            || self.cached_parent_bits_read.is_none()
+    }
+
+    /// BitVector-only version: Check if only the node itself needs recomputation (not including dirty descendants)
+    pub fn needs_self_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
+        self.has_relevant_parent_state_changed_bitvector(new_parent_state)
+            || self.is_self_dirty
+            || self.cached_parent_bits_read.is_none()
+    }
+
     /// Check if any relevant part of the parent state has changed
     pub fn has_relevant_parent_state_changed(&self, new_parent_state: &BitVector) -> bool {
         if let Some(cached_states) = &self.cached_parent_state {
@@ -602,9 +624,61 @@ impl HtmlNode {
         }
     }
 
+    /// BitVector-only version: Check if any relevant part of the parent state has changed
+    pub fn has_relevant_parent_state_changed_bitvector(&self, new_parent_state: &BitVector) -> bool {
+        if let (Some(cached_bits_read), Some(cached_values_read)) = (&self.cached_parent_bits_read, &self.cached_parent_values_read) {
+            // Only check bits that were actually read (optimization: skip unused bits)
+            for bit_pos in 0..cached_bits_read.capacity {
+                if cached_bits_read.is_bit_set(bit_pos) {
+                    // This bit was read, check if its value changed
+                    let cached_value = cached_values_read.is_bit_set(bit_pos);
+                    let current_value = new_parent_state.is_bit_set(bit_pos);
+                    if cached_value != current_value {
+                        return true; // Value changed for a bit we care about
+                    }
+                }
+                // If bit was not read (not set in cached_bits_read), we ignore changes - optimization!
+            }
+            false // No relevant changes detected
+        } else {
+            true // No cached state, need to recompute
+        }
+    }
+
     pub fn mark_clean(&mut self) {
         self.is_self_dirty = false;
         self.has_dirty_descendant = false;
+    }
+
+    /// Record that a parent state bit was read with a specific value (BitVector-only version)
+    pub fn record_parent_bit_read(&mut self, bit_pos: usize, value: bool) {
+        // Initialize BitVectors if not present
+        if self.cached_parent_bits_read.is_none() {
+            self.cached_parent_bits_read = Some(BitVector::new());
+        }
+        if self.cached_parent_values_read.is_none() {
+            self.cached_parent_values_read = Some(BitVector::new());
+        }
+
+        // Record that this bit was read
+        if let Some(ref mut bits_read) = self.cached_parent_bits_read {
+            bits_read.set_bit(bit_pos);
+        }
+
+        // Record the value that was read
+        if let Some(ref mut values_read) = self.cached_parent_values_read {
+            if value {
+                values_read.set_bit(bit_pos);
+            } else {
+                values_read.clear_bit(bit_pos);
+            }
+        }
+    }
+
+    /// Set the complete BitVector-based parent state cache
+    pub fn set_parent_state_cache_bitvector(&mut self, bits_read: BitVector, values_read: BitVector) {
+        self.cached_parent_bits_read = Some(bits_read);
+        self.cached_parent_values_read = Some(values_read);
     }
 
     pub fn mark_child_dirty_by_index(&mut self, child_index: usize) -> bool {
@@ -763,14 +837,14 @@ impl TreeNFAProgram {
 
         // Add necessary imports for the generated code to be self-contained
         code.push_str(
-            "use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector, IState};\n",
+            "use crate::{BitVector, HtmlNode, SimpleSelector, IState};\n",
         );
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
 
         // Add capacity constant for the generated BitVectors
         code.push_str(&format!(
-            "const BITVECTOR_CAPACITY: usize = {};\n\n",
+            "pub const BITVECTOR_CAPACITY: usize = {};\n\n",
             self.total_bits
         ));
 
@@ -985,6 +1059,207 @@ impl TreeNFAProgram {
             }
         }
         code
+    }
+
+    /// Generate BitVector-only Rust code (alternative to IState-based version)
+    pub fn generate_bitvector_only_rust_code(&self) -> String {
+        let mut code = String::new();
+
+        // Add necessary imports for the generated code to be self-contained
+        code.push_str(
+            "use css_bitvector_compiler::{BitVector, HtmlNode, SimpleSelector};\n",
+        );
+        code.push_str("use std::collections::HashMap;\n");
+        code.push_str("use std::sync::OnceLock;\n\n");
+
+        // Add capacity constant for the generated BitVectors
+        code.push_str(&format!(
+            "const BITVECTOR_CAPACITY: usize = {};\n\n",
+            self.total_bits
+        ));
+
+        // Generate string interning tables and optimized matcher
+        code.push_str(&self.generate_string_interning_code());
+
+        // --- Common parts ---
+        let intrinsic_checks_code = self.generate_intrinsic_checks_code();
+        let parent_dependent_rules_code = self.generate_parent_dependent_rules_bitvector_code();
+        let propagation_rules_code = self.generate_propagation_rules_code();
+
+        // --- Generate BitVector-only Incremental Processing Function ---
+        code.push_str("// --- BitVector-only Incremental Processing Functions ---\n");
+        code.push_str("pub fn process_node_generated_bitvector_incremental(\n");
+        code.push_str("    node: &mut HtmlNode,\n");
+        code.push_str("    parent_state: &BitVector,\n");
+        code.push_str(") -> BitVector { // returns child_states\n");
+        code.push_str("    // Check if we need to recompute using BitVector-only tracking\n");
+        code.push_str("    if !node.needs_any_recomputation_bitvector(parent_state) {\n");
+        code.push_str("        // Return cached result - entire subtree can be skipped\n");
+        code.push_str("        return node.cached_child_states.clone().unwrap_or_default();\n");
+        code.push_str("    }\n\n");
+        code.push_str("    // Recompute node intrinsic matches if needed\n");
+        code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
+        code.push_str(&intrinsic_checks_code);
+        code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
+        code.push_str("    }\n\n");
+        code.push_str(
+            "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
+        );
+        code.push_str("    \n");
+        code.push_str("    // BitVector-only parent state tracking\n");
+        code.push_str("    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str("    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str(&parent_dependent_rules_code);
+        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
+        code.push_str(&propagation_rules_code);
+        code.push_str("    node.css_match_bitvector = current_matches;\n");
+        code.push_str("    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);\n");
+        code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
+        code.push_str("    node.mark_clean();\n\n");
+        code.push_str("    child_states\n");
+        code.push_str("}\n\n");
+
+        // --- Generate BitVector-only From-Scratch Processing Function ---
+        code.push_str("// --- BitVector-only From-Scratch Processing Functions ---\n");
+        code.push_str("pub fn process_node_generated_bitvector_from_scratch(\n");
+        code.push_str("    node: &mut HtmlNode,\n");
+        code.push_str("    parent_state: &BitVector,\n");
+        code.push_str(") -> BitVector { // returns child_states\n");
+        code.push_str(&intrinsic_checks_code);
+        code.push_str("    let mut current_matches = intrinsic_matches;\n");
+        code.push_str("    let mut _parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str("    let mut _parent_values_read = BitVector::with_capacity(parent_state.capacity);\n");
+        code.push_str(&parent_dependent_rules_code);
+        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
+        code.push_str(&propagation_rules_code);
+        code.push_str("    node.css_match_bitvector = current_matches;\n");
+        code.push_str("    child_states\n");
+        code.push_str("}\n\n");
+
+        // --- Generate Tree Traversal Wrappers for BitVector-only version ---
+        code.push_str(&self.generate_bitvector_traversal_wrappers());
+
+        code
+    }
+
+    fn generate_parent_dependent_rules_bitvector_code(&self) -> String {
+        let mut code = String::new();
+        for instruction in &self.instructions {
+            if let NFAInstruction::CheckParentAndSetBit {
+                parent_state_bit,
+                child_selector,
+                result_bit,
+            } = instruction
+            {
+                // Use optimized matching with integer IDs
+                let match_condition = match child_selector {
+                    SimpleSelector::Type(tag) => {
+                        let tag_id = self.string_to_id[tag];
+                        format!("matches_tag_id(node, {})", tag_id)
+                    }
+                    SimpleSelector::Class(class) => {
+                        let class_id = self.string_to_id[class];
+                        format!("matches_class_id(node, {})", class_id)
+                    }
+                    SimpleSelector::Id(id) => {
+                        let id_id = self.string_to_id[id];
+                        format!("matches_id_id(node, {})", id_id)
+                    }
+                };
+
+                // First check if child matches (optimization: check child condition first)
+                code.push_str(&format!("    if {} {{\n", match_condition));
+                code.push_str(&format!(
+                    "        // Record parent state bit {} was read (BitVector-only tracking)\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!(
+                    "        parent_bits_read.set_bit({});\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!(
+                    "        let parent_bit_value = parent_state.is_bit_set({});\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!(
+                    "        if parent_bit_value {{\n"
+                ));
+                code.push_str(&format!(
+                    "            parent_values_read.set_bit({});\n",
+                    parent_state_bit
+                ));
+                code.push_str(&format!(
+                    "            current_matches.set_bit({}); // {}\n",
+                    result_bit,
+                    self.state_names
+                        .get(result_bit)
+                        .unwrap_or(&format!("bit_{}", result_bit))
+                ));
+                code.push_str("        } else {\n");
+                code.push_str(&format!(
+                    "            parent_values_read.clear_bit({});\n",
+                    parent_state_bit
+                ));
+                code.push_str("        }\n");
+                code.push_str("    }\n");
+            }
+        }
+        code
+    }
+
+    fn generate_bitvector_traversal_wrappers(&self) -> String {
+        r#"
+/// BitVector-only incremental processing driver with statistics tracking
+pub fn process_tree_bitvector_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+    let mut total_nodes = 0;
+    let mut cache_hits = 0;
+    let mut cache_misses = 0;
+    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    process_tree_recursive_bitvector_incremental(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    (total_nodes, cache_hits, cache_misses)
+}
+
+fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_state: &BitVector,
+                                               total: &mut usize, hits: &mut usize, misses: &mut usize) {
+    *total += 1;
+    
+    // Logic 1: Check if node itself needs recomputation using BitVector-only tracking
+    let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
+        *misses += 1;
+        // Recompute node and get fresh child_states
+        process_node_generated_bitvector_incremental(node, parent_state)
+    } else {
+        *hits += 1;
+        // Use cached child_states - major optimization for internal nodes!
+        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+    };
+    
+    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
+    if node.has_dirty_descendant {
+        // Recurse into children only if there are dirty descendants
+        for child in node.children.iter_mut() {
+            process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
+        }
+    }
+    // If no dirty descendants, skip entire subtree recursion - major optimization!
+}
+
+/// BitVector-only from-scratch processing driver for comparison
+pub fn process_tree_bitvector_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
+    let mut total_nodes = 0;
+    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    process_tree_recursive_bitvector_from_scratch(root, &initial_state, &mut total_nodes);
+    (total_nodes, 0, total_nodes) // 0 hits, all misses
+}
+
+fn process_tree_recursive_bitvector_from_scratch(node: &mut HtmlNode, parent_state: &BitVector, total: &mut usize) {
+    *total += 1;
+    let child_states = process_node_generated_bitvector_from_scratch(node, parent_state);
+    for child in node.children.iter_mut() {
+        process_tree_recursive_bitvector_from_scratch(child, &child_states, total);
+    }
+}
+"#.to_string()
     }
 
     pub fn generate_traversal_wrappers(&self) -> String {
@@ -1793,4 +2068,96 @@ mod tests {
         assert_eq!(processed_count, 1);
         assert!(!root.has_dirty_nodes());
     }
+
+    #[test]
+    fn test_bitvector_parent_state_tracking() {
+        let mut node = HtmlNode::new("div");
+        
+        // Clean the node first (nodes start dirty from construction)
+        node.mark_clean();
+        
+        // Test recording parent bit reads
+        node.record_parent_bit_read(5, true);
+        node.record_parent_bit_read(10, false);
+        node.record_parent_bit_read(15, true);
+
+        // Create a parent state with the same bits set
+        let mut parent_state = BitVector::new();
+        parent_state.set_bit(5);  // bit 5 = true (matches)
+        // bit 10 = false (matches)
+        parent_state.set_bit(15); // bit 15 = true (matches)
+
+        // Should not need recomputation - all tracked bits match
+        assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
+        assert!(!node.needs_self_recomputation_bitvector(&parent_state));
+
+        // Change bit 5 from true to false
+        parent_state.clear_bit(5);
+        
+        // Should need recomputation - tracked bit changed
+        assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
+        assert!(node.needs_self_recomputation_bitvector(&parent_state));
+    }
+
+    #[test]
+    fn test_bitvector_unused_bits_optimization() {
+        let mut node = HtmlNode::new("div");
+        
+        // Only record that we read bits 5 and 10
+        node.record_parent_bit_read(5, true);
+        node.record_parent_bit_read(10, false);
+
+        // Create parent state with many bits set
+        let mut parent_state = BitVector::new();
+        parent_state.set_bit(5);  // Tracked: true
+        // bit 10 = false (tracked)
+        parent_state.set_bit(1);  // Not tracked - should be ignored
+        parent_state.set_bit(20); // Not tracked - should be ignored
+        parent_state.set_bit(100); // Not tracked - should be ignored
+
+        // Should not need recomputation - tracked bits match
+        assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
+
+        // Change untracked bits - should still not need recomputation (optimization!)
+        parent_state.clear_bit(1);
+        parent_state.clear_bit(20);
+        parent_state.clear_bit(100);
+        
+        // Should still not need recomputation - untracked bits don't matter
+        assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
+
+        // Change a tracked bit - now should need recomputation
+        parent_state.set_bit(10); // Change bit 10 from false to true
+        assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
+    }
+
+    #[test]
+    fn test_bitvector_cache_setting() {
+        let mut node = HtmlNode::new("div");
+        
+        let mut bits_read = BitVector::new();
+        bits_read.set_bit(3);
+        bits_read.set_bit(7);
+        
+        let mut values_read = BitVector::new();
+        values_read.set_bit(3); // bit 3 was true
+        // bit 7 was false (not set)
+        
+        node.set_parent_state_cache_bitvector(bits_read, values_read);
+        
+        // Test with matching parent state
+        let mut parent_state = BitVector::new();
+        parent_state.set_bit(3); // true (matches cached)
+        // bit 7 = false (matches cached)
+        
+        assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
+        
+        // Test with non-matching parent state
+        parent_state.set_bit(7); // Change bit 7 from false to true
+        assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
+    }
 }
+
+// Import generated CSS processing functions as a module
+// This module will be generated by main.rs and should exist when needed
+pub mod generated_css_functions;

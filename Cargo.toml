@@ -18,6 +18,10 @@ path = "src/main.rs"
 name = "naive-gen"
 path = "src/naive_gen.rs"
 
+[[example]]
+name = "bitvector_only_test"
+path = "examples/bitvector_only_test.rs"
+
 [features]
 default = []
 generated-css = []
