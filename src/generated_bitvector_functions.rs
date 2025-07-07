@@ -1,8 +1,8 @@
-use crate::{BitVector, HtmlNode, IState, SimpleSelector};
+use crate::{BitVector, HtmlNode, SimpleSelector};
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-pub const BITVECTOR_CAPACITY: usize = 222;
+const BITVECTOR_CAPACITY: usize = 222;
 
 // String interning for optimized selector matching
 static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
@@ -10,119 +10,119 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("gsib_b", 49);
-        map.insert("gssb_g", 62);
-        map.insert("gbz", 100);
-        map.insert("gog", 101);
-        map.insert("gbprct", 27);
-        map.insert("H6sW5", 0);
-        map.insert("gsfs", 47);
-        map.insert("gssb_a", 58);
-        map.insert("gbmpalb", 14);
-        map.insert("gsn_a", 52);
-        map.insert("gbps2", 28);
-        map.insert("gbts", 40);
-        map.insert("gbmpiaw", 17);
-        map.insert("gbmc", 9);
-        map.insert("gsls_a", 50);
         map.insert("gbmac", 8);
-        map.insert("SIvCob", 74);
-        map.insert("gbg5", 79);
+        map.insert("body", 105);
         map.insert("gbpms2", 23);
+        map.insert("gssb_h", 63);
+        map.insert("gbmt", 19);
+        map.insert("gbprcs", 95);
+        map.insert("gssb_e", 60);
+        map.insert("gssb_k", 65);
+        map.insert("gbprct", 27);
+        map.insert("gbmpalb", 14);
+        map.insert("lsbb", 70);
+        map.insert("gbb", 76);
+        map.insert("gbi4id", 81);
+        map.insert("gssb_b", 102);
+        map.insert("gbtb2", 37);
+        map.insert("gbx4", 99);
+        map.insert("gbs", 97);
+        map.insert("gssb_f", 61);
+        map.insert("gbmpdv", 88);
+        map.insert("gbbw", 77);
+        map.insert("div", 106);
+        map.insert("gssb_g", 62);
+        map.insert("gbpmc", 22);
+        map.insert("gbmpiaa", 16);
+        map.insert("gbqfb-hvr", 30);
+        map.insert("gbprcd", 25);
+        map.insert("gsls_a", 50);
+        map.insert("gss_ifl", 57);
+        map.insert("gssb_i", 64);
+        map.insert("gssb_l", 66);
+        map.insert("lsb", 69);
+        map.insert("gbtcb", 38);
+        map.insert("gsib_b", 49);
+        map.insert("gbmcc", 10);
+        map.insert("h", 68);
+        map.insert("gbm", 5);
+        map.insert("gssb_a", 58);
+        map.insert("gbtsa", 41);
+        map.insert("sblc", 72);
+        map.insert("gbg", 78);
+        map.insert("gbprcb", 24);
+        map.insert("gbg5", 79);
+        map.insert("gbgs5", 80);
+        map.insert("gbqfbb-hvr", 33);
+        map.insert("gbi4t", 83);
+        map.insert("gbi5", 84);
+        map.insert("gbmpiaw", 17);
+        map.insert("gbqfba", 31);
+        map.insert("gsfs", 47);
+        map.insert("gbps2", 28);
+        map.insert("gsq_a", 56);
+        map.insert("lst", 71);
+        map.insert("gbmpas", 87);
+        map.insert("gsn_a", 52);
+        map.insert("gbmab", 7);
+        map.insert("gbmpid", 89);
         map.insert("gbmpiw", 90);
+        map.insert("gbmps", 91);
+        map.insert("gbprca", 94);
+        map.insert("gbqfbw", 96);
+        map.insert("gbt", 36);
+        map.insert("gbmtc", 20);
+        map.insert("gbto", 39);
+        map.insert("gsn_b", 53);
+        map.insert("gbxo", 43);
+        map.insert("gsn_c", 54);
+        map.insert("gbpms", 93);
         map.insert("a", 104);
+        map.insert("gbi4s1", 82);
+        map.insert("gbmpia", 15);
+        map.insert("gbqfb", 29);
+        map.insert("gbqfbb", 32);
+        map.insert("gsdd_a", 46);
+        map.insert("gbmpal", 86);
+        map.insert("gbpm", 92);
+        map.insert("gbmh", 11);
+        map.insert("gbma", 6);
+        map.insert("ds", 1);
+        map.insert("gbsbic", 35);
+        map.insert("gbmm", 85);
+        map.insert("gbmlbw", 12);
+        map.insert("H6sW5", 0);
+        map.insert("gbsb", 34);
+        map.insert("gssb_m", 67);
+        map.insert("gbts", 40);
+        map.insert("gbg4a", 2);
+        map.insert("gbxms", 42);
+        map.insert("z4hgWe", 73);
+        map.insert("gbx3", 98);
+        map.insert("gbz", 100);
         map.insert("input", 107);
         map.insert("span", 108);
-        map.insert("gbm", 5);
-        map.insert("gss_ifl", 57);
-        map.insert("gbtsa", 41);
-        map.insert("gbt", 36);
-        map.insert("gbmpia", 15);
-        map.insert("gbmpiaa", 16);
-        map.insert("lsb", 69);
-        map.insert("lsbb", 70);
-        map.insert("gbqfb-hvr", 30);
-        map.insert("gbi4s1", 82);
-        map.insert("gbmpal", 86);
-        map.insert("gbprca", 94);
-        map.insert("gbprcb", 24);
-        map.insert("gbtcb", 38);
-        map.insert("gbxo", 43);
-        map.insert("gbpmc", 22);
-        map.insert("ds", 1);
-        map.insert("gbto", 39);
-        map.insert("gssb_h", 63);
-        map.insert("gbprci", 26);
         map.insert("gssb_c", 59);
-        map.insert("gbgt", 3);
-        map.insert("gssb_k", 65);
-        map.insert("sblc", 72);
-        map.insert("gbmpid", 89);
-        map.insert("gbqfb", 29);
-        map.insert("gbmpnw", 18);
-        map.insert("gbg4a", 2);
-        map.insert("gbi4t", 83);
-        map.insert("gsdd_a", 46);
-        map.insert("gsq_a", 56);
-        map.insert("gbmab", 7);
-        map.insert("gbmlbw", 12);
-        map.insert("gssb_f", 61);
-        map.insert("gssb_i", 64);
-        map.insert("gssb_m", 67);
-        map.insert("gbb", 76);
-        map.insert("gbg", 78);
-        map.insert("gbi5", 84);
-        map.insert("gbmpas", 87);
-        map.insert("gbpm", 92);
-        map.insert("gbpms", 93);
-        map.insert("div", 106);
-        map.insert("gbma", 6);
-        map.insert("gbp0", 21);
-        map.insert("gbsbic", 35);
-        map.insert("gbqfbw", 96);
-        map.insert("gbxx", 45);
-        map.insert("gssb_b", 102);
-        map.insert("gbmt", 19);
-        map.insert("gbgs5", 80);
-        map.insert("gsn_c", 54);
-        map.insert("gbtb2", 37);
-        map.insert("gbmtc", 20);
-        map.insert("gbmh", 11);
-        map.insert("gsmq_a", 51);
-        map.insert("gssb_l", 66);
-        map.insert("gbi4p", 4);
-        map.insert("gssb_e", 60);
-        map.insert("gsib_a", 48);
         map.insert("gbmpala", 13);
-        map.insert("gbprcd", 25);
-        map.insert("gspqs_b", 55);
-        map.insert("z4hgWe", 73);
-        map.insert("gbmm", 85);
-        map.insert("gbs", 97);
-        map.insert("gbxv", 44);
-        map.insert("gbqfbb-hvr", 33);
-        map.insert("gbbw", 77);
-        map.insert("gbqfbb", 32);
-        map.insert("gsn_b", 53);
-        map.insert("gbprcs", 95);
-        map.insert("gbxms", 42);
-        map.insert("gbx3", 98);
-        map.insert("h", 68);
-        map.insert("gbx4", 99);
-        map.insert("body", 105);
-        map.insert("gbmcc", 10);
+        map.insert("gbprci", 26);
         map.insert(
             "gws-output-pages-elements-homepage_additional_languages__als",
             103,
         );
-        map.insert("gbsb", 34);
-        map.insert("lst", 71);
-        map.insert("gbqfba", 31);
-        map.insert("gbmps", 91);
         map.insert("td", 109);
-        map.insert("gbi4id", 81);
+        map.insert("gbxv", 44);
+        map.insert("SIvCob", 74);
+        map.insert("gbxx", 45);
+        map.insert("gbi4p", 4);
+        map.insert("gsib_a", 48);
+        map.insert("gbmc", 9);
+        map.insert("gbmpnw", 18);
+        map.insert("gsmq_a", 51);
+        map.insert("gbgt", 3);
+        map.insert("gbp0", 21);
         map.insert("gb", 75);
-        map.insert("gbmpdv", 88);
+        map.insert("gog", 101);
+        map.insert("gspqs_b", 55);
         map
     })
 }
@@ -177,14 +177,14 @@ fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
     node_has_class_id(node, class_id)
 }
 
-// --- Incremental Processing Functions ---
-pub fn process_node_generated_incremental(
+// --- BitVector-only Incremental Processing Functions ---
+pub fn process_node_generated_bitvector_incremental(
     node: &mut HtmlNode,
     parent_state: &BitVector,
 ) -> BitVector {
     // returns child_states
-    // Check if we need to recompute
-    if !node.needs_any_recomputation(parent_state) {
+    // Check if we need to recompute using BitVector-only tracking
+    if !node.needs_any_recomputation_bitvector(parent_state) {
         // Return cached result - entire subtree can be skipped
         return node.cached_child_states.clone().unwrap_or_default();
     }
@@ -753,8 +753,9 @@ pub fn process_node_generated_incremental(
 
     let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
 
-    // Track which parent state bits we actually use
-    let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
+    // BitVector-only parent state tracking
+    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);
+    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("H6sW5")
@@ -1090,15 +1091,15 @@ pub fn process_node_generated_incremental(
         child_states.set_bit(221); // active_Type("td")
     }
     node.css_match_bitvector = current_matches;
-    node.cached_parent_state = Some(parent_usage_tracker);
+    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);
     node.cached_child_states = Some(child_states.clone());
     node.mark_clean();
 
     child_states
 }
 
-// --- From-Scratch Processing Functions ---
-pub fn process_node_generated_from_scratch(
+// --- BitVector-only From-Scratch Processing Functions ---
+pub fn process_node_generated_bitvector_from_scratch(
     node: &mut HtmlNode,
     parent_state: &BitVector,
 ) -> BitVector {
@@ -1661,6 +1662,8 @@ pub fn process_node_generated_from_scratch(
     }
 
     let mut current_matches = intrinsic_matches;
+    let mut _parent_bits_read = BitVector::with_capacity(parent_state.capacity);
+    let mut _parent_values_read = BitVector::with_capacity(parent_state.capacity);
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("H6sW5")
@@ -1999,40 +2002,13 @@ pub fn process_node_generated_from_scratch(
     child_states
 }
 
-pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
-    let string_map = get_string_to_id_map();
-    match selector {
-        SimpleSelector::Type(tag) => {
-            if let Some(tag_id) = string_map.get(tag.as_str()) {
-                matches_tag_id(node, *tag_id)
-            } else {
-                false
-            }
-        }
-        SimpleSelector::Class(class) => {
-            if let Some(class_id) = string_map.get(class.as_str()) {
-                matches_class_id(node, *class_id)
-            } else {
-                false
-            }
-        }
-        SimpleSelector::Id(id) => {
-            if let Some(id_id) = string_map.get(id.as_str()) {
-                matches_id_id(node, *id_id)
-            } else {
-                false
-            }
-        }
-    }
-}
-
-/// Incremental processing driver with statistics tracking
-pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+/// BitVector-only incremental processing driver with statistics tracking
+pub fn process_tree_bitvector_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_incremental(
+    process_tree_recursive_bitvector_incremental(
         root,
         &initial_state,
         &mut total_nodes,
@@ -2042,7 +2018,7 @@ pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_incremental(
+fn process_tree_recursive_bitvector_incremental(
     node: &mut HtmlNode,
     parent_state: &BitVector,
     total: &mut usize,
@@ -2051,11 +2027,11 @@ fn process_tree_recursive_incremental(
 ) {
     *total += 1;
 
-    // Logic 1: Check if node itself needs recomputation
-    let child_states = if node.needs_self_recomputation(parent_state) {
+    // Logic 1: Check if node itself needs recomputation using BitVector-only tracking
+    let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
         *misses += 1;
         // Recompute node and get fresh child_states
-        process_node_generated_incremental(node, parent_state)
+        process_node_generated_bitvector_incremental(node, parent_state)
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
@@ -2068,28 +2044,28 @@ fn process_tree_recursive_incremental(
     if node.has_dirty_descendant {
         // Recurse into children only if there are dirty descendants
         for child in node.children.iter_mut() {
-            process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+            process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
         }
     }
     // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 
-/// From-scratch processing driver for comparison
-pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
+/// BitVector-only from-scratch processing driver for comparison
+pub fn process_tree_bitvector_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_from_scratch(root, &initial_state, &mut total_nodes);
+    process_tree_recursive_bitvector_from_scratch(root, &initial_state, &mut total_nodes);
     (total_nodes, 0, total_nodes) // 0 hits, all misses
 }
 
-fn process_tree_recursive_from_scratch(
+fn process_tree_recursive_bitvector_from_scratch(
     node: &mut HtmlNode,
     parent_state: &BitVector,
     total: &mut usize,
 ) {
     *total += 1;
-    let child_states = process_node_generated_from_scratch(node, parent_state);
+    let child_states = process_node_generated_bitvector_from_scratch(node, parent_state);
     for child in node.children.iter_mut() {
-        process_tree_recursive_from_scratch(child, &child_states, total);
+        process_tree_recursive_bitvector_from_scratch(child, &child_states, total);
     }
 }

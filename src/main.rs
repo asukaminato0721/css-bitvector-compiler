@@ -175,20 +175,77 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
 }
 
 fn generate_google_trace_program(
-    generated_fn_code: &str,
+    _generated_fn_code: &str,
     _google_node: &GoogleNode,
 ) -> Result<String, Box<dyn std::error::Error>> {
     // 使用模块引用方法 - 直接使用库中定义的类型和函数
     let mut program = String::new();
 
     // 1. 导入库中的所有类型和函数
-    program.push_str("use css_bitvector_compiler::*;\n\n");
+    program.push_str("use css_bitvector_compiler::*;\n");
+    program.push_str("use css_bitvector_compiler::generated_css_functions::*;\n\n");
 
-    // 2. 添加生成的 CSS 处理函数
-    program.push_str("// Generated CSS processing function\n");
-    program.push_str(generated_fn_code);
-    program.push_str("\n\n");
-    program.push_str("fn main(){}");
+    // 3. 添加结果收集函数
+    program.push_str(r#"fn collect_all_matches(node: &mut HtmlNode, parent_state: &BitVector, results: &mut Vec<(String, Vec<usize>)>) {
+    // Process this node
+    let child_states = process_node_generated_incremental(node, parent_state);
+    
+    // Collect matches for this node
+    let mut matches = Vec::new();
+    for i in 0..BITVECTOR_CAPACITY {
+        if node.css_match_bitvector.is_bit_set(i) {
+            matches.push(i);
+        }
+    }
+    
+    // Create node identifier using utility function
+    let node_id = create_node_identifier(node);
+    results.push((node_id, matches));
+    
+    // Process children
+    for child in &mut node.children {
+        collect_all_matches(child, &child_states, results);
+    }
+}
+
+"#);
+
+    // 4. 添加主函数
+    program.push_str(r#"fn main() {
+    println!("🚀 Testing OPTIMIZED Layout Calculation with Google Trace");
+    
+    // Load Google DOM tree
+    let mut root = load_dom_from_file();
+    println!("✅ Loaded Google DOM tree successfully!");
+    
+    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    let mut optimized_results = Vec::new();
+    
+    // Collect all matching results
+    collect_all_matches(&mut root, &initial_state, &mut optimized_results);
+    
+    println!("📊 OPTIMIZED Results Summary:");
+    println!("Total nodes processed: {}", optimized_results.len());
+    
+    // Output first few nodes for verification
+    println!("\n🔍 First 10 nodes with their CSS rule matches:");
+    for (i, (node_id, matches)) in optimized_results.iter().take(10).enumerate() {
+        println!("Node {}: {} -> {} rules matched", i+1, node_id, matches.len());
+        if !matches.is_empty() {
+            let rule_list: Vec<String> = matches.iter().take(5).map(|&r| r.to_string()).collect();
+            println!("  Rules: {} {}", rule_list.join(", "), if matches.len() > 5 { "..." } else { "" });
+        }
+    }
+    
+    // Save results to file for comparison
+    if let Err(e) = save_results_to_file(&optimized_results, "optimized_results.txt") {
+        println!("Failed to save optimized results: {}", e);
+        return;
+    }
+    
+    println!("\n💾 Full optimized results saved to: optimized_results.txt");
+    println!("🔄 Run the naive example to compare results!");
+}"#);
 
     Ok(program)
 }
@@ -213,43 +270,6 @@ fn main() {
     }
 }
 
-/// Parse a simple CSS selector string into a SimpleSelector enum
-/// For backward compatibility with tests
-fn parse_simple_selector(input: &str) -> Option<SimpleSelector> {
-    let input = input.trim();
-    if input.is_empty() {
-        return None;
-    }
-
-    if input.starts_with('.') {
-        let class_name = &input[1..];
-        if class_name
-            .chars()
-            .all(|c| c.is_alphanumeric() || c == '-' || c == '_')
-        {
-            return Some(SimpleSelector::Class(class_name.to_string()));
-        }
-    } else if input.starts_with('#') {
-        let id_name = &input[1..];
-        if id_name
-            .chars()
-            .all(|c| c.is_alphanumeric() || c == '-' || c == '_')
-        {
-            return Some(SimpleSelector::Id(id_name.to_string()));
-        }
-    } else if input.chars().all(|c| c.is_alphabetic()) {
-        return Some(SimpleSelector::Type(input.to_lowercase()));
-    }
-
-    None
-}
-
-/// Parse CSS file content into CSS rules
-/// For backward compatibility with tests - delegates to the new parser
-fn parse_css_file(css_content: &str) -> Vec<CssRule> {
-    parse_basic_css(css_content)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -266,57 +286,6 @@ mod tests {
                     .with_class("item")
                     .add_child(HtmlNode::new("span").with_id("specific")),
             )
-    }
-
-    #[test]
-    fn test_simple_selector_parsing() {
-        assert_eq!(
-            parse_simple_selector("div"),
-            Some(SimpleSelector::Type("div".to_string()))
-        );
-        assert_eq!(
-            parse_simple_selector(".item"),
-            Some(SimpleSelector::Class("item".to_string()))
-        );
-        assert_eq!(
-            parse_simple_selector("#specific"),
-            Some(SimpleSelector::Id("specific".to_string()))
-        );
-        assert_eq!(parse_simple_selector(""), None);
-        assert_eq!(parse_simple_selector("invalid123"), None);
-    }
-
-    #[test]
-    fn test_css_parsing() {
-        let css = r#"
-/* Rule 0 (R0) */ div {}
-/* Rule 1 (R1) */ .item {}
-/* Rule 2 (R2) */ #specific {}
-/* Rule 3 (R3) */ div > p {}
-        "#;
-
-        let rules = parse_css_file(css);
-        assert_eq!(rules.len(), 4);
-
-        assert_eq!(
-            rules[0],
-            CssRule::Simple(SimpleSelector::Type("div".to_string()))
-        );
-        assert_eq!(
-            rules[1],
-            CssRule::Simple(SimpleSelector::Class("item".to_string()))
-        );
-        assert_eq!(
-            rules[2],
-            CssRule::Simple(SimpleSelector::Id("specific".to_string()))
-        );
-        assert_eq!(
-            rules[3],
-            CssRule::Child {
-                parent_selector: SimpleSelector::Type("div".to_string()),
-                child_selector: SimpleSelector::Type("p".to_string()),
-            }
-        );
     }
 
     #[test]
@@ -411,50 +380,6 @@ mod tests {
     }
 
     #[test]
-    fn test_complex_css_scenario() {
-        // Test the exact CSS from test.css file
-        let css = r#"
-/* Rule 0 (R0) */ div {}
-/* Rule 1 (R1) */ .item {}
-/* Rule 2 (R2) */ #specific {}
-/* Rule 3 (R3) */ p {}
-/* Rule 4 (R4) */ div > p {}
-/* Rule 5 (R5) */ .item > #specific {}
-/* Rule 6 (R6) */ div > .item {}
-/* Rule 7 (R7) */ div > #specific {}
-        "#;
-
-        let rules = parse_css_file(css);
-        let mut compiler = CssCompiler::new();
-        let program = compiler.compile_css_rules(&rules);
-
-        // Create HTML structure similar to t1.html: div > p.item > span > p#specific
-        let root = HtmlNode::new("div")
-            .with_id("main")
-            .with_class("container")
-            .add_child(
-                HtmlNode::new("p")
-                    .with_class("item")
-                    .add_child(HtmlNode::new("span").with_id("specific")),
-            )
-            .add_child(
-                HtmlNode::new("div").add_child(HtmlNode::new("p").add_child(HtmlNode::new("span"))),
-            );
-
-        // Execute on root div
-
-        // Test first child (p.item)
-        let p_item = HtmlNode::new("p").with_class("item");
-
-        // Should match: p, .item, div > p, div > .item
-
-        // Test span.item
-        let span_item = HtmlNode::new("span").with_class("item");
-        // Test final p#specific under span.item
-        let p_specific = HtmlNode::new("p").with_id("specific");
-    }
-
-    #[test]
     fn test_bitvector_operations() {
         use css_bitvector_compiler::BitVector;
 
@@ -499,18 +424,6 @@ mod tests {
         bitvector.or_assign(&other);
         assert!(bitvector.is_bit_set(5));
         assert_eq!(bitvector.count_set_bits(), 3); // bits 0, 5, and 100
-    }
-
-    #[test]
-    fn test_error_handling() {
-        // Test CSS parsing with malformed input
-        let bad_css = "this is not valid css";
-        let rules = parse_css_file(bad_css);
-        assert!(rules.is_empty());
-
-        // Test selector parsing with invalid input
-        assert_eq!(parse_simple_selector("123invalid"), None);
-        assert_eq!(parse_simple_selector(""), None);
     }
 
     #[test]
@@ -586,38 +499,6 @@ mod tests {
                 .iter()
                 .any(|s| s.contains("active_Class(\"test\")"))
         );
-    }
-
-    #[test]
-    fn test_demo_generated_code() {
-        println!("\n=== CSS COMPILER DEMO ===");
-
-        // Simple CSS rules
-        let css_content = r#"
-/* Rule 0 (R0) */ div {}
-/* Rule 1 (R1) */ .item {}
-/* Rule 2 (R2) */ #specific {}
-/* Rule 3 (R3) */ div > .item {}
-/* Rule 4 (R4) */ .item > #specific {}
-        "#;
-
-        println!("Input CSS:");
-        println!("{}", css_content);
-
-        let rules = parse_css_file(css_content);
-        println!("Parsed {} CSS rules", rules.len());
-
-        let mut compiler = CssCompiler::new();
-        let program = compiler.compile_css_rules(&rules);
-
-        println!("\nGenerated Tree NFA Program:");
-        println!("Total bits: {}", program.total_bits);
-        println!("Instructions: {}", program.instructions.len());
-
-        println!("\nGenerated Rust Code:");
-        println!("{}", program.generate_rust_code());
-
-        println!("=== DEMO COMPLETE ===\n");
     }
 
     #[test]

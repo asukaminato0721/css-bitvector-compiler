@@ -14,6 +14,14 @@ path = "src/lib.rs"
 name = "main"
 path = "src/main.rs"
 
+[[bin]]
+name = "naive-gen"
+path = "src/naive_gen.rs"
+
+[[example]]
+name = "bitvector_only_test"
+path = "examples/bitvector_only_test.rs"
+
 [features]
 default = []
 generated-css = []
@@ -23,7 +31,6 @@ run-benchmark = ["generated-css"]
 serde_json = "1.0"
 scraper = "0.17"
 cssparser = "0.29"
-regex = "1.7"
 
 [profile.release]
 debug = true
