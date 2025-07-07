@@ -18,7 +18,7 @@ def main():
     plt.figure(figsize=(10, 10))
 
     # Plot all data points as 'Recalculate'
-    plt.scatter(df['trivector_cycles'], df['bitvector_cycles'],
+    plt.scatter(df['bitvector_cycles'], df['trivector_cycles'],
                 c='#1f77b4',  # Blue
                 label='Recalculate', alpha=0.7, s=80, edgecolors='white', linewidth=0.5)
 
@@ -41,8 +41,8 @@ def main():
     geometric_mean_speedup = np.exp(np.log(positive_speedups).mean()) if len(positive_speedups) > 0 else 1.0
 
     # Set labels and title
-    plt.xlabel('Cycles for TriVector (IState) Layout', fontsize=14, fontweight='bold')
-    plt.ylabel('Cycles for BitVector Layout', fontsize=14, fontweight='bold')
+    plt.xlabel('Cycles for BitVector Layout', fontsize=14, fontweight='bold')
+    plt.ylabel('Cycles for TriVector (IState) Layout', fontsize=14, fontweight='bold')
     plt.title(f'BitVector vs TriVector Performance Comparison\n(TriVector Geomean Speedup: {geometric_mean_speedup:.3f}x)',
               fontsize=16, fontweight='bold', pad=20)
 
@@ -71,13 +71,13 @@ def main():
     
     # Calculate statistics
     total_points = len(df)
-    points_below_diagonal = len(df[df['bitvector_cycles'] < df['trivector_cycles']])
-    points_above_diagonal = len(df[df['bitvector_cycles'] > df['trivector_cycles']])
+    points_below_diagonal = len(df[df['trivector_cycles'] < df['bitvector_cycles']])
+    points_above_diagonal = len(df[df['trivector_cycles'] > df['bitvector_cycles']])
     points_on_diagonal = total_points - points_below_diagonal - points_above_diagonal
     
     print(f'📈 Total data points: {total_points}')
-    print(f'🟢 BitVector faster (below diagonal): {points_below_diagonal} ({100*points_below_diagonal/total_points:.1f}%)')
-    print(f'🔴 BitVector slower (above diagonal): {points_above_diagonal} ({100*points_above_diagonal/total_points:.1f}%)')
+    print(f'🟢 TriVector faster (below diagonal): {points_below_diagonal} ({100*points_below_diagonal/total_points:.1f}%)')
+    print(f'🔴 TriVector slower (above diagonal): {points_above_diagonal} ({100*points_above_diagonal/total_points:.1f}%)')
     print(f'⚪ Equal performance (on diagonal): {points_on_diagonal} ({100*points_on_diagonal/total_points:.1f}%)')
     
     # Performance ratio analysis
@@ -106,8 +106,8 @@ def main():
     
     print('\n📈 Methodology Notes:')
     print('  • Each point represents one layout recalculation.')
-    print('  • Points below diagonal = BitVector layout is faster')
-    print('  • Points above diagonal = TriVector layout is faster')
+    print('  • Points below diagonal = TriVector layout is faster')
+    print('  • Points above diagonal = BitVector layout is faster')
     print('  • Logarithmic scale shows performance across different workload sizes')
     print('  • BitVector: Pure bit operations for state tracking')
     print('  • TriVector: IState enum (IOne, IZero, IUnused) for state tracking')
