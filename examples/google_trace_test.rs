@@ -7,7 +7,7 @@ fn collect_all_matches(
     results: &mut Vec<(String, Vec<usize>)>,
 ) {
     // Process this node
-    let child_states = process_node_generated_from_scratch(node, parent_state);
+    let child_states = process_node_generated_incremental(node, parent_state);
 
     // Collect matches for this node
     let mut matches = Vec::new();
