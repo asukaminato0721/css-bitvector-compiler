@@ -239,12 +239,12 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
         }
         "replace_value" | "insert_value" => {
             let path = extract_path_from_command(&frame.command_data);
-            println!(
-                "    DEBUG: {} operation with path {:?}",
-                frame.command_name, path
-            );
+            // println!(
+            //     "    DEBUG: {} operation with path {:?}",
+            //     frame.command_name, path
+            // );
             if let Some(target_node) = find_node_by_path_mut(tree, &path) {
-                println!("    DEBUG: Found target node: {}", target_node.tag_name);
+                // println!("    DEBUG: Found target node: {}", target_node.tag_name);
                 if let Some(key) = frame.command_data.get("key").and_then(|k| k.as_str()) {
                     match key {
                         "class" => {
@@ -389,7 +389,10 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
     println!("📊 Simulating corrected layout methodology...");
     println!("Loading layout trace from css-gen-op/command.json...");
 
-    let frames = parse_web_layout_trace("css-gen-op/command.json");
+    let frames = parse_web_layout_trace(&format!(
+        "css-gen-op/{}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ));
     println!("🎬 Found {} layout frames to process", frames.len());
     println!("📈 Only recalculate operations create data points");
 
@@ -410,13 +413,13 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
     }
 
     for (i, frame) in frames.iter().enumerate() {
-        println!(
-            "🎬 Processing frame {}/{}: {} ({})",
-            i + 1,
-            frames.len(),
-            frame.command_name,
-            get_frame_description(frame)
-        );
+        // println!(
+        //     "🎬 Processing frame {}/{}: {} ({})",
+        //     i + 1,
+        //     frames.len(),
+        //     frame.command_name,
+        //     get_frame_description(frame)
+        // );
 
         match frame.command_name.as_str() {
             "init" => {
@@ -428,10 +431,10 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
             "recalculate" => {
                 // This is when we actually benchmark!
                 data_point_counter += 1;
-                println!(
-                    "  🔄 RECALCULATE - Creating data point #{}",
-                    data_point_counter
-                );
+                // println!(
+                //     "  🔄 RECALCULATE - Creating data point #{}",
+                //     data_point_counter
+                // );
 
                 // The benchmark function will apply the modifications to its own tree copies.
                 // We pass the current tree state from *before* this batch of modifications.
@@ -442,13 +445,13 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
                     data_point_counter,
                 );
 
-                println!(
-                    "  📊 Data point #{}: BitVector {} cycles, TriVector {} cycles, Speedup {:.3}x",
-                    data_point_counter,
-                    result.bitvector_cycles,
-                    result.trivector_cycles,
-                    result.speedup
-                );
+                // println!(
+                //     "  📊 Data point #{}: BitVector {} cycles, TriVector {} cycles, Speedup {:.3}x",
+                //     data_point_counter,
+                //     result.bitvector_cycles,
+                //     result.trivector_cycles,
+                //     result.speedup
+                // );
 
                 results.push(result);
 
@@ -462,11 +465,11 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
             }
             _ => {
                 // Other operations (add, replace_value, etc.) - just mark for later
-                println!(
-                    "  📝 Marking for recalculate: {} ({})",
-                    frame.command_name,
-                    get_frame_description(frame)
-                );
+                // println!(
+                //     "  📝 Marking for recalculate: {} ({})",
+                //     frame.command_name,
+                //     get_frame_description(frame)
+                // );
                 pending_modifications.push(frame.clone());
             }
         }

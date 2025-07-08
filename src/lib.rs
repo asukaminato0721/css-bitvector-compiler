@@ -1799,8 +1799,11 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
 // DOM creation helper functions
 pub fn load_dom_from_file() -> HtmlNode {
     // Try to read Google trace data from file
-    let json_data =
-        std::fs::read_to_string("css-gen-op/command.json").expect("fail to read command.json");
+    let json_data = std::fs::read_to_string(format!(
+        "css-gen-op/{}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .expect("fail to read command.json");
 
     // Get the first line which should be the init command
     let first_line = json_data

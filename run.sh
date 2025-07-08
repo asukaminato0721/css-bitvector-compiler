@@ -32,6 +32,9 @@ fi
 
 # Step 1: Generate the code. This runs `main` without the `run-benchmark` feature,
 # so it doesn't try to compile benchmark.rs and avoids the circular dependency.
+
+export WEBSITE_NAME="$1"
+
 cargo run --bin main
 
 # Step 2: Generate the naive code.

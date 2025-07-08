@@ -5,11 +5,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📋 Generating layout calculation code without cache or optimization\n");
 
     // Load Google CSS rules (same as main binary for consistency)
-    let css_content = std::fs::read_to_string("css-gen-op/https___www.google.com_.css")
-        .unwrap_or_else(|_| {
-            println!("⚠️ Could not load Google CSS file, using basic rules");
-            "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
-        });
+    let css_content = std::fs::read_to_string(format!(
+        "css-gen-op/{}/{}.css",
+        std::env::var("WEBSITE_NAME").unwrap(),
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .unwrap_or_else(|_| {
+        println!("⚠️ Could not load Google CSS file, using basic rules");
+        "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
+    });
 
     let css_rules = parse_basic_css(&css_content);
     println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
@@ -22,7 +26,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let naive_code = program.generate_naive_rust_code();
 
     // Read the first command from command.json to get initial DOM (for consistency)
-    let commands_content = std::fs::read_to_string("css-gen-op/command.json")?;
+    let commands_content = std::fs::read_to_string(format!(
+        "css-gen-op/{}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))?;
     let first_line = commands_content
         .lines()
         .next()

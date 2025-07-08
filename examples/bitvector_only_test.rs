@@ -46,8 +46,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Load CSS rules
     println!("📜 Loading CSS rules...");
-    let css_content = fs::read_to_string("css-gen-op/https___www.google.com_.css")
-        .unwrap_or_else(|_| String::from("/* fallback CSS */"));
+    let css_content = fs::read_to_string(format!(
+        "css-gen-op/{}/{}.css",
+        std::env::var("WEBSITE_NAME").unwrap(),
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .unwrap_or_else(|_| String::from("/* fallback CSS */"));
     let css_rules = parse_basic_css(&css_content);
     println!("   ✓ Parsed {} CSS rules", css_rules.len());
 
