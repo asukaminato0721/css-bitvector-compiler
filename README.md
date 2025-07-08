@@ -10,9 +10,17 @@ put into css-gen-op folder
 
 
 ```
-./run.sh
+./run.sh google
 ```
 
+
+or
+
+```
+./run.sh amazon
+```
+
+run > 2 times to stablize the test.
 
 ## Project Overview
 

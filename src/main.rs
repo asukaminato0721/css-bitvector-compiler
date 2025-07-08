@@ -108,10 +108,7 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
         std::env::var("WEBSITE_NAME").unwrap(),
         std::env::var("WEBSITE_NAME").unwrap()
     ))
-    .unwrap_or_else(|_| {
-        println!("⚠️ Could not load Google CSS file, using basic rules");
-        "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
-    });
+    .expect("fail to read css file");
 
     let css_rules = parse_basic_css(&css_content);
     println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
