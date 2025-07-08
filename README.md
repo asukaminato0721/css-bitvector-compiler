@@ -18,6 +18,7 @@ or
 
 ```
 ./run.sh amazon
+./run.sh youtube
 ```
 
 run > 2 times to stablize the test.
