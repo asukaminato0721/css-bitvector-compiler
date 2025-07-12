@@ -22,10 +22,6 @@ path = "src/naive_gen.rs"
 name = "benchmark"
 path = "src/benchmark.rs"
 
-[[example]]
-name = "bitvector_only_test"
-path = "examples/bitvector_only_test.rs"
-
 [features]
 default = []
 generated-css = []

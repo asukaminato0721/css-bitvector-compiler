@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{CssCompiler, HtmlNode, parse_basic_css};
+use css_bitvector_compiler::{CssCompiler, HtmlNode, parse_css};
 
 #[derive(Debug, Clone)]
 pub struct GoogleNode {
@@ -93,10 +93,7 @@ impl GoogleNode {
     }
 }
 
-pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>> {
-    println!("🔍 Testing Google Trace with Rust CSS Engine (CodeGen Mode)\n");
-
-    // Load Google CSS rules
+pub fn codegen() -> Result<(), Box<dyn std::error::Error>> {
     let css_content = std::fs::read_to_string(format!(
         "css-gen-op/{}/{}.css",
         std::env::var("WEBSITE_NAME").unwrap(),
@@ -104,10 +101,9 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
     ))
     .expect("fail to read css file");
 
-    let css_rules = parse_basic_css(&css_content);
-    println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
+    let css_rules = parse_css(&css_content);
+    println!("📋 Loaded {} CSS rules from CSS", css_rules.len());
 
-    // Compile CSS rules and generate Rust code
     let mut compiler = CssCompiler::new();
     let program = compiler.compile_css_rules(&css_rules);
 
@@ -137,38 +133,6 @@ pub fn process_google_trace_with_rust() -> Result<(), Box<dyn std::error::Error>
         google_node.count_nodes()
     );
 
-    // Generate complete Rust program for Google trace testing
-    let complete_program = generate_google_trace_program(&generated_code, &google_node)?;
-
-    // Write to examples directory
-    let example_file = "examples/google_trace_test.rs";
-    std::fs::write(example_file, &complete_program)
-        .map_err(|e| format!("Failed to write generated code: {}", e))?;
-
-    println!("💾 Generated example: {}", example_file);
-
-    // Also generate functions for benchmark usage
-    let functions_file = "src/generated_css_functions.rs";
-    std::fs::write(functions_file, &generated_code)
-        .map_err(|e| format!("Failed to write generated functions: {}", e))?;
-
-    println!("💾 Generated functions: {}", functions_file);
-
-    // Run the generated example
-    println!("🚀 Running generated example with Google trace data...\n");
-    let run_output = std::process::Command::new("cargo")
-        .args(["run", "--example", "google_trace_test"])
-        .output()
-        .map_err(|e| format!("Failed to run example: {}", e))?;
-
-    if run_output.status.success() {
-        let stdout = String::from_utf8_lossy(&run_output.stdout);
-        println!("{}", stdout);
-    } else {
-        let stderr = String::from_utf8_lossy(&run_output.stderr);
-        return Err(format!("Generated example failed: {}", stderr).into());
-    }
-
     Ok(())
 }
 
@@ -176,14 +140,10 @@ fn generate_google_trace_program(
     _generated_fn_code: &str,
     _google_node: &GoogleNode,
 ) -> Result<String, Box<dyn std::error::Error>> {
-    // 使用模块引用方法 - 直接使用库中定义的类型和函数
     let mut program = String::new();
 
-    // 1. 导入库中的所有类型和函数
     program.push_str("use css_bitvector_compiler::*;\n");
-    program.push_str("use css_bitvector_compiler::generated_css_functions::*;\n\n");
 
-    // 3. 添加结果收集函数
     program.push_str(r#"fn collect_all_matches(node: &mut HtmlNode, parent_state: &BitVector, results: &mut Vec<(String, Vec<usize>)>) {
     // Process this node
     let child_states = process_node_generated_incremental(node, parent_state);
@@ -251,7 +211,7 @@ fn generate_google_trace_program(
 fn main() {
     // Test Google trace integration
     println!("\n=== GOOGLE TRACE INTEGRATION TEST ===");
-    if let Err(e) = process_google_trace_with_rust() {
+    if let Err(e) = codegen() {
         println!("Google trace test failed: {}", e);
         println!("This is expected if css-gen-op files are not available");
     }

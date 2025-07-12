@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{CssCompiler, GoogleNode, parse_basic_css};
+use css_bitvector_compiler::{CssCompiler, GoogleNode, parse_css};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔧 CSS Naive Layout Code Generator");
@@ -15,7 +15,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
     });
 
-    let css_rules = parse_basic_css(&css_content);
+    let css_rules = parse_css(&css_content);
     println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
 
     // Compile CSS rules
@@ -50,14 +50,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate complete naive Rust program
     let complete_program = generate_naive_program(&naive_code, &google_node)?;
-
-    // Write to examples directory
-    let example_file = "examples/naive_layout_test.rs";
-    std::fs::write(example_file, &complete_program)
-        .map_err(|e| format!("Failed to write generated code: {}", e))?;
-
-    println!("💾 Generated naive example: {}", example_file);
-
     // Also generate naive functions for direct usage
     let functions_file = "src/generated_naive_functions.rs";
     std::fs::write(functions_file, &naive_code)
@@ -70,21 +62,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  Optimized code: uses BitVectors, caching, dirty bits");
     println!("  Naive code: uses Vec<bool>, no caching, calculates from scratch");
     println!("  Both approaches should produce identical results!");
-
-    // Run the generated naive example
-    println!("\n🚀 Running generated naive example...\n");
-    let run_output = std::process::Command::new("cargo")
-        .args(["run", "--example", "naive_layout_test"])
-        .output()
-        .map_err(|e| format!("Failed to run naive example: {}", e))?;
-
-    if run_output.status.success() {
-        let stdout = String::from_utf8_lossy(&run_output.stdout);
-        println!("{}", stdout);
-    } else {
-        let stderr = String::from_utf8_lossy(&run_output.stderr);
-        return Err(format!("Generated naive example failed: {}", stderr).into());
-    }
 
     Ok(())
 }

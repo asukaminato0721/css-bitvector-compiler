@@ -1,5 +1,4 @@
 // Library exports for css-bitvector-compiler
-// This allows examples to use the types and functions as a library
 
 use cssparser::{Parser, ParserInput, Token};
 #[cfg(target_arch = "x86_64")]
@@ -842,7 +841,7 @@ impl TreeNFAProgram {
 
         // Add necessary imports for the generated code to be self-contained
         code.push_str("// These code are generated, dont edit by hand\n");
-        code.push_str("use crate::{BitVector, HtmlNode, SimpleSelector, IState};\n");
+        code.push_str("use crate::{BitVector, HtmlNode, IState, SimpleSelector};\n");
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
 
@@ -891,21 +890,6 @@ impl TreeNFAProgram {
         code.push_str("    node.cached_parent_state = Some(parent_usage_tracker);\n");
         code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
-        code.push_str("    child_states\n");
-        code.push_str("}\n\n");
-
-        // --- Generate From-Scratch Processing Function ---
-        code.push_str("// --- From-Scratch Processing Functions ---\n");
-        code.push_str("pub fn process_node_generated_from_scratch(\n");
-        code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: &BitVector,\n");
-        code.push_str(") -> BitVector { // returns child_states\n");
-        code.push_str(&intrinsic_checks_code);
-        code.push_str("    let mut current_matches = intrinsic_matches;\n");
-        code.push_str(&parent_dependent_rules_code);
-        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
-        code.push_str(&propagation_rules_code);
-        code.push_str("    node.css_match_bitvector = current_matches;\n");
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
@@ -1127,27 +1111,6 @@ impl TreeNFAProgram {
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
-        // --- Generate BitVector-only From-Scratch Processing Function ---
-        code.push_str("// --- BitVector-only From-Scratch Processing Functions ---\n");
-        code.push_str("pub fn process_node_generated_bitvector_from_scratch(\n");
-        code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: &BitVector,\n");
-        code.push_str(") -> BitVector { // returns child_states\n");
-        code.push_str(&intrinsic_checks_code);
-        code.push_str("    let mut current_matches = intrinsic_matches;\n");
-        code.push_str(
-            "    let mut _parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n",
-        );
-        code.push_str(
-            "    let mut _parent_values_read = BitVector::with_capacity(parent_state.capacity);\n",
-        );
-        code.push_str(&parent_dependent_rules_code);
-        code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
-        code.push_str(&propagation_rules_code);
-        code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    child_states\n");
-        code.push_str("}\n\n");
-
         // --- Generate Tree Traversal Wrappers for BitVector-only version ---
         code.push_str(&self.generate_bitvector_traversal_wrappers());
 
@@ -1253,22 +1216,6 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     }
     // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
-
-/// BitVector-only from-scratch processing driver for comparison
-pub fn process_tree_bitvector_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
-    let mut total_nodes = 0;
-    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_bitvector_from_scratch(root, &initial_state, &mut total_nodes);
-    (total_nodes, 0, total_nodes) // 0 hits, all misses
-}
-
-fn process_tree_recursive_bitvector_from_scratch(node: &mut HtmlNode, parent_state: &BitVector, total: &mut usize) {
-    *total += 1;
-    let child_states = process_node_generated_bitvector_from_scratch(node, parent_state);
-    for child in node.children.iter_mut() {
-        process_tree_recursive_bitvector_from_scratch(child, &child_states, total);
-    }
-}
 "#.to_string()
     }
 
@@ -1308,22 +1255,6 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
     }
     // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
-
-/// From-scratch processing driver for comparison
-pub fn process_tree_full_recompute(root: &mut HtmlNode) -> (usize, usize, usize) {
-    let mut total_nodes = 0;
-    let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_from_scratch(root, &initial_state, &mut total_nodes);
-    (total_nodes, 0, total_nodes) // 0 hits, all misses
-}
-
-fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVector, total: &mut usize) {
-    *total += 1;
-    let child_states = process_node_generated_from_scratch(node, parent_state);
-    for child in node.children.iter_mut() {
-        process_tree_recursive_from_scratch(child, &child_states, total);
-    }
-}
 "#.to_string()
     }
 
@@ -1331,11 +1262,8 @@ fn process_tree_recursive_from_scratch(node: &mut HtmlNode, parent_state: &BitVe
     pub fn generate_naive_rust_code(&self) -> String {
         let mut code = String::new();
 
-        // Add necessary imports for the generated code to be self-contained
-        code.push_str("use css_bitvector_compiler::{HtmlNode, SimpleSelector};\n");
-        code.push_str("use std::collections::HashMap;\n\n");
+        code.push_str("use crate::{HtmlNode, SimpleSelector};\n");
 
-        // Generate naive CSS matching functions for each rule
         code.push_str("// === NAIVE CSS MATCHING FUNCTIONS ===\n");
         code.push_str("// These functions calculate layout from scratch without any caching\n\n");
 
@@ -1687,7 +1615,7 @@ impl CssCompiler {
 }
 
 // Helper functions for parsing using external cssparser library
-pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
+pub fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
 
     // Try to parse with cssparser, fall back to regex if needed
@@ -1835,31 +1763,6 @@ pub fn save_results_to_file(
     }
     std::fs::write(filename, output)?;
     Ok(())
-}
-
-pub fn compare_result_files(
-    optimized_file: &str,
-    naive_file: &str,
-) -> Result<bool, Box<dyn std::error::Error>> {
-    if !std::path::Path::new(optimized_file).exists() {
-        println!("ℹ️  Run the optimized example first to enable result comparison");
-        return Ok(false);
-    }
-
-    let optimized_content = std::fs::read_to_string(optimized_file)?;
-    let naive_content = std::fs::read_to_string(naive_file)?;
-
-    if optimized_content == naive_content {
-        println!("🎉 SUCCESS: Naive and optimized results are IDENTICAL!");
-        Ok(true)
-    } else {
-        println!("⚠️  WARNING: Results differ between naive and optimized approaches!");
-        println!(
-            "   Check {} vs {} for differences",
-            optimized_file, naive_file
-        );
-        Ok(false)
-    }
 }
 
 pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode {
@@ -2157,10 +2060,6 @@ mod tests {
     }
 }
 
-// Import generated CSS processing functions as a module
-// This module will be generated by main.rs and should exist when needed
-pub mod generated_css_functions;
-
-// Import generated bitvector and istate functions for benchmark comparison
 pub mod generated_bitvector_functions;
 pub mod generated_istate_functions;
+pub mod generated_naive_functions;
