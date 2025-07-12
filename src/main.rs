@@ -41,7 +41,7 @@ impl GoogleNode {
                         .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
                         .collect()
                 })
-                .unwrap_or_default(),
+                .unwrap(),
             properties: obj
                 .get("properties")
                 .and_then(|v| v.as_object())
@@ -57,7 +57,7 @@ impl GoogleNode {
                 .get("children")
                 .and_then(|v| v.as_array())
                 .map(|children| children.iter().filter_map(GoogleNode::from_json).collect())
-                .unwrap_or_default(),
+                .unwrap(),
         })
     }
 
@@ -210,9 +210,5 @@ fn generate_google_trace_program(
 
 fn main() {
     // Test Google trace integration
-    println!("\n=== GOOGLE TRACE INTEGRATION TEST ===");
-    if let Err(e) = codegen() {
-        println!("Google trace test failed: {}", e);
-        println!("This is expected if css-gen-op files are not available");
-    }
+    codegen().unwrap();
 }

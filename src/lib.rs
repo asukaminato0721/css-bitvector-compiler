@@ -1,5 +1,3 @@
-// Library exports for css-bitvector-compiler
-
 use cssparser::{Parser, ParserInput, Token};
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
@@ -25,100 +23,6 @@ pub fn rdtsc() -> u64 {
 
 pub fn cycles_to_duration(start_cycles: u64, end_cycles: u64) -> u64 {
     end_cycles.saturating_sub(start_cycles)
-}
-
-// Export Google trace types
-#[derive(Debug, Clone)]
-pub struct GoogleNode {
-    pub id: Option<u32>,
-    pub name: String,
-    pub node_type: String,
-    pub namespace: Option<String>,
-    pub attributes: std::collections::HashMap<String, String>,
-    pub properties: std::collections::HashMap<String, String>,
-    pub visible: bool,
-    pub children: Vec<GoogleNode>,
-}
-
-impl GoogleNode {
-    pub fn from_json(value: &serde_json::Value) -> Option<Self> {
-        let obj = value.as_object()?;
-
-        Some(GoogleNode {
-            id: obj.get("id").and_then(|v| v.as_u64()).map(|v| v as u32),
-            name: obj
-                .get("name")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_string(),
-            node_type: obj
-                .get("type")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_string(),
-            namespace: obj
-                .get("namespace")
-                .and_then(|v| v.as_str())
-                .map(|s| s.to_string()),
-            attributes: obj
-                .get("attributes")
-                .and_then(|v| v.as_object())
-                .map(|attrs| {
-                    attrs
-                        .iter()
-                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
-                        .collect()
-                })
-                .unwrap_or_default(),
-            properties: obj
-                .get("properties")
-                .and_then(|v| v.as_object())
-                .map(|props| {
-                    props
-                        .iter()
-                        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string())))
-                        .collect()
-                })
-                .unwrap_or_default(),
-            visible: obj.get("visible").and_then(|v| v.as_bool()).unwrap_or(true),
-            children: obj
-                .get("children")
-                .and_then(|v| v.as_array())
-                .map(|children| children.iter().filter_map(GoogleNode::from_json).collect())
-                .unwrap_or_default(),
-        })
-    }
-
-    pub fn to_html_node(&self) -> HtmlNode {
-        let mut node = HtmlNode::new(&self.name);
-
-        if let Some(id) = &self.id {
-            node.id = Some(id.to_string());
-        }
-
-        // Extract classes from attributes
-        if let Some(class_attr) = self.attributes.get("class") {
-            node.classes = class_attr
-                .split_whitespace()
-                .map(|s| s.to_string())
-                .collect();
-        }
-
-        // Convert children
-        for child in &self.children {
-            node.children.push(child.to_html_node());
-        }
-
-        node
-    }
-
-    pub fn count_nodes(&self) -> usize {
-        1 + self
-            .children
-            .iter()
-            .map(|child| child.count_nodes())
-            .sum::<usize>()
-    }
 }
 
 /// whether a part of input is: 1, 0, or unused
@@ -868,7 +772,7 @@ impl TreeNFAProgram {
         code.push_str("    // Check if we need to recompute\n");
         code.push_str("    if !node.needs_any_recomputation(parent_state) {\n");
         code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.clone().unwrap_or_default();\n");
+        code.push_str("        return node.cached_child_states.clone().unwrap();\n");
         code.push_str("    }\n\n");
         code.push_str("    // Recompute node intrinsic matches if needed\n");
         code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
@@ -1081,7 +985,7 @@ impl TreeNFAProgram {
         code.push_str("    // Check if we need to recompute using BitVector-only tracking\n");
         code.push_str("    if !node.needs_any_recomputation_bitvector(parent_state) {\n");
         code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.clone().unwrap_or_default();\n");
+        code.push_str("        return node.cached_child_states.clone().unwrap();\n");
         code.push_str("    }\n\n");
         code.push_str("    // Recompute node intrinsic matches if needed\n");
         code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");

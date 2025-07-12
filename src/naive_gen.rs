@@ -1,4 +1,6 @@
-use css_bitvector_compiler::{CssCompiler, GoogleNode, parse_css};
+use css_bitvector_compiler::{
+    CssCompiler, convert_json_dom_to_html_node, count_total_nodes, parse_css,
+};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔧 CSS Naive Layout Code Generator");
@@ -40,16 +42,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Err("First command should be init".into());
     }
 
-    let google_node =
-        GoogleNode::from_json(&command["node"]).ok_or("Failed to parse Google node")?;
+    let node = convert_json_dom_to_html_node(&command["node"]);
 
     println!(
         "🌳 Google DOM tree contains {} nodes",
-        google_node.count_nodes()
+        count_total_nodes(&node)
     );
-
-    // Generate complete naive Rust program
-    let complete_program = generate_naive_program(&naive_code, &google_node)?;
     // Also generate naive functions for direct usage
     let functions_file = "src/generated_naive_functions.rs";
     std::fs::write(functions_file, &naive_code)
@@ -57,102 +55,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("💾 Generated naive functions: {}", functions_file);
 
-    // Show comparison between optimized and naive approaches
-    println!("\n📊 Code Generation Comparison:");
-    println!("  Optimized code: uses BitVectors, caching, dirty bits");
-    println!("  Naive code: uses Vec<bool>, no caching, calculates from scratch");
-    println!("  Both approaches should produce identical results!");
-
     Ok(())
-}
-
-fn generate_naive_program(
-    generated_fn_code: &str,
-    _google_node: &GoogleNode,
-) -> Result<String, Box<dyn std::error::Error>> {
-    let mut program = String::new();
-
-    // 1. Import library types and functions
-    program.push_str("use css_bitvector_compiler::*;\n\n");
-
-    // 2. Add the generated naive CSS processing functions
-    program.push_str("// Generated naive CSS processing functions\n");
-    program
-        .push_str("// These functions calculate layout from scratch without any optimization\n\n");
-    program.push_str(generated_fn_code);
-    program.push_str("\n\n");
-
-    // 3. Add result collection function for naive approach
-    program.push_str(r#"fn collect_all_naive_matches(node: &mut HtmlNode, parent_matches: &[bool], results: &mut Vec<(String, Vec<usize>)>) {
-    // Process this node with naive approach
-    let matches = process_node_naive(node, parent_matches);
-    
-    // Collect rule indices that matched
-    let mut matched_rules = Vec::new();
-    for (i, &matched) in matches.iter().enumerate() {
-        if matched {
-            matched_rules.push(i);
-        }
-    }
-    
-    // Create node identifier using utility function
-    let node_id = create_node_identifier(node);
-    results.push((node_id, matched_rules));
-    
-    // Process children
-    for child in &mut node.children {
-        collect_all_naive_matches(child, &matches, results);
-    }
-}
-
-"#);
-
-    // 4. Add main function that uses Google trace and compares results
-    program.push_str(r#"fn main() {
-    println!("🐌 Testing NAIVE Layout Calculation with Google Trace");
-    
-    // Load Google DOM tree from css-gen-op/command.json
-    let mut root = load_dom_from_file();
-    println!("✅ Loaded Google DOM tree successfully!");
-    
-    let mut naive_results = Vec::new();
-    let total_rules = get_total_rules();
-    let initial_matches = vec![false; total_rules];
-    
-    // Collect all matching results
-    collect_all_naive_matches(&mut root, &initial_matches, &mut naive_results);
-    
-    println!("📊 NAIVE Results Summary:");
-    println!("Total nodes processed: {}", naive_results.len());
-    
-    // Output first few nodes for verification
-    println!("\n🔍 First 10 nodes with their CSS rule matches:");
-    for (i, (node_id, matches)) in naive_results.iter().take(10).enumerate() {
-        println!("Node {}: {} -> {} rules matched", i+1, node_id, matches.len());
-        if !matches.is_empty() {
-            let rule_list: Vec<String> = matches.iter().take(5).map(|&r| r.to_string()).collect();
-            println!("  Rules: {} {}", rule_list.join(", "), if matches.len() > 5 { "..." } else { "" });
-        }
-    }
-    
-    // Save results to file for comparison
-    if let Err(e) = save_results_to_file(&naive_results, "naive_results.txt") {
-        println!("Failed to save naive results: {}", e);
-        return;
-    }
-    
-    println!("\n💾 Full naive results saved to: naive_results.txt");
-    
-    // Compare with optimized results if available
-    match compare_result_files("optimized_results.txt", "naive_results.txt") {
-        Ok(true) => println!("🎉 SUCCESS: Results comparison completed!"),
-        Ok(false) => println!("ℹ️  Comparison skipped - run optimized example first"),
-        Err(e) => println!("⚠️  Error during comparison: {}", e),
-    }
-    
-    println!("💡 This naive approach recalculates everything from scratch every time.");
-    println!("🔍 Each node was checked against all {} CSS rules without any caching.", total_rules);
-}"#);
-
-    Ok(program)
 }
