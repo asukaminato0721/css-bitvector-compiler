@@ -104,14 +104,6 @@ def main():
     print(f'\n📏 TriVector cycles range: {min_trivector:,} - {max_trivector:,}')
     print(f'📏 BitVector cycles range: {min_bitvector:,} - {max_bitvector:,}')
     
-    print('\n📈 Methodology Notes:')
-    print('  • Each point represents one layout recalculation.')
-    print('  • Points below diagonal = TriVector layout is faster')
-    print('  • Points above diagonal = BitVector layout is faster')
-    print('  • Logarithmic scale shows performance across different workload sizes')
-    print('  • BitVector: Pure bit operations for state tracking')
-    print('  • TriVector: IState enum (IOne, IZero, IUnused) for state tracking')
-    
     print('\n' + '📊' + '='*60 + '📊')
 
 if __name__ == '__main__':

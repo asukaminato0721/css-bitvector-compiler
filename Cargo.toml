@@ -15,10 +15,6 @@ name = "main"
 path = "src/main.rs"
 
 [[bin]]
-name = "naive-gen"
-path = "src/naive_gen.rs"
-
-[[bin]]
 name = "benchmark"
 path = "src/benchmark.rs"
 

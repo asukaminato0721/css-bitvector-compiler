@@ -11,116 +11,116 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("gbmm", 85);
-        map.insert("gbmps", 91);
-        map.insert("gbmac", 8);
-        map.insert("gbpms2", 23);
-        map.insert("gss_ifl", 57);
-        map.insert("gbi4s1", 82);
-        map.insert("gspqs_b", 55);
-        map.insert("gbqfb", 29);
+        map.insert("lsb", 69);
+        map.insert("gbi4p", 4);
+        map.insert("input", 106);
+        map.insert("gbmpnw", 18);
+        map.insert("gbxx", 45);
+        map.insert("ds", 1);
+        map.insert("gbps2", 28);
+        map.insert("gssb_k", 65);
+        map.insert("gbm", 5);
+        map.insert("gbs", 97);
+        map.insert("gbp0", 21);
+        map.insert("gb", 75);
+        map.insert("gbqfba", 31);
+        map.insert("gsn_a", 52);
+        map.insert("gbxms", 42);
+        map.insert("gbgs5", 80);
+        map.insert("gbtcb", 38);
+        map.insert("gbb", 76);
         map.insert("gog", 101);
+        map.insert("gbmcc", 10);
+        map.insert("a", 104);
+        map.insert("gbmpala", 13);
+        map.insert("gsls_a", 50);
+        map.insert("lsbb", 70);
+        map.insert("gspqs_b", 55);
+        map.insert("gbz", 100);
+        map.insert("gbprct", 27);
+        map.insert("h", 68);
+        map.insert("H6sW5", 0);
+        map.insert("gbmtc", 20);
+        map.insert("gbqfb", 29);
+        map.insert("gbsb", 34);
+        map.insert("gbtb2", 37);
+        map.insert("gsdd_a", 46);
+        map.insert("gssb_g", 62);
+        map.insert("gbi4s1", 82);
+        map.insert("gss_ifl", 57);
+        map.insert("td", 107);
+        map.insert("gssb_b", 102);
+        map.insert("gbmpalb", 14);
+        map.insert("gbmpiaa", 16);
+        map.insert("gbmh", 11);
+        map.insert("gbts", 40);
+        map.insert("gbx3", 98);
+        map.insert("gbprcs", 95);
+        map.insert("gbbw", 77);
+        map.insert("gbi4t", 83);
+        map.insert("gsmq_a", 51);
+        map.insert("gbmc", 9);
+        map.insert("gssb_l", 66);
+        map.insert("gsfs", 47);
+        map.insert("SIvCob", 74);
+        map.insert("gbmpiaw", 17);
+        map.insert("gbprcd", 25);
+        map.insert("gbmpal", 86);
+        map.insert("gbmpas", 87);
+        map.insert("gbt", 36);
+        map.insert("gsib_a", 48);
+        map.insert("lst", 71);
+        map.insert("gbg", 78);
+        map.insert("gbmps", 91);
+        map.insert("gssb_f", 61);
+        map.insert("gbg4a", 2);
+        map.insert("gbprca", 94);
+        map.insert("gbmpiw", 90);
+        map.insert("gbma", 6);
+        map.insert("gbg5", 79);
+        map.insert("gbxv", 44);
+        map.insert("gbsbic", 35);
+        map.insert("gbtsa", 41);
+        map.insert("gbpmc", 22);
+        map.insert("gsib_b", 49);
+        map.insert("gbprci", 26);
+        map.insert("gssb_m", 67);
+        map.insert("gbmpdv", 88);
+        map.insert("gbpm", 92);
+        map.insert("gbqfbb", 32);
+        map.insert("gbqfb-hvr", 30);
+        map.insert("sblc", 72);
+        map.insert("gsn_c", 54);
+        map.insert("z4hgWe", 73);
+        map.insert("gbqfbb-hvr", 33);
+        map.insert("gbprcb", 24);
+        map.insert("gssb_i", 64);
+        map.insert("gbi5", 84);
         map.insert(
             "gws-output-pages-elements-homepage_additional_languages__als",
             103,
         );
-        map.insert("td", 107);
-        map.insert("gbmpalb", 14);
-        map.insert("gbts", 40);
-        map.insert("gbprcb", 24);
-        map.insert("gssb_a", 58);
-        map.insert("a", 104);
-        map.insert("gbt", 36);
-        map.insert("gbmpia", 15);
-        map.insert("gssb_f", 61);
-        map.insert("gssb_m", 67);
-        map.insert("gbpms", 93);
-        map.insert("gsq_a", 56);
-        map.insert("gbmpal", 86);
-        map.insert("gbprca", 94);
+        map.insert("gbmm", 85);
         map.insert("gbto", 39);
-        map.insert("gbsbic", 35);
-        map.insert("gssb_c", 59);
-        map.insert("gssb_k", 65);
-        map.insert("gssb_b", 102);
-        map.insert("gbqfbb", 32);
-        map.insert("input", 106);
-        map.insert("gsib_a", 48);
-        map.insert("gsn_a", 52);
-        map.insert("gbtb2", 37);
-        map.insert("sblc", 72);
-        map.insert("gbprcs", 95);
-        map.insert("gbxx", 45);
-        map.insert("gsls_a", 50);
-        map.insert("gbqfbw", 96);
-        map.insert("gbx3", 98);
-        map.insert("gbi4p", 4);
-        map.insert("gbbw", 77);
-        map.insert("gbg5", 79);
-        map.insert("gssb_e", 60);
-        map.insert("lsb", 69);
-        map.insert("gbb", 76);
-        map.insert("gbgs5", 80);
-        map.insert("gbpm", 92);
-        map.insert("gbxms", 42);
+        map.insert("gbmac", 8);
         map.insert("gbxo", 43);
-        map.insert("gbqfba", 31);
+        map.insert("gssb_a", 58);
         map.insert("gbmlbw", 12);
-        map.insert("SIvCob", 74);
-        map.insert("gbmh", 11);
-        map.insert("gbqfb-hvr", 30);
-        map.insert("gbprct", 27);
-        map.insert("gsn_c", 54);
-        map.insert("gbg4a", 2);
-        map.insert("gssb_g", 62);
-        map.insert("gbqfbb-hvr", 33);
-        map.insert("gbm", 5);
-        map.insert("gbma", 6);
-        map.insert("gbmcc", 10);
-        map.insert("gbprcd", 25);
-        map.insert("gbprci", 26);
-        map.insert("gsib_b", 49);
-        map.insert("gbmpas", 87);
-        map.insert("H6sW5", 0);
-        map.insert("gbtcb", 38);
-        map.insert("gsmq_a", 51);
-        map.insert("gsfs", 47);
-        map.insert("gbi4id", 81);
-        map.insert("gbpmc", 22);
-        map.insert("gbs", 97);
-        map.insert("gbps2", 28);
-        map.insert("gbz", 100);
-        map.insert("gbmtc", 20);
-        map.insert("z4hgWe", 73);
-        map.insert("gbi5", 84);
-        map.insert("gbmpnw", 18);
-        map.insert("gbsb", 34);
-        map.insert("gbmpiaa", 16);
-        map.insert("body", 105);
-        map.insert("gbmpdv", 88);
-        map.insert("gbmab", 7);
-        map.insert("gbmpiaw", 17);
-        map.insert("gbmpala", 13);
-        map.insert("gssb_i", 64);
-        map.insert("gsn_b", 53);
-        map.insert("h", 68);
-        map.insert("lst", 71);
-        map.insert("gsdd_a", 46);
-        map.insert("gb", 75);
-        map.insert("gbg", 78);
-        map.insert("gbi4t", 83);
-        map.insert("gbmt", 19);
-        map.insert("lsbb", 70);
-        map.insert("gbmc", 9);
-        map.insert("ds", 1);
-        map.insert("gbp0", 21);
-        map.insert("gssb_l", 66);
-        map.insert("gbtsa", 41);
-        map.insert("gbxv", 44);
-        map.insert("gbmpiw", 90);
-        map.insert("gssb_h", 63);
         map.insert("gbmpid", 89);
+        map.insert("gsn_b", 53);
+        map.insert("gbmt", 19);
+        map.insert("gbmab", 7);
+        map.insert("gsq_a", 56);
+        map.insert("gssb_e", 60);
+        map.insert("gssb_h", 63);
+        map.insert("gbmpia", 15);
+        map.insert("gbpms2", 23);
+        map.insert("gbqfbw", 96);
+        map.insert("gbi4id", 81);
         map.insert("gbx4", 99);
+        map.insert("body", 105);
+        map.insert("gssb_c", 59);
+        map.insert("gbpms", 93);
         map.insert("gbgt", 3);
         map
     })
@@ -131,14 +131,12 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
 fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
     get_string_to_id_map().get(node.tag_name.as_str()).copied()
 }
-
 #[inline]
 fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
     node.id
         .as_ref()
         .and_then(|id| get_string_to_id_map().get(id.as_str()).copied())
 }
-
 #[inline]
 fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
     let string_map = get_string_to_id_map();
@@ -151,8 +149,8 @@ fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
     }
     false
 }
-
 // Optimized selector matching with switch on integer IDs
+
 #[inline]
 fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
     if let Some(node_tag_id) = get_node_tag_id(node) {
@@ -161,7 +159,6 @@ fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
         false
     }
 }
-
 #[inline]
 fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
     if let Some(node_id_id) = get_node_id_id(node) {
@@ -170,12 +167,10 @@ fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
         false
     }
 }
-
 #[inline]
 fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
     node_has_class_id(node, class_id)
 }
-
 // --- Incremental Processing Functions ---
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
@@ -185,7 +180,7 @@ pub fn process_node_generated_incremental(
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.clone().unwrap_or_default();
+        return node.cached_child_states.clone().unwrap();
     }
 
     // Recompute node intrinsic matches if needed

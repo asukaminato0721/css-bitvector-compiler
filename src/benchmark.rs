@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{BitVector, HtmlNode, rdtsc};
+use css_bitvector_compiler::{HtmlNode, rdtsc};
 use serde_json::{self, Value};
 
 // Use generated CSS processing functions from both modules
@@ -19,16 +19,6 @@ pub struct WebLayoutFrameResult {
     pub bitvector_cache_misses: usize,
     pub trivector_cache_hits: usize,
     pub trivector_cache_misses: usize,
-    pub modification_type: ModificationType,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum ModificationType {
-    Insertion,
-    Deletion,
-    AttributeChange,
-    LayoutRecalculation,
-    TreeInitialization,
 }
 
 #[derive(Debug, Clone)]
@@ -36,13 +26,12 @@ pub struct LayoutFrame {
     pub frame_id: usize,
     pub command_name: String,
     pub command_data: Value,
-    pub modification_type: ModificationType,
 }
 
 fn count_nodes(node: &HtmlNode) -> usize {
     1 + node.children.iter().map(count_nodes).sum::<usize>()
 }
-
+#[track_caller]
 fn find_node_by_path_mut<'a>(node: &'a mut HtmlNode, path: &[usize]) -> Option<&'a mut HtmlNode> {
     if path.is_empty() {
         return Some(node);
@@ -51,22 +40,21 @@ fn find_node_by_path_mut<'a>(node: &'a mut HtmlNode, path: &[usize]) -> Option<&
     let next_index = path[0];
     if next_index < node.children.len() {
         find_node_by_path_mut(&mut node.children[next_index], &path[1..])
-    } else if next_index == node.children.len() {
+    } else if next_index > 0 && next_index == node.children.len() {
         println!("maybe insert at the end position, {next_index}");
         find_node_by_path_mut(&mut node.children[next_index - 1], &path[1..])
+    } else if next_index == 0 && next_index == node.children.len() {
+        // TOOD: fixme
+        dbg!(path);
+        dbg!(node);
+        panic!("{:?}", path);
     } else {
-        eprint!("{:?}", path);
-        None
+        panic!("{:?}", path);
     }
 }
 
 fn json_to_html_node(json: &Value) -> Option<HtmlNode> {
     let name = json["name"].as_str()?.to_string();
-
-    // Skip text nodes and other non-element nodes, but allow #document
-    if name.starts_with('#') && name != "#document" {
-        return None;
-    }
 
     // Convert #document to a more standard name
     let tag_name = if name == "#document" { "html" } else { &name };
@@ -121,21 +109,14 @@ fn parse_web_layout_trace(file_path: &str) -> Vec<LayoutFrame> {
                     .as_str()
                     .unwrap_or("unknown")
                     .to_string();
-
-                let modification_type = match command_name.as_str() {
-                    "init" => ModificationType::TreeInitialization,
-                    "layout_init" => ModificationType::LayoutRecalculation,
-                    "add" => ModificationType::Insertion,
-                    "replace_value" | "insert_value" => ModificationType::AttributeChange,
-                    "recalculate" => ModificationType::LayoutRecalculation,
-                    _ => ModificationType::AttributeChange,
-                };
+                if command_name.starts_with("layout_") {
+                    continue;
+                }
 
                 frames.push(LayoutFrame {
                     frame_id,
                     command_name,
                     command_data,
-                    modification_type,
                 });
             }
             Err(e) => {
@@ -160,8 +141,6 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
             0
         }
         "layout_init" => {
-            // Don't mark all nodes dirty - this is just a layout initialization
-            // Only mark root dirty to trigger a single-pass layout
             tree.mark_dirty();
             count_nodes(tree)
         }
@@ -188,6 +167,7 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                         } else {
                         }
                     } else {
+                        dbg!(node_data);
                         println!("    DEBUG: Failed to create child node from JSON");
                     }
                 } else {
@@ -264,7 +244,7 @@ fn extract_path_from_command(command_data: &Value) -> Vec<usize> {
                 .map(|v| v as usize)
                 .collect::<Vec<_>>()
         })
-        .unwrap_or_default()
+        .unwrap()
 }
 
 fn invoke_bitvector_layout(tree: &mut HtmlNode) -> (usize, usize, usize) {
@@ -430,13 +410,6 @@ fn benchmark_accumulated_modifications(
 
     let total_nodes = count_nodes(&tree_bitvector);
 
-    // Final verification: The CSS matching results from both methods must be identical.
-    // assert!(
-    //     tree_bitvector.compare_css_matches(&tree_trivector),
-    //     "Mismatch between BitVector and TriVector results for data point {}",
-    //     data_point_id
-    // );
-
     let speedup = if trivector_cycles > 0 {
         bitvector_cycles as f64 / trivector_cycles as f64
     } else if bitvector_cycles > 0 {
@@ -444,9 +417,6 @@ fn benchmark_accumulated_modifications(
     } else {
         1.0 // No work done in either case, so they are equal
     };
-
-    // All data points are now considered 'recalculate'
-    let modification_type = ModificationType::LayoutRecalculation;
 
     // Create summary description of accumulated modifications
     let accumulated_description = if pending_modifications.is_empty() {
@@ -472,7 +442,6 @@ fn benchmark_accumulated_modifications(
         bitvector_cache_misses,
         trivector_cache_hits,
         trivector_cache_misses,
-        modification_type,
     }
 }
 
@@ -550,22 +519,14 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
 
 fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
     let mut csv = String::new();
-    csv.push_str("frame_id,operation_type,frame_description,modification_type,nodes_affected,total_nodes,bitvector_cycles,trivector_cycles,speedup,bitvector_cache_hits,bitvector_cache_misses,trivector_cache_hits,trivector_cache_misses\n");
+    csv.push_str("frame_id,operation_type,frame_description,nodes_affected,total_nodes,bitvector_cycles,trivector_cycles,speedup,bitvector_cache_hits,bitvector_cache_misses,trivector_cache_hits,trivector_cache_misses\n");
 
     for result in results {
-        let cache_hit_rate = if result.bitvector_cache_hits + result.bitvector_cache_misses > 0 {
-            100.0 * result.bitvector_cache_hits as f64
-                / (result.bitvector_cache_hits + result.bitvector_cache_misses) as f64
-        } else {
-            0.0
-        };
-
         csv.push_str(&format!(
-            "{},{},{},{:?},{},{},{},{},{:.6},{},{},{},{}\n",
+            "{},{},{},{},{},{},{},{:.6},{},{},{},{}\n",
             result.frame_id,
             result.operation_type,
             result.frame_description.replace(",", ";"),
-            result.modification_type,
             result.nodes_affected,
             result.total_nodes,
             result.bitvector_cycles,
