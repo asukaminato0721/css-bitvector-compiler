@@ -2,10 +2,9 @@
 // This allows examples to use the types and functions as a library
 
 use cssparser::{Parser, ParserInput, Token};
-use std::collections::{HashMap, HashSet};
-
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
+use std::collections::{HashMap, HashSet};
 
 // RDTSC 时间测量工具
 #[inline(always)]
@@ -25,12 +24,9 @@ pub fn rdtsc() -> u64 {
     }
 }
 
-// 计算两个 RDTSC 读数之间的 CPU 周期数
 pub fn cycles_to_duration(start_cycles: u64, end_cycles: u64) -> u64 {
     end_cycles.saturating_sub(start_cycles)
 }
-
-// All types are now defined directly in this file
 
 // Export Google trace types
 #[derive(Debug, Clone)]
@@ -581,16 +577,16 @@ impl HtmlNode {
 
     /// BitVector-only version: Check if subtree needs recomputation
     pub fn needs_any_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
-        self.has_relevant_parent_state_changed_bitvector(new_parent_state)
-            || self.is_self_dirty
+        self.is_self_dirty
+            || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
             || self.has_dirty_descendant
             || self.cached_parent_bits_read.is_none()
     }
 
     /// BitVector-only version: Check if only the node itself needs recomputation (not including dirty descendants)
     pub fn needs_self_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
-        self.has_relevant_parent_state_changed_bitvector(new_parent_state)
-            || self.is_self_dirty
+        self.is_self_dirty
+            || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
             || self.cached_parent_bits_read.is_none()
     }
 
@@ -752,7 +748,7 @@ impl HtmlNode {
         true
     }
 }
-// Export CSS types
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum SimpleSelector {
     Type(String),
@@ -786,7 +782,6 @@ pub enum NFAInstruction {
     },
 }
 
-// Export TreeNFAProgram
 #[derive(Debug, Default)]
 pub struct TreeNFAProgram {
     pub instructions: Vec<NFAInstruction>,
@@ -842,10 +837,11 @@ impl TreeNFAProgram {
         }
     }
 
-    pub fn generate_rust_code(&self) -> String {
+    pub fn generate_rust_istate_code(&self) -> String {
         let mut code = String::new();
 
         // Add necessary imports for the generated code to be self-contained
+        code.push_str("// These code are generated, dont edit by hand\n");
         code.push_str("use crate::{BitVector, HtmlNode, SimpleSelector, IState};\n");
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
@@ -1705,19 +1701,6 @@ pub fn parse_basic_css(css_content: &str) -> Vec<CssRule> {
         }
     }
 
-    // Add some common Google selectors as before for completeness
-    rules.extend([
-        CssRule::Simple(SimpleSelector::Type("div".to_string())),
-        CssRule::Simple(SimpleSelector::Type("span".to_string())),
-        CssRule::Simple(SimpleSelector::Type("a".to_string())),
-        CssRule::Simple(SimpleSelector::Type("input".to_string())),
-        CssRule::Simple(SimpleSelector::Class("gbts".to_string())),
-        CssRule::Simple(SimpleSelector::Class("gbmt".to_string())),
-        CssRule::Simple(SimpleSelector::Class("lsb".to_string())),
-        CssRule::Simple(SimpleSelector::Id("gb".to_string())),
-        CssRule::Simple(SimpleSelector::Id("gbz".to_string())),
-    ]);
-
     // Remove duplicates
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
@@ -1796,7 +1779,6 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
     Ok(rules)
 }
 
-// DOM creation helper functions
 pub fn load_dom_from_file() -> HtmlNode {
     // Try to read Google trace data from file
     let json_data = std::fs::read_to_string(format!(

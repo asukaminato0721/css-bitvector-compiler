@@ -73,7 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Also generate the original IState-based code for comparison
     println!("🔨 Generating IState-based Rust code for comparison...");
-    let istate_code = program.generate_rust_code();
+    let istate_code = program.generate_rust_istate_code();
     fs::write("src/generated_istate_functions.rs", &istate_code)?;
     println!("   ✓ Generated IState-based code saved to src/generated_istate_functions.rs");
 

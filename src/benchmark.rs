@@ -1,5 +1,10 @@
 use css_bitvector_compiler::{BitVector, HtmlNode, rdtsc};
 use serde_json::{self, Value};
+
+// Use generated CSS processing functions from both modules
+use css_bitvector_compiler::generated_bitvector_functions::process_tree_bitvector_incremental_with_stats as process_tree_bitvector;
+use css_bitvector_compiler::generated_istate_functions::process_tree_incremental_with_stats as process_tree_trivector;
+
 #[derive(Debug, Clone)]
 pub struct WebLayoutFrameResult {
     pub frame_id: usize,
@@ -34,10 +39,6 @@ pub struct LayoutFrame {
     pub modification_type: ModificationType,
 }
 
-// Use generated CSS processing functions from both modules
-use css_bitvector_compiler::generated_bitvector_functions::process_tree_bitvector_incremental_with_stats as process_tree_bitvector;
-use css_bitvector_compiler::generated_istate_functions::process_tree_incremental_with_stats as process_tree_trivector;
-
 fn count_nodes(node: &HtmlNode) -> usize {
     1 + node.children.iter().map(count_nodes).sum::<usize>()
 }
@@ -50,14 +51,11 @@ fn find_node_by_path_mut<'a>(node: &'a mut HtmlNode, path: &[usize]) -> Option<&
     let next_index = path[0];
     if next_index < node.children.len() {
         find_node_by_path_mut(&mut node.children[next_index], &path[1..])
+    } else if next_index == node.children.len() {
+        println!("maybe insert at the end position, {next_index}");
+        find_node_by_path_mut(&mut node.children[next_index - 1], &path[1..])
     } else {
-        println!(
-            "    DEBUG: Path finding failed - node '{}' has {} children, but tried to access index {}",
-            node.tag_name,
-            node.children.len(),
-            next_index
-        );
-        None
+        panic!()
     }
 }
 
@@ -161,12 +159,12 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                         tree.children.len()
                     );
                     for (i, child) in tree.children.iter().enumerate() {
-                        println!(
-                            "    DEBUG: Child {}: {} (has {} children)",
-                            i,
-                            child.tag_name,
-                            child.children.len()
-                        );
+                        // println!(
+                        //     "    DEBUG: Child {}: {} (has {} children)",
+                        //     i,
+                        //     child.tag_name,
+                        //     child.children.len()
+                        // );
                     }
                     return count_nodes(tree);
                 }
@@ -181,10 +179,10 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
-            println!("    DEBUG: add operation with path {:?}", path);
+            //   println!("    DEBUG: add operation with path {:?}", path);
 
             if path.is_empty() {
-                println!("    DEBUG: Empty path for add operation");
+                //   println!("    DEBUG: Empty path for add operation");
                 return 0;
             }
 
@@ -192,17 +190,17 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
             let insertion_index = path[path.len() - 1];
             let parent_path = &path[..path.len() - 1];
 
-            println!(
-                "    DEBUG: Looking for parent at path {:?}, will insert at index {}",
-                parent_path, insertion_index
-            );
+            // println!(
+            //     "    DEBUG: Looking for parent at path {:?}, will insert at index {}",
+            //     parent_path, insertion_index
+            // );
 
             if let Some(parent) = find_node_by_path_mut(tree, parent_path) {
-                println!(
-                    "    DEBUG: Found parent node: {} (has {} children)",
-                    parent.tag_name,
-                    parent.children.len()
-                );
+                // println!(
+                //     "    DEBUG: Found parent node: {} (has {} children)",
+                //     parent.tag_name,
+                //     parent.children.len()
+                // );
                 if let Some(node_data) = frame.command_data.get("node") {
                     if let Some(new_child) = json_to_html_node(node_data) {
                         // Insert at the specified index (or append if index equals length)
@@ -229,22 +227,12 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                     "    DEBUG: Failed to find parent node at path {:?}",
                     parent_path
                 );
-                println!(
-                    "    DEBUG: Tree has {} nodes, root tag: {}",
-                    count_nodes(tree),
-                    tree.tag_name
-                );
             }
             0
         }
         "replace_value" | "insert_value" => {
             let path = extract_path_from_command(&frame.command_data);
-            // println!(
-            //     "    DEBUG: {} operation with path {:?}",
-            //     frame.command_name, path
-            // );
             if let Some(target_node) = find_node_by_path_mut(tree, &path) {
-                // println!("    DEBUG: Found target node: {}", target_node.tag_name);
                 if let Some(key) = frame.command_data.get("key").and_then(|k| k.as_str()) {
                     match key {
                         "class" => {
@@ -282,11 +270,6 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                 }
             } else {
                 println!("    DEBUG: Failed to find target node at path {:?}", path);
-                println!(
-                    "    DEBUG: Tree has {} nodes, root tag: {}",
-                    count_nodes(tree),
-                    tree.tag_name
-                );
             }
             0
         }
@@ -695,6 +678,10 @@ fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
     }
 
     csv
+}
+
+fn main() {
+    run_web_browser_layout_trace_benchmark();
 }
 
 #[cfg(test)]

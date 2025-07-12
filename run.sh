@@ -49,9 +49,7 @@ diff naive_results.txt optimized_results.txt
 
 diff bitvector_results.txt naive_results.txt
 
-# Step 4: Run the benchmark. This enables the `run-benchmark` feature,
-# which compiles benchmark.rs (and includes the generated file) and runs the benchmark.
-cargo flamegraph -r --features run-benchmark --bin main -- benchmark
+cargo flamegraph -r --bin benchmark
 
 # Step 5: Plot the results.
 uv sync
