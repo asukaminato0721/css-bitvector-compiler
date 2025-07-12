@@ -1,17 +1,21 @@
-use css_bitvector_compiler::{CssCompiler, GoogleNode, parse_basic_css};
+use css_bitvector_compiler::{CssCompiler, GoogleNode, parse_css};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔧 CSS Naive Layout Code Generator");
     println!("📋 Generating layout calculation code without cache or optimization\n");
 
     // Load Google CSS rules (same as main binary for consistency)
-    let css_content = std::fs::read_to_string("css-gen-op/https___www.google.com_.css")
-        .unwrap_or_else(|_| {
-            println!("⚠️ Could not load Google CSS file, using basic rules");
-            "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
-        });
+    let css_content = std::fs::read_to_string(format!(
+        "css-gen-op/{}/{}.css",
+        std::env::var("WEBSITE_NAME").unwrap(),
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .unwrap_or_else(|_| {
+        println!("⚠️ Could not load Google CSS file, using basic rules");
+        "div { display: block; } .gbts { color: #000; } #gb { position: relative; }".to_string()
+    });
 
-    let css_rules = parse_basic_css(&css_content);
+    let css_rules = parse_css(&css_content);
     println!("📋 Loaded {} CSS rules from Google CSS", css_rules.len());
 
     // Compile CSS rules
@@ -22,7 +26,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let naive_code = program.generate_naive_rust_code();
 
     // Read the first command from command.json to get initial DOM (for consistency)
-    let commands_content = std::fs::read_to_string("css-gen-op/command.json")?;
+    let commands_content = std::fs::read_to_string(format!(
+        "css-gen-op/{}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))?;
     let first_line = commands_content
         .lines()
         .next()
@@ -43,14 +50,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate complete naive Rust program
     let complete_program = generate_naive_program(&naive_code, &google_node)?;
-
-    // Write to examples directory
-    let example_file = "examples/naive_layout_test.rs";
-    std::fs::write(example_file, &complete_program)
-        .map_err(|e| format!("Failed to write generated code: {}", e))?;
-
-    println!("💾 Generated naive example: {}", example_file);
-
     // Also generate naive functions for direct usage
     let functions_file = "src/generated_naive_functions.rs";
     std::fs::write(functions_file, &naive_code)
@@ -63,21 +62,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  Optimized code: uses BitVectors, caching, dirty bits");
     println!("  Naive code: uses Vec<bool>, no caching, calculates from scratch");
     println!("  Both approaches should produce identical results!");
-
-    // Run the generated naive example
-    println!("\n🚀 Running generated naive example...\n");
-    let run_output = std::process::Command::new("cargo")
-        .args(["run", "--example", "naive_layout_test"])
-        .output()
-        .map_err(|e| format!("Failed to run naive example: {}", e))?;
-
-    if run_output.status.success() {
-        let stdout = String::from_utf8_lossy(&run_output.stdout);
-        println!("{}", stdout);
-    } else {
-        let stderr = String::from_utf8_lossy(&run_output.stderr);
-        return Err(format!("Generated naive example failed: {}", stderr).into());
-    }
 
     Ok(())
 }

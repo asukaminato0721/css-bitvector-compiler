@@ -10,9 +10,18 @@ put into css-gen-op folder
 
 
 ```
-./run.sh
+./run.sh google
 ```
 
+
+or
+
+```
+./run.sh amazon
+./run.sh youtube
+```
+
+run > 2 times to stablize the test.
 
 ## Project Overview
 
@@ -22,3 +31,8 @@ steps
 2. run them on html changes, get 3 results. diff them to see all these 3 versions are correct.
 3. run benchmark, see the diff between bitVector and IState
 
+for each website, generate 3 versions
+
+naive, bitVector, IState
+
+run main.rs to gen them all, then run the codegen to collect the results.

@@ -18,9 +18,9 @@ path = "src/main.rs"
 name = "naive-gen"
 path = "src/naive_gen.rs"
 
-[[example]]
-name = "bitvector_only_test"
-path = "examples/bitvector_only_test.rs"
+[[bin]]
+name = "benchmark"
+path = "src/benchmark.rs"
 
 [features]
 default = []

@@ -6,3 +6,4 @@ __pycache__
 guide.txt
 perf.data
 perf.data.old
+*.trace
