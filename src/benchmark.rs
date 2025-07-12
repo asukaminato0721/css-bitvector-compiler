@@ -519,7 +519,7 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
 
 fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
     let mut csv = String::new();
-    csv.push_str("frame_id,operation_type,frame_description,modification_type,nodes_affected,total_nodes,bitvector_cycles,trivector_cycles,speedup,bitvector_cache_hits,bitvector_cache_misses,trivector_cache_hits,trivector_cache_misses\n");
+    csv.push_str("frame_id,operation_type,frame_description,nodes_affected,total_nodes,bitvector_cycles,trivector_cycles,speedup,bitvector_cache_hits,bitvector_cache_misses,trivector_cache_hits,trivector_cache_misses\n");
 
     for result in results {
         csv.push_str(&format!(

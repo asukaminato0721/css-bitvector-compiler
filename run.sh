@@ -4,16 +4,11 @@ set -eux -o pipefail
 # Ensure we start with a clean slate by removing previously generated files
 rm -f *results.txt
 
-
-# Step 1: Generate the code. This runs `main` without the `run-benchmark` feature,
-# so it doesn't try to compile benchmark.rs and avoids the circular dependency.
+# Step 1: Generate the code.
 
 export WEBSITE_NAME="$1"
 
 cargo run --bin main
-
-# Step 2: Generate the naive code.
-cargo run --bin naive-gen
 
 cargo run --example get_match_result
 

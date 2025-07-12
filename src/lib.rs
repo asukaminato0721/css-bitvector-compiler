@@ -1353,54 +1353,64 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
         code.push_str("}\n\n");
 
         // Generate optimized node matching function using switch on integer IDs
-        code.push_str("// Fast selector matching using integer IDs and switch\n");
-        code.push_str("#[inline]\n");
-        code.push_str("fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {\n");
-        code.push_str("    get_string_to_id_map().get(node.tag_name.as_str()).copied()\n");
-        code.push_str("}\n\n");
-
-        code.push_str("#[inline]\n");
-        code.push_str("fn get_node_id_id(node: &HtmlNode) -> Option<u32> {\n");
-        code.push_str("    node.id.as_ref().and_then(|id| get_string_to_id_map().get(id.as_str()).copied())\n");
-        code.push_str("}\n\n");
-
-        code.push_str("#[inline]\n");
-        code.push_str("fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {\n");
-        code.push_str("    let string_map = get_string_to_id_map();\n");
-        code.push_str("    for class in &node.classes {\n");
-        code.push_str("        if let Some(id) = string_map.get(class.as_str()) {\n");
-        code.push_str("            if *id == class_id {\n");
-        code.push_str("                return true;\n");
-        code.push_str("            }\n");
-        code.push_str("        }\n");
-        code.push_str("    }\n");
-        code.push_str("    false\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "// Fast selector matching using integer IDs and switch
+        #[inline]
+        fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
+            get_string_to_id_map().get(node.tag_name.as_str()).copied()
+        }
+        #[inline]
+        fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
+            node.id.as_ref().and_then(|id| get_string_to_id_map().get(id.as_str()).copied())
+        }
+        #[inline]
+        fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
+            let string_map = get_string_to_id_map();
+            for class in &node.classes {
+                if let Some(id) = string_map.get(class.as_str()) {
+                    if *id == class_id {
+                        return true;
+                    }
+                }
+            }
+            false
+        }
+",
+        );
 
         // Generate fast selector matching using switch statements
-        code.push_str("// Optimized selector matching with switch on integer IDs\n");
-        code.push_str("#[inline]\n");
-        code.push_str("fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {\n");
-        code.push_str("    if let Some(node_tag_id) = get_node_tag_id(node) {\n");
-        code.push_str("        node_tag_id == tag_id\n");
-        code.push_str("    } else {\n");
-        code.push_str("        false\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "// Optimized selector matching with switch on integer IDs\n
+            #[inline]
+            fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
+                if let Some(node_tag_id) = get_node_tag_id(node) {
+                    node_tag_id == tag_id
+                } else {
+                    false
+                }
+            }
+",
+        );
 
-        code.push_str("#[inline]\n");
-        code.push_str("fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {\n");
-        code.push_str("    if let Some(node_id_id) = get_node_id_id(node) {\n");
-        code.push_str("        node_id_id == id_id\n");
-        code.push_str("    } else {\n");
-        code.push_str("        false\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "#[inline]
+        fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
+            if let Some(node_id_id) = get_node_id_id(node) {
+                node_id_id == id_id
+            } else {
+                false
+            }
+        }
+",
+        );
 
-        code.push_str("#[inline]\n");
-        code.push_str("fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {\n");
-        code.push_str("    node_has_class_id(node, class_id)\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "#[inline]
+        fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
+            node_has_class_id(node, class_id)
+        }
+",
+        );
 
         code
     }
