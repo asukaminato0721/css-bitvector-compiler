@@ -747,11 +747,12 @@ impl TreeNFAProgram {
     pub fn generate_rust_istate_code(&self) -> String {
         let mut code = String::new();
 
-        // Add necessary imports for the generated code to be self-contained
-        code.push_str("// These code are generated, dont edit by hand\n");
-        code.push_str("use crate::{BitVector, HtmlNode, IState, SimpleSelector};\n");
-        code.push_str("use std::collections::HashMap;\n");
-        code.push_str("use std::sync::OnceLock;\n\n");
+        code.push_str(
+            "// These code are generated, dont edit by hand
+        use crate::{BitVector, HtmlNode, IState, SimpleSelector};
+        use std::collections::HashMap;
+        use std::sync::OnceLock;\n\n",
+        );
 
         // Add capacity constant for the generated BitVectors
         code.push_str(&format!(
@@ -760,6 +761,7 @@ impl TreeNFAProgram {
         ));
 
         // Generate string interning tables and optimized matcher
+        code.push_str("/// generate_string_interning_code\n");
         code.push_str(&self.generate_string_interning_code());
 
         // --- Common parts ---
@@ -768,18 +770,21 @@ impl TreeNFAProgram {
         let propagation_rules_code = self.generate_propagation_rules_code();
 
         // --- Generate Incremental Processing Function ---
-        code.push_str("// --- Incremental Processing Functions ---\n");
-        code.push_str("pub fn process_node_generated_incremental(\n");
-        code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: &BitVector,\n");
-        code.push_str(") -> BitVector { // returns child_states\n");
-        code.push_str("    // Check if we need to recompute\n");
-        code.push_str("    if !node.needs_any_recomputation(parent_state) {\n");
-        code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.clone().unwrap();\n");
-        code.push_str("    }\n\n");
-        code.push_str("    // Recompute node intrinsic matches if needed\n");
+        code.push_str(
+            "// --- Incremental Processing Functions ---
+        pub fn process_node_generated_incremental(
+            node: &mut HtmlNode,
+            parent_state: &BitVector,
+        ) -> BitVector { // returns child_states
+            // Check if we need to recompute
+            if !node.needs_any_recomputation(parent_state) {
+                // Return cached result - entire subtree can be skipped
+                return node.cached_child_states.clone().unwrap();
+            }
+            // Recompute node intrinsic matches if needed\n",
+        );
         code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
+        code.push_str("/// generate_intrinsic_checks_code\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");
@@ -791,43 +796,47 @@ impl TreeNFAProgram {
         code.push_str(
             "    let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];\n",
         );
+        code.push_str("/// generate_parent_dependent_rules_code\n");
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
+        code.push_str("/// generate_propagation_rules_code\n");
         code.push_str(&propagation_rules_code);
-        code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    node.cached_parent_state = Some(parent_usage_tracker);\n");
-        code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
-        code.push_str("    node.mark_clean();\n\n");
-        code.push_str("    child_states\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "    node.css_match_bitvector = current_matches;
+            node.cached_parent_state = Some(parent_usage_tracker);
+            node.cached_child_states = Some(child_states.clone());
+            node.mark_clean();
+            child_states
+        }
 
-        // --- Generate Helper Function ---
-        code.push_str("pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {\n");
-        code.push_str("    let string_map = get_string_to_id_map();\n");
-        code.push_str("    match selector {\n");
-        code.push_str("        SimpleSelector::Type(tag) => {\n");
-        code.push_str("            if let Some(tag_id) = string_map.get(tag.as_str()) {\n");
-        code.push_str("                matches_tag_id(node, *tag_id)\n");
-        code.push_str("            } else {\n");
-        code.push_str("                false\n");
-        code.push_str("            }\n");
-        code.push_str("        },\n");
-        code.push_str("        SimpleSelector::Class(class) => {\n");
-        code.push_str("            if let Some(class_id) = string_map.get(class.as_str()) {\n");
-        code.push_str("                node_has_class_id(node, *class_id)\n");
-        code.push_str("            } else {\n");
-        code.push_str("                false\n");
-        code.push_str("            }\n");
-        code.push_str("        },\n");
-        code.push_str("        SimpleSelector::Id(id) => {\n");
-        code.push_str("            if let Some(id_id) = string_map.get(id.as_str()) {\n");
-        code.push_str("                matches_id_id(node, *id_id)\n");
-        code.push_str("            } else {\n");
-        code.push_str("                false\n");
-        code.push_str("            }\n");
-        code.push_str("        },\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
+        // --- Generate Helper Functio
+        pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
+            let string_map = get_string_to_id_map();
+            match selector {
+                SimpleSelector::Type(tag) => {
+                    if let Some(tag_id) = string_map.get(tag.as_str()) {
+                        matches_tag_id(node, *tag_id)
+                    } else {
+                        false
+                    }
+                },
+                SimpleSelector::Class(class) => {
+                    if let Some(class_id) = string_map.get(class.as_str()) {
+                        node_has_class_id(node, *class_id)
+                    } else {
+                        false
+                    }
+                },
+                SimpleSelector::Id(id) => {
+                    if let Some(id_id) = string_map.get(id.as_str()) {
+                        matches_id_id(node, *id_id)
+                    } else {
+                        false
+                    }
+                },
+            }
+        }\n\n",
+        );
 
         // --- Generate Tree Traversal Wrappers ---
         code.push_str(&self.generate_traversal_wrappers());
@@ -838,7 +847,7 @@ impl TreeNFAProgram {
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
         code.push_str(
-            "        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);\n\n",
+            "let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);",
         );
         for (i, instruction) in self.instructions.iter().enumerate() {
             if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
@@ -847,7 +856,6 @@ impl TreeNFAProgram {
                     i, instruction
                 ));
 
-                // Use optimized matching with integer IDs
                 let match_condition = match selector {
                     SimpleSelector::Type(tag) => {
                         let tag_id = self.string_to_id[tag];
@@ -992,9 +1000,10 @@ impl TreeNFAProgram {
                 // Return cached result - entire subtree can be skipped
                 return node.cached_child_states.clone().unwrap();
             }
-            // Recompute node intrinsic matches if needed\n",
+            // Recompute node intrinsic matches if needed
+            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+        ",
         );
-        code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");

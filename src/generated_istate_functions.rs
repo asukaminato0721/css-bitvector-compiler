@@ -5,28 +5,29 @@ use std::sync::OnceLock;
 
 pub const BITVECTOR_CAPACITY: usize = 32;
 
+/// generate_string_interning_code
 // String interning for optimized selector matching
 static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("html", 14);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("chunked", 0);
-        map.insert("input", 15);
-        map.insert("yt-logo-updated-svg", 12);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("yt-logo-red-svg", 9);
+        map.insert("external-icon", 1);
         map.insert("shell", 5);
+        map.insert("masthead-logo", 7);
         map.insert("masthead-skeleton-icons", 8);
+        map.insert("yt-logo-updated-svg", 12);
+        map.insert("input", 15);
         map.insert("masthead-skeleton-icon", 4);
         map.insert("yt-icons-ext", 6);
-        map.insert("yt-logo-svg", 11);
+        map.insert("chunked", 0);
+        map.insert("yt-logo-red-updated-svg", 10);
         map.insert("body", 13);
+        map.insert("yt-logo-red-svg", 9);
         map.insert("hidden", 3);
-        map.insert("masthead-logo", 7);
-        map.insert("external-icon", 1);
+        map.insert("yt-logo-svg", 11);
+        map.insert("html", 14);
+        map.insert("grecaptcha-badge", 2);
         map
     })
 }
@@ -100,9 +101,9 @@ pub fn process_node_generated_incremental(
         // Return cached result - entire subtree can be skipped
         return node.cached_child_states.clone().unwrap();
     }
-
     // Recompute node intrinsic matches if needed
     if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+        /// generate_intrinsic_checks_code
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 
         // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
@@ -192,7 +193,9 @@ pub fn process_node_generated_incremental(
 
     // Track which parent state bits we actually use
     let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
+    /// generate_parent_dependent_rules_code
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
+    /// generate_propagation_rules_code
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("chunked")
     }
@@ -245,10 +248,10 @@ pub fn process_node_generated_incremental(
     node.cached_parent_state = Some(parent_usage_tracker);
     node.cached_child_states = Some(child_states.clone());
     node.mark_clean();
-
     child_states
 }
 
+// --- Generate Helper Functio
 pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
     let string_map = get_string_to_id_map();
     match selector {
