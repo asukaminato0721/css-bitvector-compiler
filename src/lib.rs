@@ -366,6 +366,10 @@ impl HtmlNode {
         self
     }
 
+    pub fn remove_child(&mut self, child_index: usize) {
+        self.children.remove(child_index);
+    }
+
     fn fix_parent_pointers(&mut self) {
         let self_ptr = self as *mut HtmlNode;
         for child in self.children.iter_mut() {
