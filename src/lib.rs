@@ -747,6 +747,10 @@ impl TreeNFAProgram {
     pub fn generate_istate_code(&self) -> String {
         fn generate_parent_dependent_rules_code(s: &TreeNFAProgram) -> String {
             let mut code = String::new();
+            code.push_str(
+                "// match get_node_tag_id(node) {
+            ",
+            );
             for instruction in &s.instructions {
                 if let NFAInstruction::CheckParentAndSetBit {
                     parent_state_bit,
@@ -809,6 +813,10 @@ impl TreeNFAProgram {
                     code.push_str("    }\n");
                 }
             }
+            code.push_str(
+                "// match get_node_id_id(node) {
+            ",
+            );
             for instruction in &s.instructions {
                 if let NFAInstruction::CheckParentAndSetBit {
                     parent_state_bit,
@@ -878,10 +886,10 @@ impl TreeNFAProgram {
                 // Return cached result - entire subtree can be skipped
                 return node.cached_child_states.clone().unwrap();
             }
-            // Recompute node intrinsic matches if needed\n",
+            // Recompute node intrinsic matches if needed
+            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+        /// generate_intrinsic_checks_code\n",
         );
-        code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
-        code.push_str("/// generate_intrinsic_checks_code\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");
@@ -915,28 +923,56 @@ impl TreeNFAProgram {
 
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
-        code.push_str("let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);");
+        code.push_str(
+            "let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
+",
+        );
+        code.push_str(
+            "match get_node_tag_id(node) {
+",
+        );
         for (i, instruction) in self.instructions.iter().enumerate() {
-            if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
+            if let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Type(tag),
+                bit_pos,
+            } = instruction
+            {
+                code.push_str(&format!("// Instruction {i}: {instruction:?}\n",));
+
+                // Use optimized matching with integer IDs
+                let match_condition = {
+                    let tag_id = self.string_to_id[tag];
+                    format!("Some({})", tag_id)
+                };
+
+                code.push_str(&format!(" {match_condition}  => {{\n",));
+                code.push_str(&format!(
+                    "            intrinsic_matches.set_bit({}); // {}\n",
+                    bit_pos,
+                    self.state_names
+                        .get(bit_pos)
+                        .unwrap_or(&format!("bit_{}", bit_pos))
+                ));
+                code.push_str("        }\n\n");
+            }
+        }
+        code.push_str("_ => {}}\n");
+
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            if let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Class(class),
+                bit_pos,
+            } = instruction
+            {
                 code.push_str(&format!(
                     "        // Instruction {}: {:?}\n",
                     i, instruction
                 ));
 
                 // Use optimized matching with integer IDs
-                let match_condition = match selector {
-                    SimpleSelector::Type(tag) => {
-                        let tag_id = self.string_to_id[tag];
-                        format!("get_node_tag_id(node) == Some({})", tag_id)
-                    }
-                    SimpleSelector::Class(class) => {
-                        let class_id = self.string_to_id[class];
-                        format!("node_has_class_id(node, {})", class_id)
-                    }
-                    SimpleSelector::Id(id) => {
-                        let id_id = self.string_to_id[id];
-                        format!("get_node_id_id(node) == Some({})", id_id)
-                    }
+                let match_condition = {
+                    let class_id = self.string_to_id[class];
+                    format!("node_has_class_id(node, {})", class_id)
                 };
 
                 code.push_str(&format!("        if {} {{\n", match_condition));
@@ -950,6 +986,36 @@ impl TreeNFAProgram {
                 code.push_str("        }\n\n");
             }
         }
+        code.push_str(
+            "match get_node_id_id(node) {
+",
+        );
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            if let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Id(id),
+                bit_pos,
+            } = instruction
+            {
+                code.push_str(&format!("        // Instruction {i}: {instruction:?}\n",));
+
+                // Use optimized matching with integer IDs
+                let match_condition = {
+                    let id_id = self.string_to_id[id];
+                    format!("Some({})", id_id)
+                };
+
+                code.push_str(&format!("        {match_condition} => {{\n",));
+                code.push_str(&format!(
+                    "            intrinsic_matches.set_bit({bit_pos}); // {}\n",
+                    self.state_names
+                        .get(bit_pos)
+                        .unwrap_or(&format!("bit_{}", bit_pos))
+                ));
+                code.push_str("        }\n");
+            }
+        }
+        code.push_str("_ => {}}\n");
+
         code
     }
 
