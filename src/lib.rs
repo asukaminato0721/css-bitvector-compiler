@@ -932,87 +932,93 @@ impl TreeNFAProgram {
 ",
         );
         for (i, instruction) in self.instructions.iter().enumerate() {
-            if let NFAInstruction::CheckAndSetBit {
+            let NFAInstruction::CheckAndSetBit {
                 selector: SimpleSelector::Type(tag),
                 bit_pos,
             } = instruction
-            {
-                code.push_str(&format!("// Instruction {i}: {instruction:?}\n",));
+            else {
+                continue;
+            };
 
-                // Use optimized matching with integer IDs
-                let match_condition = {
-                    let tag_id = self.string_to_id[tag];
-                    format!("Some({})", tag_id)
-                };
+            code.push_str(&format!("// Instruction {i}: {instruction:?}\n",));
 
-                code.push_str(&format!(" {match_condition}  => {{\n",));
-                code.push_str(&format!(
-                    "            intrinsic_matches.set_bit({}); // {}\n",
-                    bit_pos,
-                    self.state_names
-                        .get(bit_pos)
-                        .unwrap_or(&format!("bit_{}", bit_pos))
-                ));
-                code.push_str("        }\n\n");
-            }
+            // Use optimized matching with integer IDs
+            let match_condition = {
+                let tag_id = self.string_to_id[tag];
+                format!("Some({})", tag_id)
+            };
+
+            code.push_str(&format!(" {match_condition}  => {{\n",));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({}); // {}\n",
+                bit_pos,
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n\n");
         }
         code.push_str("_ => {}}\n");
 
         for (i, instruction) in self.instructions.iter().enumerate() {
-            if let NFAInstruction::CheckAndSetBit {
+            let NFAInstruction::CheckAndSetBit {
                 selector: SimpleSelector::Class(class),
                 bit_pos,
             } = instruction
-            {
-                code.push_str(&format!(
-                    "        // Instruction {}: {:?}\n",
-                    i, instruction
-                ));
+            else {
+                continue;
+            };
 
-                // Use optimized matching with integer IDs
-                let match_condition = {
-                    let class_id = self.string_to_id[class];
-                    format!("node_has_class_id(node, {})", class_id)
-                };
+            code.push_str(&format!(
+                "        // Instruction {}: {:?}\n",
+                i, instruction
+            ));
 
-                code.push_str(&format!("        if {} {{\n", match_condition));
-                code.push_str(&format!(
-                    "            intrinsic_matches.set_bit({}); // {}\n",
-                    bit_pos,
-                    self.state_names
-                        .get(bit_pos)
-                        .unwrap_or(&format!("bit_{}", bit_pos))
-                ));
-                code.push_str("        }\n\n");
-            }
+            // Use optimized matching with integer IDs
+            let match_condition = {
+                let class_id = self.string_to_id[class];
+                format!("node_has_class_id(node, {})", class_id)
+            };
+
+            code.push_str(&format!("        if {} {{\n", match_condition));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({}); // {}\n",
+                bit_pos,
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n\n");
         }
         code.push_str(
             "match get_node_id_id(node) {
 ",
         );
         for (i, instruction) in self.instructions.iter().enumerate() {
-            if let NFAInstruction::CheckAndSetBit {
+            let NFAInstruction::CheckAndSetBit {
                 selector: SimpleSelector::Id(id),
                 bit_pos,
             } = instruction
-            {
-                code.push_str(&format!("        // Instruction {i}: {instruction:?}\n",));
+            else {
+                continue;
+            };
 
-                // Use optimized matching with integer IDs
-                let match_condition = {
-                    let id_id = self.string_to_id[id];
-                    format!("Some({})", id_id)
-                };
+            code.push_str(&format!("        // Instruction {i}: {instruction:?}\n",));
 
-                code.push_str(&format!("        {match_condition} => {{\n",));
-                code.push_str(&format!(
-                    "            intrinsic_matches.set_bit({bit_pos}); // {}\n",
-                    self.state_names
-                        .get(bit_pos)
-                        .unwrap_or(&format!("bit_{}", bit_pos))
-                ));
-                code.push_str("        }\n");
-            }
+            // Use optimized matching with integer IDs
+            let match_condition = {
+                let id_id = self.string_to_id[id];
+                format!("Some({})", id_id)
+            };
+
+            code.push_str(&format!("        {match_condition} => {{\n",));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({bit_pos}); // {}\n",
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n");
         }
         code.push_str("_ => {}}\n");
 
