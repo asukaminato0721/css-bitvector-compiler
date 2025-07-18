@@ -814,7 +814,7 @@ impl TreeNFAProgram {
         code.push_str("        },\n");
         code.push_str("        SimpleSelector::Class(class) => {\n");
         code.push_str("            if let Some(class_id) = string_map.get(class.as_str()) {\n");
-        code.push_str("                matches_class_id(node, *class_id)\n");
+        code.push_str("                node_has_class_id(node, *class_id)\n");
         code.push_str("            } else {\n");
         code.push_str("                false\n");
         code.push_str("            }\n");
@@ -855,7 +855,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
-                        format!("matches_class_id(node, {})", class_id)
+                        format!("node_has_class_id(node, {})", class_id)
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
@@ -894,7 +894,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
-                        format!("matches_class_id(node, {})", class_id)
+                        format!("node_has_class_id(node, {})", class_id)
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
@@ -981,17 +981,19 @@ impl TreeNFAProgram {
         let propagation_rules_code = self.generate_propagation_rules_code();
 
         // --- Generate BitVector-only Incremental Processing Function ---
-        code.push_str("// --- BitVector-only Incremental Processing Functions ---\n");
-        code.push_str("pub fn process_node_generated_bitvector_incremental(\n");
-        code.push_str("    node: &mut HtmlNode,\n");
-        code.push_str("    parent_state: &BitVector,\n");
-        code.push_str(") -> BitVector { // returns child_states\n");
-        code.push_str("    // Check if we need to recompute using BitVector-only tracking\n");
-        code.push_str("    if !node.needs_any_recomputation_bitvector(parent_state) {\n");
-        code.push_str("        // Return cached result - entire subtree can be skipped\n");
-        code.push_str("        return node.cached_child_states.clone().unwrap();\n");
-        code.push_str("    }\n\n");
-        code.push_str("    // Recompute node intrinsic matches if needed\n");
+        code.push_str(
+            "// --- BitVector-only Incremental Processing Functions ---
+        pub fn process_node_generated_bitvector_incremental(
+            node: &mut HtmlNode,
+            parent_state: &BitVector,
+        ) -> BitVector { // returns child_states
+            // Check if we need to recompute using BitVector-only tracking
+            if !node.needs_any_recomputation_bitvector(parent_state) {
+                // Return cached result - entire subtree can be skipped
+                return node.cached_child_states.clone().unwrap();
+            }
+            // Recompute node intrinsic matches if needed\n",
+        );
         code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
@@ -1042,7 +1044,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
-                        format!("matches_class_id(node, {})", class_id)
+                        format!("node_has_class_id(node, {})", class_id)
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
@@ -1221,10 +1223,12 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
                         "        parent_matches.get({}).copied().unwrap_or(false)\n",
                         parent_state_bit
                     ));
-                    code.push_str("    } else {\n");
-                    code.push_str("        false\n");
-                    code.push_str("    }\n");
-                    code.push_str("}\n\n");
+                    code.push_str(
+                        "    } else {
+                            false
+                        }
+                    }\n\n",
+                    );
                 }
                 _ => {} // Skip propagation rules in naive implementation
             }
@@ -1284,29 +1288,26 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
             "    let empty_parent = vec![false; {}];\n",
             self.total_bits
         ));
-        code.push_str("    process_tree_recursive_naive(root, &empty_parent, &mut total_nodes);\n");
-        code.push_str("    total_nodes\n");
-        code.push_str("}\n\n");
-
-        code.push_str("fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {\n");
-        code.push_str("    *total += 1;\n");
-        code.push_str("    \n");
-        code.push_str("    // Calculate matches for this node from scratch\n");
-        code.push_str("    let node_matches = process_node_naive(node, parent_matches);\n");
-        code.push_str("    \n");
+        code.push_str("    process_tree_recursive_naive(root, &empty_parent, &mut total_nodes);
+            total_nodes
+        }
+        fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {
+            *total += 1;
+            
+            // Calculate matches for this node from scratch
+            let node_matches = process_node_naive(node, parent_matches);
+            ");
         code.push_str(
-            "    // Process all children with this node's matches as their parent context\n",
-        );
-        code.push_str("    for child in node.children.iter_mut() {\n");
-        code.push_str("        process_tree_recursive_naive(child, &node_matches, total);\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
+            "    // Process all children with this node's matches as their parent context,
+            for child in node.children.iter_mut() {
+                process_tree_recursive_naive(child, &node_matches, total);
+            }
+        }
 
-        // Generate helper function to get rule names (simplified to avoid string escaping issues)
-        code.push_str("// === HELPER FUNCTIONS ===\n");
-        code.push_str("pub fn get_rule_name(rule_index: usize) -> String {\n");
-        code.push_str("    format!(\"rule_{}\", rule_index)\n");
-        code.push_str("}\n\n");
+        pub fn get_rule_name(rule_index: usize) -> String {
+            format!(\"rule_{}\", rule_index)
+        }",
+        );
 
         // Add rule documentation as comments
         code.push_str("// Rule mapping:\n");
@@ -1316,14 +1317,16 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
         code.push_str("\n");
 
         // Generate function to print all matches for debugging
-        code.push_str("pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {\n");
-        code.push_str("    println!(\"Node '{}' matches:\", node.tag_name);\n");
-        code.push_str("    for (i, &matched) in matches.iter().enumerate() {\n");
-        code.push_str("        if matched {\n");
-        code.push_str("            println!(\"  Rule {}: {}\", i, get_rule_name(i));\n");
-        code.push_str("        }\n");
-        code.push_str("    }\n");
-        code.push_str("}\n\n");
+        code.push_str(
+            "pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {
+            println!(\"Node '{}' matches:\", node.tag_name);
+            for (i, &matched) in matches.iter().enumerate() {
+                if matched {
+                    println!(\"  Rule {}: {}\", i, get_rule_name(i));
+                }
+            }
+        }",
+        );
 
         // Generate function to get total number of rules
         code.push_str("pub fn get_total_rules() -> usize {\n");
@@ -1361,7 +1364,24 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
             "// Fast selector matching using integer IDs and switch
         #[inline]
         fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
-            get_string_to_id_map().get(node.tag_name.as_str()).copied()
+            use std::cell::RefCell;
+            thread_local! {
+                static CACHE: RefCell<Option<(String, Option<u32>)>> = RefCell::new(None);
+            }
+
+            CACHE.with(|cache| {
+                let mut cache = cache.borrow_mut();
+                
+                if let Some((cached_tag, cached_id)) = &*cache {
+                    if cached_tag == &node.tag_name {
+                        return *cached_id;
+                    }
+                }
+        
+            let result = get_string_to_id_map().get(node.tag_name.as_str()).copied();
+            *cache = Some((node.tag_name.clone(), result));
+            result
+        })
         }
         #[inline]
         fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
@@ -1404,14 +1424,6 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
             } else {
                 false
             }
-        }
-",
-        );
-
-        code.push_str(
-            "#[inline]
-        fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
-            node_has_class_id(node, class_id)
         }
 ",
         );

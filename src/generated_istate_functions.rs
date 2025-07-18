@@ -11,22 +11,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("input", 15);
-        map.insert("body", 13);
         map.insert("html", 14);
-        map.insert("yt-icons-ext", 6);
+        map.insert("grecaptcha-badge", 2);
+        map.insert("chunked", 0);
+        map.insert("input", 15);
         map.insert("yt-logo-updated-svg", 12);
-        map.insert("masthead-skeleton-icon", 4);
-        map.insert("external-icon", 1);
+        map.insert("yt-logo-red-updated-svg", 10);
         map.insert("yt-logo-red-svg", 9);
         map.insert("shell", 5);
-        map.insert("masthead-logo", 7);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("chunked", 0);
-        map.insert("yt-logo-svg", 11);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("hidden", 3);
         map.insert("masthead-skeleton-icons", 8);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("yt-icons-ext", 6);
+        map.insert("yt-logo-svg", 11);
+        map.insert("body", 13);
+        map.insert("hidden", 3);
+        map.insert("masthead-logo", 7);
+        map.insert("external-icon", 1);
         map
     })
 }
@@ -34,7 +34,24 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
 // Fast selector matching using integer IDs and switch
 #[inline]
 fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
-    get_string_to_id_map().get(node.tag_name.as_str()).copied()
+    use std::cell::RefCell;
+    thread_local! {
+        static CACHE: RefCell<Option<(String, Option<u32>)>> = RefCell::new(None);
+    }
+
+    CACHE.with(|cache| {
+        let mut cache = cache.borrow_mut();
+
+        if let Some((cached_tag, cached_id)) = &*cache {
+            if cached_tag == &node.tag_name {
+                return *cached_id;
+            }
+        }
+
+        let result = get_string_to_id_map().get(node.tag_name.as_str()).copied();
+        *cache = Some((node.tag_name.clone(), result));
+        result
+    })
 }
 #[inline]
 fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
@@ -72,10 +89,6 @@ fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
         false
     }
 }
-#[inline]
-fn matches_class_id(node: &HtmlNode, class_id: u32) -> bool {
-    node_has_class_id(node, class_id)
-}
 // --- Incremental Processing Functions ---
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
@@ -93,37 +106,37 @@ pub fn process_node_generated_incremental(
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 
         // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
-        if matches_class_id(node, 0) {
+        if node_has_class_id(node, 0) {
             intrinsic_matches.set_bit(0); // match_Class("chunked")
         }
 
         // Instruction 2: CheckAndSetBit { selector: Class("external-icon"), bit_pos: 2 }
-        if matches_class_id(node, 1) {
+        if node_has_class_id(node, 1) {
             intrinsic_matches.set_bit(2); // match_Class("external-icon")
         }
 
         // Instruction 4: CheckAndSetBit { selector: Class("grecaptcha-badge"), bit_pos: 4 }
-        if matches_class_id(node, 2) {
+        if node_has_class_id(node, 2) {
             intrinsic_matches.set_bit(4); // match_Class("grecaptcha-badge")
         }
 
         // Instruction 6: CheckAndSetBit { selector: Class("hidden"), bit_pos: 6 }
-        if matches_class_id(node, 3) {
+        if node_has_class_id(node, 3) {
             intrinsic_matches.set_bit(6); // match_Class("hidden")
         }
 
         // Instruction 8: CheckAndSetBit { selector: Class("masthead-skeleton-icon"), bit_pos: 8 }
-        if matches_class_id(node, 4) {
+        if node_has_class_id(node, 4) {
             intrinsic_matches.set_bit(8); // match_Class("masthead-skeleton-icon")
         }
 
         // Instruction 10: CheckAndSetBit { selector: Class("shell"), bit_pos: 10 }
-        if matches_class_id(node, 5) {
+        if node_has_class_id(node, 5) {
             intrinsic_matches.set_bit(10); // match_Class("shell")
         }
 
         // Instruction 12: CheckAndSetBit { selector: Class("yt-icons-ext"), bit_pos: 12 }
-        if matches_class_id(node, 6) {
+        if node_has_class_id(node, 6) {
             intrinsic_matches.set_bit(12); // match_Class("yt-icons-ext")
         }
 
@@ -248,7 +261,7 @@ pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelecto
         }
         SimpleSelector::Class(class) => {
             if let Some(class_id) = string_map.get(class.as_str()) {
-                matches_class_id(node, *class_id)
+                node_has_class_id(node, *class_id)
             } else {
                 false
             }

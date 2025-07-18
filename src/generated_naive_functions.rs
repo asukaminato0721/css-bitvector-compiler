@@ -150,57 +150,52 @@ pub fn process_tree_naive(root: &mut HtmlNode) -> usize {
     process_tree_recursive_naive(root, &empty_parent, &mut total_nodes);
     total_nodes
 }
-
 fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {
     *total += 1;
 
     // Calculate matches for this node from scratch
     let node_matches = process_node_naive(node, parent_matches);
-
-    // Process all children with this node's matches as their parent context
+    // Process all children with this node's matches as their parent context,
     for child in node.children.iter_mut() {
         process_tree_recursive_naive(child, &node_matches, total);
     }
 }
 
-// === HELPER FUNCTIONS ===
 pub fn get_rule_name(rule_index: usize) -> String {
     format!("rule_{}", rule_index)
-}
-
-// Rule mapping:
-// Rule 9: active_Class("masthead-skeleton-icon")
-// Rule 19: active_Id("yt-logo-red-svg")
-// Rule 31: active_Type("input")
-// Rule 6: match_Class("hidden")
-// Rule 29: active_Type("html")
-// Rule 12: match_Class("yt-icons-ext")
-// Rule 30: match_Type("input")
-// Rule 0: match_Class("chunked")
-// Rule 27: active_Type("body")
-// Rule 10: match_Class("shell")
+} // Rule mapping:
 // Rule 15: active_Id("masthead-logo")
-// Rule 1: active_Class("chunked")
-// Rule 2: match_Class("external-icon")
-// Rule 26: match_Type("body")
-// Rule 16: match_Id("masthead-skeleton-icons")
-// Rule 17: active_Id("masthead-skeleton-icons")
-// Rule 24: match_Id("yt-logo-updated-svg")
-// Rule 22: match_Id("yt-logo-svg")
-// Rule 25: active_Id("yt-logo-updated-svg")
-// Rule 8: match_Class("masthead-skeleton-icon")
-// Rule 13: active_Class("yt-icons-ext")
 // Rule 7: active_Class("hidden")
+// Rule 9: active_Class("masthead-skeleton-icon")
+// Rule 10: match_Class("shell")
+// Rule 25: active_Id("yt-logo-updated-svg")
+// Rule 26: match_Type("body")
+// Rule 1: active_Class("chunked")
+// Rule 13: active_Class("yt-icons-ext")
+// Rule 12: match_Class("yt-icons-ext")
+// Rule 19: active_Id("yt-logo-red-svg")
+// Rule 27: active_Type("body")
+// Rule 21: active_Id("yt-logo-red-updated-svg")
+// Rule 11: active_Class("shell")
+// Rule 8: match_Class("masthead-skeleton-icon")
+// Rule 6: match_Class("hidden")
+// Rule 14: match_Id("masthead-logo")
+// Rule 17: active_Id("masthead-skeleton-icons")
 // Rule 4: match_Class("grecaptcha-badge")
 // Rule 5: active_Class("grecaptcha-badge")
-// Rule 14: match_Id("masthead-logo")
-// Rule 20: match_Id("yt-logo-red-updated-svg")
-// Rule 21: active_Id("yt-logo-red-updated-svg")
-// Rule 23: active_Id("yt-logo-svg")
-// Rule 11: active_Class("shell")
+// Rule 2: match_Class("external-icon")
+// Rule 16: match_Id("masthead-skeleton-icons")
+// Rule 24: match_Id("yt-logo-updated-svg")
 // Rule 18: match_Id("yt-logo-red-svg")
+// Rule 31: active_Type("input")
 // Rule 3: active_Class("external-icon")
 // Rule 28: match_Type("html")
+// Rule 20: match_Id("yt-logo-red-updated-svg")
+// Rule 23: active_Id("yt-logo-svg")
+// Rule 30: match_Type("input")
+// Rule 22: match_Id("yt-logo-svg")
+// Rule 29: active_Type("html")
+// Rule 0: match_Class("chunked")
 
 pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {
     println!("Node '{}' matches:", node.tag_name);
@@ -210,7 +205,6 @@ pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {
         }
     }
 }
-
 pub fn get_total_rules() -> usize {
     32 // Total number of CSS rules
 }
