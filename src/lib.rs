@@ -943,12 +943,9 @@ impl TreeNFAProgram {
             code.push_str(&format!("// Instruction {i}: {instruction:?}\n",));
 
             // Use optimized matching with integer IDs
-            let match_condition = {
-                let tag_id = self.string_to_id[tag];
-                format!("Some({})", tag_id)
-            };
+            let tag_id = self.string_to_id[tag];
 
-            code.push_str(&format!(" {match_condition}  => {{\n",));
+            code.push_str(&format!(" Some({tag_id})  => {{\n",));
             code.push_str(&format!(
                 "            intrinsic_matches.set_bit({}); // {}\n",
                 bit_pos,
@@ -974,7 +971,6 @@ impl TreeNFAProgram {
                 i, instruction
             ));
 
-            // Use optimized matching with integer IDs
             let match_condition = {
                 let class_id = self.string_to_id[class];
                 format!("node_has_class_id(node, {})", class_id)
@@ -1005,13 +1001,9 @@ impl TreeNFAProgram {
 
             code.push_str(&format!("        // Instruction {i}: {instruction:?}\n",));
 
-            // Use optimized matching with integer IDs
-            let match_condition = {
-                let id_id = self.string_to_id[id];
-                format!("Some({})", id_id)
-            };
+            let id_id = self.string_to_id[id];
 
-            code.push_str(&format!("        {match_condition} => {{\n",));
+            code.push_str(&format!("        Some({id_id}) => {{\n",));
             code.push_str(&format!(
                 "            intrinsic_matches.set_bit({bit_pos}); // {}\n",
                 self.state_names
