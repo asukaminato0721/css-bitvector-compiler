@@ -155,72 +155,69 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
             let insertion_index = path[path.len() - 1];
             let parent_path = &path[..path.len() - 1];
 
-            if let Some(parent) = find_node_by_path_mut(tree, parent_path) {
-                if let Some(node_data) = frame.command_data.get("node") {
-                    if let Some(new_child) = json_to_html_node(node_data) {
-                        // Insert at the specified index (or append if index equals length)
-                        if insertion_index <= parent.children.len() {
-                            parent.children.insert(insertion_index, new_child);
-                            parent.mark_dirty();
-                            parent.init_parent_pointers();
-                            return 1;
-                        } else {
-                        }
-                    } else {
-                        dbg!(node_data);
-                        println!("    DEBUG: Failed to create child node from JSON");
-                    }
-                } else {
-                    println!("    DEBUG: No 'node' field in command_data");
-                }
+            let Some(parent) = find_node_by_path_mut(tree, parent_path) else {
+                println!("    DEBUG: Failed to find parent node at path {parent_path:?}",);
+                unreachable!();
+            };
+            let Some(node_data) = frame.command_data.get("node") else {
+                println!("    DEBUG: No 'node' field in command_data");
+                unreachable!();
+            };
+            let Some(new_child) = json_to_html_node(node_data) else {
+                dbg!(node_data);
+                println!("    DEBUG: Failed to create child node from JSON");
+                unreachable!();
+            };
+            // Insert at the specified index (or append if index equals length)
+            if insertion_index <= parent.children.len() {
+                parent.children.insert(insertion_index, new_child);
+                parent.mark_dirty();
+                parent.init_parent_pointers();
+                return 1;
             } else {
-                println!(
-                    "    DEBUG: Failed to find parent node at path {:?}",
-                    parent_path
-                );
+                unreachable!();
             }
-            0
         }
         "replace_value" | "insert_value" => {
             let path = extract_path_from_command(&frame.command_data);
-            if let Some(target_node) = find_node_by_path_mut(tree, &path) {
-                if let Some(key) = frame.command_data.get("key").and_then(|k| k.as_str()) {
-                    match key {
-                        "class" => {
-                            if let Some(new_value) =
-                                frame.command_data.get("value").and_then(|v| v.as_str())
-                            {
-                                target_node.classes.clear();
-                                for class in new_value.split_whitespace() {
-                                    target_node.classes.insert(class.to_string());
-                                }
-                                target_node.mark_dirty();
-                                return 1;
-                            }
-                        }
-                        "id" => {
-                            if let Some(new_value) =
-                                frame.command_data.get("value").and_then(|v| v.as_str())
-                            {
-                                target_node.id = if new_value.is_empty() {
-                                    None
-                                } else {
-                                    Some(new_value.to_string())
-                                };
-                                target_node.mark_dirty();
-                                return 1;
-                            }
-                        }
-                        _ => {
-                            target_node.mark_dirty();
-                            return 1;
-                        }
-                    }
-                } else {
-                    println!("    DEBUG: No 'key' field in command_data");
-                }
-            } else {
+            let Some(target_node) = find_node_by_path_mut(tree, &path) else {
                 println!("    DEBUG: Failed to find target node at path {:?}", path);
+                unreachable!();
+            };
+            let Some(key) = frame.command_data.get("key").and_then(|k| k.as_str()) else {
+                println!("    DEBUG: No 'key' field in command_data");
+                unreachable!();
+            };
+            match key {
+                "class" => {
+                    if let Some(new_value) =
+                        frame.command_data.get("value").and_then(|v| v.as_str())
+                    {
+                        target_node.classes.clear();
+                        for class in new_value.split_whitespace() {
+                            target_node.classes.insert(class.to_string());
+                        }
+                        target_node.mark_dirty();
+                        return 1;
+                    }
+                }
+                "id" => {
+                    if let Some(new_value) =
+                        frame.command_data.get("value").and_then(|v| v.as_str())
+                    {
+                        target_node.id = if new_value.is_empty() {
+                            None
+                        } else {
+                            Some(new_value.to_string())
+                        };
+                        target_node.mark_dirty();
+                        return 1;
+                    }
+                }
+                _ => {
+                    target_node.mark_dirty();
+                    return 1;
+                }
             }
             0
         }
@@ -230,7 +227,21 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
             tree.mark_dirty();
             count_nodes(tree)
         }
-        _ => 0,
+        "remove" => {
+            let path = extract_path_from_command(&frame.command_data);
+            let remove_index = path[path.len() - 1];
+            let parent_path = &path[..path.len() - 1];
+            let Some(parent) = find_node_by_path_mut(tree, parent_path) else {
+                unreachable!();
+            };
+            parent.remove_child(remove_index);
+            1
+        }
+        "delte_value" => 1,
+        _ => {
+            dbg!(frame.command_name.as_str());
+            0
+        }
     }
 }
 
