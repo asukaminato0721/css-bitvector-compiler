@@ -750,45 +750,88 @@ impl TreeNFAProgram {
             for instruction in &s.instructions {
                 if let NFAInstruction::CheckParentAndSetBit {
                     parent_state_bit,
-                    child_selector,
+                    child_selector: SimpleSelector::Type(tag),
                     result_bit,
                 } = instruction
                 {
                     // Use optimized matching with integer IDs
-                    let match_condition = match child_selector {
-                        SimpleSelector::Type(tag) => {
-                            let tag_id = s.string_to_id[tag];
-                            format!("get_node_tag_id(node) == Some({})", tag_id)
-                        }
-                        SimpleSelector::Class(class) => {
-                            let class_id = s.string_to_id[class];
-                            format!("node_has_class_id(node, {})", class_id)
-                        }
-                        SimpleSelector::Id(id) => {
-                            let id_id = s.string_to_id[id];
-                            format!("get_node_id_id(node) == Some({id_id})")
-                        }
+                    let match_condition = {
+                        let tag_id = s.string_to_id[tag];
+                        format!("get_node_tag_id(node) == Some({})", tag_id)
                     };
 
-                    // First check if child matches (optimization: check child condition first)
-                    code.push_str(&format!("    if {} {{\n", match_condition));
-                    code.push_str(&format!(
-                        "        // Track that we're using parent state bit {}\n",
-                        parent_state_bit
-                    ));
-                    code.push_str(&format!(
-                        "        if {} < parent_usage_tracker.len() {{\n",
-                        parent_state_bit
-                    ));
-                    code.push_str(&format!("            parent_usage_tracker[{}] = if parent_state.is_bit_set({}) {{ IState::IOne }} else {{ IState::IZero }};\n", parent_state_bit, parent_state_bit));
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
                     code.push_str("        }\n");
                     code.push_str(&format!(
-                        "        if parent_state.is_bit_set({}) {{\n",
-                        parent_state_bit
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
                     ));
                     code.push_str(&format!(
-                        "            current_matches.set_bit({}); // {}\n",
-                        result_bit,
+                        "            current_matches.set_bit({result_bit}); // {}\n",
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector: SimpleSelector::Class(class),
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = {
+                        let class_id = s.string_to_id[class];
+                        format!("node_has_class_id(node, {})", class_id)
+                    };
+
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
+                    code.push_str("        }\n");
+                    code.push_str(&format!(
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({result_bit}); // {}\n",
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector: SimpleSelector::Id(id),
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = {
+                        let id_id = s.string_to_id[id];
+                        format!("get_node_id_id(node) == Some({id_id})")
+                    };
+
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
+                    code.push_str("        }\n");
+                    code.push_str(&format!(
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({result_bit}); // {}\n",
                         s.state_names
                             .get(result_bit)
                             .unwrap_or(&format!("bit_{}", result_bit))
