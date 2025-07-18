@@ -744,7 +744,112 @@ impl TreeNFAProgram {
         }
     }
 
-    pub fn generate_rust_istate_code(&self) -> String {
+    pub fn generate_istate_code(&self) -> String {
+        fn generate_parent_dependent_rules_code(s: &TreeNFAProgram) -> String {
+            let mut code = String::new();
+            code.push_str(
+                "// match get_node_tag_id(node) {
+            ",
+            );
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector: SimpleSelector::Type(tag),
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = {
+                        let tag_id = s.string_to_id[tag];
+                        format!("get_node_tag_id(node) == Some({})", tag_id)
+                    };
+
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
+                    code.push_str("        }\n");
+                    code.push_str(&format!(
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({result_bit}); // {}\n",
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector: SimpleSelector::Class(class),
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = {
+                        let class_id = s.string_to_id[class];
+                        format!("node_has_class_id(node, {})", class_id)
+                    };
+
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
+                    code.push_str("        }\n");
+                    code.push_str(&format!(
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({result_bit}); // {}\n",
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            code.push_str(
+                "// match get_node_id_id(node) {
+            ",
+            );
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector: SimpleSelector::Id(id),
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = {
+                        let id_id = s.string_to_id[id];
+                        format!("get_node_id_id(node) == Some({id_id})")
+                    };
+
+                    code.push_str(&format!("
+                    if {match_condition} {{
+                        // Track that we're using parent state bit {parent_state_bit}
+                        if {parent_state_bit} < parent_usage_tracker.len() {{            parent_usage_tracker[{parent_state_bit}] = if parent_state.is_bit_set({parent_state_bit}) {{ IState::IOne }} else {{ IState::IZero }};\n" ));
+                    code.push_str("        }\n");
+                    code.push_str(&format!(
+                        "        if parent_state.is_bit_set({parent_state_bit}) {{\n",
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({result_bit}); // {}\n",
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            code
+        }
         let mut code = String::new();
 
         code.push_str(
@@ -766,7 +871,7 @@ impl TreeNFAProgram {
 
         // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
-        let parent_dependent_rules_code = self.generate_parent_dependent_rules_code();
+        let parent_dependent_rules_code = generate_parent_dependent_rules_code(self);
         let propagation_rules_code = self.generate_propagation_rules_code();
 
         // --- Generate Incremental Processing Function ---
@@ -781,10 +886,10 @@ impl TreeNFAProgram {
                 // Return cached result - entire subtree can be skipped
                 return node.cached_child_states.clone().unwrap();
             }
-            // Recompute node intrinsic matches if needed\n",
+            // Recompute node intrinsic matches if needed
+            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+        /// generate_intrinsic_checks_code\n",
         );
-        code.push_str("    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {\n");
-        code.push_str("/// generate_intrinsic_checks_code\n");
         code.push_str(&intrinsic_checks_code);
         code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
         code.push_str("    }\n\n");
@@ -818,96 +923,97 @@ impl TreeNFAProgram {
 
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
-        code.push_str("let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);");
+        code.push_str(
+            "let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
+",
+        );
+        code.push_str(
+            "match get_node_tag_id(node) {
+",
+        );
         for (i, instruction) in self.instructions.iter().enumerate() {
-            if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
-                code.push_str(&format!(
-                    "        // Instruction {}: {:?}\n",
-                    i, instruction
-                ));
-
-                // Use optimized matching with integer IDs
-                let match_condition = match selector {
-                    SimpleSelector::Type(tag) => {
-                        let tag_id = self.string_to_id[tag];
-                        format!("get_node_tag_id(node) == Some({})", tag_id)
-                    }
-                    SimpleSelector::Class(class) => {
-                        let class_id = self.string_to_id[class];
-                        format!("node_has_class_id(node, {})", class_id)
-                    }
-                    SimpleSelector::Id(id) => {
-                        let id_id = self.string_to_id[id];
-                        format!("get_node_id_id(node) == Some({})", id_id)
-                    }
-                };
-
-                code.push_str(&format!("        if {} {{\n", match_condition));
-                code.push_str(&format!(
-                    "            intrinsic_matches.set_bit({}); // {}\n",
-                    bit_pos,
-                    self.state_names
-                        .get(bit_pos)
-                        .unwrap_or(&format!("bit_{}", bit_pos))
-                ));
-                code.push_str("        }\n\n");
-            }
-        }
-        code
-    }
-
-    fn generate_parent_dependent_rules_code(&self) -> String {
-        let mut code = String::new();
-        for instruction in &self.instructions {
-            if let NFAInstruction::CheckParentAndSetBit {
-                parent_state_bit,
-                child_selector,
-                result_bit,
+            let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Type(tag),
+                bit_pos,
             } = instruction
-            {
-                // Use optimized matching with integer IDs
-                let match_condition = match child_selector {
-                    SimpleSelector::Type(tag) => {
-                        let tag_id = self.string_to_id[tag];
-                        format!("get_node_tag_id(node) == Some({})", tag_id)
-                    }
-                    SimpleSelector::Class(class) => {
-                        let class_id = self.string_to_id[class];
-                        format!("node_has_class_id(node, {})", class_id)
-                    }
-                    SimpleSelector::Id(id) => {
-                        let id_id = self.string_to_id[id];
-                        format!("get_node_id_id(node) == Some({id_id})")
-                    }
-                };
+            else {
+                continue;
+            };
 
-                // First check if child matches (optimization: check child condition first)
-                code.push_str(&format!("    if {} {{\n", match_condition));
-                code.push_str(&format!(
-                    "        // Track that we're using parent state bit {}\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!(
-                    "        if {} < parent_usage_tracker.len() {{\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!("            parent_usage_tracker[{}] = if parent_state.is_bit_set({}) {{ IState::IOne }} else {{ IState::IZero }};\n", parent_state_bit, parent_state_bit));
-                code.push_str("        }\n");
-                code.push_str(&format!(
-                    "        if parent_state.is_bit_set({}) {{\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!(
-                    "            current_matches.set_bit({}); // {}\n",
-                    result_bit,
-                    self.state_names
-                        .get(result_bit)
-                        .unwrap_or(&format!("bit_{}", result_bit))
-                ));
-                code.push_str("        }\n");
-                code.push_str("    }\n");
-            }
+            code.push_str(&format!("// Instruction {i}: {instruction:?}\n",));
+
+            // Use optimized matching with integer IDs
+            let tag_id = self.string_to_id[tag];
+
+            code.push_str(&format!(" Some({tag_id})  => {{\n",));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({}); // {}\n",
+                bit_pos,
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n\n");
         }
+        code.push_str("_ => {}}\n");
+
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Class(class),
+                bit_pos,
+            } = instruction
+            else {
+                continue;
+            };
+
+            code.push_str(&format!(
+                "        // Instruction {}: {:?}\n",
+                i, instruction
+            ));
+
+            let match_condition = {
+                let class_id = self.string_to_id[class];
+                format!("node_has_class_id(node, {})", class_id)
+            };
+
+            code.push_str(&format!("        if {} {{\n", match_condition));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({}); // {}\n",
+                bit_pos,
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n\n");
+        }
+        code.push_str(
+            "match get_node_id_id(node) {
+",
+        );
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            let NFAInstruction::CheckAndSetBit {
+                selector: SimpleSelector::Id(id),
+                bit_pos,
+            } = instruction
+            else {
+                continue;
+            };
+
+            code.push_str(&format!("        // Instruction {i}: {instruction:?}\n",));
+
+            let id_id = self.string_to_id[id];
+
+            code.push_str(&format!("        Some({id_id}) => {{\n",));
+            code.push_str(&format!(
+                "            intrinsic_matches.set_bit({bit_pos}); // {}\n",
+                self.state_names
+                    .get(bit_pos)
+                    .unwrap_or(&format!("bit_{}", bit_pos))
+            ));
+            code.push_str("        }\n");
+        }
+        code.push_str("_ => {}}\n");
+
         code
     }
 
@@ -937,7 +1043,69 @@ impl TreeNFAProgram {
     }
 
     /// Generate BitVector-only Rust code (alternative to IState-based version)
-    pub fn generate_bitvector_only_rust_code(&self) -> String {
+    pub fn generate_bitvector_code(&self) -> String {
+        fn generate_parent_dependent_rules_bitvector_code(s: &TreeNFAProgram) -> String {
+            let mut code = String::new();
+            for instruction in &s.instructions {
+                if let NFAInstruction::CheckParentAndSetBit {
+                    parent_state_bit,
+                    child_selector,
+                    result_bit,
+                } = instruction
+                {
+                    // Use optimized matching with integer IDs
+                    let match_condition = match child_selector {
+                        SimpleSelector::Type(tag) => {
+                            let tag_id = s.string_to_id[tag];
+                            format!("get_node_tag_id(node) == Some({})", tag_id)
+                        }
+                        SimpleSelector::Class(class) => {
+                            let class_id = s.string_to_id[class];
+                            format!("node_has_class_id(node, {})", class_id)
+                        }
+                        SimpleSelector::Id(id) => {
+                            let id_id = s.string_to_id[id];
+                            format!("get_node_id_id(node) == Some({})", id_id)
+                        }
+                    };
+
+                    // First check if child matches (optimization: check child condition first)
+                    code.push_str(&format!("    if {} {{\n", match_condition));
+                    code.push_str(&format!(
+                    "        // Record parent state bit {} was read (BitVector-only tracking)\n",
+                    parent_state_bit
+                ));
+                    code.push_str(&format!(
+                        "        parent_bits_read.set_bit({});\n",
+                        parent_state_bit
+                    ));
+                    code.push_str(&format!(
+                        "        let parent_bit_value = parent_state.is_bit_set({});\n",
+                        parent_state_bit
+                    ));
+                    code.push_str(&format!("        if parent_bit_value {{\n"));
+                    code.push_str(&format!(
+                        "            parent_values_read.set_bit({});\n",
+                        parent_state_bit
+                    ));
+                    code.push_str(&format!(
+                        "            current_matches.set_bit({}); // {}\n",
+                        result_bit,
+                        s.state_names
+                            .get(result_bit)
+                            .unwrap_or(&format!("bit_{}", result_bit))
+                    ));
+                    code.push_str("        } else {\n");
+                    code.push_str(&format!(
+                        "            parent_values_read.clear_bit({});\n",
+                        parent_state_bit
+                    ));
+                    code.push_str("        }\n");
+                    code.push_str("    }\n");
+                }
+            }
+            code
+        }
         let mut code = String::new();
 
         // Add necessary imports for the generated code to be self-contained
@@ -956,7 +1124,7 @@ impl TreeNFAProgram {
 
         // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
-        let parent_dependent_rules_code = self.generate_parent_dependent_rules_bitvector_code();
+        let parent_dependent_rules_code = generate_parent_dependent_rules_bitvector_code(self);
         let propagation_rules_code = self.generate_propagation_rules_code();
 
         // --- Generate BitVector-only Incremental Processing Function ---
@@ -1004,69 +1172,6 @@ impl TreeNFAProgram {
         // --- Generate Tree Traversal Wrappers for BitVector-only version ---
         code.push_str(&self.generate_bitvector_traversal_wrappers());
 
-        code
-    }
-
-    fn generate_parent_dependent_rules_bitvector_code(&self) -> String {
-        let mut code = String::new();
-        for instruction in &self.instructions {
-            if let NFAInstruction::CheckParentAndSetBit {
-                parent_state_bit,
-                child_selector,
-                result_bit,
-            } = instruction
-            {
-                // Use optimized matching with integer IDs
-                let match_condition = match child_selector {
-                    SimpleSelector::Type(tag) => {
-                        let tag_id = self.string_to_id[tag];
-                        format!("get_node_tag_id(node) == Some({})", tag_id)
-                    }
-                    SimpleSelector::Class(class) => {
-                        let class_id = self.string_to_id[class];
-                        format!("node_has_class_id(node, {})", class_id)
-                    }
-                    SimpleSelector::Id(id) => {
-                        let id_id = self.string_to_id[id];
-                        format!("get_node_id_id(node) == Some({})", id_id)
-                    }
-                };
-
-                // First check if child matches (optimization: check child condition first)
-                code.push_str(&format!("    if {} {{\n", match_condition));
-                code.push_str(&format!(
-                    "        // Record parent state bit {} was read (BitVector-only tracking)\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!(
-                    "        parent_bits_read.set_bit({});\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!(
-                    "        let parent_bit_value = parent_state.is_bit_set({});\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!("        if parent_bit_value {{\n"));
-                code.push_str(&format!(
-                    "            parent_values_read.set_bit({});\n",
-                    parent_state_bit
-                ));
-                code.push_str(&format!(
-                    "            current_matches.set_bit({}); // {}\n",
-                    result_bit,
-                    self.state_names
-                        .get(result_bit)
-                        .unwrap_or(&format!("bit_{}", result_bit))
-                ));
-                code.push_str("        } else {\n");
-                code.push_str(&format!(
-                    "            parent_values_read.clear_bit({});\n",
-                    parent_state_bit
-                ));
-                code.push_str("        }\n");
-                code.push_str("    }\n");
-            }
-        }
         code
     }
 

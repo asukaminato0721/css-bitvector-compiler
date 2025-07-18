@@ -12,22 +12,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("chunked", 0);
-        map.insert("yt-logo-red-svg", 9);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("html", 14);
         map.insert("masthead-skeleton-icons", 8);
-        map.insert("hidden", 3);
+        map.insert("yt-logo-red-updated-svg", 10);
         map.insert("body", 13);
+        map.insert("chunked", 0);
+        map.insert("yt-icons-ext", 6);
+        map.insert("html", 14);
+        map.insert("hidden", 3);
+        map.insert("external-icon", 1);
         map.insert("masthead-skeleton-icon", 4);
+        map.insert("masthead-logo", 7);
+        map.insert("yt-logo-svg", 11);
+        map.insert("shell", 5);
+        map.insert("grecaptcha-badge", 2);
+        map.insert("yt-logo-red-svg", 9);
         map.insert("input", 15);
         map.insert("yt-logo-updated-svg", 12);
-        map.insert("yt-logo-svg", 11);
-        map.insert("yt-icons-ext", 6);
-        map.insert("external-icon", 1);
-        map.insert("masthead-logo", 7);
-        map.insert("shell", 5);
         map
     })
 }
@@ -86,7 +86,26 @@ pub fn process_node_generated_incremental(
     // Recompute node intrinsic matches if needed
     if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
         /// generate_intrinsic_checks_code
-        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY); // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
+        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
+        match get_node_tag_id(node) {
+            // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
+            Some(13) => {
+                intrinsic_matches.set_bit(26); // match_Type("body")
+            }
+
+            // Instruction 28: CheckAndSetBit { selector: Type("html"), bit_pos: 28 }
+            Some(14) => {
+                intrinsic_matches.set_bit(28); // match_Type("html")
+            }
+
+            // Instruction 30: CheckAndSetBit { selector: Type("input"), bit_pos: 30 }
+            Some(15) => {
+                intrinsic_matches.set_bit(30); // match_Type("input")
+            }
+
+            _ => {}
+        }
+        // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
         if node_has_class_id(node, 0) {
             intrinsic_matches.set_bit(0); // match_Class("chunked")
         }
@@ -121,51 +140,33 @@ pub fn process_node_generated_incremental(
             intrinsic_matches.set_bit(12); // match_Class("yt-icons-ext")
         }
 
-        // Instruction 14: CheckAndSetBit { selector: Id("masthead-logo"), bit_pos: 14 }
-        if get_node_id_id(node) == Some(7) {
-            intrinsic_matches.set_bit(14); // match_Id("masthead-logo")
+        match get_node_id_id(node) {
+            // Instruction 14: CheckAndSetBit { selector: Id("masthead-logo"), bit_pos: 14 }
+            Some(7) => {
+                intrinsic_matches.set_bit(14); // match_Id("masthead-logo")
+            }
+            // Instruction 16: CheckAndSetBit { selector: Id("masthead-skeleton-icons"), bit_pos: 16 }
+            Some(8) => {
+                intrinsic_matches.set_bit(16); // match_Id("masthead-skeleton-icons")
+            }
+            // Instruction 18: CheckAndSetBit { selector: Id("yt-logo-red-svg"), bit_pos: 18 }
+            Some(9) => {
+                intrinsic_matches.set_bit(18); // match_Id("yt-logo-red-svg")
+            }
+            // Instruction 20: CheckAndSetBit { selector: Id("yt-logo-red-updated-svg"), bit_pos: 20 }
+            Some(10) => {
+                intrinsic_matches.set_bit(20); // match_Id("yt-logo-red-updated-svg")
+            }
+            // Instruction 22: CheckAndSetBit { selector: Id("yt-logo-svg"), bit_pos: 22 }
+            Some(11) => {
+                intrinsic_matches.set_bit(22); // match_Id("yt-logo-svg")
+            }
+            // Instruction 24: CheckAndSetBit { selector: Id("yt-logo-updated-svg"), bit_pos: 24 }
+            Some(12) => {
+                intrinsic_matches.set_bit(24); // match_Id("yt-logo-updated-svg")
+            }
+            _ => {}
         }
-
-        // Instruction 16: CheckAndSetBit { selector: Id("masthead-skeleton-icons"), bit_pos: 16 }
-        if get_node_id_id(node) == Some(8) {
-            intrinsic_matches.set_bit(16); // match_Id("masthead-skeleton-icons")
-        }
-
-        // Instruction 18: CheckAndSetBit { selector: Id("yt-logo-red-svg"), bit_pos: 18 }
-        if get_node_id_id(node) == Some(9) {
-            intrinsic_matches.set_bit(18); // match_Id("yt-logo-red-svg")
-        }
-
-        // Instruction 20: CheckAndSetBit { selector: Id("yt-logo-red-updated-svg"), bit_pos: 20 }
-        if get_node_id_id(node) == Some(10) {
-            intrinsic_matches.set_bit(20); // match_Id("yt-logo-red-updated-svg")
-        }
-
-        // Instruction 22: CheckAndSetBit { selector: Id("yt-logo-svg"), bit_pos: 22 }
-        if get_node_id_id(node) == Some(11) {
-            intrinsic_matches.set_bit(22); // match_Id("yt-logo-svg")
-        }
-
-        // Instruction 24: CheckAndSetBit { selector: Id("yt-logo-updated-svg"), bit_pos: 24 }
-        if get_node_id_id(node) == Some(12) {
-            intrinsic_matches.set_bit(24); // match_Id("yt-logo-updated-svg")
-        }
-
-        // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
-        if get_node_tag_id(node) == Some(13) {
-            intrinsic_matches.set_bit(26); // match_Type("body")
-        }
-
-        // Instruction 28: CheckAndSetBit { selector: Type("html"), bit_pos: 28 }
-        if get_node_tag_id(node) == Some(14) {
-            intrinsic_matches.set_bit(28); // match_Type("html")
-        }
-
-        // Instruction 30: CheckAndSetBit { selector: Type("input"), bit_pos: 30 }
-        if get_node_tag_id(node) == Some(15) {
-            intrinsic_matches.set_bit(30); // match_Type("input")
-        }
-
         node.cached_node_intrinsic = Some(intrinsic_matches);
     }
 
@@ -174,6 +175,8 @@ pub fn process_node_generated_incremental(
     // Track which parent state bits we actually use
     let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
     /// generate_parent_dependent_rules_code
+    // match get_node_tag_id(node) {
+    // match get_node_id_id(node) {
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     /// generate_propagation_rules_code
     if current_matches.is_bit_set(0) {

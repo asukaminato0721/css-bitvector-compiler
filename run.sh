@@ -3,7 +3,9 @@ set -eux -o pipefail
 
 # Ensure we start with a clean slate by removing previously generated files
 rm -f *results.txt
-
+echo > src/generated_bitvector_functions.rs
+echo > src/generated_istate_functions.rs
+echo > src/generated_naive_functions.rs
 # Step 1: Generate the code.
 
 export WEBSITE_NAME="$1"
