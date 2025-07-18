@@ -1,3 +1,6 @@
+use std::collections::HashSet;
+use std::sync::OnceLock;
+
 use css_bitvector_compiler::{HtmlNode, rdtsc};
 use serde_json::{self, Value};
 
@@ -127,7 +130,8 @@ fn parse_web_layout_trace(file_path: &str) -> Vec<LayoutFrame> {
 
     frames
 }
-
+static COMMAND: OnceLock<std::sync::Mutex<HashSet<String>>> =
+    OnceLock::<std::sync::Mutex<HashSet<String>>>::new();
 fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize {
     match frame.command_name.as_str() {
         "init" => {
@@ -169,14 +173,10 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                 unreachable!();
             };
             // Insert at the specified index (or append if index equals length)
-            if insertion_index <= parent.children.len() {
-                parent.children.insert(insertion_index, new_child);
-                parent.mark_dirty();
-                parent.init_parent_pointers();
-                return 1;
-            } else {
-                unreachable!();
-            }
+            parent.children.insert(insertion_index, new_child);
+            parent.mark_dirty();
+            parent.init_parent_pointers();
+            return 1;
         }
         "replace_value" | "insert_value" => {
             let path = extract_path_from_command(&frame.command_data);
@@ -237,9 +237,15 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
             parent.remove_child(remove_index);
             1
         }
-        "delte_value" => 1,
         _ => {
-            dbg!(frame.command_name.as_str());
+            let commands = COMMAND.get_or_init(|| std::sync::Mutex::new(HashSet::new()));
+            let mut commands_guard = commands.lock().unwrap();
+            if !commands_guard.contains(frame.command_name.as_str()) {
+                dbg!(frame.command_name.as_str());
+                commands_guard.insert(frame.command_name.clone());
+                return 0;
+            }
+
             0
         }
     }
