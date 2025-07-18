@@ -12,22 +12,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
+        map.insert("hidden", 3);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("external-icon", 1);
+        map.insert("shell", 5);
+        map.insert("input", 15);
+        map.insert("masthead-logo", 7);
         map.insert("masthead-skeleton-icons", 8);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("body", 13);
-        map.insert("chunked", 0);
+        map.insert("grecaptcha-badge", 2);
         map.insert("yt-icons-ext", 6);
         map.insert("html", 14);
-        map.insert("hidden", 3);
-        map.insert("external-icon", 1);
-        map.insert("masthead-skeleton-icon", 4);
-        map.insert("masthead-logo", 7);
-        map.insert("yt-logo-svg", 11);
-        map.insert("shell", 5);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("yt-logo-red-svg", 9);
-        map.insert("input", 15);
         map.insert("yt-logo-updated-svg", 12);
+        map.insert("body", 13);
+        map.insert("yt-logo-red-svg", 9);
+        map.insert("yt-logo-red-updated-svg", 10);
+        map.insert("yt-logo-svg", 11);
+        map.insert("chunked", 0);
         map
     })
 }
@@ -35,24 +35,7 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
 // Fast selector matching using integer IDs and switch
 #[inline]
 fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
-    use std::cell::RefCell;
-    thread_local! {
-        static CACHE: RefCell<Option<(String, Option<u32>)>> = RefCell::new(None);
-    }
-
-    CACHE.with(|cache| {
-        let mut cache = cache.borrow_mut();
-
-        if let Some((cached_tag, cached_id)) = &*cache {
-            if cached_tag == &node.tag_name {
-                return *cached_id;
-            }
-        }
-
-        let result = get_string_to_id_map().get(node.tag_name.as_str()).copied();
-        *cache = Some((node.tag_name.clone(), result));
-        result
-    })
+    get_string_to_id_map().get(node.tag_name.as_str()).copied()
 }
 #[inline]
 fn get_node_id_id(node: &HtmlNode) -> Option<u32> {

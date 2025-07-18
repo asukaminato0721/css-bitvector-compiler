@@ -1449,24 +1449,7 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
             "// Fast selector matching using integer IDs and switch
         #[inline]
         fn get_node_tag_id(node: &HtmlNode) -> Option<u32> {
-            use std::cell::RefCell;
-            thread_local! {
-                static CACHE: RefCell<Option<(String, Option<u32>)>> = RefCell::new(None);
-            }
-
-            CACHE.with(|cache| {
-                let mut cache = cache.borrow_mut();
-                
-                if let Some((cached_tag, cached_id)) = &*cache {
-                    if cached_tag == &node.tag_name {
-                        return *cached_id;
-                    }
-                }
-        
-            let result = get_string_to_id_map().get(node.tag_name.as_str()).copied();
-            *cache = Some((node.tag_name.clone(), result));
-            result
-        })
+            get_string_to_id_map().get(node.tag_name.as_str()).copied()
         }
         #[inline]
         fn get_node_id_id(node: &HtmlNode) -> Option<u32> {
