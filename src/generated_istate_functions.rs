@@ -12,22 +12,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("external-icon", 1);
-        map.insert("shell", 5);
-        map.insert("masthead-logo", 7);
-        map.insert("masthead-skeleton-icons", 8);
-        map.insert("yt-logo-updated-svg", 12);
-        map.insert("input", 15);
-        map.insert("masthead-skeleton-icon", 4);
-        map.insert("yt-icons-ext", 6);
         map.insert("chunked", 0);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("body", 13);
         map.insert("yt-logo-red-svg", 9);
-        map.insert("hidden", 3);
-        map.insert("yt-logo-svg", 11);
-        map.insert("html", 14);
         map.insert("grecaptcha-badge", 2);
+        map.insert("yt-logo-red-updated-svg", 10);
+        map.insert("html", 14);
+        map.insert("masthead-skeleton-icons", 8);
+        map.insert("hidden", 3);
+        map.insert("body", 13);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("input", 15);
+        map.insert("yt-logo-updated-svg", 12);
+        map.insert("yt-logo-svg", 11);
+        map.insert("yt-icons-ext", 6);
+        map.insert("external-icon", 1);
+        map.insert("masthead-logo", 7);
+        map.insert("shell", 5);
         map
     })
 }
@@ -72,24 +72,6 @@ fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
     }
     false
 }
-// Optimized selector matching with switch on integer IDs
-
-#[inline]
-fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
-    if let Some(node_tag_id) = get_node_tag_id(node) {
-        node_tag_id == tag_id
-    } else {
-        false
-    }
-}
-#[inline]
-fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
-    if let Some(node_id_id) = get_node_id_id(node) {
-        node_id_id == id_id
-    } else {
-        false
-    }
-}
 // --- Incremental Processing Functions ---
 pub fn process_node_generated_incremental(
     node: &mut HtmlNode,
@@ -104,9 +86,7 @@ pub fn process_node_generated_incremental(
     // Recompute node intrinsic matches if needed
     if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
         /// generate_intrinsic_checks_code
-        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
-
-        // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
+        let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY); // Instruction 0: CheckAndSetBit { selector: Class("chunked"), bit_pos: 0 }
         if node_has_class_id(node, 0) {
             intrinsic_matches.set_bit(0); // match_Class("chunked")
         }
@@ -142,47 +122,47 @@ pub fn process_node_generated_incremental(
         }
 
         // Instruction 14: CheckAndSetBit { selector: Id("masthead-logo"), bit_pos: 14 }
-        if matches_id_id(node, 7) {
+        if get_node_id_id(node) == Some(7) {
             intrinsic_matches.set_bit(14); // match_Id("masthead-logo")
         }
 
         // Instruction 16: CheckAndSetBit { selector: Id("masthead-skeleton-icons"), bit_pos: 16 }
-        if matches_id_id(node, 8) {
+        if get_node_id_id(node) == Some(8) {
             intrinsic_matches.set_bit(16); // match_Id("masthead-skeleton-icons")
         }
 
         // Instruction 18: CheckAndSetBit { selector: Id("yt-logo-red-svg"), bit_pos: 18 }
-        if matches_id_id(node, 9) {
+        if get_node_id_id(node) == Some(9) {
             intrinsic_matches.set_bit(18); // match_Id("yt-logo-red-svg")
         }
 
         // Instruction 20: CheckAndSetBit { selector: Id("yt-logo-red-updated-svg"), bit_pos: 20 }
-        if matches_id_id(node, 10) {
+        if get_node_id_id(node) == Some(10) {
             intrinsic_matches.set_bit(20); // match_Id("yt-logo-red-updated-svg")
         }
 
         // Instruction 22: CheckAndSetBit { selector: Id("yt-logo-svg"), bit_pos: 22 }
-        if matches_id_id(node, 11) {
+        if get_node_id_id(node) == Some(11) {
             intrinsic_matches.set_bit(22); // match_Id("yt-logo-svg")
         }
 
         // Instruction 24: CheckAndSetBit { selector: Id("yt-logo-updated-svg"), bit_pos: 24 }
-        if matches_id_id(node, 12) {
+        if get_node_id_id(node) == Some(12) {
             intrinsic_matches.set_bit(24); // match_Id("yt-logo-updated-svg")
         }
 
         // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
-        if matches_tag_id(node, 13) {
+        if get_node_tag_id(node) == Some(13) {
             intrinsic_matches.set_bit(26); // match_Type("body")
         }
 
         // Instruction 28: CheckAndSetBit { selector: Type("html"), bit_pos: 28 }
-        if matches_tag_id(node, 14) {
+        if get_node_tag_id(node) == Some(14) {
             intrinsic_matches.set_bit(28); // match_Type("html")
         }
 
         // Instruction 30: CheckAndSetBit { selector: Type("input"), bit_pos: 30 }
-        if matches_tag_id(node, 15) {
+        if get_node_tag_id(node) == Some(15) {
             intrinsic_matches.set_bit(30); // match_Type("input")
         }
 
@@ -250,35 +230,6 @@ pub fn process_node_generated_incremental(
     node.mark_clean();
     child_states
 }
-
-// --- Generate Helper Functio
-pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
-    let string_map = get_string_to_id_map();
-    match selector {
-        SimpleSelector::Type(tag) => {
-            if let Some(tag_id) = string_map.get(tag.as_str()) {
-                matches_tag_id(node, *tag_id)
-            } else {
-                false
-            }
-        }
-        SimpleSelector::Class(class) => {
-            if let Some(class_id) = string_map.get(class.as_str()) {
-                node_has_class_id(node, *class_id)
-            } else {
-                false
-            }
-        }
-        SimpleSelector::Id(id) => {
-            if let Some(id_id) = string_map.get(id.as_str()) {
-                matches_id_id(node, *id_id)
-            } else {
-                false
-            }
-        }
-    }
-}
-
 /// Incremental processing driver with statistics tracking
 pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;

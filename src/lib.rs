@@ -807,35 +807,7 @@ impl TreeNFAProgram {
             node.cached_child_states = Some(child_states.clone());
             node.mark_clean();
             child_states
-        }
-
-        // --- Generate Helper Functio
-        pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
-            let string_map = get_string_to_id_map();
-            match selector {
-                SimpleSelector::Type(tag) => {
-                    if let Some(tag_id) = string_map.get(tag.as_str()) {
-                        matches_tag_id(node, *tag_id)
-                    } else {
-                        false
-                    }
-                },
-                SimpleSelector::Class(class) => {
-                    if let Some(class_id) = string_map.get(class.as_str()) {
-                        node_has_class_id(node, *class_id)
-                    } else {
-                        false
-                    }
-                },
-                SimpleSelector::Id(id) => {
-                    if let Some(id_id) = string_map.get(id.as_str()) {
-                        matches_id_id(node, *id_id)
-                    } else {
-                        false
-                    }
-                },
-            }
-        }\n\n",
+        }",
         );
 
         // --- Generate Tree Traversal Wrappers ---
@@ -846,9 +818,7 @@ impl TreeNFAProgram {
 
     fn generate_intrinsic_checks_code(&self) -> String {
         let mut code = String::new();
-        code.push_str(
-            "let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);",
-        );
+        code.push_str("let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);");
         for (i, instruction) in self.instructions.iter().enumerate() {
             if let NFAInstruction::CheckAndSetBit { selector, bit_pos } = instruction {
                 code.push_str(&format!(
@@ -856,10 +826,11 @@ impl TreeNFAProgram {
                     i, instruction
                 ));
 
+                // Use optimized matching with integer IDs
                 let match_condition = match selector {
                     SimpleSelector::Type(tag) => {
                         let tag_id = self.string_to_id[tag];
-                        format!("matches_tag_id(node, {})", tag_id)
+                        format!("get_node_tag_id(node) == Some({})", tag_id)
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
@@ -867,7 +838,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
-                        format!("matches_id_id(node, {})", id_id)
+                        format!("get_node_id_id(node) == Some({})", id_id)
                     }
                 };
 
@@ -898,7 +869,7 @@ impl TreeNFAProgram {
                 let match_condition = match child_selector {
                     SimpleSelector::Type(tag) => {
                         let tag_id = self.string_to_id[tag];
-                        format!("matches_tag_id(node, {})", tag_id)
+                        format!("get_node_tag_id(node) == Some({})", tag_id)
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
@@ -906,7 +877,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
-                        format!("matches_id_id(node, {})", id_id)
+                        format!("get_node_id_id(node) == Some({id_id})")
                     }
                 };
 
@@ -1049,7 +1020,7 @@ impl TreeNFAProgram {
                 let match_condition = match child_selector {
                     SimpleSelector::Type(tag) => {
                         let tag_id = self.string_to_id[tag];
-                        format!("matches_tag_id(node, {})", tag_id)
+                        format!("get_node_tag_id(node) == Some({})", tag_id)
                     }
                     SimpleSelector::Class(class) => {
                         let class_id = self.string_to_id[class];
@@ -1057,7 +1028,7 @@ impl TreeNFAProgram {
                     }
                     SimpleSelector::Id(id) => {
                         let id_id = self.string_to_id[id];
-                        format!("matches_id_id(node, {})", id_id)
+                        format!("get_node_id_id(node) == Some({})", id_id)
                     }
                 };
 
@@ -1411,32 +1382,6 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
 ",
         );
 
-        // Generate fast selector matching using switch statements
-        code.push_str(
-            "// Optimized selector matching with switch on integer IDs\n
-            #[inline]
-            fn matches_tag_id(node: &HtmlNode, tag_id: u32) -> bool {
-                if let Some(node_tag_id) = get_node_tag_id(node) {
-                    node_tag_id == tag_id
-                } else {
-                    false
-                }
-            }
-",
-        );
-
-        code.push_str(
-            "#[inline]
-        fn matches_id_id(node: &HtmlNode, id_id: u32) -> bool {
-            if let Some(node_id_id) = get_node_id_id(node) {
-                node_id_id == id_id
-            } else {
-                false
-            }
-        }
-",
-        );
-
         code
     }
 }
@@ -1749,15 +1694,6 @@ pub fn count_matches(node: &HtmlNode) -> usize {
 
 pub fn count_total_nodes(node: &HtmlNode) -> usize {
     1 + node.children.iter().map(count_total_nodes).sum::<usize>()
-}
-
-// Helper function for generated code
-pub fn node_matches_selector_generated(node: &HtmlNode, selector: &SimpleSelector) -> bool {
-    match selector {
-        SimpleSelector::Type(tag) => node.tag_name == *tag,
-        SimpleSelector::Class(class) => node.classes.contains(class),
-        SimpleSelector::Id(id) => node.id.as_deref() == Some(id),
-    }
 }
 
 #[cfg(test)]
