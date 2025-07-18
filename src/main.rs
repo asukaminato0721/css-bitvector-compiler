@@ -14,12 +14,12 @@ fn main() {
     let program = compiler.compile_css_rules(&css_rules);
     std::fs::write(
         "src/generated_istate_functions.rs",
-        &program.generate_rust_istate_code(),
+        &program.generate_istate_code(),
     )
     .unwrap();
     std::fs::write(
         "src/generated_bitvector_functions.rs",
-        program.generate_bitvector_only_rust_code(),
+        program.generate_bitvector_code(),
     )
     .unwrap();
     std::fs::write(
