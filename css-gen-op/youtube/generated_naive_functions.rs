@@ -85,7 +85,7 @@ pub fn matches_rule_30(node: &HtmlNode) -> bool {
 // === MAIN NAIVE PROCESSING FUNCTION ===
 pub fn process_node_naive(node: &mut HtmlNode, parent_matches: &[bool]) -> Vec<bool> {
     let mut matches = vec![false; 32];
-
+    
     // Check all simple selectors
     if matches_rule_0(node) {
         matches[0] = true;
@@ -135,11 +135,11 @@ pub fn process_node_naive(node: &mut HtmlNode, parent_matches: &[bool]) -> Vec<b
     if matches_rule_30(node) {
         matches[30] = true;
     }
-
+    
     // Check all parent-child rules
     // No parent-child rules to check
     let _ = parent_matches; // Suppress unused parameter warning
-
+    
     matches
 }
 
@@ -148,22 +148,22 @@ pub fn process_tree_naive(root: &mut HtmlNode) -> usize {
     let mut total_nodes = 0;
     let empty_parent = vec![false; 32];
     process_tree_recursive_naive(root, &empty_parent, &mut total_nodes);
-    total_nodes
-}
-fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {
-    *total += 1;
+            total_nodes
+        }
+        fn process_tree_recursive_naive(node: &mut HtmlNode, parent_matches: &[bool], total: &mut usize) {
+            *total += 1;
+            
+            // Calculate matches for this node from scratch
+            let node_matches = process_node_naive(node, parent_matches);
+                // Process all children with this node's matches as their parent context,
+            for child in node.children.iter_mut() {
+                process_tree_recursive_naive(child, &node_matches, total);
+            }
+        }
 
-    // Calculate matches for this node from scratch
-    let node_matches = process_node_naive(node, parent_matches);
-    // Process all children with this node's matches as their parent context,
-    for child in node.children.iter_mut() {
-        process_tree_recursive_naive(child, &node_matches, total);
-    }
-}
-
-pub fn get_rule_name(rule_index: usize) -> String {
-    format!("rule_{}", rule_index)
-} // Rule mapping:
+        pub fn get_rule_name(rule_index: usize) -> String {
+            format!("rule_{}", rule_index)
+        }// Rule mapping:
 // Rule 31: active_Type("input")
 // Rule 26: match_Type("body")
 // Rule 29: active_Type("html")
@@ -198,13 +198,12 @@ pub fn get_rule_name(rule_index: usize) -> String {
 // Rule 27: active_Type("body")
 
 pub fn print_node_matches(node: &HtmlNode, matches: &[bool]) {
-    println!("Node '{}' matches:", node.tag_name);
-    for (i, &matched) in matches.iter().enumerate() {
-        if matched {
-            println!("  Rule {}: {}", i, get_rule_name(i));
-        }
-    }
-}
-pub fn get_total_rules() -> usize {
+            println!("Node '{}' matches:", node.tag_name);
+            for (i, &matched) in matches.iter().enumerate() {
+                if matched {
+                    println!("  Rule {}: {}", i, get_rule_name(i));
+                }
+            }
+        }pub fn get_total_rules() -> usize {
     32 // Total number of CSS rules
 }

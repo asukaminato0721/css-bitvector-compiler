@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux -o pipefail
 
-WEBSITE_NAMES=("google" "amazon" "youtube")
+readarray -t WEBSITE_NAMES < <(ls css-gen-op/)
 
 for i in "${WEBSITE_NAMES[@]}"; do
 	rm -f *results.txt
