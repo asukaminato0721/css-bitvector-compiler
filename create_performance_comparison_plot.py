@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 
 def main():
@@ -80,7 +82,8 @@ def main():
 
     # Save the plot
     fig.savefig(
-        "performance_comparison_scatter.png",
+        Path("css-gen-op", os.getenv("WEBSITE_NAME", "google"))
+        / "performance_comparison_scatter.png",
         dpi=300,
         bbox_inches="tight",
         facecolor="white",
