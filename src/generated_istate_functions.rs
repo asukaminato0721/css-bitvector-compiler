@@ -217,7 +217,7 @@ pub fn process_node_generated_incremental(
     child_states
 }
 /// Incremental processing driver with statistics tracking
-pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_trivector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;

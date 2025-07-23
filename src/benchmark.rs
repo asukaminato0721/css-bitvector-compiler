@@ -5,8 +5,8 @@ use css_bitvector_compiler::{HtmlNode, rdtsc};
 use serde_json::{self, Value};
 
 // Use generated CSS processing functions from both modules
-use css_bitvector_compiler::generated_bitvector_functions::process_tree_bitvector_incremental_with_stats as process_tree_bitvector;
-use css_bitvector_compiler::generated_istate_functions::process_tree_incremental_with_stats as process_tree_trivector;
+use css_bitvector_compiler::generated_bitvector_functions::process_tree_bitvector;
+use css_bitvector_compiler::generated_istate_functions::process_tree_trivector;
 
 #[derive(Debug, Clone)]
 pub struct WebLayoutFrameResult {

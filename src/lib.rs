@@ -1178,7 +1178,7 @@ impl TreeNFAProgram {
     fn generate_bitvector_traversal_wrappers(&self) -> String {
         r#"
 /// BitVector-only incremental processing driver with statistics tracking
-pub fn process_tree_bitvector_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
@@ -1217,7 +1217,7 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     pub fn generate_traversal_wrappers(&self) -> String {
         r#"
 /// Incremental processing driver with statistics tracking
-pub fn process_tree_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_trivector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;

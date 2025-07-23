@@ -1020,7 +1020,7 @@ _ => {}}
 
 
 /// BitVector-only incremental processing driver with statistics tracking
-pub fn process_tree_bitvector_incremental_with_stats(root: &mut HtmlNode) -> (usize, usize, usize) {
+pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
