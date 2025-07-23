@@ -1586,35 +1586,18 @@ impl CssCompiler {
     }
 }
 
-// Helper functions for parsing using external cssparser library
 pub fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules = Vec::new();
-
-    // Try to parse with cssparser, fall back to regex if needed
-    match parse_css_with_cssparser(css_content) {
-        Ok(parsed_rules) => {
-            rules.extend(parsed_rules);
-        }
-        Err(e) => {
-            eprintln!("⚠️ CSS parsing error{}", e);
-            panic!("CSS parsing failed");
-        }
-    }
-
-    // Remove duplicates
+    let mut rules = parse_css_with_cssparser(css_content).unwrap();
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
-
     rules
 }
 
-/// Parse CSS using the cssparser library for robust CSS parsing
 fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn std::error::Error>> {
     let mut rules = Vec::new();
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
-    // Simple state machine for CSS parsing
     let mut expecting_rule_body = false;
     let mut current_selector: Option<SimpleSelector> = None;
 
@@ -1680,7 +1663,6 @@ fn parse_css_with_cssparser(css_content: &str) -> Result<Vec<CssRule>, Box<dyn s
 }
 
 pub fn load_dom_from_file() -> HtmlNode {
-    // Try to read Google trace data from file
     let json_data = std::fs::read_to_string(format!(
         "css-gen-op/{}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
@@ -1723,18 +1705,6 @@ pub fn create_node_identifier(node: &HtmlNode) -> String {
     } else {
         node.tag_name.clone()
     }
-}
-
-pub fn save_results_to_file(
-    results: &[(String, Vec<usize>)],
-    filename: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let mut output = String::new();
-    for (node_id, matches) in results {
-        output.push_str(&format!("{}: {:?}\n", node_id, matches));
-    }
-    std::fs::write(filename, output)?;
-    Ok(())
 }
 
 pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode {

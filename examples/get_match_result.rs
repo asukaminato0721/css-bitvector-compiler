@@ -91,6 +91,18 @@ fn collect_all_istate_matches(
     }
 }
 
+fn save_results_to_file(
+    results: &[(String, Vec<usize>)],
+    filename: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let mut output = String::new();
+    for (node_id, matches) in results {
+        output.push_str(&format!("{}: {:?}\n", node_id, matches));
+    }
+    std::fs::write(filename, output)?;
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🔬 CSS BitVector-Only Layout Engine Test");
     println!("==========================================");
@@ -99,7 +111,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📁 Loading DOM from trace file...");
     let root = load_dom_from_file();
     let node_count = count_total_nodes(&root);
-    println!("   ✓ Loaded DOM tree with {} nodes", node_count);
+    println!("  Loaded DOM tree with {} nodes", node_count);
 
     // Load CSS rules
     println!("📜 Loading CSS rules...");
@@ -109,12 +121,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("WEBSITE_NAME").unwrap()
     ))?;
     let css_rules = parse_css(&css_content);
-    println!("   ✓ Parsed {} CSS rules", css_rules.len());
+    println!("   Parsed {} CSS rules", css_rules.len());
 
     let mut compiler = CssCompiler::new();
     let program = compiler.compile_css_rules(&css_rules);
     println!(
-        "   ✓ Generated {} NFA instructions",
+        "   Generated {} NFA instructions",
         program.instructions.len()
     );
 
