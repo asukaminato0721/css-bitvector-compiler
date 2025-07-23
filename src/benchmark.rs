@@ -264,16 +264,6 @@ fn extract_path_from_command(command_data: &Value) -> Vec<usize> {
         .unwrap()
 }
 
-fn invoke_bitvector_layout(tree: &mut HtmlNode) -> (usize, usize, usize) {
-    // Use the generated BitVector CSS processing code
-    process_tree_bitvector(tree)
-}
-
-fn invoke_trivector_layout(tree: &mut HtmlNode) -> (usize, usize, usize) {
-    // Use the generated TriVector (IState) CSS processing code
-    process_tree_trivector(tree)
-}
-
 fn clear_dirty_flags(node: &mut HtmlNode) {
     node.is_self_dirty = false;
     node.has_dirty_descendant = false;
@@ -387,7 +377,7 @@ fn benchmark_accumulated_modifications(
 
     // 2. Run a "warm-up" layout to ensure caches are populated, simulating a steady state.
     // This is crucial for a fair comparison, as the incremental approach relies on a previously computed state.
-    let _ = invoke_bitvector_layout(&mut tree_bitvector);
+    let _ = process_tree_bitvector(&mut tree_bitvector);
     clear_dirty_flags(&mut tree_bitvector); // Reset dirty flags after warm-up.
 
     // 3. Apply the pending modifications. This is what we actually want to measure.
@@ -400,7 +390,7 @@ fn benchmark_accumulated_modifications(
     // 4. Measure the time taken for the BitVector layout to process only the dirty nodes.
     let start_bitvector = rdtsc();
     let (_, bitvector_cache_hits, bitvector_cache_misses) =
-        invoke_bitvector_layout(&mut tree_bitvector);
+        process_tree_bitvector(&mut tree_bitvector);
     let end_bitvector = rdtsc();
     let bitvector_cycles = end_bitvector - start_bitvector;
 
@@ -410,7 +400,7 @@ fn benchmark_accumulated_modifications(
     tree_trivector.init_parent_pointers();
 
     // 2. Run a "warm-up" layout to ensure caches are populated.
-    let _ = invoke_trivector_layout(&mut tree_trivector);
+    let _ = process_tree_trivector(&mut tree_trivector);
     clear_dirty_flags(&mut tree_trivector); // Reset dirty flags after warm-up.
 
     // 3. Apply the same modifications to it to ensure it has the identical final structure.
@@ -421,7 +411,7 @@ fn benchmark_accumulated_modifications(
     // 4. Measure the time taken for the TriVector layout.
     let start_trivector = rdtsc();
     let (_, trivector_cache_hits, trivector_cache_misses) =
-        invoke_trivector_layout(&mut tree_trivector);
+        process_tree_trivector(&mut tree_trivector);
     let end_trivector = rdtsc();
     let trivector_cycles = end_trivector - start_trivector;
 
