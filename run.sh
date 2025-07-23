@@ -24,4 +24,5 @@ for i in "${WEBSITE_NAMES[@]}"; do
 
 	uv sync
 	uv run create_performance_comparison_plot.py
+	uv run create_miss_count_comparison_plot.py
 done
