@@ -10,22 +10,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("shell", 5);
-        map.insert("yt-logo-red-updated-svg", 10);
-        map.insert("masthead-logo", 7);
         map.insert("yt-logo-updated-svg", 12);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("yt-icons-ext", 6);
-        map.insert("yt-logo-svg", 11);
-        map.insert("yt-logo-red-svg", 9);
         map.insert("chunked", 0);
-        map.insert("masthead-skeleton-icons", 8);
-        map.insert("masthead-skeleton-icon", 4);
         map.insert("input", 15);
-        map.insert("external-icon", 1);
         map.insert("hidden", 3);
-        map.insert("html", 14);
+        map.insert("shell", 5);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("masthead-logo", 7);
+        map.insert("yt-logo-red-svg", 9);
+        map.insert("yt-icons-ext", 6);
         map.insert("body", 13);
+        map.insert("html", 14);
+        map.insert("grecaptcha-badge", 2);
+        map.insert("masthead-skeleton-icons", 8);
+        map.insert("yt-logo-svg", 11);
+        map.insert("external-icon", 1);
+        map.insert("yt-logo-red-updated-svg", 10);
         map
     })
 }
@@ -149,12 +149,10 @@ pub fn process_node_generated_bitvector_incremental(
         }
         node.cached_node_intrinsic = Some(intrinsic_matches);
     }
-
     let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
-
     // BitVector-only parent state tracking
-    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);
-    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);
+    node.cached_parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+    node.cached_parent_values_read = Some(BitVector::with_capacity(parent_state.capacity));
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("chunked")
@@ -205,7 +203,6 @@ pub fn process_node_generated_bitvector_incremental(
         child_states.set_bit(31); // active_Type("input")
     }
     node.css_match_bitvector = current_matches;
-    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);
     node.cached_child_states = Some(child_states.clone());
     node.mark_clean();
 

@@ -891,17 +891,13 @@ impl TreeNFAProgram {
         /// generate_intrinsic_checks_code\n",
         );
         code.push_str(&intrinsic_checks_code);
-        code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
-        code.push_str("    }\n\n");
         code.push_str(
-            "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
+            "        node.cached_node_intrinsic = Some(intrinsic_matches);
+            }
+            let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+            // Track which parent state bits we actually use
+            let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];\n",
         );
-        code.push_str("    \n");
-        code.push_str("    // Track which parent state bits we actually use\n");
-        code.push_str(
-            "    let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];\n",
-        );
-        code.push_str("/// generate_parent_dependent_rules_code\n");
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str("/// generate_propagation_rules_code\n");
@@ -1144,26 +1140,18 @@ impl TreeNFAProgram {
         ",
         );
         code.push_str(&intrinsic_checks_code);
-        code.push_str("        node.cached_node_intrinsic = Some(intrinsic_matches);\n");
-        code.push_str("    }\n\n");
         code.push_str(
-            "    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();\n",
-        );
-        code.push_str("    \n");
-        code.push_str("    // BitVector-only parent state tracking\n");
-        code.push_str(
-            "    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);\n",
-        );
-        code.push_str(
-            "    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);\n",
+            "node.cached_node_intrinsic = Some(intrinsic_matches);
+            }
+        let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+            // BitVector-only parent state tracking
+        node.cached_parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+        node.cached_parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));",
         );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str(
-            "    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);\n",
-        );
         code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
@@ -1963,32 +1951,6 @@ mod tests {
 
         // Change a tracked bit - now should need recomputation
         parent_state.set_bit(10); // Change bit 10 from false to true
-        assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
-    }
-
-    #[test]
-    fn test_bitvector_cache_setting() {
-        let mut node = HtmlNode::new("div");
-
-        let mut bits_read = BitVector::new();
-        bits_read.set_bit(3);
-        bits_read.set_bit(7);
-
-        let mut values_read = BitVector::new();
-        values_read.set_bit(3); // bit 3 was true
-        // bit 7 was false (not set)
-
-        node.set_parent_state_cache_bitvector(bits_read, values_read);
-
-        // Test with matching parent state
-        let mut parent_state = BitVector::new();
-        parent_state.set_bit(3); // true (matches cached)
-        // bit 7 = false (matches cached)
-
-        assert!(!node.has_relevant_parent_state_changed_bitvector(&parent_state));
-
-        // Test with non-matching parent state
-        parent_state.set_bit(7); // Change bit 7 from false to true
         assert!(node.has_relevant_parent_state_changed_bitvector(&parent_state));
     }
 }
