@@ -62,10 +62,10 @@ pub fn process_node_generated_bitvector_incremental(
     // Check if we need to recompute using BitVector-only tracking
     if !node.needs_any_recomputation_bitvector(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.clone().unwrap();
+        return node.child_states.clone().unwrap();
     }
     // Recompute node intrinsic matches if needed
-    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+    if node.node_intrinsic.is_none() || node.is_self_dirty {
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
         match get_node_tag_id(node) {
             // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
@@ -147,12 +147,12 @@ pub fn process_node_generated_bitvector_incremental(
             }
             _ => {}
         }
-        node.cached_node_intrinsic = Some(intrinsic_matches);
+        node.node_intrinsic = Some(intrinsic_matches);
     }
-    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+    let mut current_matches = node.node_intrinsic.clone().unwrap();
     // BitVector-only parent state tracking
-    node.cached_parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
-    node.cached_parent_values_read = Some(BitVector::with_capacity(parent_state.capacity));
+    node.parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+    node.parent_values_read = Some(BitVector::with_capacity(parent_state.capacity));
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("chunked")
@@ -203,7 +203,7 @@ pub fn process_node_generated_bitvector_incremental(
         child_states.set_bit(31); // active_Type("input")
     }
     node.css_match_bitvector = current_matches;
-    node.cached_child_states = Some(child_states.clone());
+    node.child_states = Some(child_states.clone());
     node.mark_clean();
 
     child_states
@@ -242,7 +242,7 @@ fn process_tree_recursive_bitvector_incremental(
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states
+        node.child_states
             .clone()
             .unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };

@@ -487,10 +487,10 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
             // Check if we need to recompute
             if !node.needs_any_recomputation(parent_state) {
                 // Return cached result - entire subtree can be skipped
-                return node.cached_child_states.clone().unwrap();
+                return node.child_states.clone().unwrap();
             }
             // Recompute node intrinsic matches if needed
-            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.is_self_dirty {
         /// generate_intrinsic_checks_code
 let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 match get_node_tag_id(node) {
@@ -2704,9 +2704,9 @@ match get_node_id_id(node) {
             intrinsic_matches.set_bit(878); // match_Id("icp-touch-link-language")
         }
 _ => {}}
-        node.cached_node_intrinsic = Some(intrinsic_matches);
+        node.node_intrinsic = Some(intrinsic_matches);
             }
-            let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+            let mut current_matches = node.node_intrinsic.clone().unwrap();
             // Track which parent state bits we actually use
             let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
 // match get_node_tag_id(node) {
@@ -4040,8 +4040,8 @@ _ => {}}
         child_states.set_bit(883); // active_Type("span")
     }
     node.css_match_bitvector = current_matches;
-            node.cached_parent_state = Some(parent_usage_tracker);
-            node.cached_child_states = Some(child_states.clone());
+            node.parent_state = Some(parent_usage_tracker);
+            node.child_states = Some(child_states.clone());
             node.mark_clean();
             child_states
         }
@@ -4067,7 +4067,7 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+        node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
     // Logic 2: Check if we need to recurse (only if there are dirty descendants)

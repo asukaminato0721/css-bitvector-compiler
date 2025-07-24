@@ -320,13 +320,13 @@ pub struct HtmlNode {
     pub css_match_bitvector: BitVector,
     pub is_self_dirty: bool,
     pub has_dirty_descendant: bool,
-    pub cached_parent_state: Option<Vec<IState>>,
-    pub cached_node_intrinsic: Option<BitVector>,
-    pub cached_child_states: Option<BitVector>,
+    pub parent_state: Option<Vec<IState>>,
+    pub node_intrinsic: Option<BitVector>,
+    pub child_states: Option<BitVector>,
     pub parent: Option<*mut HtmlNode>,
     // BitVector-only version of parent state tracking (alternative to IState)
-    pub cached_parent_bits_read: Option<BitVector>, // which parent bits were actually read
-    pub cached_parent_values_read: Option<BitVector>, // what values those bits had when read
+    pub parent_bits_read: Option<BitVector>, // which parent bits were actually read
+    pub parent_values_read: Option<BitVector>, // what values those bits had when read
 }
 // the idea is that check the child state first. so we dont need check parent if child not meet.
 //
@@ -340,12 +340,12 @@ impl HtmlNode {
             css_match_bitvector: BitVector::new(),
             is_self_dirty: true,
             has_dirty_descendant: false,
-            cached_parent_state: None,
-            cached_node_intrinsic: None,
-            cached_child_states: None,
+            parent_state: None,
+            node_intrinsic: None,
+            child_states: None,
             parent: None,
-            cached_parent_bits_read: None,
-            cached_parent_values_read: None,
+            parent_bits_read: None,
+            parent_values_read: None,
         }
     }
 
@@ -384,9 +384,9 @@ impl HtmlNode {
     /// Mark this node as dirty and notify ancestors
     pub fn mark_dirty(&mut self) {
         self.is_self_dirty = true;
-        self.cached_node_intrinsic = None;
-        self.cached_parent_bits_read = None;
-        self.cached_parent_values_read = None;
+        self.node_intrinsic = None;
+        self.parent_bits_read = None;
+        self.parent_values_read = None;
         self.set_summary_bit_on_ancestors();
     }
 
@@ -472,14 +472,14 @@ impl HtmlNode {
         self.has_relevant_parent_state_changed(new_parent_state)
             || self.is_self_dirty
             || self.has_dirty_descendant
-            || self.cached_parent_state.is_none()
+            || self.parent_state.is_none()
     }
 
     /// Check if only the node itself needs recomputation (not including dirty descendants)
     pub fn needs_self_recomputation(&self, new_parent_state: &BitVector) -> bool {
         self.has_relevant_parent_state_changed(new_parent_state)
             || self.is_self_dirty
-            || self.cached_parent_state.is_none()
+            || self.parent_state.is_none()
     }
 
     /// BitVector-only version: Check if subtree needs recomputation
@@ -487,19 +487,19 @@ impl HtmlNode {
         self.is_self_dirty
             || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
             || self.has_dirty_descendant
-            || self.cached_parent_bits_read.is_none()
+            || self.parent_bits_read.is_none()
     }
 
     /// BitVector-only version: Check if only the node itself needs recomputation (not including dirty descendants)
     pub fn needs_self_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
         self.is_self_dirty
             || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
-            || self.cached_parent_bits_read.is_none()
+            || self.parent_bits_read.is_none()
     }
 
     /// Check if any relevant part of the parent state has changed
     pub fn has_relevant_parent_state_changed(&self, new_parent_state: &BitVector) -> bool {
-        if let Some(cached_states) = &self.cached_parent_state {
+        if let Some(cached_states) = &self.parent_state {
             // Check each tracked bit position
             for (bit_pos, &cached_state) in cached_states.iter().enumerate() {
                 match cached_state {
@@ -532,21 +532,20 @@ impl HtmlNode {
         &self,
         new_parent_state: &BitVector,
     ) -> bool {
-        if let (Some(cached_bits_read), Some(cached_values_read)) = (
-            &self.cached_parent_bits_read,
-            &self.cached_parent_values_read,
-        ) {
+        if let (Some(bits_read), Some(values_read)) =
+            (&self.parent_bits_read, &self.parent_values_read)
+        {
             // Only check bits that were actually read (optimization: skip unused bits)
-            for bit_pos in 0..cached_bits_read.capacity {
-                if cached_bits_read.is_bit_set(bit_pos) {
+            for bit_pos in 0..bits_read.capacity {
+                if bits_read.is_bit_set(bit_pos) {
                     // This bit was read, check if its value changed
-                    let cached_value = cached_values_read.is_bit_set(bit_pos);
+                    let cached_value = values_read.is_bit_set(bit_pos);
                     let current_value = new_parent_state.is_bit_set(bit_pos);
                     if cached_value != current_value {
                         return true; // Value changed for a bit we care about
                     }
                 }
-                // If bit was not read (not set in cached_bits_read), we ignore changes - optimization!
+                // If bit was not read (not set in bits_read), we ignore changes - optimization!
             }
             false // No relevant changes detected
         } else {
@@ -562,20 +561,20 @@ impl HtmlNode {
     /// Record that a parent state bit was read with a specific value (BitVector-only version)
     pub fn record_parent_bit_read(&mut self, bit_pos: usize, value: bool) {
         // Initialize BitVectors if not present
-        if self.cached_parent_bits_read.is_none() {
-            self.cached_parent_bits_read = Some(BitVector::new());
+        if self.parent_bits_read.is_none() {
+            self.parent_bits_read = Some(BitVector::new());
         }
-        if self.cached_parent_values_read.is_none() {
-            self.cached_parent_values_read = Some(BitVector::new());
+        if self.parent_values_read.is_none() {
+            self.parent_values_read = Some(BitVector::new());
         }
 
         // Record that this bit was read
-        if let Some(ref mut bits_read) = self.cached_parent_bits_read {
+        if let Some(ref mut bits_read) = self.parent_bits_read {
             bits_read.set_bit(bit_pos);
         }
 
         // Record the value that was read
-        if let Some(ref mut values_read) = self.cached_parent_values_read {
+        if let Some(ref mut values_read) = self.parent_values_read {
             if value {
                 values_read.set_bit(bit_pos);
             } else {
@@ -590,8 +589,8 @@ impl HtmlNode {
         bits_read: BitVector,
         values_read: BitVector,
     ) {
-        self.cached_parent_bits_read = Some(bits_read);
-        self.cached_parent_values_read = Some(values_read);
+        self.parent_bits_read = Some(bits_read);
+        self.parent_values_read = Some(values_read);
     }
 
     pub fn mark_child_dirty_by_index(&mut self, child_index: usize) -> bool {
@@ -884,17 +883,17 @@ impl TreeNFAProgram {
             // Check if we need to recompute
             if !node.needs_any_recomputation(parent_state) {
                 // Return cached result - entire subtree can be skipped
-                return node.cached_child_states.clone().unwrap();
+                return node.child_states.clone().unwrap();
             }
             // Recompute node intrinsic matches if needed
-            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.is_self_dirty {
         /// generate_intrinsic_checks_code\n",
         );
         code.push_str(&intrinsic_checks_code);
         code.push_str(
-            "        node.cached_node_intrinsic = Some(intrinsic_matches);
+            "        node.node_intrinsic = Some(intrinsic_matches);
             }
-            let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+            let mut current_matches = node.node_intrinsic.clone().unwrap();
             // Track which parent state bits we actually use
             let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];\n",
         );
@@ -904,8 +903,8 @@ impl TreeNFAProgram {
         code.push_str(&propagation_rules_code);
         code.push_str(
             "    node.css_match_bitvector = current_matches;
-            node.cached_parent_state = Some(parent_usage_tracker);
-            node.cached_child_states = Some(child_states.clone());
+            node.parent_state = Some(parent_usage_tracker);
+            node.child_states = Some(child_states.clone());
             node.mark_clean();
             child_states
         }",
@@ -1133,26 +1132,26 @@ impl TreeNFAProgram {
             // Check if we need to recompute using BitVector-only tracking
             if !node.needs_any_recomputation_bitvector(parent_state) {
                 // Return cached result - entire subtree can be skipped
-                return node.cached_child_states.clone().unwrap();
+                return node.child_states.clone().unwrap();
             }
             // Recompute node intrinsic matches if needed
-            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.is_self_dirty {
         ",
         );
         code.push_str(&intrinsic_checks_code);
         code.push_str(
-            "node.cached_node_intrinsic = Some(intrinsic_matches);
+            "node.node_intrinsic = Some(intrinsic_matches);
             }
-        let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+        let mut current_matches = node.node_intrinsic.clone().unwrap();
             // BitVector-only parent state tracking
-        node.cached_parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
-        node.cached_parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));",
+        node.parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+        node.parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));",
         );
         code.push_str(&parent_dependent_rules_code);
         code.push_str("    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);\n");
         code.push_str(&propagation_rules_code);
         code.push_str("    node.css_match_bitvector = current_matches;\n");
-        code.push_str("    node.cached_child_states = Some(child_states.clone());\n");
+        code.push_str("    node.child_states = Some(child_states.clone());\n");
         code.push_str("    node.mark_clean();\n\n");
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
@@ -1187,7 +1186,7 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+        node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
     // Logic 2: Check if we need to recurse (only if there are dirty descendants)
@@ -1226,7 +1225,7 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+        node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
     // Logic 2: Check if we need to recurse (only if there are dirty descendants)

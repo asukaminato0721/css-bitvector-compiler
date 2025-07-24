@@ -64,10 +64,10 @@ pub fn process_node_generated_incremental(
     // Check if we need to recompute
     if !node.needs_any_recomputation(parent_state) {
         // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.clone().unwrap();
+        return node.child_states.clone().unwrap();
     }
     // Recompute node intrinsic matches if needed
-    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+    if node.node_intrinsic.is_none() || node.is_self_dirty {
         /// generate_intrinsic_checks_code
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
         match get_node_tag_id(node) {
@@ -150,9 +150,9 @@ pub fn process_node_generated_incremental(
             }
             _ => {}
         }
-        node.cached_node_intrinsic = Some(intrinsic_matches);
+        node.node_intrinsic = Some(intrinsic_matches);
     }
-    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+    let mut current_matches = node.node_intrinsic.clone().unwrap();
     // Track which parent state bits we actually use
     let mut parent_usage_tracker = vec![IState::IUnused; parent_state.capacity];
     // match get_node_tag_id(node) {
@@ -208,8 +208,8 @@ pub fn process_node_generated_incremental(
         child_states.set_bit(31); // active_Type("input")
     }
     node.css_match_bitvector = current_matches;
-    node.cached_parent_state = Some(parent_usage_tracker);
-    node.cached_child_states = Some(child_states.clone());
+    node.parent_state = Some(parent_usage_tracker);
+    node.child_states = Some(child_states.clone());
     node.mark_clean();
     child_states
 }
@@ -246,7 +246,7 @@ fn process_tree_recursive_incremental(
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states
+        node.child_states
             .clone()
             .unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };

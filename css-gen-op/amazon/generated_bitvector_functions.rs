@@ -485,10 +485,10 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
             // Check if we need to recompute using BitVector-only tracking
             if !node.needs_any_recomputation_bitvector(parent_state) {
                 // Return cached result - entire subtree can be skipped
-                return node.cached_child_states.clone().unwrap();
+                return node.child_states.clone().unwrap();
             }
             // Recompute node intrinsic matches if needed
-            if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.is_self_dirty {
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 match get_node_tag_id(node) {
 // Instruction 880: CheckAndSetBit { selector: Type("h3"), bit_pos: 880 }
@@ -2701,12 +2701,12 @@ match get_node_id_id(node) {
             intrinsic_matches.set_bit(878); // match_Id("icp-touch-link-language")
         }
 _ => {}}
-node.cached_node_intrinsic = Some(intrinsic_matches);
+node.node_intrinsic = Some(intrinsic_matches);
             }
-        let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
+        let mut current_matches = node.node_intrinsic.clone().unwrap();
             // BitVector-only parent state tracking
-        node.cached_parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
-        node.cached_parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
+        node.parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+        node.parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));    let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("_ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2")
     }
@@ -4034,7 +4034,7 @@ node.cached_node_intrinsic = Some(intrinsic_matches);
         child_states.set_bit(883); // active_Type("span")
     }
     node.css_match_bitvector = current_matches;
-    node.cached_child_states = Some(child_states.clone());
+    node.child_states = Some(child_states.clone());
     node.mark_clean();
 
     child_states
@@ -4063,7 +4063,7 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     } else {
         *hits += 1;
         // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
+        node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
     // Logic 2: Check if we need to recurse (only if there are dirty descendants)
