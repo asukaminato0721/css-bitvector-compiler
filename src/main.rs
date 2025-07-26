@@ -21,11 +21,6 @@ fn main() {
         program.generate_bitvector_code(),
     )
     .unwrap();
-    std::fs::write(
-        "src/generated_naive_functions.rs",
-        program.generate_naive_rust_code(),
-    )
-    .unwrap();
     // for read the gen code
     let p = Path::new("css-gen-op").join(website);
     std::fs::write(
@@ -36,11 +31,6 @@ fn main() {
     std::fs::write(
         p.join("generated_bitvector_functions.rs"),
         program.generate_bitvector_code(),
-    )
-    .unwrap();
-    std::fs::write(
-        p.join("generated_naive_functions.rs"),
-        program.generate_naive_rust_code(),
     )
     .unwrap();
 }
