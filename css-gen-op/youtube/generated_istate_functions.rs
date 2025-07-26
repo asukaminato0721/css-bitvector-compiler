@@ -12,22 +12,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("chunked", 0);
+        map.insert("html", 14);
+        map.insert("hidden", 3);
+        map.insert("yt-logo-svg", 11);
+        map.insert("yt-logo-updated-svg", 12);
+        map.insert("grecaptcha-badge", 2);
         map.insert("external-icon", 1);
         map.insert("yt-logo-red-svg", 9);
-        map.insert("masthead-skeleton-icon", 4);
-        map.insert("yt-icons-ext", 6);
-        map.insert("yt-logo-updated-svg", 12);
-        map.insert("html", 14);
-        map.insert("masthead-logo", 7);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("yt-logo-svg", 11);
-        map.insert("shell", 5);
-        map.insert("hidden", 3);
-        map.insert("input", 15);
         map.insert("yt-logo-red-updated-svg", 10);
+        map.insert("masthead-logo", 7);
         map.insert("body", 13);
+        map.insert("input", 15);
+        map.insert("shell", 5);
+        map.insert("masthead-skeleton-icon", 4);
         map.insert("masthead-skeleton-icons", 8);
+        map.insert("chunked", 0);
+        map.insert("yt-icons-ext", 6);
         map
     })
 }
