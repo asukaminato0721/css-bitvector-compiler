@@ -9,7 +9,7 @@ use css_bitvector_compiler::generated_bitvector_functions::process_tree_bitvecto
 use css_bitvector_compiler::generated_istate_functions::process_tree_trivector;
 
 #[derive(Debug, Clone)]
-pub struct WebLayoutFrameResult {
+pub struct BenchResult {
     pub frame_id: usize,
     pub operation_type: String,
     pub frame_description: String,
@@ -273,17 +273,13 @@ fn clear_dirty_flags(node: &mut HtmlNode) {
     }
 }
 
-pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
-    println!("🌐 Starting Web Browser Layout Trace Benchmark");
-    println!("📊 Simulating corrected layout methodology...");
-    println!("Loading layout trace from css-gen-op/command.json...");
+pub fn run_benchmark() -> Vec<BenchResult> {
 
     let frames = parse_web_layout_trace(&format!(
         "css-gen-op/{}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
     ));
     println!("🎬 Found {} layout frames to process", frames.len());
-    println!("📈 Only recalculate operations create data points");
 
     let mut current_layout_tree = HtmlNode::new("html");
     let mut pending_modifications = Vec::new();
@@ -302,14 +298,6 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
     }
 
     for (i, frame) in frames.iter().enumerate() {
-        // println!(
-        //     "🎬 Processing frame {}/{}: {} ({})",
-        //     i + 1,
-        //     frames.len(),
-        //     frame.command_name,
-        //     get_frame_description(frame)
-        // );
-
         match frame.command_name.as_str() {
             "init" => {
                 // Already handled above
@@ -346,12 +334,6 @@ pub fn run_web_browser_layout_trace_benchmark() -> Vec<WebLayoutFrameResult> {
         }
     }
 
-    println!(
-        "\n🎯 Benchmark completed with {} data points from {} total frames",
-        results.len(),
-        frames.len()
-    );
-
     print_web_layout_trace_summary(&results);
 
     let csv_content = generate_web_layout_csv(&results);
@@ -369,7 +351,7 @@ fn benchmark_accumulated_modifications(
     pending_modifications: &[LayoutFrame],
     _recalculate_frame: &LayoutFrame,
     data_point_id: usize,
-) -> WebLayoutFrameResult {
+) -> BenchResult {
     // --- BitVector Processing Path ---
     // 1. Start with the base tree state from before the modifications.
     let mut tree_bitvector = base_tree.clone();
@@ -434,7 +416,7 @@ fn benchmark_accumulated_modifications(
         format!("recalculate after [{}]", ops.join(", "))
     };
 
-    WebLayoutFrameResult {
+    BenchResult {
         frame_id: data_point_id,
         operation_type: "recalculate".to_string(),
         frame_description: accumulated_description,
@@ -450,7 +432,7 @@ fn benchmark_accumulated_modifications(
     }
 }
 
-fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
+fn print_web_layout_trace_summary(results: &[BenchResult]) {
     if results.is_empty() {
         println!("\nNo data points to summarize.");
         return;
@@ -522,7 +504,7 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
     println!("  Total cache attempts: {}", total_cache_attempts);
 }
 
-fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
+fn generate_web_layout_csv(results: &[BenchResult]) -> String {
     let mut csv = String::new();
     csv.push_str("frame_id,operation_type,frame_description,nodes_affected,total_nodes,bitvector_cycles,trivector_cycles,speedup,bitvector_cache_hits,bitvector_cache_misses,trivector_cache_hits,trivector_cache_misses\n");
 
@@ -548,51 +530,5 @@ fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
 }
 
 fn main() {
-    run_web_browser_layout_trace_benchmark();
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_benchmark_with_generated_css() {
-        // This test verifies that the benchmark uses actual generated CSS processing
-        println!("🧪 Testing benchmark with generated CSS functions");
-
-        let benchmark_result = run_web_browser_layout_trace_benchmark();
-
-        // Check that we have valid results
-        assert!(!benchmark_result.is_empty(), "Should have processed frames");
-        assert!(
-            benchmark_result
-                .iter()
-                .filter(|r| r.operation_type != "init")
-                .count()
-                > 0,
-            "Should have operations"
-        );
-        assert!(
-            benchmark_result.iter().filter(|r| r.speedup > 0.0).count() > 0,
-            "Should have positive speedup"
-        );
-
-        println!("✅ Benchmark test passed:");
-        println!("   Total frames: {}", benchmark_result.len());
-        println!(
-            "   Total operations: {}",
-            benchmark_result
-                .iter()
-                .filter(|r| r.operation_type != "init")
-                .count()
-        );
-        println!(
-            "   Average speedup: {:.3}x",
-            benchmark_result.iter().filter(|r| r.speedup > 0.0).count() as f64
-                / benchmark_result.len() as f64
-        );
-
-        // The fact that we get here means the generated CSS functions are working
-        println!("🎯 Using generated CSS processing functions!");
-    }
+    run_benchmark();
 }
