@@ -265,7 +265,7 @@ fn extract_path_from_command(command_data: &Value) -> Vec<usize> {
 }
 
 fn clear_dirty_flags(node: &mut HtmlNode) {
-    node.is_self_dirty = false;
+    node.self_dirty = false;
     node.has_dirty_descendant = false;
 
     for child in &mut node.children {

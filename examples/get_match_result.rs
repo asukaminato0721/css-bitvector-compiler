@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    generated_istate_functions::{BITVECTOR_CAPACITY, process_node_generated_incremental},
+    generated_istate_functions::{BITVECTOR_CAPACITY, process_node_generated},
     generated_naive_functions::process_node_naive,
     *,
 };
@@ -46,7 +46,7 @@ fn collect_all_bitvector_matches(
     results: &mut Vec<(String, Vec<usize>)>,
 ) {
     // Process this node with BitVector-only approach
-    let child_states = process_node_generated_bitvector_incremental(node, parent_state);
+    let child_states = process_node_generated_bitvector(node, parent_state);
 
     // Collect matches for this node by checking its BitVector
     let mut matches = Vec::new();
@@ -72,7 +72,7 @@ fn collect_all_istate_matches(
     results: &mut Vec<(String, Vec<usize>)>,
 ) {
     // Process this node with BitVector-only approach
-    let child_states = process_node_generated_incremental(node, parent_state);
+    let child_states = process_node_generated(node, parent_state);
     // Collect matches for this node by checking its BitVector
     let mut matches = Vec::new();
     for i in 0..node.css_match_bitvector.capacity {

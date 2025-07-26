@@ -10,22 +10,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("hidden", 3);
         map.insert("input", 15);
-        map.insert("shell", 5);
-        map.insert("external-icon", 1);
-        map.insert("masthead-logo", 7);
-        map.insert("masthead-skeleton-icon", 4);
         map.insert("body", 13);
+        map.insert("external-icon", 1);
+        map.insert("hidden", 3);
         map.insert("yt-logo-svg", 11);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("masthead-skeleton-icons", 8);
         map.insert("yt-logo-updated-svg", 12);
+        map.insert("shell", 5);
         map.insert("chunked", 0);
-        map.insert("yt-logo-red-svg", 9);
-        map.insert("yt-icons-ext", 6);
         map.insert("yt-logo-red-updated-svg", 10);
+        map.insert("yt-logo-red-svg", 9);
+        map.insert("masthead-logo", 7);
+        map.insert("grecaptcha-badge", 2);
         map.insert("html", 14);
+        map.insert("masthead-skeleton-icons", 8);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("yt-icons-ext", 6);
         map
     })
 }
@@ -52,14 +52,14 @@ fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
             false
         }
 
-        pub fn process_node_generated_bitvector_incremental(
+        pub fn process_node_generated_bitvector(
             node: &mut HtmlNode,
             parent_state: &BitVector,
         ) -> BitVector {
             if !node.needs_any_recomputation_bitvector(parent_state) {
                 return node.child_states.clone().unwrap();
             }
-            if node.node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.self_dirty {
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
 match get_node_tag_id(node) {
 // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
@@ -205,17 +205,17 @@ pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut cache_hits = 0;
     let mut cache_misses = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_bitvector_incremental(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    process_bitvector(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_state: &BitVector,
+fn process_bitvector(node: &mut HtmlNode, parent_state: &BitVector,
                                                total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     
     let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
         *misses += 1;
-        process_node_generated_bitvector_incremental(node, parent_state)
+        process_node_generated_bitvector(node, parent_state)
     } else {
         *hits += 1;
         node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
@@ -223,7 +223,7 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     
     if node.has_dirty_descendant {
         for child in node.children.iter_mut() {
-            process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
+            process_bitvector(child, &child_states, total, hits, misses);
         }
     }
 }

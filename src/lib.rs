@@ -1,10 +1,7 @@
 use cssparser::{Parser, ParserInput, Token};
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
-use std::{
-    collections::{HashMap, HashSet},
-    hash::DefaultHasher,
-};
+use std::collections::{HashMap, HashSet};
 
 // RDTSC 时间测量工具
 #[inline(always)]
@@ -206,7 +203,7 @@ pub struct HtmlNode {
     pub classes: HashSet<String>,
     pub children: Vec<HtmlNode>,
     pub css_match_bitvector: BitVector,
-    pub is_self_dirty: bool,
+    pub self_dirty: bool,
     pub has_dirty_descendant: bool,
     pub parent_state: Option<Vec<IState>>,
     pub node_intrinsic: Option<BitVector>,
@@ -226,7 +223,7 @@ impl HtmlNode {
             classes: HashSet::new(),
             children: Vec::new(),
             css_match_bitvector: BitVector::new(),
-            is_self_dirty: true,
+            self_dirty: true,
             has_dirty_descendant: false,
             parent_state: None,
             node_intrinsic: None,
@@ -268,7 +265,7 @@ impl HtmlNode {
 
     /// Mark this node as dirty and notify ancestors
     pub fn mark_dirty(&mut self) {
-        self.is_self_dirty = true;
+        self.self_dirty = true;
         self.node_intrinsic = None;
         self.parent_bits_read = None;
         self.parent_values_read = None;
@@ -299,9 +296,9 @@ impl HtmlNode {
 
     /// Find all dirty nodes in subtree and clean them up
     pub fn find_dirty_nodes(&mut self, dirty_nodes: &mut Vec<*mut HtmlNode>) {
-        if self.is_self_dirty {
+        if self.self_dirty {
             dirty_nodes.push(self as *mut HtmlNode);
-            self.is_self_dirty = false;
+            self.self_dirty = false;
         }
 
         if self.has_dirty_descendant {
@@ -314,9 +311,9 @@ impl HtmlNode {
 
     /// Recursively find all dirty nodes regardless of summary bits
     pub fn find_all_dirty_nodes_recursive(&mut self, dirty_nodes: &mut Vec<*mut HtmlNode>) {
-        if self.is_self_dirty {
+        if self.self_dirty {
             dirty_nodes.push(self as *mut HtmlNode);
-            self.is_self_dirty = false;
+            self.self_dirty = false;
         }
 
         for child in &mut self.children {
@@ -346,12 +343,12 @@ impl HtmlNode {
 
     /// Check if subtree has dirty nodes
     pub fn has_dirty_nodes(&self) -> bool {
-        self.is_self_dirty || self.has_dirty_descendant
+        self.self_dirty || self.has_dirty_descendant
     }
 
     pub fn needs_any_recomputation(&self, new_parent_state: &BitVector) -> bool {
         self.has_relevant_parent_state_changed(new_parent_state)
-            || self.is_self_dirty
+            || self.self_dirty
             || self.has_dirty_descendant
             || self.parent_state.is_none()
     }
@@ -359,13 +356,13 @@ impl HtmlNode {
     /// Check if only the node itself needs recomputation (not including dirty descendants)
     pub fn needs_self_recomputation(&self, new_parent_state: &BitVector) -> bool {
         self.has_relevant_parent_state_changed(new_parent_state)
-            || self.is_self_dirty
+            || self.self_dirty
             || self.parent_state.is_none()
     }
 
     /// BitVector-only version: Check if subtree needs recomputation
     pub fn needs_any_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
-        self.is_self_dirty
+        self.self_dirty
             || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
             || self.has_dirty_descendant
             || self.parent_bits_read.is_none()
@@ -373,7 +370,7 @@ impl HtmlNode {
 
     /// BitVector-only version: Check if only the node itself needs recomputation (not including dirty descendants)
     pub fn needs_self_recomputation_bitvector(&self, new_parent_state: &BitVector) -> bool {
-        self.is_self_dirty
+        self.self_dirty
             || self.has_relevant_parent_state_changed_bitvector(new_parent_state)
             || self.parent_bits_read.is_none()
     }
@@ -435,7 +432,7 @@ impl HtmlNode {
     }
 
     pub fn mark_clean(&mut self) {
-        self.is_self_dirty = false;
+        self.self_dirty = false;
         self.has_dirty_descendant = false;
     }
 
@@ -533,14 +530,15 @@ impl HtmlNode {
 }
 
 trait Cache<HtmlNode> {
-    fn dirtied(dirtied_node: &mut HtmlNode);
-    fn recompute(root: &mut HtmlNode);
+    fn dirtied(&mut self, path: &[u64]);
+    fn recompute(&mut self, root: &mut HtmlNode);
 }
 // note: do nt pull out bitvector result; - absvector will change that laters
 // to other typetruct NaiveCache {
 // no dirty node anywhere, have to recompute from scratch
 // bitvector result;
 //}
+#[derive(Debug, Default)]
 struct BitVectorCache {
     dirtynode: bool,
     result: BitVector,
@@ -629,18 +627,34 @@ struct TriVectorHtmlNode {
 }
 
 impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
-    fn dirtied(dirtied_node: &mut NaiveHtmlNode) {
-        // dirtied_node
+    fn dirtied(&mut self, path: &[u64]) {
+        // no op here
     }
-    fn recompute(root: &mut NaiveHtmlNode) {}
+    fn recompute(&mut self, root: &mut NaiveHtmlNode) {}
 }
 impl Cache<BitVectorHtmlNode> for BitVectorHtmlNode {
-    fn dirtied(dirtied_node: &mut BitVectorHtmlNode) {}
-    fn recompute(root: &mut BitVectorHtmlNode) {}
+    fn dirtied(&mut self, path: &[u64]) {
+        if path.is_empty() {
+            self.cache.dirtynode = true;
+            return;
+        }
+        self.dirtied(&path[1..]);
+    }
+    fn recompute(&mut self, root: &mut BitVectorHtmlNode) {
+        unimplemented!()
+    }
 }
 impl Cache<TriVectorHtmlNode> for TriVectorHtmlNode {
-    fn dirtied(dirtied_node: &mut TriVectorHtmlNode) {}
-    fn recompute(root: &mut TriVectorHtmlNode) {}
+    fn dirtied(&mut self, path: &[u64]) {
+        if path.is_empty() {
+            self.cache.dirtynode = true;
+            return;
+        }
+        self.dirtied(&path[1..]);
+    }
+    fn recompute(&mut self, root: &mut TriVectorHtmlNode) {
+        unimplemented!()
+    }
 }
 
 // Maybe called Cached?
@@ -859,14 +873,14 @@ impl TreeNFAProgram {
 
         code.push_str(
             "
-        pub fn process_node_generated_incremental(
+        pub fn process_node_generated(
             node: &mut HtmlNode,
             parent_state: &BitVector,
         ) -> BitVector {
             if !node.needs_any_recomputation(parent_state) {
                 return node.child_states.clone().unwrap();
             }
-            if node.node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.self_dirty {
 ",
         );
         code.push_str(&intrinsic_checks_code);
@@ -1098,14 +1112,14 @@ impl TreeNFAProgram {
 
         code.push_str(
             "
-        pub fn process_node_generated_bitvector_incremental(
+        pub fn process_node_generated_bitvector(
             node: &mut HtmlNode,
             parent_state: &BitVector,
         ) -> BitVector {
             if !node.needs_any_recomputation_bitvector(parent_state) {
                 return node.child_states.clone().unwrap();
             }
-            if node.node_intrinsic.is_none() || node.is_self_dirty {
+            if node.node_intrinsic.is_none() || node.self_dirty {
         ",
         );
         code.push_str(&intrinsic_checks_code);
@@ -1137,17 +1151,17 @@ pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut cache_hits = 0;
     let mut cache_misses = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_bitvector_incremental(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    process_bitvector(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_state: &BitVector,
+fn process_bitvector(node: &mut HtmlNode, parent_state: &BitVector,
                                                total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     
     let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
         *misses += 1;
-        process_node_generated_bitvector_incremental(node, parent_state)
+        process_node_generated_bitvector(node, parent_state)
     } else {
         *hits += 1;
         node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
@@ -1155,7 +1169,7 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
     
     if node.has_dirty_descendant {
         for child in node.children.iter_mut() {
-            process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
+            process_bitvector(child, &child_states, total, hits, misses);
         }
     }
 }
@@ -1169,17 +1183,17 @@ pub fn process_tree_trivector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut cache_hits = 0;
     let mut cache_misses = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_incremental(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
+    process_tree_recursive(root, &initial_state, &mut total_nodes, &mut cache_hits, &mut cache_misses);
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVector,
+fn process_tree_recursive(node: &mut HtmlNode, parent_state: &BitVector,
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     
     let child_states = if node.needs_self_recomputation(parent_state) {
         *misses += 1;
-        process_node_generated_incremental(node, parent_state)
+        process_node_generated(node, parent_state)
     } else {
         *hits += 1;
         node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
@@ -1187,7 +1201,7 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
     
     if node.has_dirty_descendant {
         for child in node.children.iter_mut() {
-            process_tree_recursive_incremental(child, &child_states, total, hits, misses);
+            process_tree_recursive(child, &child_states, total, hits, misses);
         }
     }
 }
@@ -1717,7 +1731,7 @@ mod tests {
 
         // Now nothing should be dirty
         assert!(!root.has_dirty_nodes());
-        assert!(!root.is_self_dirty);
+        assert!(!root.self_dirty);
         assert!(!root.has_dirty_descendant);
 
         // Mark the grandchild as dirty
@@ -1729,11 +1743,11 @@ mod tests {
         // - root should have dirty descendant (because child1 has dirty descendant)
         // - child1 should have dirty descendant (because grandchild is dirty)
         // - grandchild should be self dirty (but not have dirty descendant)
-        assert!(!root.is_self_dirty);
+        assert!(!root.self_dirty);
         assert!(root.has_dirty_descendant);
-        assert!(!root.children[0].is_self_dirty);
+        assert!(!root.children[0].self_dirty);
         assert!(root.children[0].has_dirty_descendant);
-        assert!(root.children[0].children[0].is_self_dirty);
+        assert!(root.children[0].children[0].self_dirty);
         assert!(!root.children[0].children[0].has_dirty_descendant);
 
         // Collect dirty nodes
@@ -1744,7 +1758,7 @@ mod tests {
         assert!(!root.has_dirty_nodes());
         assert!(!root.has_dirty_descendant);
         assert!(!root.children[0].has_dirty_descendant);
-        assert!(!root.children[0].children[0].is_self_dirty);
+        assert!(!root.children[0].children[0].self_dirty);
     }
 
     #[test]
@@ -1768,11 +1782,11 @@ mod tests {
         // - root is self dirty and has dirty descendant
         // - child1 is not dirty
         // - child2 is self dirty but has no dirty descendant
-        assert!(root.is_self_dirty);
+        assert!(root.self_dirty);
         assert!(root.has_dirty_descendant);
-        assert!(!root.children[0].is_self_dirty);
+        assert!(!root.children[0].self_dirty);
         assert!(!root.children[0].has_dirty_descendant);
-        assert!(root.children[1].is_self_dirty);
+        assert!(root.children[1].self_dirty);
         assert!(!root.children[1].has_dirty_descendant);
 
         // Collect dirty nodes
@@ -1804,13 +1818,13 @@ mod tests {
         root.children[0].children[0].children[0].mark_dirty();
 
         // Check that summary bits propagated all the way up
-        assert!(!root.is_self_dirty);
+        assert!(!root.self_dirty);
         assert!(root.has_dirty_descendant);
-        assert!(!root.children[0].is_self_dirty);
+        assert!(!root.children[0].self_dirty);
         assert!(root.children[0].has_dirty_descendant);
-        assert!(!root.children[0].children[0].is_self_dirty);
+        assert!(!root.children[0].children[0].self_dirty);
         assert!(root.children[0].children[0].has_dirty_descendant);
-        assert!(root.children[0].children[0].children[0].is_self_dirty);
+        assert!(root.children[0].children[0].children[0].self_dirty);
         assert!(!root.children[0].children[0].children[0].has_dirty_descendant);
 
         // Collect dirty nodes
