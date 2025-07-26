@@ -18,6 +18,16 @@ path = "src/main.rs"
 name = "benchmark"
 path = "src/benchmark.rs"
 
+[[bin]]
+name = "tri"
+path = "src/tri.rs"
+
+[[bin]]
+name = "bit"
+path = "src/bit.rs"
+[[bin]]
+name = "naive"
+path = "src/naive.rs"
 [features]
 default = []
 generated-css = []

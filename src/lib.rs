@@ -1,8 +1,13 @@
+#![allow(deprecated)]
 use cssparser::{Parser, ParserInput, Token};
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
 use std::collections::{HashMap, HashSet};
 
+pub trait Cache<HtmlNode> {
+    fn dirtied(&mut self, path: &[u64]);
+    fn recompute(&mut self, root: &mut HtmlNode);
+}
 // RDTSC 时间测量工具
 #[inline(always)]
 pub fn rdtsc() -> u64 {
@@ -528,141 +533,6 @@ impl HtmlNode {
         true
     }
 }
-
-trait Cache<HtmlNode> {
-    fn dirtied(&mut self, path: &[u64]);
-    fn recompute(&mut self, root: &mut HtmlNode);
-}
-// note: do nt pull out bitvector result; - absvector will change that laters
-// to other typetruct NaiveCache {
-// no dirty node anywhere, have to recompute from scratch
-// bitvector result;
-//}
-#[derive(Debug, Default)]
-struct BitVectorCache {
-    dirtynode: bool,
-    result: BitVector,
-}
-struct TriVectorCache {
-    dirtynode: bool,
-    parent: Vec<IState>,
-    result: BitVector,
-}
-//template<typename C:Cache>
-#[derive(Debug, Default)]
-/// this is the common part represent the info from the json file.
-struct BaseHtmlNode {
-    pub tag_name: String,
-    pub id: u64,
-    pub classes: HashSet<String>,
-    pub children: Vec<BaseHtmlNode>,
-    pub parent: Option<*mut BaseHtmlNode>, // TODO: use u64 in future
-}
-
-impl BaseHtmlNode {
-    fn init(&mut self) {
-        let s = std::fs::read_to_string(format!(
-            "css-gen-op/{}/command.json",
-            std::env::var("WEBSITE_NAME").unwrap()
-        ))
-        .unwrap();
-        let first_line = s.lines().next().unwrap();
-        let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
-        self.json_dom_to_html_node(&trace_data["node"]);
-    }
-
-    fn json_dom_to_html_node(&mut self, json_node: &serde_json::Value) -> Self {
-        let mut node = BaseHtmlNode::default();
-        node.tag_name = json_node["name"].as_str().unwrap().into();
-        node.id = json_node["id"].as_u64().unwrap();
-
-        // Add classes from attributes
-        node.classes = {
-            let attributes = json_node["attributes"].as_object().unwrap();
-            let Some(class_str) = attributes.get("class") else {
-                return Default::default();
-            };
-            class_str
-                .as_str()
-                .unwrap()
-                .split_whitespace()
-                .map(|x| x.into())
-                .collect::<HashSet<String>>()
-        };
-
-        // Add children recursively
-        node.children = {
-            let Some(children) = json_node["children"].as_array() else {
-                return Default::default();
-            };
-            children
-                .into_iter()
-                .map(|x| self.json_dom_to_html_node(x))
-                .collect()
-        };
-        node.fix_parent_pointers();
-        node
-    }
-    fn fix_parent_pointers(&mut self) {
-        let self_ptr = self as *mut BaseHtmlNode;
-        for child in self.children.iter_mut() {
-            child.parent = Some(self_ptr);
-            child.fix_parent_pointers();
-        }
-    }
-}
-
-struct NaiveHtmlNode {
-    node: BaseHtmlNode,
-}
-
-struct BitVectorHtmlNode {
-    node: BaseHtmlNode,
-    cache: BitVectorCache,
-}
-
-struct TriVectorHtmlNode {
-    node: BaseHtmlNode,
-    cache: TriVectorCache,
-}
-
-impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
-    fn dirtied(&mut self, path: &[u64]) {
-        // no op here
-    }
-    fn recompute(&mut self, root: &mut NaiveHtmlNode) {}
-}
-impl Cache<BitVectorHtmlNode> for BitVectorHtmlNode {
-    fn dirtied(&mut self, path: &[u64]) {
-        if path.is_empty() {
-            self.cache.dirtynode = true;
-            return;
-        }
-        self.dirtied(&path[1..]);
-    }
-    fn recompute(&mut self, root: &mut BitVectorHtmlNode) {
-        unimplemented!()
-    }
-}
-impl Cache<TriVectorHtmlNode> for TriVectorHtmlNode {
-    fn dirtied(&mut self, path: &[u64]) {
-        if path.is_empty() {
-            self.cache.dirtynode = true;
-            return;
-        }
-        self.dirtied(&path[1..]);
-    }
-    fn recompute(&mut self, root: &mut TriVectorHtmlNode) {
-        unimplemented!()
-    }
-}
-
-// Maybe called Cached?
-
-// 分离 3 种不同的 node, naive , bit, tri
-// 对每种 node, 实现一个公共的 trait, recompute, dirtied.
-// recompute 是实际做计算的
-// dirtied 只是做脏标记
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum SimpleSelector {

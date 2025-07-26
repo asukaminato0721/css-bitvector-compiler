@@ -2,7 +2,7 @@
 set -eux -o pipefail
 
 readarray -t WEBSITE_NAMES < <(ls css-gen-op/)
-
+echo > new_result.txt
 for i in "${WEBSITE_NAMES[@]}"; do
 	rm -f *results.txt
 	echo >src/generated_bitvector_functions.rs
@@ -19,8 +19,10 @@ for i in "${WEBSITE_NAMES[@]}"; do
 	diff naive_results.txt optimized_results.txt
 
 	diff bitvector_results.txt naive_results.txt
-
 	cargo flamegraph -r --bin benchmark
+	cargo run -r --bin tri &>> new_result.txt
+	cargo run -r --bin bit &>> new_result.txt
+	cargo run -r --bin naive &>> new_result.txt
 
 	uv sync
 	uv run create_performance_comparison_plot.py
