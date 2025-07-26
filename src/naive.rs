@@ -134,7 +134,13 @@ impl NaiveHtmlNode {
         //  dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
-
+        node.html_id = {
+            let attributes = json_node["attributes"].as_object().unwrap();
+            attributes
+                .get("id")
+                .and_then(|x| x.as_str())
+                .map(String::from)
+        };
         // Add classes from attributes
         node.classes = {
             let attributes = json_node["attributes"].as_object().unwrap();
@@ -172,6 +178,7 @@ impl NaiveHtmlNode {
 struct NaiveHtmlNode {
     pub tag_name: String,
     pub id: u64,
+    pub html_id: Option<String>,
     pub classes: HashSet<String>,
     pub children: Vec<NaiveHtmlNode>,
     pub parent: Option<*mut NaiveHtmlNode>, // TODO: use u64 in future
@@ -195,7 +202,6 @@ impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
 fn main() {
     let mut bit = NaiveHtmlNode::default();
     bit.init();
-    dbg!(bit);
     let css = parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
@@ -203,5 +209,6 @@ fn main() {
         ))
         .unwrap(),
     );
-    dbg!(css);
+    dbg!(&bit);
+    dbg!(&css);
 }

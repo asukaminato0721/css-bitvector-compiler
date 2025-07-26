@@ -14,6 +14,7 @@ struct BitVectorCache {
 struct BitVectorHtmlNode {
     pub tag_name: String,
     pub id: u64,
+    pub html_id: Option<String>,
     pub classes: HashSet<String>,
     pub children: Vec<BitVectorHtmlNode>,
     pub parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
@@ -37,7 +38,13 @@ impl BitVectorHtmlNode {
         //  dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
-
+        node.html_id = {
+            let attributes = json_node["attributes"].as_object().unwrap();
+            attributes
+                .get("id")
+                .and_then(|x| x.as_str())
+                .map(String::from)
+        };
         // Add classes from attributes
         node.classes = {
             let attributes = json_node["attributes"].as_object().unwrap();
