@@ -1,8 +1,10 @@
 use cssparser::{Parser, ParserInput, Token};
-use scraper;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    hash::DefaultHasher,
+};
 
 // RDTSC 时间测量工具
 #[inline(always)]
@@ -197,6 +199,7 @@ impl SelectorMatchingIndex {
 //
 // Export HtmlNode structure
 #[derive(Debug, Clone)]
+#[deprecated = "use NaiveHtmlNode or else instead"]
 pub struct HtmlNode {
     pub tag_name: String,
     pub id: Option<String>,
@@ -259,9 +262,6 @@ impl HtmlNode {
         let self_ptr = self as *mut HtmlNode;
         for child in self.children.iter_mut() {
             child.parent = Some(self_ptr);
-        }
-        // Fix children's parent pointers recursively in a separate loop
-        for child in self.children.iter_mut() {
             child.fix_parent_pointers();
         }
     }
@@ -551,21 +551,72 @@ struct TriVectorCache {
     result: BitVector,
 }
 //template<typename C:Cache>
-
+#[derive(Debug, Default)]
 /// this is the common part represent the info from the json file.
 struct BaseHtmlNode {
     pub tag_name: String,
-    pub id: Option<String>,
+    pub id: u64,
     pub classes: HashSet<String>,
     pub children: Vec<BaseHtmlNode>,
-    pub parent: Option<*mut BaseHtmlNode>,
+    pub parent: Option<*mut BaseHtmlNode>, // TODO: use u64 in future
+}
+
+impl BaseHtmlNode {
+    fn init(&mut self) {
+        let s = std::fs::read_to_string(format!(
+            "css-gen-op/{}/command.json",
+            std::env::var("WEBSITE_NAME").unwrap()
+        ))
+        .unwrap();
+        let first_line = s.lines().next().unwrap();
+        let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
+        self.json_dom_to_html_node(&trace_data["node"]);
+    }
+
+    fn json_dom_to_html_node(&mut self, json_node: &serde_json::Value) -> Self {
+        let mut node = BaseHtmlNode::default();
+        node.tag_name = json_node["name"].as_str().unwrap().into();
+        node.id = json_node["id"].as_u64().unwrap();
+
+        // Add classes from attributes
+        node.classes = {
+            let attributes = json_node["attributes"].as_object().unwrap();
+            let Some(class_str) = attributes.get("class") else {
+                return Default::default();
+            };
+            class_str
+                .as_str()
+                .unwrap()
+                .split_whitespace()
+                .map(|x| x.into())
+                .collect::<HashSet<String>>()
+        };
+
+        // Add children recursively
+        node.children = {
+            let Some(children) = json_node["children"].as_array() else {
+                return Default::default();
+            };
+            children
+                .into_iter()
+                .map(|x| self.json_dom_to_html_node(x))
+                .collect()
+        };
+        node.fix_parent_pointers();
+        node
+    }
+    fn fix_parent_pointers(&mut self) {
+        let self_ptr = self as *mut BaseHtmlNode;
+        for child in self.children.iter_mut() {
+            child.parent = Some(self_ptr);
+            child.fix_parent_pointers();
+        }
+    }
 }
 
 struct NaiveHtmlNode {
     node: BaseHtmlNode,
 }
-
-impl NaiveHtmlNode {}
 
 struct BitVectorHtmlNode {
     node: BaseHtmlNode,
@@ -574,6 +625,7 @@ struct BitVectorHtmlNode {
 
 struct TriVectorHtmlNode {
     node: BaseHtmlNode,
+    cache: TriVectorCache,
 }
 
 impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
@@ -689,10 +741,6 @@ impl TreeNFAProgram {
     pub fn generate_istate_code(&self) -> String {
         fn generate_parent_dependent_rules_code(s: &TreeNFAProgram) -> String {
             let mut code = String::new();
-            code.push_str(
-                "// match get_node_tag_id(node) {
-            ",
-            );
             for instruction in &s.instructions {
                 if let NFAInstruction::CheckParentAndSetBit {
                     parent_state_bit,
@@ -755,10 +803,6 @@ impl TreeNFAProgram {
                     code.push_str("    }\n");
                 }
             }
-            code.push_str(
-                "// match get_node_id_id(node) {
-            ",
-            );
             for instruction in &s.instructions {
                 if let NFAInstruction::CheckParentAndSetBit {
                     parent_state_bit,
@@ -1564,17 +1608,11 @@ pub fn load_dom_from_file() -> HtmlNode {
         "css-gen-op/{}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
     ))
-    .expect("fail to read command.json");
+    .unwrap();
 
-    // Get the first line which should be the init command
-    let first_line = json_data
-        .lines()
-        .next()
-        .expect("File is empty or cannot read first line");
+    let first_line = json_data.lines().next().unwrap();
 
-    // Parse the JSON to get the DOM tree
-    let trace_data: serde_json::Value =
-        serde_json::from_str(first_line).expect("Failed to parse command.json");
+    let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
 
     // Check if it's an init command
     if trace_data["name"] != "init" {
@@ -1582,10 +1620,10 @@ pub fn load_dom_from_file() -> HtmlNode {
     }
 
     // Extract the node from init command
-    let google_node_data = &trace_data["node"];
+    let node_data = &trace_data["node"];
 
     // Convert JSON DOM to HtmlNode and initialize parent pointers
-    let mut root = convert_json_dom_to_html_node(google_node_data);
+    let mut root = convert_json_dom_to_html_node(node_data);
     root.init_parent_pointers();
     root
 }
@@ -1639,7 +1677,14 @@ pub fn convert_json_dom_to_html_node(json_node: &serde_json::Value) -> HtmlNode 
 
 // Utility functions
 pub fn count_matches(node: &HtmlNode) -> usize {
-    let current = if node.css_match_bitvector.as_u64() != 0 {
+    let current = if node
+        .css_match_bitvector
+        .bits
+        .iter()
+        .map(|&x| x as usize)
+        .sum::<usize>()
+        != 0
+    {
         1
     } else {
         0
