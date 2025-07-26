@@ -1,4 +1,5 @@
 use cssparser::{Parser, ParserInput, Token};
+use scraper;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_rdtsc;
 use std::collections::{HashMap, HashSet};
@@ -393,10 +394,8 @@ impl HtmlNode {
     /// Notify ancestors that they have a dirty descendant
     fn set_summary_bit_on_ancestors(&mut self) {
         if let Some(parent_ptr) = self.parent {
-            unsafe {
-                let parent = &mut *parent_ptr;
-                parent.set_summary_bit();
-            }
+            let parent = unsafe { &mut *parent_ptr };
+            parent.set_summary_bit();
         }
     }
 
@@ -409,10 +408,8 @@ impl HtmlNode {
         self.has_dirty_descendant = true;
 
         if let Some(parent_ptr) = self.parent {
-            unsafe {
-                let parent = &mut *parent_ptr;
-                parent.set_summary_bit();
-            }
+            let parent = unsafe { &mut *parent_ptr };
+            parent.set_summary_bit();
         }
     }
 
@@ -651,6 +648,61 @@ impl HtmlNode {
     }
 }
 
+trait Cache<HtmlNode> {
+    fn dirtied(dirtied_node: &mut HtmlNode);
+    fn recompute(root: &mut HtmlNode);
+}
+// note: do nt pull out bitvector result; - absvector will change that laters
+// to other typetruct NaiveCache {
+// no dirty node anywhere, have to recompute from scratch
+// bitvector result;
+//}
+struct BitVectorCache {
+    dirtynode: bool,
+    result: BitVector,
+}
+struct TriVectorCache {
+    dirtynode: bool,
+    parent: Vec<IState>,
+    result: BitVector,
+}
+//template<typename C:Cache>
+struct HtmlState {
+    node: scraper::Node,
+}
+struct NaiveHtmlNode {
+    html: HtmlState,
+}
+
+struct BitVectorHtmlNode {
+    html: HtmlState,
+    cache: BitVectorCache,
+}
+
+struct TriVectorHtmlNode {
+    html: HtmlState,
+}
+
+impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
+    fn dirtied(dirtied_node: &mut NaiveHtmlNode) {}
+    fn recompute(root: &mut NaiveHtmlNode) {}
+}
+impl Cache<BitVectorHtmlNode> for BitVectorHtmlNode {
+    fn dirtied(dirtied_node: &mut BitVectorHtmlNode) {}
+    fn recompute(root: &mut BitVectorHtmlNode) {}
+}
+impl Cache<TriVectorHtmlNode> for TriVectorHtmlNode {
+    fn dirtied(dirtied_node: &mut TriVectorHtmlNode) {}
+    fn recompute(root: &mut TriVectorHtmlNode) {}
+}
+
+// Maybe called Cached?
+
+// 分离 3 种不同的 node, naive , bit, tri
+// 对每种 node, 实现一个公共的 trait, recompute, dirtied.
+// recompute 是实际做计算的
+// dirtied 只是做脏标记
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum SimpleSelector {
     Type(String),
@@ -854,36 +906,29 @@ impl TreeNFAProgram {
         use std::sync::OnceLock;\n\n",
         );
 
-        // Add capacity constant for the generated BitVectors
         code.push_str(&format!(
             "pub const BITVECTOR_CAPACITY: usize = {};\n\n",
             self.total_bits
         ));
 
-        // Generate string interning tables and optimized matcher
         code.push_str("/// generate_string_interning_code\n");
         code.push_str(&self.generate_string_interning_code());
 
-        // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
         let parent_dependent_rules_code = generate_parent_dependent_rules_code(self);
         let propagation_rules_code = self.generate_propagation_rules_code();
 
-        // --- Generate Incremental Processing Function ---
         code.push_str(
-            "// --- Incremental Processing Functions ---
+            "
         pub fn process_node_generated_incremental(
             node: &mut HtmlNode,
             parent_state: &BitVector,
-        ) -> BitVector { // returns child_states
-            // Check if we need to recompute
+        ) -> BitVector {
             if !node.needs_any_recomputation(parent_state) {
-                // Return cached result - entire subtree can be skipped
                 return node.child_states.clone().unwrap();
             }
-            // Recompute node intrinsic matches if needed
             if node.node_intrinsic.is_none() || node.is_self_dirty {
-        /// generate_intrinsic_checks_code\n",
+",
         );
         code.push_str(&intrinsic_checks_code);
         code.push_str(
@@ -1033,7 +1078,6 @@ impl TreeNFAProgram {
         code
     }
 
-    /// Generate BitVector-only Rust code (alternative to IState-based version)
     pub fn generate_bitvector_code(&self) -> String {
         fn generate_parent_dependent_rules_bitvector_code(s: &TreeNFAProgram) -> String {
             let mut code = String::new();
@@ -1044,7 +1088,6 @@ impl TreeNFAProgram {
                     result_bit,
                 } = instruction
                 {
-                    // Use optimized matching with integer IDs
                     let match_condition = match child_selector {
                         SimpleSelector::Type(tag) => {
                             let tag_id = s.string_to_id[tag];
@@ -1099,38 +1142,30 @@ impl TreeNFAProgram {
         }
         let mut code = String::new();
 
-        // Add necessary imports for the generated code to be self-contained
         code.push_str("use crate::{BitVector, HtmlNode, SimpleSelector};\n");
         code.push_str("use std::collections::HashMap;\n");
         code.push_str("use std::sync::OnceLock;\n\n");
 
-        // Add capacity constant for the generated BitVectors
         code.push_str(&format!(
             "const BITVECTOR_CAPACITY: usize = {};\n\n",
             self.total_bits
         ));
 
-        // Generate string interning tables and optimized matcher
         code.push_str(&self.generate_string_interning_code());
 
-        // --- Common parts ---
         let intrinsic_checks_code = self.generate_intrinsic_checks_code();
         let parent_dependent_rules_code = generate_parent_dependent_rules_bitvector_code(self);
         let propagation_rules_code = self.generate_propagation_rules_code();
 
-        // --- Generate BitVector-only Incremental Processing Function ---
         code.push_str(
-            "// --- BitVector-only Incremental Processing Functions ---
+            "
         pub fn process_node_generated_bitvector_incremental(
             node: &mut HtmlNode,
             parent_state: &BitVector,
-        ) -> BitVector { // returns child_states
-            // Check if we need to recompute using BitVector-only tracking
+        ) -> BitVector {
             if !node.needs_any_recomputation_bitvector(parent_state) {
-                // Return cached result - entire subtree can be skipped
                 return node.child_states.clone().unwrap();
             }
-            // Recompute node intrinsic matches if needed
             if node.node_intrinsic.is_none() || node.is_self_dirty {
         ",
         );
@@ -1139,7 +1174,6 @@ impl TreeNFAProgram {
             "node.node_intrinsic = Some(intrinsic_matches);
             }
         let mut current_matches = node.node_intrinsic.clone().unwrap();
-            // BitVector-only parent state tracking
         node.parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
         node.parent_values_read =Some(BitVector::with_capacity(parent_state.capacity));",
         );
@@ -1152,7 +1186,6 @@ impl TreeNFAProgram {
         code.push_str("    child_states\n");
         code.push_str("}\n\n");
 
-        // --- Generate Tree Traversal Wrappers for BitVector-only version ---
         code.push_str(&self.generate_bitvector_traversal_wrappers());
 
         code
@@ -1160,7 +1193,6 @@ impl TreeNFAProgram {
 
     fn generate_bitvector_traversal_wrappers(&self) -> String {
         r#"
-/// BitVector-only incremental processing driver with statistics tracking
 pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
@@ -1174,32 +1206,25 @@ fn process_tree_recursive_bitvector_incremental(node: &mut HtmlNode, parent_stat
                                                total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     
-    // Logic 1: Check if node itself needs recomputation using BitVector-only tracking
     let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
         *misses += 1;
-        // Recompute node and get fresh child_states
         process_node_generated_bitvector_incremental(node, parent_state)
     } else {
         *hits += 1;
-        // Use cached child_states - major optimization for internal nodes!
         node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
-    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
     if node.has_dirty_descendant {
-        // Recurse into children only if there are dirty descendants
         for child in node.children.iter_mut() {
             process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
         }
     }
-    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 "#.to_string()
     }
 
     pub fn generate_traversal_wrappers(&self) -> String {
         r#"
-/// Incremental processing driver with statistics tracking
 pub fn process_tree_trivector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
@@ -1213,25 +1238,19 @@ fn process_tree_recursive_incremental(node: &mut HtmlNode, parent_state: &BitVec
                                     total: &mut usize, hits: &mut usize, misses: &mut usize) {
     *total += 1;
     
-    // Logic 1: Check if node itself needs recomputation
     let child_states = if node.needs_self_recomputation(parent_state) {
         *misses += 1;
-        // Recompute node and get fresh child_states
         process_node_generated_incremental(node, parent_state)
     } else {
         *hits += 1;
-        // Use cached child_states - major optimization for internal nodes!
         node.child_states.clone().unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
     
-    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
     if node.has_dirty_descendant {
-        // Recurse into children only if there are dirty descendants
         for child in node.children.iter_mut() {
             process_tree_recursive_incremental(child, &child_states, total, hits, misses);
         }
     }
-    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
 "#.to_string()
     }

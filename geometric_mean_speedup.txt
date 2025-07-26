@@ -169,3 +169,9 @@ Geometric mean speedup: 1.288x
 Geometric mean speedup: 0.941x
 Geometric mean speedup: 1.085x
 Geometric mean speedup: 1.330x
+Geometric mean speedup: 1.001x
+Geometric mean speedup: 1.039x
+Geometric mean speedup: 1.194x
+Geometric mean speedup: 0.976x
+Geometric mean speedup: 1.292x
+Geometric mean speedup: 1.059x
