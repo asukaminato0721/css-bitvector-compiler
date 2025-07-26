@@ -14,7 +14,7 @@ enum SimpleSelector {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum CssRule {
     Simple(SimpleSelector),
-    Compound { selectors: Vec<SimpleSelector> },
+    Descendant { selectors: Vec<SimpleSelector> },
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
@@ -41,7 +41,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         if selector_chain.len() == 1 {
                             rules.push(CssRule::Simple(selector_chain.into_iter().next().unwrap()));
                         } else {
-                            rules.push(CssRule::Compound {
+                            rules.push(CssRule::Descendant {
                                 selectors: selector_chain,
                             });
                         }
@@ -89,7 +89,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                             rules.push(CssRule::Simple(selector));
                         } else {
                             selector_chain.push(selector);
-                            rules.push(CssRule::Compound {
+                            rules.push(CssRule::Descendant {
                                 selectors: selector_chain,
                             });
                         }

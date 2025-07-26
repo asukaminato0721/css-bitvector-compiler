@@ -6,7 +6,7 @@ use css_bitvector_compiler::Cache;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum CssRule {
     Simple(SimpleSelector),
-    Compound { selectors: Vec<SimpleSelector> },
+    Descendant { selectors: Vec<SimpleSelector> },
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum SimpleSelector {
@@ -39,7 +39,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         if selector_chain.len() == 1 {
                             rules.push(CssRule::Simple(selector_chain.into_iter().next().unwrap()));
                         } else {
-                            rules.push(CssRule::Compound {
+                            rules.push(CssRule::Descendant {
                                 selectors: selector_chain,
                             });
                         }
@@ -87,7 +87,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                             rules.push(CssRule::Simple(selector));
                         } else {
                             selector_chain.push(selector);
-                            rules.push(CssRule::Compound {
+                            rules.push(CssRule::Descendant {
                                 selectors: selector_chain,
                             });
                         }
@@ -127,6 +127,7 @@ impl NaiveHtmlNode {
         let first_line = s.lines().next().unwrap();
         let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
         *self = self.json_dom_to_html_node(&trace_data["node"]);
+        self.fix_parent_pointers();
     }
 
     fn json_dom_to_html_node(&mut self, json_node: &serde_json::Value) -> Self {
@@ -162,7 +163,6 @@ impl NaiveHtmlNode {
                 .map(|x| self.json_dom_to_html_node(x))
                 .collect()
         };
-        node.fix_parent_pointers();
         node
     }
     fn fix_parent_pointers(&mut self) {
@@ -170,6 +170,56 @@ impl NaiveHtmlNode {
         for child in self.children.iter_mut() {
             child.parent = Some(self_ptr);
             child.fix_parent_pointers();
+        }
+    }
+    fn matches_simple_selector(&self, selector: &SimpleSelector) -> bool {
+        match selector {
+            SimpleSelector::Type(tag) => self.tag_name.to_lowercase() == tag.to_lowercase(),
+            SimpleSelector::Class(class) => self.classes.contains(class),
+            SimpleSelector::Id(id) => {
+                if let Some(ref html_id) = self.html_id {
+                    html_id == id
+                } else {
+                    false
+                }
+            }
+        }
+    }
+    fn matches_descendant_selector(&self, selectors: &[SimpleSelector]) -> bool {
+        match (self.parent, selectors.len()) {
+            (Some(_), 0) => false,
+            (None, 0) => true,
+            (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
+            (None, 2..) => false,
+            (Some(p), 1..) => {
+                let p = unsafe { &*p };
+                if self.matches_simple_selector(selectors.last().unwrap()) {
+                    p.matches_descendant_selector(&selectors[..selectors.len() - 1])
+                } else {
+                    p.matches_descendant_selector(selectors)
+                }
+            }
+        }
+    }
+    fn matches_css_rule(&self, rule: &CssRule) -> bool {
+        match rule {
+            CssRule::Simple(selector) => self.matches_simple_selector(selector),
+            CssRule::Descendant { selectors } => self.matches_descendant_selector(selectors),
+        }
+    }
+    fn collect_matches(&self, rule: &CssRule, matches: &mut Vec<u64>) {
+        if self.matches_css_rule(rule) {
+            matches.push(self.id);
+        }
+        for child in &self.children {
+            child.collect_matches(rule, matches);
+        }
+    }
+    fn print_css_matches(&self, rules: &[CssRule]) {
+        for rule in rules {
+            let mut matches = Vec::new();
+            self.collect_matches(rule, &mut matches);
+            println!("{:?} -> {:?}", rule, matches);
         }
     }
 }
@@ -210,5 +260,6 @@ fn main() {
         .unwrap(),
     );
     dbg!(&bit);
-    dbg!(&css);
+    //  dbg!(&css);
+    bit.print_css_matches(&css);
 }
