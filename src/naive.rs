@@ -187,8 +187,7 @@ impl NaiveHtmlNode {
     }
     fn matches_descendant_selector(&self, selectors: &[SimpleSelector]) -> bool {
         match (self.parent, selectors.len()) {
-            (Some(_), 0) => false,
-            (None, 0) => true,
+            (_, 0) => true,
             (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
             (None, 2..) => false,
             (Some(p), 1..) => {

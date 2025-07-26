@@ -60,17 +60,17 @@ warning: variable does not need to be mutable
 warning: `css-bitvector-compiler` (lib) generated 7 warnings (run `cargo fix --lib -p css-bitvector-compiler` to apply 6 suggestions)
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
 warning: unused variable: `path`
-   --> src/naive.rs:238:27
+   --> src/naive.rs:237:27
     |
-238 |     fn dirtied(&mut self, path: &[u64]) {
+237 |     fn dirtied(&mut self, path: &[u64]) {
     |                           ^^^^ help: if this is intentional, prefix it with an underscore: `_path`
     |
     = note: `#[warn(unused_variables)]` on by default
 
 warning: unused variable: `root`
-   --> src/naive.rs:241:29
+   --> src/naive.rs:240:29
     |
-241 |     fn recompute(&mut self, root: &mut NaiveHtmlNode) {
+240 |     fn recompute(&mut self, root: &mut NaiveHtmlNode) {
     |                             ^^^^ help: if this is intentional, prefix it with an underscore: `_root`
 
 warning: type `SimpleSelector` is more private than the item `CssRule::Simple::0`
@@ -99,9 +99,9 @@ note: but type `SimpleSelector` is only usable at visibility `pub(crate)`
    | ^^^^^^^^^^^^^^^^^^^
 
 warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.85s
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.86s
      Running `target/release/naive`
-[src/naive.rs:262:5] &bit = NaiveHtmlNode {
+[src/naive.rs:261:5] &bit = NaiveHtmlNode {
     tag_name: "#document",
     id: 4,
     html_id: None,
@@ -114,7 +114,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
             classes: {},
             children: [],
             parent: Some(
-                0x00007fff7e1a4fb8,
+                0x00007fff263294b8,
             ),
         },
         NaiveHtmlNode {
@@ -136,7 +136,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                             classes: {},
                             children: [],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -146,7 +146,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                             classes: {},
                             children: [],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -156,7 +156,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                             classes: {},
                             children: [],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -166,7 +166,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                             classes: {},
                             children: [],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -182,12 +182,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6aa60,
+                                        0x0000565034559a60,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -203,12 +203,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6aaf0,
+                                        0x0000565034559af0,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -224,12 +224,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6ab80,
+                                        0x0000565034559b80,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -245,12 +245,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6ac10,
+                                        0x0000565034559c10,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                         NaiveHtmlNode {
@@ -266,17 +266,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6aca0,
+                                        0x0000565034559ca0,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a6d0,
+                                0x00005650345596d0,
                             ),
                         },
                     ],
                     parent: Some(
-                        0x0000559fa1e6a5f0,
+                        0x00005650345595f0,
                     ),
                 },
                 NaiveHtmlNode {
@@ -298,12 +298,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6b240,
+                                        0x000056503455a240,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a760,
+                                0x0000565034559760,
                             ),
                         },
                         NaiveHtmlNode {
@@ -335,12 +335,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                     classes: {},
                                                     children: [],
                                                     parent: Some(
-                                                        0x0000559fa1e6b690,
+                                                        0x000056503455a690,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1e6b5b0,
+                                                0x000056503455a5b0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -368,7 +368,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             },
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1e6ba90,
+                                                                0x000056503455aa90,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -396,9 +396,9 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                 "gb_1",
                                                                             ),
                                                                             classes: {
-                                                                                "gbzt",
                                                                                 "gbp1",
                                                                                 "gbz0l",
+                                                                                "gbzt",
                                                                             },
                                                                             children: [
                                                                                 NaiveHtmlNode {
@@ -410,7 +410,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6c4b0,
+                                                                                        0x000056503455b4b0,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -428,22 +428,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6c700,
+                                                                                                0x000056503455b700,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6c4b0,
+                                                                                        0x000056503455b4b0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6bed0,
+                                                                                0x000056503455aed0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -473,7 +473,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6caa0,
+                                                                                        0x000056503455baa0,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -491,22 +491,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6ccb0,
+                                                                                                0x000056503455bcb0,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6caa0,
+                                                                                        0x000056503455baa0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6bf60,
+                                                                                0x000056503455af60,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -536,7 +536,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6d050,
+                                                                                        0x000056503455c050,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -554,22 +554,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6d260,
+                                                                                                0x000056503455c260,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6d050,
+                                                                                        0x000056503455c050,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6bff0,
+                                                                                0x000056503455aff0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -599,7 +599,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6d600,
+                                                                                        0x000056503455c600,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -617,22 +617,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6d810,
+                                                                                                0x000056503455c810,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6d600,
+                                                                                        0x000056503455c600,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c080,
+                                                                                0x000056503455b080,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -662,7 +662,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6dbb0,
+                                                                                        0x000056503455cbb0,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -680,22 +680,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6ddc0,
+                                                                                                0x000056503455cdc0,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6dbb0,
+                                                                                        0x000056503455cbb0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c110,
+                                                                                0x000056503455b110,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -725,7 +725,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6e160,
+                                                                                        0x000056503455d160,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -743,22 +743,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6e370,
+                                                                                                0x000056503455d370,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6e160,
+                                                                                        0x000056503455d160,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c1a0,
+                                                                                0x000056503455b1a0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -788,7 +788,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6e710,
+                                                                                        0x000056503455d710,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -806,22 +806,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6e920,
+                                                                                                0x000056503455d920,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6e710,
+                                                                                        0x000056503455d710,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c230,
+                                                                                0x000056503455b230,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -851,7 +851,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6ecc0,
+                                                                                        0x000056503455dcc0,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -869,22 +869,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6eed0,
+                                                                                                0x000056503455ded0,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6ecc0,
+                                                                                        0x000056503455dcc0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c2c0,
+                                                                                0x000056503455b2c0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -914,7 +914,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6f270,
+                                                                                        0x000056503455e270,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -924,8 +924,8 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                         "gbztms",
                                                                                     ),
                                                                                     classes: {
-                                                                                        "gbts",
                                                                                         "gbtsa",
+                                                                                        "gbts",
                                                                                     },
                                                                                     children: [
                                                                                         NaiveHtmlNode {
@@ -943,12 +943,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                     classes: {},
                                                                                                     children: [],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6f800,
+                                                                                                        0x000056503455e800,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6f5a0,
+                                                                                                0x000056503455e5a0,
                                                                                             ),
                                                                                         },
                                                                                         NaiveHtmlNode {
@@ -960,17 +960,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             },
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6f5a0,
+                                                                                                0x000056503455e5a0,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6f270,
+                                                                                        0x000056503455e270,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c350,
+                                                                                0x000056503455b350,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -986,12 +986,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     classes: {},
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6f300,
+                                                                                        0x000056503455e300,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c350,
+                                                                                0x000056503455b350,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -1011,9 +1011,9 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                         "gbmmb",
                                                                                     ),
                                                                                     classes: {
-                                                                                        "gbmc",
-                                                                                        "gbsbis",
                                                                                         "gbsb",
+                                                                                        "gbsbis",
+                                                                                        "gbmc",
                                                                                     },
                                                                                     children: [
                                                                                         NaiveHtmlNode {
@@ -1023,8 +1023,8 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                 "gbmm",
                                                                                             ),
                                                                                             classes: {
-                                                                                                "gbmcc",
                                                                                                 "gbsbic",
+                                                                                                "gbmcc",
                                                                                             },
                                                                                             children: [
                                                                                                 NaiveHtmlNode {
@@ -1052,17 +1052,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1e707a0,
+                                                                                                                        0x000056503455f7a0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70130,
+                                                                                                                0x000056503455f130,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1090,17 +1090,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1e70aa0,
+                                                                                                                        0x000056503455faa0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e701c0,
+                                                                                                                0x000056503455f1c0,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1128,17 +1128,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1e70da0,
+                                                                                                                        0x000056503455fda0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70250,
+                                                                                                                0x000056503455f250,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1166,17 +1166,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1e710a0,
+                                                                                                                        0x00005650345600a0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e702e0,
+                                                                                                                0x000056503455f2e0,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1204,17 +1204,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1e713a0,
+                                                                                                                        0x00005650345603a0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70370,
+                                                                                                                0x000056503455f370,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1242,17 +1242,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ece100,
+                                                                                                                        0x00005650345bd100,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70400,
+                                                                                                                0x000056503455f400,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1280,17 +1280,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ece380,
+                                                                                                                        0x00005650345bd380,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70490,
+                                                                                                                0x000056503455f490,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1318,17 +1318,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ece680,
+                                                                                                                        0x00005650345bd680,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70520,
+                                                                                                                0x000056503455f520,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1344,17 +1344,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                             id: 233,
                                                                                                             html_id: None,
                                                                                                             classes: {
-                                                                                                                "gbmt",
                                                                                                                 "gbmh",
+                                                                                                                "gbmt",
                                                                                                             },
                                                                                                             children: [],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e705b0,
+                                                                                                                0x000056503455f5b0,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1380,12 +1380,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ecebc0,
+                                                                                                                        0x00005650345bdbc0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70640,
+                                                                                                                0x000056503455f640,
                                                                                                             ),
                                                                                                         },
                                                                                                         NaiveHtmlNode {
@@ -1401,22 +1401,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ecec50,
+                                                                                                                        0x00005650345bdc50,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1e70640,
+                                                                                                                0x000056503455f640,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1e6fe70,
+                                                                                                        0x000056503455ee70,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6fcb0,
+                                                                                                0x000056503455ecb0,
                                                                                             ),
                                                                                         },
                                                                                         NaiveHtmlNode {
@@ -1428,7 +1428,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             },
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6fcb0,
+                                                                                                0x000056503455ecb0,
                                                                                             ),
                                                                                         },
                                                                                         NaiveHtmlNode {
@@ -1440,32 +1440,32 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             },
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1e6fcb0,
+                                                                                                0x000056503455ecb0,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1e6f390,
+                                                                                        0x000056503455e390,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1e6c350,
+                                                                                0x000056503455b350,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1e6bc90,
+                                                                        0x000056503455ac90,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1e6ba90,
+                                                                0x000056503455aa90,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1e6b720,
+                                                        0x000056503455a720,
                                                     ),
                                                 },
                                                 NaiveHtmlNode {
@@ -1491,12 +1491,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ecf110,
+                                                                        0x00005650345be110,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1e6bb20,
+                                                                0x000056503455ab20,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -1508,7 +1508,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             },
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1e6bb20,
+                                                                0x000056503455ab20,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -1546,7 +1546,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ecf850,
+                                                                                        0x00005650345be850,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -1574,27 +1574,27 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                     classes: {},
                                                                                                     children: [],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ecfca0,
+                                                                                                        0x00005650345beca0,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ecfa60,
+                                                                                                0x00005650345bea60,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ecf850,
+                                                                                        0x00005650345be850,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ecf5d0,
+                                                                                0x00005650345be5d0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ecf230,
+                                                                        0x00005650345be230,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -1602,8 +1602,8 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     id: 273,
                                                                     html_id: None,
                                                                     classes: {
-                                                                        "gbt",
                                                                         "gbtb",
+                                                                        "gbt",
                                                                     },
                                                                     children: [
                                                                         NaiveHtmlNode {
@@ -1615,12 +1615,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             },
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ecf660,
+                                                                                0x00005650345be660,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ecf230,
+                                                                        0x00005650345be230,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -1650,7 +1650,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     },
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed0140,
+                                                                                        0x00005650345bf140,
                                                                                     ),
                                                                                 },
                                                                                 NaiveHtmlNode {
@@ -1672,17 +1672,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed0470,
+                                                                                                0x00005650345bf470,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed0140,
+                                                                                        0x00005650345bf140,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ecf6f0,
+                                                                                0x00005650345be6f0,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -1698,12 +1698,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     classes: {},
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed01d0,
+                                                                                        0x00005650345bf1d0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ecf6f0,
+                                                                                0x00005650345be6f0,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -1739,8 +1739,8 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                     id: 305,
                                                                                                     html_id: None,
                                                                                                     classes: {
-                                                                                                        "gbmtc",
                                                                                                         "gbkc",
+                                                                                                        "gbmtc",
                                                                                                     },
                                                                                                     children: [
                                                                                                         NaiveHtmlNode {
@@ -1758,17 +1758,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ed0ed0,
+                                                                                                                        0x00005650345bfed0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed0c30,
+                                                                                                                0x00005650345bfc30,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed0ab0,
+                                                                                                        0x00005650345bfab0,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1784,17 +1784,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                             id: 313,
                                                                                                             html_id: None,
                                                                                                             classes: {
-                                                                                                                "gbmt",
                                                                                                                 "gbmh",
+                                                                                                                "gbmt",
                                                                                                             },
                                                                                                             children: [],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed0cc0,
+                                                                                                                0x00005650345bfcc0,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed0ab0,
+                                                                                                        0x00005650345bfab0,
                                                                                                     ),
                                                                                                 },
                                                                                                 NaiveHtmlNode {
@@ -1821,52 +1821,52 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ed1410,
+                                                                                                                        0x00005650345c0410,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed0d50,
+                                                                                                                0x00005650345bfd50,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed0ab0,
+                                                                                                        0x00005650345bfab0,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed0950,
+                                                                                                0x00005650345bf950,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed0260,
+                                                                                        0x00005650345bf260,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ecf6f0,
+                                                                                0x00005650345be6f0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ecf230,
+                                                                        0x00005650345be230,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1e6bb20,
+                                                                0x000056503455ab20,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1e6b720,
+                                                        0x000056503455a720,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1e6b5b0,
+                                                0x000056503455a5b0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -1878,7 +1878,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1e6b5b0,
+                                                0x000056503455a5b0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -1890,7 +1890,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1e6b5b0,
+                                                0x000056503455a5b0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -1906,22 +1906,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                     classes: {},
                                                     children: [],
                                                     parent: Some(
-                                                        0x0000559fa1e6b8d0,
+                                                        0x000056503455a8d0,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1e6b5b0,
+                                                0x000056503455a5b0,
                                             ),
                                         },
                                     ],
                                     parent: Some(
-                                        0x0000559fa1e6b2d0,
+                                        0x000056503455a2d0,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a760,
+                                0x0000565034559760,
                             ),
                         },
                         NaiveHtmlNode {
@@ -1939,7 +1939,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6b360,
+                                        0x000056503455a360,
                                     ),
                                 },
                                 NaiveHtmlNode {
@@ -1959,7 +1959,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1ed1840,
+                                                0x00005650345c0840,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -1969,7 +1969,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1ed1840,
+                                                0x00005650345c0840,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -1979,12 +1979,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1ed1840,
+                                                0x00005650345c0840,
                                             ),
                                         },
                                     ],
                                     parent: Some(
-                                        0x0000559fa1e6b360,
+                                        0x000056503455a360,
                                     ),
                                 },
                                 NaiveHtmlNode {
@@ -2024,12 +2024,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed20d0,
+                                                                                0x00005650345c10d0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed2010,
+                                                                        0x00005650345c1010,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -2045,7 +2045,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2055,7 +2055,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2065,7 +2065,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2075,7 +2075,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2113,7 +2113,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                             classes: {},
                                                                                                             children: [],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed2b80,
+                                                                                                                0x00005650345c1b80,
                                                                                                             ),
                                                                                                         },
                                                                                                         NaiveHtmlNode {
@@ -2129,32 +2129,32 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ed2cd0,
+                                                                                                                        0x00005650345c1cd0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed2b80,
+                                                                                                                0x00005650345c1b80,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed2ac0,
+                                                                                                        0x00005650345c1ac0,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed2960,
+                                                                                                0x00005650345c1960,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed25d0,
+                                                                                        0x00005650345c15d0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2164,7 +2164,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                             classes: {},
                                                                             children: [],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2210,32 +2210,32 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ed32d0,
+                                                                                                                        0x00005650345c22d0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed3210,
+                                                                                                                0x00005650345c2210,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed30b0,
+                                                                                                        0x00005650345c20b0,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed2f50,
+                                                                                                0x00005650345c1f50,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed26f0,
+                                                                                        0x00005650345c16f0,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                         NaiveHtmlNode {
@@ -2283,22 +2283,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                                     classes: {},
                                                                                                                     children: [],
                                                                                                                     parent: Some(
-                                                                                                                        0x0000559fa1ed39e0,
+                                                                                                                        0x00005650345c29e0,
                                                                                                                     ),
                                                                                                                 },
                                                                                                             ],
                                                                                                             parent: Some(
-                                                                                                                0x0000559fa1ed3920,
+                                                                                                                0x00005650345c2920,
                                                                                                             ),
                                                                                                         },
                                                                                                     ],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed3670,
+                                                                                                        0x00005650345c2670,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed3510,
+                                                                                                0x00005650345c2510,
                                                                                             ),
                                                                                         },
                                                                                         NaiveHtmlNode {
@@ -2314,12 +2314,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                                     classes: {},
                                                                                                     children: [],
                                                                                                     parent: Some(
-                                                                                                        0x0000559fa1ed3700,
+                                                                                                        0x00005650345c2700,
                                                                                                     ),
                                                                                                 },
                                                                                             ],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed3510,
+                                                                                                0x00005650345c2510,
                                                                                             ),
                                                                                         },
                                                                                         NaiveHtmlNode {
@@ -2329,22 +2329,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                             classes: {},
                                                                                             children: [],
                                                                                             parent: Some(
-                                                                                                0x0000559fa1ed3510,
+                                                                                                0x00005650345c2510,
                                                                                             ),
                                                                                         },
                                                                                     ],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed2780,
+                                                                                        0x00005650345c1780,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed2160,
+                                                                                0x00005650345c1160,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed2010,
+                                                                        0x00005650345c1010,
                                                                     ),
                                                                 },
                                                                 NaiveHtmlNode {
@@ -2369,32 +2369,32 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                                     classes: {},
                                                                                     children: [],
                                                                                     parent: Some(
-                                                                                        0x0000559fa1ed3d40,
+                                                                                        0x00005650345c2d40,
                                                                                     ),
                                                                                 },
                                                                             ],
                                                                             parent: Some(
-                                                                                0x0000559fa1ed21f0,
+                                                                                0x00005650345c11f0,
                                                                             ),
                                                                         },
                                                                     ],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed2010,
+                                                                        0x00005650345c1010,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed1f50,
+                                                                0x00005650345c0f50,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed1d70,
+                                                        0x00005650345c0d70,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1ed18d0,
+                                                0x00005650345c08d0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -2406,7 +2406,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1ed18d0,
+                                                0x00005650345c08d0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -2422,17 +2422,17 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                     classes: {},
                                                     children: [],
                                                     parent: Some(
-                                                        0x0000559fa1ed1e90,
+                                                        0x00005650345c0e90,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1ed18d0,
+                                                0x00005650345c08d0,
                                             ),
                                         },
                                     ],
                                     parent: Some(
-                                        0x0000559fa1e6b360,
+                                        0x000056503455a360,
                                     ),
                                 },
                                 NaiveHtmlNode {
@@ -2448,7 +2448,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                             classes: {},
                                             children: [],
                                             parent: Some(
-                                                0x0000559fa1ed1960,
+                                                0x00005650345c0960,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -2472,12 +2472,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             classes: {},
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1ed41c0,
+                                                                0x00005650345c31c0,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed4090,
+                                                        0x00005650345c3090,
                                                     ),
                                                 },
                                                 NaiveHtmlNode {
@@ -2495,7 +2495,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             classes: {},
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1ed4250,
+                                                                0x00005650345c3250,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -2511,12 +2511,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed44a0,
+                                                                        0x00005650345c34a0,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed4250,
+                                                                0x00005650345c3250,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -2526,22 +2526,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             classes: {},
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1ed4250,
+                                                                0x00005650345c3250,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed4090,
+                                                        0x00005650345c3090,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1ed1960,
+                                                0x00005650345c0960,
                                             ),
                                         },
                                     ],
                                     parent: Some(
-                                        0x0000559fa1e6b360,
+                                        0x000056503455a360,
                                     ),
                                 },
                                 NaiveHtmlNode {
@@ -2579,12 +2579,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed4960,
+                                                                        0x00005650345c3960,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed4880,
+                                                                0x00005650345c3880,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -2600,12 +2600,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed49f0,
+                                                                        0x00005650345c39f0,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed4880,
+                                                                0x00005650345c3880,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -2621,12 +2621,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed4a80,
+                                                                        0x00005650345c3a80,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed4880,
+                                                                0x00005650345c3880,
                                                             ),
                                                         },
                                                         NaiveHtmlNode {
@@ -2642,22 +2642,22 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                                     classes: {},
                                                                     children: [],
                                                                     parent: Some(
-                                                                        0x0000559fa1ed4b10,
+                                                                        0x00005650345c3b10,
                                                                     ),
                                                                 },
                                                             ],
                                                             parent: Some(
-                                                                0x0000559fa1ed4880,
+                                                                0x00005650345c3880,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed4730,
+                                                        0x00005650345c3730,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1ed19f0,
+                                                0x00005650345c09f0,
                                             ),
                                         },
                                         NaiveHtmlNode {
@@ -2673,7 +2673,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                     classes: {},
                                                     children: [],
                                                     parent: Some(
-                                                        0x0000559fa1ed47c0,
+                                                        0x00005650345c37c0,
                                                     ),
                                                 },
                                                 NaiveHtmlNode {
@@ -2689,12 +2689,12 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             classes: {},
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1ed4fe0,
+                                                                0x00005650345c3fe0,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed47c0,
+                                                        0x00005650345c37c0,
                                                     ),
                                                 },
                                                 NaiveHtmlNode {
@@ -2704,7 +2704,7 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                     classes: {},
                                                     children: [],
                                                     parent: Some(
-                                                        0x0000559fa1ed47c0,
+                                                        0x00005650345c37c0,
                                                     ),
                                                 },
                                                 NaiveHtmlNode {
@@ -2720,27 +2720,27 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                                             classes: {},
                                                             children: [],
                                                             parent: Some(
-                                                                0x0000559fa1ed5100,
+                                                                0x00005650345c4100,
                                                             ),
                                                         },
                                                     ],
                                                     parent: Some(
-                                                        0x0000559fa1ed47c0,
+                                                        0x00005650345c37c0,
                                                     ),
                                                 },
                                             ],
                                             parent: Some(
-                                                0x0000559fa1ed19f0,
+                                                0x00005650345c09f0,
                                             ),
                                         },
                                     ],
                                     parent: Some(
-                                        0x0000559fa1e6b360,
+                                        0x000056503455a360,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a760,
+                                0x0000565034559760,
                             ),
                         },
                         NaiveHtmlNode {
@@ -2756,28 +2756,28 @@ warning: `css-bitvector-compiler` (bin "naive") generated 4 warnings
                                     classes: {},
                                     children: [],
                                     parent: Some(
-                                        0x0000559fa1e6b3f0,
+                                        0x000056503455a3f0,
                                     ),
                                 },
                             ],
                             parent: Some(
-                                0x0000559fa1e6a760,
+                                0x0000565034559760,
                             ),
                         },
                     ],
                     parent: Some(
-                        0x0000559fa1e6a5f0,
+                        0x00005650345595f0,
                     ),
                 },
             ],
             parent: Some(
-                0x00007fff7e1a4fb8,
+                0x00007fff263294b8,
             ),
         },
     ],
     parent: None,
 }
-Descendant { selectors: [Class("fl"), Type("a")] } -> []
+Descendant { selectors: [Class("fl"), Type("a")] } -> [431, 433]
 Descendant { selectors: [Class("gac_m"), Type("td")] } -> []
 Descendant { selectors: [Class("gbem"), Class("gbgs"), Class("gbmab")] } -> []
 Descendant { selectors: [Class("gbem"), Class("gbgs"), Class("gbmac")] } -> []
@@ -2796,10 +2796,10 @@ Descendant { selectors: [Class("gbpd"), Class("gbps")] } -> []
 Descendant { selectors: [Class("gbpdjs"), Class("gbto"), Class("gbm")] } -> []
 Descendant { selectors: [Class("gbpmc"), Class("gbpmtc")] } -> []
 Descendant { selectors: [Class("gbrtl"), Class("gbm")] } -> []
-Descendant { selectors: [Class("gbsb"), Class("gbsbb")] } -> []
-Descendant { selectors: [Class("gbsbis"), Class("gbsbb")] } -> []
-Descendant { selectors: [Class("gbsbis"), Class("gbsbt")] } -> []
-Descendant { selectors: [Class("gbtb"), Class("gbts")] } -> []
+Descendant { selectors: [Class("gbsb"), Class("gbsbb")] } -> [246]
+Descendant { selectors: [Class("gbsbis"), Class("gbsbb")] } -> [246]
+Descendant { selectors: [Class("gbsbis"), Class("gbsbt")] } -> [244]
+Descendant { selectors: [Class("gbtb"), Class("gbts")] } -> [275]
 Descendant { selectors: [Class("gbto"), Class("gbg4a"), Class("gbts")] } -> []
 Descendant { selectors: [Class("gbto"), Class("gbgt"), Class("gbtb2")] } -> []
 Descendant { selectors: [Class("gbto"), Class("gbmac")] } -> []
@@ -2808,14 +2808,14 @@ Descendant { selectors: [Class("gbto"), Id("gbgs5")] } -> []
 Descendant { selectors: [Class("gbto"), Id("gbi4id")] } -> []
 Descendant { selectors: [Class("gbto"), Id("gbi5")] } -> []
 Descendant { selectors: [Class("gbto"), Id("gbs")] } -> []
-Descendant { selectors: [Class("gbz0l"), Class("gbtb2")] } -> []
-Descendant { selectors: [Class("gbz0l"), Class("gbts")] } -> []
-Descendant { selectors: [Class("gbzt"), Class("gbts")] } -> []
+Descendant { selectors: [Class("gbz0l"), Class("gbtb2")] } -> [62]
+Descendant { selectors: [Class("gbz0l"), Class("gbts")] } -> [64, 66]
+Descendant { selectors: [Class("gbzt"), Class("gbts")] } -> [64, 66, 75, 77, 86, 88, 97, 99, 108, 110, 119, 121, 130, 132, 141, 143]
 Descendant { selectors: [Class("gssb_a"), Type("td")] } -> []
 Descendant { selectors: [Class("gssb_i"), Class("gss_ifl")] } -> []
-Descendant { selectors: [Class("sblc"), Type("a")] } -> []
-Descendant { selectors: [Id("SIvCob"), Type("a")] } -> []
-Descendant { selectors: [Id("WqQANb"), Type("a")] } -> []
+Descendant { selectors: [Class("sblc"), Type("a")] } -> [431, 433]
+Descendant { selectors: [Id("SIvCob"), Type("a")] } -> [452, 454]
+Descendant { selectors: [Id("WqQANb"), Type("a")] } -> [463, 465, 466, 468, 469, 471, 472, 474]
 Descendant { selectors: [Id("gb"), Id("gbprc")] } -> []
 Descendant { selectors: [Id("gbd4"), Class("gbmc")] } -> []
 Descendant { selectors: [Id("gbd4"), Class("gbmcc")] } -> []
@@ -2823,9 +2823,9 @@ Descendant { selectors: [Id("gbd4"), Class("gbmh")] } -> []
 Descendant { selectors: [Id("gbd4"), Class("gbmtc")] } -> []
 Descendant { selectors: [Id("gbd4"), Class("gbpc")] } -> []
 Descendant { selectors: [Id("gbd4"), Class("gbpgs"), Class("gbmtc")] } -> []
-Descendant { selectors: [Id("gbg"), Class("gbgt")] } -> []
-Descendant { selectors: [Id("gbg"), Class("gbm")] } -> []
-Descendant { selectors: [Id("gbg"), Class("gbtcb")] } -> []
+Descendant { selectors: [Id("gbg"), Class("gbgt")] } -> [259, 265, 267, 270, 272, 279, 286, 288, 291]
+Descendant { selectors: [Id("gbg"), Class("gbm")] } -> [296, 300, 302, 305, 307, 310, 311, 313, 315, 317, 320]
+Descendant { selectors: [Id("gbg"), Class("gbtcb")] } -> [253]
 Descendant { selectors: [Id("gbmpal"), Class("gbqfbb")] } -> []
 Descendant { selectors: [Id("gbmpas"), Class("gbmt")] } -> []
 Descendant { selectors: [Id("gbmpasb"), Class("gbps")] } -> []
@@ -2837,8 +2837,8 @@ Descendant { selectors: [Id("gbprc"), Class("gbmc")] } -> []
 Descendant { selectors: [Id("gbprc"), Class("gbprcbc")] } -> []
 Descendant { selectors: [Id("gbprca"), Class("gbmab")] } -> []
 Descendant { selectors: [Id("gbprca"), Class("gbmac")] } -> []
-Descendant { selectors: [Id("gbz"), Class("gbm")] } -> []
-Descendant { selectors: [Id("gbz"), Class("gbtcb")] } -> []
+Descendant { selectors: [Id("gbz"), Class("gbm")] } -> [165, 169, 172, 175, 177, 181, 182, 184, 188, 189, 191, 195, 196, 198, 202, 203, 205, 209, 210, 212, 216, 217, 219, 223, 224, 226, 230, 231, 233, 235, 237, 240, 241, 243, 244, 246]
+Descendant { selectors: [Id("gbz"), Class("gbtcb")] } -> [51]
 Descendant { selectors: [Type("a"), Class("gbiba")] } -> []
 Descendant { selectors: [Type("a"), Class("gspqs_a")] } -> []
 Descendant { selectors: [Type("a"), Class("gssb_j")] } -> []
