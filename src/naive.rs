@@ -284,6 +284,21 @@ fn parse_trace() -> Vec<LayoutFrame> {
     frames
 }
 
+fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
+    command_data
+        .get("path")
+        .and_then(|p| p.as_array())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|v| v.as_u64())
+                .map(|v| v as usize)
+                .collect::<Vec<_>>()
+        })
+        .unwrap()
+}
+
+
+
 // 分离 3 种不同的 node, naive , bit, tri
 // 对每种 node, 实现一个公共的 trait, recompute, dirtied.
 // recompute 是实际做计算的
