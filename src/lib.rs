@@ -13,17 +13,12 @@ pub fn rdtsc() -> u64 {
     }
     #[cfg(not(target_arch = "x86_64"))]
     {
-        // 对于非 x86_64 架构，回退到 nanos
         use std::time::{SystemTime, UNIX_EPOCH};
         SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos() as u64
     }
-}
-
-pub fn cycles_to_duration(start_cycles: u64, end_cycles: u64) -> u64 {
-    end_cycles.saturating_sub(start_cycles)
 }
 
 /// whether a part of input is: 1, 0, or unused
@@ -43,8 +38,8 @@ pub enum OState {
 // Export BitVector
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BitVector {
-    pub bits: Vec<u8>,
-    pub capacity: usize, // Total number of bits this vector can hold
+    pub bits: Vec<bool>,
+    pub capacity: usize,
 }
 
 impl Default for BitVector {
@@ -56,151 +51,40 @@ impl Default for BitVector {
 impl BitVector {
     pub fn new() -> Self {
         BitVector {
-            bits: vec![0; 32], // Start with 256 bits (32 * 8)
+            bits: vec![false; 256],
             capacity: 256,
         }
     }
 
     pub fn with_capacity(capacity: usize) -> Self {
-        let num_bytes = (capacity + 7) / 8; // Round up to nearest byte
         BitVector {
-            bits: vec![0; num_bytes],
+            bits: vec![false; capacity],
             capacity,
         }
     }
 
-    pub fn from_u64(bits: u64) -> Self {
-        let mut bv = Self::with_capacity(64);
-        // Convert u64 to bytes (little-endian)
-        for i in 0..8 {
-            bv.bits[i] = ((bits >> (i * 8)) & 0xFF) as u8;
-        }
-        bv
-    }
-
     fn ensure_capacity(&mut self, pos: usize) {
         if pos >= self.capacity {
-            let new_capacity = ((pos + 8) / 8) * 8; // Round up to nearest 8 bits
-            let new_len = (new_capacity + 7) / 8;
-
-            self.bits.resize(new_len, 0);
-            self.capacity = new_capacity;
+            self.bits.resize(pos, Default::default());
+            self.capacity = pos;
         }
     }
 
     pub fn set_bit(&mut self, pos: usize) {
         self.ensure_capacity(pos);
-        let byte_index = pos / 8;
-        let bit_index = pos % 8;
-        self.bits[byte_index] |= 1u8 << bit_index;
+        self.bits[pos] |= true;
     }
 
     pub fn clear_bit(&mut self, pos: usize) {
-        if pos >= self.capacity {
-            return; // Bit is already 0 if out of capacity
-        }
-        let byte_index = pos / 8;
-        let bit_index = pos % 8;
-        if byte_index < self.bits.len() {
-            self.bits[byte_index] &= !(1u8 << bit_index);
-        }
+        self.bits[pos] = false;
     }
 
     pub fn is_bit_set(&self, pos: usize) -> bool {
-        if pos >= self.capacity {
-            return false;
-        }
-        let byte_index = pos / 8;
-        let bit_index = pos % 8;
-        if byte_index < self.bits.len() {
-            (self.bits[byte_index] & (1u8 << bit_index)) != 0
-        } else {
-            false
-        }
-    }
-
-    pub fn or_assign(&mut self, other: &BitVector) {
-        // Ensure we have capacity for all bits in other
-        if !other.bits.is_empty() {
-            let max_bit = (other.bits.len() * 8) - 1;
-            self.ensure_capacity(max_bit);
-        }
-
-        let min_len = std::cmp::min(self.bits.len(), other.bits.len());
-        for i in 0..min_len {
-            self.bits[i] |= other.bits[i];
-        }
-    }
-
-    pub fn and(&self, other: &BitVector) -> BitVector {
-        let mut result = BitVector::new();
-        let min_len = std::cmp::min(self.bits.len(), other.bits.len());
-
-        if min_len > 0 {
-            result.bits.resize(min_len, 0);
-            for i in 0..min_len {
-                result.bits[i] = self.bits[i] & other.bits[i];
-            }
-        }
-
-        result
+        self.bits[pos]
     }
 
     pub fn is_empty(&self) -> bool {
-        self.bits.iter().all(|&byte| byte == 0)
-    }
-
-    pub fn as_u64(&self) -> u64 {
-        let mut result = 0u64;
-        for (i, &byte) in self.bits.iter().take(8).enumerate() {
-            result |= (byte as u64) << (i * 8);
-        }
-        result
-    }
-
-    pub fn has_any_bits(&self, mask: &BitVector) -> bool {
-        let min_len = std::cmp::min(self.bits.len(), mask.bits.len());
-        for i in 0..min_len {
-            if (self.bits[i] & mask.bits[i]) != 0 {
-                return true;
-            }
-        }
-        false
-    }
-
-    pub fn count_set_bits(&self) -> usize {
-        self.bits
-            .iter()
-            .map(|&byte| byte.count_ones() as usize)
-            .sum()
-    }
-
-    pub fn first_set_bit(&self) -> Option<usize> {
-        for (byte_idx, &byte) in self.bits.iter().enumerate() {
-            if byte != 0 {
-                return Some(byte_idx * 8 + byte.trailing_zeros() as usize);
-            }
-        }
-        None
-    }
-}
-
-impl std::fmt::Binary for BitVector {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // Display first 64 bits for compatibility, but indicate if there are more
-        if self.bits.is_empty() {
-            write!(f, "0")
-        } else {
-            // Show first 8 bytes (64 bits) in binary
-            let bits_to_show = std::cmp::min(8, self.bits.len());
-            for i in (0..bits_to_show).rev() {
-                write!(f, "{:08b}", self.bits[i])?;
-            }
-            if self.bits.len() > 8 {
-                write!(f, "...")?;
-            }
-            Ok(())
-        }
+        self.bits.iter().all(|&byte| !byte)
     }
 }
 
@@ -667,24 +551,35 @@ struct TriVectorCache {
     result: BitVector,
 }
 //template<typename C:Cache>
-struct HtmlState {
-    node: scraper::Node,
-}
-struct NaiveHtmlNode {
-    html: HtmlState,
+
+/// this is the common part represent the info from the json file.
+struct BaseHtmlNode {
+    pub tag_name: String,
+    pub id: Option<String>,
+    pub classes: HashSet<String>,
+    pub children: Vec<BaseHtmlNode>,
+    pub parent: Option<*mut BaseHtmlNode>,
 }
 
+struct NaiveHtmlNode {
+    node: BaseHtmlNode,
+}
+
+impl NaiveHtmlNode {}
+
 struct BitVectorHtmlNode {
-    html: HtmlState,
+    node: BaseHtmlNode,
     cache: BitVectorCache,
 }
 
 struct TriVectorHtmlNode {
-    html: HtmlState,
+    node: BaseHtmlNode,
 }
 
 impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
-    fn dirtied(dirtied_node: &mut NaiveHtmlNode) {}
+    fn dirtied(dirtied_node: &mut NaiveHtmlNode) {
+        // dirtied_node
+    }
     fn recompute(root: &mut NaiveHtmlNode) {}
 }
 impl Cache<BitVectorHtmlNode> for BitVectorHtmlNode {
