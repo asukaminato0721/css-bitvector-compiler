@@ -242,7 +242,47 @@ impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
     }
 }
 
-// Maybe called Cached?
+#[derive(Debug, Clone)]
+pub struct LayoutFrame {
+    pub frame_id: usize,
+    pub command_name: String,
+    pub command_data: serde_json::Value,
+}
+
+fn parse_trace() -> Vec<LayoutFrame> {
+    let content = std::fs::read_to_string(format!(
+        "css-gen-op/{0}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .expect("Failed to read web layout trace file");
+
+    let mut frames = Vec::new();
+    for (frame_id, line) in content.lines().enumerate() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        let Ok(command_data) = serde_json::from_str::<serde_json::Value>(line) else {
+            eprintln!("Failed to parse frame {}: {}", frame_id, line);
+            continue;
+        };
+
+        let command_name = command_data["name"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        if command_name.starts_with("layout_") {
+            continue;
+        }
+
+        frames.push(LayoutFrame {
+            frame_id,
+            command_name,
+            command_data,
+        });
+    }
+
+    frames
+}
 
 // 分离 3 种不同的 node, naive , bit, tri
 // 对每种 node, 实现一个公共的 trait, recompute, dirtied.
@@ -261,4 +301,6 @@ fn main() {
     dbg!(&bit);
     //  dbg!(&css);
     bit.print_css_matches(&css);
+    let trace = parse_trace();
+    dbg!(trace);
 }

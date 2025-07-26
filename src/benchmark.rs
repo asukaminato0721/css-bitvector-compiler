@@ -274,7 +274,6 @@ fn clear_dirty_flags(node: &mut HtmlNode) {
 }
 
 pub fn run_benchmark() -> Vec<BenchResult> {
-
     let frames = parse_web_layout_trace(&format!(
         "css-gen-op/{}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
