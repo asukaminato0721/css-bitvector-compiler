@@ -584,11 +584,7 @@ impl HtmlNode {
     }
 
     /// Set the complete BitVector-based parent state cache
-    pub fn set_parent_state_cache_bitvector(
-        &mut self,
-        bits_read: BitVector,
-        values_read: BitVector,
-    ) {
+    pub fn set_parent_state_bitvector(&mut self, bits_read: BitVector, values_read: BitVector) {
         self.parent_bits_read = Some(bits_read);
         self.parent_values_read = Some(values_read);
     }

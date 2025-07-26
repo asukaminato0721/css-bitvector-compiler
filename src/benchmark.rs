@@ -18,10 +18,10 @@ pub struct WebLayoutFrameResult {
     pub bitvector_cycles: u64,
     pub trivector_cycles: u64,
     pub speedup: f64,
-    pub bitvector_cache_hits: usize,
-    pub bitvector_cache_misses: usize,
-    pub trivector_cache_hits: usize,
-    pub trivector_cache_misses: usize,
+    pub bitvector_hits: usize,
+    pub bitvector_misses: usize,
+    pub trivector_hits: usize,
+    pub trivector_misses: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -389,8 +389,7 @@ fn benchmark_accumulated_modifications(
 
     // 4. Measure the time taken for the BitVector layout to process only the dirty nodes.
     let start_bitvector = rdtsc();
-    let (_, bitvector_cache_hits, bitvector_cache_misses) =
-        process_tree_bitvector(&mut tree_bitvector);
+    let (_, bitvector_hits, bitvector_misses) = process_tree_bitvector(&mut tree_bitvector);
     let end_bitvector = rdtsc();
     let bitvector_cycles = end_bitvector - start_bitvector;
 
@@ -410,8 +409,7 @@ fn benchmark_accumulated_modifications(
 
     // 4. Measure the time taken for the TriVector layout.
     let start_trivector = rdtsc();
-    let (_, trivector_cache_hits, trivector_cache_misses) =
-        process_tree_trivector(&mut tree_trivector);
+    let (_, trivector_hits, trivector_misses) = process_tree_trivector(&mut tree_trivector);
     let end_trivector = rdtsc();
     let trivector_cycles = end_trivector - start_trivector;
 
@@ -445,10 +443,10 @@ fn benchmark_accumulated_modifications(
         bitvector_cycles,
         trivector_cycles,
         speedup,
-        bitvector_cache_hits,
-        bitvector_cache_misses,
-        trivector_cache_hits,
-        trivector_cache_misses,
+        bitvector_hits,
+        bitvector_misses,
+        trivector_hits,
+        trivector_misses,
     }
 }
 
@@ -481,10 +479,10 @@ fn print_web_layout_trace_summary(results: &[WebLayoutFrameResult]) {
         .filter(|r| (r.speedup - 1.0).abs() < 0.1)
         .count();
 
-    let total_cache_hits: usize = results.iter().map(|r| r.bitvector_cache_hits).sum();
+    let total_cache_hits: usize = results.iter().map(|r| r.bitvector_hits).sum();
     let total_cache_attempts: usize = results
         .iter()
-        .map(|r| r.bitvector_cache_hits + r.bitvector_cache_misses)
+        .map(|r| r.bitvector_hits + r.bitvector_misses)
         .sum();
     let overall_cache_hit_rate = if total_cache_attempts > 0 {
         100.0 * total_cache_hits as f64 / total_cache_attempts as f64
@@ -539,10 +537,10 @@ fn generate_web_layout_csv(results: &[WebLayoutFrameResult]) -> String {
             result.bitvector_cycles,
             result.trivector_cycles,
             result.speedup,
-            result.bitvector_cache_hits,
-            result.bitvector_cache_misses,
-            result.trivector_cache_hits,
-            result.trivector_cache_misses
+            result.bitvector_hits,
+            result.bitvector_misses,
+            result.trivector_hits,
+            result.trivector_misses
         ));
     }
 
