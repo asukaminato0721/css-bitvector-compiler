@@ -27,7 +27,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut current_selector: Option<SimpleSelector> = None;
 
     while !parser.is_exhausted() {
-        let Ok(token) = parser.next() else { 
+        let Ok(token) = parser.next() else {
             break;
         };
 
@@ -46,7 +46,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                             });
                         }
                     }
-                    
+
                     selector_chain = Vec::new();
                     expecting_rule_body = false;
                 }
@@ -60,33 +60,30 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
             match token {
                 Token::Ident(name) => {
                     let type_name = name.to_string().to_lowercase();
-                
+
                     if let Some(prev_selector) = current_selector.take() {
                         selector_chain.push(prev_selector);
                     }
-                    
+
                     current_selector = Some(SimpleSelector::Type(type_name));
                 }
                 Token::IDHash(id) => {
-                
                     if let Some(prev_selector) = current_selector.take() {
                         selector_chain.push(prev_selector);
                     }
-                    
+
                     current_selector = Some(SimpleSelector::Id(id.to_string()));
                 }
                 Token::Delim('.') => {
                     if let Ok(Token::Ident(class_name)) = parser.next() {
-                    
                         if let Some(prev_selector) = current_selector.take() {
                             selector_chain.push(prev_selector);
                         }
-                        
+
                         current_selector = Some(SimpleSelector::Class(class_name.to_string()));
                     }
                 }
                 Token::CurlyBracketBlock => {
-                
                     if let Some(selector) = current_selector.take() {
                         if selector_chain.is_empty() {
                             rules.push(CssRule::Simple(selector));

@@ -1,6 +1,116 @@
+use cssparser::{Parser, ParserInput, Token};
 use std::collections::HashSet;
 
 use css_bitvector_compiler::Cache;
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum CssRule {
+    Simple(SimpleSelector),
+    Compound { selectors: Vec<SimpleSelector> },
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum SimpleSelector {
+    Type(String),
+    Class(String),
+    Id(String),
+}
+
+fn parse_css(css_content: &str) -> Vec<CssRule> {
+    let mut rules = Vec::new();
+    let mut input = ParserInput::new(css_content);
+    let mut parser = Parser::new(&mut input);
+
+    let mut expecting_rule_body = false;
+    let mut selector_chain: Vec<SimpleSelector> = Vec::new();
+    let mut current_selector: Option<SimpleSelector> = None;
+
+    while !parser.is_exhausted() {
+        let Ok(token) = parser.next() else {
+            break;
+        };
+
+        if expecting_rule_body {
+            match token {
+                Token::CurlyBracketBlock => {
+                    if let Some(selector) = current_selector.take() {
+                        selector_chain.push(selector);
+                    }
+                    if !selector_chain.is_empty() {
+                        if selector_chain.len() == 1 {
+                            rules.push(CssRule::Simple(selector_chain.into_iter().next().unwrap()));
+                        } else {
+                            rules.push(CssRule::Compound {
+                                selectors: selector_chain,
+                            });
+                        }
+                    }
+
+                    selector_chain = Vec::new();
+                    expecting_rule_body = false;
+                }
+                _ => {
+                    expecting_rule_body = false;
+                    current_selector = None;
+                    selector_chain.clear();
+                }
+            }
+        } else {
+            match token {
+                Token::Ident(name) => {
+                    let type_name = name.to_string().to_lowercase();
+
+                    if let Some(prev_selector) = current_selector.take() {
+                        selector_chain.push(prev_selector);
+                    }
+
+                    current_selector = Some(SimpleSelector::Type(type_name));
+                }
+                Token::IDHash(id) => {
+                    if let Some(prev_selector) = current_selector.take() {
+                        selector_chain.push(prev_selector);
+                    }
+
+                    current_selector = Some(SimpleSelector::Id(id.to_string()));
+                }
+                Token::Delim('.') => {
+                    if let Ok(Token::Ident(class_name)) = parser.next() {
+                        if let Some(prev_selector) = current_selector.take() {
+                            selector_chain.push(prev_selector);
+                        }
+
+                        current_selector = Some(SimpleSelector::Class(class_name.to_string()));
+                    }
+                }
+                Token::CurlyBracketBlock => {
+                    if let Some(selector) = current_selector.take() {
+                        if selector_chain.is_empty() {
+                            rules.push(CssRule::Simple(selector));
+                        } else {
+                            selector_chain.push(selector);
+                            rules.push(CssRule::Compound {
+                                selectors: selector_chain,
+                            });
+                        }
+                    }
+                    selector_chain = Vec::new();
+                }
+                Token::WhiteSpace(_) => {
+                    if current_selector.is_some() {
+                        expecting_rule_body = true;
+                    }
+                }
+                _ => {
+                    current_selector = None;
+                    selector_chain.clear();
+                }
+            }
+        }
+    }
+
+    rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
+    rules.dedup();
+    rules
+}
 
 // note: do nt pull out bitvector result; - absvector will change that laters
 // to other type struct NaiveCache {
@@ -86,4 +196,12 @@ fn main() {
     let mut bit = NaiveHtmlNode::default();
     bit.init();
     dbg!(bit);
+    let css = parse_css(
+        &std::fs::read_to_string(format!(
+            "css-gen-op/{0}/{0}.css",
+            std::env::var("WEBSITE_NAME").unwrap(),
+        ))
+        .unwrap(),
+    );
+    dbg!(css);
 }
