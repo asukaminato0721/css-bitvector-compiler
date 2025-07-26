@@ -132,7 +132,7 @@ fn parse_web_layout_trace(file_path: &str) -> Vec<LayoutFrame> {
 }
 static COMMAND: OnceLock<std::sync::Mutex<HashSet<String>>> =
     OnceLock::<std::sync::Mutex<HashSet<String>>>::new();
-fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize {
+fn apply_frame(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize {
     match frame.command_name.as_str() {
         "init" => {
             if let Some(node_data) = frame.command_data.get("node") {
@@ -143,10 +143,6 @@ fn apply_frame_modifications(tree: &mut HtmlNode, frame: &LayoutFrame) -> usize 
                 }
             }
             0
-        }
-        "layout_init" => {
-            tree.mark_dirty();
-            count_nodes(tree)
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
@@ -288,7 +284,7 @@ pub fn run_benchmark() -> Vec<BenchResult> {
     // Initialize tree with first init command if present
     if let Some(init_frame) = frames.first() {
         if init_frame.command_name == "init" {
-            apply_frame_modifications(&mut current_layout_tree, init_frame);
+            apply_frame(&mut current_layout_tree, init_frame);
             println!(
                 "✅ Initialized layout tree with {} nodes",
                 count_nodes(&current_layout_tree)
@@ -301,7 +297,7 @@ pub fn run_benchmark() -> Vec<BenchResult> {
             "init" => {
                 // Already handled above
                 if i > 0 {
-                    apply_frame_modifications(&mut current_layout_tree, frame);
+                    apply_frame(&mut current_layout_tree, frame);
                 }
             }
             "recalculate" => {
@@ -321,7 +317,7 @@ pub fn run_benchmark() -> Vec<BenchResult> {
 
                 // Now, apply the modifications to the main tree to advance its state for the next frames.
                 for pending_frame in &pending_modifications {
-                    apply_frame_modifications(&mut current_layout_tree, pending_frame);
+                    apply_frame(&mut current_layout_tree, pending_frame);
                 }
 
                 // Clear pending modifications after recalculate
@@ -362,10 +358,10 @@ fn benchmark_accumulated_modifications(
     clear_dirty_flags(&mut tree_bitvector); // Reset dirty flags after warm-up.
 
     // 3. Apply the pending modifications. This is what we actually want to measure.
-    // The `apply_frame_modifications` function will mark nodes as dirty.
+    // The `apply_frame` function will mark nodes as dirty.
     let mut total_nodes_affected = 0;
     for modification in pending_modifications {
-        total_nodes_affected += apply_frame_modifications(&mut tree_bitvector, modification);
+        total_nodes_affected += apply_frame(&mut tree_bitvector, modification);
     }
 
     // 4. Measure the time taken for the BitVector layout to process only the dirty nodes.
@@ -385,7 +381,7 @@ fn benchmark_accumulated_modifications(
 
     // 3. Apply the same modifications to it to ensure it has the identical final structure.
     for modification in pending_modifications {
-        apply_frame_modifications(&mut tree_trivector, modification);
+        apply_frame(&mut tree_trivector, modification);
     }
 
     // 4. Measure the time taken for the TriVector layout.
