@@ -5,24 +5,24 @@ use css_bitvector_compiler::Cache;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum CssRule {
-    Simple(SimpleSelector),
-    Descendant { selectors: Vec<SimpleSelector> },
+    Simple(Selector),
+    Descendant { selectors: Vec<Selector> },
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum SimpleSelector {
+enum Selector {
     Type(String),
     Class(String),
     Id(String),
 }
 
-fn parse_css(css_content: &str) -> Vec<CssRule> {
+pub fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
     let mut expecting_rule_body = false;
-    let mut selector_chain: Vec<SimpleSelector> = Vec::new();
-    let mut current_selector: Option<SimpleSelector> = None;
+    let mut selector_chain: Vec<Selector> = Vec::new();
+    let mut current_selector: Option<Selector> = None;
 
     while let Ok(token) = parser.next() {
         if expecting_rule_body {
@@ -59,14 +59,14 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         selector_chain.push(prev_selector);
                     }
 
-                    current_selector = Some(SimpleSelector::Type(type_name));
+                    current_selector = Some(Selector::Type(type_name));
                 }
                 Token::IDHash(id) => {
                     if let Some(prev_selector) = current_selector.take() {
                         selector_chain.push(prev_selector);
                     }
 
-                    current_selector = Some(SimpleSelector::Id(id.to_string()));
+                    current_selector = Some(Selector::Id(id.to_string()));
                 }
                 Token::Delim('.') => {
                     if let Ok(Token::Ident(class_name)) = parser.next() {
@@ -74,7 +74,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                             selector_chain.push(prev_selector);
                         }
 
-                        current_selector = Some(SimpleSelector::Class(class_name.to_string()));
+                        current_selector = Some(Selector::Class(class_name.to_string()));
                     }
                 }
                 Token::CurlyBracketBlock => {
@@ -121,7 +121,7 @@ impl NaiveHtmlNode {
             return;
         }
         self.children[path[0]].add_by_path(&path[1..], node);
-        self.fix_parent_pointers();  // TODO: optimize
+        self.fix_parent_pointers(); // TODO: optimize
     }
     fn remove_by_path(&mut self, path: &[usize]) {
         assert!(!path.is_empty());
@@ -170,11 +170,11 @@ impl NaiveHtmlNode {
             child.fix_parent_pointers();
         }
     }
-    fn matches_simple_selector(&self, selector: &SimpleSelector) -> bool {
+    fn matches_simple_selector(&self, selector: &Selector) -> bool {
         match selector {
-            SimpleSelector::Type(tag) => self.tag_name.to_lowercase() == tag.to_lowercase(),
-            SimpleSelector::Class(class) => self.classes.contains(class),
-            SimpleSelector::Id(id) => {
+            Selector::Type(tag) => self.tag_name.to_lowercase() == tag.to_lowercase(),
+            Selector::Class(class) => self.classes.contains(class),
+            Selector::Id(id) => {
                 if let Some(ref html_id) = self.html_id {
                     html_id == id
                 } else {
@@ -183,7 +183,7 @@ impl NaiveHtmlNode {
             }
         }
     }
-    fn matches_descendant_selector(&self, selectors: &[SimpleSelector]) -> bool {
+    fn matches_descendant_selector(&self, selectors: &[Selector]) -> bool {
         match (self.parent, selectors.len()) {
             (_, 0) => true,
             (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
@@ -288,7 +288,6 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
 fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     match frame.command_name.as_str() {
         "init" => {
-           
             dbg!(frame.frame_id, frame.command_name.as_str());
             *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers();
@@ -332,7 +331,7 @@ fn main() {
         ))
         .unwrap(),
     );
-   // dbg!(&naive);
+    // dbg!(&naive);
     //  dbg!(&css);
     let trace = parse_trace();
 
@@ -340,5 +339,5 @@ fn main() {
         apply_frame(&mut naive, &i);
     }
     naive.print_css_matches(&css);
-  //  dbg!(trace);
+    //  dbg!(trace);
 }
