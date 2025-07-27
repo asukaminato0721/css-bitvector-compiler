@@ -237,7 +237,7 @@ impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
 }
 
 #[derive(Debug, Clone)]
-pub struct LayoutFrame {
+struct LayoutFrame {
     pub frame_id: usize,
     pub command_name: String,
     pub command_data: serde_json::Value,
@@ -288,12 +288,13 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
 fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     match frame.command_name.as_str() {
         "init" => {
-            dbg!(frame.command_name.as_str());
+           
+            dbg!(frame.frame_id, frame.command_name.as_str());
             *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers();
         }
         "add" => {
-            dbg!(frame.command_name.as_str());
+            dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             if path.is_empty() {
                 return;
@@ -302,18 +303,18 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             tree.fix_parent_pointers(); // TODO: optimize
         }
         "replace_value" | "insert_value" => {
-            dbg!(frame.command_name.as_str());
+            dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "recalculate" => {
-            dbg!(frame.command_name.as_str());
+            dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "remove" => {
-            dbg!(frame.command_name.as_str());
+            dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             tree.remove_by_path(&path);
         }
         _ => {
-            dbg!(frame.command_name.as_str());
+            dbg!(frame.frame_id, frame.command_name.as_str());
         }
     }
 }

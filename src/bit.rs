@@ -2,7 +2,6 @@ use std::collections::HashSet;
 
 use css_bitvector_compiler::Cache;
 
-//}
 #[derive(Debug, Default)]
 struct BitVectorCache {
     dirtynode: bool,
