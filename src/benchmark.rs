@@ -467,8 +467,6 @@ fn print_web_layout_trace_summary(results: &[BenchResult]) {
         0.0
     };
 
-    println!("\n🌐 Web Browser Layout Trace Benchmark Summary:");
-    println!("════════════════════════════════════════════════");
     println!("Total recalculate data points: {}", total_frames);
     println!(
         "Average speedup (TriVector vs BitVector): {:.3}x",

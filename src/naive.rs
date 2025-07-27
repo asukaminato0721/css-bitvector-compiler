@@ -114,51 +114,53 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
 // bitvector result;
 //}
 impl NaiveHtmlNode {
-    fn init(&mut self) {
-        let s = std::fs::read_to_string(format!(
-            "css-gen-op/{}/command.json",
-            std::env::var("WEBSITE_NAME").unwrap()
-        ))
-        .unwrap();
-        let first_line = s.lines().next().unwrap();
-        let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
-        *self = self.json_dom_to_html_node(&trace_data["node"]);
-        self.fix_parent_pointers();
+    fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value) {
+        assert!(!path.is_empty());
+        if path.len() == 1 {
+            self.children.insert(path[0], self.json_to_node(node));
+            return;
+        }
+        self.children[path[0]].add_by_path(&path[1..], node);
+        self.fix_parent_pointers();  // TODO: optimize
+    }
+    fn remove_by_path(&mut self, path: &[usize]) {
+        assert!(!path.is_empty());
+        if path.len() == 1 {
+            self.children.remove(path[0]);
+            return;
+        }
+        self.children[path[0]].remove_by_path(&path[1..]);
     }
 
-    fn json_dom_to_html_node(&mut self, json_node: &serde_json::Value) -> Self {
+    fn json_to_node(&self, json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
         //  dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
-        node.html_id = {
-            let attributes = json_node["attributes"].as_object().unwrap();
-            attributes
-                .get("id")
-                .and_then(|x| x.as_str())
-                .map(String::from)
-        };
+        node.html_id = json_node["attributes"]
+            .as_object()
+            .unwrap()
+            .get("id")
+            .and_then(|x| x.as_str())
+            .map(String::from);
         // Add classes from attributes
-        node.classes = {
-            let attributes = json_node["attributes"].as_object().unwrap();
-            let class_str = attributes
-                .get("class")
-                .map(|x| x.as_str().unwrap())
-                .unwrap_or_default();
-            class_str
-                .split_whitespace()
-                .map(|x| x.into())
-                .collect::<HashSet<String>>()
-        };
+        node.classes = json_node["attributes"]
+            .as_object()
+            .unwrap()
+            .get("class")
+            .map(|x| x.as_str().unwrap())
+            .unwrap_or_default()
+            .split_whitespace()
+            .map(|x| x.into())
+            .collect::<HashSet<String>>();
 
         // Add children recursively
-        node.children = {
-            let children = json_node["children"].as_array().unwrap();
-            children
-                .into_iter()
-                .map(|x| self.json_dom_to_html_node(x))
-                .collect()
-        };
+        node.children = json_node["children"]
+            .as_array()
+            .unwrap()
+            .into_iter()
+            .map(|x| self.json_to_node(x))
+            .collect();
         node
     }
     fn fix_parent_pointers(&mut self) {
@@ -230,12 +232,8 @@ struct NaiveHtmlNode {
 }
 
 impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
-    fn dirtied(&mut self, path: &[u64]) {
-        unimplemented!()
-    }
-    fn recompute(&mut self, root: &mut NaiveHtmlNode) {
-        unimplemented!()
-    }
+    fn dirtied(&mut self, _: &[u64]) {}
+    fn recompute(&mut self, _: &mut NaiveHtmlNode) {}
 }
 
 #[derive(Debug, Clone)]
@@ -250,17 +248,14 @@ fn parse_trace() -> Vec<LayoutFrame> {
         "css-gen-op/{0}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
     ))
-    .expect("Failed to read web layout trace file");
+    .unwrap();
 
     let mut frames = Vec::new();
     for (frame_id, line) in content.lines().enumerate() {
         if line.trim().is_empty() {
             continue;
         }
-        let Ok(command_data) = serde_json::from_str::<serde_json::Value>(line) else {
-            eprintln!("Failed to parse frame {}: {}", frame_id, line);
-            continue;
-        };
+        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
 
         let command_name = command_data["name"].as_str().unwrap().to_string();
         if command_name.starts_with("layout_") {
@@ -290,13 +285,45 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
         .unwrap()
 }
 
+fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
+    match frame.command_name.as_str() {
+        "init" => {
+            dbg!(frame.command_name.as_str());
+            *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
+            tree.fix_parent_pointers();
+        }
+        "add" => {
+            dbg!(frame.command_name.as_str());
+            let path = extract_path_from_command(&frame.command_data);
+            if path.is_empty() {
+                return;
+            }
+            tree.add_by_path(&path, frame.command_data.get("node").unwrap());
+            tree.fix_parent_pointers(); // TODO: optimize
+        }
+        "replace_value" | "insert_value" => {
+            dbg!(frame.command_name.as_str());
+        }
+        "recalculate" => {
+            dbg!(frame.command_name.as_str());
+        }
+        "remove" => {
+            dbg!(frame.command_name.as_str());
+            let path = extract_path_from_command(&frame.command_data);
+            tree.remove_by_path(&path);
+        }
+        _ => {
+            dbg!(frame.command_name.as_str());
+        }
+    }
+}
+
 // 分离 3 种不同的 node, naive , bit, tri
 // 对每种 node, 实现一个公共的 trait, recompute, dirtied.
 // recompute 是实际做计算的
 // dirtied 只是做脏标记
 fn main() {
-    let mut bit = NaiveHtmlNode::default();
-    bit.init();
+    let mut naive = NaiveHtmlNode::default();
     let css = parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
@@ -304,9 +331,13 @@ fn main() {
         ))
         .unwrap(),
     );
-    dbg!(&bit);
+   // dbg!(&naive);
     //  dbg!(&css);
-    bit.print_css_matches(&css);
     let trace = parse_trace();
-    dbg!(trace);
+
+    for i in &trace {
+        apply_frame(&mut naive, &i);
+    }
+    naive.print_css_matches(&css);
+  //  dbg!(trace);
 }
