@@ -16,21 +16,11 @@ fn main() {
         &program.generate_istate_code(),
     )
     .unwrap();
-    std::fs::write(
-        "src/generated_bitvector_functions.rs",
-        program.generate_bitvector_code(),
-    )
-    .unwrap();
     // for read the gen code
     let p = Path::new("css-gen-op").join(website);
     std::fs::write(
         p.join("generated_istate_functions.rs"),
         &program.generate_istate_code(),
-    )
-    .unwrap();
-    std::fs::write(
-        p.join("generated_bitvector_functions.rs"),
-        program.generate_bitvector_code(),
     )
     .unwrap();
 }
