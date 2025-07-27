@@ -1364,4 +1364,3 @@ pub fn count_total_nodes(node: &HtmlNode) -> usize {
 
 pub mod generated_bitvector_functions;
 pub mod generated_istate_functions;
-pub mod generated_naive_functions;

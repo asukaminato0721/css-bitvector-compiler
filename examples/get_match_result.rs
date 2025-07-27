@@ -1,44 +1,9 @@
 use css_bitvector_compiler::{
     generated_istate_functions::{BITVECTOR_CAPACITY, process_node_generated},
-    generated_naive_functions::process_node_naive,
     *,
 };
 use generated_bitvector_functions::*;
 use std::fs;
-
-fn collect_all_naive_matches(
-    node: &mut HtmlNode,
-    parent_state: &BitVector,
-    results: &mut Vec<(String, Vec<usize>)>,
-) {
-    let mut tmp_vec = vec![Default::default(); parent_state.capacity + 10];
-    for i in 0..parent_state.capacity {
-        tmp_vec[i] = parent_state.is_bit_set(i);
-    }
-    let child_states = process_node_naive(node, &tmp_vec);
-
-    // Collect matches for this node by checking its BitVector
-    let mut matches = Vec::new();
-    for i in 0..node.css_match_bitvector.capacity {
-        if node.css_match_bitvector.is_bit_set(i) {
-            matches.push(i);
-        }
-    }
-
-    // Create node identifier using utility function
-    let node_id = create_node_identifier(node);
-    results.push((node_id, matches));
-    let mut tmp_child = BitVector::new();
-    for (i, &bo) in child_states.iter().enumerate() {
-        if bo {
-            tmp_child.set_bit(i);
-        }
-    }
-    // Process children
-    for child in &mut node.children {
-        collect_all_naive_matches(child, &tmp_child, results);
-    }
-}
 
 fn collect_all_bitvector_matches(
     node: &mut HtmlNode,
@@ -142,9 +107,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     collect_all_istate_matches(&mut test_root, &initial_state, &mut istate);
     save_results_to_file(&istate, "optimized_results.txt")?;
-    let mut naive_result = vec![];
-    collect_all_naive_matches(&mut test_root, &initial_state, &mut naive_result);
-    save_results_to_file(&naive_result, "naive_results.txt")?;
 
     Ok(())
 }

@@ -24,11 +24,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut selector_chain: Vec<SimpleSelector> = Vec::new();
     let mut current_selector: Option<SimpleSelector> = None;
 
-    while !parser.is_exhausted() {
-        let Ok(token) = parser.next() else {
-            break;
-        };
-
+    while let Ok(token) = parser.next() {
         if expecting_rule_body {
             match token {
                 Token::CurlyBracketBlock => {
@@ -266,10 +262,7 @@ fn parse_trace() -> Vec<LayoutFrame> {
             continue;
         };
 
-        let command_name = command_data["name"]
-            .as_str()
-            .unwrap()
-            .to_string();
+        let command_name = command_data["name"].as_str().unwrap().to_string();
         if command_name.starts_with("layout_") {
             continue;
         }
@@ -296,8 +289,6 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
         })
         .unwrap()
 }
-
-
 
 // 分离 3 种不同的 node, naive , bit, tri
 // 对每种 node, 实现一个公共的 trait, recompute, dirtied.
