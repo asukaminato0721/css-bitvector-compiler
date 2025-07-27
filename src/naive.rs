@@ -354,5 +354,5 @@ fn main() {
     }
     naive.print_css_matches(&css);
     //  dbg!(trace);
-    dbg!(naive);
+    //dbg!(naive);
 }

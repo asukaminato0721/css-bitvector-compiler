@@ -32,6 +32,7 @@ struct BitVectorHtmlNode {
     output_state: Vec<bool>,
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     cache: BitVectorCache,
+    dirty: bool,
 }
 
 impl BitVectorHtmlNode {
@@ -151,6 +152,14 @@ impl BitVectorHtmlNode {
         if path.len() == 1 {
             let n = self.json_to_html_node(node, &hm);
             self.children.insert(path[0], n);
+            self.dirty = true;
+            let mut cur: *mut BitVectorHtmlNode = self;
+            unsafe {
+                while let Some(parent_ptr) = (*cur).parent {
+                    (*parent_ptr).dirty = true;
+                    cur = parent_ptr;
+                }
+            }
             return;
         }
         self.children[path[0]].add_by_path(&path[1..], node, &hm);
@@ -160,6 +169,14 @@ impl BitVectorHtmlNode {
         assert!(!path.is_empty());
         if path.len() == 1 {
             self.children.remove(path[0]);
+            self.dirty = true;
+            let mut cur: *mut BitVectorHtmlNode = self;
+            unsafe {
+                while let Some(parent_ptr) = (*cur).parent {
+                    (*parent_ptr).dirty = true;
+                    cur = parent_ptr;
+                }
+            }
             return;
         }
         self.children[path[0]].remove_by_path(&path[1..]);
@@ -375,5 +392,5 @@ fn main() {
         apply_frame(&mut bit, &i, &hm);
     }
     bit.print_css_matches(&css);
-    dbg!(bit);
+    //dbg!(bit);
 }
