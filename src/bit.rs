@@ -1,11 +1,10 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::{ascii::escape_default, collections::{HashMap, HashSet}};
+use std::collections::{HashMap, HashSet};
 
 use css_bitvector_compiler::Cache;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
-    Simple(Selector),
     Descendant { selectors: Vec<Selector> },
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -24,31 +23,22 @@ struct BitVectorCache {
 #[derive(Debug, Default)]
 
 struct BitVectorHtmlNode {
-    pub tag_name: String,
-    pub id: u64,
-    pub html_id: Option<String>,
-    pub class: HashSet<String>,
-    pub children: Vec<BitVectorHtmlNode>,
-    pub parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
+    tag_name: String,
+    id: u64,
+    html_id: Option<String>,
+    class: HashSet<String>,
+    children: Vec<BitVectorHtmlNode>,
+    input_state: Vec<bool>,
+    output_state: Vec<bool>,
+    parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     cache: BitVectorCache,
 }
 
 impl BitVectorHtmlNode {
-    fn init(&mut self, hm: &HashMap<Selector, usize>) {
-        let s = std::fs::read_to_string(format!(
-            "css-gen-op/{}/command.json",
-            std::env::var("WEBSITE_NAME").unwrap()
-        ))
-        .unwrap();
-        let first_line = s.lines().next().unwrap();
-        let trace_data: serde_json::Value = serde_json::from_str(first_line).unwrap();
-        *self = self.json_to_html_node(&trace_data["node"], hm);
-    }
-
     fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
-        hm: &HashMap<Selector, usize>,
+        hm: &HashMap<CssRule, usize>,
     ) -> Self {
         let mut node = Self::default();
         //  dbg!(&json_node);
@@ -89,25 +79,90 @@ impl BitVectorHtmlNode {
             child.fix_parent_pointers();
         }
     }
-    fn match_css(&self, arr: &[bool], hm: &HashMap<Selector, usize>) -> bool {
-        // self has tag_name, html_id, class: set<str>
-        // html_id
-        let is_id_match = if let Some(id) = &self.html_id {
-            if let Some(v) = hm.get(&Selector::Id(id.to_string())) {
-                arr[*v]
-            } else {
-                true
+    fn matches_simple_selector(&self, selector: &Selector) -> bool {
+        match selector {
+            Selector::Type(tag) => self.tag_name.to_lowercase() == tag.to_lowercase(),
+            Selector::Class(class) => self.class.contains(class),
+            Selector::Id(id) => {
+                if let Some(ref html_id) = self.html_id {
+                    html_id == id
+                } else {
+                    false
+                }
             }
-        } else {
-            true
-        };
-        let is_tag_match = if let Some(v) = hm.get(&Selector::Type(self.tag_name.clone())) {
-            arr[*v]
-        } else {true};
-        let is_class_match = self.class.iter().map(|cls|
-          todo!()
-        );
-        is_id_match && is_tag_match
+        }
+    }
+    /// first match is strict match, after can have loose match, so split into 2 func
+    fn matches_descendant_selector_after(&self, selectors: &[Selector]) -> bool {
+        match (self.parent, selectors.len()) {
+            (_, 0) => true,
+            (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
+            (None, 2..) => false,
+            (Some(p), 1..) => {
+                let p = unsafe { &*p };
+                if self.matches_simple_selector(selectors.last().unwrap()) {
+                    p.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
+                } else {
+                    p.matches_descendant_selector_after(selectors)
+                }
+            }
+        }
+    }
+    fn matches_descendant_selector(&self, selectors: &[Selector]) -> bool {
+        match (self.parent, selectors.len()) {
+            (_, 0) => true,
+            (None, 1) => self.matches_simple_selector(&selectors[0]),
+            (None, 2..) => false,
+            (Some(p), 1..) => {
+                let p = unsafe { &*p };
+                if self.matches_simple_selector(selectors.last().unwrap()) {
+                    p.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
+                } else {
+                    false
+                }
+            }
+        }
+    }
+    fn matches_css_rule(&self, CssRule::Descendant { selectors }: &CssRule) -> bool {
+        self.matches_descendant_selector(selectors)
+    }
+    fn collect_matches(&self, rule: &CssRule, matches: &mut HashSet<u64>) {
+        if self.matches_css_rule(rule) {
+            matches.insert(self.id);
+        }
+        for child in &self.children {
+            child.collect_matches(rule, matches);
+        }
+    }
+    fn print_css_matches(&self, rules: &[CssRule]) {
+        for rule in rules {
+            let mut matches = HashSet::new();
+            self.collect_matches(rule, &mut matches);
+            println!("{:?} -> {:?}", rule, matches);
+        }
+    }
+    fn add_by_path(
+        &mut self,
+        path: &[usize],
+        node: &serde_json::Value,
+        hm: &HashMap<CssRule, usize>,
+    ) {
+        assert!(!path.is_empty());
+        if path.len() == 1 {
+            let n = self.json_to_html_node(node, &hm);
+            self.children.insert(path[0], n);
+            return;
+        }
+        self.children[path[0]].add_by_path(&path[1..], node, &hm);
+        self.fix_parent_pointers(); // TODO: optimize
+    }
+    fn remove_by_path(&mut self, path: &[usize]) {
+        assert!(!path.is_empty());
+        if path.len() == 1 {
+            self.children.remove(path[0]);
+            return;
+        }
+        self.children[path[0]].remove_by_path(&path[1..]);
     }
 }
 
@@ -141,13 +196,9 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         selector_chain.push(selector);
                     }
                     if !selector_chain.is_empty() {
-                        if selector_chain.len() == 1 {
-                            rules.push(CssRule::Simple(selector_chain.into_iter().next().unwrap()));
-                        } else {
-                            rules.push(CssRule::Descendant {
-                                selectors: selector_chain,
-                            });
-                        }
+                        rules.push(CssRule::Descendant {
+                            selectors: selector_chain,
+                        });
                     }
 
                     selector_chain = Vec::new();
@@ -188,14 +239,10 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 }
                 Token::CurlyBracketBlock => {
                     if let Some(selector) = current_selector.take() {
-                        if selector_chain.is_empty() {
-                            rules.push(CssRule::Simple(selector));
-                        } else {
-                            selector_chain.push(selector);
-                            rules.push(CssRule::Descendant {
-                                selectors: selector_chain,
-                            });
-                        }
+                        selector_chain.push(selector);
+                        rules.push(CssRule::Descendant {
+                            selectors: selector_chain,
+                        });
                     }
                     selector_chain = Vec::new();
                 }
@@ -216,7 +263,85 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules.dedup();
     rules
 }
+#[derive(Debug, Clone)]
+struct LayoutFrame {
+    pub frame_id: usize,
+    pub command_name: String,
+    pub command_data: serde_json::Value,
+}
+fn parse_trace() -> Vec<LayoutFrame> {
+    let content = std::fs::read_to_string(format!(
+        "css-gen-op/{0}/command.json",
+        std::env::var("WEBSITE_NAME").unwrap()
+    ))
+    .unwrap();
 
+    let mut frames = Vec::new();
+    for (frame_id, line) in content.lines().enumerate() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
+
+        let command_name = command_data["name"].as_str().unwrap().to_string();
+        if command_name.starts_with("layout_") {
+            continue;
+        }
+
+        frames.push(LayoutFrame {
+            frame_id,
+            command_name,
+            command_data,
+        });
+    }
+
+    frames
+}
+
+fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
+    command_data
+        .get("path")
+        .and_then(|p| p.as_array())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|v| v.as_u64())
+                .map(|v| v as usize)
+                .collect::<Vec<_>>()
+        })
+        .unwrap()
+}
+fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<CssRule, usize>) {
+    match frame.command_name.as_str() {
+        "init" => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+            *tree = tree.json_to_html_node(frame.command_data.get("node").unwrap(), &hm);
+            tree.fix_parent_pointers();
+        }
+        "add" => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+            let path = extract_path_from_command(&frame.command_data);
+            if path.is_empty() {
+                return;
+            }
+            tree.add_by_path(&path, frame.command_data.get("node").unwrap(), &hm);
+            tree.fix_parent_pointers(); // TODO: optimize
+        }
+        "replace_value" | "insert_value" => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+        }
+        "recalculate" => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+        }
+        "remove" => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+            let path = extract_path_from_command(&frame.command_data);
+            tree.remove_by_path(&path);
+        }
+        _ => {
+            dbg!(frame.frame_id, frame.command_name.as_str());
+        }
+    }
+}
 fn main() {
     let css = parse_css(
         &std::fs::read_to_string(format!(
@@ -225,26 +350,30 @@ fn main() {
         ))
         .unwrap(),
     );
-    let mut hm = HashMap::new();
-    dbg!(&css);
-    for i in css {
-        match i {
-            CssRule::Descendant { selectors } => {
-                for s in selectors {
-                    if !hm.contains_key(&s) {
-                        hm.insert(s, hm.len());
-                    }
-                }
-            }
-            CssRule::Simple(s) => {
-                if !hm.contains_key(&s) {
-                    hm.insert(s, hm.len());
+    //dbg!(&css);
+    let hm = {
+        let mut hm = HashMap::new();
+        for CssRule::Descendant { selectors } in &css {
+            let mut v = vec![];
+            for s in selectors {
+                v.push(s.clone());
+                let ss = CssRule::Descendant {
+                    selectors: v.clone(),
+                };
+                if !hm.contains_key(&ss) {
+                    hm.insert(ss, hm.len());
                 }
             }
         }
-    }
+        hm
+    };
+    dbg!(&hm);
 
     let mut bit = BitVectorHtmlNode::default();
-    bit.init(&hm);
-   // dbg!(bit);
+    let trace = parse_trace();
+    for i in &trace {
+        apply_frame(&mut bit, &i, &hm);
+    }
+    bit.print_css_matches(&css);
+    dbg!(bit);
 }
