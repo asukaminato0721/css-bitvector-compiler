@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use css_bitvector_compiler::Cache;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum CssRule {
+enum CssRule {
     Simple(Selector),
     Descendant { selectors: Vec<Selector> },
 }
@@ -15,7 +15,7 @@ enum Selector {
     Id(String),
 }
 
-pub fn parse_css(css_content: &str) -> Vec<CssRule> {
+fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut rules = Vec::new();
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
@@ -223,12 +223,12 @@ impl NaiveHtmlNode {
 #[derive(Debug, Default)]
 
 struct NaiveHtmlNode {
-    pub tag_name: String,
-    pub id: u64,
-    pub html_id: Option<String>,
-    pub classes: HashSet<String>,
-    pub children: Vec<NaiveHtmlNode>,
-    pub parent: Option<*mut NaiveHtmlNode>, // TODO: use u64 in future
+    tag_name: String,
+    id: u64,
+    html_id: Option<String>,
+    classes: HashSet<String>,
+    children: Vec<NaiveHtmlNode>,
+    parent: Option<*mut NaiveHtmlNode>, // TODO: use u64 in future
 }
 
 impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
