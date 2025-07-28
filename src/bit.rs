@@ -1,8 +1,6 @@
 use cssparser::{Parser, ParserInput, Token};
 use std::collections::{HashMap, HashSet};
 
-use css_bitvector_compiler::Cache;
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
     Descendant { selectors: Vec<Selector> },
@@ -12,12 +10,6 @@ enum Selector {
     Type(String),
     Class(String),
     Id(String),
-}
-
-#[derive(Debug, Default)]
-struct BitVectorCache {
-    dirtynode: bool,
-    result: Vec<bool>,
 }
 
 #[derive(Debug, Default)]
@@ -31,7 +23,6 @@ struct BitVectorHtmlNode {
     input_state: Vec<bool>,
     output_state: Vec<bool>,
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
-    cache: BitVectorCache,
     dirty: bool,
 }
 
@@ -92,57 +83,6 @@ impl BitVectorHtmlNode {
                     false
                 }
             }
-        }
-    }
-    /// first match is strict match, after can have loose match, so split into 2 func
-    fn matches_descendant_selector_after(&self, selectors: &[Selector]) -> bool {
-        match (self.parent, selectors.len()) {
-            (_, 0) => true,
-            (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
-            (None, 2..) => false,
-            (Some(p), 1..) => {
-                let p = unsafe { &*p };
-                if self.matches_simple_selector(selectors.last().unwrap()) {
-                    p.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
-                } else {
-                    p.matches_descendant_selector_after(selectors)
-                }
-            }
-        }
-    }
-    fn matches_descendant_selector(&self, selectors: &[Selector]) -> bool {
-        match (self.parent, selectors.len()) {
-            (_, 0) => true,
-            (None, 1) => self.matches_simple_selector(&selectors[0]),
-            (None, 2..) => false,
-            (Some(p), 1..) => {
-                let p = unsafe { &*p };
-                if self.matches_simple_selector(selectors.last().unwrap()) {
-                    p.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
-                } else {
-                    false
-                }
-            }
-        }
-    }
-    fn matches_css_rule(&self, CssRule::Descendant { selectors }: &CssRule) -> bool {
-        self.matches_descendant_selector(selectors)
-    }
-    fn collect_matches(&self, rule: &CssRule, matches: &mut HashSet<u64>) {
-        if self.matches_css_rule(rule) {
-            matches.insert(self.id);
-        }
-        for child in &self.children {
-            child.collect_matches(rule, matches);
-        }
-    }
-    fn print_css_matches(&self, rules: &[CssRule]) {
-        for rule in rules {
-            let mut matches = HashSet::new();
-            self.collect_matches(rule, &mut matches);
-            let mut m = matches.iter().collect::<Vec<_>>();
-            m.sort_unstable();
-            println!("{:?} -> {:?}", rule, m);
         }
     }
     fn add_node_by_path(
@@ -258,12 +198,8 @@ impl BitVectorHtmlNode {
         final_matches: &mut HashMap<CssRule, Vec<u64>>,
     ) {
         for (bit_index, &is_match) in self.output_state.iter().enumerate() {
-            // 如果这个 bit 位被设置了，说明存在一个匹配
             if is_match {
-                // 使用反向映射找到这个 bit 位对应的 CSS 规则
                 if let Some(rule) = reverse_state_map.get(&bit_index) {
-                    // 将当前节点的 ID 添加到该规则的匹配列表中
-                    // .entry().or_default() 是一个方便的写法，如果规则不存在则插入一个空 Vec
                     final_matches.entry(rule.clone()).or_default().push(self.id);
                 }
             }
@@ -272,19 +208,6 @@ impl BitVectorHtmlNode {
         for child in &self.children {
             child.collect_all_matches(reverse_state_map, final_matches);
         }
-    }
-}
-
-impl Cache<BitVectorHtmlNode> for BitVectorHtmlNode {
-    fn dirtied(&mut self, path: &[u64]) {
-        if path.is_empty() {
-            self.cache.dirtynode = true;
-            return;
-        }
-        self.dirtied(&path[1..]);
-    }
-    fn recompute(&mut self, root: &mut BitVectorHtmlNode) {
-        unimplemented!()
     }
 }
 
