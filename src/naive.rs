@@ -218,9 +218,9 @@ impl NaiveHtmlNode {
             CssRule::Descendant { selectors } => self.matches_descendant_selector(selectors),
         }
     }
-    fn collect_matches(&self, rule: &CssRule, matches: &mut HashSet<u64>) {
+    fn collect_matches(&self, rule: &CssRule, matches: &mut Vec<u64>) {
         if self.matches_css_rule(rule) {
-            matches.insert(self.id);
+            matches.push(self.id);
         }
         for child in &self.children {
             child.collect_matches(rule, matches);
@@ -228,8 +228,13 @@ impl NaiveHtmlNode {
     }
     fn print_css_matches(&self, rules: &[CssRule]) {
         for rule in rules {
-            let mut matches = HashSet::new();
+            let mut matches = Vec::new();
             self.collect_matches(rule, &mut matches);
+            if matches.is_empty() {
+                continue;
+            }
+            matches.sort_unstable();
+            matches.dedup();
             println!("{:?} -> {:?}", rule, matches);
         }
     }
