@@ -19,6 +19,27 @@ struct BitVectorCache {
     dirtynode: bool,
     result: Vec<bool>,
 }
+#[derive(Debug)]
+
+enum Pending {
+    Add {
+        index: usize,
+        node_json: serde_json::Value,
+    },
+    Remove {
+        index: usize,
+    },
+    ReplaceValue {},
+}
+
+impl Default for Pending {
+    // make rustc happy
+    fn default() -> Self {
+        Pending::Remove {
+            index: Default::default(),
+        }
+    }
+}
 
 #[derive(Debug, Default)]
 
@@ -30,6 +51,7 @@ struct BitVectorHtmlNode {
     children: Vec<BitVectorHtmlNode>,
     input_state: Vec<bool>,
     output_state: Vec<bool>,
+    pending_changes: Vec<Pending>,
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     cache: BitVectorCache,
     dirty: bool,
@@ -139,47 +161,75 @@ impl BitVectorHtmlNode {
         for rule in rules {
             let mut matches = HashSet::new();
             self.collect_matches(rule, &mut matches);
-            println!("{:?} -> {:?}", rule, matches);
+            let mut m = matches.iter().collect::<Vec<_>>();
+            m.sort_unstable();
+            println!("{:?} -> {:?}", rule, m);
         }
     }
-    fn add_by_path(
+    fn record_add(
         &mut self,
         path: &[usize],
         node: &serde_json::Value,
         hm: &HashMap<CssRule, usize>,
     ) {
         assert!(!path.is_empty());
-        if path.len() == 1 {
-            let n = self.json_to_html_node(node, &hm);
-            self.children.insert(path[0], n);
-            self.dirty = true;
-            let mut cur: *mut BitVectorHtmlNode = self;
-            unsafe {
-                while let Some(parent_ptr) = (*cur).parent {
-                    (*parent_ptr).dirty = true;
-                    cur = parent_ptr;
-                }
-            }
+        if path.len() > 1 {
+            self.children[path[0]].record_add(&path[1..], node, &hm);
             return;
         }
-        self.children[path[0]].add_by_path(&path[1..], node, &hm);
-        self.fix_parent_pointers(); // TODO: optimize
+        self.pending_changes.push(Pending::Add {
+            index: path[0],
+            node_json: node.clone(),
+        });
+        self.dirty = true;
+        let mut cur: *mut BitVectorHtmlNode = self;
+        unsafe {
+            while let Some(parent_ptr) = (*cur).parent {
+                (*parent_ptr).dirty = true;
+                cur = parent_ptr;
+            }
+        }
     }
-    fn remove_by_path(&mut self, path: &[usize]) {
+    fn record_remove(&mut self, path: &[usize]) {
         assert!(!path.is_empty());
-        if path.len() == 1 {
-            self.children.remove(path[0]);
-            self.dirty = true;
-            let mut cur: *mut BitVectorHtmlNode = self;
-            unsafe {
-                while let Some(parent_ptr) = (*cur).parent {
-                    (*parent_ptr).dirty = true;
-                    cur = parent_ptr;
-                }
-            }
+        if path.len() > 1 {
+            self.children[path[0]].record_remove(&path[1..]);
             return;
         }
-        self.children[path[0]].remove_by_path(&path[1..]);
+
+        self.pending_changes
+            .push(Pending::Remove { index: path[0] });
+        self.dirty = true;
+        let mut cur: *mut BitVectorHtmlNode = self;
+        unsafe {
+            while let Some(parent_ptr) = (*cur).parent {
+                (*parent_ptr).dirty = true;
+                cur = parent_ptr;
+            }
+        }
+    }
+    fn apply_pending(&mut self, state_map: &HashMap<CssRule, usize>) {
+        for child in self.children.iter_mut() {
+            child.apply_pending(state_map);
+        }
+        if self.pending_changes.is_empty() {
+            return;
+        }
+        let changes = std::mem::take(&mut self.pending_changes);
+        for change in changes {
+            match change {
+                Pending::Add { index, node_json } => {
+                    let mut new_node = BitVectorHtmlNode::default();
+                    new_node = new_node.json_to_html_node(&node_json, state_map);
+                    self.children.insert(index, new_node);
+                }
+                Pending::Remove { index } => {
+                    self.children.remove(index);
+                }
+                _ => todo!(),
+            }
+        }
+        self.fix_parent_pointers();
     }
 }
 
@@ -327,6 +377,7 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
         })
         .unwrap()
 }
+
 fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<CssRule, usize>) {
     match frame.command_name.as_str() {
         "init" => {
@@ -340,19 +391,19 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
             if path.is_empty() {
                 return;
             }
-            tree.add_by_path(&path, frame.command_data.get("node").unwrap(), &hm);
-            tree.fix_parent_pointers(); // TODO: optimize
+            tree.record_add(&path, frame.command_data.get("node").unwrap(), &hm);
         }
         "replace_value" | "insert_value" => {
             dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "recalculate" => {
             dbg!(frame.frame_id, frame.command_name.as_str());
+            tree.apply_pending(hm);
         }
         "remove" => {
             dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
-            tree.remove_by_path(&path);
+            tree.record_remove(&path);
         }
         _ => {
             dbg!(frame.frame_id, frame.command_name.as_str());
