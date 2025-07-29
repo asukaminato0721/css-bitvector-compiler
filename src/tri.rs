@@ -2,6 +2,8 @@ use css_bitvector_compiler::rdtsc;
 use cssparser::{Parser, ParserInput, Token};
 use std::collections::{HashMap, HashSet};
 
+static mut MISS_CNT: usize = 0;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
     Descendant { selectors: Vec<Selector> },
@@ -169,7 +171,9 @@ impl BitVectorHtmlNode {
         if !self.dirty {
             return;
         }
-
+        unsafe {
+            MISS_CNT += 1;
+        }
         let mut current_ancestor_match_state = ancestor.to_vec();
         current_ancestor_match_state
             .iter_mut()
@@ -476,4 +480,5 @@ fn main() {
         node_ids.dedup();
         println!("{:?} -> {:?}", rule, node_ids);
     }
+    dbg!(unsafe { MISS_CNT });
 }
