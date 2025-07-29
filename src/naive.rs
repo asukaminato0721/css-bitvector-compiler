@@ -5,7 +5,6 @@ use css_bitvector_compiler::Cache;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
-    Simple(Selector),
     Descendant { selectors: Vec<Selector> },
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -32,13 +31,9 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         selector_chain.push(selector);
                     }
                     if !selector_chain.is_empty() {
-                        if selector_chain.len() == 1 {
-                            rules.push(CssRule::Simple(selector_chain.into_iter().next().unwrap()));
-                        } else {
-                            rules.push(CssRule::Descendant {
-                                selectors: selector_chain,
-                            });
-                        }
+                        rules.push(CssRule::Descendant {
+                            selectors: selector_chain,
+                        });
                     }
 
                     selector_chain = Vec::new();
@@ -79,14 +74,10 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 }
                 Token::CurlyBracketBlock => {
                     if let Some(selector) = current_selector.take() {
-                        if selector_chain.is_empty() {
-                            rules.push(CssRule::Simple(selector));
-                        } else {
-                            selector_chain.push(selector);
-                            rules.push(CssRule::Descendant {
-                                selectors: selector_chain,
-                            });
-                        }
+                        selector_chain.push(selector);
+                        rules.push(CssRule::Descendant {
+                            selectors: selector_chain,
+                        });
                     }
                     selector_chain = Vec::new();
                 }
@@ -212,11 +203,8 @@ impl NaiveHtmlNode {
             }
         }
     }
-    fn matches_css_rule(&self, rule: &CssRule) -> bool {
-        match rule {
-            CssRule::Simple(selector) => self.matches_simple_selector(selector),
-            CssRule::Descendant { selectors } => self.matches_descendant_selector(selectors),
-        }
+    fn matches_css_rule(&self, CssRule::Descendant { selectors }: &CssRule) -> bool {
+        self.matches_descendant_selector(selectors)
     }
     fn collect_matches(&self, rule: &CssRule, matches: &mut Vec<u64>) {
         if self.matches_css_rule(rule) {
@@ -226,7 +214,8 @@ impl NaiveHtmlNode {
             child.collect_matches(rule, matches);
         }
     }
-    fn print_css_matches(&self, rules: &[CssRule]) {
+    fn print_css_matches(&self, rules: &mut [CssRule]) {
+        rules.sort_by_key(|x| format!("{x:?}"));
         for rule in rules {
             let mut matches = Vec::new();
             self.collect_matches(rule, &mut matches);
@@ -343,7 +332,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
 // dirtied 只是做脏标记
 fn main() {
     let mut naive = NaiveHtmlNode::default();
-    let css = parse_css(
+    let mut css = parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
@@ -357,7 +346,7 @@ fn main() {
     for i in &trace {
         apply_frame(&mut naive, &i);
     }
-    naive.print_css_matches(&css);
+    naive.print_css_matches(&mut css);
     //  // dbg!(trace);
     //// dbg!(naive);
 }

@@ -1,3 +1,4 @@
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
 warning: field `frame_id` is never read
    --> src/bit.rs:312:9
     |
@@ -10,52 +11,52 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 2.77s
      Running `target/release/bit`
-4327332
-34937
-92951
-37861
-55240
-1971206
-36711
-35024
-42637
-1959991
-39430
-69577
-1739925
-43449
-76053
-1693947
-35975
-73679
-1733285
-41657
-87608
-1828461
-55945
-95539
-2091922
-64378
-93620
-2009879
-56587
-95728
-1726077
-67683
-86696
-1559842
-76873
-79665
-1717668
-79841
-82244
-1660079
-83731
-85285
-1513627
-86797
+4422040
+25829
+140821
+38806
+17623
+1873837
+33173
+28981
+68385
+1680602
+37822
+75418
+1600626
+42989
+77368
+1674007
+47973
+83546
+2452984
+48490
+80618
+2753010
+60298
+89614
+1780829
+46268
+67293
+2339206
+50001
+97416
+1927729
+54050
+75228
+1457329
+56821
+76115
+1876739
+60736
+82400
+1570325
+63490
+84023
+1445941
+67746
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
 Descendant { selectors: [Class("fl"), Type("a")] } -> [431]
 Descendant { selectors: [Class("gbgt")] } -> [146, 259, 279]
