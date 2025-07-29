@@ -134,7 +134,7 @@ impl NaiveHtmlNode {
 
     fn json_to_node(&self, json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
-        //  dbg!(&json_node);
+        //  // dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
         node.html_id = json_node["attributes"]
@@ -254,7 +254,7 @@ impl Cache<NaiveHtmlNode> for NaiveHtmlNode {
     fn dirtied(&mut self, _: &[u64]) {}
     fn recompute(&mut self, _: &mut NaiveHtmlNode) {}
 }
-
+#[allow(unused)]
 #[derive(Debug, Clone)]
 struct LayoutFrame {
     pub frame_id: usize,
@@ -307,12 +307,12 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
 fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     match frame.command_name.as_str() {
         "init" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
             *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers();
         }
         "add" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             if path.is_empty() {
                 return;
@@ -321,18 +321,18 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             tree.fix_parent_pointers(); // TODO: optimize
         }
         "replace_value" | "insert_value" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "recalculate" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "remove" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             tree.remove_by_path(&path);
         }
         _ => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
     }
 }
@@ -350,14 +350,14 @@ fn main() {
         ))
         .unwrap(),
     );
-    // dbg!(&naive);
-    //  dbg!(&css);
+    // // dbg!(&naive);
+    //  // dbg!(&css);
     let trace = parse_trace();
 
     for i in &trace {
         apply_frame(&mut naive, &i);
     }
     naive.print_css_matches(&css);
-    //  dbg!(trace);
-    //dbg!(naive);
+    //  // dbg!(trace);
+    //// dbg!(naive);
 }

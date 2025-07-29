@@ -346,12 +346,12 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
 fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<CssRule, usize>) {
     match frame.command_name.as_str() {
         "init" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            //   dbg!(frame.frame_id, frame.command_name.as_str());
             *tree = tree.json_to_html_node(frame.command_data.get("node").unwrap(), &hm);
             tree.fix_parent_pointers();
         }
         "add" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            //   dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             if path.is_empty() {
                 return;
@@ -359,20 +359,20 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
             tree.add_node_by_path(&path, frame.command_data.get("node").unwrap(), &hm);
         }
         "replace_value" | "insert_value" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            //   dbg!(frame.frame_id, frame.command_name.as_str());
         }
         "recalculate" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            //   dbg!(frame.frame_id, frame.command_name.as_str());
             let initial_state = vec![false; hm.len()];
             tree.recompute_styles(hm, &initial_state, &initial_state, true);
         }
         "remove" => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            //  dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
             tree.record_remove(&path);
         }
         _ => {
-            dbg!(frame.frame_id, frame.command_name.as_str());
+            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
     }
 }
@@ -401,7 +401,7 @@ fn main() {
         }
         hm
     };
-    dbg!(&hm);
+    //  dbg!(&hm);
 
     let final_rules_map: HashMap<_, _> = css
         .iter()
