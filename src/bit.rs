@@ -127,27 +127,27 @@ impl BitVectorHtmlNode {
     fn recompute_styles(
         &mut self,
         state_map: &HashMap<CssRule, usize>,
+        parent_output: &[bool],
         ancestor: &[bool],
-        parent_output_state: &[bool],
         force_recompute: bool,
     ) {
-        let is_input_changed = self.input_state != parent_output_state;
+        let is_input_changed = self.input_state != ancestor;
         if is_input_changed || force_recompute {
             self.dirty = true;
         }
         if !self.dirty {
             return;
         }
-        let mut current_ancestor_match_state = ancestor.to_vec();
+        let mut current_ancestor_match_state = parent_output.to_vec();
         current_ancestor_match_state
             .iter_mut()
-            .zip(parent_output_state)
+            .zip(ancestor)
             .for_each(|(c, p)| *c |= p);
         let new_output_state =
             self.calculate_new_output_state(&current_ancestor_match_state, state_map);
         let is_output_changed = self.output_state != new_output_state;
         self.output_state = new_output_state;
-        self.input_state = parent_output_state.to_vec();
+        self.input_state = ancestor.to_vec();
         self.dirty = false;
 
         // 遍历所有子节点，递归地调用此函数

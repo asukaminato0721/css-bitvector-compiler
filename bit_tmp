@@ -53,16 +53,228 @@ warning: variable does not need to be mutable
 
 warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --lib -p css-bitvector-compiler` to apply 5 suggestions)
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 3.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 3.13s
      Running `target/release/bit`
 [src/bit.rs:404:5] &hm = {
     Descendant {
         selectors: [
             Class(
-                "lsbb",
+                "gssb_i",
+            ),
+            Class(
+                "gss_ifl",
             ),
         ],
-    }: 123,
+    }: 117,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Id(
+                "gbgs5",
+            ),
+        ],
+    }: 82,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbmc",
+            ),
+        ],
+    }: 137,
+    Descendant {
+        selectors: [
+            Class(
+                "gbp0",
+            ),
+        ],
+    }: 36,
+    Descendant {
+        selectors: [
+            Class(
+                "lsb",
+            ),
+        ],
+    }: 122,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbmh",
+            ),
+        ],
+    }: 139,
+    Descendant {
+        selectors: [
+            Class(
+                "gbqfba",
+            ),
+        ],
+    }: 59,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpasb",
+            ),
+        ],
+    }: 159,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprca",
+            ),
+        ],
+    }: 175,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprcs",
+            ),
+        ],
+    }: 178,
+    Descendant {
+        selectors: [
+            Id(
+                "gbg5",
+            ),
+        ],
+    }: 148,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmcc",
+            ),
+        ],
+    }: 25,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpmc",
+            ),
+            Class(
+                "gbpmtc",
+            ),
+        ],
+    }: 50,
+    Descendant {
+        selectors: [
+            Class(
+                "h",
+            ),
+        ],
+    }: 121,
+    Descendant {
+        selectors: [
+            Id(
+                "SIvCob",
+            ),
+            Type(
+                "a",
+            ),
+        ],
+    }: 129,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Class(
+                "gbg4a",
+            ),
+        ],
+    }: 76,
+    Descendant {
+        selectors: [
+            Class(
+                "gbgt",
+            ),
+        ],
+    }: 19,
+    Descendant {
+        selectors: [
+            Class(
+                "gbma",
+            ),
+        ],
+    }: 22,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 80,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_e",
+            ),
+        ],
+    }: 112,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmpia",
+            ),
+        ],
+    }: 30,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmtc",
+            ),
+        ],
+    }: 35,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpd",
+            ),
+            Class(
+                "gbps",
+            ),
+        ],
+    }: 45,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_f",
+            ),
+        ],
+    }: 113,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprc",
+            ),
+            Class(
+                "gbmc",
+            ),
+        ],
+    }: 173,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_i",
+            ),
+        ],
+    }: 116,
+    Descendant {
+        selectors: [
+            Type(
+                "hover",
+            ),
+        ],
+    }: 201,
     Descendant {
         selectors: [
             Class(
@@ -72,11 +284,179 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 88,
     Descendant {
         selectors: [
-            Id(
-                "gbx4",
+            Class(
+                "gssb_c",
             ),
         ],
-    }: 183,
+    }: 111,
+    Descendant {
+        selectors: [
+            Class(
+                "fl",
+            ),
+            Type(
+                "a",
+            ),
+        ],
+    }: 3,
+    Descendant {
+        selectors: [
+            Id(
+                "gssb_b",
+            ),
+        ],
+    }: 188,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_h",
+            ),
+        ],
+    }: 115,
+    Descendant {
+        selectors: [
+            Class(
+                "lsbb",
+            ),
+        ],
+    }: 123,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbpgs",
+            ),
+        ],
+    }: 142,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpc",
+            ),
+            Class(
+                "gbpd",
+            ),
+        ],
+    }: 40,
+    Descendant {
+        selectors: [
+            Id(
+                "gbpm",
+            ),
+            Class(
+                "gbml1",
+            ),
+        ],
+    }: 168,
+    Descendant {
+        selectors: [
+            Class(
+                "sblc",
+            ),
+        ],
+    }: 125,
+    Descendant {
+        selectors: [
+            Id(
+                "gws-output-pages-elements-homepage_additional_languages__als",
+            ),
+        ],
+    }: 189,
+    Descendant {
+        selectors: [
+            Type(
+                "em",
+            ),
+        ],
+    }: 198,
+    Descendant {
+        selectors: [
+            Type(
+                "form",
+            ),
+        ],
+    }: 200,
+    Descendant {
+        selectors: [
+            Id(
+                "gbpm",
+            ),
+            Class(
+                "gbpmtc",
+            ),
+        ],
+    }: 169,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpid",
+            ),
+        ],
+    }: 162,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmpalb",
+            ),
+        ],
+    }: 29,
+    Descendant {
+        selectors: [
+            Class(
+                "gbsbis",
+            ),
+            Class(
+                "gbsbb",
+            ),
+        ],
+    }: 68,
+    Descendant {
+        selectors: [
+            Class(
+                "gsn_b",
+            ),
+        ],
+    }: 104,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpas",
+            ),
+        ],
+    }: 157,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+        ],
+    }: 75,
+    Descendant {
+        selectors: [
+            Id(
+                "gbb",
+            ),
+        ],
+    }: 134,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmh",
+            ),
+        ],
+    }: 26,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpdjs",
+            ),
+            Class(
+                "gbto",
+            ),
+        ],
+    }: 47,
     Descendant {
         selectors: [
             Class(
@@ -86,18 +466,433 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 74,
     Descendant {
         selectors: [
-            Type(
-                "vertical",
+            Id(
+                "gbs",
             ),
         ],
-    }: 206,
+    }: 181,
     Descendant {
         selectors: [
             Class(
-                "gbmpia",
+                "gbmpala",
             ),
         ],
-    }: 30,
+    }: 28,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpd",
+            ),
+            Class(
+                "gbmt",
+            ),
+        ],
+    }: 44,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmc",
+            ),
+        ],
+    }: 24,
+    Descendant {
+        selectors: [
+            Class(
+                "gbts",
+            ),
+        ],
+    }: 86,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmt",
+            ),
+        ],
+    }: 34,
+    Descendant {
+        selectors: [
+            Class(
+                "gbtb2",
+            ),
+        ],
+    }: 73,
+    Descendant {
+        selectors: [
+            Id(
+                "SIvCob",
+            ),
+        ],
+    }: 128,
+    Descendant {
+        selectors: [
+            Id(
+                "gog",
+            ),
+        ],
+    }: 187,
+    Descendant {
+        selectors: [
+            Type(
+                "a",
+            ),
+            Class(
+                "gssb_j",
+            ),
+        ],
+    }: 194,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 23,
+    Descendant {
+        selectors: [
+            Id(
+                "gbg",
+            ),
+            Class(
+                "gbgt",
+            ),
+        ],
+    }: 145,
+    Descendant {
+        selectors: [
+            Type(
+                "focus",
+            ),
+        ],
+    }: 199,
+    Descendant {
+        selectors: [
+            Class(
+                "gac_m",
+            ),
+        ],
+    }: 4,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_g",
+            ),
+        ],
+    }: 114,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Id(
+                "gbi4id",
+            ),
+        ],
+    }: 83,
+    Descendant {
+        selectors: [
+            Class(
+                "gbzt",
+            ),
+        ],
+    }: 95,
+    Descendant {
+        selectors: [
+            Class(
+                "gsib_b",
+            ),
+        ],
+    }: 100,
+    Descendant {
+        selectors: [
+            Class(
+                "z4hgWe",
+            ),
+        ],
+    }: 127,
+    Descendant {
+        selectors: [
+            Type(
+                "a",
+            ),
+            Class(
+                "gbiba",
+            ),
+        ],
+    }: 192,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpmc",
+            ),
+        ],
+    }: 49,
+    Descendant {
+        selectors: [
+            Type(
+                "span",
+            ),
+        ],
+    }: 203,
+    Descendant {
+        selectors: [
+            Class(
+                "lst",
+            ),
+        ],
+    }: 124,
+    Descendant {
+        selectors: [
+            Type(
+                "span",
+            ),
+            Id(
+                "gbg4",
+            ),
+        ],
+    }: 204,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpal",
+            ),
+            Class(
+                "gbqfbb",
+            ),
+        ],
+    }: 156,
+    Descendant {
+        selectors: [
+            Class(
+                "gbrtl",
+            ),
+        ],
+    }: 62,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpc",
+            ),
+            Class(
+                "gbps",
+            ),
+        ],
+    }: 41,
+    Descendant {
+        selectors: [
+            Class(
+                "fl",
+            ),
+        ],
+    }: 2,
+    Descendant {
+        selectors: [
+            Class(
+                "gbz0l",
+            ),
+        ],
+    }: 92,
+    Descendant {
+        selectors: [
+            Class(
+                "H6sW5",
+            ),
+        ],
+    }: 0,
+    Descendant {
+        selectors: [
+            Class(
+                "gbp0",
+            ),
+            Class(
+                "gbps2",
+            ),
+        ],
+    }: 38,
+    Descendant {
+        selectors: [
+            Class(
+                "gbtb",
+            ),
+        ],
+    }: 71,
+    Descendant {
+        selectors: [
+            Class(
+                "gbps2",
+            ),
+        ],
+    }: 56,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbmcc",
+            ),
+        ],
+    }: 138,
+    Descendant {
+        selectors: [
+            Class(
+                "gbqfb",
+            ),
+        ],
+    }: 57,
+    Descendant {
+        selectors: [
+            Id(
+                "gbbw",
+            ),
+        ],
+    }: 135,
+    Descendant {
+        selectors: [
+            Class(
+                "gspqs_b",
+            ),
+        ],
+    }: 106,
+    Descendant {
+        selectors: [
+            Class(
+                "gbgs",
+            ),
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 18,
+    Descendant {
+        selectors: [
+            Class(
+                "gbprct",
+            ),
+        ],
+    }: 55,
+    Descendant {
+        selectors: [
+            Class(
+                "gbsb",
+            ),
+        ],
+    }: 64,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbpc",
+            ),
+        ],
+    }: 141,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+        ],
+    }: 136,
+    Descendant {
+        selectors: [
+            Class(
+                "gbm",
+            ),
+        ],
+    }: 21,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpal",
+            ),
+        ],
+    }: 155,
+    Descendant {
+        selectors: [
+            Id(
+                "gbpm",
+            ),
+        ],
+    }: 167,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprca",
+            ),
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 177,
+    Descendant {
+        selectors: [
+            Id(
+                "gbx3",
+            ),
+        ],
+    }: 182,
+    Descendant {
+        selectors: [
+            Id(
+                "gbz",
+            ),
+            Class(
+                "gbtcb",
+            ),
+        ],
+    }: 186,
+    Descendant {
+        selectors: [
+            Type(
+                "after",
+            ),
+        ],
+    }: 196,
+    Descendant {
+        selectors: [
+            Class(
+                "gbqfbb",
+            ),
+        ],
+    }: 60,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprca",
+            ),
+            Class(
+                "gbmab",
+            ),
+        ],
+    }: 176,
+    Descendant {
+        selectors: [
+            Class(
+                "gbem",
+            ),
+            Class(
+                "gbgs",
+            ),
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 9,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmlbw",
+            ),
+        ],
+    }: 27,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpdjs",
+            ),
+        ],
+    }: 46,
     Descendant {
         selectors: [
             Id(
@@ -111,62 +906,44 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
-                "gsn_b",
+                "gbprcb",
             ),
         ],
-    }: 104,
+    }: 52,
     Descendant {
         selectors: [
             Id(
-                "gbbw",
-            ),
-        ],
-    }: 135,
-    Descendant {
-        selectors: [
-            Class(
-                "gac_m",
-            ),
-        ],
-    }: 4,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmplp",
+                "gbmpasb",
             ),
             Class(
                 "gbps",
             ),
         ],
-    }: 165,
+    }: 160,
     Descendant {
         selectors: [
             Class(
-                "gbto",
+                "gbt",
             ),
         ],
-    }: 75,
+    }: 70,
     Descendant {
         selectors: [
+            Type(
+                "a",
+            ),
             Class(
-                "gsib_b",
+                "gspqs_a",
             ),
         ],
-    }: 100,
+    }: 193,
     Descendant {
         selectors: [
-            Class(
-                "lsb",
+            Type(
+                "vertical",
             ),
         ],
-    }: 122,
-    Descendant {
-        selectors: [
-            Class(
-                "z4hgWe",
-            ),
-        ],
-    }: 127,
+    }: 206,
     Descendant {
         selectors: [
             Id(
@@ -176,45 +953,11 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 130,
     Descendant {
         selectors: [
-            Id(
-                "gbprcs",
+            Class(
+                "gbem",
             ),
         ],
-    }: 178,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpc",
-            ),
-            Class(
-                "gbpd",
-            ),
-        ],
-    }: 40,
-    Descendant {
-        selectors: [
-            Class(
-                "gbprct",
-            ),
-        ],
-    }: 55,
-    Descendant {
-        selectors: [
-            Id(
-                "gbprc",
-            ),
-            Class(
-                "gbm",
-            ),
-        ],
-    }: 172,
-    Descendant {
-        selectors: [
-            Class(
-                "gbqfba",
-            ),
-        ],
-    }: 59,
+    }: 6,
     Descendant {
         selectors: [
             Class(
@@ -230,131 +973,41 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 8,
     Descendant {
         selectors: [
-            Class(
-                "gbmcc",
-            ),
-        ],
-    }: 25,
-    Descendant {
-        selectors: [
-            Class(
-                "gbz0l",
-            ),
-        ],
-    }: 92,
-    Descendant {
-        selectors: [
             Id(
-                "gbqfbw",
+                "gbmplp",
+            ),
+            Class(
+                "gbps",
             ),
         ],
-    }: 180,
+    }: 165,
     Descendant {
         selectors: [
             Class(
-                "gbtb2",
-            ),
-        ],
-    }: 73,
-    Descendant {
-        selectors: [
-            Id(
-                "gbb",
-            ),
-        ],
-    }: 134,
-    Descendant {
-        selectors: [
-            Class(
-                "gsib_a",
-            ),
-        ],
-    }: 99,
-    Descendant {
-        selectors: [
-            Class(
-                "gbz0l",
+                "gbzt",
             ),
             Class(
                 "gbts",
             ),
         ],
-    }: 94,
-    Descendant {
-        selectors: [
-            Id(
-                "gbprca",
-            ),
-            Class(
-                "gbmab",
-            ),
-        ],
-    }: 176,
-    Descendant {
-        selectors: [
-            Id(
-                "gws-output-pages-elements-homepage_additional_languages__als",
-            ),
-        ],
-    }: 189,
-    Descendant {
-        selectors: [
-            Type(
-                "focus",
-            ),
-        ],
-    }: 199,
+    }: 96,
     Descendant {
         selectors: [
             Class(
-                "gbma",
+                "gbxo",
             ),
         ],
-    }: 22,
-    Descendant {
-        selectors: [
-            Id(
-                "WqQANb",
-            ),
-            Type(
-                "a",
-            ),
-        ],
-    }: 131,
-    Descendant {
-        selectors: [
-            Type(
-                "hover",
-            ),
-        ],
-    }: 201,
+    }: 89,
     Descendant {
         selectors: [
             Class(
-                "gbsbic",
-            ),
-        ],
-    }: 66,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpd",
+                "gbsb",
             ),
             Class(
-                "gbmt",
+                "gbsbb",
             ),
         ],
-    }: 44,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Id(
-                "gbs",
-            ),
-        ],
-    }: 85,
+    }: 65,
     Descendant {
         selectors: [
             Class(
@@ -371,13 +1024,219 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
-                "gssb_a",
+                "gbi4p",
             ),
+        ],
+    }: 20,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprc",
+            ),
+        ],
+    }: 171,
+    Descendant {
+        selectors: [
+            Class(
+                "gbp0",
+            ),
+            Class(
+                "gbps",
+            ),
+        ],
+    }: 37,
+    Descendant {
+        selectors: [
+            Class(
+                "gbes",
+            ),
+            Class(
+                "gbgs",
+            ),
+            Class(
+                "gbmac",
+            ),
+        ],
+    }: 13,
+    Descendant {
+        selectors: [
+            Class(
+                "gbg4a",
+            ),
+        ],
+    }: 14,
+    Descendant {
+        selectors: [
+            Class(
+                "gbrtl",
+            ),
+            Class(
+                "gbm",
+            ),
+        ],
+    }: 63,
+    Descendant {
+        selectors: [
+            Class(
+                "gbtsa",
+            ),
+        ],
+    }: 87,
+    Descendant {
+        selectors: [
+            Class(
+                "gsls_a",
+            ),
+        ],
+    }: 101,
+    Descendant {
+        selectors: [
+            Id(
+                "gbg",
+            ),
+        ],
+    }: 144,
+    Descendant {
+        selectors: [
+            Id(
+                "gbi5",
+            ),
+        ],
+    }: 153,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpms2",
+            ),
+        ],
+    }: 51,
+    Descendant {
+        selectors: [
+            Id(
+                "gbz",
+            ),
+        ],
+    }: 184,
+    Descendant {
+        selectors: [
+            Class(
+                "gbsbis",
+            ),
+            Class(
+                "gbsbt",
+            ),
+        ],
+    }: 69,
+    Descendant {
+        selectors: [
+            Type(
+                "a",
+            ),
+        ],
+    }: 191,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmpiaa",
+            ),
+        ],
+    }: 31,
+    Descendant {
+        selectors: [
+            Class(
+                "gbg4a",
+            ),
+            Class(
+                "gbts",
+            ),
+        ],
+    }: 15,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpdv",
+            ),
+        ],
+    }: 161,
+    Descendant {
+        selectors: [
+            Id(
+                "gbprc",
+            ),
+            Class(
+                "gbprcbc",
+            ),
+        ],
+    }: 174,
+    Descendant {
+        selectors: [
+            Class(
+                "gbsbic",
+            ),
+        ],
+    }: 66,
+    Descendant {
+        selectors: [
+            Id(
+                "gbgs5",
+            ),
+        ],
+    }: 149,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmps",
+            ),
+        ],
+    }: 166,
+    Descendant {
+        selectors: [
+            Class(
+                "gbxv",
+            ),
+        ],
+    }: 90,
+    Descendant {
+        selectors: [
+            Id(
+                "gb",
+            ),
+            Id(
+                "gbprc",
+            ),
+        ],
+    }: 133,
+    Descendant {
+        selectors: [
+            Type(
+                "body",
+            ),
+        ],
+    }: 197,
+    Descendant {
+        selectors: [
             Type(
                 "td",
             ),
         ],
-    }: 110,
+    }: 205,
+    Descendant {
+        selectors: [
+            Class(
+                "gsq_a",
+            ),
+        ],
+    }: 107,
+    Descendant {
+        selectors: [
+            Id(
+                "gbg",
+            ),
+            Class(
+                "gbm",
+            ),
+        ],
+    }: 146,
     Descendant {
         selectors: [
             Id(
@@ -397,550 +1256,11 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 102,
     Descendant {
         selectors: [
-            Class(
-                "gbrtl",
-            ),
-            Class(
-                "gbm",
-            ),
-        ],
-    }: 63,
-    Descendant {
-        selectors: [
             Type(
-                "active",
+                "input",
             ),
         ],
-    }: 195,
-    Descendant {
-        selectors: [
-            Class(
-                "gbg4a",
-            ),
-            Class(
-                "gbts",
-            ),
-        ],
-    }: 15,
-    Descendant {
-        selectors: [
-            Class(
-                "gbtb",
-            ),
-        ],
-    }: 71,
-    Descendant {
-        selectors: [
-            Id(
-                "gbg",
-            ),
-            Class(
-                "gbm",
-            ),
-        ],
-    }: 146,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpid",
-            ),
-        ],
-    }: 162,
-    Descendant {
-        selectors: [
-            Id(
-                "gbs",
-            ),
-        ],
-    }: 181,
-    Descendant {
-        selectors: [
-            Class(
-                "gbqfb",
-            ),
-        ],
-    }: 57,
-    Descendant {
-        selectors: [
-            Class(
-                "gbsbis",
-            ),
-            Class(
-                "gbsbt",
-            ),
-        ],
-    }: 69,
-    Descendant {
-        selectors: [
-            Type(
-                "after",
-            ),
-        ],
-    }: 196,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbmh",
-            ),
-        ],
-    }: 139,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_a",
-            ),
-        ],
-    }: 109,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Class(
-                "gbg4a",
-            ),
-            Class(
-                "gbts",
-            ),
-        ],
-    }: 77,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_i",
-            ),
-            Class(
-                "gss_ifl",
-            ),
-        ],
-    }: 117,
-    Descendant {
-        selectors: [
-            Class(
-                "gbem",
-            ),
-            Class(
-                "gbgs",
-            ),
-        ],
-    }: 7,
-    Descendant {
-        selectors: [
-            Id(
-                "gbprc",
-            ),
-            Class(
-                "gbprcbc",
-            ),
-        ],
-    }: 174,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbpgs",
-            ),
-        ],
-    }: 142,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbpgs",
-            ),
-            Class(
-                "gbmtc",
-            ),
-        ],
-    }: 143,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmm",
-            ),
-        ],
-    }: 154,
-    Descendant {
-        selectors: [
-            Class(
-                "gsn_c",
-            ),
-        ],
-    }: 105,
-    Descendant {
-        selectors: [
-            Class(
-                "H6sW5",
-            ),
-        ],
-    }: 0,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_i",
-            ),
-        ],
-    }: 116,
-    Descendant {
-        selectors: [
-            Id(
-                "gbx3",
-            ),
-        ],
-    }: 182,
-    Descendant {
-        selectors: [
-            Id(
-                "gbz",
-            ),
-            Class(
-                "gbm",
-            ),
-        ],
-    }: 185,
-    Descendant {
-        selectors: [
-            Type(
-                "em",
-            ),
-        ],
-    }: 198,
-    Descendant {
-        selectors: [
-            Type(
-                "span",
-            ),
-            Id(
-                "gbg4",
-            ),
-        ],
-    }: 204,
-    Descendant {
-        selectors: [
-            Class(
-                "gbes",
-            ),
-        ],
-    }: 10,
-    Descendant {
-        selectors: [
-            Class(
-                "gbes",
-            ),
-            Class(
-                "gbgs",
-            ),
-            Class(
-                "gbmac",
-            ),
-        ],
-    }: 13,
-    Descendant {
-        selectors: [
-            Class(
-                "gbrtl",
-            ),
-        ],
-    }: 62,
-    Descendant {
-        selectors: [
-            Class(
-                "gbes",
-            ),
-            Class(
-                "gbgs",
-            ),
-        ],
-    }: 11,
-    Descendant {
-        selectors: [
-            Class(
-                "fl",
-            ),
-            Type(
-                "a",
-            ),
-        ],
-    }: 3,
-    Descendant {
-        selectors: [
-            Class(
-                "gbem",
-            ),
-            Class(
-                "gbgs",
-            ),
-            Class(
-                "gbmac",
-            ),
-        ],
-    }: 9,
-    Descendant {
-        selectors: [
-            Class(
-                "gbxo",
-            ),
-        ],
-    }: 89,
-    Descendant {
-        selectors: [
-            Class(
-                "gbes",
-            ),
-            Class(
-                "gbgs",
-            ),
-            Class(
-                "gbmab",
-            ),
-        ],
-    }: 12,
-    Descendant {
-        selectors: [
-            Class(
-                "gbxx",
-            ),
-        ],
-    }: 91,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbmcc",
-            ),
-        ],
-    }: 138,
-    Descendant {
-        selectors: [
-            Class(
-                "gbzt",
-            ),
-        ],
-    }: 95,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpd",
-            ),
-        ],
-    }: 43,
-    Descendant {
-        selectors: [
-            Id(
-                "gbg",
-            ),
-            Class(
-                "gbgt",
-            ),
-        ],
-    }: 145,
-    Descendant {
-        selectors: [
-            Id(
-                "gbg5",
-            ),
-        ],
-    }: 148,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Class(
-                "gbmac",
-            ),
-        ],
-    }: 80,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-        ],
-    }: 136,
-    Descendant {
-        selectors: [
-            Class(
-                "gbts",
-            ),
-        ],
-    }: 86,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_g",
-            ),
-        ],
-    }: 114,
-    Descendant {
-        selectors: [
-            Class(
-                "gbt",
-            ),
-        ],
-    }: 70,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbpc",
-            ),
-        ],
-    }: 141,
-    Descendant {
-        selectors: [
-            Id(
-                "gbi5",
-            ),
-        ],
-    }: 153,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpal",
-            ),
-            Class(
-                "gbqfbb",
-            ),
-        ],
-    }: 156,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpasb",
-            ),
-            Class(
-                "gbps",
-            ),
-        ],
-    }: 160,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Id(
-                "gbi4id",
-            ),
-        ],
-    }: 83,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpd",
-            ),
-            Class(
-                "gbps",
-            ),
-        ],
-    }: 45,
-    Descendant {
-        selectors: [
-            Class(
-                "gbxv",
-            ),
-        ],
-    }: 90,
-    Descendant {
-        selectors: [
-            Type(
-                "a",
-            ),
-            Class(
-                "gspqs_a",
-            ),
-        ],
-    }: 193,
-    Descendant {
-        selectors: [
-            Type(
-                "a",
-            ),
-            Class(
-                "gssb_j",
-            ),
-        ],
-    }: 194,
-    Descendant {
-        selectors: [
-            Type(
-                "span",
-            ),
-        ],
-    }: 203,
-    Descendant {
-        selectors: [
-            Id(
-                "gb",
-            ),
-        ],
-    }: 132,
-    Descendant {
-        selectors: [
-            Id(
-                "gbprc",
-            ),
-        ],
-    }: 171,
-    Descendant {
-        selectors: [
-            Class(
-                "gbi4p",
-            ),
-        ],
-    }: 20,
-    Descendant {
-        selectors: [
-            Class(
-                "gbsb",
-            ),
-        ],
-    }: 64,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmc",
-            ),
-        ],
-    }: 24,
-    Descendant {
-        selectors: [
-            Id(
-                "SIvCob",
-            ),
-            Type(
-                "a",
-            ),
-        ],
-    }: 129,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpmc",
-            ),
-            Class(
-                "gbpmtc",
-            ),
-        ],
-    }: 50,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmh",
-            ),
-        ],
-    }: 26,
+    }: 202,
     Descendant {
         selectors: [
             Class(
@@ -954,371 +1274,17 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
-                "gbmtc",
-            ),
-        ],
-    }: 35,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_m",
-            ),
-        ],
-    }: 120,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmt",
-            ),
-        ],
-    }: 34,
-    Descendant {
-        selectors: [
-            Id(
-                "gbpm",
-            ),
-        ],
-    }: 167,
-    Descendant {
-        selectors: [
-            Class(
-                "gbqfbb-hvr",
-            ),
-        ],
-    }: 61,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Id(
-                "gbi5",
-            ),
-        ],
-    }: 84,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmlbw",
-            ),
-        ],
-    }: 27,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_e",
-            ),
-        ],
-    }: 112,
-    Descendant {
-        selectors: [
-            Class(
-                "h",
-            ),
-        ],
-    }: 121,
-    Descendant {
-        selectors: [
-            Id(
-                "gbgs5",
-            ),
-        ],
-    }: 149,
-    Descendant {
-        selectors: [
-            Type(
-                "visited",
-            ),
-        ],
-    }: 207,
-    Descendant {
-        selectors: [
-            Class(
-                "gspqs_b",
-            ),
-        ],
-    }: 106,
-    Descendant {
-        selectors: [
-            Id(
-                "gb",
-            ),
-            Id(
-                "gbprc",
-            ),
-        ],
-    }: 133,
-    Descendant {
-        selectors: [
-            Class(
-                "gbsbis",
-            ),
-        ],
-    }: 67,
-    Descendant {
-        selectors: [
-            Id(
-                "gbpm",
-            ),
-            Class(
-                "gbml1",
-            ),
-        ],
-    }: 168,
-    Descendant {
-        selectors: [
-            Type(
-                "form",
-            ),
-        ],
-    }: 200,
-    Descendant {
-        selectors: [
-            Class(
-                "gsq_a",
-            ),
-        ],
-    }: 107,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmpnw",
-            ),
-        ],
-    }: 33,
-    Descendant {
-        selectors: [
-            Class(
-                "gbsbis",
-            ),
-            Class(
-                "gbsbb",
-            ),
-        ],
-    }: 68,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpas",
-            ),
-            Class(
-                "gbmt",
-            ),
-        ],
-    }: 158,
-    Descendant {
-        selectors: [
-            Class(
-                "gbg4a",
-            ),
-        ],
-    }: 14,
-    Descendant {
-        selectors: [
-            Class(
-                "sblc",
-            ),
-        ],
-    }: 125,
-    Descendant {
-        selectors: [
-            Id(
-                "gbd4",
-            ),
-            Class(
-                "gbmc",
-            ),
-        ],
-    }: 137,
-    Descendant {
-        selectors: [
-            Class(
                 "gbpc",
             ),
-            Class(
-                "gbps",
-            ),
         ],
-    }: 41,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Id(
-                "gbgs5",
-            ),
-        ],
-    }: 82,
+    }: 39,
     Descendant {
         selectors: [
             Id(
-                "gbprca",
+                "gbqfbw",
             ),
         ],
-    }: 175,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpasb",
-            ),
-        ],
-    }: 159,
-    Descendant {
-        selectors: [
-            Id(
-                "gssb_b",
-            ),
-        ],
-    }: 188,
-    Descendant {
-        selectors: [
-            Class(
-                "gbgt",
-            ),
-        ],
-    }: 19,
-    Descendant {
-        selectors: [
-            Type(
-                "body",
-            ),
-        ],
-    }: 197,
-    Descendant {
-        selectors: [
-            Class(
-                "gbp0",
-            ),
-        ],
-    }: 36,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpms2",
-            ),
-        ],
-    }: 51,
-    Descendant {
-        selectors: [
-            Type(
-                "a",
-            ),
-            Class(
-                "gbiba",
-            ),
-        ],
-    }: 192,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmpiaa",
-            ),
-        ],
-    }: 31,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Class(
-                "gbgt",
-            ),
-        ],
-    }: 78,
-    Descendant {
-        selectors: [
-            Class(
-                "gbtsa",
-            ),
-        ],
-    }: 87,
-    Descendant {
-        selectors: [
-            Class(
-                "gbz0l",
-            ),
-            Class(
-                "gbtb2",
-            ),
-        ],
-    }: 93,
-    Descendant {
-        selectors: [
-            Id(
-                "gbqfb",
-            ),
-        ],
-    }: 179,
-    Descendant {
-        selectors: [
-            Id(
-                "gbpms",
-            ),
-        ],
-    }: 170,
-    Descendant {
-        selectors: [
-            Class(
-                "gsls_a",
-            ),
-        ],
-    }: 101,
-    Descendant {
-        selectors: [
-            Id(
-                "gog",
-            ),
-        ],
-    }: 187,
-    Descendant {
-        selectors: [
-            Class(
-                "gbgs",
-            ),
-            Class(
-                "gbmac",
-            ),
-        ],
-    }: 18,
-    Descendant {
-        selectors: [
-            Type(
-                "input",
-            ),
-        ],
-    }: 202,
-    Descendant {
-        selectors: [
-            Class(
-                "gbp0",
-            ),
-            Class(
-                "gbps",
-            ),
-        ],
-    }: 37,
-    Descendant {
-        selectors: [
-            Class(
-                "gsfs",
-            ),
-        ],
-    }: 98,
-    Descendant {
-        selectors: [
-            Class(
-                "gbprcd",
-            ),
-        ],
-    }: 53,
-    Descendant {
-        selectors: [
-            Class(
-                "lst",
-            ),
-        ],
-    }: 124,
+    }: 180,
     Descendant {
         selectors: [
             Id(
@@ -1326,278 +1292,6 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
             ),
         ],
     }: 152,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpdjs",
-            ),
-            Class(
-                "gbto",
-            ),
-        ],
-    }: 47,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpiw",
-            ),
-        ],
-    }: 163,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_k",
-            ),
-        ],
-    }: 118,
-    Descendant {
-        selectors: [
-            Id(
-                "gbz",
-            ),
-        ],
-    }: 184,
-    Descendant {
-        selectors: [
-            Class(
-                "gbqfbb",
-            ),
-        ],
-    }: 60,
-    Descendant {
-        selectors: [
-            Id(
-                "gbz",
-            ),
-            Class(
-                "gbtcb",
-            ),
-        ],
-    }: 186,
-    Descendant {
-        selectors: [
-            Class(
-                "gbto",
-            ),
-            Class(
-                "gbg4a",
-            ),
-        ],
-    }: 76,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_f",
-            ),
-        ],
-    }: 113,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpdv",
-            ),
-        ],
-    }: 161,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmpala",
-            ),
-        ],
-    }: 28,
-    Descendant {
-        selectors: [
-            Class(
-                "gbprcb",
-            ),
-        ],
-    }: 52,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpdjs",
-            ),
-        ],
-    }: 46,
-    Descendant {
-        selectors: [
-            Id(
-                "gbi4id",
-            ),
-        ],
-    }: 150,
-    Descendant {
-        selectors: [
-            Id(
-                "gbi4s1",
-            ),
-        ],
-    }: 151,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_l",
-            ),
-        ],
-    }: 119,
-    Descendant {
-        selectors: [
-            Class(
-                "gbsb",
-            ),
-            Class(
-                "gbsbb",
-            ),
-        ],
-    }: 65,
-    Descendant {
-        selectors: [
-            Class(
-                "gss_ifl",
-            ),
-        ],
-    }: 108,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_h",
-            ),
-        ],
-    }: 115,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmps",
-            ),
-        ],
-    }: 166,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpc",
-            ),
-            Class(
-                "gbps2",
-            ),
-        ],
-    }: 42,
-    Descendant {
-        selectors: [
-            Class(
-                "ds",
-            ),
-        ],
-    }: 1,
-    Descendant {
-        selectors: [
-            Class(
-                "gbzt",
-            ),
-            Class(
-                "gbts",
-            ),
-        ],
-    }: 96,
-    Descendant {
-        selectors: [
-            Class(
-                "gbm",
-            ),
-        ],
-    }: 21,
-    Descendant {
-        selectors: [
-            Class(
-                "gsdd_a",
-            ),
-        ],
-    }: 97,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmpas",
-            ),
-        ],
-    }: 157,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmac",
-            ),
-        ],
-    }: 23,
-    Descendant {
-        selectors: [
-            Class(
-                "gbmpalb",
-            ),
-        ],
-    }: 29,
-    Descendant {
-        selectors: [
-            Class(
-                "sblc",
-            ),
-            Type(
-                "a",
-            ),
-        ],
-    }: 126,
-    Descendant {
-        selectors: [
-            Type(
-                "a",
-            ),
-        ],
-    }: 191,
-    Descendant {
-        selectors: [
-            Class(
-                "gssb_c",
-            ),
-        ],
-    }: 111,
-    Descendant {
-        selectors: [
-            Class(
-                "gbps2",
-            ),
-        ],
-    }: 56,
-    Descendant {
-        selectors: [
-            Id(
-                "SIvCob",
-            ),
-        ],
-    }: 128,
-    Descendant {
-        selectors: [
-            Class(
-                "gbp0",
-            ),
-            Class(
-                "gbps2",
-            ),
-        ],
-    }: 38,
-    Descendant {
-        selectors: [
-            Id(
-                "gbmplp",
-            ),
-        ],
-    }: 164,
-    Descendant {
-        selectors: [
-            Id(
-                "gbpm",
-            ),
-            Class(
-                "gbpmtc",
-            ),
-        ],
-    }: 169,
     Descendant {
         selectors: [
             Class(
@@ -1611,44 +1305,44 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Id(
-                "gbprc",
+                "gbz",
             ),
             Class(
-                "gbmc",
+                "gbm",
             ),
         ],
-    }: 173,
+    }: 185,
+    Descendant {
+        selectors: [
+            Class(
+                "gbsbis",
+            ),
+        ],
+    }: 67,
     Descendant {
         selectors: [
             Id(
-                "gbmpal",
+                "gbi4s1",
             ),
         ],
-    }: 155,
-    Descendant {
-        selectors: [
-            Type(
-                "-moz-focus-inner",
-            ),
-        ],
-    }: 190,
+    }: 151,
     Descendant {
         selectors: [
             Id(
-                "gbprca",
-            ),
-            Class(
-                "gbmac",
+                "gbmm",
             ),
         ],
-    }: 177,
+    }: 154,
     Descendant {
         selectors: [
-            Type(
-                "td",
+            Class(
+                "gbem",
+            ),
+            Class(
+                "gbgs",
             ),
         ],
-    }: 205,
+    }: 7,
     Descendant {
         selectors: [
             Class(
@@ -1671,32 +1365,21 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     }: 5,
     Descendant {
         selectors: [
+            Id(
+                "gbprc",
+            ),
             Class(
-                "gbmpiaw",
+                "gbm",
             ),
         ],
-    }: 32,
+    }: 172,
     Descendant {
         selectors: [
             Id(
-                "gbg",
+                "gbqfb",
             ),
         ],
-    }: 144,
-    Descendant {
-        selectors: [
-            Class(
-                "gbpc",
-            ),
-        ],
-    }: 39,
-    Descendant {
-        selectors: [
-            Class(
-                "gbem",
-            ),
-        ],
-    }: 6,
+    }: 179,
     Descendant {
         selectors: [
             Class(
@@ -1707,6 +1390,190 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
+                "gss_ifl",
+            ),
+        ],
+    }: 108,
+    Descendant {
+        selectors: [
+            Class(
+                "gbprcd",
+            ),
+        ],
+    }: 53,
+    Descendant {
+        selectors: [
+            Id(
+                "gbi4id",
+            ),
+        ],
+    }: 150,
+    Descendant {
+        selectors: [
+            Id(
+                "gbx4",
+            ),
+        ],
+    }: 183,
+    Descendant {
+        selectors: [
+            Type(
+                "-moz-focus-inner",
+            ),
+        ],
+    }: 190,
+    Descendant {
+        selectors: [
+            Class(
+                "gbes",
+            ),
+            Class(
+                "gbgs",
+            ),
+            Class(
+                "gbmab",
+            ),
+        ],
+    }: 12,
+    Descendant {
+        selectors: [
+            Class(
+                "ds",
+            ),
+        ],
+    }: 1,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpc",
+            ),
+            Class(
+                "gbps2",
+            ),
+        ],
+    }: 42,
+    Descendant {
+        selectors: [
+            Class(
+                "gsib_a",
+            ),
+        ],
+    }: 99,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_a",
+            ),
+            Type(
+                "td",
+            ),
+        ],
+    }: 110,
+    Descendant {
+        selectors: [
+            Class(
+                "sblc",
+            ),
+            Type(
+                "a",
+            ),
+        ],
+    }: 126,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_a",
+            ),
+        ],
+    }: 109,
+    Descendant {
+        selectors: [
+            Id(
+                "WqQANb",
+            ),
+            Type(
+                "a",
+            ),
+        ],
+    }: 131,
+    Descendant {
+        selectors: [
+            Id(
+                "gbd4",
+            ),
+            Class(
+                "gbpgs",
+            ),
+            Class(
+                "gbmtc",
+            ),
+        ],
+    }: 143,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpiw",
+            ),
+        ],
+    }: 163,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmplp",
+            ),
+        ],
+    }: 164,
+    Descendant {
+        selectors: [
+            Type(
+                "active",
+            ),
+        ],
+    }: 195,
+    Descendant {
+        selectors: [
+            Type(
+                "visited",
+            ),
+        ],
+    }: 207,
+    Descendant {
+        selectors: [
+            Class(
+                "gbes",
+            ),
+            Class(
+                "gbgs",
+            ),
+        ],
+    }: 11,
+    Descendant {
+        selectors: [
+            Class(
+                "gbxx",
+            ),
+        ],
+    }: 91,
+    Descendant {
+        selectors: [
+            Class(
+                "gsn_c",
+            ),
+        ],
+    }: 105,
+    Descendant {
+        selectors: [
+            Class(
+                "gbz0l",
+            ),
+            Class(
+                "gbtb2",
+            ),
+        ],
+    }: 93,
+    Descendant {
+        selectors: [
+            Class(
                 "gbprci",
             ),
         ],
@@ -1714,17 +1581,112 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
-                "gbgs",
+                "gbto",
+            ),
+            Class(
+                "gbgt",
             ),
         ],
-    }: 16,
+    }: 78,
+    Descendant {
+        selectors: [
+            Id(
+                "gb",
+            ),
+        ],
+    }: 132,
     Descendant {
         selectors: [
             Class(
-                "gbqfb-hvr",
+                "gbz0l",
+            ),
+            Class(
+                "gbts",
             ),
         ],
-    }: 58,
+    }: 94,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_m",
+            ),
+        ],
+    }: 120,
+    Descendant {
+        selectors: [
+            Class(
+                "gsdd_a",
+            ),
+        ],
+    }: 97,
+    Descendant {
+        selectors: [
+            Id(
+                "gbmpas",
+            ),
+            Class(
+                "gbmt",
+            ),
+        ],
+    }: 158,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Id(
+                "gbs",
+            ),
+        ],
+    }: 85,
+    Descendant {
+        selectors: [
+            Class(
+                "gbpd",
+            ),
+        ],
+    }: 43,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmpnw",
+            ),
+        ],
+    }: 33,
+    Descendant {
+        selectors: [
+            Id(
+                "gbpms",
+            ),
+        ],
+    }: 170,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_l",
+            ),
+        ],
+    }: 119,
+    Descendant {
+        selectors: [
+            Class(
+                "gsfs",
+            ),
+        ],
+    }: 98,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Class(
+                "gbg4a",
+            ),
+            Class(
+                "gbts",
+            ),
+        ],
+    }: 77,
     Descendant {
         selectors: [
             Class(
@@ -1741,17 +1703,55 @@ warning: `css-bitvector-compiler` (lib) generated 6 warnings (run `cargo fix --l
     Descendant {
         selectors: [
             Class(
-                "gbpmc",
+                "gbqfb-hvr",
             ),
         ],
-    }: 49,
+    }: 58,
     Descendant {
         selectors: [
             Class(
-                "fl",
+                "gbes",
             ),
         ],
-    }: 2,
+    }: 10,
+    Descendant {
+        selectors: [
+            Class(
+                "gbto",
+            ),
+            Id(
+                "gbi5",
+            ),
+        ],
+    }: 84,
+    Descendant {
+        selectors: [
+            Class(
+                "gssb_k",
+            ),
+        ],
+    }: 118,
+    Descendant {
+        selectors: [
+            Class(
+                "gbmpiaw",
+            ),
+        ],
+    }: 32,
+    Descendant {
+        selectors: [
+            Class(
+                "gbgs",
+            ),
+        ],
+    }: 16,
+    Descendant {
+        selectors: [
+            Class(
+                "gbqfbb-hvr",
+            ),
+        ],
+    }: 61,
 }
 [src/bit.rs:349:13] frame.frame_id = 0
 [src/bit.rs:349:13] frame.command_name.as_str() = "init"

@@ -12,6 +12,15 @@ enum Selector {
     Id(String),
 }
 
+/// whether a part of input is: 1, 0, or unused
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum IState {
+    IOne,
+    IZero,
+    #[default]
+    IUnused,
+}
+
 #[derive(Debug, Default)]
 
 struct BitVectorHtmlNode {
@@ -20,7 +29,7 @@ struct BitVectorHtmlNode {
     html_id: Option<String>,
     class: HashSet<String>,
     children: Vec<BitVectorHtmlNode>,
-    input_state: Vec<bool>,
+    input_state: Vec<IState>,
     output_state: Vec<bool>,
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     dirty: bool,
@@ -60,7 +69,7 @@ impl BitVectorHtmlNode {
                 .map(|x| self.json_to_html_node(x, &hm))
                 .collect()
         };
-        node.input_state = vec![false; hm.len()];
+        node.input_state = vec![Default::default(); hm.len()];
         node.output_state = vec![false; hm.len()];
         node.fix_parent_pointers();
         node
@@ -131,41 +140,42 @@ impl BitVectorHtmlNode {
         parent_output_state: &[bool],
         force_recompute: bool,
     ) {
-        let is_input_changed = self.input_state != parent_output_state;
-        if is_input_changed || force_recompute {
+        let mut dependencies_are_valid = true;
+        let mut has_recorded_dependencies = false;
+        for (i, &last_dependency) in self.input_state.iter().enumerate() {
+            match last_dependency {
+                IState::IOne => {
+                    has_recorded_dependencies = true;
+                    if !parent_output_state[i] {
+                        dependencies_are_valid = false;
+                        break;
+                    }
+                }
+                IState::IZero => {
+                    has_recorded_dependencies = true;
+                    if parent_output_state[i] {
+                        dependencies_are_valid = false;
+                        break;
+                    }
+                }
+                IState::IUnused => continue,
+            }
+        }
+
+        if !has_recorded_dependencies || !dependencies_are_valid || force_recompute {
             self.dirty = true;
         }
         if !self.dirty {
             return;
         }
+
         let mut current_ancestor_match_state = ancestor.to_vec();
         current_ancestor_match_state
             .iter_mut()
             .zip(parent_output_state)
             .for_each(|(c, p)| *c |= p);
-        let new_output_state =
-            self.calculate_new_output_state(&current_ancestor_match_state, state_map);
-        let is_output_changed = self.output_state != new_output_state;
-        self.output_state = new_output_state;
-        self.input_state = parent_output_state.to_vec();
-        self.dirty = false;
-
-        // 遍历所有子节点，递归地调用此函数
-        for child in self.children.iter_mut() {
-            child.recompute_styles(
-                state_map,
-                &self.output_state,
-                &current_ancestor_match_state,
-                is_output_changed,
-            );
-        }
-    }
-    fn calculate_new_output_state(
-        &self,
-        ancestor: &[bool],
-        state_map: &HashMap<CssRule, usize>,
-    ) -> Vec<bool> {
-        let mut new_state = vec![false; state_map.len()];
+        let mut new_output_state = vec![false; state_map.len()];
+        let mut new_input_state = vec![IState::default(); state_map.len()];
 
         for (CssRule::Descendant { selectors }, &bit_index) in state_map {
             let last_selector = selectors.last().unwrap();
@@ -175,7 +185,7 @@ impl BitVectorHtmlNode {
             }
 
             if selectors.len() == 1 {
-                new_state[bit_index] = true;
+                new_output_state[bit_index] = true;
             } else {
                 let parent_selectors = &selectors[..selectors.len() - 1];
                 let parent_rule = CssRule::Descendant {
@@ -183,15 +193,35 @@ impl BitVectorHtmlNode {
                 };
 
                 if let Some(&parent_bit_index) = state_map.get(&parent_rule) {
-                    if ancestor[parent_bit_index] {
-                        new_state[bit_index] = true;
+                    let dependency_met = read_and_record_dependency(
+                        &current_ancestor_match_state,
+                        parent_bit_index,
+                        &mut new_input_state,
+                    );
+
+                    if dependency_met {
+                        new_output_state[bit_index] = true;
                     }
                 }
             }
         }
 
-        new_state
+        let is_output_changed = self.output_state != new_output_state;
+        self.output_state = new_output_state;
+        self.input_state = new_input_state;
+        self.dirty = false;
+
+        // 遍历所有子节点，递归地调用此函数
+        for child in self.children.iter_mut() {
+            child.recompute_styles(
+                state_map,
+                &current_ancestor_match_state,
+                &self.output_state,
+                is_output_changed,
+            );
+        }
     }
+
     fn collect_all_matches(
         &self,
         reverse_state_map: &HashMap<usize, CssRule>,
@@ -209,6 +239,17 @@ impl BitVectorHtmlNode {
             child.collect_all_matches(reverse_state_map, final_matches);
         }
     }
+}
+
+fn read_and_record_dependency(
+    source_state: &[bool],
+    bit_index: usize,
+    new_input_state: &mut [IState],
+) -> bool {
+    let ret = source_state[bit_index];
+    new_input_state[bit_index] = if ret { IState::IOne } else { IState::IZero };
+
+    ret
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
