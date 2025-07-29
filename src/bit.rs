@@ -160,7 +160,7 @@ impl BitVectorHtmlNode {
         let is_output_changed = self.output_state != new_output_state;
         self.output_state = new_output_state;
         self.input_state = ancestor.to_vec();
-       // self.dirty = false;
+        // self.dirty = false;
 
         // 遍历所有子节点，递归地调用此函数
         for child in self.children.iter_mut() {
