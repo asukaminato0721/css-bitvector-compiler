@@ -1,17 +1,62 @@
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
 warning: field `frame_id` is never read
-   --> src/bit.rs:300:9
+   --> src/bit.rs:301:9
     |
-299 | struct LayoutFrame {
+300 | struct LayoutFrame {
     |        ----------- field in this struct
-300 |     pub frame_id: usize,
+301 |     pub frame_id: usize,
     |         ^^^^^^^^
     |
     = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+    Finished `release` profile [optimized + debuginfo] target(s) in 2.60s
      Running `target/release/bit`
+3832204
+14550
+77165
+29103
+10394
+1659939
+11830
+10750
+28693
+1520859
+10603
+28863
+1551720
+10739
+27625
+1540427
+9608
+27342
+1523567
+10115
+28863
+1563867
+9575
+28275
+1550842
+9786
+27068
+1696881
+10527
+29450
+1524824
+9384
+27805
+1269811
+10481
+28835
+1478582
+9711
+28588
+1437642
+9845
+27939
+1316851
+9732
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
 Descendant { selectors: [Class("fl"), Type("a")] } -> [431]
 Descendant { selectors: [Class("gbgt")] } -> [146, 259, 279]

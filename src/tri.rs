@@ -1,3 +1,4 @@
+use css_bitvector_compiler::rdtsc;
 use cssparser::{Parser, ParserInput, Token};
 use std::collections::{HashMap, HashSet};
 
@@ -211,7 +212,6 @@ impl BitVectorHtmlNode {
         self.input_state = new_input_state;
         self.dirty = false;
 
-        // 遍历所有子节点，递归地调用此函数
         for child in self.children.iter_mut() {
             child.recompute_styles(
                 state_map,
@@ -406,7 +406,10 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
         "recalculate" => {
             // dbg!(frame.frame_id, frame.command_name.as_str());
             let initial_state = vec![false; hm.len()];
+            let s = rdtsc();
             tree.recompute_styles(hm, &initial_state, &initial_state, true);
+            let e = rdtsc();
+            println!("{}", e - s);
         }
         "remove" => {
             // dbg!(frame.frame_id, frame.command_name.as_str());

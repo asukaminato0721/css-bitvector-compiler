@@ -1,16 +1,13 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::_rdtsc;
-
 pub trait Cache<HtmlNode> {
     fn dirtied(&mut self, path: &[u64]);
     fn recompute(&mut self, root: &mut HtmlNode);
 }
-// RDTSC 时间测量工具
+
 #[inline(always)]
 pub fn rdtsc() -> u64 {
     #[cfg(target_arch = "x86_64")]
     unsafe {
-        _rdtsc()
+        std::arch::x86_64::_rdtsc()
     }
     #[cfg(not(target_arch = "x86_64"))]
     {

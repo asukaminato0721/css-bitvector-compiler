@@ -1,5 +1,50 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
+    Finished `release` profile [optimized + debuginfo] target(s) in 2.94s
      Running `target/release/tri`
+5513533
+1263022
+1327206
+1299221
+1252343
+2911181
+1344826
+1247290
+1283717
+2945797
+1268091
+1291317
+3548453
+1464421
+1323640
+4824274
+1440815
+1906960
+3443326
+1270492
+1306414
+3531561
+1333523
+1291739
+3669803
+1291516
+1383016
+3603550
+1267818
+1240836
+3925214
+2057426
+2606467
+6850101
+1388740
+1426805
+3961475
+1275414
+1255034
+3830975
+1384692
+2121068
+3870148
+1284932
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
 Descendant { selectors: [Class("fl"), Type("a")] } -> [431]
 Descendant { selectors: [Class("gbgt")] } -> [146, 259, 279]
