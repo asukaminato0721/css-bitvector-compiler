@@ -127,6 +127,12 @@ impl BitVectorHtmlNode {
             }
         }
     }
+    fn clear_dirty(&mut self) {
+        self.dirty = false;
+        for child in &mut self.children {
+            child.clear_dirty();
+        }
+    }
     fn recompute_styles(
         &mut self,
         state_map: &HashMap<CssRule, usize>,
@@ -154,7 +160,7 @@ impl BitVectorHtmlNode {
         let is_output_changed = self.output_state != new_output_state;
         self.output_state = new_output_state;
         self.input_state = ancestor.to_vec();
-        self.dirty = false;
+       // self.dirty = false;
 
         // 遍历所有子节点，递归地调用此函数
         for child in self.children.iter_mut() {
@@ -372,6 +378,7 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
             let initial_state = vec![false; hm.len()];
             let s = rdtsc();
             tree.recompute_styles(hm, &initial_state, &initial_state, true);
+            tree.clear_dirty();
             let e = rdtsc();
             println!("{}", e - s);
         }

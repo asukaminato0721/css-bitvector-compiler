@@ -97,6 +97,22 @@ impl BitVectorHtmlNode {
             }
         }
     }
+    fn mark_dirty_upwards(&mut self) {
+        self.dirty = true;
+        let mut cur: *mut BitVectorHtmlNode = self;
+        unsafe {
+            while let Some(parent_ptr) = (*cur).parent {
+                (*parent_ptr).dirty = true;
+                cur = parent_ptr;
+            }
+        }
+    }
+    fn clear_dirty(&mut self) {
+        self.dirty = false;
+        for child in &mut self.children {
+            child.clear_dirty();
+        }
+    }
     fn add_node_by_path(
         &mut self,
         path: &[usize],
@@ -110,14 +126,7 @@ impl BitVectorHtmlNode {
         }
         let new_n = self.json_to_html_node(json_node, hm);
         self.children.insert(path[0], new_n);
-        self.dirty = true;
-        let mut cur: *mut BitVectorHtmlNode = self;
-        unsafe {
-            while let Some(parent_ptr) = (*cur).parent {
-                (*parent_ptr).dirty = true;
-                cur = parent_ptr;
-            }
-        }
+        self.mark_dirty_upwards();
         self.fix_parent_pointers();
     }
     fn record_remove(&mut self, path: &[usize]) {
@@ -127,14 +136,7 @@ impl BitVectorHtmlNode {
             return;
         }
         self.children.remove(path[0]);
-        self.dirty = true;
-        let mut cur: *mut BitVectorHtmlNode = self;
-        unsafe {
-            while let Some(parent_ptr) = (*cur).parent {
-                (*parent_ptr).dirty = true;
-                cur = parent_ptr;
-            }
-        }
+        self.mark_dirty_upwards();
     }
     fn recompute_styles(
         &mut self,
@@ -214,7 +216,7 @@ impl BitVectorHtmlNode {
         let is_output_changed = self.output_state != new_output_state;
         self.output_state = new_output_state;
         self.input_state = new_input_state;
-        self.dirty = false;
+        // self.dirty = false;
 
         for child in self.children.iter_mut() {
             child.recompute_styles(
@@ -412,6 +414,7 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
             let initial_state = vec![false; hm.len()];
             let s = rdtsc();
             tree.recompute_styles(hm, &initial_state, &initial_state, true);
+            tree.clear_dirty();
             let e = rdtsc();
             println!("{}", e - s);
         }
