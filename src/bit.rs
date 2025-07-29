@@ -440,7 +440,5 @@ fn main() {
         node_ids.dedup();
         println!("{:?} -> {:?}", rule, node_ids);
     }
-    dbg!(unsafe {
-        MISS_CNT
-    });
+    dbg!(unsafe { MISS_CNT });
 }
