@@ -15,18 +15,19 @@ name = "main"
 path = "src/main.rs"
 
 [[bin]]
-name = "benchmark"
-path = "src/benchmark.rs"
+name = "tri"
+path = "src/tri.rs"
 
-[features]
-default = []
-generated-css = []
-run-benchmark = ["generated-css"]
+[[bin]]
+name = "bit"
+path = "src/bit.rs"
+[[bin]]
+name = "naive"
+path = "src/naive.rs"
 
 [dependencies]
+cssparser = "0.35.0"
 serde_json = "1.0"
-scraper = "0.17"
-cssparser = "0.29"
 
 [profile.release]
 debug = true

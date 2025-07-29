@@ -10,29 +10,5 @@ put into css-gen-op folder
 
 
 ```
-./run.sh google
+./run.sh
 ```
-
-
-or
-
-```
-./run.sh amazon
-./run.sh youtube
-```
-
-run > 2 times to stablize the test.
-
-## Project Overview
-
-steps
-
-1. from css, generate 3 version of code, 1 is no optimization, 1 is only bitVector, 1 is `Vec<IState>` which has 3 states
-2. run them on html changes, get 3 results. diff them to see all these 3 versions are correct.
-3. run benchmark, see the diff between bitVector and IState
-
-for each website, generate 3 versions
-
-naive, bitVector, IState
-
-run main.rs to gen them all, then run the codegen to collect the results.

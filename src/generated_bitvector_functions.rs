@@ -10,22 +10,22 @@ static STRING_TO_ID: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
 fn get_string_to_id_map() -> &'static HashMap<&'static str, u32> {
     STRING_TO_ID.get_or_init(|| {
         let mut map = HashMap::new();
-        map.insert("chunked", 0);
-        map.insert("shell", 5);
-        map.insert("grecaptcha-badge", 2);
-        map.insert("masthead-skeleton-icon", 4);
-        map.insert("yt-logo-updated-svg", 12);
-        map.insert("external-icon", 1);
         map.insert("html", 14);
-        map.insert("input", 15);
-        map.insert("body", 13);
-        map.insert("masthead-skeleton-icons", 8);
-        map.insert("yt-icons-ext", 6);
-        map.insert("yt-logo-red-svg", 9);
         map.insert("hidden", 3);
         map.insert("yt-logo-svg", 11);
-        map.insert("masthead-logo", 7);
+        map.insert("yt-logo-updated-svg", 12);
+        map.insert("grecaptcha-badge", 2);
+        map.insert("external-icon", 1);
+        map.insert("yt-logo-red-svg", 9);
         map.insert("yt-logo-red-updated-svg", 10);
+        map.insert("masthead-logo", 7);
+        map.insert("body", 13);
+        map.insert("input", 15);
+        map.insert("shell", 5);
+        map.insert("masthead-skeleton-icon", 4);
+        map.insert("masthead-skeleton-icons", 8);
+        map.insert("chunked", 0);
+        map.insert("yt-icons-ext", 6);
         map
     })
 }
@@ -53,19 +53,15 @@ fn node_has_class_id(node: &HtmlNode, class_id: u32) -> bool {
     }
     false
 }
-// --- BitVector-only Incremental Processing Functions ---
-pub fn process_node_generated_bitvector_incremental(
+
+pub fn process_node_generated_bitvector(
     node: &mut HtmlNode,
     parent_state: &BitVector,
 ) -> BitVector {
-    // returns child_states
-    // Check if we need to recompute using BitVector-only tracking
     if !node.needs_any_recomputation_bitvector(parent_state) {
-        // Return cached result - entire subtree can be skipped
-        return node.cached_child_states.clone().unwrap();
+        return node.child_states.clone().unwrap();
     }
-    // Recompute node intrinsic matches if needed
-    if node.cached_node_intrinsic.is_none() || node.is_self_dirty {
+    if node.node_intrinsic.is_none() || node.self_dirty {
         let mut intrinsic_matches = BitVector::with_capacity(BITVECTOR_CAPACITY);
         match get_node_tag_id(node) {
             // Instruction 26: CheckAndSetBit { selector: Type("body"), bit_pos: 26 }
@@ -147,14 +143,11 @@ pub fn process_node_generated_bitvector_incremental(
             }
             _ => {}
         }
-        node.cached_node_intrinsic = Some(intrinsic_matches);
+        node.node_intrinsic = Some(intrinsic_matches);
     }
-
-    let mut current_matches = node.cached_node_intrinsic.clone().unwrap();
-
-    // BitVector-only parent state tracking
-    let mut parent_bits_read = BitVector::with_capacity(parent_state.capacity);
-    let mut parent_values_read = BitVector::with_capacity(parent_state.capacity);
+    let mut current_matches = node.node_intrinsic.clone().unwrap();
+    node.parent_bits_read = Some(BitVector::with_capacity(parent_state.capacity));
+    node.parent_values_read = Some(BitVector::with_capacity(parent_state.capacity));
     let mut child_states = BitVector::with_capacity(BITVECTOR_CAPACITY);
     if current_matches.is_bit_set(0) {
         child_states.set_bit(1); // active_Class("chunked")
@@ -205,20 +198,18 @@ pub fn process_node_generated_bitvector_incremental(
         child_states.set_bit(31); // active_Type("input")
     }
     node.css_match_bitvector = current_matches;
-    node.set_parent_state_cache_bitvector(parent_bits_read, parent_values_read);
-    node.cached_child_states = Some(child_states.clone());
+    node.child_states = Some(child_states.clone());
     node.mark_clean();
 
     child_states
 }
 
-/// BitVector-only incremental processing driver with statistics tracking
 pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     let mut total_nodes = 0;
     let mut cache_hits = 0;
     let mut cache_misses = 0;
     let initial_state = BitVector::with_capacity(BITVECTOR_CAPACITY);
-    process_tree_recursive_bitvector_incremental(
+    process_bitvector(
         root,
         &initial_state,
         &mut total_nodes,
@@ -228,7 +219,7 @@ pub fn process_tree_bitvector(root: &mut HtmlNode) -> (usize, usize, usize) {
     (total_nodes, cache_hits, cache_misses)
 }
 
-fn process_tree_recursive_bitvector_incremental(
+fn process_bitvector(
     node: &mut HtmlNode,
     parent_state: &BitVector,
     total: &mut usize,
@@ -237,25 +228,19 @@ fn process_tree_recursive_bitvector_incremental(
 ) {
     *total += 1;
 
-    // Logic 1: Check if node itself needs recomputation using BitVector-only tracking
     let child_states = if node.needs_self_recomputation_bitvector(parent_state) {
         *misses += 1;
-        // Recompute node and get fresh child_states
-        process_node_generated_bitvector_incremental(node, parent_state)
+        process_node_generated_bitvector(node, parent_state)
     } else {
         *hits += 1;
-        // Use cached child_states - major optimization for internal nodes!
-        node.cached_child_states
+        node.child_states
             .clone()
             .unwrap_or_else(|| BitVector::with_capacity(BITVECTOR_CAPACITY))
     };
 
-    // Logic 2: Check if we need to recurse (only if there are dirty descendants)
     if node.has_dirty_descendant {
-        // Recurse into children only if there are dirty descendants
         for child in node.children.iter_mut() {
-            process_tree_recursive_bitvector_incremental(child, &child_states, total, hits, misses);
+            process_bitvector(child, &child_states, total, hits, misses);
         }
     }
-    // If no dirty descendants, skip entire subtree recursion - major optimization!
 }
