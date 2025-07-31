@@ -136,12 +136,17 @@ impl BitVectorHtmlNode {
                 MISS_CNT += 1;
             }
             let new_output_state = self.new_output_state(&self.output_state, state_map);
-            self.output_state = new_output_state;
-            self.dirty = false;
+            if self.output_state != new_output_state {
+                self.output_state = new_output_state;
+                for c in self.children.iter_mut() {
+                    c.set_dirty();
+                }
+            }
         }
         for child in self.children.iter_mut() {
             child.recompute_styles(state_map);
         }
+        self.dirty = false;
         self.recursive_dirty = false;
     }
     fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssRule, usize>) -> Vec<bool> {

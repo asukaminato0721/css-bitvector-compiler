@@ -1,52 +1,48 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.03s
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.09s
      Running `target/release/bit`
-12881
-53
-13688
-3635
-263
-31988
-288
-267
-6077
-9198
-313
-4112
-7264
-283
-3350
-6846
+314
+302
+49
+584
+394
+51
+272
+276
+236
+20
+262
+269
+20
+270
+60
+18
+30
+46
 33
-4084
-6949
-312
-6227
-6833
-37
-3485
-7083
-320
-6069
-7060
-37
-3867
-6969
+264
+276
 31
-3554
-7018
-274
-3758
-6830
-209
-3465
-7338
+34
+50
 35
-3832
-7162
-57
-Descendant { selectors: [Class("gssb_e")] } -> [510]
-Descendant { selectors: [Type("body")] } -> [35]
-Descendant { selectors: [Type("form")] } -> [343]
-Descendant { selectors: [Type("td")] } -> [510]
-[src/bit.rs:425:5] unsafe { MISS_CNT } = 43
+276
+304
+33
+50
+316
+19
+34
+48
+35
+261
+268
+34
+49
+81
+34
+20
+259
+519
+248
+[src/bit.rs:422:5] unsafe { MISS_CNT } = 0
