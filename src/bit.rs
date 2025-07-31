@@ -127,10 +127,7 @@ impl BitVectorHtmlNode {
         self.children.remove(path[0]);
         self.set_dirty();
     }
-    fn recompute_styles(
-        &mut self,
-        state_map: &HashMap<CssRule, usize>,
-    ) {
+    fn recompute_styles(&mut self, state_map: &HashMap<CssRule, usize>) {
         if !self.recursive_dirty {
             return;
         }
@@ -138,8 +135,7 @@ impl BitVectorHtmlNode {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state =
-                self.new_output_state(&self.output_state, state_map);
+            let new_output_state = self.new_output_state(&self.output_state, state_map);
             self.output_state = new_output_state;
             self.dirty = false;
         }
@@ -148,11 +144,7 @@ impl BitVectorHtmlNode {
         }
         self.recursive_dirty = false;
     }
-    fn new_output_state(
-        &self,
-        input: &[bool],
-        state_map: &HashMap<CssRule, usize>,
-    ) -> Vec<bool> {
+    fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
         let mut new_state = input.to_vec();
 
         for (CssRule::Descendant { selectors }, &bit_index) in state_map {
