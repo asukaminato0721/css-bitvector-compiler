@@ -23,13 +23,28 @@ struct BitVectorHtmlNode {
     html_id: Option<String>,
     class: HashSet<String>,
     children: Vec<BitVectorHtmlNode>,
-    input_state: Vec<bool>,
     output_state: Vec<bool>,
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     dirty: bool,
+    recursive_dirty: bool,
 }
 
 impl BitVectorHtmlNode {
+    fn set_dirty(&mut self) {
+        self.dirty = true;
+        self.recursive_dirty = true;
+        unsafe {
+            let mut cur: *mut BitVectorHtmlNode = self;
+            while let Some(parent_ptr) = (*cur).parent {
+                if (*parent_ptr).recursive_dirty {
+                    break;
+                } else {
+                    (*parent_ptr).recursive_dirty = true;
+                    cur = parent_ptr;
+                }
+            }
+        }
+    }
     fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
@@ -63,7 +78,6 @@ impl BitVectorHtmlNode {
                 .map(|x| self.json_to_html_node(x, &hm))
                 .collect()
         };
-        node.input_state = vec![false; hm.len()];
         node.output_state = vec![false; hm.len()];
         node.fix_parent_pointers();
         node
@@ -101,14 +115,7 @@ impl BitVectorHtmlNode {
         }
         let new_n = self.json_to_html_node(json_node, hm);
         self.children.insert(path[0], new_n);
-        self.dirty = true;
-        let mut cur: *mut BitVectorHtmlNode = self;
-        unsafe {
-            while let Some(parent_ptr) = (*cur).parent {
-                (*parent_ptr).dirty = true;
-                cur = parent_ptr;
-            }
-        }
+        self.set_dirty();
         self.fix_parent_pointers();
     }
     fn record_remove(&mut self, path: &[usize]) {
@@ -118,14 +125,7 @@ impl BitVectorHtmlNode {
             return;
         }
         self.children.remove(path[0]);
-        self.dirty = true;
-        let mut cur: *mut BitVectorHtmlNode = self;
-        unsafe {
-            while let Some(parent_ptr) = (*cur).parent {
-                (*parent_ptr).dirty = true;
-                cur = parent_ptr;
-            }
-        }
+        self.set_dirty();
     }
     fn clear_dirty(&mut self) {
         self.dirty = false;
@@ -138,38 +138,38 @@ impl BitVectorHtmlNode {
         state_map: &HashMap<CssRule, usize>,
         parent_output: &[bool],
         ancestor: &[bool],
-        force_recompute: bool,
     ) {
-        let is_input_changed = self.input_state != ancestor;
-        if is_input_changed || force_recompute {
-            self.dirty = true;
-        }
-        if !self.dirty {
+        if !self.recursive_dirty {
             return;
-        }
-        unsafe {
-            MISS_CNT += 1;
-        }
-        let mut current_ancestor_match_state = parent_output.to_vec();
-        current_ancestor_match_state
-            .iter_mut()
-            .zip(ancestor)
-            .for_each(|(c, p)| *c |= p);
-        let new_output_state =
-            self.calculate_new_output_state(&current_ancestor_match_state, state_map);
-        let is_output_changed = self.output_state != new_output_state;
-        self.output_state = new_output_state;
-        self.input_state = ancestor.to_vec();
-        // self.dirty = false;
-
-        // 遍历所有子节点，递归地调用此函数
-        for child in self.children.iter_mut() {
-            child.recompute_styles(
-                state_map,
-                &self.output_state,
-                &current_ancestor_match_state,
-                is_output_changed,
-            );
+        } else {
+            let mut current_ancestor_match_state = parent_output.to_vec();
+            current_ancestor_match_state
+                .iter_mut()
+                .zip(ancestor)
+                .for_each(|(c, p)| *c |= p);
+            if self.dirty {
+                unsafe {
+                    MISS_CNT += 1;
+                }
+                let new_output_state =
+                    self.calculate_new_output_state(&current_ancestor_match_state, state_map);
+                let is_output_changed = self.output_state != new_output_state;
+                if is_output_changed {
+                    for child in self.children.iter_mut() {
+                        child.set_dirty();
+                    }
+                }
+                self.output_state = new_output_state;
+                self.dirty = false;
+            }
+            for child in self.children.iter_mut() {
+                child.recompute_styles(
+                    state_map,
+                    &self.output_state,
+                    &current_ancestor_match_state,
+                );
+            }
+            self.recursive_dirty = false;
         }
     }
     fn calculate_new_output_state(
@@ -377,7 +377,7 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
             //   dbg!(frame.frame_id, frame.command_name.as_str());
             let initial_state = vec![false; hm.len()];
             let s = rdtsc();
-            tree.recompute_styles(hm, &initial_state, &initial_state, true);
+            tree.recompute_styles(hm, &initial_state, &initial_state);
             tree.clear_dirty();
             let e = rdtsc();
             println!("{}", e - s);
