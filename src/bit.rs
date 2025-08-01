@@ -79,6 +79,7 @@ impl BitVectorHtmlNode {
                 .collect()
         };
         node.output_state = vec![false; hm.len()];
+        node.set_dirty();
         node.fix_parent_pointers();
         node
     }
@@ -142,6 +143,15 @@ impl BitVectorHtmlNode {
                     c.set_dirty();
                 }
             }
+        } else {
+            // Check: if not dirty, recomputing should not change output
+            let original_output_state = self.output_state.clone();
+            let new_output_state = self.new_output_state(&self.output_state, state_map);
+            assert_eq!(
+                original_output_state, new_output_state,
+                "Node ID {}: Output state changed when node was not dirty!",
+                self.id
+            );
         }
         for child in self.children.iter_mut() {
             child.recompute_styles(state_map);
