@@ -1,8 +1,0 @@
-/* Rule 0 (R0) */ div {}
-/* Rule 1 (R1) */ .item {}
-/* Rule 2 (R2) */ #specific {}
-/* Rule 3 (R3) */ p {}
-/* Rule 4 (R4) */ div > p {}
-/* Rule 5 (R5) */ .item > #specific {}
-/* Rule 6 (R6) */ div > .item {}
-/* Rule 7 (R7) */ div > #specific {}

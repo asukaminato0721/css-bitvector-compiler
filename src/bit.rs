@@ -119,10 +119,10 @@ impl BitVectorHtmlNode {
         self.set_dirty();
         self.fix_parent_pointers();
     }
-    fn record_remove(&mut self, path: &[usize]) {
+    fn remove_node_by_path(&mut self, path: &[usize]) {
         assert!(!path.is_empty());
         if path.len() > 1 {
-            self.children[path[0]].record_remove(&path[1..]);
+            self.children[path[0]].remove_node_by_path(&path[1..]);
             return;
         }
         self.children.remove(path[0]);
@@ -136,7 +136,7 @@ impl BitVectorHtmlNode {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state = self.new_output_state(state_map);
+            let new_output_state = self.new_output_state(&self.output_state, state_map);
             if self.output_state != new_output_state {
                 self.output_state = new_output_state;
                 for c in self.children.iter_mut() {
@@ -146,7 +146,7 @@ impl BitVectorHtmlNode {
         } else {
             // Check: if not dirty, recomputing should not change output
             let original_output_state = self.output_state.clone();
-            let new_output_state = self.new_output_state(state_map);
+            let new_output_state = self.new_output_state(&self.output_state, state_map);
             assert_eq!(
                 original_output_state, new_output_state,
                 "Node ID {}: Output state changed when node was not dirty!",
@@ -159,13 +159,8 @@ impl BitVectorHtmlNode {
         self.dirty = false;
         self.recursive_dirty = false;
     }
-    fn new_output_state(&self, state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
-        let parent_state = if let Some(p) = self.parent {
-            Some(unsafe { &(*p).output_state })
-        } else {
-            None
-        };
-        let mut new_state = vec![false; state_map.len()];
+    fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
+        let mut new_state = input.to_vec();
 
         for (CssRule::Descendant { selectors }, &bit_index) in state_map {
             let last_selector = selectors.last().unwrap();
@@ -173,20 +168,18 @@ impl BitVectorHtmlNode {
             if !self.matches_simple_selector(last_selector) {
                 continue;
             }
-
+            assert!(self.matches_simple_selector(last_selector));
             if selectors.len() == 1 {
                 new_state[bit_index] = true;
             } else {
-                if let Some(ps) = parent_state {
-                    let parent_selectors = &selectors[..selectors.len() - 1];
-                    let parent_rule = CssRule::Descendant {
-                        selectors: parent_selectors.to_vec(),
-                    };
-                    if let Some(&parent_bit_index) = state_map.get(&parent_rule) {
-                        if ps[parent_bit_index] {
-                            new_state[bit_index] = true;
-                        }
-                    }
+                let parent_selectors = &selectors[..selectors.len() - 1];
+                let parent_rule = CssRule::Descendant {
+                    selectors: parent_selectors.to_vec(),
+                };
+                let &parent_bit_index = state_map.get(&parent_rule).unwrap();
+                //dbg!(input.iter().all(|x|!x));
+                if input[parent_bit_index] {
+                    new_state[bit_index] = true;
                 }
             }
         }
@@ -373,7 +366,7 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
         "remove" => {
             //  dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
-            tree.record_remove(&path);
+            tree.remove_node_by_path(&path);
         }
         _ => {
             // dbg!(frame.frame_id, frame.command_name.as_str());
@@ -436,4 +429,70 @@ fn main() {
         println!("{:?} -> {:?}", rule, node_ids);
     }
     dbg!(unsafe { MISS_CNT });
+}
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    /// div
+    fn test_new_output_state_simple() {
+        let mut state_map = HashMap::new();
+        let rule_div = CssRule::Descendant {
+            selectors: vec![Selector::Type("div".to_string())],
+        };
+        state_map.insert(rule_div.clone(), state_map.len());
+        let mut node = BitVectorHtmlNode::default();
+        node.tag_name = "div".to_string();
+        let input = vec![false];
+        let output = node.new_output_state(&input, &state_map);
+        assert_eq!(output, [true]);
+    }
+
+    #[test]
+    /// .foo#bar
+    fn test_new_output_state_class_and_id() {
+        let mut state_map = HashMap::new();
+        let rule_class = CssRule::Descendant {
+            selectors: vec![Selector::Class("foo".to_string())],
+        };
+        let rule_id = CssRule::Descendant {
+            selectors: vec![Selector::Id("bar".to_string())],
+        };
+        state_map.insert(rule_class.clone(), 0);
+        state_map.insert(rule_id.clone(), 1);
+        let mut node = BitVectorHtmlNode::default();
+        node.class = ["foo".to_string()].iter().cloned().collect::<HashSet<_>>();
+        node.html_id = Some("bar".to_string());
+        let input = vec![false, false];
+        let output = node.new_output_state(&input, &state_map);
+        assert_eq!(output, vec![true, true]);
+    }
+    #[test]
+    /// .foo  #bar
+    fn test_descendant() {
+        let mut state_map = HashMap::new();
+        let rule = CssRule::Descendant {
+            selectors: vec![Selector::Class("foo".into()), Selector::Id("bar".into())],
+        };
+        let rule_father = CssRule::Descendant {
+            selectors: vec![Selector::Class("foo".into())],
+        };
+        state_map.insert(rule_father.clone(), state_map.len());
+        state_map.insert(rule.clone(), state_map.len());
+
+        let mut node = BitVectorHtmlNode::default();
+        node.class = ["foo".into()].iter().cloned().collect::<HashSet<_>>();
+
+        let mut child_node = BitVectorHtmlNode::default();
+        child_node.html_id = Some("bar".into());
+
+        node.children = vec![child_node];
+        node.fix_parent_pointers();
+        node.children[0].set_dirty();
+
+        let input = vec![true, false];
+        let output = node.children[0].new_output_state(&input, &state_map);
+        assert_eq!(output, [true, true]);
+    }
 }
