@@ -136,7 +136,7 @@ impl BitVectorHtmlNode {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state = self.new_output_state(&self.output_state, state_map);
+            let new_output_state = self.new_output_state(state_map);
             if self.output_state != new_output_state {
                 self.output_state = new_output_state;
                 for c in self.children.iter_mut() {
@@ -146,7 +146,7 @@ impl BitVectorHtmlNode {
         } else {
             // Check: if not dirty, recomputing should not change output
             let original_output_state = self.output_state.clone();
-            let new_output_state = self.new_output_state(&self.output_state, state_map);
+            let new_output_state = self.new_output_state(state_map);
             assert_eq!(
                 original_output_state, new_output_state,
                 "Node ID {}: Output state changed when node was not dirty!",
@@ -159,8 +159,13 @@ impl BitVectorHtmlNode {
         self.dirty = false;
         self.recursive_dirty = false;
     }
-    fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
-        let mut new_state = input.to_vec();
+    fn new_output_state(&self, state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
+        let parent_state = if let Some(p) = self.parent {
+            Some(unsafe { &(*p).output_state })
+        } else {
+            None
+        };
+        let mut new_state = vec![false; state_map.len()];
 
         for (CssRule::Descendant { selectors }, &bit_index) in state_map {
             let last_selector = selectors.last().unwrap();
@@ -172,14 +177,15 @@ impl BitVectorHtmlNode {
             if selectors.len() == 1 {
                 new_state[bit_index] = true;
             } else {
-                let parent_selectors = &selectors[..selectors.len() - 1];
-                let parent_rule = CssRule::Descendant {
-                    selectors: parent_selectors.to_vec(),
-                };
-
-                if let Some(&parent_bit_index) = state_map.get(&parent_rule) {
-                    if input[parent_bit_index] {
-                        new_state[bit_index] = true;
+                if let Some(ps) = parent_state {
+                    let parent_selectors = &selectors[..selectors.len() - 1];
+                    let parent_rule = CssRule::Descendant {
+                        selectors: parent_selectors.to_vec(),
+                    };
+                    if let Some(&parent_bit_index) = state_map.get(&parent_rule) {
+                        if ps[parent_bit_index] {
+                            new_state[bit_index] = true;
+                        }
                     }
                 }
             }
