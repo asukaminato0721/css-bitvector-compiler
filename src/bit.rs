@@ -177,29 +177,23 @@ impl BitVectorHtmlNode {
                     selectors: parent_selectors.to_vec(),
                 };
                 let &parent_bit_index = state_map.get(&parent_rule).unwrap();
-                if self.has_ancestor_matching_rule(parent_bit_index, input) {
+                if self.has_ancestor_matching_rule(parent_bit_index) {
                     new_state[bit_index] = true;
                 }
             }
         }
         new_state
     }
-    fn has_ancestor_matching_rule(&self, parent_bit_index: usize, input: &[bool]) -> bool {
-        unsafe {
-            let mut current_parent = self.parent;
-            while let Some(parent_ptr) = current_parent {
-                let parent_node = &*parent_ptr;
-                if parent_node
-                    .output_state
-                    .get(parent_bit_index)
-                    .copied()
-                    .unwrap_or(false)
-                {
-                    return true;
-                }
-                current_parent = parent_node.parent;
+    fn has_ancestor_matching_rule(&self, parent_bit_index: usize) -> bool {
+        let mut current_parent = self.parent;
+        while let Some(parent_ptr) = current_parent {
+            let parent_node = unsafe { &*parent_ptr };
+            if parent_node.output_state[parent_bit_index] {
+                return true;
             }
+            current_parent = parent_node.parent;
         }
+
         false
     }
     fn collect_all_matches(

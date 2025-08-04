@@ -1,59 +1,50 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-warning: unused variable: `input`
-   --> src/bit.rs:188:67
-    |
-188 |     fn has_ancestor_matching_rule(&self, parent_bit_index: usize, input: &[bool]) -> bool {
-    |                                                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_input`
-    |
-    = note: `#[warn(unused_variables)]` on by default
-
-warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.04s
      Running `target/release/bit`
-15630
-58
-97625
-22731
-41
-584203
-20
-59
-24987
-552877
+16752
+351
+72806
+14379
+49
+565408
+418
+53
+14689
+616010
+10575
+15884
+595428
 83
-23986
-527614
-55
-23879
-553515
-306
-24254
-541254
-64
-23737
-572754
-32
-25010
-544826
-69
-29054
-568033
-44
-25021
-547851
-73
-23930
-472722
-43
-25134
-591208
-36
-36875
-544263
-57
-26343
-487928
-31
+14724
+604452
+59
+15129
+591994
+20
+14348
+599547
+20
+14391
+575552
+633
+17052
+580582
+20
+14550
+712613
+60
+16453
+681344
+40
+20316
+590558
+20
+14414
+562313
+19
+14109
+506495
+59
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
 Descendant { selectors: [Class("fl"), Type("a")] } -> [431]
 Descendant { selectors: [Class("gbgt")] } -> [146, 259, 279]
@@ -117,4 +108,4 @@ Descendant { selectors: [Type("body")] } -> [35]
 Descendant { selectors: [Type("form")] } -> [343]
 Descendant { selectors: [Type("input")] } -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
 Descendant { selectors: [Type("td")] } -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-[src/bit.rs:444:5] unsafe { MISS_CNT } = 1628
+[src/bit.rs:442:5] unsafe { MISS_CNT } = 1628
