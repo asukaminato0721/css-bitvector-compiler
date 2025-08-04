@@ -1,51 +1,61 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.25s
+warning: unused variable: `input`
+   --> src/bit.rs:188:67
+    |
+188 |     fn has_ancestor_matching_rule(&self, parent_bit_index: usize, input: &[bool]) -> bool {
+    |                                                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_input`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.11s
      Running `target/release/bit`
-1939473
-329
-82052
-15907
-30
-666886
-275
-274
-15671
-654861
-229
-15950
-693735
-271
-16774
-682181
-24
-16749
-650688
-24
-16212
-662599
-236
-16156
-768125
+15630
+58
+97625
+22731
+41
+584203
+20
+59
+24987
+552877
+83
+23986
+527614
 55
-18909
-750148
-349
-16859
-679734
-24
-16683
-589276
-81
-15745
-673271
-338
-16013
-635883
-24
-17535
-572349
-62
+23879
+553515
+306
+24254
+541254
+64
+23737
+572754
+32
+25010
+544826
+69
+29054
+568033
+44
+25021
+547851
+73
+23930
+472722
+43
+25134
+591208
+36
+36875
+544263
+57
+26343
+487928
+31
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
+Descendant { selectors: [Class("fl"), Type("a")] } -> [431]
 Descendant { selectors: [Class("gbgt")] } -> [146, 259, 279]
 Descendant { selectors: [Class("gbm")] } -> [165, 296]
 Descendant { selectors: [Class("gbma")] } -> [160]
@@ -54,16 +64,24 @@ Descendant { selectors: [Class("gbmcc")] } -> [172, 302]
 Descendant { selectors: [Class("gbmh")] } -> [233, 313]
 Descendant { selectors: [Class("gbmt")] } -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
 Descendant { selectors: [Class("gbmtc")] } -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
+Descendant { selectors: [Class("gbsb"), Class("gbsbb")] } -> [246]
 Descendant { selectors: [Class("gbsb")] } -> [169]
 Descendant { selectors: [Class("gbsbic")] } -> [172]
+Descendant { selectors: [Class("gbsbis"), Class("gbsbb")] } -> [246]
+Descendant { selectors: [Class("gbsbis"), Class("gbsbt")] } -> [244]
 Descendant { selectors: [Class("gbt")] } -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
+Descendant { selectors: [Class("gbtb"), Class("gbts")] } -> [275]
 Descendant { selectors: [Class("gbtb2")] } -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
 Descendant { selectors: [Class("gbtcb")] } -> [51, 253]
 Descendant { selectors: [Class("gbts")] } -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
 Descendant { selectors: [Class("gbtsa")] } -> [154]
 Descendant { selectors: [Class("gbxx")] } -> [250]
+Descendant { selectors: [Class("gbz0l"), Class("gbtb2")] } -> [62]
+Descendant { selectors: [Class("gbz0l"), Class("gbts")] } -> [64]
+Descendant { selectors: [Class("gbzt"), Class("gbts")] } -> [64, 75, 86, 97, 108, 119, 130, 141]
 Descendant { selectors: [Class("gsfs")] } -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 Descendant { selectors: [Class("gsq_a")] } -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
+Descendant { selectors: [Class("gssb_a"), Type("td")] } -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
 Descendant { selectors: [Class("gssb_a")] } -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 Descendant { selectors: [Class("gssb_c")] } -> [499]
 Descendant { selectors: [Class("gssb_e")] } -> [510]
@@ -73,9 +91,15 @@ Descendant { selectors: [Class("gssb_m")] } -> [513]
 Descendant { selectors: [Class("lsb")] } -> [396, 409, 909, 921]
 Descendant { selectors: [Class("lsbb")] } -> [394, 407, 917, 929]
 Descendant { selectors: [Class("lst")] } -> [375]
+Descendant { selectors: [Class("sblc"), Type("a")] } -> [431]
 Descendant { selectors: [Class("sblc")] } -> [426]
+Descendant { selectors: [Id("SIvCob"), Type("a")] } -> [452]
 Descendant { selectors: [Id("SIvCob")] } -> [449]
+Descendant { selectors: [Id("WqQANb"), Type("a")] } -> [463, 466, 469, 472]
 Descendant { selectors: [Id("gb")] } -> [42]
+Descendant { selectors: [Id("gbg"), Class("gbgt")] } -> [259, 279]
+Descendant { selectors: [Id("gbg"), Class("gbm")] } -> [296]
+Descendant { selectors: [Id("gbg"), Class("gbtcb")] } -> [253]
 Descendant { selectors: [Id("gbg")] } -> [248]
 Descendant { selectors: [Id("gbg5")] } -> [279]
 Descendant { selectors: [Id("gbgs5")] } -> [288]
@@ -84,6 +108,8 @@ Descendant { selectors: [Id("gbi5")] } -> [291]
 Descendant { selectors: [Id("gbmm")] } -> [172]
 Descendant { selectors: [Id("gbx3")] } -> [321]
 Descendant { selectors: [Id("gbx4")] } -> [323]
+Descendant { selectors: [Id("gbz"), Class("gbm")] } -> [165]
+Descendant { selectors: [Id("gbz"), Class("gbtcb")] } -> [51]
 Descendant { selectors: [Id("gbz")] } -> [49]
 Descendant { selectors: [Id("gws-output-pages-elements-homepage_additional_languages__als")] } -> [445]
 Descendant { selectors: [Type("a")] } -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
@@ -91,4 +117,4 @@ Descendant { selectors: [Type("body")] } -> [35]
 Descendant { selectors: [Type("form")] } -> [343]
 Descendant { selectors: [Type("input")] } -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
 Descendant { selectors: [Type("td")] } -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-[src/bit.rs:432:5] unsafe { MISS_CNT } = 1627
+[src/bit.rs:444:5] unsafe { MISS_CNT } = 1628
