@@ -1,6 +1,9 @@
 use css_bitvector_compiler::rdtsc;
 use cssparser::{Parser, ParserInput, Token};
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Debug,
+};
 
 static mut MISS_CNT: usize = 0;
 
@@ -20,7 +23,7 @@ enum Selector {
     Id(String),
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 
 struct BitVectorHtmlNode {
     tag_name: String,
@@ -32,6 +35,21 @@ struct BitVectorHtmlNode {
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     dirty: bool,
     recursive_dirty: bool,
+}
+
+impl Debug for BitVectorHtmlNode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("BitVectorHtmlNode")
+            .field("tag_name", &self.tag_name)
+            .field("id", &self.id)
+            .field("html_id", &self.html_id)
+            .field("class", &self.class)
+            .field("parent", &self.parent.map_or(0, |x| unsafe { { &*x }.id }))
+            .field("children", &self.children)
+            //  .field("dirty", &self.dirty)
+            //  .field("recursive_dirty", &self.recursive_dirty)
+            .finish()
+    }
 }
 
 impl BitVectorHtmlNode {
@@ -212,7 +230,7 @@ impl BitVectorHtmlNode {
                             selectors: selectors[..selectors.len() - 1].to_vec(),
                         };
                         if self.matches_simple_selector(last_selector)
-                            && new_state[*state_map.get(&parent_rule).unwrap()]
+                            && input[*state_map.get(&parent_rule).unwrap()]
                         {
                             new_state[bit_index] = true;
                         }
@@ -449,6 +467,7 @@ fn main() {
     for i in &trace {
         apply_frame(&mut bit, &i, &hm);
     }
+   // dbg!(&bit);
     let rev_hm = hm
         .iter()
         .filter_map(|(x, y)| match x {
