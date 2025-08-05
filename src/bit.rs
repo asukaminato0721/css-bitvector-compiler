@@ -209,7 +209,7 @@ impl BitVectorHtmlNode {
                                     selectors: selectors[..selectors.len() - 1].to_vec(),
                                 };
                                 if self.matches_simple_selector(last_selector)
-                                    && new_state[*state_map.get(&parent_rule).unwrap()]
+                                    && input[*state_map.get(&parent_rule).unwrap()]
                                 {
                                     new_state[bit_index] = true;
                                 }
