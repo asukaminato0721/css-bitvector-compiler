@@ -467,7 +467,7 @@ fn main() {
     for i in &trace {
         apply_frame(&mut bit, &i, &hm);
     }
-   // dbg!(&bit);
+    // dbg!(&bit);
     let rev_hm = hm
         .iter()
         .filter_map(|(x, y)| match x {
