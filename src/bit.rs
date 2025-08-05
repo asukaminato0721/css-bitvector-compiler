@@ -80,11 +80,7 @@ impl BitVectorHtmlNode {
             }
         }
     }
-    fn json_to_html_node(
-        &mut self,
-        json_node: &serde_json::Value,
-        num_states: usize,
-    ) -> Self {
+    fn json_to_html_node(&mut self, json_node: &serde_json::Value, num_states: usize) -> Self {
         let mut node = Self::default();
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
