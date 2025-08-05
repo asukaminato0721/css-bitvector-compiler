@@ -1,111 +1,66 @@
-   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.23s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-5786568
-65
-198341
-47243
+167425
+686370
+1278741
+110151
+310506
+45284
+843680
+61
+16024
+27767
+18
+10092
+292
 26
-1515395
-24
-39
-44972
-1457585
-26
-44846
-1479026
-28
-366071
-1571607
-25
-43216
-1405794
-26
-41288
-1321204
-25
-41395
-2362978
-26
-50184
-1544569
-26
-42646
-1376829
-24
-46752
-1194118
-26
-43609
-2271574
-30
-47902
-1366230
-22
-46237
-1224344
-55
-Done { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
-Done { selectors: [Class("fl"), Type("a")] } -> [431]
-Done { selectors: [Class("gbgt")] } -> [146, 259, 279]
-Done { selectors: [Class("gbm")] } -> [165, 296]
-Done { selectors: [Class("gbma")] } -> [160]
-Done { selectors: [Class("gbmc")] } -> [169, 300]
-Done { selectors: [Class("gbmcc")] } -> [172, 302]
-Done { selectors: [Class("gbmh")] } -> [233, 313]
-Done { selectors: [Class("gbmt")] } -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
-Done { selectors: [Class("gbmtc")] } -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
-Done { selectors: [Class("gbsb"), Class("gbsbb")] } -> [246]
-Done { selectors: [Class("gbsb")] } -> [169]
-Done { selectors: [Class("gbsbic")] } -> [172]
-Done { selectors: [Class("gbsbis"), Class("gbsbb")] } -> [246]
-Done { selectors: [Class("gbsbis"), Class("gbsbt")] } -> [244]
-Done { selectors: [Class("gbt")] } -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
-Done { selectors: [Class("gbtb"), Class("gbts")] } -> [275]
-Done { selectors: [Class("gbtb2")] } -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
-Done { selectors: [Class("gbtcb")] } -> [51, 253]
-Done { selectors: [Class("gbts")] } -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
-Done { selectors: [Class("gbtsa")] } -> [154]
-Done { selectors: [Class("gbxx")] } -> [250]
-Done { selectors: [Class("gbz0l"), Class("gbtb2")] } -> [62]
-Done { selectors: [Class("gbz0l"), Class("gbts")] } -> [64]
-Done { selectors: [Class("gbzt"), Class("gbts")] } -> [64, 75, 86, 97, 108, 119, 130, 141]
-Done { selectors: [Class("gsfs")] } -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-Done { selectors: [Class("gsq_a")] } -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
-Done { selectors: [Class("gssb_a"), Type("td")] } -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
-Done { selectors: [Class("gssb_a")] } -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-Done { selectors: [Class("gssb_c")] } -> [499]
-Done { selectors: [Class("gssb_e")] } -> [510]
-Done { selectors: [Class("gssb_f")] } -> [507]
-Done { selectors: [Class("gssb_g")] } -> [907]
-Done { selectors: [Class("gssb_m")] } -> [513]
-Done { selectors: [Class("lsb")] } -> [396, 409, 909, 921]
-Done { selectors: [Class("lsbb")] } -> [394, 407, 917, 929]
-Done { selectors: [Class("lst")] } -> [375]
-Done { selectors: [Class("sblc"), Type("a")] } -> [431]
-Done { selectors: [Class("sblc")] } -> [426]
-Done { selectors: [Id("SIvCob"), Type("a")] } -> [452]
-Done { selectors: [Id("SIvCob")] } -> [449]
-Done { selectors: [Id("WqQANb"), Type("a")] } -> [463, 466, 469, 472]
-Done { selectors: [Id("gb")] } -> [42]
-Done { selectors: [Id("gbg"), Class("gbgt")] } -> [259, 279]
-Done { selectors: [Id("gbg"), Class("gbm")] } -> [296]
-Done { selectors: [Id("gbg"), Class("gbtcb")] } -> [253]
-Done { selectors: [Id("gbg")] } -> [248]
-Done { selectors: [Id("gbg5")] } -> [279]
-Done { selectors: [Id("gbgs5")] } -> [288]
-Done { selectors: [Id("gbi4s1")] } -> [270]
-Done { selectors: [Id("gbi5")] } -> [291]
-Done { selectors: [Id("gbmm")] } -> [172]
-Done { selectors: [Id("gbx3")] } -> [321]
-Done { selectors: [Id("gbx4")] } -> [323]
-Done { selectors: [Id("gbz"), Class("gbm")] } -> [165]
-Done { selectors: [Id("gbz"), Class("gbtcb")] } -> [51]
-Done { selectors: [Id("gbz")] } -> [49]
-Done { selectors: [Id("gws-output-pages-elements-homepage_additional_languages__als")] } -> [445]
-Done { selectors: [Type("a")] } -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
-Done { selectors: [Type("body")] } -> [35]
-Done { selectors: [Type("form")] } -> [343]
-Done { selectors: [Type("input")] } -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
-Done { selectors: [Type("td")] } -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-[src/bit.rs:489:5] unsafe { MISS_CNT } = 1627
+14641
+274363
+295
+150309
+198154
+76382
+178675
+572473
+110655
+97897
+94935
+126490
+91755
+141245
+36
+74595
+83873
+93967
+92741
+100237
+91052
+93166
+92540
+92337
+203919
+67622
+105093
+89521
+111964
+70774
+90757
+89220
+88026
+127260
+350877
+354494
+477756
+1367606
+624467
+Done { selectors: [Class("hidden")] } -> [7245, 8803, 8862, 8921, 8980, 9039, 13784, 14120]
+Done { selectors: [Class("masthead-skeleton-icon")] } -> [382, 384, 386]
+Done { selectors: [Id("masthead-skeleton-icons")] } -> [379]
+Done { selectors: [Type("body")] } -> [233, 4487, 5866]
+Done { selectors: [Type("dom-repeat")] } -> [5129, 5141, 5320, 12772, 13614, 13626, 13797]
+Done { selectors: [Type("html")] } -> [5, 6, 4485, 5864]
+Done { selectors: [Type("ytd-masthead"), Class("external-icon")] } -> [274, 291, 336]
+Done { selectors: [Type("ytd-masthead"), Class("yt-icons-ext")] } -> [278]
+Done { selectors: [Type("ytd-masthead"), Id("masthead-logo"), Id("country-code")] } -> [377]
+Done { selectors: [Type("ytd-masthead"), Id("masthead-logo")] } -> [284]
+[src/bit.rs:514:5] unsafe { MISS_CNT } = 3509
