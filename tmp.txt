@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/naive`
 Descendant { selectors: [Class("ds")] } -> [372, 392, 405, 916, 928]
 Descendant { selectors: [Class("fl"), Type("a")] } -> [431]

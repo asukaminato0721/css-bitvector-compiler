@@ -1,6 +1,9 @@
 use css_bitvector_compiler::rdtsc;
 use cssparser::{Parser, ParserInput, Token};
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Debug,
+};
 
 static mut MISS_CNT: usize = 0;
 
@@ -9,13 +12,18 @@ enum CssRule {
     Descendant { selectors: Vec<Selector> },
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum CssMatch {
+    Done { selectors: Vec<Selector> },
+    Doing { selectors: Vec<Selector> },
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Selector {
     Type(String),
     Class(String),
     Id(String),
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 
 struct BitVectorHtmlNode {
     tag_name: String,
@@ -27,6 +35,21 @@ struct BitVectorHtmlNode {
     parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
     dirty: bool,
     recursive_dirty: bool,
+}
+
+impl Debug for BitVectorHtmlNode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("BitVectorHtmlNode")
+            .field("tag_name", &self.tag_name)
+            .field("id", &self.id)
+            .field("html_id", &self.html_id)
+            .field("class", &self.class)
+            .field("parent", &self.parent.map_or(0, |x| unsafe { { &*x }.id }))
+            .field("children", &self.children)
+            //  .field("dirty", &self.dirty)
+            //  .field("recursive_dirty", &self.recursive_dirty)
+            .finish()
+    }
 }
 
 impl BitVectorHtmlNode {
@@ -48,7 +71,7 @@ impl BitVectorHtmlNode {
     fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
-        hm: &HashMap<CssRule, usize>,
+        hm: &HashMap<CssMatch, usize>,
     ) -> Self {
         let mut node = Self::default();
         node.tag_name = json_node["name"].as_str().unwrap().into();
@@ -107,7 +130,7 @@ impl BitVectorHtmlNode {
         &mut self,
         path: &[usize],
         json_node: &serde_json::Value,
-        hm: &HashMap<CssRule, usize>,
+        hm: &HashMap<CssMatch, usize>,
     ) {
         assert!(!path.is_empty());
         if path.len() > 1 {
@@ -119,16 +142,16 @@ impl BitVectorHtmlNode {
         self.set_dirty();
         self.fix_parent_pointers();
     }
-    fn record_remove(&mut self, path: &[usize]) {
+    fn remove_node_by_path(&mut self, path: &[usize]) {
         assert!(!path.is_empty());
         if path.len() > 1 {
-            self.children[path[0]].record_remove(&path[1..]);
+            self.children[path[0]].remove_node_by_path(&path[1..]);
             return;
         }
         self.children.remove(path[0]);
         self.set_dirty();
     }
-    fn recompute_styles(&mut self, state_map: &HashMap<CssRule, usize>) {
+    fn recompute_styles(&mut self, state_map: &HashMap<CssMatch, usize>, input: &[bool]) {
         if !self.recursive_dirty {
             return;
         }
@@ -136,7 +159,7 @@ impl BitVectorHtmlNode {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state = self.new_output_state(&self.output_state, state_map);
+            let new_output_state = self.new_output_state(input, state_map);
             if self.output_state != new_output_state {
                 self.output_state = new_output_state;
                 for c in self.children.iter_mut() {
@@ -146,7 +169,7 @@ impl BitVectorHtmlNode {
         } else {
             // Check: if not dirty, recomputing should not change output
             let original_output_state = self.output_state.clone();
-            let new_output_state = self.new_output_state(&self.output_state, state_map);
+            let new_output_state = self.new_output_state(input, state_map);
             assert_eq!(
                 original_output_state, new_output_state,
                 "Node ID {}: Output state changed when node was not dirty!",
@@ -154,43 +177,73 @@ impl BitVectorHtmlNode {
             );
         }
         for child in self.children.iter_mut() {
-            child.recompute_styles(state_map);
+            child.recompute_styles(state_map, &self.output_state);
         }
         self.dirty = false;
         self.recursive_dirty = false;
     }
-    fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssRule, usize>) -> Vec<bool> {
-        let mut new_state = input.to_vec();
+    fn new_output_state(&self, input: &[bool], state_map: &HashMap<CssMatch, usize>) -> Vec<bool> {
+        let mut new_state = vec![false; input.len()];
 
-        for (CssRule::Descendant { selectors }, &bit_index) in state_map {
-            let last_selector = selectors.last().unwrap();
-
-            if !self.matches_simple_selector(last_selector) {
-                continue;
-            }
-
-            if selectors.len() == 1 {
-                new_state[bit_index] = true;
-            } else {
-                let parent_selectors = &selectors[..selectors.len() - 1];
-                let parent_rule = CssRule::Descendant {
-                    selectors: parent_selectors.to_vec(),
-                };
-
-                if let Some(&parent_bit_index) = state_map.get(&parent_rule) {
-                    if input[parent_bit_index] {
+        for (mch, &bit_index) in state_map {
+            match mch {
+                CssMatch::Doing { selectors } => match input[bit_index] {
+                    true => {
+                        // a b c
+                        // a b k
                         new_state[bit_index] = true;
                     }
-                }
+                    false => {
+                        match selectors.len() {
+                            0 => unreachable!(),
+                            1 => {
+                                // selector a b
+                                // g c
+                                if self.matches_simple_selector(&selectors[0]) {
+                                    new_state[bit_index] = true;
+                                }
+                            }
+                            _ => {
+                                let last_selector = selectors.last().unwrap();
+                                let parent_rule = CssMatch::Doing {
+                                    selectors: selectors[..selectors.len() - 1].to_vec(),
+                                };
+                                if self.matches_simple_selector(last_selector)
+                                    && new_state[*state_map.get(&parent_rule).unwrap()]
+                                {
+                                    new_state[bit_index] = true;
+                                }
+                            }
+                        }
+                    }
+                },
+                CssMatch::Done { selectors } => match selectors.len() {
+                    0 => unreachable!(),
+                    1 => {
+                        if self.matches_simple_selector(&selectors[0]) {
+                            new_state[bit_index] = true;
+                        }
+                    }
+                    _ => {
+                        let last_selector = selectors.last().unwrap();
+                        let parent_rule = CssMatch::Doing {
+                            selectors: selectors[..selectors.len() - 1].to_vec(),
+                        };
+                        if self.matches_simple_selector(last_selector)
+                            && input[*state_map.get(&parent_rule).unwrap()]
+                        {
+                            new_state[bit_index] = true;
+                        }
+                    }
+                },
             }
         }
-
         new_state
     }
     fn collect_all_matches(
         &self,
-        reverse_state_map: &HashMap<usize, CssRule>,
-        final_matches: &mut HashMap<CssRule, Vec<u64>>,
+        reverse_state_map: &HashMap<usize, CssMatch>,
+        final_matches: &mut HashMap<CssMatch, Vec<u64>>,
     ) {
         for (bit_index, &is_match) in self.output_state.iter().enumerate() {
             if is_match {
@@ -339,12 +392,13 @@ fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
         .unwrap()
 }
 
-fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<CssRule, usize>) {
+fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<CssMatch, usize>) {
     match frame.command_name.as_str() {
         "init" => {
             //   dbg!(frame.frame_id, frame.command_name.as_str());
             *tree = tree.json_to_html_node(frame.command_data.get("node").unwrap(), &hm);
             tree.fix_parent_pointers();
+            // tree.recompute_styles(hm);
         }
         "add" => {
             //   dbg!(frame.frame_id, frame.command_name.as_str());
@@ -359,15 +413,17 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, hm: &HashMap<C
         }
         "recalculate" => {
             //   dbg!(frame.frame_id, frame.command_name.as_str());
+            let ii = vec![false; hm.len()];
             let s = rdtsc();
-            tree.recompute_styles(hm);
+
+            tree.recompute_styles(hm, &ii);
             let e = rdtsc();
             println!("{}", e - s);
         }
         "remove" => {
             //  dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
-            tree.record_remove(&path);
+            tree.remove_node_by_path(&path);
         }
         _ => {
             // dbg!(frame.frame_id, frame.command_name.as_str());
@@ -389,8 +445,14 @@ fn main() {
             let mut v = vec![];
             for s in selectors {
                 v.push(s.clone());
-                let ss = CssRule::Descendant {
-                    selectors: v.clone(),
+                let ss = if v.len() == selectors.len() {
+                    CssMatch::Done {
+                        selectors: v.clone(),
+                    }
+                } else {
+                    CssMatch::Doing {
+                        selectors: v.clone(),
+                    }
                 };
                 if !hm.contains_key(&ss) {
                     hm.insert(ss, hm.len());
@@ -399,25 +461,20 @@ fn main() {
         }
         hm
     };
-    //  dbg!(&hm);
-
-    let final_rules_map: HashMap<_, _> = css
-        .iter()
-        .map(|rule| {
-            let bit_index = *hm.get(rule).unwrap();
-            (rule.clone(), bit_index)
-        })
-        .collect();
 
     let mut bit = BitVectorHtmlNode::default();
     let trace = parse_trace();
     for i in &trace {
         apply_frame(&mut bit, &i, &hm);
     }
-    let rev_hm = final_rules_map
+    // dbg!(&bit);
+    let rev_hm = hm
         .iter()
-        .map(|(x, &y)| (y, x.clone()))
-        .collect::<HashMap<_, _>>();
+        .filter_map(|(x, y)| match x {
+            CssMatch::Doing { .. } => None,
+            CssMatch::Done { .. } => Some((*y, x.clone())),
+        })
+        .collect();
 
     let mut final_matches = HashMap::new();
     bit.collect_all_matches(&rev_hm, &mut final_matches);
@@ -430,4 +487,35 @@ fn main() {
         println!("{:?} -> {:?}", rule, node_ids);
     }
     dbg!(unsafe { MISS_CNT });
+}
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    /// .foo  #bar
+    fn test_descendant() {
+        let mut state_map = HashMap::new();
+        let rule = CssMatch::Done {
+            selectors: vec![Selector::Class("foo".into()), Selector::Id("bar".into())],
+        };
+        let rule_father = CssMatch::Doing {
+            selectors: vec![Selector::Class("foo".into())],
+        };
+        state_map.insert(rule_father.clone(), state_map.len());
+        state_map.insert(rule.clone(), state_map.len());
+
+        let mut node = BitVectorHtmlNode::default();
+        node.class = ["foo".into()].iter().cloned().collect::<HashSet<_>>();
+
+        let mut child_node = BitVectorHtmlNode::default();
+        child_node.html_id = Some("bar".into());
+
+        node.children = vec![child_node];
+        node.fix_parent_pointers();
+        node.children[0].set_dirty();
+
+        let input = vec![true, false];
+        let output = node.children[0].new_output_state(&input, &state_map);
+        assert_eq!(output, [true, true]);
+    }
 }
