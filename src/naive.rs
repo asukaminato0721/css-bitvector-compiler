@@ -148,7 +148,6 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules
 }
 
-
 // note: do nt pull out bitvector result; - absvector will change that laters
 // to other type struct NaiveCache {
 // no dirty node anywhere, have to recompute from scratch
@@ -245,13 +244,13 @@ impl NaiveHtmlNode {
                 let parent = unsafe { &*parent_ptr };
                 let remaining_parts = &parts[..parts.len() - 1];
 
-                                // 获取前一个组合器（这是连接当前选择器和父级的组合器）
+                // 获取前一个组合器（这是连接当前选择器和父级的组合器）
                 let combinator = if parts.len() >= 2 {
                     &parts[parts.len() - 2].combinator
                 } else {
                     &Combinator::None
                 };
-                
+
                 match combinator {
                     Combinator::None => {
                         // 这不应该发生在中间部分
@@ -270,7 +269,6 @@ impl NaiveHtmlNode {
         }
     }
 
-
     fn matches_complex_selector_recursive(&self, parts: &[SelectorPart]) -> bool {
         if self.matches_complex_selector(parts) {
             return true;
@@ -284,7 +282,7 @@ impl NaiveHtmlNode {
             }
         }
     }
-  
+
     fn matches_css_rule(&self, CssRule::Complex { parts }: &CssRule) -> bool {
         self.matches_complex_selector(parts)
     }
@@ -421,8 +419,8 @@ fn main() {
         ))
         .unwrap(),
     );
-     dbg!(&naive);
-     dbg!(&css);
+    dbg!(&naive);
+    dbg!(&css);
     let trace = parse_trace();
 
     for i in &trace {
