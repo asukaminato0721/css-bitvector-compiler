@@ -8,6 +8,6 @@ for name in "${WEBSITE_NAMES[@]}"; do
     cargo run -r --bin naive &> tmp.txt
     cargo run -r --bin bit &> bit_tmp.txt
     cargo run -r --bin tri &> tri_tmp.txt
-    diff <(grep '^Descendant' tmp.txt | cut -d' ' -f2-) <(grep '^Done' bit_tmp.txt | cut -d' ' -f2-)
-    diff <(grep '^Descendant' tmp.txt) <(grep '^Descendant' tri_tmp.txt)
+    diff <(grep '^MATCH' tmp.txt | cut -d' ' -f2-) <(grep '^Done' bit_tmp.txt | cut -d' ' -f2-)
+    diff <(grep '^MATCH' tmp.txt) <(grep '^Descendant' tri_tmp.txt)
 done

@@ -1,5 +1,8 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::collections::HashSet;
+use std::{
+    collections::HashSet,
+    fmt::{Debug, Display},
+};
 
 use css_bitvector_compiler::Cache;
 
@@ -8,10 +11,29 @@ enum CssRule {
     Complex { parts: Vec<SelectorPart> },
 }
 
+impl Display for CssRule {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CssRule::Complex { parts } => {
+                for part in parts {
+                    write!(f, "{}", part)?;
+                }
+                Ok(())
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,
     combinator: Combinator,
+}
+
+impl Display for SelectorPart {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} {}", self.selector, self.combinator)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -21,11 +43,31 @@ enum Combinator {
     None,       // 最后一个选择器没有组合器
 }
 
+impl Display for Combinator {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Combinator::Descendant => write!(f, " "),
+            Combinator::Child => write!(f, ">"),
+            Combinator::None => write!(f, ""),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Selector {
     Type(String),
     Class(String),
     Id(String),
+}
+
+impl Display for Selector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Selector::Type(tag) => write!(f, "{}", tag),
+            Selector::Class(class) => write!(f, ".{}", class),
+            Selector::Id(id) => write!(f, "#{}", id),
+        }
+    }
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
@@ -304,7 +346,7 @@ impl NaiveHtmlNode {
             }
             matches.sort_unstable();
             matches.dedup();
-            println!("{:?} -> {:?}", rule, matches);
+            println!("MATCH {} -> {:?}", rule, matches);
         }
     }
 }
@@ -415,8 +457,8 @@ fn main() {
         ))
         .unwrap(),
     );
-    dbg!(&naive);
-    dbg!(&css);
+    // dbg!(&naive);
+    // dbg!(&css);
     let trace = parse_trace();
 
     for i in &trace {
