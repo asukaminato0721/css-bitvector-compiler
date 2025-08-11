@@ -3,18 +3,47 @@ use cssparser::{Parser, ParserInput, Token};
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
+    fmt::Display,
 };
 
 static mut MISS_CNT: usize = 0;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
-    Descendant { selectors: Vec<Selector> },
+    Complex { parts: Vec<SelectorPart> },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct SelectorPart {
+    selector: Selector,
+    combinator: Combinator,
+}
+impl Display for SelectorPart {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}{}", self.selector, self.combinator)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum Combinator {
+    Descendant, // 空格
+    Child,      // >
+    None,       // 最后一个选择器没有组合器
+}
+impl Display for Combinator {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Combinator::Descendant => write!(f, " "),
+            Combinator::Child => write!(f, ">"),
+            Combinator::None => write!(f, ""),
+        }
+    }
 }
 #[derive(Debug, Clone)]
 struct NfaStateInfo {
     selector: Selector,
     parent_state: Option<usize>, // None if it's the first selector in a chain
+    combinator: Combinator,      // Combinator leading to this state
     is_final: bool,              // Corresponds to CssMatch::Done
 }
 
@@ -25,18 +54,40 @@ struct NFA {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssMatch {
-    Done { selectors: Vec<Selector> },
-    Doing { selectors: Vec<Selector> },
+    Done { parts: Vec<SelectorPart> },
+    Doing { parts: Vec<SelectorPart> },
 }
+
+impl Display for CssMatch {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let parts = match self {
+            CssMatch::Done { parts } => parts,
+            CssMatch::Doing { parts } => parts,
+        };
+
+        for part in parts {
+            write!(f, "{}", part)?;
+        }
+        Ok(())
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Selector {
     Type(String),
     Class(String),
     Id(String),
 }
-
+impl Display for Selector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Selector::Type(tag) => write!(f, "{}", tag),
+            Selector::Class(class) => write!(f, ".{}", class),
+            Selector::Id(id) => write!(f, "#{}", id),
+        }
+    }
+}
 #[derive(Default)]
-
 struct BitVectorHtmlNode {
     tag_name: String,
     id: u64,
@@ -198,7 +249,20 @@ impl BitVectorHtmlNode {
             if input[i] {
                 if let Some(info) = &nfa.states[i] {
                     if !info.is_final {
-                        new_state[i] = true;
+                        // For descendant combinator, propagate to all descendants
+                        // For child combinator, only direct children can match
+                        match info.combinator {
+                            Combinator::Descendant => {
+                                new_state[i] = true;
+                            }
+                            Combinator::Child => {
+                                // Child combinator states don't propagate to grandchildren
+                                // They only apply to direct children
+                            }
+                            Combinator::None => {
+                                new_state[i] = true;
+                            }
+                        }
                     }
                 }
             }
@@ -209,7 +273,20 @@ impl BitVectorHtmlNode {
             if let Some(info) = &nfa.states[i] {
                 if self.matches_simple_selector(&info.selector) {
                     let parent_matched = match info.parent_state {
-                        Some(parent_idx) => input[parent_idx],
+                        Some(parent_idx) => {
+                            // Check if parent state is active and combinator allows match
+                            match info.combinator {
+                                Combinator::Child => {
+                                    // For child combinator, parent must be direct parent
+                                    self.is_direct_child_of_state(input, parent_idx)
+                                }
+                                Combinator::Descendant => {
+                                    // For descendant combinator, any ancestor match is fine
+                                    input[parent_idx]
+                                }
+                                Combinator::None => input[parent_idx],
+                            }
+                        }
                         None => true, // No parent needed, this is the start of a chain
                     };
                     if parent_matched {
@@ -218,7 +295,6 @@ impl BitVectorHtmlNode {
                 }
             }
         }
-
         new_state
     }
     fn collect_all_matches(
@@ -238,6 +314,22 @@ impl BitVectorHtmlNode {
             child.collect_all_matches(reverse_state_map, final_matches);
         }
     }
+    fn is_direct_child_of_state(&self, parent_input: &[bool], parent_state_idx: usize) -> bool {
+        // Check if this node is a direct child of a node that has the parent_state active
+        if let Some(parent_ptr) = self.parent {
+            unsafe {
+                let parent = &*parent_ptr;
+                parent_input[parent_state_idx]
+                    && parent
+                        .output_state
+                        .get(parent_state_idx)
+                        .copied()
+                        .unwrap_or(false)
+            }
+        } else {
+            false
+        }
+    }
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
@@ -245,77 +337,112 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
-    let mut expecting_rule_body = false;
-    let mut selector_chain: Vec<Selector> = vec![];
+    let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
+    let mut pending_combinator = Combinator::None;
 
-    while let Ok(token) = parser.next() {
-        if expecting_rule_body {
-            match token {
-                Token::CurlyBracketBlock => {
-                    if let Some(selector) = current_selector.take() {
-                        selector_chain.push(selector);
-                    }
-                    if !selector_chain.is_empty() {
-                        rules.push(CssRule::Descendant {
-                            selectors: selector_chain,
-                        });
-                    }
+    #[derive(PartialEq, Eq)]
+    enum NextSelector {
+        Class,
+        Type,
+    }
+    let mut next_selector = NextSelector::Type;
 
-                    selector_chain = vec![];
-                    expecting_rule_body = false;
+    loop {
+        let token = match parser.next_including_whitespace_and_comments() {
+            Ok(token) => token,
+            Err(_) => {
+                // End of input, finalize any pending rule
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
-                _ => {
-                    expecting_rule_body = false;
-                    current_selector = None;
-                    selector_chain.clear();
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
+                }
+                break;
+            }
+        };
+
+        match token {
+            Token::Comment(_) => continue,
+            Token::WhiteSpace(_) => {
+                if current_selector.is_some() && pending_combinator == Combinator::None {
+                    pending_combinator = Combinator::Descendant;
                 }
             }
-        } else {
-            match token {
-                Token::Ident(name) => {
-                    let type_name = name.to_string().to_lowercase();
-
-                    if let Some(prev_selector) = current_selector.take() {
-                        selector_chain.push(prev_selector);
-                    }
-
-                    current_selector = Some(Selector::Type(type_name));
+            Token::Delim('.') => {
+                next_selector = NextSelector::Class;
+            }
+            Token::Delim('>') => {
+                if current_selector.is_some() {
+                    pending_combinator = Combinator::Child;
                 }
-                Token::IDHash(id) => {
-                    if let Some(prev_selector) = current_selector.take() {
-                        selector_chain.push(prev_selector);
-                    }
-
-                    current_selector = Some(Selector::Id(id.to_string()));
+            }
+            Token::IDHash(id) => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                    pending_combinator = Combinator::None;
                 }
-                Token::Delim('.') => {
-                    if let Ok(Token::Ident(class_name)) = parser.next() {
-                        if let Some(prev_selector) = current_selector.take() {
-                            selector_chain.push(prev_selector);
-                        }
-
-                        current_selector = Some(Selector::Class(class_name.to_string()));
-                    }
+                current_selector = Some(Selector::Id(id.to_string()));
+                next_selector = NextSelector::Type;
+            }
+            Token::Ident(name) => {
+                let s = match next_selector {
+                    NextSelector::Class => Selector::Class(name.to_string()),
+                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
+                };
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                    pending_combinator = Combinator::None;
                 }
-                Token::CurlyBracketBlock => {
-                    if let Some(selector) = current_selector.take() {
-                        selector_chain.push(selector);
-                        rules.push(CssRule::Descendant {
-                            selectors: selector_chain,
-                        });
-                    }
-                    selector_chain = vec![];
+                current_selector = Some(s);
+                next_selector = NextSelector::Type;
+            }
+            Token::CurlyBracketBlock => {
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
-                Token::WhiteSpace(_) => {
-                    if current_selector.is_some() {
-                        expecting_rule_body = true;
-                    }
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
                 }
-                _ => {
-                    current_selector = None;
-                    selector_chain.clear();
+                selector_parts = vec![];
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                next_selector = NextSelector::Type;
+            }
+            _ => {
+                // Any other token (like a comma) finalizes the current rule
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
+                }
+                selector_parts = vec![];
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                next_selector = NextSelector::Type;
             }
         }
     }
@@ -324,39 +451,51 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules.dedup();
     rules
 }
+
 fn build_nfa(state_map: &HashMap<CssMatch, usize>) -> NFA {
     let num_states = state_map.len();
     let mut states = vec![None; num_states];
 
     for (mch, &idx) in state_map {
-        let (selectors, is_final) = match mch {
-            CssMatch::Doing { selectors } => (selectors, false),
-            CssMatch::Done { selectors } => (selectors, true),
+        let (parts, is_final) = match mch {
+            CssMatch::Doing { parts } => (parts, false),
+            CssMatch::Done { parts } => (parts, true),
         };
 
-        if selectors.is_empty() {
+        if parts.is_empty() {
             continue;
         }
 
-        let selector = selectors.last().unwrap().clone();
-        let parent_state = if selectors.len() > 1 {
+        let last_part = &parts[parts.len() - 1];
+        let selector = last_part.selector.clone();
+
+        let parent_state = if parts.len() > 1 {
             let parent_rule = CssMatch::Doing {
-                selectors: selectors[..selectors.len() - 1].to_vec(),
+                parts: parts[..parts.len() - 1].to_vec(),
             };
             Some(*state_map.get(&parent_rule).unwrap())
         } else {
             None
         };
 
+        // The combinator for this state is the one from the previous part (if any)
+        let combinator = if parts.len() >= 2 {
+            parts[parts.len() - 2].combinator.clone()
+        } else {
+            Combinator::None
+        };
+
         states[idx] = Some(NfaStateInfo {
             selector,
             parent_state,
+            combinator,
             is_final,
         });
     }
 
     NFA { states }
 }
+
 #[derive(Debug, Clone)]
 #[allow(unused)]
 struct LayoutFrame {
@@ -364,6 +503,7 @@ struct LayoutFrame {
     pub command_name: String,
     pub command_data: serde_json::Value,
 }
+
 fn parse_trace() -> Vec<LayoutFrame> {
     let content = std::fs::read_to_string(format!(
         "css-gen-op/{0}/command.json",
@@ -449,6 +589,7 @@ fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, nfa: &NFA) {
         }
     }
 }
+
 fn main() {
     let css = parse_css(
         &std::fs::read_to_string(format!(
@@ -460,17 +601,18 @@ fn main() {
     //dbg!(&css);
     let hm = {
         let mut hm = HashMap::new();
-        for CssRule::Descendant { selectors } in &css {
-            let mut v = vec![];
-            for s in selectors {
-                v.push(s.clone());
-                let ss = if v.len() == selectors.len() {
+        for rule in &css {
+            let CssRule::Complex { parts } = rule;
+            let mut current_parts = vec![];
+            for part in parts {
+                current_parts.push(part.clone());
+                let ss = if current_parts.len() == parts.len() {
                     CssMatch::Done {
-                        selectors: v.clone(),
+                        parts: current_parts.clone(),
                     }
                 } else {
                     CssMatch::Doing {
-                        selectors: v.clone(),
+                        parts: current_parts.clone(),
                     }
                 };
                 if !hm.contains_key(&ss) {
@@ -505,23 +647,66 @@ fn main() {
     for (rule, mut node_ids) in sorted_matches {
         node_ids.sort_unstable();
         node_ids.dedup();
-        println!("{:?} -> {:?}", rule, node_ids);
+        println!("MATCH {}  -> {:?}", rule, node_ids);
     }
     dbg!(unsafe { MISS_CNT });
 }
+
 #[cfg(test)]
 mod test {
     use super::*;
+
     #[test]
-    /// .foo  #bar
-    fn test_descendant() {
+    fn test_mixed_combinators() {
+        // Test for "div a > h1 h2"
+        let css_content = "div a > h1 h2 { color: red; }";
+        let rules = parse_css(css_content);
+
+        assert_eq!(rules.len(), 1);
+        if let CssRule::Complex { parts } = &rules[0] {
+            assert_eq!(parts.len(), 4);
+
+            // div (no combinator, it's the first)
+            assert_eq!(parts[0].selector, Selector::Type("div".to_string()));
+            assert_eq!(parts[0].combinator, Combinator::None);
+
+            // a (descendant of div)
+            assert_eq!(parts[1].selector, Selector::Type("a".to_string()));
+            assert_eq!(parts[1].combinator, Combinator::Descendant);
+
+            // h1 (child of a)
+            assert_eq!(parts[2].selector, Selector::Type("h1".to_string()));
+            assert_eq!(parts[2].combinator, Combinator::Child);
+
+            // h2 (descendant of h1)
+            assert_eq!(parts[3].selector, Selector::Type("h2".to_string()));
+            assert_eq!(parts[3].combinator, Combinator::Descendant);
+        }
+    }
+
+    #[test]
+    fn test_child_selector() {
         let mut state_map = HashMap::new();
+
+        // Create a rule for .foo > #bar
+        let parts = vec![
+            SelectorPart {
+                selector: Selector::Class("foo".into()),
+                combinator: Combinator::None,
+            },
+            SelectorPart {
+                selector: Selector::Id("bar".into()),
+                combinator: Combinator::Child,
+            },
+        ];
+
         let rule_father = CssMatch::Doing {
-            selectors: vec![Selector::Class("foo".into())],
+            parts: vec![parts[0].clone()],
         };
         let rule = CssMatch::Done {
-            selectors: vec![Selector::Class("foo".into()), Selector::Id("bar".into())],
+            parts: parts.clone(),
         };
+
         state_map.insert(rule_father.clone(), state_map.len());
         state_map.insert(rule.clone(), state_map.len());
         let nfa = build_nfa(&state_map);
