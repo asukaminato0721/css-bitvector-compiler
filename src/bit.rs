@@ -241,12 +241,12 @@ impl BitVectorHtmlNode {
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules = Vec::new();
+    let mut rules = vec![];
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
     let mut expecting_rule_body = false;
-    let mut selector_chain: Vec<Selector> = Vec::new();
+    let mut selector_chain: Vec<Selector> = vec![];
     let mut current_selector: Option<Selector> = None;
 
     while let Ok(token) = parser.next() {
@@ -262,7 +262,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         });
                     }
 
-                    selector_chain = Vec::new();
+                    selector_chain = vec![];
                     expecting_rule_body = false;
                 }
                 _ => {
@@ -305,7 +305,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                             selectors: selector_chain,
                         });
                     }
-                    selector_chain = Vec::new();
+                    selector_chain = vec![];
                 }
                 Token::WhiteSpace(_) => {
                     if current_selector.is_some() {
@@ -371,7 +371,7 @@ fn parse_trace() -> Vec<LayoutFrame> {
     ))
     .unwrap();
 
-    let mut frames = Vec::new();
+    let mut frames = vec![];
     for (frame_id, line) in content.lines().enumerate() {
         if line.trim().is_empty() {
             continue;

@@ -29,11 +29,11 @@ enum Selector {
 }
 
 fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules = Vec::new();
+    let mut rules = vec![];
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
-    let mut selector_parts: Vec<SelectorPart> = Vec::new();
+    let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
 
@@ -117,7 +117,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         parts: selector_parts,
                     });
                 }
-                selector_parts = Vec::new();
+                selector_parts = vec![];
                 current_selector = None;
                 pending_combinator = Combinator::None;
                 next_selector = NextSelector::Type;
@@ -135,7 +135,7 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                         parts: selector_parts,
                     });
                 }
-                selector_parts = Vec::new();
+                selector_parts = vec![];
                 current_selector = None;
                 pending_combinator = Combinator::None;
                 next_selector = NextSelector::Type;
@@ -297,7 +297,7 @@ impl NaiveHtmlNode {
     fn print_css_matches(&self, rules: &mut [CssRule]) {
         rules.sort_by_key(|x| format!("{x:?}"));
         for rule in rules {
-            let mut matches = Vec::new();
+            let mut matches = vec![];
             self.collect_matches(rule, &mut matches);
             if matches.is_empty() {
                 continue;
@@ -338,7 +338,7 @@ fn parse_trace() -> Vec<LayoutFrame> {
     ))
     .unwrap();
 
-    let mut frames = Vec::new();
+    let mut frames = vec![];
     for (frame_id, line) in content.lines().enumerate() {
         if line.trim().is_empty() {
             continue;
@@ -406,10 +406,6 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     }
 }
 
-// 分离 3 种不同的 node, naive , bit, tri
-// 对每种 node, 实现一个公共的 trait, recompute, dirtied.
-// recompute 是实际做计算的
-// dirtied 只是做脏标记
 fn main() {
     let mut naive = NaiveHtmlNode::default();
     let mut css = parse_css(
@@ -429,4 +425,14 @@ fn main() {
     naive.print_css_matches(&mut css);
     //  // dbg!(trace);
     //// dbg!(naive);
+}
+#[cfg(test)]
+mod test {
+    use crate::parse_css;
+
+    #[test]
+    fn base_case() {
+        let s = "div h1 > h2 p .a > .b #c";
+        dbg!(parse_css(s));
+    }
 }
