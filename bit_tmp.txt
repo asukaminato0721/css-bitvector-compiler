@@ -1,66 +1,68 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/bit`
-167425
-686370
-1278741
-110151
-310506
-45284
-843680
-61
-16024
-27767
-18
-10092
-292
+534587
+1504619
+3152120
+245519
+567113
+78550
+1522960
+53
+30938
+48157
+69
+22324
 26
-14641
-274363
-295
-150309
-198154
-76382
-178675
-572473
-110655
-97897
-94935
-126490
-91755
-141245
-36
-74595
-83873
-93967
-92741
-100237
-91052
-93166
-92540
-92337
-203919
-67622
-105093
-89521
-111964
-70774
-90757
-89220
-88026
-127260
-350877
-354494
-477756
-1367606
-624467
-Done { selectors: [Class("hidden")] } -> [7245, 8803, 8862, 8921, 8980, 9039, 13784, 14120]
-Done { selectors: [Class("masthead-skeleton-icon")] } -> [382, 384, 386]
-Done { selectors: [Id("masthead-skeleton-icons")] } -> [379]
-Done { selectors: [Type("body")] } -> [233, 4487, 5866]
-Done { selectors: [Type("dom-repeat")] } -> [5129, 5141, 5320, 12772, 13614, 13626, 13797]
-Done { selectors: [Type("html")] } -> [5, 6, 4485, 5864]
-Done { selectors: [Type("ytd-masthead"), Class("external-icon")] } -> [274, 291, 336]
-Done { selectors: [Type("ytd-masthead"), Class("yt-icons-ext")] } -> [278]
-Done { selectors: [Type("ytd-masthead"), Id("masthead-logo"), Id("country-code")] } -> [377]
-Done { selectors: [Type("ytd-masthead"), Id("masthead-logo")] } -> [284]
-[src/bit.rs:514:5] unsafe { MISS_CNT } = 3509
+26
+34362
+565929
+46
+317950
+412624
+156913
+405697
+1124509
+223838
+207181
+198639
+265010
+193066
+297550
+63
+177133
+181421
+196053
+194683
+193961
+189682
+191868
+190650
+189930
+421329
+141411
+206304
+194691
+233383
+152677
+207949
+193904
+194314
+260230
+782742
+731841
+988473
+3104353
+1515555
+MATCH .hidden  -> [7245, 8803, 8862, 8921, 8980, 9039, 13784, 14120]
+MATCH .masthead-skeleton-icon  -> [382, 384, 386]
+MATCH #masthead-skeleton-icons  -> [379]
+MATCH body  -> [233, 4487, 5866]
+MATCH dom-if  -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
+MATCH dom-repeat  -> [5129, 5141, 5320, 12772, 13614, 13626, 13797]
+MATCH html  -> [5, 6, 4485, 5864]
+MATCH ps-dom-if  -> [7640, 13850, 13856]
+MATCH ytd-masthead .external-icon  -> [274, 291, 336]
+MATCH ytd-masthead .yt-icons-ext  -> [278]
+MATCH ytd-masthead #masthead-logo #country-code  -> [377]
+MATCH ytd-masthead #masthead-logo  -> [284]
+[src/bit.rs:653:5] unsafe { MISS_CNT } = 3509
