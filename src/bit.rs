@@ -61,8 +61,7 @@ enum CssMatch {
 impl Display for CssMatch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let parts = match self {
-            CssMatch::Done { parts } => parts,
-            CssMatch::Doing { parts } => parts,
+            CssMatch::Done { parts } | CssMatch::Doing { parts } => parts,
         };
 
         for part in parts {
@@ -246,53 +245,58 @@ impl BitVectorHtmlNode {
 
         // 1. Propagate states from parent
         for i in 0..nfa.states.len() {
-            if input[i] {
-                if let Some(info) = &nfa.states[i] {
-                    if !info.is_final {
-                        // For descendant combinator, propagate to all descendants
-                        // For child combinator, only direct children can match
-                        match info.combinator {
-                            Combinator::Descendant => {
-                                new_state[i] = true;
-                            }
-                            Combinator::Child => {
-                                // Child combinator states don't propagate to grandchildren
-                                // They only apply to direct children
-                            }
-                            Combinator::None => {
-                                new_state[i] = true;
-                            }
-                        }
-                    }
+            if !input[i] {
+                continue;
+            }
+            let Some(info) = &nfa.states[i] else {
+                continue;
+            };
+            if info.is_final {
+                continue;
+            }
+            // For descendant combinator, propagate to all descendants
+            // For child combinator, only direct children can match
+            match info.combinator {
+                Combinator::Descendant => {
+                    new_state[i] = true;
+                }
+                Combinator::Child => {
+                    // Child combinator states don't propagate to grandchildren
+                    // They only apply to direct children
+                }
+                Combinator::None => {
+                    new_state[i] = true;
                 }
             }
         }
 
         // 2. Compute new matches
         for i in 0..nfa.states.len() {
-            if let Some(info) = &nfa.states[i] {
-                if self.matches_simple_selector(&info.selector) {
-                    let parent_matched = match info.parent_state {
-                        Some(parent_idx) => {
-                            // Check if parent state is active and combinator allows match
-                            match info.combinator {
-                                Combinator::Child => {
-                                    // For child combinator, parent must be direct parent
-                                    self.is_direct_child_of_state(input, parent_idx)
-                                }
-                                Combinator::Descendant => {
-                                    // For descendant combinator, any ancestor match is fine
-                                    input[parent_idx]
-                                }
-                                Combinator::None => input[parent_idx],
-                            }
+            let Some(info) = &nfa.states[i] else {
+                continue;
+            };
+            if !self.matches_simple_selector(&info.selector) {
+                continue;
+            }
+            let parent_matched = match info.parent_state {
+                Some(parent_idx) => {
+                    // Check if parent state is active and combinator allows match
+                    match info.combinator {
+                        Combinator::Child => {
+                            // For child combinator, parent must be direct parent
+                            self.is_direct_child_of_state(input, parent_idx)
                         }
-                        None => true, // No parent needed, this is the start of a chain
-                    };
-                    if parent_matched {
-                        new_state[i] = true;
+                        Combinator::Descendant => {
+                            // For descendant combinator, any ancestor match is fine
+                            input[parent_idx]
+                        }
+                        Combinator::None => input[parent_idx],
                     }
                 }
+                None => true, // No parent needed, this is the start of a chain
+            };
+            if parent_matched {
+                new_state[i] = true;
             }
         }
         new_state
@@ -316,19 +320,16 @@ impl BitVectorHtmlNode {
     }
     fn is_direct_child_of_state(&self, parent_input: &[bool], parent_state_idx: usize) -> bool {
         // Check if this node is a direct child of a node that has the parent_state active
-        if let Some(parent_ptr) = self.parent {
-            unsafe {
-                let parent = &*parent_ptr;
-                parent_input[parent_state_idx]
-                    && parent
-                        .output_state
-                        .get(parent_state_idx)
-                        .copied()
-                        .unwrap_or(false)
-            }
-        } else {
-            false
-        }
+        let Some(parent_ptr) = self.parent else {
+            return false;
+        };
+        let parent = unsafe { &*parent_ptr };
+        parent_input[parent_state_idx]
+            && parent
+                .output_state
+                .get(parent_state_idx)
+                .copied()
+                .unwrap_or(false)
     }
 }
 
@@ -663,7 +664,8 @@ mod test {
         let rules = parse_css(css_content);
 
         assert_eq!(rules.len(), 1);
-        if let CssRule::Complex { parts } = &rules[0] {
+        let CssRule::Complex { parts } = &rules[0];
+        {
             assert_eq!(parts.len(), 4);
 
             // div (no combinator, it's the first)
