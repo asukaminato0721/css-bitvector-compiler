@@ -312,7 +312,7 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
 pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
     // 首先检查目标节点本身是否匹配起始状态的转移
     let mut current_state = nfa.start_state;
-    
+
     // 获取起始状态的转移
     let start_transitions = match nfa.transitions.get(&current_state) {
         Some(transitions) => transitions,
@@ -325,7 +325,7 @@ pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
         if selector_id == 0 {
             continue; // 跳过通配符
         }
-        
+
         if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
             if dom.node_matches_selector(target_node_index, selector) {
                 current_state = next_state;
