@@ -221,7 +221,7 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
     }
 
     // 2. 弹出目标选择器。它定义了我们要检查的节点类型，但不属于祖先匹配规则。
-    parts.pop();
+    let target_selector = parts.pop().unwrap();
 
     // --- NFA 初始化 ---
     let start_state = 0;
@@ -229,14 +229,32 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
     let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
 
     let mut state_counter = 1;
-    // `from_state` 是状态链中较靠近起始状态（即选择器右侧）的状态。
-    let mut from_state = start_state;
+
+    // 为目标选择器创建第一个转移 (state 0 -> state 1)
+    if !parts.is_empty() {
+        let first_state = state_counter;
+        states.insert(first_state);
+
+        // 解析目标选择器并获取对应的ID
+        let target_sel = parse_selector(target_selector);
+        let target_selector_id = selector_manager.get_or_create_id(target_sel);
+
+        // 创建从起始状态到第一个状态的转移（匹配目标选择器）
+        transitions
+            .entry(start_state)
+            .or_default()
+            .insert(target_selector_id, first_state);
+
+        state_counter += 1;
+    }
+
+    // `from_state` 是状态链中的当前状态
+    let mut from_state = if parts.is_empty() { start_state } else { 1 };
 
     // 3. 从右向左遍历规则（通过从Vec末尾pop）。
     while let Some(part) = parts.pop() {
         let (selector_str, is_descendant) = if part == ">" {
             // 如果是子代组合器，它修饰的是它左边的选择器，所以我们再pop一次。
-            // `unwrap` 在这里是可接受的，因为一个格式正确的选择器在 `>` 前面一定有内容。
             let sel = parts
                 .pop()
                 .expect("Invalid selector: '>' must be preceded by a selector.");
@@ -255,7 +273,6 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
         let selector_id = selector_manager.get_or_create_id(selector);
 
         // 创建从上一个状态到新状态的转移。
-        // `entry().or_default()` 是一个非常方便的模式，用于处理嵌套的HashMap。
         transitions
             .entry(from_state)
             .or_default()
@@ -293,21 +310,49 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
 /// * `target_node_index` - 我们要检查是否匹配的节点的索引。
 ///
 pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
+    // 首先检查目标节点本身是否匹配起始状态的转移
     let mut current_state = nfa.start_state;
+    
+    // 获取起始状态的转移
+    let start_transitions = match nfa.transitions.get(&current_state) {
+        Some(transitions) => transitions,
+        None => return true, // 没有转移规则，直接匹配成功
+    };
 
-    // 定义"真实后继"：有至少一个非 "0"（通配符ID）的出边
-    let mut has_real_successor = nfa
+    // 检查目标节点是否匹配起始状态的任何转移
+    let mut matched_target = false;
+    for (&selector_id, &next_state) in start_transitions {
+        if selector_id == 0 {
+            continue; // 跳过通配符
+        }
+        
+        if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
+            if dom.node_matches_selector(target_node_index, selector) {
+                current_state = next_state;
+                matched_target = true;
+                break;
+            }
+        }
+    }
+
+    // 如果目标节点不匹配任何起始转移，失败
+    if !matched_target {
+        return false;
+    }
+
+    // 检查当前状态是否还有更多转移需要匹配
+    let has_more_transitions = nfa
         .transitions
         .get(&current_state)
-        .map(|m| m.keys().any(|&k| k != 0))
+        .map(|m| !m.is_empty() && m.keys().any(|&k| k != 0))
         .unwrap_or(false);
 
-    // 若起始状态就没有真实后继，说明无需匹配任何祖先，直接成功
-    if !has_real_successor {
+    // 如果没有更多转移，匹配成功
+    if !has_more_transitions {
         return true;
     }
 
-    // 从目标节点的父节点开始向上遍历
+    // 从目标节点的父节点开始向上遍历，匹配剩余的祖先选择器
     let mut current_node_opt = dom
         .nodes
         .get(target_node_index)
@@ -334,11 +379,11 @@ pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
                             current_state = next_state;
                             found_match = true;
 
-                            // 成功转移后，若新状态没有"真实后继"，则匹配完成
-                            has_real_successor = nfa
+                            // 成功转移后，检查是否还有更多转移
+                            let has_real_successor = nfa
                                 .transitions
                                 .get(&current_state)
-                                .map(|m| m.keys().any(|&k| k != 0))
+                                .map(|m| !m.is_empty() && m.keys().any(|&k| k != 0))
                                 .unwrap_or(false);
 
                             if !has_real_successor {
