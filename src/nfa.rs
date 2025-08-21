@@ -56,11 +56,11 @@ pub fn find_nodes_by_tag(dom: &DOM, tag_name: &str) -> Vec<usize> {
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
-    pub states: HashSet<String>,
+    pub states: HashSet<usize>,
     /// 转移函数，格式为: {当前状态: {输入符号: 下一个状态}}
-    pub transitions: HashMap<String, HashMap<String, String>>,
+    pub transitions: HashMap<usize, HashMap<String, usize>>,
     /// 起始状态。
-    pub start_state: String,
+    pub start_state: usize,
 }
 
 pub fn generate_nfa(selector: &str) -> NFA {
@@ -72,7 +72,7 @@ pub fn generate_nfa(selector: &str) -> NFA {
         return NFA {
             states: HashSet::new(),
             transitions: HashMap::new(),
-            start_state: "q0".to_string(),
+            start_state: 0,
         };
     }
 
@@ -80,13 +80,13 @@ pub fn generate_nfa(selector: &str) -> NFA {
     parts.pop();
 
     // --- NFA 初始化 ---
-    let start_state = "q0".to_string();
-    let mut states: HashSet<String> = [start_state.clone()].into_iter().collect();
-    let mut transitions = HashMap::<_, HashMap<_, String>>::new();
+    let start_state = 0;
+    let mut states: HashSet<usize> = [start_state].into_iter().collect();
+    let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
 
     let mut state_counter = 1;
     // `from_state` 是状态链中较靠近起始状态（即选择器右侧）的状态。
-    let mut from_state = start_state.clone();
+    let mut from_state = start_state;
 
     // 3. 从右向左遍历规则（通过从Vec末尾pop）。
     while let Some(part) = parts.pop() {
@@ -103,23 +103,23 @@ pub fn generate_nfa(selector: &str) -> NFA {
         };
 
         // --- 为这条规则构建NFA片段 ---
-        let to_state = format!("q{}", state_counter);
-        states.insert(to_state.clone());
+        let to_state = state_counter;
+        states.insert(to_state);
 
         // 创建从上一个状态到新状态的转移。
         // `entry().or_default()` 是一个非常方便的模式，用于处理嵌套的HashMap。
         transitions
-            .entry(from_state.clone())
+            .entry(from_state)
             .or_default()
-            .insert(tag_name.to_string(), to_state.clone());
+            .insert(tag_name.to_string(), to_state);
 
         // 5. 添加传播规则：如果是后代选择器，就在新状态上添加一个自循环。
         if is_descendant {
-            // 关键修复：通配跳过应加在“当前(from_state)”上，表示在匹配到该标签前可跳过任意祖先
+            // 关键修复：通配跳过应加在"当前(from_state)"上，表示在匹配到该标签前可跳过任意祖先
             transitions
-                .entry(from_state.clone())
+                .entry(from_state)
                 .or_default()
-                .insert("*".to_string(), from_state.clone());
+                .insert("*".to_string(), from_state);
         }
 
         // 为下一次迭代更新状态
@@ -144,9 +144,9 @@ pub fn generate_nfa(selector: &str) -> NFA {
 /// * `target_node_index` - 我们要检查是否匹配的节点的索引。
 ///
 pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
-    let mut current_state = nfa.start_state.clone();
+    let mut current_state = nfa.start_state;
 
-    // 定义“真实后继”：有至少一个非 "*" 的出边
+    // 定义"真实后继"：有至少一个非 "*" 的出边
     let mut has_real_successor = nfa
         .transitions
         .get(&current_state)
@@ -172,10 +172,10 @@ pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
         match nfa.transitions.get(&current_state) {
             Some(state_transitions) => {
                 // 优先匹配精确标签
-                if let Some(next_state) = state_transitions.get(input_symbol) {
-                    current_state = next_state.clone();
+                if let Some(&next_state) = state_transitions.get(input_symbol) {
+                    current_state = next_state;
 
-                    // 成功转移后，若新状态没有“真实后继”，则匹配完成
+                    // 成功转移后，若新状态没有"真实后继"，则匹配完成
                     has_real_successor = nfa
                         .transitions
                         .get(&current_state)
@@ -191,13 +191,13 @@ pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
                     continue;
                 }
 
-                // 没有精确匹配，但允许通配符“跳过”则跳过当前祖先
+                // 没有精确匹配，但允许通配符"跳过"则跳过当前祖先
                 if state_transitions.contains_key("*") {
                     current_node_opt = ancestor_node.parent;
                     continue;
                 }
 
-                // 既没有精确匹配，也没有“*”，说明此处必须是紧邻父代；失败
+                // 既没有精确匹配，也没有"*"，说明此处必须是紧邻父代；失败
                 return false;
             }
             None => {
