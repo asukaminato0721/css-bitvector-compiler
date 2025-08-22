@@ -153,6 +153,16 @@ impl DOM {
             false
         }
     }
+
+    /// 获取所有根节点（没有父节点的节点）
+    pub fn get_root_nodes(&self) -> Vec<usize> {
+        self.nodes
+            .iter()
+            .enumerate()
+            .filter(|(_, node)| node.parent.is_none())
+            .map(|(idx, _)| idx)
+            .collect()
+    }
 }
 
 /// 辅助函数，用于在 DOM 树中查找所有匹配特定选择器的节点的索引。
@@ -190,7 +200,25 @@ pub struct NFA {
     /// 起始状态。
     pub start_state: usize,
 }
+impl NFA {
+    /// 检查给定状态是否为接受状态（没有后继状态）
+    pub fn is_accept_state(&self, state: usize) -> bool {
+        !self.transitions.contains_key(&state)
+            || self
+                .transitions
+                .get(&state)
+                .map_or(true, |trans| trans.is_empty())
+    }
 
+    /// 获取所有接受状态
+    pub fn get_accept_states(&self) -> HashSet<usize> {
+        self.states
+            .iter()
+            .filter(|&&state| self.is_accept_state(state))
+            .copied()
+            .collect()
+    }
+}
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim();
@@ -209,7 +237,7 @@ pub fn parse_selector(selector_str: &str) -> Selector {
 
 pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> NFA {
     let t = selector.replace('>', " > ");
-    let mut parts: Vec<&str> = t.split_whitespace().collect();
+    let parts: Vec<&str> = t.split_whitespace().collect();
 
     // 如果选择器为空，则返回一个永远不会匹配的空NFA。
     if parts.is_empty() {
@@ -220,77 +248,72 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
         };
     }
 
-    // 2. 弹出目标选择器。它定义了我们要检查的节点类型，但不属于祖先匹配规则。
-    let target_selector = parts.pop().unwrap();
-
     // --- NFA 初始化 ---
     let start_state = 0;
     let mut states: HashSet<usize> = [start_state].into_iter().collect();
     let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
 
     let mut state_counter = 1;
+    let mut current_state = start_state;
 
-    // 为目标选择器创建第一个转移 (state 0 -> state 1)
-    if !parts.is_empty() {
-        let first_state = state_counter;
-        states.insert(first_state);
+    // 从左往右处理选择器部分
+    let mut i = 0;
+    while i < parts.len() {
+        let part = parts[i];
 
-        // 解析目标选择器并获取对应的ID
-        let target_sel = parse_selector(target_selector);
-        let target_selector_id = selector_manager.get_or_create_id(target_sel);
+        if part == ">" {
+            // 子代组合器，跳过它，下一个选择器是直接子元素
+            i += 1;
+            if i >= parts.len() {
+                break;
+            }
+            let selector_str = parts[i];
 
-        // 创建从起始状态到第一个状态的转移（匹配目标选择器）
-        transitions
-            .entry(start_state)
-            .or_default()
-            .insert(target_selector_id, first_state);
+            // 创建新状态
+            let new_state = state_counter;
+            states.insert(new_state);
 
-        state_counter += 1;
-    }
+            // 解析选择器并获取对应的ID
+            let selector = parse_selector(selector_str);
+            let selector_id = selector_manager.get_or_create_id(selector);
 
-    // `from_state` 是状态链中的当前状态
-    let mut from_state = if parts.is_empty() { start_state } else { 1 };
-
-    // 3. 从右向左遍历规则（通过从Vec末尾pop）。
-    while let Some(part) = parts.pop() {
-        let (selector_str, is_descendant) = if part == ">" {
-            // 如果是子代组合器，它修饰的是它左边的选择器，所以我们再pop一次。
-            let sel = parts
-                .pop()
-                .expect("Invalid selector: '>' must be preceded by a selector.");
-            (sel, false) // 标记为非后代（即子代）
-        } else {
-            // 如果是选择器，则意味着是隐式的后代组合器。
-            (part, true) // 标记为后代
-        };
-
-        // --- 为这条规则构建NFA片段 ---
-        let to_state = state_counter;
-        states.insert(to_state);
-
-        // 解析选择器并获取对应的ID
-        let selector = parse_selector(selector_str);
-        let selector_id = selector_manager.get_or_create_id(selector);
-
-        // 创建从上一个状态到新状态的转移。
-        transitions
-            .entry(from_state)
-            .or_default()
-            .insert(selector_id, to_state);
-
-        // 5. 添加传播规则：如果是后代选择器，就在新状态上添加一个自循环。
-        if is_descendant {
-            // 关键修复：通配跳过应加在"当前(from_state)"上，表示在匹配到该选择器前可跳过任意祖先
-            // 通配符 "*" 的ID是0
+            // 创建直接转移（不允许跳过中间节点）
             transitions
-                .entry(from_state)
+                .entry(current_state)
                 .or_default()
-                .insert(0, from_state);
+                .insert(selector_id, new_state);
+
+            current_state = new_state;
+            state_counter += 1;
+        } else {
+            // 后代选择器（隐式或显式）
+            let selector_str = part;
+
+            // 创建新状态
+            let new_state = state_counter;
+            states.insert(new_state);
+
+            // 解析选择器并获取对应的ID
+            let selector = parse_selector(selector_str);
+            let selector_id = selector_manager.get_or_create_id(selector);
+
+            // 创建转移到新状态
+            transitions
+                .entry(current_state)
+                .or_default()
+                .insert(selector_id, new_state);
+
+            // 添加自循环，允许跳过不匹配的中间节点（通配符）
+            transitions
+                .entry(current_state)
+                .or_default()
+                .insert(0, current_state);
+
+            current_state = new_state;
+            state_counter += 1;
         }
 
-        // 为下一次迭代更新状态
-        from_state = to_state;
-        state_counter += 1;
+        i += 1;
     }
 
     NFA {
@@ -300,125 +323,75 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
     }
 }
 
-/// NFA 匹配引擎。
+/// 新的 NFA 匹配引擎。
 ///
-/// 从目标节点的父节点开始，向上遍历祖先链，并根据 NFA 规则转换状态。
+/// 从根节点开始，向下遍历所有子节点，并根据 NFA 规则转换状态。
 ///
 /// # Arguments
 /// * `nfa` - 用于匹配的 NFA。
 /// * `dom` - 包含所有节点的 DOM 结构。
-/// * `target_node_index` - 我们要检查是否匹配的节点的索引。
 ///
-pub fn nfa_match(nfa: &NFA, dom: &DOM, target_node_index: usize) -> bool {
-    // 首先检查目标节点本身是否匹配起始状态的转移
-    let mut current_state = nfa.start_state;
+pub fn nfa_match(nfa: &NFA, dom: &DOM) -> Vec<usize> {
+    let mut matches = HashSet::new(); // 使用 HashSet 避免重复
+    let root_nodes = dom.get_root_nodes();
 
-    // 获取起始状态的转移
-    let start_transitions = match nfa.transitions.get(&current_state) {
-        Some(transitions) => transitions,
-        None => return true, // 没有转移规则，直接匹配成功
-    };
+    for root_idx in root_nodes {
+        nfa_match_recursive(nfa, dom, root_idx, nfa.start_state, &mut matches);
+    }
 
-    // 检查目标节点是否匹配起始状态的任何转移
-    let mut matched_target = false;
-    for (&selector_id, &next_state) in start_transitions {
-        if selector_id == 0 {
-            continue; // 跳过通配符
-        }
+    matches.into_iter().collect()
+}
 
-        if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
-            if dom.node_matches_selector(target_node_index, selector) {
-                current_state = next_state;
-                matched_target = true;
-                break;
+/// 递归匹配函数
+fn nfa_match_recursive(
+    nfa: &NFA,
+    dom: &DOM,
+    node_idx: usize,
+    current_state: usize,
+    matches: &mut HashSet<usize>,
+) {
+    // 检查当前节点是否可以进行状态转移
+    if let Some(state_transitions) = nfa.transitions.get(&current_state) {
+        let mut state_advanced = false;
+
+        // 尝试匹配所有可能的选择器（除了通配符）
+        for (&selector_id, &next_state) in state_transitions {
+            if selector_id == 0 {
+                continue; // 先跳过通配符，稍后处理
             }
-        }
-    }
 
-    // 如果目标节点不匹配任何起始转移，失败
-    if !matched_target {
-        return false;
-    }
-
-    // 检查当前状态是否还有更多转移需要匹配
-    let has_more_transitions = nfa
-        .transitions
-        .get(&current_state)
-        .map(|m| !m.is_empty() && m.keys().any(|&k| k != 0))
-        .unwrap_or(false);
-
-    // 如果没有更多转移，匹配成功
-    if !has_more_transitions {
-        return true;
-    }
-
-    // 从目标节点的父节点开始向上遍历，匹配剩余的祖先选择器
-    let mut current_node_opt = dom
-        .nodes
-        .get(target_node_index)
-        .and_then(|node| node.parent);
-
-    while let Some(node_index) = current_node_opt {
-        let ancestor_node = &dom.nodes[node_index];
-
-        // 当前状态的转移
-        match nfa.transitions.get(&current_state) {
-            Some(state_transitions) => {
-                let mut found_match = false;
-
-                // 检查所有可能的选择器匹配
-                for (&selector_id, &next_state) in state_transitions {
-                    if selector_id == 0 {
-                        // 跳过通配符，稍后处理
-                        continue;
+            if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
+                if dom.node_matches_selector(node_idx, selector) {
+                    // 匹配成功，转移到下一个状态
+                    if nfa.is_accept_state(next_state) {
+                        // 如果下一个状态是接受状态，记录匹配
+                        matches.insert(node_idx);
                     }
 
-                    if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
-                        if dom.node_matches_selector(node_index, selector) {
-                            // 找到匹配的选择器
-                            current_state = next_state;
-                            found_match = true;
-
-                            // 成功转移后，检查是否还有更多转移
-                            let has_real_successor = nfa
-                                .transitions
-                                .get(&current_state)
-                                .map(|m| !m.is_empty() && m.keys().any(|&k| k != 0))
-                                .unwrap_or(false);
-
-                            if !has_real_successor {
-                                return true;
-                            }
-
-                            break;
-                        }
+                    // 继续从新状态匹配子节点
+                    for &child_idx in &dom.nodes[node_idx].children {
+                        nfa_match_recursive(nfa, dom, child_idx, next_state, matches);
                     }
-                }
 
-                if found_match {
-                    // 找到了精确匹配，继续向上
-                    current_node_opt = ancestor_node.parent;
-                    continue;
+                    state_advanced = true;
                 }
-
-                // 没有精确匹配，但允许通配符"跳过"（ID为0）则跳过当前祖先
-                if state_transitions.contains_key(&0) {
-                    current_node_opt = ancestor_node.parent;
-                    continue;
-                }
-
-                // 既没有精确匹配，也没有通配符，说明此处必须是紧邻父代；失败
-                return false;
             }
-            None => {
-                // 没有更多转移，说明需求已满足
-                return true;
+        }
+
+        // 如果没有状态推进，并且有通配符转移，则使用通配符继续在当前状态
+        if !state_advanced && state_transitions.contains_key(&0) {
+            for &child_idx in &dom.nodes[node_idx].children {
+                nfa_match_recursive(nfa, dom, child_idx, current_state, matches);
             }
         }
     }
 
-    // 走到根也未满足所有必需的规则
-    false
+    // 如果没有转移规则，继续遍历子节点（保持当前状态）
+    if !nfa.transitions.contains_key(&current_state) {
+        for &child_idx in &dom.nodes[node_idx].children {
+            nfa_match_recursive(nfa, dom, child_idx, current_state, matches);
+        }
+    }
 }
 
 fn main() {
@@ -480,6 +453,7 @@ fn main() {
         "#main p",               // ID选择器 + 标签选择器
         ".container .highlight", // 类选择器组合
         "section .highlight",    // 标签 + 类选择器
+        "div section",
     ];
 
     // 3. 循环测试每个选择器
@@ -489,6 +463,7 @@ fn main() {
         // 3.1 动态生成 NFA
         let nfa = generate_nfa(selector, &mut dom.selector_manager);
         println!("NFA 状态: {:?}", nfa.states);
+        println!("NFA 接受状态: {:?}", nfa.get_accept_states());
         println!("NFA 转移:");
         for (from_state, transitions) in &nfa.transitions {
             for (selector_id, to_state) in transitions {
@@ -506,41 +481,33 @@ fn main() {
             }
         }
 
-        // 3.2 识别目标选择器
-        let t = selector.replace('>', " > ");
-        let target_selector_str = t.split_whitespace().last().unwrap();
-        let target_selector = parse_selector(target_selector_str);
-        println!("目标选择器: {:?}\n", target_selector);
+        // 3.2
+        let matched_nodes = nfa_match(&nfa, &dom);
 
-        // 3.3 在 DOM 树中查找所有目标节点并进行匹配
-        let nodes_to_check = find_nodes_by_selector(&dom, &target_selector);
+        println!("匹配结果:");
+        if matched_nodes.is_empty() {
+            println!("  无匹配节点");
+        } else {
+            for &node_idx in &matched_nodes {
+                let node = dom.nodes.get(node_idx).unwrap();
+                let classes_str = if node.classes.is_empty() {
+                    "无".to_string()
+                } else {
+                    node.classes.iter().cloned().collect::<Vec<_>>().join(" ")
+                };
+                let id_str = node.html_id.as_deref().unwrap_or("无");
+                let n = "None".to_string();
+                let parent_tag = node
+                    .parent
+                    .and_then(|p_idx| dom.nodes.get(p_idx))
+                    .map(|p_node| &p_node.tag_name)
+                    .unwrap_or(&n);
 
-        for node_idx in nodes_to_check {
-            let node = dom.nodes.get(node_idx).unwrap();
-            let classes_str = if node.classes.is_empty() {
-                "无".to_string()
-            } else {
-                node.classes.iter().cloned().collect::<Vec<_>>().join(" ")
-            };
-            let id_str = node.html_id.as_deref().unwrap_or("无");
-            let n = "None".to_string();
-            let parent_tag = node
-                .parent
-                .and_then(|p_idx| dom.nodes.get(p_idx))
-                .map(|p_node| &p_node.tag_name)
-                .unwrap_or(&n);
-
-            let is_match = nfa_match(&nfa, &dom, node_idx);
-
-            println!(
-                "节点 <{}> [类: {}] [ID: {}] (索引 {}) [父节点: <{}>] 是否匹配?  {}",
-                node.tag_name,
-                classes_str,
-                id_str,
-                node_idx,
-                parent_tag,
-                if is_match { "是" } else { "否" }
-            );
+                println!(
+                    "  节点 <{}> [类: {}] [ID: {}] (索引 {}) [父节点: <{}>]",
+                    node.tag_name, classes_str, id_str, node_idx, parent_tag
+                );
+            }
         }
     }
 }
