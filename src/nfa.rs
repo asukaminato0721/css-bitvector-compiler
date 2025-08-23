@@ -143,7 +143,7 @@ impl DOM {
             children: Vec::new(),
             dirty: true,
             recursive_dirty: true,
-            output_state: vec![false; unsafe { STATE }],
+            output_state: vec![false; unsafe { STATE } + 1],
         };
 
         self.nodes.insert(id, new_node);
@@ -344,7 +344,7 @@ impl DOM {
         }
     }
     fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = vec![false; nfa.max_state_id + 1];
+        let mut new_state = self.nodes[&node_idx].output_state.clone();
         for (state_id, state_transitions) in nfa.transitions.iter() {
             if !input[*state_id] {
                 continue;
@@ -375,6 +375,8 @@ pub struct NFA {
     /// 起始状态。
     pub start_state: usize,
     pub max_state_id: usize,
+    /// 原始 CSS 选择器字符串
+    pub rule: String,
 }
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
@@ -418,7 +420,8 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa_arr: &[NFA]) {
     match frame.command_name.as_str() {
         "init" => {
             let node_data = frame.command_data.get("node").unwrap();
-            *dom = DOM::new();
+            dom.nodes.clear();
+            dom.root_node = None;
             dom.json_to_html_node(node_data, None);
         }
         "add" => {
@@ -434,7 +437,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa_arr: &[NFA]) {
 
             for n in nfa_arr.iter() {
                 input[n.start_state] = true;
-                let _matches = dom.recompute_styles(n, &input);
+                dom.recompute_styles(n, &input);
             }
             let end = rdtsc();
             println!("{}", end - start);
@@ -531,9 +534,28 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
         transitions,
         start_state,
         max_state_id: current_state,
+        rule: selector.to_string(),
     }
 }
 
+/// 收集所有 rule -> [node id] 的匹配结果
+pub fn collect_rule_matches(dom: &DOM, nfas: &[NFA]) -> HashMap<String, Vec<u64>> {
+    let mut res: HashMap<String, Vec<u64>> = HashMap::new();
+    for nfa in nfas {
+        let accept_states = nfa.get_accept_states();
+        for (node_id, node) in dom.nodes.iter() {
+            for &acc in &accept_states {
+                if acc < node.output_state.len() && node.output_state[acc] {
+                    res.entry(nfa.rule.clone()).or_default().push(*node_id);
+                }
+            }
+        }
+    }
+    for v in res.values_mut() {
+        v.sort_unstable();
+    }
+    res
+}
 fn main() {
     // 1. 构建 DOM 树
     let mut dom = DOM::new();
@@ -552,5 +574,7 @@ fn main() {
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa_arr);
     }
+    let final_matches = collect_rule_matches(&dom, &nfa_arr);
+    println!("final_rule_matches: {:?}", final_matches);
     dbg!(unsafe { MISS_CNT });
 }
