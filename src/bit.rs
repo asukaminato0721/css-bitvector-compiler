@@ -1,3 +1,5 @@
+use css_bitvector_compiler::LayoutFrame;
+use css_bitvector_compiler::parse_trace;
 use css_bitvector_compiler::rdtsc;
 use cssparser::{Parser, ParserInput, Token};
 use std::{
@@ -495,43 +497,6 @@ fn build_nfa(state_map: &HashMap<CssMatch, usize>) -> NFA {
     }
 
     NFA { states }
-}
-
-#[derive(Debug, Clone)]
-#[allow(unused)]
-struct LayoutFrame {
-    pub frame_id: usize,
-    pub command_name: String,
-    pub command_data: serde_json::Value,
-}
-
-fn parse_trace() -> Vec<LayoutFrame> {
-    let content = std::fs::read_to_string(format!(
-        "css-gen-op/{0}/command.json",
-        std::env::var("WEBSITE_NAME").unwrap()
-    ))
-    .unwrap();
-
-    let mut frames = vec![];
-    for (frame_id, line) in content.lines().enumerate() {
-        if line.trim().is_empty() {
-            continue;
-        }
-        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
-
-        let command_name = command_data["name"].as_str().unwrap().to_string();
-        if command_name.starts_with("layout_") {
-            continue;
-        }
-
-        frames.push(LayoutFrame {
-            frame_id,
-            command_name,
-            command_data,
-        });
-    }
-
-    frames
 }
 
 fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
