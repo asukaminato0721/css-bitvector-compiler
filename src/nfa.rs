@@ -77,11 +77,11 @@ impl SelectorManager {
 
 #[derive(Debug)]
 pub struct DOMNode {
-    pub tag_name: String,         // 标签名
-    pub classes: HashSet<String>, // CSS类列表
-    pub html_id: Option<String>,  // HTML ID属性
-    pub parent: Option<usize>,    // 存储父节点在 arena 中的索引
-    pub children: Vec<usize>,     // 存储子节点在 arena 中的索引
+    pub tag_id: usize,                 // 标签选择器ID
+    pub class_ids: HashSet<usize>,     // CSS类选择器ID集合
+    pub id_selector_id: Option<usize>, // HTML ID选择器ID
+    pub parent: Option<usize>,         // 存储父节点在 arena 中的索引
+    pub children: Vec<usize>,          // 存储子节点在 arena 中的索引
 }
 
 #[derive(Debug)]
@@ -110,10 +110,23 @@ impl DOM {
     ) -> usize {
         let new_node_index = self.nodes.len();
 
+        // 获取或创建选择器ID
+        let tag_id = self.selector_manager.get_or_create_type_id(tag_name);
+
+        let mut class_ids = HashSet::new();
+        for class in &classes {
+            let class_id = self.selector_manager.get_or_create_class_id(class);
+            class_ids.insert(class_id);
+        }
+
+        let id_selector_id = html_id
+            .as_ref()
+            .map(|id| self.selector_manager.get_or_create_id_selector_id(id));
+
         let new_node = DOMNode {
-            tag_name: tag_name.to_string(),
-            classes: classes.into_iter().collect(),
-            html_id,
+            tag_id,
+            class_ids,
+            id_selector_id,
             parent: parent_index,
             children: Vec::new(),
         };
@@ -135,20 +148,32 @@ impl DOM {
         self.add_node(tag_name, vec![], None, parent_index)
     }
 
-    /// 检查节点是否匹配给定的选择器
-    pub fn node_matches_selector(&self, node_index: usize, selector: &Selector) -> bool {
+    /// 检查节点是否匹配给定的选择器ID（优化版本，使用usize比较）
+    pub fn node_matches_selector(&self, node_index: usize, selector_id: usize) -> bool {
         if let Some(node) = self.nodes.get(node_index) {
-            match selector {
-                Selector::Type(tag) => node.tag_name.to_lowercase() == tag.to_lowercase(),
-                Selector::Class(class) => node.classes.contains(class),
-                Selector::Id(id) => {
-                    if let Some(ref html_id) = node.html_id {
-                        html_id == id
-                    } else {
-                        false
-                    }
+            // 通配符匹配所有节点
+            if selector_id == 0 {
+                return true;
+            }
+
+            // 检查是否匹配标签选择器
+            if node.tag_id == selector_id {
+                return true;
+            }
+
+            // 检查是否匹配类选择器
+            if node.class_ids.contains(&selector_id) {
+                return true;
+            }
+
+            // 检查是否匹配ID选择器
+            if let Some(id_sel_id) = node.id_selector_id {
+                if id_sel_id == selector_id {
+                    return true;
                 }
             }
+
+            false
         } else {
             false
         }
@@ -166,28 +191,43 @@ impl DOM {
 }
 
 /// 辅助函数，用于在 DOM 树中查找所有匹配特定选择器的节点的索引。
-pub fn find_nodes_by_selector(dom: &DOM, selector: &Selector) -> Vec<usize> {
+pub fn find_nodes_by_selector_id(dom: &DOM, selector_id: usize) -> Vec<usize> {
     dom.nodes
         .iter()
         .enumerate()
-        .filter(|(index, _)| dom.node_matches_selector(*index, selector))
+        .filter(|(index, _)| dom.node_matches_selector(*index, selector_id))
         .map(|(index, _)| index)
         .collect()
 }
 
 /// 便捷函数：根据标签名查找节点
 pub fn find_nodes_by_tag(dom: &DOM, tag_name: &str) -> Vec<usize> {
-    find_nodes_by_selector(dom, &Selector::Type(tag_name.to_string()))
+    let selector = Selector::Type(tag_name.to_string());
+    if let Some(selector_id) = dom.selector_manager.get_id(&selector) {
+        find_nodes_by_selector_id(dom, selector_id)
+    } else {
+        vec![]
+    }
 }
 
 /// 便捷函数：根据类名查找节点
 pub fn find_nodes_by_class(dom: &DOM, class_name: &str) -> Vec<usize> {
-    find_nodes_by_selector(dom, &Selector::Class(class_name.to_string()))
+    let selector = Selector::Class(class_name.to_string());
+    if let Some(selector_id) = dom.selector_manager.get_id(&selector) {
+        find_nodes_by_selector_id(dom, selector_id)
+    } else {
+        vec![]
+    }
 }
 
 /// 便捷函数：根据ID查找节点
 pub fn find_nodes_by_id(dom: &DOM, id_name: &str) -> Vec<usize> {
-    find_nodes_by_selector(dom, &Selector::Id(id_name.to_string()))
+    let selector = Selector::Id(id_name.to_string());
+    if let Some(selector_id) = dom.selector_manager.get_id(&selector) {
+        find_nodes_by_selector_id(dom, selector_id)
+    } else {
+        vec![]
+    }
 }
 
 /// 表示一个非确定性有限状态自动机 (NFA)。
@@ -342,7 +382,7 @@ pub fn nfa_match(nfa: &NFA, dom: &DOM) -> Vec<usize> {
     matches.into_iter().collect()
 }
 
-/// 递归匹配函数
+/// 递归匹配函数（完全优化版本）
 fn nfa_match_recursive(
     nfa: &NFA,
     dom: &DOM,
@@ -360,21 +400,20 @@ fn nfa_match_recursive(
                 continue; // 先跳过通配符，稍后处理
             }
 
-            if let Some(selector) = dom.selector_manager.get_selector(selector_id) {
-                if dom.node_matches_selector(node_idx, selector) {
-                    // 匹配成功，转移到下一个状态
-                    if nfa.is_accept_state(next_state) {
-                        // 如果下一个状态是接受状态，记录匹配
-                        matches.insert(node_idx);
-                    }
-
-                    // 继续从新状态匹配子节点
-                    for &child_idx in &dom.nodes[node_idx].children {
-                        nfa_match_recursive(nfa, dom, child_idx, next_state, matches);
-                    }
-
-                    state_advanced = true;
+            // 直接使用selector_id进行匹配，无需字符串比较
+            if dom.node_matches_selector(node_idx, selector_id) {
+                // 匹配成功，转移到下一个状态
+                if nfa.is_accept_state(next_state) {
+                    // 如果下一个状态是接受状态，记录匹配
+                    matches.insert(node_idx);
                 }
+
+                // 继续从新状态匹配子节点
+                for &child_idx in &dom.nodes[node_idx].children {
+                    nfa_match_recursive(nfa, dom, child_idx, next_state, matches);
+                }
+
+                state_advanced = true;
             }
         }
 
@@ -393,7 +432,6 @@ fn nfa_match_recursive(
         }
     }
 }
-
 fn main() {
     // 1. 构建 DOM 树
     let mut dom = DOM::new();
@@ -418,24 +456,55 @@ fn main() {
 
     println!("DOM 结构:");
     for (idx, node) in dom.nodes.iter().enumerate() {
-        let classes_str = if node.classes.is_empty() {
+        // 根据ID获取对应的字符串用于显示
+        let tag_name = dom
+            .selector_manager
+            .get_selector(node.tag_id)
+            .map(|s| match s {
+                Selector::Type(name) => name.as_str(),
+                _ => "unknown",
+            })
+            .unwrap_or("unknown");
+
+        let classes_str = if node.class_ids.is_empty() {
             "无".to_string()
         } else {
-            node.classes.iter().cloned().collect::<Vec<_>>().join(" ")
+            node.class_ids
+                .iter()
+                .filter_map(|&id| dom.selector_manager.get_selector(id))
+                .filter_map(|s| match s {
+                    Selector::Class(name) => Some(name.as_str()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+                .join(" ")
         };
 
-        let id_str = node.html_id.as_deref().unwrap_or("无");
+        let id_str = if let Some(id_sel_id) = node.id_selector_id {
+            dom.selector_manager
+                .get_selector(id_sel_id)
+                .and_then(|s| match s {
+                    Selector::Id(name) => Some(name.as_str()),
+                    _ => None,
+                })
+                .unwrap_or("无")
+        } else {
+            "无"
+        };
 
-        let n = "None".to_string();
         let parent_tag = node
             .parent
             .and_then(|p_idx| dom.nodes.get(p_idx))
-            .map(|p_node| &p_node.tag_name)
-            .unwrap_or(&n);
+            .and_then(|p_node| dom.selector_manager.get_selector(p_node.tag_id))
+            .map(|s| match s {
+                Selector::Type(name) => name.as_str(),
+                _ => "unknown",
+            })
+            .unwrap_or("None");
 
         println!(
             "索引 {}: <{}> [类: {}] [ID: {}] [父节点: <{}>]",
-            idx, node.tag_name, classes_str, id_str, parent_tag
+            idx, tag_name, classes_str, id_str, parent_tag
         );
     }
 
@@ -490,22 +559,55 @@ fn main() {
         } else {
             for &node_idx in &matched_nodes {
                 let node = dom.nodes.get(node_idx).unwrap();
-                let classes_str = if node.classes.is_empty() {
+
+                let tag_name = dom
+                    .selector_manager
+                    .get_selector(node.tag_id)
+                    .map(|s| match s {
+                        Selector::Type(name) => name.as_str(),
+                        _ => "unknown",
+                    })
+                    .unwrap_or("unknown");
+
+                let classes_str = if node.class_ids.is_empty() {
                     "无".to_string()
                 } else {
-                    node.classes.iter().cloned().collect::<Vec<_>>().join(" ")
+                    node.class_ids
+                        .iter()
+                        .filter_map(|&id| dom.selector_manager.get_selector(id))
+                        .filter_map(|s| match s {
+                            Selector::Class(name) => Some(name.as_str()),
+                            _ => None,
+                        })
+                        .collect::<Vec<_>>()
+                        .join(" ")
                 };
-                let id_str = node.html_id.as_deref().unwrap_or("无");
-                let n = "None".to_string();
+
+                let id_str = if let Some(id_sel_id) = node.id_selector_id {
+                    dom.selector_manager
+                        .get_selector(id_sel_id)
+                        .and_then(|s| match s {
+                            Selector::Id(name) => Some(name.as_str()),
+                            _ => None,
+                        })
+                        .unwrap_or("无")
+                } else {
+                    "无"
+                };
+
                 let parent_tag = node
                     .parent
                     .and_then(|p_idx| dom.nodes.get(p_idx))
-                    .map(|p_node| &p_node.tag_name)
-                    .unwrap_or(&n);
+                    .and_then(|p_node| dom.selector_manager.get_selector(p_node.tag_id))
+                    .map(|s| match s {
+                        Selector::Type(name) => name.as_str(),
+                        _ => "unknown",
+                    })
+                    .unwrap_or("None");
 
                 println!(
                     "  节点 <{}> [类: {}] [ID: {}] (索引 {}) [父节点: <{}>]",
-                    node.tag_name, classes_str, id_str, node_idx, parent_tag
+                    tag_name, classes_str, id_str, node_idx, parent_tag
                 );
             }
         }
