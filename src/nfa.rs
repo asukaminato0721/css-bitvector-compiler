@@ -375,8 +375,8 @@ pub struct NFA {
     /// 起始状态。
     pub start_state: usize,
     pub max_state_id: usize,
-    /// 原始 CSS 选择器字符串
-    pub rule: String,
+    // for print match
+    pub accept_states: Vec<usize>,
 }
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
@@ -416,7 +416,7 @@ pub fn parse_selector(selector_str: &str) -> Selector {
     }
 }
 
-fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa_arr: &[NFA]) {
+fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     match frame.command_name.as_str() {
         "init" => {
             let node_data = frame.command_data.get("node").unwrap();
@@ -435,10 +435,9 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa_arr: &[NFA]) {
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
 
-            for n in nfa_arr.iter() {
-                input[n.start_state] = true;
-                dom.recompute_styles(n, &input);
-            }
+            input[nfa.start_state] = true;
+            dom.recompute_styles(nfa, &input);
+
             let end = rdtsc();
             println!("{}", end - start);
         }
@@ -451,33 +450,37 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa_arr: &[NFA]) {
     }
 }
 
-pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> NFA {
-    let t = selector.replace('>', " > ");
-    let parts: Vec<&str> = t.split_whitespace().collect();
-
-    // --- NFA 初始化 ---
+pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager) -> NFA {
+    unsafe {
+        STATE = 0;
+    };
     let start_state = unsafe {
         STATE += 1;
         STATE
     };
     let mut states: HashSet<usize> = [start_state].into_iter().collect();
     let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
+    let mut accept_states = Vec::with_capacity(selectors.len());
 
-    let mut current_state = start_state;
+    for rule in selectors {
+        let t = rule.replace('>', " > ");
+        let parts: Vec<&str> = t.split_whitespace().collect();
+        let mut cur = start_state;
 
-    // 从左往右处理选择器部分
-    let mut i = 0;
-    while i < parts.len() {
-        let part = parts[i];
+        // 从左往右处理选择器部分
+        let mut i = 0;
+        while i < parts.len() {
+            let token = parts[i];
+            let direct = token == ">";
 
-        if part == ">" {
-            // 子代组合器，跳过它，下一个选择器是直接子元素
-            i += 1;
-            if i >= parts.len() {
-                break;
+            if direct {
+                // 子代组合器，跳过它，下一个选择器是直接子元素
+                i += 1;
+                if i >= parts.len() {
+                    break;
+                }
             }
-            let selector_str = parts[i];
-
+            let selector_str = if direct { parts[i] } else { token };
             // 创建新状态
             let new_state = unsafe {
                 STATE += 1;
@@ -491,66 +494,42 @@ pub fn generate_nfa(selector: &str, selector_manager: &mut SelectorManager) -> N
 
             // 创建直接转移（不允许跳过中间节点）
             transitions
-                .entry(current_state)
+                .entry(cur)
                 .or_default()
                 .insert(selector_id, new_state);
-
-            current_state = new_state;
-        } else {
-            // 后代选择器（隐式或显式）
-            let selector_str = part;
-
-            // 创建新状态
-            let new_state = unsafe {
-                STATE += 1;
-                STATE
-            };
-            states.insert(new_state);
-
-            // 解析选择器并获取对应的ID
-            let selector = parse_selector(selector_str);
-            let selector_id = selector_manager.get_or_create_id(selector);
-
-            // 创建转移到新状态
-            transitions
-                .entry(current_state)
-                .or_default()
-                .insert(selector_id, new_state);
-
-            // 添加自循环，允许跳过不匹配的中间节点（通配符）
-            transitions
-                .entry(current_state)
-                .or_default()
-                .insert(0, current_state);
-
-            current_state = new_state;
+            if !direct {
+                transitions.entry(cur).or_default().insert(0, cur);
+            }
+            cur = new_state;
+            i += 1;
         }
-
-        i += 1;
+        accept_states.push(cur);
     }
-
     NFA {
         states,
         transitions,
         start_state,
-        max_state_id: current_state,
-        rule: selector.to_string(),
+        max_state_id: unsafe { STATE },
+        accept_states,
     }
 }
 
 /// 收集所有 rule -> [node id] 的匹配结果
-pub fn collect_rule_matches(dom: &DOM, nfas: &[NFA]) -> HashMap<String, Vec<u64>> {
+pub fn collect_rule_matches(
+    dom: &DOM,
+    nfas: &NFA,
+    selects: &[String],
+) -> HashMap<String, Vec<u64>> {
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
-    for nfa in nfas {
-        let accept_states = nfa.get_accept_states();
+    for (idx, rule) in selects.iter().enumerate() {
+        let acc = nfas.accept_states[idx];
         for (node_id, node) in dom.nodes.iter() {
-            for &acc in &accept_states {
-                if acc < node.output_state.len() && node.output_state[acc] {
-                    res.entry(nfa.rule.clone()).or_default().push(*node_id);
-                }
+            if acc < node.output_state.len() && node.output_state[acc] {
+                res.entry(rule.clone()).or_default().push(*node_id);
             }
         }
     }
+
     for v in res.values_mut() {
         v.sort_unstable();
     }
@@ -566,15 +545,11 @@ fn main() {
         ))
         .unwrap(),
     );
-
-    let nfa_arr: Vec<_> = selectors
-        .iter()
-        .map(|x| generate_nfa(&x, &mut dom.selector_manager))
-        .collect();
+    let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
     for f in parse_trace() {
-        apply_frame(&mut dom, &f, &nfa_arr);
+        apply_frame(&mut dom, &f, &nfa);
     }
-    let final_matches = collect_rule_matches(&dom, &nfa_arr);
-    println!("final_rule_matches: {:?}", final_matches);
+    let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
+    println!("final_rule_matches: {:#?}", final_matches);
     dbg!(unsafe { MISS_CNT });
 }
