@@ -1,12 +1,58 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::collections::HashSet;
+use std::{
+    collections::HashSet,
+    fmt::{Debug, Display},
+};
 
 use css_bitvector_compiler::Cache;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
-    Descendant { selectors: Vec<Selector> },
+    Complex { parts: Vec<SelectorPart> },
 }
+
+impl Display for CssRule {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CssRule::Complex { parts } => {
+                for part in parts {
+                    write!(f, "{}", part)?;
+                }
+                Ok(())
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct SelectorPart {
+    selector: Selector,
+    combinator: Combinator,
+}
+
+impl Display for SelectorPart {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} {}", self.selector, self.combinator)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum Combinator {
+    Descendant, // 空格
+    Child,      // >
+    None,       // 最后一个选择器没有组合器
+}
+
+impl Display for Combinator {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Combinator::Descendant => write!(f, " "),
+            Combinator::Child => write!(f, ">"),
+            Combinator::None => write!(f, ""),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Selector {
     Type(String),
@@ -14,82 +60,127 @@ enum Selector {
     Id(String),
 }
 
+impl Display for Selector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Selector::Type(tag) => write!(f, "{}", tag),
+            Selector::Class(class) => write!(f, ".{}", class),
+            Selector::Id(id) => write!(f, "#{}", id),
+        }
+    }
+}
+
 fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules = Vec::new();
+    let mut rules = vec![];
     let mut input = ParserInput::new(css_content);
     let mut parser = Parser::new(&mut input);
 
-    let mut expecting_rule_body = false;
-    let mut selector_chain: Vec<Selector> = Vec::new();
+    let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
+    let mut pending_combinator = Combinator::None;
 
-    while let Ok(token) = parser.next() {
-        if expecting_rule_body {
-            match token {
-                Token::CurlyBracketBlock => {
-                    if let Some(selector) = current_selector.take() {
-                        selector_chain.push(selector);
-                    }
-                    if !selector_chain.is_empty() {
-                        rules.push(CssRule::Descendant {
-                            selectors: selector_chain,
-                        });
-                    }
+    #[derive(PartialEq, Eq)]
+    enum NextSelector {
+        Class,
+        Type,
+    }
+    let mut next_selector = NextSelector::Type;
 
-                    selector_chain = Vec::new();
-                    expecting_rule_body = false;
+    loop {
+        let token = match parser.next_including_whitespace_and_comments() {
+            Ok(token) => token,
+            Err(_) => {
+                // End of input, finalize any pending rule
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
-                _ => {
-                    expecting_rule_body = false;
-                    current_selector = None;
-                    selector_chain.clear();
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
+                }
+                break;
+            }
+        };
+
+        match token {
+            Token::Comment(_) => continue,
+            Token::WhiteSpace(_) => {
+                if current_selector.is_some() && pending_combinator == Combinator::None {
+                    pending_combinator = Combinator::Descendant;
                 }
             }
-        } else {
-            match token {
-                Token::Ident(name) => {
-                    let type_name = name.to_string().to_lowercase();
-
-                    if let Some(prev_selector) = current_selector.take() {
-                        selector_chain.push(prev_selector);
-                    }
-
-                    current_selector = Some(Selector::Type(type_name));
+            Token::Delim('.') => {
+                next_selector = NextSelector::Class;
+            }
+            Token::Delim('>') => {
+                if current_selector.is_some() {
+                    pending_combinator = Combinator::Child;
                 }
-                Token::IDHash(id) => {
-                    if let Some(prev_selector) = current_selector.take() {
-                        selector_chain.push(prev_selector);
-                    }
-
-                    current_selector = Some(Selector::Id(id.to_string()));
+            }
+            Token::IDHash(id) => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                    pending_combinator = Combinator::None;
                 }
-                Token::Delim('.') => {
-                    if let Ok(Token::Ident(class_name)) = parser.next() {
-                        if let Some(prev_selector) = current_selector.take() {
-                            selector_chain.push(prev_selector);
-                        }
-
-                        current_selector = Some(Selector::Class(class_name.to_string()));
-                    }
+                current_selector = Some(Selector::Id(id.to_string()));
+                next_selector = NextSelector::Type;
+            }
+            Token::Ident(name) => {
+                let s = match next_selector {
+                    NextSelector::Class => Selector::Class(name.to_string()),
+                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
+                };
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                    pending_combinator = Combinator::None;
                 }
-                Token::CurlyBracketBlock => {
-                    if let Some(selector) = current_selector.take() {
-                        selector_chain.push(selector);
-                        rules.push(CssRule::Descendant {
-                            selectors: selector_chain,
-                        });
-                    }
-                    selector_chain = Vec::new();
+                current_selector = Some(s);
+                next_selector = NextSelector::Type;
+            }
+            Token::CurlyBracketBlock => {
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
-                Token::WhiteSpace(_) => {
-                    if current_selector.is_some() {
-                        expecting_rule_body = true;
-                    }
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
                 }
-                _ => {
-                    current_selector = None;
-                    selector_chain.clear();
+                selector_parts = vec![];
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                next_selector = NextSelector::Type;
+            }
+            _ => {
+                // Any other token (like a comma) finalizes the current rule
+                if let Some(selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector,
+                        combinator: Combinator::None,
+                    });
                 }
+                if !selector_parts.is_empty() {
+                    rules.push(CssRule::Complex {
+                        parts: selector_parts,
+                    });
+                }
+                selector_parts = vec![];
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                next_selector = NextSelector::Type;
             }
         }
     }
@@ -174,37 +265,68 @@ impl NaiveHtmlNode {
             }
         }
     }
-    /// first match is strict match, after can have loose match, so split into 2 func
-    fn matches_descendant_selector_after(&self, selectors: &[Selector]) -> bool {
-        match (self.parent, selectors.len()) {
-            (_, 0) => true,
-            (None, 1) => self.matches_simple_selector(selectors.last().unwrap()),
-            (None, 2..) => false,
-            (Some(p), 1..) => {
-                let p = unsafe { &*p };
-                if self.matches_simple_selector(selectors.last().unwrap()) {
-                    p.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
+
+    fn matches_complex_selector(&self, parts: &[SelectorPart]) -> bool {
+        if parts.is_empty() {
+            return true;
+        }
+
+        let last_part = &parts[parts.len() - 1];
+        if !self.matches_simple_selector(&last_part.selector) {
+            return false;
+        }
+
+        if parts.len() == 1 {
+            return true;
+        }
+
+        match self.parent {
+            None => false,
+            Some(parent_ptr) => {
+                let parent = unsafe { &*parent_ptr };
+                let remaining_parts = &parts[..parts.len() - 1];
+
+                // 获取前一个组合器（这是连接当前选择器和父级的组合器）
+                let combinator = if parts.len() >= 2 {
+                    &parts[parts.len() - 2].combinator
                 } else {
-                    p.matches_descendant_selector_after(selectors)
+                    &Combinator::None
+                };
+
+                match combinator {
+                    Combinator::None => {
+                        // 这不应该发生在中间部分
+                        parent.matches_complex_selector_recursive(remaining_parts)
+                    }
+                    Combinator::Child => {
+                        // 直接子代：父节点必须精确匹配剩余的选择器
+                        parent.matches_complex_selector(remaining_parts)
+                    }
+                    Combinator::Descendant => {
+                        // 后代：可以在祖先链上任意位置匹配
+                        parent.matches_complex_selector_recursive(remaining_parts)
+                    }
                 }
             }
         }
     }
-    fn matches_descendant_selector(&self, selectors: &[Selector]) -> bool {
-        match (self.parent, selectors.len()) {
-            (_, 0) => true,
-            (None, 1) => self.matches_simple_selector(&selectors[0]),
-            (None, 2..) => false,
-            (Some(p), 1..) => {
-                if !self.matches_simple_selector(selectors.last().unwrap()) {
-                    return false;
-                }
-                unsafe { &*p }.matches_descendant_selector_after(&selectors[..selectors.len() - 1])
+
+    fn matches_complex_selector_recursive(&self, parts: &[SelectorPart]) -> bool {
+        if self.matches_complex_selector(parts) {
+            return true;
+        }
+
+        match self.parent {
+            None => false,
+            Some(parent_ptr) => {
+                let parent = unsafe { &*parent_ptr };
+                parent.matches_complex_selector_recursive(parts)
             }
         }
     }
-    fn matches_css_rule(&self, CssRule::Descendant { selectors }: &CssRule) -> bool {
-        self.matches_descendant_selector(selectors)
+
+    fn matches_css_rule(&self, CssRule::Complex { parts }: &CssRule) -> bool {
+        self.matches_complex_selector(parts)
     }
     fn collect_matches(&self, rule: &CssRule, matches: &mut Vec<u64>) {
         if self.matches_css_rule(rule) {
@@ -217,14 +339,14 @@ impl NaiveHtmlNode {
     fn print_css_matches(&self, rules: &mut [CssRule]) {
         rules.sort_by_key(|x| format!("{x:?}"));
         for rule in rules {
-            let mut matches = Vec::new();
+            let mut matches = vec![];
             self.collect_matches(rule, &mut matches);
             if matches.is_empty() {
                 continue;
             }
             matches.sort_unstable();
             matches.dedup();
-            println!("{:?} -> {:?}", rule, matches);
+            println!("MATCH {} -> {:?}", rule, matches);
         }
     }
 }
@@ -258,7 +380,7 @@ fn parse_trace() -> Vec<LayoutFrame> {
     ))
     .unwrap();
 
-    let mut frames = Vec::new();
+    let mut frames = vec![];
     for (frame_id, line) in content.lines().enumerate() {
         if line.trim().is_empty() {
             continue;
@@ -326,10 +448,6 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     }
 }
 
-// 分离 3 种不同的 node, naive , bit, tri
-// 对每种 node, 实现一个公共的 trait, recompute, dirtied.
-// recompute 是实际做计算的
-// dirtied 只是做脏标记
 fn main() {
     let mut naive = NaiveHtmlNode::default();
     let mut css = parse_css(
@@ -339,8 +457,8 @@ fn main() {
         ))
         .unwrap(),
     );
-    // // dbg!(&naive);
-    //  // dbg!(&css);
+    // dbg!(&naive);
+    // dbg!(&css);
     let trace = parse_trace();
 
     for i in &trace {
@@ -349,4 +467,14 @@ fn main() {
     naive.print_css_matches(&mut css);
     //  // dbg!(trace);
     //// dbg!(naive);
+}
+#[cfg(test)]
+mod test {
+    use crate::parse_css;
+
+    #[test]
+    fn base_case() {
+        let s = "div h1 > h2 p .a > .b #c";
+        dbg!(parse_css(s));
+    }
 }
