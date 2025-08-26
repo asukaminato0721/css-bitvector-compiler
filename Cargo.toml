@@ -24,9 +24,7 @@ path = "src/bit.rs"
 [[bin]]
 name = "naive"
 path = "src/naive.rs"
-[[bin]]
-name = "nfa"
-path = "src/nfa.rs"
+
 
 [dependencies]
 cssparser = "0.35.0"
