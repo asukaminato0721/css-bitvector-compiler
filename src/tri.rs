@@ -386,7 +386,7 @@ impl DOM {
                 }
             }
         }
-        new_state
+        (new_state, new_tri_state)
     }
 }
 
