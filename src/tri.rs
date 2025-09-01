@@ -1,749 +1,580 @@
-use css_bitvector_compiler::rdtsc;
-use cssparser::{Parser, ParserInput, Token};
-use std::{
-    collections::{HashMap, HashSet},
-    fmt::Debug,
-    fmt::Display,
+use css_bitvector_compiler::{
+    LayoutFrame, extract_path_from_command, parse_css, parse_trace, rdtsc,
 };
-
+use serde_json;
+use std::collections::{HashMap, HashSet};
 static mut MISS_CNT: usize = 0;
+static mut STATE: usize = 0; // global state
 
+/// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum CssRule {
-    Complex { parts: Vec<SelectorPart> },
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct SelectorPart {
-    selector: Selector,
-    combinator: Combinator,
-}
-impl Display for SelectorPart {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}{}", self.selector, self.combinator)
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Combinator {
-    Descendant, // 空格
-    Child,      // >
-    None,       // 最后一个选择器没有组合器
-}
-impl Display for Combinator {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Combinator::Descendant => write!(f, " "),
-            Combinator::Child => write!(f, ">"),
-            Combinator::None => write!(f, ""),
-        }
-    }
-}
-#[derive(Debug, Clone)]
-struct NfaStateInfo {
-    selector: Selector,
-    parent_state: Option<usize>, // None if it's the first selector in a chain
-    combinator: Combinator,      // Combinator leading to this state
-    is_final: bool,              // Corresponds to CssMatch::Done
-}
-
-#[derive(Debug, Default, Clone)]
-struct NFA {
-    states: Vec<Option<NfaStateInfo>>, // Indexed by state usize
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum CssMatch {
-    Done { parts: Vec<SelectorPart> },
-    Doing { parts: Vec<SelectorPart> },
-}
-
-impl Display for CssMatch {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let parts = match self {
-            CssMatch::Done { parts } | CssMatch::Doing { parts } => parts,
-        };
-
-        for part in parts {
-            write!(f, "{}", part)?;
-        }
-        Ok(())
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Selector {
+pub enum Selector {
     Type(String),
     Class(String),
     Id(String),
 }
 
 /// whether a part of input is: 1, 0, or unused
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IState {
     IOne,
     IZero,
-    #[default]
     IUnused,
 }
 
-impl Display for Selector {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Selector::Type(tag) => write!(f, "{}", tag),
-            Selector::Class(class) => write!(f, ".{}", class),
-            Selector::Id(id) => write!(f, "#{}", id),
+/// 标签名和选择器管理器，负责字符串选择器与ID之间的映射
+#[derive(Debug)]
+pub struct SelectorManager {
+    /// 从选择器到ID的映射
+    pub selector_to_id: HashMap<Selector, usize>,
+    /// 从ID到选择器的映射
+    pub id_to_selector: HashMap<usize, Selector>,
+    /// 下一个可用的ID
+    next_id: usize,
+}
+
+impl SelectorManager {
+    /// 创建一个新的选择器管理器，其中ID 0 保留给通配符 "*"
+    pub fn new() -> Self {
+        let mut manager = SelectorManager {
+            selector_to_id: HashMap::new(),
+            id_to_selector: HashMap::new(),
+            next_id: 1, // 从1开始，因为0保留给通配符
+        };
+
+        // 预先注册通配符
+        let wildcard_selector = Selector::Type("*".to_string());
+        manager.selector_to_id.insert(wildcard_selector.clone(), 0);
+        manager.id_to_selector.insert(0, wildcard_selector);
+
+        manager
+    }
+
+    /// 获取选择器对应的ID，如果不存在则创建新的ID
+    pub fn get_or_create_id(&mut self, selector: Selector) -> usize {
+        if let Some(&id) = self.selector_to_id.get(&selector) {
+            return id;
         }
+
+        let id = self.next_id;
+        self.selector_to_id.insert(selector.clone(), id);
+        self.id_to_selector.insert(id, selector);
+        self.next_id += 1;
+        id
+    }
+
+    /// 根据选择器获取ID
+    pub fn get_id(&self, selector: &Selector) -> Option<usize> {
+        self.selector_to_id.get(selector).copied()
+    }
+
+    /// 便捷方法：根据标签名获取或创建类型选择器ID
+    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> usize {
+        self.get_or_create_id(Selector::Type(tag_name.to_string()))
+    }
+
+    /// 便捷方法：根据类名获取或创建类选择器ID
+    pub fn get_or_create_class_id(&mut self, class_name: &str) -> usize {
+        self.get_or_create_id(Selector::Class(class_name.to_string()))
+    }
+
+    /// 便捷方法：根据ID获取或创建ID选择器ID
+    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> usize {
+        self.get_or_create_id(Selector::Id(id_name.to_string()))
     }
 }
-#[derive(Default)]
-struct BitVectorHtmlNode {
-    tag_name: String,
-    id: u64,
-    html_id: Option<String>,
-    class: HashSet<String>,
-    children: Vec<BitVectorHtmlNode>,
-    output_state: Vec<bool>,
-    parent: Option<*mut BitVectorHtmlNode>, // TODO: use u64 in future
-    dirty: bool,
-    recursive_dirty: bool,
+
+#[derive(Debug, Default)]
+pub struct DOMNode {
+    pub tag_id: usize,                 // 标签选择器ID
+    pub class_ids: HashSet<usize>,     // CSS类选择器ID集合
+    pub id_selector_id: Option<usize>, // HTML ID选择器ID
+    pub parent: Option<u64>,           // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,            // 存储子节点在 arena 中的索引
+    pub dirty: bool,
+    pub recursive_dirty: bool,
+    pub output_state: Vec<bool>,
+    pub tri_state: Vec<IState>,
 }
 
-impl Debug for BitVectorHtmlNode {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("BitVectorHtmlNode")
-            .field("tag_name", &self.tag_name)
-            .field("id", &self.id)
-            .field("html_id", &self.html_id)
-            .field("class", &self.class)
-            .field("parent", &self.parent.map_or(0, |x| unsafe { { &*x }.id }))
-            .field("children", &self.children)
-            //  .field("dirty", &self.dirty)
-            //  .field("recursive_dirty", &self.recursive_dirty)
-            .finish()
-    }
-}
-
-impl BitVectorHtmlNode {
+impl DOMNode {
     fn set_dirty(&mut self) {
         self.dirty = true;
         self.recursive_dirty = true;
-        unsafe {
-            let mut cur: *mut BitVectorHtmlNode = self;
-            while let Some(parent_ptr) = (*cur).parent {
-                if (*parent_ptr).recursive_dirty {
-                    break;
-                } else {
-                    (*parent_ptr).recursive_dirty = true;
-                    cur = parent_ptr;
-                }
-            }
+    }
+}
+
+#[derive(Debug)]
+pub struct DOM {
+    pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
+    pub selector_manager: SelectorManager, // 选择器管理器
+    root_node: Option<u64>,
+}
+
+impl DOM {
+    /// 创建一个新的、空的 DOM。
+    pub fn new() -> Self {
+        DOM {
+            nodes: Default::default(),
+            selector_manager: SelectorManager::new(),
+            root_node: None,
         }
     }
-    fn json_to_html_node(&mut self, json_node: &serde_json::Value, num_states: usize) -> Self {
-        let mut node = Self::default();
-        node.tag_name = json_node["name"].as_str().unwrap().into();
-        node.id = json_node["id"].as_u64().unwrap();
-        node.html_id = {
-            let attributes = json_node["attributes"].as_object().unwrap();
-            attributes
-                .get("id")
-                .and_then(|x| x.as_str())
-                .map(String::from)
+
+    /// 向 DOM 中添加一个新节点。
+    /// 返回新节点的索引。
+    pub fn add_node(
+        &mut self,
+        id: u64,
+        tag_name: &str,
+        classes: Vec<String>,
+        html_id: Option<String>,
+        parent_index: Option<u64>,
+    ) -> u64 {
+        // 获取或创建选择器ID
+        let tag_id = self.selector_manager.get_or_create_type_id(tag_name);
+
+        let mut class_ids = HashSet::new();
+        for class in &classes {
+            let class_id = self.selector_manager.get_or_create_class_id(class);
+            class_ids.insert(class_id);
+        }
+
+        let id_selector_id = html_id
+            .as_ref()
+            .map(|id| self.selector_manager.get_or_create_id_selector_id(id));
+
+        let new_node = DOMNode {
+            tag_id,
+            class_ids,
+            id_selector_id,
+            parent: parent_index,
+            children: Vec::new(),
+            dirty: true,
+            recursive_dirty: true,
+            output_state: vec![false; unsafe { STATE } + 1],
+            tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        node.class = json_node["attributes"]
+
+        self.nodes.insert(id, new_node);
+
+        // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
+        if let Some(p_idx) = parent_index {
+            self.nodes
+                .get_mut(&p_idx)
+                .expect(&format!("{p_idx} not found"))
+                .children
+                .push(id);
+        }
+
+        id
+    }
+
+    /// 检查节点是否匹配给定的选择器ID
+    pub fn node_matches_selector(&self, node_index: u64, selector_id: usize) -> bool {
+        if let Some(node) = self.nodes.get(&node_index) {
+            // 通配符匹配所有节点
+            if selector_id == 0 {
+                return true;
+            }
+
+            // 检查是否匹配标签选择器
+            if node.tag_id == selector_id {
+                return true;
+            }
+
+            // 检查是否匹配类选择器
+            if node.class_ids.contains(&selector_id) {
+                return true;
+            }
+
+            // 检查是否匹配ID选择器
+            if let Some(id_sel_id) = node.id_selector_id {
+                if id_sel_id == selector_id {
+                    return true;
+                }
+            }
+
+            false
+        } else {
+            false
+        }
+    }
+
+    pub fn get_root_node(&mut self) -> u64 {
+        if let Some(r) = self.root_node {
+            return r;
+        }
+        self.root_node = Some(
+            self.nodes
+                .iter()
+                .filter(|(_, node)| node.parent.is_none())
+                .map(|(idx, _)| *idx)
+                .take(1)
+                .next()
+                .unwrap(),
+        );
+        return self.root_node.unwrap();
+    }
+
+    /// 设置指定节点为脏状态，并向上传播recursive_dirty位
+    pub fn set_node_dirty(&mut self, node_idx: u64) {
+        let node = self.nodes.get_mut(&node_idx).unwrap();
+        node.set_dirty();
+
+        // 向上传播 recursive_dirty
+        let mut current_idx = node.parent;
+        while let Some(parent_idx) = current_idx {
+            let parent_node = self.nodes.get_mut(&parent_idx).unwrap();
+
+            if parent_node.recursive_dirty {
+                break; // 如果父节点已经设置了recursive_dirty，停止传播
+            }
+            parent_node.recursive_dirty = true;
+            current_idx = parent_node.parent;
+        }
+    }
+    fn json_to_html_node(
+        &mut self,
+        json_node: &serde_json::Value,
+        parent_index: Option<u64>,
+    ) -> u64 {
+        let tag_name = json_node["name"].as_str().unwrap();
+        let id = json_node["id"].as_u64().unwrap();
+        let html_id = json_node["attributes"]
             .as_object()
-            .unwrap()
-            .get("class")
-            .map(|x| x.as_str().unwrap())
+            .and_then(|attrs| attrs.get("id"))
+            .and_then(|id| id.as_str())
+            .map(String::from);
+
+        let classes = json_node["attributes"]
+            .as_object()
+            .and_then(|attrs| attrs.get("class"))
+            .and_then(|class| class.as_str())
             .unwrap_or_default()
             .split_whitespace()
-            .map(|x| x.to_string())
-            .collect();
+            .map(String::from)
+            .collect::<Vec<String>>();
 
-        // Add children recursively
-        node.children = {
-            let children = json_node["children"].as_array().unwrap();
-            children
-                .into_iter()
-                .map(|x| self.json_to_html_node(x, num_states))
-                .collect()
-        };
-        node.output_state = vec![false; num_states];
-        node.set_dirty();
-        node.fix_parent_pointers();
-        node
-    }
-    fn fix_parent_pointers(&mut self) {
-        let self_ptr = self as *mut Self;
-        for child in self.children.iter_mut() {
-            child.parent = Some(self_ptr);
-            child.fix_parent_pointers();
-        }
-    }
-    fn matches_simple_selector(&self, selector: &Selector) -> bool {
-        match selector {
-            Selector::Type(tag) => self.tag_name.to_lowercase() == tag.to_lowercase(),
-            Selector::Class(class) => self.class.contains(class),
-            Selector::Id(id) => {
-                if let Some(ref html_id) = self.html_id {
-                    html_id == id
-                } else {
-                    false
-                }
+        // 创建当前节点
+        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index);
+
+        // 递归处理子节点
+        if let Some(children_array) = json_node["children"].as_array() {
+            for child_json in children_array {
+                self.json_to_html_node(child_json, Some(current_index));
             }
         }
+        current_index
     }
-    fn add_node_by_path(
-        &mut self,
-        path: &[usize],
-        json_node: &serde_json::Value,
-        num_states: usize,
-    ) {
+
+    /// 通过路径添加节点
+    pub fn add_node_by_path(&mut self, path: &[u64], json_node: &serde_json::Value) {
         assert!(!path.is_empty());
-        if path.len() > 1 {
-            self.children[path[0]].add_node_by_path(&path[1..], json_node, num_states);
-            return;
+        let root_node = self.get_root_node();
+
+        let mut current_idx = root_node;
+
+        // 遍历路径到目标父节点
+        for &path_element in &path[..path.len() - 1] {
+            current_idx = self.nodes[&current_idx].children[path_element as usize];
         }
-        let new_n = self.json_to_html_node(json_node, num_states);
-        self.children.insert(path[0], new_n);
-        self.set_dirty();
-        self.fix_parent_pointers();
+
+        // 在指定位置插入新节点
+        let new_node_idx = self.json_to_html_node(json_node, Some(current_idx));
+        let insert_pos = path[path.len() - 1];
+        self.nodes.entry(current_idx).and_modify(|x| {
+            x.children
+                .insert(insert_pos.try_into().unwrap(), new_node_idx)
+        });
+        self.set_node_dirty(current_idx);
     }
-    fn remove_node_by_path(&mut self, path: &[usize]) {
-        assert!(!path.is_empty());
-        if path.len() > 1 {
-            self.children[path[0]].remove_node_by_path(&path[1..]);
-            return;
+
+    /// 通过路径移除节点
+    pub fn remove_node_by_path(&mut self, path: &[u64]) {
+        let root_nodes = self.get_root_node();
+        // 递归到目标父节点
+        let mut cur_idx = root_nodes;
+        for &path_element in &path[..path.len() - 1] {
+            cur_idx = self.nodes[&cur_idx].children[path_element as usize];
         }
-        self.children.remove(path[0]);
-        self.set_dirty();
+
+        // 移除目标节点
+        let rm_pos = path[path.len() - 1];
+        self.nodes
+            .get_mut(&cur_idx)
+            .unwrap()
+            .children
+            .remove(rm_pos.try_into().unwrap());
+        self.nodes.remove(&rm_pos);
+        self.set_node_dirty(cur_idx);
     }
-    fn recompute_styles(&mut self, nfa: &NFA, input: &[IState]) {
-        if !self.recursive_dirty {
+    pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
+        let root_node = self.get_root_node();
+        self.recompute_styles_recursive(root_node, nfa, input);
+    }
+    fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
+        if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
-        if self.dirty {
+
+        if self.nodes[&node_idx].dirty {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state = self.new_output_state(input, nfa);
-            if self.output_state != new_output_state {
-                self.output_state = new_output_state;
-                for c in self.children.iter_mut() {
-                    c.set_dirty();
+            let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
+
+            if new_output_state.iter().zip(new_tri_state).all(|x| {
+                matches!(
+                    x,
+                    (false, IState::IZero) | (true, IState::IOne) | (_, IState::IUnused)
+                )
+            }) {
+                self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
+                for child_idx in self.nodes[&node_idx].children.clone() {
+                    self.nodes.get_mut(&child_idx).unwrap().set_dirty();
                 }
             }
         } else {
-            // Check: if not dirty, recomputing should not change output
-            let original_output_state = self.output_state.clone();
-            let new_output_state = self.new_output_state(input, nfa);
+            // Debug check: if not dirty, recomputing should not change output
+            let original_output_state = self.nodes[&node_idx].output_state.clone();
+            let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
             assert_eq!(
                 original_output_state, new_output_state,
-                "Node ID {}: Output state changed when node was not dirty!",
-                self.id
+                "Node index {}: Output state changed when node was not dirty!",
+                node_idx
             );
         }
-        for child in self.children.iter_mut() {
-            child.recompute_styles(
-                nfa,
-                &self
-                    .output_state
-                    .iter()
-                    .map(|&x| if x { IState::IOne } else { IState::IZero })
-                    .collect::<Vec<_>>(),
-            );
+
+        // Recursively process children
+        let children_indices = self.nodes[&node_idx].children.clone();
+        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        for &child_idx in &children_indices {
+            self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
         }
-        self.dirty = false;
-        self.recursive_dirty = false;
+
+        // Reset dirty flags
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
+            node.dirty = false;
+            node.recursive_dirty = false;
+        }
     }
-    fn new_output_state(&self, input: &[IState], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = vec![false; nfa.states.len()];
+    fn new_output_state(
+        &self,
+        node_idx: u64,
+        input: &[bool],
+        nfa: &NFA,
+    ) -> (Vec<bool>, Vec<IState>) {
+        let mut new_state = self.nodes[&node_idx].output_state.clone();
 
-        // 1. Propagate states from parent
-        for i in 0..nfa.states.len() {
-            if input[i] == IState::IUnused || input[i] == IState::IZero {
-                continue;
-            }
-            let Some(info) = &nfa.states[i] else {
-                continue;
-            };
-            if info.is_final {
-                continue;
-            }
-            // For descendant combinator, propagate to all descendants
-            // For child combinator, only direct children can match
-            match info.combinator {
-                Combinator::Descendant => {
-                    new_state[i] = true;
-                }
-                Combinator::Child => {
-                    // Child combinator states don't propagate to grandchildren
-                    // They only apply to direct children
-                }
-                Combinator::None => {
-                    new_state[i] = true;
-                }
-            }
-        }
+        let mut new_tri_state = self.nodes[&node_idx].tri_state.clone();
+        // TODO: cal new_tri_state
 
-        // 2. Compute new matches
-        for i in 0..nfa.states.len() {
-            let Some(info) = &nfa.states[i] else {
-                continue;
-            };
-            if !self.matches_simple_selector(&info.selector) {
+        for (state_id, state_transitions) in nfa.transitions.iter() {
+            if !input[*state_id] {
                 continue;
             }
-            let parent_matched = match info.parent_state {
-                Some(parent_idx) => {
-                    // Check if parent state is active and combinator allows match
-                    match info.combinator {
-                        Combinator::Child => {
-                            // For child combinator, parent must be direct parent
-                            self.is_direct_child_of_state(input, parent_idx)
-                        }
-                        Combinator::Descendant => {
-                            // For descendant combinator, any ancestor match is fine
-                            input[parent_idx] == IState::IOne
-                        }
-                        Combinator::None => input[parent_idx] == IState::IOne,
-                    }
+            if nfa.is_accept_state(*state_id) {
+                continue;
+            }
+            // 遍历所有可能的转移
+            for (&selector_id, &next_state) in state_transitions {
+                // 检查当前节点是否匹配这个选择器
+                if self.node_matches_selector(node_idx, selector_id) {
+                    // 如果匹配，激活下一个状态
+                    new_state[next_state] = true;
                 }
-                None => true, // No parent needed, this is the start of a chain
-            };
-            if parent_matched {
-                new_state[i] = true;
             }
         }
         new_state
     }
-    fn collect_all_matches(
-        &self,
-        reverse_state_map: &HashMap<usize, CssMatch>,
-        final_matches: &mut HashMap<CssMatch, Vec<u64>>,
-    ) {
-        for (bit_index, &is_match) in self.output_state.iter().enumerate() {
-            if is_match {
-                if let Some(rule) = reverse_state_map.get(&bit_index) {
-                    final_matches.entry(rule.clone()).or_default().push(self.id);
-                }
-            }
-        }
+}
 
-        for child in &self.children {
-            child.collect_all_matches(reverse_state_map, final_matches);
-        }
+/// 表示一个非确定性有限状态自动机 (NFA)。
+#[derive(Debug, PartialEq, Eq)]
+pub struct NFA {
+    /// NFA 中所有状态的集合。
+    pub states: HashSet<usize>,
+    /// 转移函数，格式为: {当前状态: {输入选择器ID: 下一个状态}}
+    pub transitions: HashMap<usize, HashMap<usize, usize>>,
+    /// 起始状态。
+    pub start_state: usize,
+    pub max_state_id: usize,
+    // for print match
+    pub accept_states: Vec<usize>,
+}
+impl NFA {
+    /// 检查给定状态是否为接受状态（没有后继状态）
+    pub fn is_accept_state(&self, state: usize) -> bool {
+        !self.transitions.contains_key(&state)
+            || self
+                .transitions
+                .get(&state)
+                .map_or(true, |trans| trans.is_empty())
     }
-    fn is_direct_child_of_state(&self, parent_input: &[IState], parent_state_idx: usize) -> bool {
-        // Check if this node is a direct child of a node that has the parent_state active
-        let Some(parent_ptr) = self.parent else {
-            return false;
-        };
-        let parent = unsafe { &*parent_ptr };
-        parent_input[parent_state_idx] == IState::IOne
-            && parent
-                .output_state
-                .get(parent_state_idx)
-                .copied()
-                .unwrap_or(false)
+
+    /// 获取所有接受状态
+    pub fn get_accept_states(&self) -> HashSet<usize> {
+        self.states
+            .iter()
+            .filter(|&&state| self.is_accept_state(state))
+            .copied()
+            .collect()
+    }
+    pub fn trans(&self, cur: usize, status: usize) -> usize {
+        self.transitions[&cur][&status]
+    }
+}
+/// 解析CSS选择器字符串并生成对应的选择器对象
+pub fn parse_selector(selector_str: &str) -> Selector {
+    let trimmed = selector_str.trim();
+
+    if trimmed.starts_with('.') {
+        // 类选择器
+        Selector::Class(trimmed[1..].to_string())
+    } else if trimmed.starts_with('#') {
+        // ID选择器
+        Selector::Id(trimmed[1..].to_string())
+    } else {
+        // 标签选择器
+        Selector::Type(trimmed.to_string())
     }
 }
 
-fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules = vec![];
-    let mut input = ParserInput::new(css_content);
-    let mut parser = Parser::new(&mut input);
-
-    let mut selector_parts: Vec<SelectorPart> = vec![];
-    let mut current_selector: Option<Selector> = None;
-    let mut pending_combinator = Combinator::None;
-
-    #[derive(PartialEq, Eq)]
-    enum NextSelector {
-        Class,
-        Type,
-    }
-    let mut next_selector = NextSelector::Type;
-
-    loop {
-        let token = match parser.next_including_whitespace_and_comments() {
-            Ok(token) => token,
-            Err(_) => {
-                // End of input, finalize any pending rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    rules.push(CssRule::Complex {
-                        parts: selector_parts,
-                    });
-                }
-                break;
-            }
-        };
-
-        match token {
-            Token::Comment(_) => continue,
-            Token::WhiteSpace(_) => {
-                if current_selector.is_some() && pending_combinator == Combinator::None {
-                    pending_combinator = Combinator::Descendant;
-                }
-            }
-            Token::Delim('.') => {
-                next_selector = NextSelector::Class;
-            }
-            Token::Delim('>') => {
-                if current_selector.is_some() {
-                    pending_combinator = Combinator::Child;
-                }
-            }
-            Token::IDHash(id) => {
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(Selector::Id(id.to_string()));
-                next_selector = NextSelector::Type;
-            }
-            Token::Ident(name) => {
-                let s = match next_selector {
-                    NextSelector::Class => Selector::Class(name.to_string()),
-                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
-                };
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(s);
-                next_selector = NextSelector::Type;
-            }
-            Token::CurlyBracketBlock => {
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    rules.push(CssRule::Complex {
-                        parts: selector_parts,
-                    });
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
-            _ => {
-                // Any other token (like a comma) finalizes the current rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    rules.push(CssRule::Complex {
-                        parts: selector_parts,
-                    });
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
-        }
-    }
-
-    rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
-    rules.dedup();
-    rules
-}
-
-fn build_nfa(state_map: &HashMap<CssMatch, usize>) -> NFA {
-    let num_states = state_map.len();
-    let mut states = vec![None; num_states];
-
-    for (mch, &idx) in state_map {
-        let (parts, is_final) = match mch {
-            CssMatch::Doing { parts } => (parts, false),
-            CssMatch::Done { parts } => (parts, true),
-        };
-
-        if parts.is_empty() {
-            continue;
-        }
-
-        let last_part = &parts[parts.len() - 1];
-        let selector = last_part.selector.clone();
-
-        let parent_state = if parts.len() > 1 {
-            let parent_rule = CssMatch::Doing {
-                parts: parts[..parts.len() - 1].to_vec(),
-            };
-            Some(*state_map.get(&parent_rule).unwrap())
-        } else {
-            None
-        };
-
-        // The combinator for this state is the one from the previous part (if any)
-        let combinator = if parts.len() >= 2 {
-            parts[parts.len() - 2].combinator.clone()
-        } else {
-            Combinator::None
-        };
-
-        states[idx] = Some(NfaStateInfo {
-            selector,
-            parent_state,
-            combinator,
-            is_final,
-        });
-    }
-
-    NFA { states }
-}
-
-#[derive(Debug, Clone)]
-#[allow(unused)]
-struct LayoutFrame {
-    pub frame_id: usize,
-    pub command_name: String,
-    pub command_data: serde_json::Value,
-}
-
-fn parse_trace() -> Vec<LayoutFrame> {
-    let content = std::fs::read_to_string(format!(
-        "css-gen-op/{0}/command.json",
-        std::env::var("WEBSITE_NAME").unwrap()
-    ))
-    .unwrap();
-
-    let mut frames = vec![];
-    for (frame_id, line) in content.lines().enumerate() {
-        if line.trim().is_empty() {
-            continue;
-        }
-        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
-
-        let command_name = command_data["name"].as_str().unwrap().to_string();
-        if command_name.starts_with("layout_") {
-            continue;
-        }
-
-        frames.push(LayoutFrame {
-            frame_id,
-            command_name,
-            command_data,
-        });
-    }
-
-    frames
-}
-
-fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
-    command_data
-        .get("path")
-        .and_then(|p| p.as_array())
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|v| v.as_u64())
-                .map(|v| v as usize)
-                .collect::<Vec<_>>()
-        })
-        .unwrap()
-}
-
-fn apply_frame(tree: &mut BitVectorHtmlNode, frame: &LayoutFrame, nfa: &NFA) {
+fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     match frame.command_name.as_str() {
         "init" => {
-            //   dbg!(frame.frame_id, frame.command_name.as_str());
-            *tree =
-                tree.json_to_html_node(frame.command_data.get("node").unwrap(), nfa.states.len());
-            tree.fix_parent_pointers();
-            // tree.recompute_styles(hm);
+            let node_data = frame.command_data.get("node").unwrap();
+            dom.nodes.clear();
+            dom.root_node = None;
+            dom.json_to_html_node(node_data, None);
         }
         "add" => {
-            //   dbg!(frame.frame_id, frame.command_name.as_str());
             let path = extract_path_from_command(&frame.command_data);
-            if path.is_empty() {
-                return;
-            }
-            tree.add_node_by_path(
-                &path,
-                frame.command_data.get("node").unwrap(),
-                nfa.states.len(),
-            );
+            let node_data = frame.command_data.get("node").unwrap();
+            dom.add_node_by_path(&path, node_data);
         }
-        "replace_value" | "insert_value" => {
-            //   dbg!(frame.frame_id, frame.command_name.as_str());
-        }
+        "replace_value" | "insert_value" => {}
         "recalculate" => {
-            //   dbg!(frame.frame_id, frame.command_name.as_str());
-            let ii = vec![IState::IZero; nfa.states.len()];
-            let s = rdtsc();
+            // Perform CSS matching using NFA
+            let start = rdtsc();
+            let mut input = vec![false; unsafe { STATE } + 1];
 
-            tree.recompute_styles(nfa, &ii);
-            let e = rdtsc();
-            println!("{}", e - s);
+            input[nfa.start_state] = true;
+            dom.recompute_styles(nfa, &input);
+
+            let end = rdtsc();
+            println!("{}", end - start);
         }
         "remove" => {
-            //  dbg!(frame.frame_id, frame.command_name.as_str());
+            // Remove node at specified path
             let path = extract_path_from_command(&frame.command_data);
-            tree.remove_node_by_path(&path);
+            dom.remove_node_by_path(&path);
         }
-        _ => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-        }
+        _ => {}
     }
 }
 
+pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager) -> NFA {
+    unsafe {
+        STATE = 0;
+    };
+    let start_state = unsafe {
+        STATE += 1;
+        STATE
+    };
+    let mut states: HashSet<usize> = [start_state].into_iter().collect();
+    let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
+    let mut accept_states = Vec::with_capacity(selectors.len());
+
+    for rule in selectors {
+        let t = rule.replace('>', " > ");
+        let parts: Vec<&str> = t.split_whitespace().collect();
+        let mut cur = start_state;
+
+        // 从左往右处理选择器部分
+        let mut i = 0;
+        while i < parts.len() {
+            let token = parts[i];
+            let direct = token == ">";
+
+            if direct {
+                // 子代组合器，跳过它，下一个选择器是直接子元素
+                i += 1;
+                if i >= parts.len() {
+                    break;
+                }
+            }
+            let selector_str = if direct { parts[i] } else { token };
+            // 创建新状态
+            let new_state = unsafe {
+                STATE += 1;
+                STATE
+            };
+            states.insert(new_state);
+
+            // 解析选择器并获取对应的ID
+            let selector = parse_selector(selector_str);
+            let selector_id = selector_manager.get_or_create_id(selector);
+
+            // 创建直接转移（不允许跳过中间节点）
+            transitions
+                .entry(cur)
+                .or_default()
+                .insert(selector_id, new_state);
+            if !direct {
+                transitions.entry(cur).or_default().insert(0, cur);
+            }
+            cur = new_state;
+            i += 1;
+        }
+        accept_states.push(cur);
+    }
+    NFA {
+        states,
+        transitions,
+        start_state,
+        max_state_id: unsafe { STATE },
+        accept_states,
+    }
+}
+
+/// 收集所有 rule -> [node id] 的匹配结果
+pub fn collect_rule_matches(
+    dom: &DOM,
+    nfas: &NFA,
+    selects: &[String],
+) -> HashMap<String, Vec<u64>> {
+    let mut res: HashMap<String, Vec<u64>> = HashMap::new();
+    for (idx, rule) in selects.iter().enumerate() {
+        let acc = nfas.accept_states[idx];
+        for (node_id, node) in dom.nodes.iter() {
+            if acc < node.output_state.len() && node.output_state[acc] {
+                res.entry(rule.clone()).or_default().push(*node_id);
+            }
+        }
+    }
+
+    for v in res.values_mut() {
+        v.sort_unstable();
+    }
+    res
+}
 fn main() {
-    let css = parse_css(
+    // 1. 构建 DOM 树
+    let mut dom = DOM::new();
+    let selectors = parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
     );
-    //dbg!(&css);
-    let hm = {
-        let mut hm = HashMap::new();
-        for rule in &css {
-            let CssRule::Complex { parts } = rule;
-            let mut current_parts = vec![];
-            for part in parts {
-                current_parts.push(part.clone());
-                let ss = if current_parts.len() == parts.len() {
-                    CssMatch::Done {
-                        parts: current_parts.clone(),
-                    }
-                } else {
-                    CssMatch::Doing {
-                        parts: current_parts.clone(),
-                    }
-                };
-                if !hm.contains_key(&ss) {
-                    hm.insert(ss, hm.len());
-                }
-            }
-        }
-        hm
-    };
-    // in this step, we map the Match status to usize
-    let nfa = build_nfa(&hm);
-
-    let mut bit = BitVectorHtmlNode::default();
-    let trace = parse_trace();
-    for i in &trace {
-        apply_frame(&mut bit, i, &nfa);
+    let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
+    for f in parse_trace() {
+        apply_frame(&mut dom, &f, &nfa);
     }
-    // dbg!(&bit);
-    let rev_hm = hm
-        .iter()
-        .filter_map(|(x, y)| match x {
-            CssMatch::Doing { .. } => None,
-            CssMatch::Done { .. } => Some((*y, x.clone())),
-        })
-        .collect();
-
-    let mut final_matches = HashMap::new();
-    bit.collect_all_matches(&rev_hm, &mut final_matches);
-    let mut sorted_matches: Vec<_> = final_matches.into_iter().collect();
-    sorted_matches.sort_by_key(|(rule, _)| format!("{rule:?}"));
-
-    for (rule, mut node_ids) in sorted_matches {
-        node_ids.sort_unstable();
-        node_ids.dedup();
-        println!("MATCH {}  -> {:?}", rule, node_ids);
-    }
+    let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
+    println!("final_rule_matches: {:#?}", final_matches);
     dbg!(unsafe { MISS_CNT });
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn test_mixed_combinators() {
-        // Test for "div a > h1 h2"
-        let css_content = "div a > h1 h2 { color: red; }";
-        let rules = parse_css(css_content);
-
-        assert_eq!(rules.len(), 1);
-        let CssRule::Complex { parts } = &rules[0];
-        {
-            assert_eq!(parts.len(), 4);
-
-            // div (no combinator, it's the first)
-            assert_eq!(parts[0].selector, Selector::Type("div".to_string()));
-            assert_eq!(parts[0].combinator, Combinator::None);
-
-            // a (descendant of div)
-            assert_eq!(parts[1].selector, Selector::Type("a".to_string()));
-            assert_eq!(parts[1].combinator, Combinator::Descendant);
-
-            // h1 (child of a)
-            assert_eq!(parts[2].selector, Selector::Type("h1".to_string()));
-            assert_eq!(parts[2].combinator, Combinator::Child);
-
-            // h2 (descendant of h1)
-            assert_eq!(parts[3].selector, Selector::Type("h2".to_string()));
-            assert_eq!(parts[3].combinator, Combinator::Descendant);
-        }
-    }
-
-    #[test]
-    fn test_child_selector() {
-        let mut state_map = HashMap::new();
-
-        // Create a rule for .foo > #bar
-        let parts = vec![
-            SelectorPart {
-                selector: Selector::Class("foo".into()),
-                combinator: Combinator::None,
-            },
-            SelectorPart {
-                selector: Selector::Id("bar".into()),
-                combinator: Combinator::Child,
-            },
-        ];
-
-        let rule_father = CssMatch::Doing {
-            parts: vec![parts[0].clone()],
-        };
-        let rule = CssMatch::Done {
-            parts: parts.clone(),
-        };
-
-        state_map.insert(rule_father.clone(), state_map.len());
-        state_map.insert(rule.clone(), state_map.len());
-        let nfa = build_nfa(&state_map);
-
-        let mut node = BitVectorHtmlNode::default();
-        node.class = ["foo".into()].iter().cloned().collect::<HashSet<_>>();
-        node.output_state = vec![false; nfa.states.len()];
-
-        let mut child_node = BitVectorHtmlNode::default();
-        child_node.html_id = Some("bar".into());
-        child_node.output_state = vec![false; nfa.states.len()];
-
-        node.children = vec![child_node];
-        node.fix_parent_pointers();
-        node.children[0].set_dirty();
-
-        let input = vec![true, false];
-        let output = node.children[0].new_output_state(&input, &nfa);
-        assert_eq!(output, [true, true]);
-    }
 }
