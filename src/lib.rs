@@ -65,13 +65,6 @@ pub fn rdtsc() -> u64 {
     }
 }
 
-/// whether a part of input is: 1, 0, or unused
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum IState {
-    IOne,
-    IZero,
-    IUnused,
-}
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum OState {
     OOne,
