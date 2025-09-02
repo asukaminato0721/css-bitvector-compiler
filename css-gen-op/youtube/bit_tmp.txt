@@ -1,0 +1,23 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+     Running `target/release/bit`
+261358
+1119488
+2247481
+189525
+393440
+57595
+1208831
+319
+24617
+44208
+211
+18002
+189
+118
+29684
+434924
+120
+
+thread 'main' panicked at src/bit.rs:307:23:
+no entry found for key
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
