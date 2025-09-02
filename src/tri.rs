@@ -323,12 +323,15 @@ impl DOM {
                 MISS_CNT += 1;
             }
             let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
-            let need_re = !new_output_state.iter().zip(new_tri_state).all(|x: (&bool, IState)| {
-                matches!(
-                    x,
-                    (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
-                )
-            });
+            let need_re = !new_output_state
+                .iter()
+                .zip(new_tri_state)
+                .all(|x: (&bool, IState)| {
+                    matches!(
+                        x,
+                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+                    )
+                });
 
             if !need_re {
                 self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
