@@ -34,19 +34,13 @@ pub struct SelectorManager {
 }
 
 impl SelectorManager {
-    /// 创建一个新的选择器管理器，其中ID 0 保留给通配符 "*"
+    /// 创建一个新的选择器管理器
     pub fn new() -> Self {
-        let mut manager = SelectorManager {
+        let manager = SelectorManager {
             selector_to_id: HashMap::new(),
             id_to_selector: HashMap::new(),
-            next_id: 1, // 从1开始，因为0保留给通配符
+            next_id: 0,
         };
-
-        // 预先注册通配符
-        let wildcard_selector = Selector::Type("*".to_string());
-        manager.selector_to_id.insert(wildcard_selector.clone(), 0);
-        manager.id_to_selector.insert(0, wildcard_selector);
-
         manager
     }
 
@@ -162,11 +156,6 @@ impl DOM {
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node_index: u64, SelectorId(sid): SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
-            // 通配符匹配所有节点
-            if sid == 0 {
-                return true;
-            }
-
             // 检查是否匹配标签选择器
             if node.tag_id == sid {
                 return true;
@@ -531,14 +520,12 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
             };
             states.insert(new_state);
 
-            // 解析选择器并获取对应的ID
-            let selector = parse_selector(selector_str);
-            let selector_id = selector_manager.get_or_create_id(selector);
-
-            // 构建规则：(Option<predicate>, Option<prev>, next)
-            let pred_opt = if selector_id == 0 {
+            // 解析选择器并获取对应的ID（"*" 用 None 表示通配符）
+            let pred_opt = if selector_str == "*" {
                 None
             } else {
+                let selector = parse_selector(selector_str);
+                let selector_id = selector_manager.get_or_create_id(selector);
                 Some(SelectorId(selector_id))
             };
             let prev_opt = if cur == start_state { None } else { Some(cur) };

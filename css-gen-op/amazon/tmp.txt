@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/naive`
 MATCH ._cropped-image-link_style_centerImage-focusable__1JvMN  -> [1666]
 MATCH ._cropped-image-link_style_centerImage__1rzYI  -> [1666]
