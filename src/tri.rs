@@ -67,21 +67,6 @@ impl SelectorManager {
     pub fn get_id(&self, selector: &Selector) -> Option<usize> {
         self.selector_to_id.get(selector).copied()
     }
-
-    /// 便捷方法：根据标签名获取或创建类型选择器ID
-    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> usize {
-        self.get_or_create_id(Selector::Type(tag_name.to_string()))
-    }
-
-    /// 便捷方法：根据类名获取或创建类选择器ID
-    pub fn get_or_create_class_id(&mut self, class_name: &str) -> usize {
-        self.get_or_create_id(Selector::Class(class_name.to_string()))
-    }
-
-    /// 便捷方法：根据ID获取或创建ID选择器ID
-    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> usize {
-        self.get_or_create_id(Selector::Id(id_name.to_string()))
-    }
 }
 
 #[derive(Debug, Default)]
@@ -132,17 +117,21 @@ impl DOM {
         parent_index: Option<u64>,
     ) -> u64 {
         // 获取或创建选择器ID
-        let tag_id = self.selector_manager.get_or_create_type_id(tag_name);
+        let tag_id = self
+            .selector_manager
+            .get_or_create_id(Selector::Type(tag_name.into()));
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = self.selector_manager.get_or_create_class_id(class);
+            let class_id = self
+                .selector_manager
+                .get_or_create_id(Selector::Class(class.into()));
             class_ids.insert(class_id);
         }
-
-        let id_selector_id = html_id
-            .as_ref()
-            .map(|id| self.selector_manager.get_or_create_id_selector_id(id));
+        let id_selector_id = html_id.as_ref().map(|id| {
+            self.selector_manager
+                .get_or_create_id(Selector::Id(id.into()))
+        });
 
         let new_node = DOMNode {
             tag_id,
@@ -171,26 +160,26 @@ impl DOM {
     }
 
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node_index: u64, selector_id: usize) -> bool {
+    pub fn node_matches_selector(&self, node_index: u64, Selectorid(sid): Selectorid) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
             // 通配符匹配所有节点
-            if selector_id == 0 {
+            if sid == 0 {
                 return true;
             }
 
             // 检查是否匹配标签选择器
-            if node.tag_id == selector_id {
+            if node.tag_id == sid {
                 return true;
             }
 
             // 检查是否匹配类选择器
-            if node.class_ids.contains(&selector_id) {
+            if node.class_ids.contains(&sid) {
                 return true;
             }
 
             // 检查是否匹配ID选择器
             if let Some(id_sel_id) = node.id_selector_id {
-                if id_sel_id == selector_id {
+                if id_sel_id == sid {
                     return true;
                 }
             }
@@ -323,17 +312,14 @@ impl DOM {
                 MISS_CNT += 1;
             }
             let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
-            let need_re = !new_output_state
-                .iter()
-                .zip(new_tri_state)
-                .all(|x: (&bool, IState)| {
-                    matches!(
-                        x,
-                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
-                    )
-                });
+            let need_re = !input.iter().zip(new_tri_state).all(|x: (&bool, IState)| {
+                matches!(
+                    x,
+                    (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+                )
+            });
 
-            if !need_re {
+            if need_re {
                 self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
                 for child_idx in self.nodes[&node_idx].children.clone() {
                     self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
@@ -343,11 +329,11 @@ impl DOM {
             // Debug check: if not dirty, recomputing should not change output
             let original_output_state = self.nodes[&node_idx].output_state.clone();
             let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
-            // assert_eq!(
-            //     original_output_state, new_output_state,
-            //     "Node index {}: Output state changed when node was not dirty!",
-            //     node_idx
-            // );
+            assert_eq!(
+                original_output_state, new_output_state,
+                "Node index {}: Output state changed when node was not dirty!",
+                node_idx
+            );
         }
 
         // Recursively process children
@@ -373,16 +359,17 @@ impl DOM {
 
         let mut new_tri_state = vec![IState::IUnused; self.nodes[&node_idx].tri_state.len()];
 
-        for (state_id, state_transitions) in nfa.transitions.iter() {
-            new_tri_state[*state_id] = if input[*state_id] {
+        for (Nfacell(state_id), state_transitions) in nfa.transitions.iter() {
+            let sid = *state_id;
+            new_tri_state[sid] = if input[sid] {
                 IState::IOne
             } else {
                 IState::IZero
             };
-            if !input[*state_id] {
+            if !input[sid] {
                 continue;
             }
-            if nfa.is_accept_state(*state_id) {
+            if nfa.is_accept_state(Nfacell(*state_id)) {
                 continue;
             }
             // 遍历所有可能的转移
@@ -390,7 +377,7 @@ impl DOM {
                 // 检查当前节点是否匹配这个选择器
                 if self.node_matches_selector(node_idx, selector_id) {
                     // 如果匹配，激活下一个状态
-                    new_state[next_state] = true;
+                    new_state[next_state.0] = true;
                 }
             }
         }
@@ -398,22 +385,26 @@ impl DOM {
     }
 }
 
-/// 表示一个非确定性有限状态自动机 (NFA)。
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct Nfacell(usize); // newtype for NFA cell id
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct Selectorid(pub usize); // newtype for selector id
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
-    pub states: HashSet<usize>,
+    pub states: HashSet<Nfacell>,
     /// 转移函数，格式为: {当前状态: {输入选择器ID: 下一个状态}}
-    pub transitions: HashMap<usize, HashMap<usize, usize>>,
+    pub transitions: HashMap<Nfacell, HashMap<Selectorid, Nfacell>>,
     /// 起始状态。
-    pub start_state: usize,
+    pub start_state: Nfacell,
     pub max_state_id: usize,
     // for print match
-    pub accept_states: Vec<usize>,
+    pub accept_states: Vec<Nfacell>,
 }
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
-    pub fn is_accept_state(&self, state: usize) -> bool {
+    pub fn is_accept_state(&self, state: Nfacell) -> bool {
         !self.transitions.contains_key(&state)
             || self
                 .transitions
@@ -422,15 +413,15 @@ impl NFA {
     }
 
     /// 获取所有接受状态
-    pub fn get_accept_states(&self) -> HashSet<usize> {
+    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
         self.states
             .iter()
             .filter(|&&state| self.is_accept_state(state))
             .copied()
             .collect()
     }
-    pub fn trans(&self, cur: usize, status: usize) -> usize {
-        self.transitions[&cur][&status]
+    pub fn trans(&self, cur: Nfacell, status: usize) -> Nfacell {
+        self.transitions[&cur][&Selectorid(status)]
     }
 }
 /// 解析CSS选择器字符串并生成对应的选择器对象
@@ -468,7 +459,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
 
-            input[nfa.start_state] = true;
+            input[nfa.start_state.0] = true;
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
@@ -489,11 +480,11 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
     };
     let start_state = unsafe {
         STATE += 1;
-        STATE
+        Nfacell(STATE)
     };
-    let mut states: HashSet<usize> = [start_state].into_iter().collect();
-    let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
-    let mut accept_states = Vec::with_capacity(selectors.len());
+    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
+    let mut transitions: HashMap<Nfacell, HashMap<Selectorid, Nfacell>> = HashMap::new();
+    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
 
     for rule in selectors {
         let t = rule.replace('>', " > ");
@@ -517,7 +508,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
             // 创建新状态
             let new_state = unsafe {
                 STATE += 1;
-                STATE
+                Nfacell(STATE)
             };
             states.insert(new_state);
 
@@ -529,9 +520,12 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
             transitions
                 .entry(cur)
                 .or_default()
-                .insert(selector_id, new_state);
+                .insert(Selectorid(selector_id), new_state);
             if !direct {
-                transitions.entry(cur).or_default().insert(0, cur);
+                transitions
+                    .entry(cur)
+                    .or_default()
+                    .insert(Selectorid(0), cur);
             }
             cur = new_state;
             i += 1;
@@ -557,7 +551,7 @@ pub fn collect_rule_matches(
     for (idx, rule) in selects.iter().enumerate() {
         let acc = nfas.accept_states[idx];
         for (node_id, node) in dom.nodes.iter() {
-            if acc < node.output_state.len() && node.output_state[acc] {
+            if acc.0 < node.output_state.len() && node.output_state[acc.0] {
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
         }

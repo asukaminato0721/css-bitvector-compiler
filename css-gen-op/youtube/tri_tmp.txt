@@ -1,38 +1,18 @@
-warning: unused variable: `original_output_state`
-   --> src/tri.rs:341:17
-    |
-341 |             let original_output_state = self.nodes[&node_idx].output_state.clone();
-    |                 ^^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_original_output_state`
-    |
-    = note: `#[warn(unused_variables)]` on by default
+warning: unused import: `any::TypeId`
+ --> src/tri.rs:6:5
+  |
+6 |     any::TypeId,
+  |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
 
-warning: unused variable: `new_output_state`
-   --> src/tri.rs:342:18
-    |
-342 |             let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
-    |                  ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_new_output_state`
-
-warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
-277343
-1257033
-4434971
-3368656
-617416
-88154
-8169828
-937
-4526049
-3311560
-432
-3359815
-397
-367
-3205660
-509179
-162
+374658
 
-thread 'main' panicked at src/tri.rs:317:23:
-no entry found for key
+thread 'main' panicked at src/tri.rs:335:13:
+assertion `left == right` failed: Node index 4: Output state changed when node was not dirty!
+  left: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+ right: [false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -1,107 +1,19 @@
-warning: unused variable: `original_output_state`
-   --> src/tri.rs:341:17
-    |
-341 |             let original_output_state = self.nodes[&node_idx].output_state.clone();
-    |                 ^^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_original_output_state`
-    |
-    = note: `#[warn(unused_variables)]` on by default
+warning: unused import: `any::TypeId`
+ --> src/tri.rs:6:5
+  |
+6 |     any::TypeId,
+  |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
 
-warning: unused variable: `new_output_state`
-   --> src/tri.rs:342:18
-    |
-342 |             let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
-    |                  ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_new_output_state`
-
-warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
-1161529
-304
-1005731
-854560
-266
-947278
-201
-204
-204759
-1326848
-213
-210110
-1650280
-269
-221358
-1876169
-123
-238233
-2174914
-193
-244965
-2524129
-308
-276944
-2718861
-203
-265241
-3074563
-211
-278903
-3384359
-248
-273515
-3548859
-215
-294647
-3850105
-215
-301395
-4077425
-183
-316818
-4371970
-553
-final_rule_matches: {
-    ".gsfs": [
-        901,
-    ],
-    ".gssb_c": [
-        499,
-    ],
-    ".gssb_m": [
-        513,
-    ],
-    ".gssb_f": [
-        507,
-    ],
-    ".lst": [
-        375,
-    ],
-    ".ds": [
-        372,
-        392,
-        405,
-        916,
-        928,
-    ],
-    ".lsb": [
-        396,
-        409,
-        909,
-        921,
-    ],
-    "#gws-output-pages-elements-homepage_additional_languages__als": [
-        445,
-    ],
-    ".lsbb": [
-        394,
-        407,
-        917,
-        929,
-    ],
-    ".gssb_g": [
-        907,
-    ],
-    ".gssb_e": [
-        510,
-    ],
-}
-[src/tri.rs:584:5] unsafe { MISS_CNT } = 3805
+907264
+726
+
+thread 'main' panicked at src/tri.rs:335:13:
+assertion `left == right` failed: Node index 4: Output state changed when node was not dirty!
+  left: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+ right: [false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
