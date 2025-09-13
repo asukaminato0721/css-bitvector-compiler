@@ -338,23 +338,27 @@ impl DOM {
         }
     }
     fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
-            let mut new_state = self.nodes[&node_idx].output_state.clone();
-            for Rule(sel_opt, from_opt, to_state) in &nfa.rules {
-                if let Some(from_state) = from_opt {
-                    if !input[from_state.0] { continue; }
-                    if nfa.is_accept_state(from_state) { continue; }
-                    if let Some(sel_id) = sel_opt {
-                        if self.node_matches_selector(node_idx, *sel_id) {
-                            new_state[to_state.0] = true;
-                        }
-                    } else {
-                        // None 选择器表示通配/epsilon
-                        new_state[to_state.0] = true;
-                    }
-                }
+        let mut new_state = self.nodes[&node_idx].output_state.clone();
+        for Rule(sel_opt, from_opt, to_state) in &nfa.rules {
+            let Some(from_state) = from_opt else {
+                continue;
+            };
+            if !input[from_state.0] {
+                continue;
             }
-            new_state
+            if nfa.is_accept_state(from_state) {
+                continue;
+            }
+            if let Some(sel_id) = sel_opt {
+                if self.node_matches_selector(node_idx, *sel_id) {
+                    new_state[to_state.0] = true;
+                }
+            } else {
+                new_state[to_state.0] = true;
+            }
         }
+        new_state
+    }
 }
 
 /// 转移规则: (输入选择器, 当前状态, 下一个状态)
@@ -376,7 +380,10 @@ impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
     pub fn is_accept_state(&self, state: &Nfacell) -> bool {
         // 如果没有任何以该状态为 from 的规则，则认为是接受状态
-        !self.rules.iter().any(|Rule(_, from, _)| from.as_ref() == Some(state))
+        !self
+            .rules
+            .iter()
+            .any(|Rule(_, from, _)| from.as_ref() == Some(state))
     }
 
     /// 获取所有接受状态
@@ -470,6 +477,14 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                 }
             }
             let selector_str = if direct { parts[i] } else { token };
+            // 判断当前处理的是否是最后一个选择器（忽略 '>' 符号）
+            let mut k = i + 1;
+            let mut has_more_selector = false;
+            while k < parts.len() {
+                if parts[k] != ">" { has_more_selector = true; break; }
+                k += 1;
+            }
+            let is_last_selector = !has_more_selector;
             // 创建新状态
             let new_state = unsafe {
                 STATE += 1;
@@ -489,8 +504,8 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                     rules.push(Rule(Some(selector_id), Some(cur), new_state));
                 }
             }
-            if !direct {
-                // simulate wildcard/self-loop
+            if !direct && !is_last_selector {
+                // 仅在不是最后一个选择器时添加自循环（用于后代组合器 * 匹配）
                 rules.push(Rule(None, Some(cur), cur));
             }
             cur = new_state;

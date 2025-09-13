@@ -1,22 +1,22 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-325517
-1559499
-2637790
-208221
-504700
-72199
-1596410
-294
-28808
-53213
-165
-21432
-164
+343284
+1621107
+2804346
+233764
+567449
+73831
+1724396
+148
+30311
+57110
+120
+21271
 156
-31814
-597016
-199
+120
+33156
+602911
+164
 
 thread 'main' panicked at src/bit.rs:301:23:
 no entry found for key
