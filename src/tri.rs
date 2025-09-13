@@ -386,7 +386,6 @@ pub struct NFA {
     /// NFA 中所有状态的集合。
     pub states: HashSet<Nfacell>,
     /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
-
     pub rules: Vec<Rule>,
     /// 起始状态。
     pub start_state: Nfacell,

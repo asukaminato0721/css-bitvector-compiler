@@ -6,6 +6,12 @@ use std::collections::{HashMap, HashSet};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct Nfacell(pub usize);
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct SelectorId(pub usize);
+
 /// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Selector {
@@ -18,11 +24,11 @@ pub enum Selector {
 #[derive(Debug)]
 pub struct SelectorManager {
     /// 从选择器到ID的映射
-    pub selector_to_id: HashMap<Selector, usize>,
+    pub selector_to_id: HashMap<Selector, SelectorId>,
     /// 从ID到选择器的映射
-    pub id_to_selector: HashMap<usize, Selector>,
+    pub id_to_selector: HashMap<SelectorId, Selector>,
     /// 下一个可用的ID
-    next_id: usize,
+    next_id: SelectorId,
 }
 
 impl SelectorManager {
@@ -31,19 +37,23 @@ impl SelectorManager {
         let mut manager = SelectorManager {
             selector_to_id: HashMap::new(),
             id_to_selector: HashMap::new(),
-            next_id: 1, // 从1开始，因为0保留给通配符
+            next_id: SelectorId(1), // 从1开始，因为0保留给通配符
         };
 
         // 预先注册通配符
         let wildcard_selector = Selector::Type("*".to_string());
-        manager.selector_to_id.insert(wildcard_selector.clone(), 0);
-        manager.id_to_selector.insert(0, wildcard_selector);
+        manager
+            .selector_to_id
+            .insert(wildcard_selector.clone(), SelectorId(0));
+        manager
+            .id_to_selector
+            .insert(SelectorId(0), wildcard_selector);
 
         manager
     }
 
     /// 获取选择器对应的ID，如果不存在则创建新的ID
-    pub fn get_or_create_id(&mut self, selector: Selector) -> usize {
+    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
         if let Some(&id) = self.selector_to_id.get(&selector) {
             return id;
         }
@@ -51,38 +61,38 @@ impl SelectorManager {
         let id = self.next_id;
         self.selector_to_id.insert(selector.clone(), id);
         self.id_to_selector.insert(id, selector);
-        self.next_id += 1;
+        self.next_id = SelectorId(self.next_id.0 + 1);
         id
     }
 
     /// 根据选择器获取ID
-    pub fn get_id(&self, selector: &Selector) -> Option<usize> {
+    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
         self.selector_to_id.get(selector).copied()
     }
 
     /// 便捷方法：根据标签名获取或创建类型选择器ID
-    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> usize {
+    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Type(tag_name.to_string()))
     }
 
     /// 便捷方法：根据类名获取或创建类选择器ID
-    pub fn get_or_create_class_id(&mut self, class_name: &str) -> usize {
+    pub fn get_or_create_class_id(&mut self, class_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Class(class_name.to_string()))
     }
 
     /// 便捷方法：根据ID获取或创建ID选择器ID
-    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> usize {
+    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Id(id_name.to_string()))
     }
 }
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: usize,                 // 标签选择器ID
-    pub class_ids: HashSet<usize>,     // CSS类选择器ID集合
-    pub id_selector_id: Option<usize>, // HTML ID选择器ID
-    pub parent: Option<u64>,           // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,            // 存储子节点在 arena 中的索引
+    pub tag_id: SelectorId,                 // 标签选择器ID
+    pub class_ids: HashSet<SelectorId>,     // CSS类选择器ID集合
+    pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
+    pub parent: Option<u64>,                // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
@@ -161,10 +171,10 @@ impl DOM {
     }
 
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node_index: u64, selector_id: usize) -> bool {
+    pub fn node_matches_selector(&self, node_index: u64, selector_id: SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
             // 通配符匹配所有节点
-            if selector_id == 0 {
+            if selector_id.0 == 0 {
                 return true;
             }
 
@@ -346,10 +356,10 @@ impl DOM {
     fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
         let mut new_state = self.nodes[&node_idx].output_state.clone();
         for (state_id, state_transitions) in nfa.transitions.iter() {
-            if !input[*state_id] {
+            if !input[state_id.0] {
                 continue;
             }
-            if nfa.is_accept_state(*state_id) {
+            if nfa.is_accept_state(state_id) {
                 continue;
             }
             // 遍历所有可能的转移
@@ -357,7 +367,7 @@ impl DOM {
                 // 检查当前节点是否匹配这个选择器
                 if self.node_matches_selector(node_idx, selector_id) {
                     // 如果匹配，激活下一个状态
-                    new_state[next_state] = true;
+                    new_state[next_state.0] = true;
                 }
             }
         }
@@ -369,35 +379,35 @@ impl DOM {
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
-    pub states: HashSet<usize>,
+    pub states: HashSet<Nfacell>,
     /// 转移函数，格式为: {当前状态: {输入选择器ID: 下一个状态}}
-    pub transitions: HashMap<usize, HashMap<usize, usize>>,
+    pub transitions: HashMap<Nfacell, HashMap<SelectorId, Nfacell>>,
     /// 起始状态。
-    pub start_state: usize,
-    pub max_state_id: usize,
+    pub start_state: Nfacell,
+    pub max_state_id: Nfacell,
     // for print match
-    pub accept_states: Vec<usize>,
+    pub accept_states: Vec<Nfacell>,
 }
 
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
-    pub fn is_accept_state(&self, state: usize) -> bool {
-        !self.transitions.contains_key(&state)
+    pub fn is_accept_state(&self, state: &Nfacell) -> bool {
+        !self.transitions.contains_key(state)
             || self
                 .transitions
-                .get(&state)
+                .get(state)
                 .map_or(true, |trans| trans.is_empty())
     }
 
     /// 获取所有接受状态
-    pub fn get_accept_states(&self) -> HashSet<usize> {
+    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
         self.states
             .iter()
-            .filter(|&&state| self.is_accept_state(state))
+            .filter(|&state| self.is_accept_state(state))
             .copied()
             .collect()
     }
-    pub fn trans(&self, cur: usize, status: usize) -> usize {
+    pub fn trans(&self, cur: Nfacell, status: SelectorId) -> Nfacell {
         self.transitions[&cur][&status]
     }
 }
@@ -436,7 +446,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
 
-            input[nfa.start_state] = true;
+            input[nfa.start_state.0] = true;
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
@@ -457,11 +467,11 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
     };
     let start_state = unsafe {
         STATE += 1;
-        STATE
+        Nfacell(STATE)
     };
-    let mut states: HashSet<usize> = [start_state].into_iter().collect();
-    let mut transitions = HashMap::<_, HashMap<_, usize>>::new();
-    let mut accept_states = Vec::with_capacity(selectors.len());
+    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
+    let mut transitions = HashMap::<Nfacell, HashMap<SelectorId, Nfacell>>::new();
+    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
 
     for rule in selectors {
         let t = rule.replace('>', " > ");
@@ -485,7 +495,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
             // 创建新状态
             let new_state = unsafe {
                 STATE += 1;
-                STATE
+                Nfacell(STATE)
             };
             states.insert(new_state);
 
@@ -499,7 +509,10 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                 .or_default()
                 .insert(selector_id, new_state);
             if !direct {
-                transitions.entry(cur).or_default().insert(0, cur);
+                transitions
+                    .entry(cur)
+                    .or_default()
+                    .insert(SelectorId(0), cur);
             }
             cur = new_state;
             i += 1;
@@ -510,7 +523,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
         states,
         transitions,
         start_state,
-        max_state_id: unsafe { STATE },
+        max_state_id: Nfacell(unsafe { STATE }),
         accept_states,
     }
 }
@@ -525,7 +538,7 @@ pub fn collect_rule_matches(
     for (idx, rule) in selects.iter().enumerate() {
         let acc = nfas.accept_states[idx];
         for (node_id, node) in dom.nodes.iter() {
-            if acc < node.output_state.len() && node.output_state[acc] {
+            if acc.0 < node.output_state.len() && node.output_state[acc.0] {
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
         }
