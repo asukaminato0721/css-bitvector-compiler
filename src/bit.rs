@@ -32,23 +32,12 @@ pub struct SelectorManager {
 }
 
 impl SelectorManager {
-    /// 创建一个新的选择器管理器，其中ID 0 保留给通配符 "*"
     pub fn new() -> Self {
-        let mut manager = SelectorManager {
+        let manager = SelectorManager {
             selector_to_id: HashMap::new(),
             id_to_selector: HashMap::new(),
-            next_id: SelectorId(1), // 从1开始，因为0保留给通配符
+            next_id: SelectorId(0),
         };
-
-        // 预先注册通配符
-        let wildcard_selector = Selector::Type("*".to_string());
-        manager
-            .selector_to_id
-            .insert(wildcard_selector.clone(), SelectorId(0));
-        manager
-            .id_to_selector
-            .insert(SelectorId(0), wildcard_selector);
-
         manager
     }
 
@@ -173,11 +162,6 @@ impl DOM {
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node_index: u64, selector_id: SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
-            // 通配符匹配所有节点
-            if selector_id.0 == 0 {
-                return true;
-            }
-
             // 检查是否匹配标签选择器
             if node.tag_id == selector_id {
                 return true;
@@ -354,49 +338,45 @@ impl DOM {
         }
     }
     fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = self.nodes[&node_idx].output_state.clone();
-        for (state_id, state_transitions) in nfa.transitions.iter() {
-            if !input[state_id.0] {
-                continue;
-            }
-            if nfa.is_accept_state(state_id) {
-                continue;
-            }
-            // 遍历所有可能的转移
-            for (&selector_id, &next_state) in state_transitions {
-                // 检查当前节点是否匹配这个选择器
-                if self.node_matches_selector(node_idx, selector_id) {
-                    // 如果匹配，激活下一个状态
-                    new_state[next_state.0] = true;
+            let mut new_state = self.nodes[&node_idx].output_state.clone();
+            for Rule(sel_opt, from_opt, to_state) in &nfa.rules {
+                if let Some(from_state) = from_opt {
+                    if !input[from_state.0] { continue; }
+                    if nfa.is_accept_state(from_state) { continue; }
+                    if let Some(sel_id) = sel_opt {
+                        if self.node_matches_selector(node_idx, *sel_id) {
+                            new_state[to_state.0] = true;
+                        }
+                    } else {
+                        // None 选择器表示通配/epsilon
+                        new_state[to_state.0] = true;
+                    }
                 }
             }
+            new_state
         }
-        new_state
-    }
 }
+
+/// 转移规则: (输入选择器, 当前状态, 下一个状态)
+/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 
 /// 表示一个非确定性有限状态自动机 (NFA)。
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
-    /// NFA 中所有状态的集合。
     pub states: HashSet<Nfacell>,
-    /// 转移函数，格式为: {当前状态: {输入选择器ID: 下一个状态}}
-    pub transitions: HashMap<Nfacell, HashMap<SelectorId, Nfacell>>,
-    /// 起始状态。
+    pub rules: Vec<Rule>,
     pub start_state: Nfacell,
     pub max_state_id: Nfacell,
-    // for print match
     pub accept_states: Vec<Nfacell>,
 }
 
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
     pub fn is_accept_state(&self, state: &Nfacell) -> bool {
-        !self.transitions.contains_key(state)
-            || self
-                .transitions
-                .get(state)
-                .map_or(true, |trans| trans.is_empty())
+        // 如果没有任何以该状态为 from 的规则，则认为是接受状态
+        !self.rules.iter().any(|Rule(_, from, _)| from.as_ref() == Some(state))
     }
 
     /// 获取所有接受状态
@@ -407,9 +387,7 @@ impl NFA {
             .copied()
             .collect()
     }
-    pub fn trans(&self, cur: Nfacell, status: SelectorId) -> Nfacell {
-        self.transitions[&cur][&status]
-    }
+    // trans 方法在新结构下不再适用，如需要可实现查询功能
 }
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
@@ -470,7 +448,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
         Nfacell(STATE)
     };
     let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
-    let mut transitions = HashMap::<Nfacell, HashMap<SelectorId, Nfacell>>::new();
+    let mut rules: Vec<Rule> = Vec::new();
     let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
 
     for rule in selectors {
@@ -501,18 +479,19 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
 
             // 解析选择器并获取对应的ID
             let selector = parse_selector(selector_str);
-            let selector_id = selector_manager.get_or_create_id(selector);
-
-            // 创建直接转移（不允许跳过中间节点）
-            transitions
-                .entry(cur)
-                .or_default()
-                .insert(selector_id, new_state);
+            // '*' 直接转换为 None 代表通配符，否则分配 SelectorId
+            match selector {
+                Selector::Type(ref s) if s == "*" => {
+                    rules.push(Rule(None, Some(cur), new_state));
+                }
+                other => {
+                    let selector_id = selector_manager.get_or_create_id(other);
+                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
+                }
+            }
             if !direct {
-                transitions
-                    .entry(cur)
-                    .or_default()
-                    .insert(SelectorId(0), cur);
+                // simulate wildcard/self-loop
+                rules.push(Rule(None, Some(cur), cur));
             }
             cur = new_state;
             i += 1;
@@ -521,7 +500,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
     }
     NFA {
         states,
-        transitions,
+        rules,
         start_state,
         max_state_id: Nfacell(unsafe { STATE }),
         accept_states,

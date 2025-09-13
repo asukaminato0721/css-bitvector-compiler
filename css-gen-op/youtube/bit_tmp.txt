@@ -1,23 +1,23 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-336903
-1417782
-3526553
-221549
-498759
-72155
-1503933
-312
-32923
-53430
-229
-23893
-209
-264
-38690
-557032
-161
+325517
+1559499
+2637790
+208221
+504700
+72199
+1596410
+294
+28808
+53213
+165
+21432
+164
+156
+31814
+597016
+199
 
-thread 'main' panicked at src/bit.rs:307:23:
+thread 'main' panicked at src/bit.rs:301:23:
 no entry found for key
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
