@@ -378,6 +378,7 @@ pub struct NFA {
     // for print match
     pub accept_states: Vec<usize>,
 }
+
 impl NFA {
     /// 检查给定状态是否为接受状态（没有后继状态）
     pub fn is_accept_state(&self, state: usize) -> bool {

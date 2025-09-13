@@ -22,26 +22,17 @@ pub enum IState {
     IUnused,
 }
 
-/// 标签名和选择器管理器，负责字符串选择器与ID之间的映射
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct SelectorManager {
-    /// 从选择器到ID的映射
     pub selector_to_id: HashMap<Selector, usize>,
-    /// 从ID到选择器的映射
     pub id_to_selector: HashMap<usize, Selector>,
-    /// 下一个可用的ID
     next_id: usize,
 }
 
 impl SelectorManager {
     /// 创建一个新的选择器管理器
     pub fn new() -> Self {
-        let manager = SelectorManager {
-            selector_to_id: HashMap::new(),
-            id_to_selector: HashMap::new(),
-            next_id: 0,
-        };
-        manager
+        Default::default()
     }
 
     /// 获取选择器对应的ID，如果不存在则创建新的ID
@@ -83,21 +74,16 @@ impl DOMNode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct DOM {
-    pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
-    pub selector_manager: SelectorManager, // 选择器管理器
+    pub nodes: HashMap<u64, DOMNode>, // Arena: 所有节点都存储在这里
+    pub selector_manager: SelectorManager,
     root_node: Option<u64>,
 }
 
 impl DOM {
-    /// 创建一个新的、空的 DOM。
     pub fn new() -> Self {
-        DOM {
-            nodes: Default::default(),
-            selector_manager: SelectorManager::new(),
-            root_node: None,
-        }
+        Default::default()
     }
 
     /// 向 DOM 中添加一个新节点。
@@ -110,22 +96,17 @@ impl DOM {
         html_id: Option<String>,
         parent_index: Option<u64>,
     ) -> u64 {
-        // 获取或创建选择器ID
-        let tag_id = self
-            .selector_manager
-            .get_or_create_id(Selector::Type(tag_name.into()));
+        let sm = &mut self.selector_manager;
+        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.into()));
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = self
-                .selector_manager
-                .get_or_create_id(Selector::Class(class.into()));
+            let class_id = sm.get_or_create_id(Selector::Class(class.into()));
             class_ids.insert(class_id);
         }
-        let id_selector_id = html_id.as_ref().map(|id| {
-            self.selector_manager
-                .get_or_create_id(Selector::Id(id.into()))
-        });
+        let id_selector_id = html_id
+            .as_ref()
+            .map(|id| sm.get_or_create_id(Selector::Id(id.into())));
 
         let new_node = DOMNode {
             tag_id,
@@ -156,21 +137,18 @@ impl DOM {
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node_index: u64, SelectorId(sid): SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
-            // 检查是否匹配标签选择器
             if node.tag_id == sid {
                 return true;
             }
 
-            // 检查是否匹配类选择器
             if node.class_ids.contains(&sid) {
                 return true;
             }
 
-            // 检查是否匹配ID选择器
-            if let Some(id_sel_id) = node.id_selector_id {
-                if id_sel_id == sid {
-                    return true;
-                }
+            if let Some(id_sel_id) = node.id_selector_id
+                && id_sel_id == sid
+            {
+                return true;
             }
 
             false
@@ -350,7 +328,11 @@ impl DOM {
 
         // 标记并处理每个当前为1的状态
         for &Nfacell(sid) in nfa.states.iter() {
-            new_tri_state[sid] = if input[sid] { IState::IOne } else { IState::IZero };
+            new_tri_state[sid] = if input[sid] {
+                IState::IOne
+            } else {
+                IState::IZero
+            };
             if !input[sid] {
                 continue;
             }
@@ -391,19 +373,20 @@ impl DOM {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub struct Nfacell(usize); // newtype for NFA cell id
+pub struct Nfacell(usize);
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SelectorId(pub usize);
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+/// - 谓词为 None 表示自环
+/// - 前驱为 None 表示从初始节点出发
 pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
     pub states: HashSet<Nfacell>,
     /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
-    /// - 谓词为 None 表示通配符 "*"
-    /// - 前驱为 None 表示从初始节点出发
+
     pub rules: Vec<Rule>,
     /// 起始状态。
     pub start_state: Nfacell,
@@ -413,7 +396,10 @@ pub struct NFA {
 }
 impl NFA {
     pub fn is_accept_state(&self, state: Nfacell) -> bool {
-        !self.rules.iter().any(|Rule(_, prev, _)| *prev == Some(state))
+        !self
+            .rules
+            .iter()
+            .any(|Rule(_, prev, _)| *prev == Some(state))
     }
 
     pub fn get_accept_states(&self) -> HashSet<Nfacell> {
@@ -424,14 +410,14 @@ impl NFA {
             .collect()
     }
     pub fn trans(&self, cur: Nfacell, status: usize) -> Nfacell {
-        self
-            .rules
+        self.rules
             .iter()
             .find(|Rule(pred, prev, _)| *prev == Some(cur) && *pred == Some(SelectorId(status)))
             .map(|Rule(_, _, next)| *next)
             .expect("transition not found")
     }
 }
+
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim();
