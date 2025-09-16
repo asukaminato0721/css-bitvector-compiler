@@ -21,7 +21,7 @@ pub enum Selector {
 }
 
 /// 标签名和选择器管理器，负责字符串选择器与ID之间的映射
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct SelectorManager {
     /// 从选择器到ID的映射
     pub selector_to_id: HashMap<Selector, SelectorId>,
@@ -33,12 +33,7 @@ pub struct SelectorManager {
 
 impl SelectorManager {
     pub fn new() -> Self {
-        let manager = SelectorManager {
-            selector_to_id: HashMap::new(),
-            id_to_selector: HashMap::new(),
-            next_id: SelectorId(0),
-        };
-        manager
+        Default::default()
     }
 
     /// 获取选择器对应的ID，如果不存在则创建新的ID
@@ -94,7 +89,7 @@ impl DOMNode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct DOM {
     pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
     pub selector_manager: SelectorManager, // 选择器管理器
@@ -104,11 +99,7 @@ pub struct DOM {
 impl DOM {
     /// 创建一个新的、空的 DOM。
     pub fn new() -> Self {
-        DOM {
-            nodes: Default::default(),
-            selector_manager: SelectorManager::new(),
-            root_node: None,
-        }
+        Default::default()
     }
 
     /// 向 DOM 中添加一个新节点。
@@ -337,24 +328,38 @@ impl DOM {
             node.recursive_dirty = false;
         }
     }
+    /// 传播规则是这样的
+    /// 对 NFA 来说, 每条边对应一个 Rule
+    /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
+    /// 当一个新的 input 传下来时, 已经亮的就不用检查了
     fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = self.nodes[&node_idx].output_state.clone();
-        for Rule(sel_opt, from_opt, to_state) in &nfa.rules {
-            let Some(from_state) = from_opt else {
-                continue;
-            };
-            if !input[from_state.0] {
-                continue;
-            }
-            if nfa.is_accept_state(from_state) {
-                continue;
-            }
-            if let Some(sel_id) = sel_opt {
-                if self.node_matches_selector(node_idx, *sel_id) {
-                    new_state[to_state.0] = true;
+        let mut new_state = input.to_vec();
+
+        for &rule in nfa.rules.iter() {
+            match rule {
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
                 }
-            } else {
-                new_state[to_state.0] = true;
+                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
+                    if input[b] {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), None, Nfacell(c)) => {
+                    if self.node_matches_selector(node_idx, a) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
+                    if !input[b] {
+                        continue;
+                    }
+                    if self.nodes[&node_idx].parent.is_some() {
+                        if self.node_matches_selector(self.nodes[&node_idx].parent.unwrap(), a) {
+                            new_state[c] = true;
+                        }
+                    }
+                }
             }
         }
         new_state
@@ -429,9 +434,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
-            let mut input = vec![false; unsafe { STATE } + 1];
-
-            input[nfa.start_state.0] = true;
+            let input = vec![false; unsafe { STATE } + 1];
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
@@ -481,7 +484,10 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
             let mut k = i + 1;
             let mut has_more_selector = false;
             while k < parts.len() {
-                if parts[k] != ">" { has_more_selector = true; break; }
+                if parts[k] != ">" {
+                    has_more_selector = true;
+                    break;
+                }
                 k += 1;
             }
             let is_last_selector = !has_more_selector;
