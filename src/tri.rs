@@ -59,8 +59,8 @@ pub struct DOMNode {
     pub tag_id: SelectorId,                 // 标签选择器ID
     pub class_ids: HashSet<SelectorId>,     // CSS类选择器ID集合
     pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
-    pub parent: Option<u64>,           // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,            // 存储子节点在 arena 中的索引
+    pub parent: Option<u64>,                // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,

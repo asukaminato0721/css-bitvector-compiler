@@ -479,7 +479,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             // Perform CSS matching using NFA
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
-            input[1] = true;
+            input[nfa.start_state.0] = true;
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
@@ -618,7 +618,7 @@ mod tests {
         }
 
         let mut selector_manager = SelectorManager::new();
-        let selectors = ["div a".to_string(), "p".to_string(), "h1 > h2".into()];
+        let selectors = ["div a", "p", "h1 > h2", "h1 h2", "div a p"].map(|x| x.into());
 
         let nfa = generate_nfa(&selectors, &mut selector_manager);
         // dbg!(&nfa);
