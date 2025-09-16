@@ -1,22 +1,22 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-97076
-338805
-1170668
-106213
-110595
-24212
-338821
-204
-15650
-19474
-180
-13258
-184
-292
-17674
-119805
-746
+104850
+356327
+1080990
+63392
+116244
+26947
+364362
+263
+17396
+20973
+201
+14420
+253
+278
+19026
+123368
+231
 
 thread 'main' panicked at src/tri.rs:273:23:
 no entry found for key

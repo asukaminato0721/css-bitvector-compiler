@@ -565,17 +565,17 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
     }
 }
 
-/// 收集所有 rule -> [node id] 的匹配结果
 pub fn collect_rule_matches(
     dom: &DOM,
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
-    for (idx, rule) in selects.iter().enumerate() {
-        let acc = nfas.accept_states[idx];
-        for (node_id, node) in dom.nodes.iter() {
-            if acc.0 < node.output_state.len() && node.output_state[acc.0] {
+
+    for (node_id, node) in dom.nodes.iter() {
+        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
+            if node.output_state[state_index] {
+                let rule = &selects[idx];
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
         }
