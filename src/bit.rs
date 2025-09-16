@@ -370,7 +370,9 @@ impl DOM {
 /// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
-
+fn escape_dot_label(s: &str) -> String {
+    s.replace('\\', "\\\\").replace('"', "\\\"")
+}
 /// 表示一个非确定性有限状态自动机 (NFA)。
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
@@ -399,7 +401,52 @@ impl NFA {
             .copied()
             .collect()
     }
-    // trans 方法在新结构下不再适用，如需要可实现查询功能
+    pub fn to_dot(&self, selector_manager: &SelectorManager) -> String {
+        let mut s = String::new();
+        s.push_str("digraph NFA {\n");
+        s.push_str("  rankdir=LR;\n");
+        s.push_str("  node [shape=circle, fontsize=10];\n");
+
+        // Start marker
+        s.push_str("  __start [shape=point, label=\"\"];\n");
+        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
+
+        // States
+        for st in &self.states {
+            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
+        }
+
+        // Accept states styling
+        if !self.accept_states.is_empty() {
+            s.push_str("  { node [shape=doublecircle]; ");
+            for st in &self.accept_states {
+                s.push_str(&format!("{} ", st.0));
+            }
+            s.push_str("}\n");
+        }
+
+        // Edges
+        for Rule(selector_opt, from_opt, to) in &self.rules {
+            let from = from_opt.unwrap_or(self.start_state).0;
+            let label = match selector_opt {
+                None => "*".to_string(),
+                Some(sel_id) => match selector_manager.id_to_selector.get(sel_id) {
+                    Some(Selector::Type(t)) => t.clone(),
+                    Some(Selector::Class(c)) => format!(".{}", c),
+                    Some(Selector::Id(i)) => format!("#{}", i),
+                    None => format!("sid:{}", sel_id.0),
+                },
+            };
+            s.push_str(&format!(
+                "  {} -> {} [label=\"{}\"];\n",
+                from,
+                to.0,
+                escape_dot_label(&label)
+            ));
+        }
+        s.push_str("}\n");
+        s
+    }
 }
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
@@ -467,41 +514,31 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
         let parts: Vec<&str> = t.split_whitespace().collect();
         let mut cur = start_state;
 
-        // 从左往右处理选择器部分
         let mut i = 0;
         while i < parts.len() {
-            let token = parts[i];
-            let direct = token == ">";
-
-            if direct {
-                // 子代组合器，跳过它，下一个选择器是直接子元素
+            if parts[i] == ">" {
                 i += 1;
-                if i >= parts.len() {
-                    break;
-                }
+                continue;
             }
-            let selector_str = if direct { parts[i] } else { token };
-            // 判断当前处理的是否是最后一个选择器（忽略 '>' 符号）
-            let mut k = i + 1;
-            let mut has_more_selector = false;
-            while k < parts.len() {
-                if parts[k] != ">" {
-                    has_more_selector = true;
-                    break;
-                }
-                k += 1;
+            let selector_str = parts[i];
+
+            // Look ahead to find the next selector and whether the combinator is direct (>)
+            let mut next_selector_index = i + 1;
+            let mut next_is_direct = false;
+            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
+                next_is_direct = true;
+                next_selector_index += 1;
             }
-            let is_last_selector = !has_more_selector;
-            // 创建新状态
+            let has_next_selector = next_selector_index < parts.len();
+
+            // Create new state and edge for current selector
             let new_state = unsafe {
                 STATE += 1;
                 Nfacell(STATE)
             };
             states.insert(new_state);
 
-            // 解析选择器并获取对应的ID
             let selector = parse_selector(selector_str);
-            // '*' 直接转换为 None 代表通配符，否则分配 SelectorId
             match selector {
                 Selector::Type(ref s) if s == "*" => {
                     rules.push(Rule(None, Some(cur), new_state));
@@ -511,12 +548,14 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                     rules.push(Rule(Some(selector_id), Some(cur), new_state));
                 }
             }
-            if !direct && !is_last_selector {
-                // 仅在不是最后一个选择器时添加自循环（用于后代组合器 * 匹配）
-                rules.push(Rule(None, Some(cur), cur));
+
+            // Add self-loop only for descendant combinators (a b), not for child (a > b)
+            if has_next_selector && !next_is_direct {
+                rules.push(Rule(None, Some(new_state), new_state));
             }
+
             cur = new_state;
-            i += 1;
+            i = next_selector_index;
         }
         accept_states.push(cur);
     }
@@ -569,9 +608,10 @@ fn main() {
     dbg!(unsafe { MISS_CNT });
 }
 
-
 #[cfg(test)]
 mod tests {
+    use std::fs::write;
+
     use super::*;
     #[test]
     fn test_generate_nfa() {
@@ -579,15 +619,13 @@ mod tests {
         unsafe {
             STATE = 0;
         }
-        
+
         let mut selector_manager = SelectorManager::new();
-        let selectors = vec![
-            "div a".to_string(),
-            "p".to_string(),
-        ];
-        
+        let selectors = ["div a".to_string(), "p".to_string(), "h1 > h2".into()];
+
         let nfa = generate_nfa(&selectors, &mut selector_manager);
-        dbg!(nfa);
+        dbg!(&nfa);
+        let _ = write("./dot.dot", nfa.to_dot(&selector_manager));
         dbg!(selector_manager);
     }
 }
