@@ -434,7 +434,8 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
-            let input = vec![false; unsafe { STATE } + 1];
+            let mut input = vec![false; unsafe { STATE } + 1];
+            input[1] = true;
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
@@ -566,4 +567,27 @@ fn main() {
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
     println!("final_rule_matches: {:#?}", final_matches);
     dbg!(unsafe { MISS_CNT });
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_generate_nfa() {
+        // Reset global state for testing
+        unsafe {
+            STATE = 0;
+        }
+        
+        let mut selector_manager = SelectorManager::new();
+        let selectors = vec![
+            "div a".to_string(),
+            "p".to_string(),
+        ];
+        
+        let nfa = generate_nfa(&selectors, &mut selector_manager);
+        dbg!(nfa);
+        dbg!(selector_manager);
+    }
 }

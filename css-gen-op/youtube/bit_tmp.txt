@@ -1,31 +1,22 @@
-warning: unused variable: `index`
-   --> src/bit.rs:338:14
-    |
-338 |         for (index, &rule) in nfa.rules.iter().enumerate() {
-    |              ^^^^^ help: if this is intentional, prefix it with an underscore: `_index`
-    |
-    = note: `#[warn(unused_variables)]` on by default
-
-warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-84177
-253953
-772086
-46689
-86791
-18416
-286893
-225
-11804
-14031
-176
-10263
-197
-253
-14221
-94548
-215
+839512
+3092578
+7985724
+807948
+1169912
+151094
+3201614
+213
+57298
+95561
+156
+40722
+105
+148
+68521
+1143650
+144
 
 thread 'main' panicked at src/bit.rs:292:23:
 no entry found for key
