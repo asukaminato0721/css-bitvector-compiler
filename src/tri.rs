@@ -36,16 +36,16 @@ impl SelectorManager {
     }
 
     /// 获取选择器对应的ID，如果不存在则创建新的ID
-    pub fn get_or_create_id(&mut self, selector: Selector) -> usize {
+    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
         if let Some(&id) = self.selector_to_id.get(&selector) {
-            return id;
+            return SelectorId(id);
         }
 
         let id = self.next_id;
         self.selector_to_id.insert(selector.clone(), id);
         self.id_to_selector.insert(id, selector);
         self.next_id += 1;
-        id
+        SelectorId(id)
     }
 
     /// 根据选择器获取ID
@@ -56,9 +56,9 @@ impl SelectorManager {
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: usize,                 // 标签选择器ID
-    pub class_ids: HashSet<usize>,     // CSS类选择器ID集合
-    pub id_selector_id: Option<usize>, // HTML ID选择器ID
+    pub tag_id: SelectorId,                 // 标签选择器ID
+    pub class_ids: HashSet<SelectorId>,     // CSS类选择器ID集合
+    pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
     pub parent: Option<u64>,           // 存储父节点在 arena 中的索引
     pub children: Vec<u64>,            // 存储子节点在 arena 中的索引
     pub dirty: bool,
@@ -137,16 +137,16 @@ impl DOM {
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node_index: u64, SelectorId(sid): SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
-            if node.tag_id == sid {
+            if node.tag_id == SelectorId(sid) {
                 return true;
             }
 
-            if node.class_ids.contains(&sid) {
+            if node.class_ids.contains(&SelectorId(sid)) {
                 return true;
             }
 
             if let Some(id_sel_id) = node.id_selector_id
-                && id_sel_id == sid
+                && id_sel_id == SelectorId(sid)
             {
                 return true;
             }
@@ -375,7 +375,7 @@ impl DOM {
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Nfacell(usize);
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
 pub struct SelectorId(pub usize);
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 /// - 谓词为 None 表示自环
@@ -484,43 +484,48 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
         let parts: Vec<&str> = t.split_whitespace().collect();
         let mut cur = start_state;
 
-        // 从左往右处理选择器部分
         let mut i = 0;
         while i < parts.len() {
-            let token = parts[i];
-            let direct = token == ">";
-
-            if direct {
-                // 子代组合器，跳过它，下一个选择器是直接子元素
+            if parts[i] == ">" {
                 i += 1;
-                if i >= parts.len() {
-                    break;
-                }
+                continue;
             }
-            let selector_str = if direct { parts[i] } else { token };
-            // 创建新状态
+            let selector_str = parts[i];
+
+            // Look ahead to find the next selector and whether the combinator is direct (>)
+            let mut next_selector_index = i + 1;
+            let mut next_is_direct = false;
+            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
+                next_is_direct = true;
+                next_selector_index += 1;
+            }
+            let has_next_selector = next_selector_index < parts.len();
+
+            // Create new state and edge for current selector
             let new_state = unsafe {
                 STATE += 1;
                 Nfacell(STATE)
             };
             states.insert(new_state);
 
-            // 解析选择器并获取对应的ID（"*" 用 None 表示通配符）
-            let pred_opt = if selector_str == "*" {
-                None
-            } else {
-                let selector = parse_selector(selector_str);
-                let selector_id = selector_manager.get_or_create_id(selector);
-                Some(SelectorId(selector_id))
-            };
-            let prev_opt = if cur == start_state { None } else { Some(cur) };
-            rules.push(Rule(pred_opt, prev_opt, new_state));
-            if !direct {
-                // 后代组合器：允许通配符保持当前状态
-                rules.push(Rule(None, Some(cur), cur));
+            let selector = parse_selector(selector_str);
+            match selector {
+                Selector::Type(ref s) if s == "*" => {
+                    rules.push(Rule(None, Some(cur), new_state));
+                }
+                other => {
+                    let selector_id = selector_manager.get_or_create_id(other);
+                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
+                }
             }
+
+            // Add self-loop only for descendant combinators (a b), not for child (a > b)
+            if has_next_selector && !next_is_direct {
+                rules.push(Rule(None, Some(new_state), new_state));
+            }
+
             cur = new_state;
-            i += 1;
+            i = next_selector_index;
         }
         accept_states.push(cur);
     }

@@ -153,21 +153,18 @@ impl DOM {
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node_index: u64, selector_id: SelectorId) -> bool {
         if let Some(node) = self.nodes.get(&node_index) {
-            // 检查是否匹配标签选择器
             if node.tag_id == selector_id {
                 return true;
             }
 
-            // 检查是否匹配类选择器
             if node.class_ids.contains(&selector_id) {
                 return true;
             }
 
-            // 检查是否匹配ID选择器
-            if let Some(id_sel_id) = node.id_selector_id {
-                if id_sel_id == selector_id {
-                    return true;
-                }
+            if let Some(id_sel_id) = node.id_selector_id
+                && id_sel_id == selector_id
+            {
+                return true;
             }
 
             false
@@ -624,8 +621,8 @@ mod tests {
         let selectors = ["div a".to_string(), "p".to_string(), "h1 > h2".into()];
 
         let nfa = generate_nfa(&selectors, &mut selector_manager);
-        dbg!(&nfa);
+        // dbg!(&nfa);
         let _ = write("./dot.dot", nfa.to_dot(&selector_manager));
-        dbg!(selector_manager);
+        dbg!(nfa.rules);
     }
 }
