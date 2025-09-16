@@ -1,23 +1,27 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-104850
-356327
-1080990
-63392
-116244
-26947
-364362
-263
-17396
-20973
-201
-14420
-253
-278
-19026
-123368
-231
+103141
+381091
+970239
+54758
+108040
+22754
+334897
+203
+13742
+17441
+170
+12528
+225
+312
+16287
+124548
+221
+96642
+113947
+47870
+113057
 
-thread 'main' panicked at src/tri.rs:273:23:
-no entry found for key
+thread 'main' panicked at src/tri.rs:236:60:
+index out of bounds: the len is 0 but the index is 0
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

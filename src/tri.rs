@@ -239,10 +239,11 @@ impl DOM {
         // 在指定位置插入新节点
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx));
         let insert_pos = path[path.len() - 1];
-        self.nodes.entry(current_idx).and_modify(|x| {
-            x.children
-                .insert(insert_pos.try_into().unwrap(), new_node_idx)
-        });
+        if let Some(parent) = self.nodes.get_mut(&current_idx) {
+            debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
+            parent.children.pop();
+            parent.children.insert(insert_pos as usize, new_node_idx);
+        }
         self.set_node_dirty(current_idx);
     }
 
@@ -262,7 +263,9 @@ impl DOM {
             .unwrap()
             .children
             .remove(rm_pos.try_into().unwrap());
-        self.nodes.remove(&rm_pos);
+        let rm_pos = path[path.len() - 1] as usize;
+        let removed_child_id = self.nodes.get_mut(&cur_idx).unwrap().children.remove(rm_pos);
+        self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {

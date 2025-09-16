@@ -2,7 +2,10 @@ use css_bitvector_compiler::{
     LayoutFrame, extract_path_from_command, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
@@ -255,10 +258,11 @@ impl DOM {
         // 在指定位置插入新节点
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx));
         let insert_pos = path[path.len() - 1];
-        self.nodes.entry(current_idx).and_modify(|x| {
-            x.children
-                .insert(insert_pos.try_into().unwrap(), new_node_idx)
-        });
+        if let Some(parent) = self.nodes.get_mut(&current_idx) {
+            debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
+            parent.children.pop();
+            parent.children.insert(insert_pos as usize, new_node_idx);
+        }
         self.set_node_dirty(current_idx);
     }
 
@@ -272,13 +276,9 @@ impl DOM {
         }
 
         // 移除目标节点
-        let rm_pos = path[path.len() - 1];
-        self.nodes
-            .get_mut(&cur_idx)
-            .unwrap()
-            .children
-            .remove(rm_pos.try_into().unwrap());
-        self.nodes.remove(&rm_pos);
+        let rm_pos = path[path.len() - 1] as usize;
+        let removed_child_id = self.nodes.get_mut(&cur_idx).unwrap().children.remove(rm_pos);
+        self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
@@ -473,6 +473,9 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data);
+            if std::env::var("WEBSITE_NAME").unwrap() == "testcase".to_string() {
+                dbg!(&dom.nodes);
+            }
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
@@ -597,6 +600,13 @@ fn main() {
         .unwrap(),
     );
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
+    let _ = fs::write(
+        format!(
+            "css-gen-op/{0}/dot.dot",
+            std::env::var("WEBSITE_NAME").unwrap(),
+        ),
+        nfa.to_dot(&dom.selector_manager),
+    );
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }

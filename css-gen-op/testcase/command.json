@@ -1,0 +1,3 @@
+{"name": "init","node": {"id": 1,"name": "div", "type": "document", "attributes": { "class": "a" },"children": [{"id": 2,"name": "p","attributes": {},"children": [] }]}}
+{"name": "add","path": [1],"node":  {"id": 3,"name": "span","attributes": { "id": "b" },"children": []}}
+{"name": "recalculate","node": {}}
