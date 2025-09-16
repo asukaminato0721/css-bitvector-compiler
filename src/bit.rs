@@ -277,7 +277,12 @@ impl DOM {
 
         // 移除目标节点
         let rm_pos = path[path.len() - 1] as usize;
-        let removed_child_id = self.nodes.get_mut(&cur_idx).unwrap().children.remove(rm_pos);
+        let removed_child_id = self
+            .nodes
+            .get_mut(&cur_idx)
+            .unwrap()
+            .children
+            .remove(rm_pos);
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
@@ -351,10 +356,8 @@ impl DOM {
                     if !input[b] {
                         continue;
                     }
-                    if self.nodes[&node_idx].parent.is_some() {
-                        if self.node_matches_selector(self.nodes[&node_idx].parent.unwrap(), a) {
-                            new_state[c] = true;
-                        }
+                    if self.node_matches_selector(node_idx, a) {
+                        new_state[c] = true;
                     }
                 }
             }

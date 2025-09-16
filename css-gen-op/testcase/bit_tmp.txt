@@ -1,12 +1,37 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/bit`
-[src/bit.rs:477:17] &dom.nodes = {
+[src/bit.rs:480:17] &dom.nodes = {
     2: DOMNode {
         tag_id: SelectorId(
             3,
         ),
         class_ids: {},
         id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    3: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
         parent: Some(
             1,
         ),
@@ -48,32 +73,11 @@
             false,
         ],
     },
-    3: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
 }
-6082
-final_rule_matches: {}
-[src/bit.rs:615:5] unsafe { MISS_CNT } = 3
+6387
+final_rule_matches: {
+    "#b": [
+        3,
+    ],
+}
+[src/bit.rs:618:5] unsafe { MISS_CNT } = 3

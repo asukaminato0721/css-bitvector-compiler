@@ -1,26 +1,26 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-103141
-381091
-970239
-54758
-108040
-22754
-334897
-203
-13742
-17441
-170
-12528
-225
-312
-16287
-124548
-221
-96642
-113947
-47870
-113057
+121708
+451087
+1146171
+119446
+242048
+50648
+1289245
+5094
+40394
+43611
+468
+33501
+423
+607
+43897
+285394
+422
+222942
+250450
+99601
+244491
 
 thread 'main' panicked at src/tri.rs:236:60:
 index out of bounds: the len is 0 but the index is 0

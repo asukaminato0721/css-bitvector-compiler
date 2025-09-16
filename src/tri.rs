@@ -264,7 +264,12 @@ impl DOM {
             .children
             .remove(rm_pos.try_into().unwrap());
         let rm_pos = path[path.len() - 1] as usize;
-        let removed_child_id = self.nodes.get_mut(&cur_idx).unwrap().children.remove(rm_pos);
+        let removed_child_id = self
+            .nodes
+            .get_mut(&cur_idx)
+            .unwrap()
+            .children
+            .remove(rm_pos);
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }

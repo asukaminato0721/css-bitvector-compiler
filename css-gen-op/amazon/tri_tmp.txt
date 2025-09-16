@@ -1,8 +1,8 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.97s
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.05s
      Running `target/release/tri`
-271286
-56970
+329307
+62975
 
 thread 'main' panicked at src/tri.rs:236:60:
 index out of bounds: the len is 0 but the index is 0
