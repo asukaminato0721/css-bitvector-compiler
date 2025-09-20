@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, extract_path_from_command, parse_css, parse_trace, rdtsc,
+    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::{
@@ -9,11 +9,7 @@ use std::{
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
-pub struct Nfacell(pub usize);
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
-pub struct SelectorId(pub usize);
 
 /// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -358,10 +354,8 @@ impl DOM {
     }
 }
 
-/// 转移规则: (输入选择器, 当前状态, 下一个状态)
-/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
+
+
 fn escape_dot_label(s: &str) -> String {
     s.replace('\\', "\\\\").replace('"', "\\\"")
 }

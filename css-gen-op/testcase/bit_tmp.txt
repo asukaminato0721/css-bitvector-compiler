@@ -1,6 +1,6 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-[src/bit.rs:472:17] &dom.nodes = {
+[src/bit.rs:466:17] &dom.nodes = {
     3: DOMNode {
         tag_id: SelectorId(
             4,
@@ -11,6 +11,27 @@
                 0,
             ),
         ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            3,
+        ),
+        class_ids: {},
+        id_selector_id: None,
         parent: Some(
             1,
         ),
@@ -52,32 +73,11 @@
             false,
         ],
     },
-    2: DOMNode {
-        tag_id: SelectorId(
-            3,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
 }
-5706
+4934
 final_rule_matches: {
     "#b": [
         3,
     ],
 }
-[src/bit.rs:610:5] unsafe { MISS_CNT } = 3
+[src/bit.rs:604:5] unsafe { MISS_CNT } = 3

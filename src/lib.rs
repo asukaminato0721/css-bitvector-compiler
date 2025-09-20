@@ -268,3 +268,14 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     rules.dedup();
     rules
 }
+
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct Nfacell(pub usize);
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct SelectorId(pub usize);
+/// 转移规则: (输入选择器, 当前状态, 下一个状态)
+/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);

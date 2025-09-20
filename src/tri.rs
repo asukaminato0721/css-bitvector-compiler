@@ -1,19 +1,11 @@
 use css_bitvector_compiler::{
-    LayoutFrame, extract_path_from_command, parse_css, parse_trace, rdtsc,
+    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::collections::{HashMap, HashSet};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub struct Nfacell(usize);
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
-pub struct SelectorId(pub usize);
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-
-pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 
 /// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -392,7 +384,9 @@ impl DOM {
         (new_state, input.tri)
     }
 }
-
+fn escape_dot_label(s: &str) -> String {
+    s.replace('\\', "\\\\").replace('"', "\\\"")
+}
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
