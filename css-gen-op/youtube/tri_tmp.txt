@@ -1,61 +1,70 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+warning: unused import: `process::exit`
+ --> src/tri.rs:7:9
+  |
+7 |     fs, process::exit,
+  |         ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-947
-843
-848
-817
-834
-548
-740
-602
-397
-426
-361
-349
-347
-389
+321
+409
+229
+305
+357
+121
+387
+246
+142
+146
+166
+156
+164
+158
+152
+158
+334
+7957
+150
+128
+130
+355
+278
 292
-657
-511
-24271
-959
-728
-726
-1083
-708
-732
-742
-876
-858
-726
-943
-724
-696
-640
-783
-736
-720
-767
-649
-698
-837
-686
-739
-807
-823
-707
-606
-775
-734
-798
-728
-918
-22492
-1541
-1029
+343
+118
+288
+1174
+223
+1122
+347
+347
+112
+290
+677
+112
+258
+233
+391
+236
+1235
+333
+306
+227
+152
+304
+142
+313
+197
+179
+7979
+1060
+229
 final_rule_matches:
 html -> [5]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-#masthead-skeleton-icons -> [379]
+#masthead-skeleton-icons -> [379, 382, 384, 386]
 .masthead-skeleton-icon -> [382, 384, 386]
-[src/tri.rs:593:5] unsafe { MISS_CNT } = 0
+.hidden -> [7203, 7245, 7250, 8790, 8803, 8849, 8862, 8908, 8921, 8967, 8980, 9026, 9039, 13079, 13784, 14120]
+[src/tri.rs:570:5] unsafe { MISS_CNT } = 0

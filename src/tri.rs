@@ -1,11 +1,10 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
-    extract_path_from_command, parse_css, parse_trace, rdtsc,
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode, extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::{
     collections::{HashMap, HashSet},
-    fs,
+    fs, process::exit,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
@@ -414,23 +413,45 @@ new_tri is {:?}
         }
         (new_state, input.tri)
     }
-}
 
-/// 解析CSS选择器字符串并生成对应的选择器对象
-pub fn parse_selector(selector_str: &str) -> Selector {
-    let trimmed = selector_str.trim();
+  fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
+        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
+        // unsafe {
+        //     MISS_CNT += 1;
+        // }
+        let (new_output_state, new_tri) = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
+        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
+        self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
+        for child_idx in self.nodes[&node_idx].children.clone() {
+            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
+        }
+        
+        // Debug check: if not dirty, recomputing should not change output
+        // let original_output_state = self.nodes[&node_idx].output_state.clone();
+        // let new_output_state = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
+        // assert_eq!(
+        //     original_output_state, new_output_state,
+        //     "Node index {}: Output state changed when node was not dirty!",
+        //     node_idx
+        // );
+        
 
-    if trimmed.starts_with('.') {
-        // 类选择器
-        Selector::Class(trimmed[1..].to_string())
-    } else if trimmed.starts_with('#') {
-        // ID选择器
-        Selector::Id(trimmed[1..].to_string())
-    } else {
-        // 标签选择器
-        Selector::Type(trimmed.to_string())
+        // Recursively process children
+        let children_indices = self.nodes[&node_idx].children.clone();
+        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        for &child_idx in &children_indices {
+            self.force_recalc(child_idx,&current_output_state, nfa);
+        }
+
+        // Reset dirty flags
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
+            node.dirty = false;
+            node.recursive_dirty = false;
+        }
     }
 }
+
 
 fn get_input(nfa: &NFA) -> Vec<bool> {
     let mut input = vec![false; unsafe { STATE } + 1];
@@ -452,6 +473,25 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
+            // BEGIN HACK
+
+            if node_data["id"].as_u64().unwrap() == 5458 {
+                let classes = node_data["attributes"]
+                .as_object()
+                .and_then(|attrs| attrs.get("class"))
+                .and_then(|class| class.as_str())
+                .unwrap_or_default()
+                .split_whitespace()
+                .map(String::from)
+                .collect::<Vec<String>>();
+                if classes.contains(&"hidden".to_string()) {
+                    dbg!(node_data);
+                    panic!();
+                }
+
+            }
+
+            // END HACK
             dom.recompute_styles(nfa, &get_input(nfa)); // 
         }
         "replace_value" | "insert_value" => {}
@@ -470,77 +510,6 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.remove_node_by_path(&path);
         }
         _ => {}
-    }
-}
-
-pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager) -> NFA {
-    unsafe {
-        STATE = 0;
-    };
-    let start_state = unsafe {
-        STATE += 1;
-        Nfacell(STATE)
-    };
-    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
-    let mut rules: Vec<Rule> = Vec::new();
-    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
-
-    for rule in selectors {
-        let t = rule.replace('>', " > ");
-        let parts: Vec<&str> = t.split_whitespace().collect();
-        let mut cur = start_state;
-
-        let mut i = 0;
-        while i < parts.len() {
-            if parts[i] == ">" {
-                i += 1;
-                continue;
-            }
-            let selector_str = parts[i];
-
-            // Look ahead to find the next selector and whether the combinator is direct (>)
-            let mut next_selector_index = i + 1;
-            let mut next_is_direct = false;
-            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
-                next_is_direct = true;
-                next_selector_index += 1;
-            }
-            let has_next_selector = next_selector_index < parts.len();
-
-            // Create new state and edge for current selector
-            let new_state = unsafe {
-                STATE += 1;
-                Nfacell(STATE)
-            };
-            states.insert(new_state);
-
-            let selector = parse_selector(selector_str);
-            match selector {
-                Selector::Type(ref s) if s == "*" => {
-                    rules.push(Rule(None, Some(cur), new_state));
-                }
-                other => {
-                    let selector_id = sm.get_or_create_id(other);
-                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
-                }
-            }
-
-            // Add self-loop only for descendant combinators (a b), not for child (a > b)
-            if has_next_selector && !next_is_direct {
-                rules.push(Rule(None, Some(new_state), new_state));
-            }
-
-            cur = new_state;
-            i = next_selector_index;
-        }
-        accept_states.push(cur);
-    }
-    NFA {
-        states,
-        rules,
-        start_state,
-        max_state_id: Nfacell(unsafe { STATE }),
-        accept_states,
     }
 }
 
@@ -574,7 +543,11 @@ fn main() {
         ))
         .unwrap(),
     );
-    let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
+    let mut s = unsafe { STATE };
+    let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
+    unsafe {
+        STATE = s;
+    }
     let _ = fs::write(
         format!(
             "css-gen-op/{0}/dot_tri.dot",
@@ -585,6 +558,10 @@ fn main() {
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
+
+    let d = dom.get_root_node();
+    dom.force_recalc(d, &get_input(&nfa), &nfa);
+
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
     println!("final_rule_matches:");
     for (k, v) in final_matches {

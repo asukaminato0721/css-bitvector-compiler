@@ -1,6 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    extract_path_from_command, parse_css, parse_trace, rdtsc,
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::{
@@ -335,6 +334,42 @@ impl DOM {
         }
         new_state
     }
+
+    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
+        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
+        // unsafe {
+        //     MISS_CNT += 1;
+        // }
+        let new_output_state = self.new_output_state(&self.nodes[&node_idx], input, nfa);
+        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
+        for child_idx in self.nodes[&node_idx].children.clone() {
+            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
+        }
+        
+        // Debug check: if not dirty, recomputing should not change output
+        let original_output_state = self.nodes[&node_idx].output_state.clone();
+        let new_output_state = self.new_output_state(&self.nodes[&node_idx], input, nfa);
+        assert_eq!(
+            original_output_state, new_output_state,
+            "Node index {}: Output state changed when node was not dirty!",
+            node_idx
+        );
+        
+
+        // Recursively process children
+        let children_indices = self.nodes[&node_idx].children.clone();
+        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        for &child_idx in &children_indices {
+            self.force_recalc(child_idx,&current_output_state, nfa);
+        }
+
+        // Reset dirty flags
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
+            node.dirty = false;
+            node.recursive_dirty = false;
+        }
+    }
 }
 
 /// 解析CSS选择器字符串并生成对应的选择器对象
@@ -389,77 +424,6 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     }
 }
 
-pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager) -> NFA {
-    unsafe {
-        STATE = 0;
-    };
-    let start_state = unsafe {
-        STATE += 1;
-        Nfacell(STATE)
-    };
-    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
-    let mut rules: Vec<Rule> = Vec::new();
-    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
-
-    for rule in selectors {
-        let t = rule.replace('>', " > ");
-        let parts: Vec<&str> = t.split_whitespace().collect();
-        let mut cur = start_state;
-
-        let mut i = 0;
-        while i < parts.len() {
-            if parts[i] == ">" {
-                i += 1;
-                continue;
-            }
-            let selector_str = parts[i];
-
-            // Look ahead to find the next selector and whether the combinator is direct (>)
-            let mut next_selector_index = i + 1;
-            let mut next_is_direct = false;
-            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
-                next_is_direct = true;
-                next_selector_index += 1;
-            }
-            let has_next_selector = next_selector_index < parts.len();
-
-            // Create new state and edge for current selector
-            let new_state = unsafe {
-                STATE += 1;
-                Nfacell(STATE)
-            };
-            states.insert(new_state);
-
-            let selector = parse_selector(selector_str);
-            match selector {
-                Selector::Type(ref s) if s == "*" => {
-                    rules.push(Rule(None, Some(cur), new_state));
-                }
-                other => {
-                    let selector_id = sm.get_or_create_id(other);
-                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
-                }
-            }
-
-            // Add self-loop only for descendant combinators (a b), not for child (a > b)
-            if has_next_selector && !next_is_direct {
-                rules.push(Rule(None, Some(new_state), new_state));
-            }
-
-            cur = new_state;
-            i = next_selector_index;
-        }
-        accept_states.push(cur);
-    }
-    NFA {
-        states,
-        rules,
-        start_state,
-        max_state_id: Nfacell(unsafe { STATE }),
-        accept_states,
-    }
-}
-
 pub fn collect_rule_matches(
     dom: &DOM,
     nfas: &NFA,
@@ -481,6 +445,7 @@ pub fn collect_rule_matches(
     }
     res
 }
+
 fn main() {
     // 1. 构建 DOM 树
     let mut dom = DOM::new();
@@ -491,7 +456,13 @@ fn main() {
         ))
         .unwrap(),
     );
-    let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
+    let mut s = unsafe {
+         STATE
+    };
+    let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
+    unsafe {
+        STATE = s;
+    }
     let _ = fs::write(
         format!(
             "css-gen-op/{0}/dot.dot",
@@ -502,6 +473,9 @@ fn main() {
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
+    let d = dom.get_root_node();
+    dom.force_recalc(d, &get_input(&nfa), &nfa);
+    
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
     println!("final_rule_matches:");
     for (k, v) in final_matches {
@@ -514,18 +488,17 @@ fn main() {
 mod tests {
     use std::fs::write;
 
+    use css_bitvector_compiler::generate_nfa;
+
     use super::*;
     #[test]
     fn test_generate_nfa() {
         // Reset global state for testing
-        unsafe {
-            STATE = 0;
-        }
-
+        let mut s = 0;
         let mut selector_manager = SelectorManager::new();
         let selectors = ["div a", "p", "h1 > h2", "h1 h2", "div a p"].map(|x| x.into());
 
-        let nfa = generate_nfa(&selectors, &mut selector_manager);
+        let nfa = generate_nfa(&selectors, &mut selector_manager, &mut s);
         // dbg!(&nfa);
         let _ = write("./dot.dot", nfa.to_dot(&selector_manager));
         dbg!(nfa.rules);

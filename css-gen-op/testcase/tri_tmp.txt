@@ -1,7 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
+warning: unused import: `process::exit`
+ --> src/tri.rs:7:9
+  |
+7 |     fs, process::exit,
+  |         ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-685
+3990
 final_rule_matches:
-#bb -> [4]
 #b -> [3]
-[src/tri.rs:593:5] unsafe { MISS_CNT } = 3
+#bb -> [4]
+[src/tri.rs:570:5] unsafe { MISS_CNT } = 3

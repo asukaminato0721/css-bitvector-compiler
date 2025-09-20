@@ -442,3 +442,90 @@ where
     encoded.push((current_item, count));
     encoded
 }
+
+
+pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut usize) -> NFA {
+    *state = 0;
+    *state += 1;
+
+    let start_state = Nfacell(*state);
+    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
+    let mut rules: Vec<Rule> = Vec::new();
+    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
+
+    for rule in selectors {
+        let t = rule.replace('>', " > ");
+        let parts: Vec<&str> = t.split_whitespace().collect();
+        let mut cur = start_state;
+
+        let mut i = 0;
+        while i < parts.len() {
+            if parts[i] == ">" {
+                i += 1;
+                continue;
+            }
+            let selector_str = parts[i];
+
+            // Look ahead to find the next selector and whether the combinator is direct (>)
+            let mut next_selector_index = i + 1;
+            let mut next_is_direct = false;
+            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
+                next_is_direct = true;
+                next_selector_index += 1;
+            }
+            let has_next_selector = next_selector_index < parts.len();
+
+            // Create new state and edge for current selector
+            *state += 1;
+
+            let new_state = 
+                Nfacell(*state)
+            ;
+            states.insert(new_state);
+
+            let selector = parse_selector(selector_str);
+            match selector {
+                Selector::Type(ref s) if s == "*" => {
+                    rules.push(Rule(None, Some(cur), new_state));
+                }
+                other => {
+                    let selector_id = sm.get_or_create_id(other);
+                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
+                }
+            }
+
+            // Add self-loop only for descendant combinators (a b), not for child (a > b)
+            if has_next_selector && !next_is_direct {
+                rules.push(Rule(None, Some(new_state), new_state));
+            }
+
+            cur = new_state;
+            i = next_selector_index;
+        }
+        accept_states.push(cur);
+    }
+    NFA {
+        states,
+        rules,
+        start_state,
+        max_state_id: Nfacell(*state),
+        accept_states,
+    }
+}
+
+
+/// 解析CSS选择器字符串并生成对应的选择器对象
+pub fn parse_selector(selector_str: &str) -> Selector {
+    let trimmed = selector_str.trim();
+
+    if trimmed.starts_with('.') {
+        // 类选择器
+        Selector::Class(trimmed[1..].to_string())
+    } else if trimmed.starts_with('#') {
+        // ID选择器
+        Selector::Id(trimmed[1..].to_string())
+    } else {
+        // 标签选择器
+        Selector::Type(trimmed.to_string())
+    }
+}
