@@ -1,11 +1,11 @@
 use css_bitvector_compiler::{
-    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace, rdtsc
+    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace,
+    rdtsc,
 };
 use serde_json;
 use std::collections::{HashMap, HashSet};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
-
 
 /// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

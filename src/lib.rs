@@ -269,7 +269,6 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     rules
 }
 
-
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
 pub struct Nfacell(pub usize);
 
