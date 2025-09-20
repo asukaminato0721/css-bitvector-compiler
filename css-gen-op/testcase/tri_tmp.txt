@@ -18,9 +18,9 @@ warning: method `force_recalc` is never used
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-316
+312
 final_rule_matches:
 #b -> [3]
 #bb -> [4]

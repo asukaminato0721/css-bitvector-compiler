@@ -61,17 +61,17 @@ impl DOM {
         nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
-        let tag_id = sm.get_or_create_type_id(tag_name);
+        let tag_id = sm.get_or_create_type_id(&tag_name.to_lowercase());
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_class_id(class);
+            let class_id = sm.get_or_create_class_id(&class.to_lowercase());
             class_ids.insert(class_id);
         }
 
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id_selector_id(id));
+            .map(|id| sm.get_or_create_id_selector_id(&id.to_lowercase()));
 
         let mut new_node = DOMNode {
             tag_id,

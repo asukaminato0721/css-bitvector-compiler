@@ -20,62 +20,71 @@ warning: method `force_recalc` is never used
 warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-275
-349
-379
-322
-341
-106
-365
-177
-113
-109
-130
-160
-124
-177
-122
-116
-114
-6499
-118
-116
-116
-272
-138
-227
-1119
-105
-104
-282
-189
-120
-578
-653
-136
-521
-318
-280
-838
-202
-178
+339
+376
+542
 308
-361
-118
+357
+136
 261
-134
-314
-478
-803
-436
-282
-178
-8726
-531
-180
+247
+138
+127
+142
+120
+138
+138
+136
+146
+233
+7912
+146
+138
+136
+482
+221
+237
+250
+209
+306
+316
+223
+257
+302
+298
+212
+294
+132
+761
+304
+161
+130
+290
+343
+373
+249
+146
+403
+556
+322
+310
+191
+306
+8263
+375
+324
 final_rule_matches:
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
 .masthead-skeleton-icon -> [382, 384, 386]
-html -> [5]
-[src/tri.rs:500:5] unsafe { MISS_CNT } = 0
+body -> [233, 4487, 5866]
+dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
+dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
+html -> [5, 6, 4485, 5864]
+ps-dom-if -> [7640, 13850, 13856]
+ps-dom-repeat -> [12974]
+ytd-masthead #masthead-logo -> [284]
+ytd-masthead #masthead-logo #country-code -> [377]
+ytd-masthead .external-icon -> [274, 291, 336]
+ytd-masthead .yt-icons-ext -> [278]
+[src/tri.rs:500:5] unsafe { MISS_CNT } = 235
