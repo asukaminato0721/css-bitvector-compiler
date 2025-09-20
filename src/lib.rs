@@ -1,5 +1,8 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::{collections::{HashMap, HashSet}, fmt::Display};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Display,
+};
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,
@@ -292,7 +295,6 @@ pub struct NFA {
     pub accept_states: Vec<Nfacell>,
 }
 
-
 impl NFA {
     pub fn is_accept_state(&self, state: Nfacell) -> bool {
         !self
@@ -401,4 +403,3 @@ impl SelectorManager {
         self.get_or_create_id(Selector::Id(id_name.to_string()))
     }
 }
-

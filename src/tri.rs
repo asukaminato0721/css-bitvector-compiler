@@ -1,5 +1,6 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, extract_path_from_command, parse_css, parse_trace, rdtsc
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    extract_path_from_command, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
 use std::{
@@ -343,8 +344,6 @@ impl DOM {
         (new_state, input.tri)
     }
 }
-
-
 
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
