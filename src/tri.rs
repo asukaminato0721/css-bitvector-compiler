@@ -229,8 +229,14 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index, nfa);
-
+        let current_index = self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        // HACK
+        if id == 5458 {
+            if classes.contains(&"hidden".to_string()) {
+                panic!()
+            }
+        }
+        //
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
@@ -473,25 +479,6 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            // BEGIN HACK
-
-            if node_data["id"].as_u64().unwrap() == 5458 {
-                let classes = node_data["attributes"]
-                .as_object()
-                .and_then(|attrs| attrs.get("class"))
-                .and_then(|class| class.as_str())
-                .unwrap_or_default()
-                .split_whitespace()
-                .map(String::from)
-                .collect::<Vec<String>>();
-                if classes.contains(&"hidden".to_string()) {
-                    dbg!(node_data);
-                    panic!();
-                }
-
-            }
-
-            // END HACK
             dom.recompute_styles(nfa, &get_input(nfa)); // 
         }
         "replace_value" | "insert_value" => {}

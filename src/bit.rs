@@ -201,8 +201,14 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index, nfa);
-
+        let current_index = self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        // HACK
+        if id == 5458 {
+            if classes.contains(&"hidden".to_string()) {
+                panic!()
+            }
+        }
+        //
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
@@ -403,6 +409,12 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             if std::env::var("WEBSITE_NAME").unwrap() == "testcase".to_string() {
                 dbg!(&dom.nodes);
             }
+
+
+                        // BEGIN HACK
+
+
+            // END HACK
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
