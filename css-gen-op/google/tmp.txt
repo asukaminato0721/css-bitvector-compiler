@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running `target/release/naive`
 MATCH .ds  -> [372, 392, 405, 916, 928]
 MATCH .fl  a  -> [431]

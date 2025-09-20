@@ -1,16 +1,7 @@
-warning: unused import: `std::panic`
- --> src/tri.rs:6:5
-  |
-6 | use std::panic;
-  |     ^^^^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running `target/release/tri`
-825
+685
 final_rule_matches:
 #bb -> [4]
 #b -> [3]
-[src/tri.rs:601:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:593:5] unsafe { MISS_CNT } = 3

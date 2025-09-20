@@ -3,7 +3,6 @@ use css_bitvector_compiler::{
     extract_path_from_command, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
-use std::panic;
 use std::{
     collections::{HashMap, HashSet},
     fs,

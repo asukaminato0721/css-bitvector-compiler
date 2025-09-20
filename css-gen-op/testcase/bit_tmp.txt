@@ -1,28 +1,6 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
-[src/bit.rs:335:17] &dom.nodes = {
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
+[src/bit.rs:369:17] &dom.nodes = {
     3: DOMNode {
         tag_id: SelectorId(
             5,
@@ -41,8 +19,8 @@
         recursive_dirty: true,
         output_state: [
             false,
-            false,
-            false,
+            true,
+            true,
             false,
             false,
             false,
@@ -68,7 +46,29 @@
         recursive_dirty: true,
         output_state: [
             false,
+            true,
             false,
+            false,
+            true,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
             false,
             false,
             false,
@@ -77,55 +77,7 @@
         ],
     },
 }
-[src/bit.rs:335:17] &dom.nodes = {
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
-    3: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
+[src/bit.rs:369:17] &dom.nodes = {
     1: DOMNode {
         tag_id: SelectorId(
             2,
@@ -146,7 +98,29 @@
         recursive_dirty: true,
         output_state: [
             false,
+            true,
             false,
+            false,
+            true,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
             false,
             false,
             false,
@@ -172,8 +146,34 @@
         recursive_dirty: true,
         output_state: [
             false,
+            true,
+            false,
+            true,
             false,
             false,
+            false,
+        ],
+    },
+    3: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            true,
             false,
             false,
             false,
@@ -181,8 +181,8 @@
         ],
     },
 }
-21154
+13131
 final_rule_matches:
 #bb -> [4]
 #b -> [3]
-[src/bit.rs:476:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:510:5] unsafe { MISS_CNT } = 4

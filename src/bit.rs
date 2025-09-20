@@ -36,7 +36,41 @@ pub struct DOM {
     root_node: Option<u64>,
 }
 
+fn get_input(nfa: &NFA) -> Vec<bool> {
+    let mut input = vec![false; unsafe { STATE } + 1];
+
+    input[nfa.start_state.0] = true;
+    input
+}
+
 impl DOM {
+    fn new_output_state_for_init(&self, input: &[bool], nfa: &NFA, node: &DOMNode) -> Vec<bool> {
+        let mut new_state = input.to_vec();
+
+        for &rule in nfa.rules.iter() {
+            match rule {
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
+                }
+                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
+                    if input[b] {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), None, Nfacell(c)) => {
+                    if self.node_matches_selector(node, a) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
+                    if input[b] && self.node_matches_selector(node, a) {
+                        new_state[c] = true;
+                    }
+                }
+            }
+        }
+        new_state
+    }
     /// 创建一个新的、空的 DOM。
     pub fn new() -> Self {
         Default::default()
@@ -51,6 +85,7 @@ impl DOM {
         classes: Vec<String>,
         html_id: Option<String>,
         parent_index: Option<u64>,
+        nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
         let tag_id = sm.get_or_create_type_id(tag_name);
@@ -65,7 +100,7 @@ impl DOM {
             .as_ref()
             .map(|id| sm.get_or_create_id_selector_id(id));
 
-        let new_node = DOMNode {
+        let mut new_node = DOMNode {
             tag_id,
             class_ids,
             id_selector_id,
@@ -75,7 +110,8 @@ impl DOM {
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
         };
-
+        let o = self.new_output_state_for_init(&get_input(nfa), nfa, &new_node);
+        new_node.output_state = o;
         self.nodes.insert(id, new_node);
 
         // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
@@ -91,26 +127,22 @@ impl DOM {
     }
 
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node_index: u64, selector_id: SelectorId) -> bool {
-        if let Some(node) = self.nodes.get(&node_index) {
-            if node.tag_id == selector_id {
-                return true;
-            }
-
-            if node.class_ids.contains(&selector_id) {
-                return true;
-            }
-
-            if let Some(id_sel_id) = node.id_selector_id
-                && id_sel_id == selector_id
-            {
-                return true;
-            }
-
-            false
-        } else {
-            false
+    pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
+        if node.tag_id == selector_id {
+            return true;
         }
+
+        if node.class_ids.contains(&selector_id) {
+            return true;
+        }
+
+        if let Some(id_sel_id) = node.id_selector_id
+            && id_sel_id == selector_id
+        {
+            return true;
+        }
+
+        false
     }
 
     pub fn get_root_node(&mut self) -> u64 {
@@ -150,6 +182,7 @@ impl DOM {
         &mut self,
         json_node: &serde_json::Value,
         parent_index: Option<u64>,
+        nfa: &NFA,
     ) -> u64 {
         let tag_name = json_node["name"].as_str().unwrap();
         let id = json_node["id"].as_u64().unwrap();
@@ -169,19 +202,19 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index);
+        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index, nfa);
 
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
-                self.json_to_html_node(child_json, Some(current_index));
+                self.json_to_html_node(child_json, Some(current_index), nfa);
             }
         }
         current_index
     }
 
     /// 通过路径添加节点
-    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value) {
+    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value, nfa: &NFA) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
@@ -193,7 +226,7 @@ impl DOM {
         }
 
         // 在指定位置插入新节点
-        let new_node_idx = self.json_to_html_node(json_node, Some(current_idx));
+        let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
             debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
@@ -231,12 +264,13 @@ impl DOM {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
+        let node = &self.nodes[&node_idx];
 
         if self.nodes[&node_idx].dirty {
             unsafe {
                 MISS_CNT += 1;
             }
-            let new_output_state = self.new_output_state(node_idx, input, nfa);
+            let new_output_state = self.new_output_state(node, input, nfa);
             if self.nodes[&node_idx].output_state != new_output_state {
                 self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
                 for child_idx in self.nodes[&node_idx].children.clone() {
@@ -246,7 +280,7 @@ impl DOM {
         } else {
             // Debug check: if not dirty, recomputing should not change output
             let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let new_output_state = self.new_output_state(node_idx, input, nfa);
+            let new_output_state = self.new_output_state(node, input, nfa);
             assert_eq!(
                 original_output_state, new_output_state,
                 "Node index {}: Output state changed when node was not dirty!",
@@ -271,7 +305,7 @@ impl DOM {
     /// 对 NFA 来说, 每条边对应一个 Rule
     /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
     /// 当一个新的 input 传下来时, 已经亮的就不用检查了
-    fn new_output_state(&self, node_idx: u64, input: &[bool], nfa: &NFA) -> Vec<bool> {
+    fn new_output_state(&self, node: &DOMNode, input: &[bool], nfa: &NFA) -> Vec<bool> {
         let mut new_state = input.to_vec();
 
         for &rule in nfa.rules.iter() {
@@ -285,7 +319,7 @@ impl DOM {
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node_idx, a) {
+                    if self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }
@@ -293,7 +327,7 @@ impl DOM {
                     if !input[b] {
                         continue;
                     }
-                    if self.node_matches_selector(node_idx, a) {
+                    if self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }
@@ -325,12 +359,12 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let node_data = frame.command_data.get("node").unwrap();
             dom.nodes.clear();
             dom.root_node = None;
-            dom.json_to_html_node(node_data, None);
+            dom.json_to_html_node(node_data, None, nfa);
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
-            dom.add_node_by_path(&path, node_data);
+            dom.add_node_by_path(&path, node_data, nfa);
             if std::env::var("WEBSITE_NAME").unwrap() == "testcase".to_string() {
                 dbg!(&dom.nodes);
             }
