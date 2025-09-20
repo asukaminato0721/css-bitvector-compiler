@@ -128,11 +128,15 @@ pub fn parse_trace() -> Vec<LayoutFrame> {
 }
 
 /// Extract path from command data
-pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<u64> {
+pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
     command_data
         .get("path")
         .and_then(|p| p.as_array())
-        .map(|arr| arr.iter().filter_map(|v| v.as_u64()).collect::<Vec<_>>())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|v| v.as_u64().map(|x| x as usize))
+                .collect::<Vec<_>>()
+        })
         .unwrap()
 }
 

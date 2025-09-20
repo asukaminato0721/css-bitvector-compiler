@@ -1,27 +1,9 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-121708
-451087
-1146171
-119446
-242048
-50648
-1289245
-5094
-40394
-43611
-468
-33501
-423
-607
-43897
-285394
-422
-222942
-250450
-99601
-244491
+122216
 
-thread 'main' panicked at src/tri.rs:236:60:
-index out of bounds: the len is 0 but the index is 0
+thread 'main' panicked at src/tri.rs:316:13:
+assertion `left == right` failed: Node index 4: Output state changed when node was not dirty!
+  left: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+ right: [false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

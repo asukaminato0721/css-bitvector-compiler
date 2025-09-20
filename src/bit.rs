@@ -23,14 +23,10 @@ pub enum Selector {
     Id(String),
 }
 
-/// 标签名和选择器管理器，负责字符串选择器与ID之间的映射
 #[derive(Debug, Default)]
 pub struct SelectorManager {
-    /// 从选择器到ID的映射
     pub selector_to_id: HashMap<Selector, SelectorId>,
-    /// 从ID到选择器的映射
     pub id_to_selector: HashMap<SelectorId, Selector>,
-    /// 下一个可用的ID
     next_id: SelectorId,
 }
 
@@ -39,7 +35,6 @@ impl SelectorManager {
         Default::default()
     }
 
-    /// 获取选择器对应的ID，如果不存在则创建新的ID
     pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
         if let Some(&id) = self.selector_to_id.get(&selector) {
             return id;
@@ -57,17 +52,14 @@ impl SelectorManager {
         self.selector_to_id.get(selector).copied()
     }
 
-    /// 便捷方法：根据标签名获取或创建类型选择器ID
     pub fn get_or_create_type_id(&mut self, tag_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Type(tag_name.to_string()))
     }
 
-    /// 便捷方法：根据类名获取或创建类选择器ID
     pub fn get_or_create_class_id(&mut self, class_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Class(class_name.to_string()))
     }
 
-    /// 便捷方法：根据ID获取或创建ID选择器ID
     pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> SelectorId {
         self.get_or_create_id(Selector::Id(id_name.to_string()))
     }
@@ -115,18 +107,18 @@ impl DOM {
         html_id: Option<String>,
         parent_index: Option<u64>,
     ) -> u64 {
-        // 获取或创建选择器ID
-        let tag_id = self.selector_manager.get_or_create_type_id(tag_name);
+        let sm = &mut self.selector_manager;
+        let tag_id = sm.get_or_create_type_id(tag_name);
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = self.selector_manager.get_or_create_class_id(class);
+            let class_id = sm.get_or_create_class_id(class);
             class_ids.insert(class_id);
         }
 
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| self.selector_manager.get_or_create_id_selector_id(id));
+            .map(|id| sm.get_or_create_id_selector_id(id));
 
         let new_node = DOMNode {
             tag_id,
@@ -244,7 +236,7 @@ impl DOM {
     }
 
     /// 通过路径添加节点
-    pub fn add_node_by_path(&mut self, path: &[u64], json_node: &serde_json::Value) {
+    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
@@ -267,12 +259,12 @@ impl DOM {
     }
 
     /// 通过路径移除节点
-    pub fn remove_node_by_path(&mut self, path: &[u64]) {
+    pub fn remove_node_by_path(&mut self, path: &[usize]) {
         let root_nodes = self.get_root_node();
         // 递归到目标父节点
         let mut cur_idx = root_nodes;
-        for &path_element in &path[..path.len() - 1] {
-            cur_idx = self.nodes[&cur_idx].children[path_element as usize];
+        for &path_idx in &path[..path.len() - 1] {
+            cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
         // 移除目标节点
@@ -500,7 +492,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     }
 }
 
-pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager) -> NFA {
+pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager) -> NFA {
     unsafe {
         STATE = 0;
     };
@@ -547,7 +539,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                     rules.push(Rule(None, Some(cur), new_state));
                 }
                 other => {
-                    let selector_id = selector_manager.get_or_create_id(other);
+                    let selector_id = sm.get_or_create_id(other);
                     rules.push(Rule(Some(selector_id), Some(cur), new_state));
                 }
             }

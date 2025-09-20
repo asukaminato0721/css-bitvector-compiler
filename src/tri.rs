@@ -6,6 +6,15 @@ use std::collections::{HashMap, HashSet};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct Nfacell(usize);
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct SelectorId(pub usize);
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+
+pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
+
 /// CSS选择器类型
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Selector {
@@ -24,9 +33,9 @@ pub enum IState {
 
 #[derive(Debug, Default)]
 pub struct SelectorManager {
-    pub selector_to_id: HashMap<Selector, usize>,
-    pub id_to_selector: HashMap<usize, Selector>,
-    next_id: usize,
+    pub selector_to_id: HashMap<Selector, SelectorId>,
+    pub id_to_selector: HashMap<SelectorId, Selector>,
+    next_id: SelectorId,
 }
 
 impl SelectorManager {
@@ -38,18 +47,18 @@ impl SelectorManager {
     /// 获取选择器对应的ID，如果不存在则创建新的ID
     pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
         if let Some(&id) = self.selector_to_id.get(&selector) {
-            return SelectorId(id);
+            return id;
         }
 
         let id = self.next_id;
         self.selector_to_id.insert(selector.clone(), id);
         self.id_to_selector.insert(id, selector);
-        self.next_id += 1;
-        SelectorId(id)
+        self.next_id = SelectorId(self.next_id.0 + 1);
+        id
     }
 
     /// 根据选择器获取ID
-    pub fn get_id(&self, selector: &Selector) -> Option<usize> {
+    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
         self.selector_to_id.get(selector).copied()
     }
 }
@@ -225,7 +234,7 @@ impl DOM {
     }
 
     /// 通过路径添加节点
-    pub fn add_node_by_path(&mut self, path: &[u64], json_node: &serde_json::Value) {
+    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
@@ -248,12 +257,12 @@ impl DOM {
     }
 
     /// 通过路径移除节点
-    pub fn remove_node_by_path(&mut self, path: &[u64]) {
+    pub fn remove_node_by_path(&mut self, path: &[usize]) {
         let root_nodes = self.get_root_node();
         // 递归到目标父节点
         let mut cur_idx = root_nodes;
-        for &path_element in &path[..path.len() - 1] {
-            cur_idx = self.nodes[&cur_idx].children[path_element as usize];
+        for &path_idx in &path[..path.len() - 1] {
+            cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
         // 移除目标节点
@@ -330,65 +339,60 @@ impl DOM {
         input: &[bool],
         nfa: &NFA,
     ) -> (Vec<bool>, Vec<IState>) {
-        let mut new_state = self.nodes[&node_idx].output_state.clone();
+        let mut new_state = input.to_vec();
 
-        let mut new_tri_state = vec![IState::IUnused; self.nodes[&node_idx].tri_state.len()];
-
-        // 标记并处理每个当前为1的状态
-        for &Nfacell(sid) in nfa.states.iter() {
-            new_tri_state[sid] = if input[sid] {
-                IState::IOne
-            } else {
-                IState::IZero
-            };
-            if !input[sid] {
-                continue;
-            }
-            if nfa.is_accept_state(Nfacell(sid)) {
-                continue;
-            }
-            for Rule(pred, prev, next) in &nfa.rules {
-                if *prev != Some(Nfacell(sid)) {
-                    continue;
+        struct Read {
+            input: Vec<bool>,
+            pub tri: Vec<IState>,
+        }
+        impl Read {
+            fn new(v: &[bool]) -> Self {
+                let l = v.len();
+                Self {
+                    input: v.into(),
+                    tri: vec![IState::IUnused; l],
                 }
-                let pred_ok = match pred {
-                    None => true,
-                    Some(sel) => self.node_matches_selector(node_idx, *sel),
+            }
+            fn get(&mut self, idx: usize) -> bool {
+                self.tri[idx] = if self.input[idx] {
+                    IState::IOne
+                } else {
+                    IState::IZero
                 };
-                if pred_ok {
-                    new_state[next.0] = true;
+                return self.input[idx];
+            }
+        }
+        let mut input = Read::new(input);
+
+        for &rule in nfa.rules.iter() {
+            match rule {
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
+                }
+                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
+                    if input.get(b) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), None, Nfacell(c)) => {
+                    if self.node_matches_selector(node_idx, a) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
+                    if !input.get(b) {
+                        continue;
+                    }
+                    if self.node_matches_selector(node_idx, a) {
+                        new_state[c] = true;
+                    }
                 }
             }
         }
-
-        // 处理无前驱（从初始节点出发）的规则
-        if input[nfa.start_state.0] {
-            for Rule(pred, prev, next) in &nfa.rules {
-                if prev.is_some() {
-                    continue;
-                }
-                let pred_ok = match pred {
-                    None => true,
-                    Some(sel) => self.node_matches_selector(node_idx, *sel),
-                };
-                if pred_ok {
-                    new_state[next.0] = true;
-                }
-            }
-        }
-        (new_state, new_tri_state)
+        (new_state, input.tri)
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub struct Nfacell(usize);
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
-pub struct SelectorId(pub usize);
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-/// - 谓词为 None 表示自环
-/// - 前驱为 None 表示从初始节点出发
-pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
@@ -397,7 +401,7 @@ pub struct NFA {
     pub rules: Vec<Rule>,
     /// 起始状态。
     pub start_state: Nfacell,
-    pub max_state_id: usize,
+    pub max_state_id: Nfacell,
     // for print match
     pub accept_states: Vec<Nfacell>,
 }
@@ -415,13 +419,6 @@ impl NFA {
             .filter(|&&state| self.is_accept_state(state))
             .copied()
             .collect()
-    }
-    pub fn trans(&self, cur: Nfacell, status: usize) -> Nfacell {
-        self.rules
-            .iter()
-            .find(|Rule(pred, prev, _)| *prev == Some(cur) && *pred == Some(SelectorId(status)))
-            .map(|Rule(_, _, next)| *next)
-            .expect("transition not found")
     }
 }
 
@@ -475,7 +472,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     }
 }
 
-pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager) -> NFA {
+pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager) -> NFA {
     unsafe {
         STATE = 0;
     };
@@ -522,7 +519,7 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
                     rules.push(Rule(None, Some(cur), new_state));
                 }
                 other => {
-                    let selector_id = selector_manager.get_or_create_id(other);
+                    let selector_id = sm.get_or_create_id(other);
                     rules.push(Rule(Some(selector_id), Some(cur), new_state));
                 }
             }
@@ -541,22 +538,22 @@ pub fn generate_nfa(selectors: &[String], selector_manager: &mut SelectorManager
         states,
         rules,
         start_state,
-        max_state_id: unsafe { STATE },
+        max_state_id: Nfacell(unsafe { STATE }),
         accept_states,
     }
 }
 
-/// 收集所有 rule -> [node id] 的匹配结果
 pub fn collect_rule_matches(
     dom: &DOM,
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
-    for (idx, rule) in selects.iter().enumerate() {
-        let acc = nfas.accept_states[idx];
-        for (node_id, node) in dom.nodes.iter() {
-            if acc.0 < node.output_state.len() && node.output_state[acc.0] {
+
+    for (node_id, node) in dom.nodes.iter() {
+        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
+            if node.output_state[state_index] {
+                let rule = &selects[idx];
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
         }
