@@ -284,7 +284,7 @@ impl DOM {
     /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
     /// 当一个新的 input 传下来时, 已经亮的就不用检查了
     fn new_output_state(&self, node: &DOMNode, input: &[bool], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = input.to_vec();
+        let mut new_state = vec![false; input.len()];
 
         for &rule in nfa.rules.iter() {
             match rule {

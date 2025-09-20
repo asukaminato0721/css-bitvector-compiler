@@ -314,7 +314,7 @@ new_tri is {:?}
         input: &[bool],
         nfa: &NFA,
     ) -> (Vec<bool>, Vec<IState>) {
-        let mut new_state = input.to_vec();
+        let mut new_state = vec![false; input.len()];
 
         struct Read {
             input: Vec<bool>,
