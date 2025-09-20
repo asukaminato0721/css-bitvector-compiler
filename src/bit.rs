@@ -43,33 +43,6 @@ fn get_input(nfa: &NFA) -> Vec<bool> {
 }
 
 impl DOM {
-    fn new_output_state_for_init(&self, input: &[bool], nfa: &NFA, node: &DOMNode) -> Vec<bool> {
-        let mut new_state = input.to_vec();
-
-        for &rule in nfa.rules.iter() {
-            match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
-                }
-                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input[b] {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if input[b] && self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-            }
-        }
-        new_state
-    }
     /// 创建一个新的、空的 DOM。
     pub fn new() -> Self {
         Default::default()
@@ -109,7 +82,7 @@ impl DOM {
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
         };
-        let o = self.new_output_state_for_init(&get_input(nfa), nfa, &new_node);
+        let o = self.new_output_state(&new_node, &get_input(nfa), nfa);
         new_node.output_state = o;
         self.nodes.insert(id, new_node);
 
@@ -329,10 +302,7 @@ impl DOM {
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if !input[b] {
-                        continue;
-                    }
-                    if self.node_matches_selector(node, a) {
+                    if self.node_matches_selector(node, a) && input[b] {
                         new_state[c] = true;
                     }
                 }

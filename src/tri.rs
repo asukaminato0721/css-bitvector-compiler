@@ -45,62 +45,6 @@ pub struct DOM {
 }
 
 impl DOM {
-    fn new_output_state_for_init(
-        &self,
-        input: &[bool],
-        nfa: &NFA,
-        node: &DOMNode,
-    ) -> (Vec<bool>, Vec<IState>) {
-        let mut new_state = input.to_vec();
-
-        struct Read {
-            input: Vec<bool>,
-            pub tri: Vec<IState>,
-        }
-        impl Read {
-            fn new(v: &[bool]) -> Self {
-                let l = v.len();
-                Self {
-                    input: v.into(),
-                    tri: vec![IState::IUnused; l],
-                }
-            }
-            fn get(&mut self, idx: usize) -> bool {
-                self.tri[idx] = if self.input[idx] {
-                    IState::IOne
-                } else {
-                    IState::IZero
-                };
-                return self.input[idx];
-            }
-        }
-        let mut input = Read::new(input);
-
-        for &rule in nfa.rules.iter() {
-            match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
-                }
-                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) && self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-            }
-        }
-        (new_state, input.tri)
-    }
-
     pub fn new() -> Self {
         Default::default()
     }
@@ -139,7 +83,7 @@ impl DOM {
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state_for_init(&get_input(nfa), nfa, &new_node);
+        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa, );
         new_node.output_state = output;
         new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
@@ -314,7 +258,7 @@ impl DOM {
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
+                let (new_output_state, new_tri_state) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
                 let node = self.nodes.get_mut(&node_idx).unwrap();
                 node.output_state = new_output_state.clone();
                 node.tri_state = new_tri_state.clone();
@@ -326,7 +270,7 @@ impl DOM {
             // Debug check: if not dirty, recomputing should not change output
             let original_tri_state = self.nodes[&node_idx].tri_state.clone();
             let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_output, new_tri) = self.new_output_state(node_idx, input, nfa);
+            let (new_output, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
             assert_eq!(
                 original_tri_state,
                 new_tri,
@@ -366,7 +310,7 @@ new_tri is {:?}
     }
     fn new_output_state(
         &self,
-        node_idx: u64,
+        node: &DOMNode,
         input: &[bool],
         nfa: &NFA,
     ) -> (Vec<bool>, Vec<IState>) {
@@ -394,7 +338,6 @@ new_tri is {:?}
             }
         }
         let mut input = Read::new(input);
-        let node = &self.nodes[&node_idx];
         for &rule in nfa.rules.iter() {
             match rule {
                 Rule(None, None, Nfacell(c)) => {
@@ -411,7 +354,7 @@ new_tri is {:?}
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) && self.node_matches_selector(node, a) {
+                    if self.node_matches_selector(node, a) && input.get(b) {
                         new_state[c] = true;
                     }
                 }
@@ -426,7 +369,7 @@ new_tri is {:?}
         // unsafe {
         //     MISS_CNT += 1;
         // }
-        let (new_output_state, new_tri) = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
+        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa, );
         self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
         self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
         for child_idx in self.nodes[&node_idx].children.clone() {
