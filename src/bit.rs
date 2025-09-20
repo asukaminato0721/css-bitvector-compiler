@@ -597,8 +597,9 @@ fn main() {
         apply_frame(&mut dom, &f, &nfa);
     }
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
+    println!("final_rule_matches:");
     for (k, v) in final_matches {
-        println!("MATCHES: {} -> {:?}", k, v);
+        println!("{} -> {:?}", k, v);
     }
     dbg!(unsafe { MISS_CNT });
 }
