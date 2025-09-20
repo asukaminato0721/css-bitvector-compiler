@@ -1,48 +1,276 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-1431138
-183
-57538
-7582
-166
-1330013
-470
-199
-20983
-1425799
-659
-10682
-680605
-203
-9194
-631752
-120
-8527
-567995
-207
-8645
-547983
+[src/bit.rs:440:5] &selectors = [
+    "#GBMPAL",
+    "#SIvCob",
+    "#SIvCob a",
+    "#WqQANb a",
+    "#gb",
+    "#gb #gbprc",
+    "#gbb",
+    "#gbbw",
+    "#gbd4 .gbmc",
+    "#gbd4 .gbmcc",
+    "#gbd4 .gbmh",
+    "#gbd4 .gbmtc",
+    "#gbd4 .gbpc",
+    "#gbd4 .gbpgs .gbmtc",
+    "#gbd4 .gbsbic",
+    "#gbg",
+    "#gbg .gbgt",
+    "#gbg .gbm",
+    "#gbg .gbtcb",
+    "#gbg5",
+    "#gbg6.gbgt",
+    "#gbg6.gbgt-hvr",
+    "#gbgs5",
+    "#gbi4i",
+    "#gbi4id",
+    "#gbi4m1",
+    "#gbi4s",
+    "#gbi4s1",
+    "#gbi4t",
+    "#gbi5",
+    "#gbmm",
+    "#gbmpal",
+    "#gbmpal .gbqfbb",
+    "#gbmpas",
+    "#gbmpas .gbmt",
+    "#gbmpasb .gbps",
+    "#gbmpdv",
+    "#gbmpi",
+    "#gbmpid",
+    "#gbmpiw",
+    "#gbmplp.gbps",
+    "#gbmps",
+    "#gbpm",
+    "#gbpm .gbml1",
+    "#gbpm .gbpmtc",
+    "#gbpms",
+    "#gbprc .gbm",
+    "#gbprc .gbmc",
+    "#gbprc .gbprcbc",
+    "#gbprc .gbprcx",
+    "#gbprc .gbprcx.gbgt-hvr",
+    "#gbprca",
+    "#gbprca .gbmab",
+    "#gbprca .gbmac",
+    "#gbprcs",
+    "#gbqfb",
+    "#gbqfbw",
+    "#gbqfqw",
+    "#gbs",
+    "#gbx3",
+    "#gbx4",
+    "#gbz",
+    "#gbz .gbgt",
+    "#gbz .gbm",
+    "#gbz .gbtcb",
+    "#gbz .gbzt",
+    "#gbztms1",
+    "#gog",
+    "#gssb_b",
+    "#gws-output-pages-elements-homepage_additional_languages__als",
+    "-moz-focus-inner",
+    "-webkit-scrollbar-track",
+    ".GBMCC",
+    ".H6sW5",
+    ".ds",
+    ".fl a",
+    ".gac_m td",
+    ".gbem .gbgs .gbmab",
+    ".gbem .gbgs .gbmac",
+    ".gbemi .gbgs .gbmab",
+    ".gbemi .gbgs .gbmac",
+    ".gbes .gbgs .gbmab",
+    ".gbes .gbgs .gbmac",
+    ".gbesi .gbgs .gbmab",
+    ".gbesi .gbgs .gbmac",
+    ".gbf .gbmt",
+    ".gbg4a",
+    ".gbg4a .gbts",
+    ".gbgs .gbmab",
+    ".gbgs .gbmac",
+    ".gbgt",
+    ".gbgt-hvr",
+    ".gbi4p",
+    ".gbm",
+    ".gbm0l",
+    ".gbma",
+    ".gbmab",
+    ".gbmac",
+    ".gbmc",
+    ".gbmcc",
+    ".gbmh",
+    ".gbml1",
+    ".gbml1-hvr",
+    ".gbmlb",
+    ".gbmlb-hvr",
+    ".gbmlbw",
+    ".gbmpala",
+    ".gbmpalb",
+    ".gbmpia",
+    ".gbmpiaa",
+    ".gbmpiaw",
+    ".gbmpnw",
+    ".gbmt",
+    ".gbmtc",
+    ".gbn .gbmt",
+    ".gbnd .gbmt",
+    ".gbp0",
+    ".gbp0 .gbps",
+    ".gbp0 .gbps2",
+    ".gbpc .gbpd",
+    ".gbpc .gbps",
+    ".gbpc .gbps2",
+    ".gbpd .gbmt",
+    ".gbpd .gbps",
+    ".gbpdjs .gbto .gbm",
+    ".gbpmc",
+    ".gbpmc .gbpmtc",
+    ".gbpms2",
+    ".gbprcb",
+    ".gbprcd",
+    ".gbprci",
+    ".gbprct",
+    ".gbps2",
+    ".gbqfb",
+    ".gbqfb-hvr",
+    ".gbqfb-no-focus",
+    ".gbqfba",
+    ".gbqfba-hvr",
+    ".gbqfbb",
+    ".gbqfbb-hvr",
+    ".gbrtl .gbm",
+    ".gbsb",
+    ".gbsb .gbsbb",
+    ".gbsb .gbsbt",
+    ".gbsbic",
+    ".gbsbis .gbsbb",
+    ".gbsbis .gbsbt",
+    ".gbt",
+    ".gbtb .gbts",
+    ".gbtb2",
+    ".gbtc",
+    ".gbtcb",
+    ".gbto",
+    ".gbto #gbgs5",
+    ".gbto #gbi4i",
+    ".gbto #gbi4id",
+    ".gbto #gbi5",
+    ".gbto #gbs",
+    ".gbto .gbg4a .gbts",
+    ".gbto .gbgt .gbtb2",
+    ".gbto .gbm",
+    ".gbto .gbmab",
+    ".gbto .gbmac",
+    ".gbto .gbts",
+    ".gbto .gbzt .gbtb2",
+    ".gbts",
+    ".gbtsa",
+    ".gbxms",
+    ".gbxo",
+    ".gbxv",
+    ".gbxx",
+    ".gbz0l .gbtb2",
+    ".gbz0l .gbts",
+    ".gbzt",
+    ".gbzt .gbts",
+    ".gsdd_a",
+    ".gsfi",
+    ".gsfs",
+    ".gsib_a",
+    ".gsib_b",
+    ".gsls_a",
+    ".gsmq_a",
+    ".gsn_a",
+    ".gsn_b",
+    ".gsn_c",
+    ".gspqs_b",
+    ".gsq_a",
+    ".gss_ifl",
+    ".gssb_a",
+    ".gssb_a td",
+    ".gssb_c",
+    ".gssb_e",
+    ".gssb_f",
+    ".gssb_g",
+    ".gssb_h",
+    ".gssb_i",
+    ".gssb_i .gss_ifl",
+    ".gssb_k",
+    ".gssb_l",
+    ".gssb_m",
+    ".h",
+    ".lsb",
+    ".lsbb",
+    ".lst",
+    ".sblc",
+    ".sblc a",
+    ".z4hgWe",
+    "a",
+    "a.gbiba",
+    "a.gspqs_a",
+    "a.gssb_j",
+    "active",
+    "after",
+    "body",
+    "em",
+    "focus",
+    "form",
+    "hover",
+    "input",
+    "last-child",
+    "p",
+    "span#gbg4",
+    "span#gbg6",
+    "td",
+    "vertical",
+    "visited",
+]
+1635606
+195
+65765
+8554
+196
+588808
+205
+126
+8141
+572969
+197
+8075
+1216864
+237
+9535
+650998
+208
+9669
+601751
+209
+9285
+571930
+189
+8268
+544591
+194
+8470
+590734
+126
+8346
+580541
 127
-8088
-680883
-152
-10485
-592112
-136
-8557
-575530
-248
-8953
-468838
-120
-8277
-546730
-120
-8504
-521232
-213
-8350
-958900
-185
+8592
+723453
+290
+13495
+1494399
+164
+11100
+619372
+201
+9845
+1094259
+209
 final_rule_matches:
-[src/bit.rs:466:5] unsafe { MISS_CNT } = 1627
+[src/bit.rs:464:5] unsafe { MISS_CNT } = 1627

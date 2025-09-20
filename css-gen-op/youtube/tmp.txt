@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/naive`
 MATCH .hidden  -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
 MATCH .masthead-skeleton-icon  -> [382, 384, 386]

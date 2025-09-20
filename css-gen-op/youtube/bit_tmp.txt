@@ -1,57 +1,117 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-122638
-1747672
-1023227
-490598
-440099
-55559
-1151583
-182
-10427
-30714
-156
-9215
-184
-156
-12728
-442122
-292
-190613
-280350
-117903
-281904
-737087
-161227
-169011
-171996
-226273
-174865
-272866
-229
-115961
-143656
-163548
-168856
-170256
-162694
-163729
-163567
-168896
-350937
-120128
-163603
-162695
-204284
-123184
-162019
-165071
-170413
-1000085
-711346
-762442
-880467
-2598307
-1131908
+[src/bit.rs:440:5] &selectors = [
+    "#logo-red-icon-container.ytd-topbar-logo-renderer",
+    "#masthead-skeleton-icons",
+    "#search-container.ytd-searchbox-spt",
+    "#search-input.ytd-searchbox-spt #search",
+    "#search-input.ytd-searchbox-spt input",
+    "-moz-input-placeholder",
+    "-ms-input-placeholder",
+    "-stv-set-elsewhere",
+    "-webkit-input-placeholder",
+    ".grecaptcha-badge",
+    ".hidden",
+    ".masthead-skeleton-icon",
+    "body",
+    "body.autoscroll",
+    "body.no-scroll",
+    "body.no-y-scroll",
+    "dom-bind",
+    "dom-if",
+    "dom-repeat",
+    "first-child",
+    "html",
+    "last-child",
+    "ps-dom-if",
+    "ps-dom-repeat",
+    "textarea",
+    "ytd-app>ytd-masthead.chunked",
+    "ytd-masthead #masthead-logo",
+    "ytd-masthead #masthead-logo #country-code",
+    "ytd-masthead .external-icon",
+    "ytd-masthead .yt-icons-ext",
+    "ytd-masthead svg#yt-logo-red-svg",
+    "ytd-masthead svg#yt-logo-red-svg #youtube-red-paths path",
+    "ytd-masthead svg#yt-logo-red-updated-svg",
+    "ytd-masthead svg#yt-logo-red-updated-svg #youtube-red-paths path",
+    "ytd-masthead svg#yt-logo-svg",
+    "ytd-masthead svg#yt-logo-svg #youtube-paths path",
+    "ytd-masthead svg#yt-logo-updated-svg",
+    "ytd-masthead svg#yt-logo-updated-svg #youtube-paths path",
+    "ytd-masthead.dark .masthead-skeleton-icon",
+    "ytd-masthead.dark svg#yt-logo-red-svg #youtube-red-paths path",
+    "ytd-masthead.dark svg#yt-logo-red-updated-svg #youtube-red-paths path",
+    "ytd-masthead.dark svg#yt-logo-svg #youtube-paths path",
+    "ytd-masthead.dark svg#yt-logo-updated-svg #youtube-paths path",
+    "ytd-masthead.masthead-finish #masthead-skeleton-icons",
+    "ytd-masthead.shell",
+    "ytd-masthead.shell #a11y-skip-nav",
+    "ytd-masthead.shell #menu-icon",
+    "ytd-masthead.shell #yt-logo-red-svg",
+    "ytd-masthead.shell #yt-logo-red-updated-svg",
+    "ytd-masthead.shell #yt-logo-svg",
+    "ytd-masthead.shell #yt-logo-updated-svg",
+    "ytd-masthead.shell svg",
+    "ytd-masthead.shell.dark",
+    "ytd-masthead.shell.dark .yt-icons-ext ytd-masthead.shell.theater .yt-icons-ext",
+    "ytd-masthead.shell.full-window-mode",
+    "ytd-masthead.shell.theater",
+    "ytd-masthead.theater svg#yt-logo-red-svg #youtube-red-paths path",
+    "ytd-masthead.theater svg#yt-logo-svg #youtube-paths path",
+]
+170751
+997217
+1754071
+213429
+489657
+50023
+1129945
+304
+10247
+31804
+161
+9054
+171
+165
+12228
+875722
+1939
+252245
+339944
+166276
+289536
+728118
+163952
+172518
+167292
+219499
+164169
+286543
+178
+134298
+156534
+193178
+181227
+176743
+177850
+175162
+172903
+182928
+942992
+151834
+205416
+196823
+249214
+149855
+204202
+182719
+218278
+254821
+615171
+758564
+1067944
+2264523
+1133834
 final_rule_matches:
-[src/bit.rs:466:5] unsafe { MISS_CNT } = 3581
+[src/bit.rs:464:5] unsafe { MISS_CNT } = 3581

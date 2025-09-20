@@ -437,6 +437,7 @@ fn main() {
         ))
         .unwrap(),
     );
+    dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {
