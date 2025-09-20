@@ -1,7 +1,7 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-7198
+6522
 final_rule_matches:
 #bb -> [4]
 #b -> [3]
-[src/tri.rs:632:5] unsafe { MISS_CNT } = 4
+[src/tri.rs:516:5] unsafe { MISS_CNT } = 4

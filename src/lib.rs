@@ -1,5 +1,5 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::fmt::Display;
+use std::{collections::{HashMap, HashSet}, fmt::Display};
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,
@@ -13,7 +13,7 @@ enum Combinator {
     None,       // 最后一个选择器没有组合器
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Selector {
+pub enum Selector {
     Type(String),
     Class(String),
     Id(String),
@@ -278,3 +278,127 @@ pub struct SelectorId(pub usize);
 /// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct NFA {
+    /// NFA 中所有状态的集合。
+    pub states: HashSet<Nfacell>,
+    /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
+    pub rules: Vec<Rule>,
+    /// 起始状态。
+    pub start_state: Nfacell,
+    pub max_state_id: Nfacell,
+    // for print match
+    pub accept_states: Vec<Nfacell>,
+}
+
+
+impl NFA {
+    pub fn is_accept_state(&self, state: Nfacell) -> bool {
+        !self
+            .rules
+            .iter()
+            .any(|Rule(_, prev, _)| *prev == Some(state))
+    }
+
+    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
+        self.states
+            .iter()
+            .filter(|&&state| self.is_accept_state(state))
+            .copied()
+            .collect()
+    }
+    pub fn to_dot(&self, sm: &SelectorManager) -> String {
+        let mut s = String::new();
+        s.push_str("digraph NFA {\n");
+        s.push_str("  rankdir=LR;\n");
+        s.push_str("  node [shape=circle, fontsize=10];\n");
+
+        // Start marker
+        s.push_str("  __start [shape=point, label=\"\"];\n");
+        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
+
+        // States
+        for st in &self.states {
+            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
+        }
+
+        // Accept states styling
+        if !self.accept_states.is_empty() {
+            s.push_str("  { node [shape=doublecircle]; ");
+            for st in &self.accept_states {
+                s.push_str(&format!("{} ", st.0));
+            }
+            s.push_str("}\n");
+        }
+
+        // Edges
+        for Rule(selector_opt, from_opt, to) in &self.rules {
+            let from = from_opt.unwrap_or(self.start_state).0;
+            let label = match selector_opt {
+                None => "*".to_string(),
+                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
+                    Some(Selector::Type(t)) => t.clone(),
+                    Some(Selector::Class(c)) => format!(".{}", c),
+                    Some(Selector::Id(i)) => format!("#{}", i),
+                    None => format!("sid:{}", sel_id.0),
+                },
+            };
+            s.push_str(&format!(
+                "  {} -> {} [label=\"{}\"];\n",
+                from,
+                to.0,
+                escape_dot_label(&label)
+            ));
+        }
+        s.push_str("}\n");
+        s
+    }
+}
+
+fn escape_dot_label(s: &str) -> String {
+    s.replace('\\', "\\\\").replace('"', "\\\"")
+}
+
+#[derive(Debug, Default)]
+pub struct SelectorManager {
+    pub selector_to_id: HashMap<Selector, SelectorId>,
+    pub id_to_selector: HashMap<SelectorId, Selector>,
+    next_id: SelectorId,
+}
+
+impl SelectorManager {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
+        if let Some(&id) = self.selector_to_id.get(&selector) {
+            return id;
+        }
+
+        let id = self.next_id;
+        self.selector_to_id.insert(selector.clone(), id);
+        self.id_to_selector.insert(id, selector);
+        self.next_id = SelectorId(self.next_id.0 + 1);
+        id
+    }
+
+    /// 根据选择器获取ID
+    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
+        self.selector_to_id.get(selector).copied()
+    }
+
+    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Type(tag_name.to_string()))
+    }
+
+    pub fn get_or_create_class_id(&mut self, class_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Class(class_name.to_string()))
+    }
+
+    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Id(id_name.to_string()))
+    }
+}
+

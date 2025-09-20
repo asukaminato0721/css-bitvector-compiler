@@ -1,6 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace,
-    rdtsc,
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, extract_path_from_command, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::{
@@ -10,52 +9,12 @@ use std::{
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
-/// CSS选择器类型
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum Selector {
-    Type(String),
-    Class(String),
-    Id(String),
-}
-
 /// whether a part of input is: 1, 0, or unused
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IState {
     IOne,
     IZero,
     IUnused,
-}
-
-#[derive(Debug, Default)]
-pub struct SelectorManager {
-    pub selector_to_id: HashMap<Selector, SelectorId>,
-    pub id_to_selector: HashMap<SelectorId, Selector>,
-    next_id: SelectorId,
-}
-
-impl SelectorManager {
-    /// 创建一个新的选择器管理器
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    /// 获取选择器对应的ID，如果不存在则创建新的ID
-    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
-        if let Some(&id) = self.selector_to_id.get(&selector) {
-            return id;
-        }
-
-        let id = self.next_id;
-        self.selector_to_id.insert(selector.clone(), id);
-        self.id_to_selector.insert(id, selector);
-        self.next_id = SelectorId(self.next_id.0 + 1);
-        id
-    }
-
-    /// 根据选择器获取ID
-    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
-        self.selector_to_id.get(selector).copied()
-    }
 }
 
 #[derive(Debug, Default)]
@@ -384,83 +343,8 @@ impl DOM {
         (new_state, input.tri)
     }
 }
-fn escape_dot_label(s: &str) -> String {
-    s.replace('\\', "\\\\").replace('"', "\\\"")
-}
-#[derive(Debug, PartialEq, Eq)]
-pub struct NFA {
-    /// NFA 中所有状态的集合。
-    pub states: HashSet<Nfacell>,
-    /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
-    pub rules: Vec<Rule>,
-    /// 起始状态。
-    pub start_state: Nfacell,
-    pub max_state_id: Nfacell,
-    // for print match
-    pub accept_states: Vec<Nfacell>,
-}
-impl NFA {
-    pub fn is_accept_state(&self, state: Nfacell) -> bool {
-        !self
-            .rules
-            .iter()
-            .any(|Rule(_, prev, _)| *prev == Some(state))
-    }
 
-    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
-        self.states
-            .iter()
-            .filter(|&&state| self.is_accept_state(state))
-            .copied()
-            .collect()
-    }
-    pub fn to_dot(&self, sm: &SelectorManager) -> String {
-        let mut s = String::new();
-        s.push_str("digraph NFA {\n");
-        s.push_str("  rankdir=LR;\n");
-        s.push_str("  node [shape=circle, fontsize=10];\n");
 
-        // Start marker
-        s.push_str("  __start [shape=point, label=\"\"];\n");
-        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
-
-        // States
-        for st in &self.states {
-            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
-        }
-
-        // Accept states styling
-        if !self.accept_states.is_empty() {
-            s.push_str("  { node [shape=doublecircle]; ");
-            for st in &self.accept_states {
-                s.push_str(&format!("{} ", st.0));
-            }
-            s.push_str("}\n");
-        }
-
-        // Edges
-        for Rule(selector_opt, from_opt, to) in &self.rules {
-            let from = from_opt.unwrap_or(self.start_state).0;
-            let label = match selector_opt {
-                None => "*".to_string(),
-                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
-                    Some(Selector::Type(t)) => t.clone(),
-                    Some(Selector::Class(c)) => format!(".{}", c),
-                    Some(Selector::Id(i)) => format!("#{}", i),
-                    None => format!("sid:{}", sel_id.0),
-                },
-            };
-            s.push_str(&format!(
-                "  {} -> {} [label=\"{}\"];\n",
-                from,
-                to.0,
-                escape_dot_label(&label)
-            ));
-        }
-        s.push_str("}\n");
-        s
-    }
-}
 
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {

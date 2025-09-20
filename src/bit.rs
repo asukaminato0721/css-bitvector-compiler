@@ -1,6 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, Nfacell, Rule, SelectorId, extract_path_from_command, parse_css, parse_trace,
-    rdtsc,
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, extract_path_from_command, parse_css, parse_trace, rdtsc
 };
 use serde_json;
 use std::{
@@ -10,55 +9,7 @@ use std::{
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
-/// CSS选择器类型
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum Selector {
-    Type(String),
-    Class(String),
-    Id(String),
-}
 
-#[derive(Debug, Default)]
-pub struct SelectorManager {
-    pub selector_to_id: HashMap<Selector, SelectorId>,
-    pub id_to_selector: HashMap<SelectorId, Selector>,
-    next_id: SelectorId,
-}
-
-impl SelectorManager {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
-        if let Some(&id) = self.selector_to_id.get(&selector) {
-            return id;
-        }
-
-        let id = self.next_id;
-        self.selector_to_id.insert(selector.clone(), id);
-        self.id_to_selector.insert(id, selector);
-        self.next_id = SelectorId(self.next_id.0 + 1);
-        id
-    }
-
-    /// 根据选择器获取ID
-    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
-        self.selector_to_id.get(selector).copied()
-    }
-
-    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> SelectorId {
-        self.get_or_create_id(Selector::Type(tag_name.to_string()))
-    }
-
-    pub fn get_or_create_class_id(&mut self, class_name: &str) -> SelectorId {
-        self.get_or_create_id(Selector::Class(class_name.to_string()))
-    }
-
-    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> SelectorId {
-        self.get_or_create_id(Selector::Id(id_name.to_string()))
-    }
-}
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
@@ -353,84 +304,6 @@ impl DOM {
     }
 }
 
-fn escape_dot_label(s: &str) -> String {
-    s.replace('\\', "\\\\").replace('"', "\\\"")
-}
-/// 表示一个非确定性有限状态自动机 (NFA)。
-#[derive(Debug, PartialEq, Eq)]
-pub struct NFA {
-    pub states: HashSet<Nfacell>,
-    pub rules: Vec<Rule>,
-    pub start_state: Nfacell,
-    pub max_state_id: Nfacell,
-    pub accept_states: Vec<Nfacell>,
-}
-
-impl NFA {
-    /// 检查给定状态是否为接受状态（没有后继状态）
-    pub fn is_accept_state(&self, state: &Nfacell) -> bool {
-        // 如果没有任何以该状态为 from 的规则，则认为是接受状态
-        !self
-            .rules
-            .iter()
-            .any(|Rule(_, from, _)| from.as_ref() == Some(state))
-    }
-
-    /// 获取所有接受状态
-    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
-        self.states
-            .iter()
-            .filter(|&state| self.is_accept_state(state))
-            .copied()
-            .collect()
-    }
-    pub fn to_dot(&self, sm: &SelectorManager) -> String {
-        let mut s = String::new();
-        s.push_str("digraph NFA {\n");
-        s.push_str("  rankdir=LR;\n");
-        s.push_str("  node [shape=circle, fontsize=10];\n");
-
-        // Start marker
-        s.push_str("  __start [shape=point, label=\"\"];\n");
-        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
-
-        // States
-        for st in &self.states {
-            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
-        }
-
-        // Accept states styling
-        if !self.accept_states.is_empty() {
-            s.push_str("  { node [shape=doublecircle]; ");
-            for st in &self.accept_states {
-                s.push_str(&format!("{} ", st.0));
-            }
-            s.push_str("}\n");
-        }
-
-        // Edges
-        for Rule(selector_opt, from_opt, to) in &self.rules {
-            let from = from_opt.unwrap_or(self.start_state).0;
-            let label = match selector_opt {
-                None => "*".to_string(),
-                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
-                    Some(Selector::Type(t)) => t.clone(),
-                    Some(Selector::Class(c)) => format!(".{}", c),
-                    Some(Selector::Id(i)) => format!("#{}", i),
-                    None => format!("sid:{}", sel_id.0),
-                },
-            };
-            s.push_str(&format!(
-                "  {} -> {} [label=\"{}\"];\n",
-                from,
-                to.0,
-                escape_dot_label(&label)
-            ));
-        }
-        s.push_str("}\n");
-        s
-    }
-}
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim().to_lowercase();
