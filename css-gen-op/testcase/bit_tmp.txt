@@ -1,16 +1,12 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
 [src/bit.rs:466:17] &dom.nodes = {
-    3: DOMNode {
+    2: DOMNode {
         tag_id: SelectorId(
-            4,
+            3,
         ),
         class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
+        id_selector_id: None,
         parent: Some(
             1,
         ),
@@ -26,12 +22,16 @@
             false,
         ],
     },
-    2: DOMNode {
+    3: DOMNode {
         tag_id: SelectorId(
-            3,
+            4,
         ),
         class_ids: {},
-        id_selector_id: None,
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
         parent: Some(
             1,
         ),
@@ -74,7 +74,7 @@
         ],
     },
 }
-4934
+4737
 final_rule_matches: {
     "#b": [
         3,

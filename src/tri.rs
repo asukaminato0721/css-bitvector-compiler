@@ -3,7 +3,7 @@ use css_bitvector_compiler::{
     rdtsc,
 };
 use serde_json;
-use std::collections::{HashMap, HashSet};
+use std::{collections::{HashMap, HashSet}, fs};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
@@ -414,6 +414,52 @@ impl NFA {
             .copied()
             .collect()
     }
+pub fn to_dot(&self, sm: &SelectorManager) -> String {
+        let mut s = String::new();
+        s.push_str("digraph NFA {\n");
+        s.push_str("  rankdir=LR;\n");
+        s.push_str("  node [shape=circle, fontsize=10];\n");
+
+        // Start marker
+        s.push_str("  __start [shape=point, label=\"\"];\n");
+        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
+
+        // States
+        for st in &self.states {
+            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
+        }
+
+        // Accept states styling
+        if !self.accept_states.is_empty() {
+            s.push_str("  { node [shape=doublecircle]; ");
+            for st in &self.accept_states {
+                s.push_str(&format!("{} ", st.0));
+            }
+            s.push_str("}\n");
+        }
+
+        // Edges
+        for Rule(selector_opt, from_opt, to) in &self.rules {
+            let from = from_opt.unwrap_or(self.start_state).0;
+            let label = match selector_opt {
+                None => "*".to_string(),
+                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
+                    Some(Selector::Type(t)) => t.clone(),
+                    Some(Selector::Class(c)) => format!(".{}", c),
+                    Some(Selector::Id(i)) => format!("#{}", i),
+                    None => format!("sid:{}", sel_id.0),
+                },
+            };
+            s.push_str(&format!(
+                "  {} -> {} [label=\"{}\"];\n",
+                from,
+                to.0,
+                escape_dot_label(&label)
+            ));
+        }
+        s.push_str("}\n");
+        s
+    }
 }
 
 /// 解析CSS选择器字符串并生成对应的选择器对象
@@ -559,7 +605,6 @@ pub fn collect_rule_matches(
     res
 }
 fn main() {
-    // 1. 构建 DOM 树
     let mut dom = DOM::new();
     let selectors = parse_css(
         &std::fs::read_to_string(format!(
@@ -569,6 +614,13 @@ fn main() {
         .unwrap(),
     );
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager);
+    let _ = fs::write(
+        format!(
+            "css-gen-op/{0}/dot_tri.dot",
+            std::env::var("WEBSITE_NAME").unwrap(),
+        ),
+        nfa.to_dot(&dom.selector_manager),
+    );
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }

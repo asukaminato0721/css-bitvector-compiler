@@ -384,7 +384,7 @@ impl NFA {
             .copied()
             .collect()
     }
-    pub fn to_dot(&self, selector_manager: &SelectorManager) -> String {
+    pub fn to_dot(&self, sm: &SelectorManager) -> String {
         let mut s = String::new();
         s.push_str("digraph NFA {\n");
         s.push_str("  rankdir=LR;\n");
@@ -413,7 +413,7 @@ impl NFA {
             let from = from_opt.unwrap_or(self.start_state).0;
             let label = match selector_opt {
                 None => "*".to_string(),
-                Some(sel_id) => match selector_manager.id_to_selector.get(sel_id) {
+                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
                     Some(Selector::Type(t)) => t.clone(),
                     Some(Selector::Class(c)) => format!(".{}", c),
                     Some(Selector::Id(i)) => format!("#{}", i),

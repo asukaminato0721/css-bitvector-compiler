@@ -1,16 +1,7 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-warning: function `escape_dot_label` is never used
-   --> src/tri.rs:387:4
-    |
-387 | fn escape_dot_label(s: &str) -> String {
-    |    ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.87s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.92s
      Running `target/release/tri`
-284856
+281889
 
 thread 'main' panicked at src/tri.rs:308:13:
 assertion `left == right` failed: Node index 4: Output state changed when node was not dirty!
