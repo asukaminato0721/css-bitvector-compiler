@@ -289,7 +289,7 @@ pub struct NFA {
     /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
     pub rules: Vec<Rule>,
     /// 起始状态。
-    pub start_state: Option< Nfacell>,
+    pub start_state: Option<Nfacell>,
     pub max_state_id: Nfacell,
     // for print match
     pub accept_states: Vec<Nfacell>,
@@ -322,7 +322,11 @@ impl NFA {
 
         // States
         for st in &self.states {
-            s.push_str(&format!("  {} [label=\"{}\"];\n", st.unwrap_or_default().0, st.unwrap_or_default().0));
+            s.push_str(&format!(
+                "  {} [label=\"{}\"];\n",
+                st.unwrap_or_default().0,
+                st.unwrap_or_default().0
+            ));
         }
 
         // Accept states styling

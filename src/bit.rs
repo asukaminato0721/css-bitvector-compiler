@@ -463,7 +463,9 @@ fn main() {
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
-    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors).into_iter().collect::<Vec<_>>();
+    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors)
+        .into_iter()
+        .collect::<Vec<_>>();
     final_matches.sort();
     println!("final_rule_matches:");
     for (k, v) in final_matches {
