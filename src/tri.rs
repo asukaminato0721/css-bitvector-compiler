@@ -3,7 +3,10 @@ use css_bitvector_compiler::{
     rdtsc,
 };
 use serde_json;
-use std::{collections::{HashMap, HashSet}, fs};
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
 
@@ -414,7 +417,7 @@ impl NFA {
             .copied()
             .collect()
     }
-pub fn to_dot(&self, sm: &SelectorManager) -> String {
+    pub fn to_dot(&self, sm: &SelectorManager) -> String {
         let mut s = String::new();
         s.push_str("digraph NFA {\n");
         s.push_str("  rankdir=LR;\n");
