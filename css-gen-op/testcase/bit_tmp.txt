@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
      Running `target/release/bit`
 [src/bit.rs:335:17] &dom.nodes = {
     2: DOMNode {
@@ -78,16 +78,12 @@
     },
 }
 [src/bit.rs:335:17] &dom.nodes = {
-    4: DOMNode {
+    2: DOMNode {
         tag_id: SelectorId(
-            5,
+            4,
         ),
         class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                1,
-            ),
-        ),
+        id_selector_id: None,
         parent: Some(
             1,
         ),
@@ -114,28 +110,6 @@
                 0,
             ),
         ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
         parent: Some(
             1,
         ),
@@ -180,9 +154,35 @@
             false,
         ],
     },
+    4: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                1,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-6697
+21154
 final_rule_matches:
-#b -> [3]
 #bb -> [4]
+#b -> [3]
 [src/bit.rs:476:5] unsafe { MISS_CNT } = 4

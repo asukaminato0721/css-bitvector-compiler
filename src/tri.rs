@@ -89,15 +89,12 @@ impl DOM {
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector_without_idx(node, a) {
+                    if self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if !input.get(b) {
-                        continue;
-                    }
-                    if self.node_matches_selector_without_idx(node, a) {
+                    if input.get(b) && self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }
@@ -159,35 +156,8 @@ impl DOM {
         }
         id
     }
-
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node_index: u64, SelectorId(sid): SelectorId) -> bool {
-        if let Some(node) = self.nodes.get(&node_index) {
-            if node.tag_id == SelectorId(sid) {
-                return true;
-            }
-
-            if node.class_ids.contains(&SelectorId(sid)) {
-                return true;
-            }
-
-            if let Some(id_sel_id) = node.id_selector_id
-                && id_sel_id == SelectorId(sid)
-            {
-                return true;
-            }
-
-            false
-        } else {
-            false
-        }
-    }
-    /// 检查节点是否匹配给定的选择器ID, used in init
-    pub fn node_matches_selector_without_idx(
-        &self,
-        node: &DOMNode,
-        SelectorId(sid): SelectorId,
-    ) -> bool {
+    pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
         if node.tag_id == SelectorId(sid) {
             return true;
         }
@@ -420,7 +390,7 @@ new_tri is {:?}
             }
         }
         let mut input = Read::new(input);
-
+        let node = &self.nodes[&node_idx];
         for &rule in nfa.rules.iter() {
             match rule {
                 Rule(None, None, Nfacell(c)) => {
@@ -432,15 +402,12 @@ new_tri is {:?}
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node_idx, a) {
+                    if self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if !input.get(b) {
-                        continue;
-                    }
-                    if self.node_matches_selector(node_idx, a) {
+                    if input.get(b) && self.node_matches_selector(node, a) {
                         new_state[c] = true;
                     }
                 }

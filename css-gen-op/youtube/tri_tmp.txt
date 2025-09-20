@@ -7,64 +7,64 @@ warning: unused import: `std::panic`
   = note: `#[warn(unused_imports)]` on by default
 
 warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running `target/release/tri`
-276
-314
-142
-643
-310
-105
-395
-174
-154
-158
-176
-170
-187
-197
-170
-156
-122
-10675
-122
-113
-116
-138
-258
-111
-132
-136
-1146
-332
-195
-373
-355
-333
-144
-310
-132
-126
-409
-517
-292
-225
-138
-110
-304
-304
-144
-1075
-142
-333
-115
-194
-11211
-288
-175
+755
+641
+821
+706
+1064
+515
+902
+942
+440
+408
+410
+434
+444
+540
+325
+775
+594
+25592
+874
+726
+707
+990
+797
+718
+748
+838
+803
+655
+830
+663
+628
+763
+726
+862
+523
+645
+612
+641
+787
+782
+840
+829
+844
+473
+749
+874
+684
+873
+703
+876
+53305
+1750
+799
 final_rule_matches:
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-html -> [5]
 #masthead-skeleton-icons -> [379]
 .masthead-skeleton-icon -> [382, 384, 386]
-[src/tri.rs:627:5] unsafe { MISS_CNT } = 0
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+html -> [5]
+[src/tri.rs:601:5] unsafe { MISS_CNT } = 0
