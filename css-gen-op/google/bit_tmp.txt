@@ -1,276 +1,456 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-[src/bit.rs:440:5] &selectors = [
-    "#GBMPAL",
-    "#SIvCob",
-    "#SIvCob a",
-    "#WqQANb a",
-    "#gb",
-    "#gb #gbprc",
-    "#gbb",
-    "#gbbw",
-    "#gbd4 .gbmc",
-    "#gbd4 .gbmcc",
-    "#gbd4 .gbmh",
-    "#gbd4 .gbmtc",
-    "#gbd4 .gbpc",
-    "#gbd4 .gbpgs .gbmtc",
-    "#gbd4 .gbsbic",
-    "#gbg",
-    "#gbg .gbgt",
-    "#gbg .gbm",
-    "#gbg .gbtcb",
-    "#gbg5",
-    "#gbg6.gbgt",
-    "#gbg6.gbgt-hvr",
-    "#gbgs5",
-    "#gbi4i",
-    "#gbi4id",
-    "#gbi4m1",
-    "#gbi4s",
-    "#gbi4s1",
-    "#gbi4t",
-    "#gbi5",
-    "#gbmm",
-    "#gbmpal",
-    "#gbmpal .gbqfbb",
-    "#gbmpas",
-    "#gbmpas .gbmt",
-    "#gbmpasb .gbps",
-    "#gbmpdv",
-    "#gbmpi",
-    "#gbmpid",
-    "#gbmpiw",
-    "#gbmplp.gbps",
-    "#gbmps",
-    "#gbpm",
-    "#gbpm .gbml1",
-    "#gbpm .gbpmtc",
-    "#gbpms",
-    "#gbprc .gbm",
-    "#gbprc .gbmc",
-    "#gbprc .gbprcbc",
-    "#gbprc .gbprcx",
-    "#gbprc .gbprcx.gbgt-hvr",
-    "#gbprca",
-    "#gbprca .gbmab",
-    "#gbprca .gbmac",
-    "#gbprcs",
-    "#gbqfb",
-    "#gbqfbw",
-    "#gbqfqw",
-    "#gbs",
-    "#gbx3",
-    "#gbx4",
-    "#gbz",
-    "#gbz .gbgt",
-    "#gbz .gbm",
-    "#gbz .gbtcb",
-    "#gbz .gbzt",
-    "#gbztms1",
-    "#gog",
-    "#gssb_b",
-    "#gws-output-pages-elements-homepage_additional_languages__als",
-    "-moz-focus-inner",
-    "-webkit-scrollbar-track",
-    ".GBMCC",
-    ".H6sW5",
-    ".ds",
-    ".fl a",
-    ".gac_m td",
-    ".gbem .gbgs .gbmab",
-    ".gbem .gbgs .gbmac",
-    ".gbemi .gbgs .gbmab",
-    ".gbemi .gbgs .gbmac",
-    ".gbes .gbgs .gbmab",
-    ".gbes .gbgs .gbmac",
-    ".gbesi .gbgs .gbmab",
-    ".gbesi .gbgs .gbmac",
-    ".gbf .gbmt",
-    ".gbg4a",
-    ".gbg4a .gbts",
-    ".gbgs .gbmab",
-    ".gbgs .gbmac",
-    ".gbgt",
-    ".gbgt-hvr",
-    ".gbi4p",
-    ".gbm",
-    ".gbm0l",
-    ".gbma",
-    ".gbmab",
-    ".gbmac",
-    ".gbmc",
-    ".gbmcc",
-    ".gbmh",
-    ".gbml1",
-    ".gbml1-hvr",
-    ".gbmlb",
-    ".gbmlb-hvr",
-    ".gbmlbw",
-    ".gbmpala",
-    ".gbmpalb",
-    ".gbmpia",
-    ".gbmpiaa",
-    ".gbmpiaw",
-    ".gbmpnw",
-    ".gbmt",
-    ".gbmtc",
-    ".gbn .gbmt",
-    ".gbnd .gbmt",
-    ".gbp0",
-    ".gbp0 .gbps",
-    ".gbp0 .gbps2",
-    ".gbpc .gbpd",
-    ".gbpc .gbps",
-    ".gbpc .gbps2",
-    ".gbpd .gbmt",
-    ".gbpd .gbps",
-    ".gbpdjs .gbto .gbm",
-    ".gbpmc",
-    ".gbpmc .gbpmtc",
-    ".gbpms2",
-    ".gbprcb",
-    ".gbprcd",
-    ".gbprci",
-    ".gbprct",
-    ".gbps2",
-    ".gbqfb",
-    ".gbqfb-hvr",
-    ".gbqfb-no-focus",
-    ".gbqfba",
-    ".gbqfba-hvr",
-    ".gbqfbb",
-    ".gbqfbb-hvr",
-    ".gbrtl .gbm",
-    ".gbsb",
-    ".gbsb .gbsbb",
-    ".gbsb .gbsbt",
-    ".gbsbic",
-    ".gbsbis .gbsbb",
-    ".gbsbis .gbsbt",
-    ".gbt",
-    ".gbtb .gbts",
-    ".gbtb2",
-    ".gbtc",
-    ".gbtcb",
-    ".gbto",
-    ".gbto #gbgs5",
-    ".gbto #gbi4i",
-    ".gbto #gbi4id",
-    ".gbto #gbi5",
-    ".gbto #gbs",
-    ".gbto .gbg4a .gbts",
-    ".gbto .gbgt .gbtb2",
-    ".gbto .gbm",
-    ".gbto .gbmab",
-    ".gbto .gbmac",
-    ".gbto .gbts",
-    ".gbto .gbzt .gbtb2",
-    ".gbts",
-    ".gbtsa",
-    ".gbxms",
-    ".gbxo",
-    ".gbxv",
-    ".gbxx",
-    ".gbz0l .gbtb2",
-    ".gbz0l .gbts",
-    ".gbzt",
-    ".gbzt .gbts",
-    ".gsdd_a",
-    ".gsfi",
-    ".gsfs",
-    ".gsib_a",
-    ".gsib_b",
-    ".gsls_a",
-    ".gsmq_a",
-    ".gsn_a",
-    ".gsn_b",
-    ".gsn_c",
-    ".gspqs_b",
-    ".gsq_a",
-    ".gss_ifl",
-    ".gssb_a",
-    ".gssb_a td",
-    ".gssb_c",
-    ".gssb_e",
-    ".gssb_f",
-    ".gssb_g",
-    ".gssb_h",
-    ".gssb_i",
-    ".gssb_i .gss_ifl",
-    ".gssb_k",
-    ".gssb_l",
-    ".gssb_m",
-    ".h",
-    ".lsb",
-    ".lsbb",
-    ".lst",
-    ".sblc",
-    ".sblc a",
-    ".z4hgWe",
-    "a",
-    "a.gbiba",
-    "a.gspqs_a",
-    "a.gssb_j",
-    "active",
-    "after",
-    "body",
-    "em",
-    "focus",
-    "form",
-    "hover",
-    "input",
-    "last-child",
-    "p",
-    "span#gbg4",
-    "span#gbg6",
-    "td",
-    "vertical",
-    "visited",
-]
-1635606
-195
-65765
-8554
-196
-588808
+#GBMPAL Some(Nfacell(1))  Nfacell(2)
+#SIvCob Some(Nfacell(1))  Nfacell(3)
+#SIvCob Some(Nfacell(1))  Nfacell(4)
+#GBMPAL Some(Nfacell(4))  Nfacell(4)
+a Some(Nfacell(4))  Nfacell(5)
+#WqQANb Some(Nfacell(1))  Nfacell(6)
+#GBMPAL Some(Nfacell(6))  Nfacell(6)
+a Some(Nfacell(6))  Nfacell(7)
+#gb Some(Nfacell(1))  Nfacell(8)
+#gb Some(Nfacell(1))  Nfacell(9)
+#GBMPAL Some(Nfacell(9))  Nfacell(9)
+#gbprc Some(Nfacell(9))  Nfacell(10)
+#gbb Some(Nfacell(1))  Nfacell(11)
+#gbbw Some(Nfacell(1))  Nfacell(12)
+#gbd4 Some(Nfacell(1))  Nfacell(13)
+#GBMPAL Some(Nfacell(13))  Nfacell(13)
+.gbmc Some(Nfacell(13))  Nfacell(14)
+#gbd4 Some(Nfacell(1))  Nfacell(15)
+#GBMPAL Some(Nfacell(15))  Nfacell(15)
+.gbmcc Some(Nfacell(15))  Nfacell(16)
+#gbd4 Some(Nfacell(1))  Nfacell(17)
+#GBMPAL Some(Nfacell(17))  Nfacell(17)
+.gbmh Some(Nfacell(17))  Nfacell(18)
+#gbd4 Some(Nfacell(1))  Nfacell(19)
+#GBMPAL Some(Nfacell(19))  Nfacell(19)
+.gbmtc Some(Nfacell(19))  Nfacell(20)
+#gbd4 Some(Nfacell(1))  Nfacell(21)
+#GBMPAL Some(Nfacell(21))  Nfacell(21)
+.gbpc Some(Nfacell(21))  Nfacell(22)
+#gbd4 Some(Nfacell(1))  Nfacell(23)
+#GBMPAL Some(Nfacell(23))  Nfacell(23)
+.gbpgs Some(Nfacell(23))  Nfacell(24)
+#GBMPAL Some(Nfacell(24))  Nfacell(24)
+.gbmtc Some(Nfacell(24))  Nfacell(25)
+#gbd4 Some(Nfacell(1))  Nfacell(26)
+#GBMPAL Some(Nfacell(26))  Nfacell(26)
+.gbsbic Some(Nfacell(26))  Nfacell(27)
+#gbg Some(Nfacell(1))  Nfacell(28)
+#gbg Some(Nfacell(1))  Nfacell(29)
+#GBMPAL Some(Nfacell(29))  Nfacell(29)
+.gbgt Some(Nfacell(29))  Nfacell(30)
+#gbg Some(Nfacell(1))  Nfacell(31)
+#GBMPAL Some(Nfacell(31))  Nfacell(31)
+.gbm Some(Nfacell(31))  Nfacell(32)
+#gbg Some(Nfacell(1))  Nfacell(33)
+#GBMPAL Some(Nfacell(33))  Nfacell(33)
+.gbtcb Some(Nfacell(33))  Nfacell(34)
+#gbg5 Some(Nfacell(1))  Nfacell(35)
+#gbg6.gbgt Some(Nfacell(1))  Nfacell(36)
+#gbg6.gbgt-hvr Some(Nfacell(1))  Nfacell(37)
+#gbgs5 Some(Nfacell(1))  Nfacell(38)
+#gbi4i Some(Nfacell(1))  Nfacell(39)
+#gbi4id Some(Nfacell(1))  Nfacell(40)
+#gbi4m1 Some(Nfacell(1))  Nfacell(41)
+#gbi4s Some(Nfacell(1))  Nfacell(42)
+#gbi4s1 Some(Nfacell(1))  Nfacell(43)
+#gbi4t Some(Nfacell(1))  Nfacell(44)
+#gbi5 Some(Nfacell(1))  Nfacell(45)
+#gbmm Some(Nfacell(1))  Nfacell(46)
+#gbmpal Some(Nfacell(1))  Nfacell(47)
+#gbmpal Some(Nfacell(1))  Nfacell(48)
+#GBMPAL Some(Nfacell(48))  Nfacell(48)
+.gbqfbb Some(Nfacell(48))  Nfacell(49)
+#gbmpas Some(Nfacell(1))  Nfacell(50)
+#gbmpas Some(Nfacell(1))  Nfacell(51)
+#GBMPAL Some(Nfacell(51))  Nfacell(51)
+.gbmt Some(Nfacell(51))  Nfacell(52)
+#gbmpasb Some(Nfacell(1))  Nfacell(53)
+#GBMPAL Some(Nfacell(53))  Nfacell(53)
+.gbps Some(Nfacell(53))  Nfacell(54)
+#gbmpdv Some(Nfacell(1))  Nfacell(55)
+#gbmpi Some(Nfacell(1))  Nfacell(56)
+#gbmpid Some(Nfacell(1))  Nfacell(57)
+#gbmpiw Some(Nfacell(1))  Nfacell(58)
+#gbmplp.gbps Some(Nfacell(1))  Nfacell(59)
+#gbmps Some(Nfacell(1))  Nfacell(60)
+#gbpm Some(Nfacell(1))  Nfacell(61)
+#gbpm Some(Nfacell(1))  Nfacell(62)
+#GBMPAL Some(Nfacell(62))  Nfacell(62)
+.gbml1 Some(Nfacell(62))  Nfacell(63)
+#gbpm Some(Nfacell(1))  Nfacell(64)
+#GBMPAL Some(Nfacell(64))  Nfacell(64)
+.gbpmtc Some(Nfacell(64))  Nfacell(65)
+#gbpms Some(Nfacell(1))  Nfacell(66)
+#gbprc Some(Nfacell(1))  Nfacell(67)
+#GBMPAL Some(Nfacell(67))  Nfacell(67)
+.gbm Some(Nfacell(67))  Nfacell(68)
+#gbprc Some(Nfacell(1))  Nfacell(69)
+#GBMPAL Some(Nfacell(69))  Nfacell(69)
+.gbmc Some(Nfacell(69))  Nfacell(70)
+#gbprc Some(Nfacell(1))  Nfacell(71)
+#GBMPAL Some(Nfacell(71))  Nfacell(71)
+.gbprcbc Some(Nfacell(71))  Nfacell(72)
+#gbprc Some(Nfacell(1))  Nfacell(73)
+#GBMPAL Some(Nfacell(73))  Nfacell(73)
+.gbprcx Some(Nfacell(73))  Nfacell(74)
+#gbprc Some(Nfacell(1))  Nfacell(75)
+#GBMPAL Some(Nfacell(75))  Nfacell(75)
+.gbprcx.gbgt-hvr Some(Nfacell(75))  Nfacell(76)
+#gbprca Some(Nfacell(1))  Nfacell(77)
+#gbprca Some(Nfacell(1))  Nfacell(78)
+#GBMPAL Some(Nfacell(78))  Nfacell(78)
+.gbmab Some(Nfacell(78))  Nfacell(79)
+#gbprca Some(Nfacell(1))  Nfacell(80)
+#GBMPAL Some(Nfacell(80))  Nfacell(80)
+.gbmac Some(Nfacell(80))  Nfacell(81)
+#gbprcs Some(Nfacell(1))  Nfacell(82)
+#gbqfb Some(Nfacell(1))  Nfacell(83)
+#gbqfbw Some(Nfacell(1))  Nfacell(84)
+#gbqfqw Some(Nfacell(1))  Nfacell(85)
+#gbs Some(Nfacell(1))  Nfacell(86)
+#gbx3 Some(Nfacell(1))  Nfacell(87)
+#gbx4 Some(Nfacell(1))  Nfacell(88)
+#gbz Some(Nfacell(1))  Nfacell(89)
+#gbz Some(Nfacell(1))  Nfacell(90)
+#GBMPAL Some(Nfacell(90))  Nfacell(90)
+.gbgt Some(Nfacell(90))  Nfacell(91)
+#gbz Some(Nfacell(1))  Nfacell(92)
+#GBMPAL Some(Nfacell(92))  Nfacell(92)
+.gbm Some(Nfacell(92))  Nfacell(93)
+#gbz Some(Nfacell(1))  Nfacell(94)
+#GBMPAL Some(Nfacell(94))  Nfacell(94)
+.gbtcb Some(Nfacell(94))  Nfacell(95)
+#gbz Some(Nfacell(1))  Nfacell(96)
+#GBMPAL Some(Nfacell(96))  Nfacell(96)
+.gbzt Some(Nfacell(96))  Nfacell(97)
+#gbztms1 Some(Nfacell(1))  Nfacell(98)
+#gog Some(Nfacell(1))  Nfacell(99)
+#gssb_b Some(Nfacell(1))  Nfacell(100)
+#gws-output-pages-elements-homepage_additional_languages__als Some(Nfacell(1))  Nfacell(101)
+-moz-focus-inner Some(Nfacell(1))  Nfacell(102)
+-webkit-scrollbar-track Some(Nfacell(1))  Nfacell(103)
+.GBMCC Some(Nfacell(1))  Nfacell(104)
+.H6sW5 Some(Nfacell(1))  Nfacell(105)
+.ds Some(Nfacell(1))  Nfacell(106)
+.fl Some(Nfacell(1))  Nfacell(107)
+#GBMPAL Some(Nfacell(107))  Nfacell(107)
+a Some(Nfacell(107))  Nfacell(108)
+.gac_m Some(Nfacell(1))  Nfacell(109)
+#GBMPAL Some(Nfacell(109))  Nfacell(109)
+td Some(Nfacell(109))  Nfacell(110)
+.gbem Some(Nfacell(1))  Nfacell(111)
+#GBMPAL Some(Nfacell(111))  Nfacell(111)
+.gbgs Some(Nfacell(111))  Nfacell(112)
+#GBMPAL Some(Nfacell(112))  Nfacell(112)
+.gbmab Some(Nfacell(112))  Nfacell(113)
+.gbem Some(Nfacell(1))  Nfacell(114)
+#GBMPAL Some(Nfacell(114))  Nfacell(114)
+.gbgs Some(Nfacell(114))  Nfacell(115)
+#GBMPAL Some(Nfacell(115))  Nfacell(115)
+.gbmac Some(Nfacell(115))  Nfacell(116)
+.gbemi Some(Nfacell(1))  Nfacell(117)
+#GBMPAL Some(Nfacell(117))  Nfacell(117)
+.gbgs Some(Nfacell(117))  Nfacell(118)
+#GBMPAL Some(Nfacell(118))  Nfacell(118)
+.gbmab Some(Nfacell(118))  Nfacell(119)
+.gbemi Some(Nfacell(1))  Nfacell(120)
+#GBMPAL Some(Nfacell(120))  Nfacell(120)
+.gbgs Some(Nfacell(120))  Nfacell(121)
+#GBMPAL Some(Nfacell(121))  Nfacell(121)
+.gbmac Some(Nfacell(121))  Nfacell(122)
+.gbes Some(Nfacell(1))  Nfacell(123)
+#GBMPAL Some(Nfacell(123))  Nfacell(123)
+.gbgs Some(Nfacell(123))  Nfacell(124)
+#GBMPAL Some(Nfacell(124))  Nfacell(124)
+.gbmab Some(Nfacell(124))  Nfacell(125)
+.gbes Some(Nfacell(1))  Nfacell(126)
+#GBMPAL Some(Nfacell(126))  Nfacell(126)
+.gbgs Some(Nfacell(126))  Nfacell(127)
+#GBMPAL Some(Nfacell(127))  Nfacell(127)
+.gbmac Some(Nfacell(127))  Nfacell(128)
+.gbesi Some(Nfacell(1))  Nfacell(129)
+#GBMPAL Some(Nfacell(129))  Nfacell(129)
+.gbgs Some(Nfacell(129))  Nfacell(130)
+#GBMPAL Some(Nfacell(130))  Nfacell(130)
+.gbmab Some(Nfacell(130))  Nfacell(131)
+.gbesi Some(Nfacell(1))  Nfacell(132)
+#GBMPAL Some(Nfacell(132))  Nfacell(132)
+.gbgs Some(Nfacell(132))  Nfacell(133)
+#GBMPAL Some(Nfacell(133))  Nfacell(133)
+.gbmac Some(Nfacell(133))  Nfacell(134)
+.gbf Some(Nfacell(1))  Nfacell(135)
+#GBMPAL Some(Nfacell(135))  Nfacell(135)
+.gbmt Some(Nfacell(135))  Nfacell(136)
+.gbg4a Some(Nfacell(1))  Nfacell(137)
+.gbg4a Some(Nfacell(1))  Nfacell(138)
+#GBMPAL Some(Nfacell(138))  Nfacell(138)
+.gbts Some(Nfacell(138))  Nfacell(139)
+.gbgs Some(Nfacell(1))  Nfacell(140)
+#GBMPAL Some(Nfacell(140))  Nfacell(140)
+.gbmab Some(Nfacell(140))  Nfacell(141)
+.gbgs Some(Nfacell(1))  Nfacell(142)
+#GBMPAL Some(Nfacell(142))  Nfacell(142)
+.gbmac Some(Nfacell(142))  Nfacell(143)
+.gbgt Some(Nfacell(1))  Nfacell(144)
+.gbgt-hvr Some(Nfacell(1))  Nfacell(145)
+.gbi4p Some(Nfacell(1))  Nfacell(146)
+.gbm Some(Nfacell(1))  Nfacell(147)
+.gbm0l Some(Nfacell(1))  Nfacell(148)
+.gbma Some(Nfacell(1))  Nfacell(149)
+.gbmab Some(Nfacell(1))  Nfacell(150)
+.gbmac Some(Nfacell(1))  Nfacell(151)
+.gbmc Some(Nfacell(1))  Nfacell(152)
+.gbmcc Some(Nfacell(1))  Nfacell(153)
+.gbmh Some(Nfacell(1))  Nfacell(154)
+.gbml1 Some(Nfacell(1))  Nfacell(155)
+.gbml1-hvr Some(Nfacell(1))  Nfacell(156)
+.gbmlb Some(Nfacell(1))  Nfacell(157)
+.gbmlb-hvr Some(Nfacell(1))  Nfacell(158)
+.gbmlbw Some(Nfacell(1))  Nfacell(159)
+.gbmpala Some(Nfacell(1))  Nfacell(160)
+.gbmpalb Some(Nfacell(1))  Nfacell(161)
+.gbmpia Some(Nfacell(1))  Nfacell(162)
+.gbmpiaa Some(Nfacell(1))  Nfacell(163)
+.gbmpiaw Some(Nfacell(1))  Nfacell(164)
+.gbmpnw Some(Nfacell(1))  Nfacell(165)
+.gbmt Some(Nfacell(1))  Nfacell(166)
+.gbmtc Some(Nfacell(1))  Nfacell(167)
+.gbn Some(Nfacell(1))  Nfacell(168)
+#GBMPAL Some(Nfacell(168))  Nfacell(168)
+.gbmt Some(Nfacell(168))  Nfacell(169)
+.gbnd Some(Nfacell(1))  Nfacell(170)
+#GBMPAL Some(Nfacell(170))  Nfacell(170)
+.gbmt Some(Nfacell(170))  Nfacell(171)
+.gbp0 Some(Nfacell(1))  Nfacell(172)
+.gbp0 Some(Nfacell(1))  Nfacell(173)
+#GBMPAL Some(Nfacell(173))  Nfacell(173)
+.gbps Some(Nfacell(173))  Nfacell(174)
+.gbp0 Some(Nfacell(1))  Nfacell(175)
+#GBMPAL Some(Nfacell(175))  Nfacell(175)
+.gbps2 Some(Nfacell(175))  Nfacell(176)
+.gbpc Some(Nfacell(1))  Nfacell(177)
+#GBMPAL Some(Nfacell(177))  Nfacell(177)
+.gbpd Some(Nfacell(177))  Nfacell(178)
+.gbpc Some(Nfacell(1))  Nfacell(179)
+#GBMPAL Some(Nfacell(179))  Nfacell(179)
+.gbps Some(Nfacell(179))  Nfacell(180)
+.gbpc Some(Nfacell(1))  Nfacell(181)
+#GBMPAL Some(Nfacell(181))  Nfacell(181)
+.gbps2 Some(Nfacell(181))  Nfacell(182)
+.gbpd Some(Nfacell(1))  Nfacell(183)
+#GBMPAL Some(Nfacell(183))  Nfacell(183)
+.gbmt Some(Nfacell(183))  Nfacell(184)
+.gbpd Some(Nfacell(1))  Nfacell(185)
+#GBMPAL Some(Nfacell(185))  Nfacell(185)
+.gbps Some(Nfacell(185))  Nfacell(186)
+.gbpdjs Some(Nfacell(1))  Nfacell(187)
+#GBMPAL Some(Nfacell(187))  Nfacell(187)
+.gbto Some(Nfacell(187))  Nfacell(188)
+#GBMPAL Some(Nfacell(188))  Nfacell(188)
+.gbm Some(Nfacell(188))  Nfacell(189)
+.gbpmc Some(Nfacell(1))  Nfacell(190)
+.gbpmc Some(Nfacell(1))  Nfacell(191)
+#GBMPAL Some(Nfacell(191))  Nfacell(191)
+.gbpmtc Some(Nfacell(191))  Nfacell(192)
+.gbpms2 Some(Nfacell(1))  Nfacell(193)
+.gbprcb Some(Nfacell(1))  Nfacell(194)
+.gbprcd Some(Nfacell(1))  Nfacell(195)
+.gbprci Some(Nfacell(1))  Nfacell(196)
+.gbprct Some(Nfacell(1))  Nfacell(197)
+.gbps2 Some(Nfacell(1))  Nfacell(198)
+.gbqfb Some(Nfacell(1))  Nfacell(199)
+.gbqfb-hvr Some(Nfacell(1))  Nfacell(200)
+.gbqfb-no-focus Some(Nfacell(1))  Nfacell(201)
+.gbqfba Some(Nfacell(1))  Nfacell(202)
+.gbqfba-hvr Some(Nfacell(1))  Nfacell(203)
+.gbqfbb Some(Nfacell(1))  Nfacell(204)
+.gbqfbb-hvr Some(Nfacell(1))  Nfacell(205)
+.gbrtl Some(Nfacell(1))  Nfacell(206)
+#GBMPAL Some(Nfacell(206))  Nfacell(206)
+.gbm Some(Nfacell(206))  Nfacell(207)
+.gbsb Some(Nfacell(1))  Nfacell(208)
+.gbsb Some(Nfacell(1))  Nfacell(209)
+#GBMPAL Some(Nfacell(209))  Nfacell(209)
+.gbsbb Some(Nfacell(209))  Nfacell(210)
+.gbsb Some(Nfacell(1))  Nfacell(211)
+#GBMPAL Some(Nfacell(211))  Nfacell(211)
+.gbsbt Some(Nfacell(211))  Nfacell(212)
+.gbsbic Some(Nfacell(1))  Nfacell(213)
+.gbsbis Some(Nfacell(1))  Nfacell(214)
+#GBMPAL Some(Nfacell(214))  Nfacell(214)
+.gbsbb Some(Nfacell(214))  Nfacell(215)
+.gbsbis Some(Nfacell(1))  Nfacell(216)
+#GBMPAL Some(Nfacell(216))  Nfacell(216)
+.gbsbt Some(Nfacell(216))  Nfacell(217)
+.gbt Some(Nfacell(1))  Nfacell(218)
+.gbtb Some(Nfacell(1))  Nfacell(219)
+#GBMPAL Some(Nfacell(219))  Nfacell(219)
+.gbts Some(Nfacell(219))  Nfacell(220)
+.gbtb2 Some(Nfacell(1))  Nfacell(221)
+.gbtc Some(Nfacell(1))  Nfacell(222)
+.gbtcb Some(Nfacell(1))  Nfacell(223)
+.gbto Some(Nfacell(1))  Nfacell(224)
+.gbto Some(Nfacell(1))  Nfacell(225)
+#GBMPAL Some(Nfacell(225))  Nfacell(225)
+#gbgs5 Some(Nfacell(225))  Nfacell(226)
+.gbto Some(Nfacell(1))  Nfacell(227)
+#GBMPAL Some(Nfacell(227))  Nfacell(227)
+#gbi4i Some(Nfacell(227))  Nfacell(228)
+.gbto Some(Nfacell(1))  Nfacell(229)
+#GBMPAL Some(Nfacell(229))  Nfacell(229)
+#gbi4id Some(Nfacell(229))  Nfacell(230)
+.gbto Some(Nfacell(1))  Nfacell(231)
+#GBMPAL Some(Nfacell(231))  Nfacell(231)
+#gbi5 Some(Nfacell(231))  Nfacell(232)
+.gbto Some(Nfacell(1))  Nfacell(233)
+#GBMPAL Some(Nfacell(233))  Nfacell(233)
+#gbs Some(Nfacell(233))  Nfacell(234)
+.gbto Some(Nfacell(1))  Nfacell(235)
+#GBMPAL Some(Nfacell(235))  Nfacell(235)
+.gbg4a Some(Nfacell(235))  Nfacell(236)
+#GBMPAL Some(Nfacell(236))  Nfacell(236)
+.gbts Some(Nfacell(236))  Nfacell(237)
+.gbto Some(Nfacell(1))  Nfacell(238)
+#GBMPAL Some(Nfacell(238))  Nfacell(238)
+.gbgt Some(Nfacell(238))  Nfacell(239)
+#GBMPAL Some(Nfacell(239))  Nfacell(239)
+.gbtb2 Some(Nfacell(239))  Nfacell(240)
+.gbto Some(Nfacell(1))  Nfacell(241)
+#GBMPAL Some(Nfacell(241))  Nfacell(241)
+.gbm Some(Nfacell(241))  Nfacell(242)
+.gbto Some(Nfacell(1))  Nfacell(243)
+#GBMPAL Some(Nfacell(243))  Nfacell(243)
+.gbmab Some(Nfacell(243))  Nfacell(244)
+.gbto Some(Nfacell(1))  Nfacell(245)
+#GBMPAL Some(Nfacell(245))  Nfacell(245)
+.gbmac Some(Nfacell(245))  Nfacell(246)
+.gbto Some(Nfacell(1))  Nfacell(247)
+#GBMPAL Some(Nfacell(247))  Nfacell(247)
+.gbts Some(Nfacell(247))  Nfacell(248)
+.gbto Some(Nfacell(1))  Nfacell(249)
+#GBMPAL Some(Nfacell(249))  Nfacell(249)
+.gbzt Some(Nfacell(249))  Nfacell(250)
+#GBMPAL Some(Nfacell(250))  Nfacell(250)
+.gbtb2 Some(Nfacell(250))  Nfacell(251)
+.gbts Some(Nfacell(1))  Nfacell(252)
+.gbtsa Some(Nfacell(1))  Nfacell(253)
+.gbxms Some(Nfacell(1))  Nfacell(254)
+.gbxo Some(Nfacell(1))  Nfacell(255)
+.gbxv Some(Nfacell(1))  Nfacell(256)
+.gbxx Some(Nfacell(1))  Nfacell(257)
+.gbz0l Some(Nfacell(1))  Nfacell(258)
+#GBMPAL Some(Nfacell(258))  Nfacell(258)
+.gbtb2 Some(Nfacell(258))  Nfacell(259)
+.gbz0l Some(Nfacell(1))  Nfacell(260)
+#GBMPAL Some(Nfacell(260))  Nfacell(260)
+.gbts Some(Nfacell(260))  Nfacell(261)
+.gbzt Some(Nfacell(1))  Nfacell(262)
+.gbzt Some(Nfacell(1))  Nfacell(263)
+#GBMPAL Some(Nfacell(263))  Nfacell(263)
+.gbts Some(Nfacell(263))  Nfacell(264)
+.gsdd_a Some(Nfacell(1))  Nfacell(265)
+.gsfi Some(Nfacell(1))  Nfacell(266)
+.gsfs Some(Nfacell(1))  Nfacell(267)
+.gsib_a Some(Nfacell(1))  Nfacell(268)
+.gsib_b Some(Nfacell(1))  Nfacell(269)
+.gsls_a Some(Nfacell(1))  Nfacell(270)
+.gsmq_a Some(Nfacell(1))  Nfacell(271)
+.gsn_a Some(Nfacell(1))  Nfacell(272)
+.gsn_b Some(Nfacell(1))  Nfacell(273)
+.gsn_c Some(Nfacell(1))  Nfacell(274)
+.gspqs_b Some(Nfacell(1))  Nfacell(275)
+.gsq_a Some(Nfacell(1))  Nfacell(276)
+.gss_ifl Some(Nfacell(1))  Nfacell(277)
+.gssb_a Some(Nfacell(1))  Nfacell(278)
+.gssb_a Some(Nfacell(1))  Nfacell(279)
+#GBMPAL Some(Nfacell(279))  Nfacell(279)
+td Some(Nfacell(279))  Nfacell(280)
+.gssb_c Some(Nfacell(1))  Nfacell(281)
+.gssb_e Some(Nfacell(1))  Nfacell(282)
+.gssb_f Some(Nfacell(1))  Nfacell(283)
+.gssb_g Some(Nfacell(1))  Nfacell(284)
+.gssb_h Some(Nfacell(1))  Nfacell(285)
+.gssb_i Some(Nfacell(1))  Nfacell(286)
+.gssb_i Some(Nfacell(1))  Nfacell(287)
+#GBMPAL Some(Nfacell(287))  Nfacell(287)
+.gss_ifl Some(Nfacell(287))  Nfacell(288)
+.gssb_k Some(Nfacell(1))  Nfacell(289)
+.gssb_l Some(Nfacell(1))  Nfacell(290)
+.gssb_m Some(Nfacell(1))  Nfacell(291)
+.h Some(Nfacell(1))  Nfacell(292)
+.lsb Some(Nfacell(1))  Nfacell(293)
+.lsbb Some(Nfacell(1))  Nfacell(294)
+.lst Some(Nfacell(1))  Nfacell(295)
+.sblc Some(Nfacell(1))  Nfacell(296)
+.sblc Some(Nfacell(1))  Nfacell(297)
+#GBMPAL Some(Nfacell(297))  Nfacell(297)
+a Some(Nfacell(297))  Nfacell(298)
+.z4hgWe Some(Nfacell(1))  Nfacell(299)
+a Some(Nfacell(1))  Nfacell(300)
+a.gbiba Some(Nfacell(1))  Nfacell(301)
+a.gspqs_a Some(Nfacell(1))  Nfacell(302)
+a.gssb_j Some(Nfacell(1))  Nfacell(303)
+active Some(Nfacell(1))  Nfacell(304)
+after Some(Nfacell(1))  Nfacell(305)
+body Some(Nfacell(1))  Nfacell(306)
+em Some(Nfacell(1))  Nfacell(307)
+focus Some(Nfacell(1))  Nfacell(308)
+form Some(Nfacell(1))  Nfacell(309)
+hover Some(Nfacell(1))  Nfacell(310)
+input Some(Nfacell(1))  Nfacell(311)
+last-child Some(Nfacell(1))  Nfacell(312)
+p Some(Nfacell(1))  Nfacell(313)
+span#gbg4 Some(Nfacell(1))  Nfacell(314)
+span#gbg6 Some(Nfacell(1))  Nfacell(315)
+td Some(Nfacell(1))  Nfacell(316)
+vertical Some(Nfacell(1))  Nfacell(317)
+visited Some(Nfacell(1))  Nfacell(318)
+2589541
+209
+72039
+9644
 205
-126
-8141
-572969
-197
-8075
-1216864
-237
-9535
-650998
-208
-9669
-601751
-209
-9285
-571930
-189
-8268
-544591
-194
-8470
-590734
-126
-8346
-580541
+525847
+172
+116
+7740
+532854
 127
-8592
-723453
-290
-13495
-1494399
-164
-11100
-619372
-201
-9845
-1094259
-209
+8474
+572501
+126
+8531
+511888
+112
+7813
+524943
+115
+8537
+507835
+112
+7838
+550010
+122
+9145
+521224
+119
+7951
+581028
+187
+9721
+740492
+310
+49952
+1472968
+274
+11258
+628650
+222
+11038
+1009086
+135
 final_rule_matches:
-[src/bit.rs:464:5] unsafe { MISS_CNT } = 1627
+[src/bit.rs:467:5] unsafe { MISS_CNT } = 1627

@@ -1,117 +1,222 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-[src/bit.rs:440:5] &selectors = [
-    "#logo-red-icon-container.ytd-topbar-logo-renderer",
-    "#masthead-skeleton-icons",
-    "#search-container.ytd-searchbox-spt",
-    "#search-input.ytd-searchbox-spt #search",
-    "#search-input.ytd-searchbox-spt input",
-    "-moz-input-placeholder",
-    "-ms-input-placeholder",
-    "-stv-set-elsewhere",
-    "-webkit-input-placeholder",
-    ".grecaptcha-badge",
-    ".hidden",
-    ".masthead-skeleton-icon",
-    "body",
-    "body.autoscroll",
-    "body.no-scroll",
-    "body.no-y-scroll",
-    "dom-bind",
-    "dom-if",
-    "dom-repeat",
-    "first-child",
-    "html",
-    "last-child",
-    "ps-dom-if",
-    "ps-dom-repeat",
-    "textarea",
-    "ytd-app>ytd-masthead.chunked",
-    "ytd-masthead #masthead-logo",
-    "ytd-masthead #masthead-logo #country-code",
-    "ytd-masthead .external-icon",
-    "ytd-masthead .yt-icons-ext",
-    "ytd-masthead svg#yt-logo-red-svg",
-    "ytd-masthead svg#yt-logo-red-svg #youtube-red-paths path",
-    "ytd-masthead svg#yt-logo-red-updated-svg",
-    "ytd-masthead svg#yt-logo-red-updated-svg #youtube-red-paths path",
-    "ytd-masthead svg#yt-logo-svg",
-    "ytd-masthead svg#yt-logo-svg #youtube-paths path",
-    "ytd-masthead svg#yt-logo-updated-svg",
-    "ytd-masthead svg#yt-logo-updated-svg #youtube-paths path",
-    "ytd-masthead.dark .masthead-skeleton-icon",
-    "ytd-masthead.dark svg#yt-logo-red-svg #youtube-red-paths path",
-    "ytd-masthead.dark svg#yt-logo-red-updated-svg #youtube-red-paths path",
-    "ytd-masthead.dark svg#yt-logo-svg #youtube-paths path",
-    "ytd-masthead.dark svg#yt-logo-updated-svg #youtube-paths path",
-    "ytd-masthead.masthead-finish #masthead-skeleton-icons",
-    "ytd-masthead.shell",
-    "ytd-masthead.shell #a11y-skip-nav",
-    "ytd-masthead.shell #menu-icon",
-    "ytd-masthead.shell #yt-logo-red-svg",
-    "ytd-masthead.shell #yt-logo-red-updated-svg",
-    "ytd-masthead.shell #yt-logo-svg",
-    "ytd-masthead.shell #yt-logo-updated-svg",
-    "ytd-masthead.shell svg",
-    "ytd-masthead.shell.dark",
-    "ytd-masthead.shell.dark .yt-icons-ext ytd-masthead.shell.theater .yt-icons-ext",
-    "ytd-masthead.shell.full-window-mode",
-    "ytd-masthead.shell.theater",
-    "ytd-masthead.theater svg#yt-logo-red-svg #youtube-red-paths path",
-    "ytd-masthead.theater svg#yt-logo-svg #youtube-paths path",
-]
-170751
-997217
-1754071
-213429
-489657
-50023
-1129945
-304
-10247
-31804
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(1))  Nfacell(2)
+#masthead-skeleton-icons Some(Nfacell(1))  Nfacell(3)
+#search-container.ytd-searchbox-spt Some(Nfacell(1))  Nfacell(4)
+#search-input.ytd-searchbox-spt Some(Nfacell(1))  Nfacell(5)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(5))  Nfacell(5)
+#search Some(Nfacell(5))  Nfacell(6)
+#search-input.ytd-searchbox-spt Some(Nfacell(1))  Nfacell(7)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(7))  Nfacell(7)
+input Some(Nfacell(7))  Nfacell(8)
+-moz-input-placeholder Some(Nfacell(1))  Nfacell(9)
+-ms-input-placeholder Some(Nfacell(1))  Nfacell(10)
+-stv-set-elsewhere Some(Nfacell(1))  Nfacell(11)
+-webkit-input-placeholder Some(Nfacell(1))  Nfacell(12)
+.grecaptcha-badge Some(Nfacell(1))  Nfacell(13)
+.hidden Some(Nfacell(1))  Nfacell(14)
+.masthead-skeleton-icon Some(Nfacell(1))  Nfacell(15)
+body Some(Nfacell(1))  Nfacell(16)
+body.autoscroll Some(Nfacell(1))  Nfacell(17)
+body.no-scroll Some(Nfacell(1))  Nfacell(18)
+body.no-y-scroll Some(Nfacell(1))  Nfacell(19)
+dom-bind Some(Nfacell(1))  Nfacell(20)
+dom-if Some(Nfacell(1))  Nfacell(21)
+dom-repeat Some(Nfacell(1))  Nfacell(22)
+first-child Some(Nfacell(1))  Nfacell(23)
+html Some(Nfacell(1))  Nfacell(24)
+last-child Some(Nfacell(1))  Nfacell(25)
+ps-dom-if Some(Nfacell(1))  Nfacell(26)
+ps-dom-repeat Some(Nfacell(1))  Nfacell(27)
+textarea Some(Nfacell(1))  Nfacell(28)
+ytd-app Some(Nfacell(1))  Nfacell(29)
+ytd-masthead.chunked Some(Nfacell(29))  Nfacell(30)
+ytd-masthead Some(Nfacell(1))  Nfacell(31)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(31))  Nfacell(31)
+#masthead-logo Some(Nfacell(31))  Nfacell(32)
+ytd-masthead Some(Nfacell(1))  Nfacell(33)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(33))  Nfacell(33)
+#masthead-logo Some(Nfacell(33))  Nfacell(34)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(34))  Nfacell(34)
+#country-code Some(Nfacell(34))  Nfacell(35)
+ytd-masthead Some(Nfacell(1))  Nfacell(36)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(36))  Nfacell(36)
+.external-icon Some(Nfacell(36))  Nfacell(37)
+ytd-masthead Some(Nfacell(1))  Nfacell(38)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(38))  Nfacell(38)
+.yt-icons-ext Some(Nfacell(38))  Nfacell(39)
+ytd-masthead Some(Nfacell(1))  Nfacell(40)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(40))  Nfacell(40)
+svg#yt-logo-red-svg Some(Nfacell(40))  Nfacell(41)
+ytd-masthead Some(Nfacell(1))  Nfacell(42)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(42))  Nfacell(42)
+svg#yt-logo-red-svg Some(Nfacell(42))  Nfacell(43)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(43))  Nfacell(43)
+#youtube-red-paths Some(Nfacell(43))  Nfacell(44)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(44))  Nfacell(44)
+path Some(Nfacell(44))  Nfacell(45)
+ytd-masthead Some(Nfacell(1))  Nfacell(46)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(46))  Nfacell(46)
+svg#yt-logo-red-updated-svg Some(Nfacell(46))  Nfacell(47)
+ytd-masthead Some(Nfacell(1))  Nfacell(48)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(48))  Nfacell(48)
+svg#yt-logo-red-updated-svg Some(Nfacell(48))  Nfacell(49)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(49))  Nfacell(49)
+#youtube-red-paths Some(Nfacell(49))  Nfacell(50)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(50))  Nfacell(50)
+path Some(Nfacell(50))  Nfacell(51)
+ytd-masthead Some(Nfacell(1))  Nfacell(52)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(52))  Nfacell(52)
+svg#yt-logo-svg Some(Nfacell(52))  Nfacell(53)
+ytd-masthead Some(Nfacell(1))  Nfacell(54)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(54))  Nfacell(54)
+svg#yt-logo-svg Some(Nfacell(54))  Nfacell(55)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(55))  Nfacell(55)
+#youtube-paths Some(Nfacell(55))  Nfacell(56)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(56))  Nfacell(56)
+path Some(Nfacell(56))  Nfacell(57)
+ytd-masthead Some(Nfacell(1))  Nfacell(58)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(58))  Nfacell(58)
+svg#yt-logo-updated-svg Some(Nfacell(58))  Nfacell(59)
+ytd-masthead Some(Nfacell(1))  Nfacell(60)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(60))  Nfacell(60)
+svg#yt-logo-updated-svg Some(Nfacell(60))  Nfacell(61)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(61))  Nfacell(61)
+#youtube-paths Some(Nfacell(61))  Nfacell(62)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(62))  Nfacell(62)
+path Some(Nfacell(62))  Nfacell(63)
+ytd-masthead.dark Some(Nfacell(1))  Nfacell(64)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(64))  Nfacell(64)
+.masthead-skeleton-icon Some(Nfacell(64))  Nfacell(65)
+ytd-masthead.dark Some(Nfacell(1))  Nfacell(66)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(66))  Nfacell(66)
+svg#yt-logo-red-svg Some(Nfacell(66))  Nfacell(67)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(67))  Nfacell(67)
+#youtube-red-paths Some(Nfacell(67))  Nfacell(68)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(68))  Nfacell(68)
+path Some(Nfacell(68))  Nfacell(69)
+ytd-masthead.dark Some(Nfacell(1))  Nfacell(70)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(70))  Nfacell(70)
+svg#yt-logo-red-updated-svg Some(Nfacell(70))  Nfacell(71)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(71))  Nfacell(71)
+#youtube-red-paths Some(Nfacell(71))  Nfacell(72)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(72))  Nfacell(72)
+path Some(Nfacell(72))  Nfacell(73)
+ytd-masthead.dark Some(Nfacell(1))  Nfacell(74)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(74))  Nfacell(74)
+svg#yt-logo-svg Some(Nfacell(74))  Nfacell(75)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(75))  Nfacell(75)
+#youtube-paths Some(Nfacell(75))  Nfacell(76)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(76))  Nfacell(76)
+path Some(Nfacell(76))  Nfacell(77)
+ytd-masthead.dark Some(Nfacell(1))  Nfacell(78)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(78))  Nfacell(78)
+svg#yt-logo-updated-svg Some(Nfacell(78))  Nfacell(79)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(79))  Nfacell(79)
+#youtube-paths Some(Nfacell(79))  Nfacell(80)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(80))  Nfacell(80)
+path Some(Nfacell(80))  Nfacell(81)
+ytd-masthead.masthead-finish Some(Nfacell(1))  Nfacell(82)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(82))  Nfacell(82)
+#masthead-skeleton-icons Some(Nfacell(82))  Nfacell(83)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(84)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(85)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(85))  Nfacell(85)
+#a11y-skip-nav Some(Nfacell(85))  Nfacell(86)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(87)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(87))  Nfacell(87)
+#menu-icon Some(Nfacell(87))  Nfacell(88)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(89)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(89))  Nfacell(89)
+#yt-logo-red-svg Some(Nfacell(89))  Nfacell(90)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(91)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(91))  Nfacell(91)
+#yt-logo-red-updated-svg Some(Nfacell(91))  Nfacell(92)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(93)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(93))  Nfacell(93)
+#yt-logo-svg Some(Nfacell(93))  Nfacell(94)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(95)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(95))  Nfacell(95)
+#yt-logo-updated-svg Some(Nfacell(95))  Nfacell(96)
+ytd-masthead.shell Some(Nfacell(1))  Nfacell(97)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(97))  Nfacell(97)
+svg Some(Nfacell(97))  Nfacell(98)
+ytd-masthead.shell.dark Some(Nfacell(1))  Nfacell(99)
+ytd-masthead.shell.dark Some(Nfacell(1))  Nfacell(100)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(100))  Nfacell(100)
+.yt-icons-ext Some(Nfacell(100))  Nfacell(101)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(101))  Nfacell(101)
+ytd-masthead.shell.theater Some(Nfacell(101))  Nfacell(102)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(102))  Nfacell(102)
+.yt-icons-ext Some(Nfacell(102))  Nfacell(103)
+ytd-masthead.shell.full-window-mode Some(Nfacell(1))  Nfacell(104)
+ytd-masthead.shell.theater Some(Nfacell(1))  Nfacell(105)
+ytd-masthead.theater Some(Nfacell(1))  Nfacell(106)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(106))  Nfacell(106)
+svg#yt-logo-red-svg Some(Nfacell(106))  Nfacell(107)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(107))  Nfacell(107)
+#youtube-red-paths Some(Nfacell(107))  Nfacell(108)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(108))  Nfacell(108)
+path Some(Nfacell(108))  Nfacell(109)
+ytd-masthead.theater Some(Nfacell(1))  Nfacell(110)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(110))  Nfacell(110)
+svg#yt-logo-svg Some(Nfacell(110))  Nfacell(111)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(111))  Nfacell(111)
+#youtube-paths Some(Nfacell(111))  Nfacell(112)
+#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(112))  Nfacell(112)
+path Some(Nfacell(112))  Nfacell(113)
+144394
+994013
+1028846
+147914
+385979
+50376
+1138066
+285
+10479
+31114
+162
+9500
 161
-9054
-171
-165
-12228
-875722
-1939
-252245
-339944
-166276
-289536
-728118
-163952
-172518
-167292
-219499
-164169
-286543
-178
-134298
-156534
-193178
-181227
-176743
-177850
-175162
-172903
-182928
-942992
-151834
-205416
-196823
-249214
-149855
-204202
-182719
-218278
-254821
-615171
-758564
-1067944
-2264523
-1133834
+162
+12487
+450445
+278
+220161
+305545
+133105
+384562
+771516
+157781
+154969
+154583
+204295
+161317
+278949
+264
+298913
+202192
+208774
+203528
+201294
+206032
+180813
+180630
+191899
+400774
+126650
+173506
+173967
+217368
+127014
+166300
+167337
+165992
+239420
+632395
+961331
+1110452
+4239738
+1228158
 final_rule_matches:
-[src/bit.rs:464:5] unsafe { MISS_CNT } = 3581
+[src/bit.rs:467:5] unsafe { MISS_CNT } = 3581

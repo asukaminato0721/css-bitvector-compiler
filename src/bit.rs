@@ -437,7 +437,7 @@ fn main() {
         ))
         .unwrap(),
     );
-    dbg!(&selectors);
+   // dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {
@@ -450,6 +450,9 @@ fn main() {
         ),
         nfa.to_dot(&dom.selector_manager),
     );
+    for Rule(a,b ,c ) in nfa.rules.iter() {
+        println!("{} {:?}  {:?}",dom.selector_manager.id_to_selector[&a.unwrap_or_default()],b,c);
+    }
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
