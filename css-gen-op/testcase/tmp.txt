@@ -1,4 +1,4 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/naive`
-MATCH #b  -> [3]
-MATCH #bb  -> [4]
+#b  -> [3]
+#bb  -> [4]

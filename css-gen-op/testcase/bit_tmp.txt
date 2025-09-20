@@ -1,11 +1,17 @@
+warning: method `force_recalc` is never used
+   --> src/bit.rs:316:8
+    |
+46  | impl DOM {
+    | -------- method in this implementation
+...
+316 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-#b None  Nfacell(1)
-#bb None  Nfacell(2)
-div None  Nfacell(3)
-#b Some(Nfacell(3))  Nfacell(3)
-.a Some(Nfacell(3))  Nfacell(4)
-p Some(Nfacell(4))  Nfacell(5)
 [src/bit.rs:381:17] &dom.nodes = {
     2: DOMNode {
         tag_id: SelectorId(
@@ -22,6 +28,31 @@ p Some(Nfacell(4))  Nfacell(5)
         output_state: [
             false,
             false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    3: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
             false,
             false,
             false,
@@ -50,110 +81,12 @@ p Some(Nfacell(4))  Nfacell(5)
             false,
             false,
             true,
-            false,
-            false,
-        ],
-    },
-    3: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            true,
-            false,
-            false,
             false,
             false,
         ],
     },
 }
 [src/bit.rs:381:17] &dom.nodes = {
-    1: DOMNode {
-        tag_id: SelectorId(
-            2,
-        ),
-        class_ids: {
-            SelectorId(
-                3,
-            ),
-        },
-        id_selector_id: None,
-        parent: None,
-        children: [
-            2,
-            4,
-            3,
-        ],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            true,
-            false,
-            false,
-        ],
-    },
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
-    3: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            true,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
     4: DOMNode {
         tag_id: SelectorId(
             5,
@@ -179,9 +112,82 @@ p Some(Nfacell(4))  Nfacell(5)
             false,
         ],
     },
+    1: DOMNode {
+        tag_id: SelectorId(
+            2,
+        ),
+        class_ids: {
+            SelectorId(
+                3,
+            ),
+        },
+        id_selector_id: None,
+        parent: None,
+        children: [
+            2,
+            4,
+            3,
+        ],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+        ],
+    },
+    3: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-4661
+8746
 final_rule_matches:
 #b -> [3]
 #bb -> [4]
-[src/bit.rs:472:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:462:5] unsafe { MISS_CNT } = 4

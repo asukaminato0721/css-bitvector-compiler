@@ -491,10 +491,8 @@ fn main() {
         apply_frame(&mut dom, &f, &nfa);
     }
 
-    let d = dom.get_root_node();
-    dom.force_recalc(d, &get_input(&nfa), &nfa);
-
-    let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
+    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors).into_iter().collect::<Vec<_>>();
+    final_matches.sort();
     println!("final_rule_matches:");
     for (k, v) in final_matches {
         println!("{} -> {:?}", k, v);

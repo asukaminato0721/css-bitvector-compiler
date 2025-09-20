@@ -1,226 +1,73 @@
+warning: method `force_recalc` is never used
+   --> src/bit.rs:316:8
+    |
+46  | impl DOM {
+    | -------- method in this implementation
+...
+316 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-#logo-red-icon-container.ytd-topbar-logo-renderer None  Nfacell(1)
-#masthead-skeleton-icons None  Nfacell(2)
-#search-container.ytd-searchbox-spt None  Nfacell(3)
-#search-input.ytd-searchbox-spt None  Nfacell(4)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(4))  Nfacell(4)
-#search Some(Nfacell(4))  Nfacell(5)
-#search-input.ytd-searchbox-spt None  Nfacell(6)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(6))  Nfacell(6)
-input Some(Nfacell(6))  Nfacell(7)
--moz-input-placeholder None  Nfacell(8)
--ms-input-placeholder None  Nfacell(9)
--stv-set-elsewhere None  Nfacell(10)
--webkit-input-placeholder None  Nfacell(11)
-.grecaptcha-badge None  Nfacell(12)
-.hidden None  Nfacell(13)
-.masthead-skeleton-icon None  Nfacell(14)
-body None  Nfacell(15)
-body.autoscroll None  Nfacell(16)
-body.no-scroll None  Nfacell(17)
-body.no-y-scroll None  Nfacell(18)
-dom-bind None  Nfacell(19)
-dom-if None  Nfacell(20)
-dom-repeat None  Nfacell(21)
-first-child None  Nfacell(22)
-html None  Nfacell(23)
-last-child None  Nfacell(24)
-ps-dom-if None  Nfacell(25)
-ps-dom-repeat None  Nfacell(26)
-textarea None  Nfacell(27)
-ytd-app None  Nfacell(28)
-ytd-masthead.chunked Some(Nfacell(28))  Nfacell(29)
-ytd-masthead None  Nfacell(30)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(30))  Nfacell(30)
-#masthead-logo Some(Nfacell(30))  Nfacell(31)
-ytd-masthead None  Nfacell(32)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(32))  Nfacell(32)
-#masthead-logo Some(Nfacell(32))  Nfacell(33)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(33))  Nfacell(33)
-#country-code Some(Nfacell(33))  Nfacell(34)
-ytd-masthead None  Nfacell(35)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(35))  Nfacell(35)
-.external-icon Some(Nfacell(35))  Nfacell(36)
-ytd-masthead None  Nfacell(37)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(37))  Nfacell(37)
-.yt-icons-ext Some(Nfacell(37))  Nfacell(38)
-ytd-masthead None  Nfacell(39)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(39))  Nfacell(39)
-svg#yt-logo-red-svg Some(Nfacell(39))  Nfacell(40)
-ytd-masthead None  Nfacell(41)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(41))  Nfacell(41)
-svg#yt-logo-red-svg Some(Nfacell(41))  Nfacell(42)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(42))  Nfacell(42)
-#youtube-red-paths Some(Nfacell(42))  Nfacell(43)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(43))  Nfacell(43)
-path Some(Nfacell(43))  Nfacell(44)
-ytd-masthead None  Nfacell(45)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(45))  Nfacell(45)
-svg#yt-logo-red-updated-svg Some(Nfacell(45))  Nfacell(46)
-ytd-masthead None  Nfacell(47)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(47))  Nfacell(47)
-svg#yt-logo-red-updated-svg Some(Nfacell(47))  Nfacell(48)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(48))  Nfacell(48)
-#youtube-red-paths Some(Nfacell(48))  Nfacell(49)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(49))  Nfacell(49)
-path Some(Nfacell(49))  Nfacell(50)
-ytd-masthead None  Nfacell(51)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(51))  Nfacell(51)
-svg#yt-logo-svg Some(Nfacell(51))  Nfacell(52)
-ytd-masthead None  Nfacell(53)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(53))  Nfacell(53)
-svg#yt-logo-svg Some(Nfacell(53))  Nfacell(54)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(54))  Nfacell(54)
-#youtube-paths Some(Nfacell(54))  Nfacell(55)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(55))  Nfacell(55)
-path Some(Nfacell(55))  Nfacell(56)
-ytd-masthead None  Nfacell(57)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(57))  Nfacell(57)
-svg#yt-logo-updated-svg Some(Nfacell(57))  Nfacell(58)
-ytd-masthead None  Nfacell(59)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(59))  Nfacell(59)
-svg#yt-logo-updated-svg Some(Nfacell(59))  Nfacell(60)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(60))  Nfacell(60)
-#youtube-paths Some(Nfacell(60))  Nfacell(61)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(61))  Nfacell(61)
-path Some(Nfacell(61))  Nfacell(62)
-ytd-masthead.dark None  Nfacell(63)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(63))  Nfacell(63)
-.masthead-skeleton-icon Some(Nfacell(63))  Nfacell(64)
-ytd-masthead.dark None  Nfacell(65)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(65))  Nfacell(65)
-svg#yt-logo-red-svg Some(Nfacell(65))  Nfacell(66)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(66))  Nfacell(66)
-#youtube-red-paths Some(Nfacell(66))  Nfacell(67)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(67))  Nfacell(67)
-path Some(Nfacell(67))  Nfacell(68)
-ytd-masthead.dark None  Nfacell(69)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(69))  Nfacell(69)
-svg#yt-logo-red-updated-svg Some(Nfacell(69))  Nfacell(70)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(70))  Nfacell(70)
-#youtube-red-paths Some(Nfacell(70))  Nfacell(71)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(71))  Nfacell(71)
-path Some(Nfacell(71))  Nfacell(72)
-ytd-masthead.dark None  Nfacell(73)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(73))  Nfacell(73)
-svg#yt-logo-svg Some(Nfacell(73))  Nfacell(74)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(74))  Nfacell(74)
-#youtube-paths Some(Nfacell(74))  Nfacell(75)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(75))  Nfacell(75)
-path Some(Nfacell(75))  Nfacell(76)
-ytd-masthead.dark None  Nfacell(77)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(77))  Nfacell(77)
-svg#yt-logo-updated-svg Some(Nfacell(77))  Nfacell(78)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(78))  Nfacell(78)
-#youtube-paths Some(Nfacell(78))  Nfacell(79)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(79))  Nfacell(79)
-path Some(Nfacell(79))  Nfacell(80)
-ytd-masthead.masthead-finish None  Nfacell(81)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(81))  Nfacell(81)
-#masthead-skeleton-icons Some(Nfacell(81))  Nfacell(82)
-ytd-masthead.shell None  Nfacell(83)
-ytd-masthead.shell None  Nfacell(84)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(84))  Nfacell(84)
-#a11y-skip-nav Some(Nfacell(84))  Nfacell(85)
-ytd-masthead.shell None  Nfacell(86)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(86))  Nfacell(86)
-#menu-icon Some(Nfacell(86))  Nfacell(87)
-ytd-masthead.shell None  Nfacell(88)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(88))  Nfacell(88)
-#yt-logo-red-svg Some(Nfacell(88))  Nfacell(89)
-ytd-masthead.shell None  Nfacell(90)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(90))  Nfacell(90)
-#yt-logo-red-updated-svg Some(Nfacell(90))  Nfacell(91)
-ytd-masthead.shell None  Nfacell(92)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(92))  Nfacell(92)
-#yt-logo-svg Some(Nfacell(92))  Nfacell(93)
-ytd-masthead.shell None  Nfacell(94)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(94))  Nfacell(94)
-#yt-logo-updated-svg Some(Nfacell(94))  Nfacell(95)
-ytd-masthead.shell None  Nfacell(96)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(96))  Nfacell(96)
-svg Some(Nfacell(96))  Nfacell(97)
-ytd-masthead.shell.dark None  Nfacell(98)
-ytd-masthead.shell.dark None  Nfacell(99)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(99))  Nfacell(99)
-.yt-icons-ext Some(Nfacell(99))  Nfacell(100)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(100))  Nfacell(100)
-ytd-masthead.shell.theater Some(Nfacell(100))  Nfacell(101)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(101))  Nfacell(101)
-.yt-icons-ext Some(Nfacell(101))  Nfacell(102)
-ytd-masthead.shell.full-window-mode None  Nfacell(103)
-ytd-masthead.shell.theater None  Nfacell(104)
-ytd-masthead.theater None  Nfacell(105)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(105))  Nfacell(105)
-svg#yt-logo-red-svg Some(Nfacell(105))  Nfacell(106)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(106))  Nfacell(106)
-#youtube-red-paths Some(Nfacell(106))  Nfacell(107)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(107))  Nfacell(107)
-path Some(Nfacell(107))  Nfacell(108)
-ytd-masthead.theater None  Nfacell(109)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(109))  Nfacell(109)
-svg#yt-logo-svg Some(Nfacell(109))  Nfacell(110)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(110))  Nfacell(110)
-#youtube-paths Some(Nfacell(110))  Nfacell(111)
-#logo-red-icon-container.ytd-topbar-logo-renderer Some(Nfacell(111))  Nfacell(111)
-path Some(Nfacell(111))  Nfacell(112)
-158439
-1158881
-1429551
-148222
-461281
-55458
-1262872
-284
-13307
-38396
-195
-11700
-227
-187
-15654
-459418
-209
-245917
-310514
-128100
-277019
-775971
-172618
-169755
-167973
-241407
-172743
-275594
-183
-119462
-145410
-168782
-167561
-167288
-166263
-168282
-169796
-170630
-371751
-122741
-172266
-175027
-222245
-130117
-171966
-173432
-178110
-247677
-655883
-837813
-1023296
-2656478
-1148870
+127235
+1132380
+955384
+124877
+346409
+44248
+1175014
+261
+10914
+30738
+169
+8534
+164
+164
+12142
+406489
+168
+928532
+339468
+141191
+303987
+790594
+165956
+178992
+201501
+1025528
+233640
+302620
+223
+134628
+160014
+200853
+176591
+176881
+177098
+196780
+168061
+168434
+367832
+116362
+167774
+169597
+208385
+120730
+498249
+205446
+203986
+273069
+662911
+807670
+907311
+2061212
+924728
 final_rule_matches:
-.masthead-skeleton-icon -> [382, 384, 386]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-html -> [5]
 #masthead-skeleton-icons -> [379]
-[src/bit.rs:472:5] unsafe { MISS_CNT } = 3581
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+.masthead-skeleton-icon -> [382, 384, 386]
+html -> [5]
+[src/bit.rs:462:5] unsafe { MISS_CNT } = 3581

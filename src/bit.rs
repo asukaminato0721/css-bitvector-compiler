@@ -450,21 +450,21 @@ fn main() {
         ),
         nfa.to_dot(&dom.selector_manager),
     );
-    for Rule(a, b, c) in nfa.rules.iter() {
-        println!(
-            "{} {:?}  {:?}",
-            dom.selector_manager.id_to_selector[&a.unwrap_or_default()],
-            b,
-            c
-        );
-    }
+
+    // for Rule(a, b, c) in nfa.rules.iter() {
+    //     println!(
+    //         "{} {:?}  {:?}",
+    //         dom.selector_manager.id_to_selector[&a.unwrap_or_default()],
+    //         b,
+    //         c
+    //     );
+    // }
+
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
-    let d = dom.get_root_node();
-    dom.force_recalc(d, &get_input(&nfa), &nfa);
-
-    let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
+    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors).into_iter().collect::<Vec<_>>();
+    final_matches.sort();
     println!("final_rule_matches:");
     for (k, v) in final_matches {
         println!("{} -> {:?}", k, v);

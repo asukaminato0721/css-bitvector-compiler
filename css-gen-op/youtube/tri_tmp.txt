@@ -6,65 +6,76 @@ warning: unused import: `process::exit`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
+warning: method `force_recalc` is never used
+   --> src/tri.rs:370:8
+    |
+49  | impl DOM {
+    | -------- method in this implementation
+...
+370 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-332
-255
-157
-296
-278
-140
-148
-615
+275
+349
+379
+322
+341
+106
+365
+177
+113
+109
+130
+160
+124
+177
 122
-123
-178
-121
-132
-122
-142
-136
-132
-7651
-146
-166
-128
-196
-131
-223
-337
-134
-128
-667
+116
+114
+6499
+118
+116
+116
+272
+138
 227
+1119
+105
+104
+282
+189
+120
+578
+653
+136
+521
+318
+280
+838
+202
+178
+308
+361
+118
+261
 134
-582
-294
-138
-347
-255
-255
-332
-146
-232
-327
-264
-138
-278
-135
-1127
-367
-347
-357
-215
-247
-7965
-304
-186
+314
+478
+803
+436
+282
+178
+8726
+531
+180
 final_rule_matches:
-html -> [5]
 #masthead-skeleton-icons -> [379]
-.masthead-skeleton-icon -> [382, 384, 386]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-[src/tri.rs:502:5] unsafe { MISS_CNT } = 0
+.masthead-skeleton-icon -> [382, 384, 386]
+html -> [5]
+[src/tri.rs:500:5] unsafe { MISS_CNT } = 0
