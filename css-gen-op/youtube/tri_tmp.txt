@@ -1,61 +1,24 @@
+warning: unused import: `std::panic`
+ --> src/tri.rs:6:5
+  |
+6 | use std::panic;
+  |     ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-408047
-1897491
-3627848
-240850
-615159
-81374
-1804793
-245
-28712
-59306
-189
-21054
-113
-154
-32760
-609240
-144
-396035
-507297
-197828
-458552
-1263419
-234352
-222826
-232827
-312726
-233965
-360250
-288
-181642
-203175
-232373
-230891
-235989
-237254
-231618
-233937
-236615
-515459
-170390
-229015
-231548
-294157
-177625
-237899
-240616
-237905
-354395
-867981
-1052575
-2577605
-3400123
-1537145
-final_rule_matches:
-html -> [5]
-#masthead-skeleton-icons -> [379, 382, 384, 386]
-.masthead-skeleton-icon -> [382, 384, 386]
-.hidden -> [5458, 5587, 7203, 7245, 7250, 8790, 8803, 8849, 8862, 8908, 8921, 8967, 8980, 9026, 9039, 13079, 13784, 14120]
-[src/tri.rs:516:5] unsafe { MISS_CNT } = 3581
+63338
+
+thread 'main' panicked at src/tri.rs:277:17:
+assertion `left == right` failed: input is [(false, 1), (true, 1), (false, 112)]
+old_tri is [(IUnused, 114)]
+old_output is [(false, 114)]
+new_output is [(false, 1), (true, 1), (false, 112)]
+new_tri is [(IUnused, 1), (IOne, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 21), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 3), (IUnused, 3), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1)]
+
+                   
+  left: [IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
+ right: [IUnused, IOne, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IZero, IZero, IUnused, IUnused, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

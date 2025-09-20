@@ -1,5 +1,4 @@
-   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 1.61s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/naive`
 MATCH ._cropped-image-link_style_centerImage-focusable__1JvMN  -> [1666]
 MATCH ._cropped-image-link_style_centerImage__1rzYI  -> [1666]

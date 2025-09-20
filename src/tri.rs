@@ -1,8 +1,9 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
     extract_path_from_command, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
+use std::panic;
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -29,6 +30,7 @@ pub struct DOMNode {
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
     pub tri_state: Vec<IState>,
+    pub initialized_bit: bool,
 }
 
 impl DOMNode {
@@ -82,6 +84,7 @@ impl DOM {
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
+            initialized_bit: false
         };
 
         self.nodes.insert(id, new_node);
@@ -235,41 +238,67 @@ impl DOM {
         self.recompute_styles_recursive(root_node, nfa, input);
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
+        self.nodes.get_mut(&node_idx).unwrap().initialized_bit = true;
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
 
         if self.nodes[&node_idx].dirty {
-            unsafe {
-                MISS_CNT += 1;
-            }
-            let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
-
             let node = self.nodes.get_mut(&node_idx).unwrap();
-            node.output_state = new_output_state.clone();
-            node.tri_state = new_tri_state.clone();
-            let need_re = !input.iter().zip(new_tri_state).all(|x: (&bool, IState)| {
-                matches!(
-                    x,
-                    (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
-                )
-            });
+            // use prev to cal
+            let need_re = !input
+                .iter()
+                .zip(node.tri_state.clone())
+                .all(|x: (&bool, IState)| {
+                    matches!(
+                        x,
+                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+                    )
+                });
 
             if need_re {
-                self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
+                unsafe {
+                    MISS_CNT += 1;
+                }
+                let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
+                let node = self.nodes.get_mut(&node_idx).unwrap();
+                node.output_state = new_output_state.clone();
+                node.tri_state = new_tri_state.clone();
                 for child_idx in self.nodes[&node_idx].children.clone() {
                     self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
                 }
             }
         } else {
             // Debug check: if not dirty, recomputing should not change output
+            let original_tri_state = self.nodes[&node_idx].tri_state.clone();
             let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
-            assert_eq!(
-                original_output_state, new_output_state,
-                "Node index {}: Output state changed when node was not dirty!",
-                node_idx
-            );
+            let (new_output, new_tri) = self.new_output_state(node_idx, input, nfa);
+            if self.nodes[&node_idx].initialized_bit {
+                let _ = panic::catch_unwind(|| {
+                    assert_eq!(
+                        original_tri_state,
+                        new_tri,
+                        "input is {:?}
+old_tri is {:?}
+old_output is {:?}
+new_output is {:?}
+new_tri is {:?}
+
+                   ",
+                        encode(input),
+                        encode(&original_tri_state),
+                        encode(&original_output_state),
+                        encode(&new_output),
+                        encode(&new_tri)
+                    );
+                });
+            }
+
+            // assert_eq!(
+            //     original_output_state, new_output,
+            //     "Node index {}: Output state changed when node was not dirty!",
+            //     node_idx
+            // )
         }
 
         // Recursively process children

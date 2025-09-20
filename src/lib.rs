@@ -403,3 +403,42 @@ impl SelectorManager {
         self.get_or_create_id(Selector::Id(id_name.to_string()))
     }
 }
+
+/// Encodes a slice of elements of type T using Run-Length Encoding.
+///
+/// # Arguments
+///
+/// * `data` - A slice of elements to be encoded.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of the elements in the slice. It must implement the `Copy` and `PartialEq` traits.
+///
+/// # Returns
+///
+/// A `Vec<(T, usize)>` where each tuple represents a run of an element and its count.
+pub fn encode<T>(data: &[T]) -> Vec<(T, usize)>
+where
+    T: Copy + PartialEq,
+{
+    if data.is_empty() {
+        return Vec::new();
+    }
+
+    let mut encoded = Vec::new();
+    let mut current_item = data[0];
+    let mut count = 1;
+
+    for &item in &data[1..] {
+        if item == current_item {
+            count += 1;
+        } else {
+            encoded.push((current_item, count));
+            current_item = item;
+            count = 1;
+        }
+    }
+
+    encoded.push((current_item, count));
+    encoded
+}
