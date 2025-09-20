@@ -9,16 +9,62 @@ warning: unused import: `std::panic`
 warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-63338
-
-thread 'main' panicked at src/tri.rs:277:17:
-assertion `left == right` failed: input is [(false, 1), (true, 1), (false, 112)]
-old_tri is [(IUnused, 114)]
-old_output is [(false, 114)]
-new_output is [(false, 1), (true, 1), (false, 112)]
-new_tri is [(IUnused, 1), (IOne, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 21), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 3), (IUnused, 3), (IZero, 3), (IUnused, 1), (IZero, 3), (IUnused, 1)]
-
-                   
-  left: [IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
- right: [IUnused, IOne, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IZero, IZero, IUnused, IUnused, IUnused, IZero, IZero, IZero, IUnused, IZero, IZero, IZero, IUnused]
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+276
+314
+142
+643
+310
+105
+395
+174
+154
+158
+176
+170
+187
+197
+170
+156
+122
+10675
+122
+113
+116
+138
+258
+111
+132
+136
+1146
+332
+195
+373
+355
+333
+144
+310
+132
+126
+409
+517
+292
+225
+138
+110
+304
+304
+144
+1075
+142
+333
+115
+194
+11211
+288
+175
+final_rule_matches:
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+html -> [5]
+#masthead-skeleton-icons -> [379]
+.masthead-skeleton-icon -> [382, 384, 386]
+[src/tri.rs:627:5] unsafe { MISS_CNT } = 0

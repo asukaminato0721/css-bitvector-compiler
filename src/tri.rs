@@ -30,7 +30,6 @@ pub struct DOMNode {
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
     pub tri_state: Vec<IState>,
-    pub initialized_bit: bool,
 }
 
 impl DOMNode {
@@ -48,6 +47,65 @@ pub struct DOM {
 }
 
 impl DOM {
+    fn new_output_state_for_init(
+        &self,
+        input: &[bool],
+        nfa: &NFA,
+        node: &DOMNode,
+    ) -> (Vec<bool>, Vec<IState>) {
+        let mut new_state = input.to_vec();
+
+        struct Read {
+            input: Vec<bool>,
+            pub tri: Vec<IState>,
+        }
+        impl Read {
+            fn new(v: &[bool]) -> Self {
+                let l = v.len();
+                Self {
+                    input: v.into(),
+                    tri: vec![IState::IUnused; l],
+                }
+            }
+            fn get(&mut self, idx: usize) -> bool {
+                self.tri[idx] = if self.input[idx] {
+                    IState::IOne
+                } else {
+                    IState::IZero
+                };
+                return self.input[idx];
+            }
+        }
+        let mut input = Read::new(input);
+
+        for &rule in nfa.rules.iter() {
+            match rule {
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
+                }
+                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
+                    if input.get(b) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), None, Nfacell(c)) => {
+                    if self.node_matches_selector_without_idx(node, a) {
+                        new_state[c] = true;
+                    }
+                }
+                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
+                    if !input.get(b) {
+                        continue;
+                    }
+                    if self.node_matches_selector_without_idx(node, a) {
+                        new_state[c] = true;
+                    }
+                }
+            }
+        }
+        (new_state, input.tri)
+    }
+
     pub fn new() -> Self {
         Default::default()
     }
@@ -61,6 +119,7 @@ impl DOM {
         classes: Vec<String>,
         html_id: Option<String>,
         parent_index: Option<u64>,
+        nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
         let tag_id = sm.get_or_create_id(Selector::Type(tag_name.into()));
@@ -74,7 +133,7 @@ impl DOM {
             .as_ref()
             .map(|id| sm.get_or_create_id(Selector::Id(id.into())));
 
-        let new_node = DOMNode {
+        let mut new_node = DOMNode {
             tag_id,
             class_ids,
             id_selector_id,
@@ -84,9 +143,10 @@ impl DOM {
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
-            initialized_bit: false
         };
-
+        let (output, tri) = self.new_output_state_for_init(&get_input(nfa), nfa, &new_node);
+        new_node.output_state = output;
+        new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
 
         // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
@@ -97,7 +157,6 @@ impl DOM {
                 .children
                 .push(id);
         }
-
         id
     }
 
@@ -123,7 +182,28 @@ impl DOM {
             false
         }
     }
+    /// 检查节点是否匹配给定的选择器ID, used in init
+    pub fn node_matches_selector_without_idx(
+        &self,
+        node: &DOMNode,
+        SelectorId(sid): SelectorId,
+    ) -> bool {
+        if node.tag_id == SelectorId(sid) {
+            return true;
+        }
 
+        if node.class_ids.contains(&SelectorId(sid)) {
+            return true;
+        }
+
+        if let Some(id_sel_id) = node.id_selector_id
+            && id_sel_id == SelectorId(sid)
+        {
+            return true;
+        }
+
+        false
+    }
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
             return r;
@@ -161,6 +241,7 @@ impl DOM {
         &mut self,
         json_node: &serde_json::Value,
         parent_index: Option<u64>,
+        nfa: &NFA,
     ) -> u64 {
         let tag_name = json_node["name"].as_str().unwrap();
         let id = json_node["id"].as_u64().unwrap();
@@ -180,19 +261,19 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index);
+        let current_index = self.add_node(id, tag_name, classes, html_id, parent_index, nfa);
 
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
-                self.json_to_html_node(child_json, Some(current_index));
+                self.json_to_html_node(child_json, Some(current_index), nfa);
             }
         }
         current_index
     }
 
     /// 通过路径添加节点
-    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value) {
+    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value, nfa: &NFA) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
@@ -204,7 +285,7 @@ impl DOM {
         }
 
         // 在指定位置插入新节点
-        let new_node_idx = self.json_to_html_node(json_node, Some(current_idx));
+        let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
             debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
@@ -238,7 +319,6 @@ impl DOM {
         self.recompute_styles_recursive(root_node, nfa, input);
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
-        self.nodes.get_mut(&node_idx).unwrap().initialized_bit = true;
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
@@ -273,26 +353,22 @@ impl DOM {
             let original_tri_state = self.nodes[&node_idx].tri_state.clone();
             let original_output_state = self.nodes[&node_idx].output_state.clone();
             let (new_output, new_tri) = self.new_output_state(node_idx, input, nfa);
-            if self.nodes[&node_idx].initialized_bit {
-                let _ = panic::catch_unwind(|| {
-                    assert_eq!(
-                        original_tri_state,
-                        new_tri,
-                        "input is {:?}
+            assert_eq!(
+                original_tri_state,
+                new_tri,
+                "input is {:?}
 old_tri is {:?}
 old_output is {:?}
 new_output is {:?}
 new_tri is {:?}
 
                    ",
-                        encode(input),
-                        encode(&original_tri_state),
-                        encode(&original_output_state),
-                        encode(&new_output),
-                        encode(&new_tri)
-                    );
-                });
-            }
+                encode(input),
+                encode(&original_tri_state),
+                encode(&original_output_state),
+                encode(&new_output),
+                encode(&new_tri)
+            );
 
             // assert_eq!(
             //     original_output_state, new_output,
@@ -390,27 +466,34 @@ pub fn parse_selector(selector_str: &str) -> Selector {
     }
 }
 
+fn get_input(nfa: &NFA) -> Vec<bool> {
+    let mut input = vec![false; unsafe { STATE } + 1];
+
+    input[nfa.start_state.0] = true;
+    input
+}
+
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
     match frame.command_name.as_str() {
         "init" => {
             let node_data = frame.command_data.get("node").unwrap();
             dom.nodes.clear();
             dom.root_node = None;
-            dom.json_to_html_node(node_data, None);
+            dom.json_to_html_node(node_data, None, nfa);
+            dom.recompute_styles(nfa, &get_input(nfa)); // 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
-            dom.add_node_by_path(&path, node_data);
+            dom.add_node_by_path(&path, node_data, nfa);
+            dom.recompute_styles(nfa, &get_input(nfa)); // 
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
-            let mut input = vec![false; unsafe { STATE } + 1];
 
-            input[nfa.start_state.0] = true;
-            dom.recompute_styles(nfa, &input);
+            dom.recompute_styles(nfa, &get_input(nfa));
 
             let end = rdtsc();
             println!("{}", end - start);
