@@ -285,11 +285,11 @@ pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
     /// NFA 中所有状态的集合。
-    pub states: HashSet<Nfacell>,
+    pub states: HashSet<Option<Nfacell>>,
     /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
     pub rules: Vec<Rule>,
     /// 起始状态。
-    pub start_state: Nfacell,
+    pub start_state: Option< Nfacell>,
     pub max_state_id: Nfacell,
     // for print match
     pub accept_states: Vec<Nfacell>,
@@ -303,10 +303,10 @@ impl NFA {
             .any(|Rule(_, prev, _)| *prev == Some(state))
     }
 
-    pub fn get_accept_states(&self) -> HashSet<Nfacell> {
+    pub fn get_accept_states(&self) -> HashSet<Option<Nfacell>> {
         self.states
             .iter()
-            .filter(|&&state| self.is_accept_state(state))
+            .filter(|&&state| self.is_accept_state(state.unwrap()))
             .copied()
             .collect()
     }
@@ -318,11 +318,11 @@ impl NFA {
 
         // Start marker
         s.push_str("  __start [shape=point, label=\"\"];\n");
-        s.push_str(&format!("  __start -> {};\n", self.start_state.0));
+        s.push_str(&format!("  __start -> {:?};\n", self.start_state));
 
         // States
         for st in &self.states {
-            s.push_str(&format!("  {} [label=\"{}\"];\n", st.0, st.0));
+            s.push_str(&format!("  {} [label=\"{}\"];\n", st.unwrap_or_default().0, st.unwrap_or_default().0));
         }
 
         // Accept states styling
@@ -336,7 +336,7 @@ impl NFA {
 
         // Edges
         for Rule(selector_opt, from_opt, to) in &self.rules {
-            let from = from_opt.unwrap_or(self.start_state).0;
+            let from = from_opt.unwrap_or(self.start_state.unwrap_or_default()).0;
             let label = match selector_opt {
                 None => "*".to_string(),
                 Some(sel_id) => match sm.id_to_selector.get(sel_id) {
@@ -445,10 +445,8 @@ where
 
 pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut usize) -> NFA {
     *state = 0;
-    *state += 1;
-
-    let start_state = Nfacell(*state);
-    let mut states: HashSet<Nfacell> = [start_state].into_iter().collect();
+    let start_state = Option::<Nfacell>::None;
+    let mut states: HashSet<Option<Nfacell>> = [start_state].into_iter().collect();
     let mut rules: Vec<Rule> = Vec::new();
     let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
 
@@ -478,16 +476,16 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
             *state += 1;
 
             let new_state = Nfacell(*state);
-            states.insert(new_state);
+            states.insert(Some(new_state));
 
             let selector = parse_selector(selector_str);
             match selector {
                 Selector::Type(ref s) if s == "*" => {
-                    rules.push(Rule(None, Some(cur), new_state));
+                    rules.push(Rule(None, cur, new_state));
                 }
                 other => {
                     let selector_id = sm.get_or_create_id(other);
-                    rules.push(Rule(Some(selector_id), Some(cur), new_state));
+                    rules.push(Rule(Some(selector_id), cur, new_state));
                 }
             }
 
@@ -496,10 +494,10 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
                 rules.push(Rule(None, Some(new_state), new_state));
             }
 
-            cur = new_state;
+            cur = Some(new_state);
             i = next_selector_index;
         }
-        accept_states.push(cur);
+        accept_states.push(cur.unwrap());
     }
     NFA {
         states,

@@ -407,7 +407,7 @@ new_tri is {:?}
 fn get_input(nfa: &NFA) -> Vec<bool> {
     let mut input = vec![false; unsafe { STATE } + 1];
 
-    input[nfa.start_state.0] = true;
+    input[nfa.start_state.unwrap_or_default().0] = true;
     input
 }
 

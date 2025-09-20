@@ -9,6 +9,8 @@ warning: unused import: `process::exit`
 warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-309
+288
 final_rule_matches:
+#b -> [3]
+#bb -> [4]
 [src/tri.rs:502:5] unsafe { MISS_CNT } = 3

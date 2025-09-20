@@ -39,7 +39,7 @@ pub struct DOM {
 fn get_input(nfa: &NFA) -> Vec<bool> {
     let mut input = vec![false; unsafe { STATE } + 1];
 
-    input[nfa.start_state.0] = true;
+    input[nfa.start_state.unwrap_or_default().0] = true;
     input
 }
 
@@ -390,7 +390,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             // Perform CSS matching using NFA
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
-            input[nfa.start_state.0] = true;
+            input[nfa.start_state.unwrap_or_default().0] = true;
             dom.recompute_styles(nfa, &input);
 
             let end = rdtsc();
