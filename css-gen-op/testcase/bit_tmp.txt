@@ -1,20 +1,21 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
 [src/bit.rs:463:17] &dom.nodes = {
-    3: DOMNode {
+    1: DOMNode {
         tag_id: SelectorId(
-            5,
+            2,
         ),
-        class_ids: {},
-        id_selector_id: Some(
+        class_ids: {
             SelectorId(
-                0,
+                3,
             ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
+        },
+        id_selector_id: None,
+        parent: None,
+        children: [
+            2,
+            3,
+        ],
         dirty: true,
         recursive_dirty: true,
         output_state: [
@@ -49,21 +50,20 @@
             false,
         ],
     },
-    1: DOMNode {
+    3: DOMNode {
         tag_id: SelectorId(
-            2,
+            5,
         ),
-        class_ids: {
+        class_ids: {},
+        id_selector_id: Some(
             SelectorId(
-                3,
+                0,
             ),
-        },
-        id_selector_id: None,
-        parent: None,
-        children: [
-            2,
-            3,
-        ],
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
         dirty: true,
         recursive_dirty: true,
         output_state: [
@@ -106,14 +106,14 @@
             false,
         ],
     },
-    4: DOMNode {
+    3: DOMNode {
         tag_id: SelectorId(
             5,
         ),
         class_ids: {},
         id_selector_id: Some(
             SelectorId(
-                1,
+                0,
             ),
         ),
         parent: Some(
@@ -154,14 +154,14 @@
             false,
         ],
     },
-    3: DOMNode {
+    4: DOMNode {
         tag_id: SelectorId(
             5,
         ),
         class_ids: {},
         id_selector_id: Some(
             SelectorId(
-                0,
+                1,
             ),
         ),
         parent: Some(
@@ -181,7 +181,7 @@
         ],
     },
 }
-5824
-MATCHES: #bb -> [4]
+6501
 MATCHES: #b -> [3]
+MATCHES: #bb -> [4]
 [src/bit.rs:604:5] unsafe { MISS_CNT } = 4

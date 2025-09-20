@@ -278,9 +278,6 @@ impl DOM {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
-        // 取出旧值
-        let prev_output = self.nodes[&node_idx].output_state.clone();
-        let prev_tri = self.nodes[&node_idx].tri_state.clone();
 
         if self.nodes[&node_idx].dirty {
             unsafe {
@@ -288,13 +285,9 @@ impl DOM {
             }
             let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
 
-            // 写回当前节点（不要被 need_re 门控）
-            {
-                let node = self.nodes.get_mut(&node_idx).unwrap();
-                node.output_state = new_output_state.clone();
-                node.tri_state = new_tri_state.clone();
-            }
-            let changed_output = prev_output != new_output_state;
+            let node = self.nodes.get_mut(&node_idx).unwrap();
+            node.output_state = new_output_state.clone();
+            node.tri_state = new_tri_state.clone();
             let need_re = !input.iter().zip(new_tri_state).all(|x: (&bool, IState)| {
                 matches!(
                     x,
@@ -302,7 +295,7 @@ impl DOM {
                 )
             });
 
-            if changed_output || need_re {
+            if need_re {
                 self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
                 for child_idx in self.nodes[&node_idx].children.clone() {
                     self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
