@@ -1,9 +1,66 @@
+warning: unused variable: `prev_tri`
+   --> src/tri.rs:283:13
+    |
+283 |         let prev_tri = self.nodes[&node_idx].tri_state.clone();
+    |             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_prev_tri`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-93065
-
-thread 'main' panicked at src/tri.rs:308:13:
-assertion `left == right` failed: Node index 4: Output state changed when node was not dirty!
-  left: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
- right: [false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+407948
+1763100
+3340881
+261423
+598938
+76973
+1844491
+211
+30857
+62770
+166
+24354
+182
+161
+39854
+672725
+286
+375822
+480590
+188245
+458203
+1275454
+279002
+242277
+237962
+334717
+239179
+405833
+233
+191414
+207400
+238795
+236334
+236522
+248770
+288115
+290106
+361123
+547780
+174913
+238105
+266742
+318170
+179454
+234091
+238483
+231473
+334078
+896762
+1136462
+1354268
+3480541
+1650019
+final_rule_matches: {".hidden": [5458, 5587, 7203, 7245, 7250, 8790, 8803, 8849, 8862, 8908, 8921, 8967, 8980, 9026, 9039, 13079, 13784, 14120], ".masthead-skeleton-icon": [382, 384, 386], "#masthead-skeleton-icons": [379, 382, 384, 386], "html": [5]}
+[src/tri.rs:636:5] unsafe { MISS_CNT } = 3581

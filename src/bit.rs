@@ -433,7 +433,7 @@ impl NFA {
 }
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
-    let trimmed = selector_str.trim();
+    let trimmed = selector_str.trim().to_lowercase();
 
     if trimmed.starts_with('.') {
         // 类选择器
@@ -597,7 +597,10 @@ fn main() {
         apply_frame(&mut dom, &f, &nfa);
     }
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
-    println!("final_rule_matches: {:#?}", final_matches);
+    for (k,v) in final_matches {
+
+        println!("MATCHES: {} -> {:?}", k, v);
+    }
     dbg!(unsafe { MISS_CNT });
 }
 

@@ -237,7 +237,7 @@ impl DOM {
 
         // 遍历路径到目标父节点
         for &path_element in &path[..path.len() - 1] {
-            current_idx = self.nodes[&current_idx].children[path_element as usize];
+            current_idx = self.nodes[&current_idx].children[path_element];
         }
 
         // 在指定位置插入新节点
@@ -260,13 +260,6 @@ impl DOM {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        // 移除目标节点
-        let rm_pos = path[path.len() - 1];
-        self.nodes
-            .get_mut(&cur_idx)
-            .unwrap()
-            .children
-            .remove(rm_pos.try_into().unwrap());
         let rm_pos = path[path.len() - 1] as usize;
         let removed_child_id = self
             .nodes
@@ -285,12 +278,23 @@ impl DOM {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
+        // 取出旧值
+        let prev_output = self.nodes[&node_idx].output_state.clone();
+        let prev_tri = self.nodes[&node_idx].tri_state.clone();
 
         if self.nodes[&node_idx].dirty {
             unsafe {
                 MISS_CNT += 1;
             }
             let (new_output_state, new_tri_state) = self.new_output_state(node_idx, input, nfa);
+
+            // 写回当前节点（不要被 need_re 门控）
+            {
+                let node = self.nodes.get_mut(&node_idx).unwrap();
+                node.output_state = new_output_state.clone();
+                node.tri_state = new_tri_state.clone();
+            }
+            let changed_output = prev_output != new_output_state;
             let need_re = !input.iter().zip(new_tri_state).all(|x: (&bool, IState)| {
                 matches!(
                     x,
@@ -298,7 +302,7 @@ impl DOM {
                 )
             });
 
-            if need_re {
+            if changed_output || need_re {
                 self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
                 for child_idx in self.nodes[&node_idx].children.clone() {
                     self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
@@ -628,6 +632,6 @@ fn main() {
         apply_frame(&mut dom, &f, &nfa);
     }
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
-    println!("final_rule_matches: {:#?}", final_matches);
+    println!("final_rule_matches: {:?}", final_matches);
     dbg!(unsafe { MISS_CNT });
 }

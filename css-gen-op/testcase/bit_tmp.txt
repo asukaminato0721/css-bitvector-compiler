@@ -1,30 +1,9 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-[src/bit.rs:466:17] &dom.nodes = {
-    2: DOMNode {
-        tag_id: SelectorId(
-            3,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
+[src/bit.rs:463:17] &dom.nodes = {
     3: DOMNode {
         tag_id: SelectorId(
-            4,
+            5,
         ),
         class_ids: {},
         id_selector_id: Some(
@@ -45,15 +24,38 @@
             false,
             false,
             false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
         ],
     },
     1: DOMNode {
         tag_id: SelectorId(
-            1,
+            2,
         ),
         class_ids: {
             SelectorId(
-                2,
+                3,
             ),
         },
         id_selector_id: None,
@@ -71,13 +73,115 @@
             false,
             false,
             false,
+            false,
         ],
     },
 }
-4737
-final_rule_matches: {
-    "#b": [
-        3,
-    ],
+[src/bit.rs:463:17] &dom.nodes = {
+    1: DOMNode {
+        tag_id: SelectorId(
+            2,
+        ),
+        class_ids: {
+            SelectorId(
+                3,
+            ),
+        },
+        id_selector_id: None,
+        parent: None,
+        children: [
+            2,
+            4,
+            3,
+        ],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    4: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                1,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    3: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-[src/bit.rs:604:5] unsafe { MISS_CNT } = 3
+5824
+MATCHES: #bb -> [4]
+MATCHES: #b -> [3]
+[src/bit.rs:604:5] unsafe { MISS_CNT } = 4

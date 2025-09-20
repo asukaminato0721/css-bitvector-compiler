@@ -1,5 +1,14 @@
+warning: unused variable: `prev_tri`
+   --> src/tri.rs:283:13
+    |
+283 |         let prev_tri = self.nodes[&node_idx].tri_state.clone();
+    |             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_prev_tri`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-3636
-final_rule_matches: {}
-[src/tri.rs:630:5] unsafe { MISS_CNT } = 3
+9109
+final_rule_matches: {"#b": [3], "#bb": [4]}
+[src/tri.rs:636:5] unsafe { MISS_CNT } = 4
