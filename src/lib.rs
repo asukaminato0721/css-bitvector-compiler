@@ -443,7 +443,6 @@ where
     encoded
 }
 
-
 pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut usize) -> NFA {
     *state = 0;
     *state += 1;
@@ -478,9 +477,7 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
             // Create new state and edge for current selector
             *state += 1;
 
-            let new_state = 
-                Nfacell(*state)
-            ;
+            let new_state = Nfacell(*state);
             states.insert(new_state);
 
             let selector = parse_selector(selector_str);
@@ -512,7 +509,6 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
         accept_states,
     }
 }
-
 
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {

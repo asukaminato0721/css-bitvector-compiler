@@ -1,5 +1,6 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
 use std::{
@@ -174,7 +175,8 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        let current_index =
+            self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
         if id == 5458 {
             if classes.contains(&"hidden".to_string()) {
@@ -322,7 +324,7 @@ impl DOM {
         for child_idx in self.nodes[&node_idx].children.clone() {
             self.nodes.get_mut(&child_idx).unwrap().set_dirty();
         }
-        
+
         // Debug check: if not dirty, recomputing should not change output
         let original_output_state = self.nodes[&node_idx].output_state.clone();
         let new_output_state = self.new_output_state(&self.nodes[&node_idx], input, nfa);
@@ -331,13 +333,12 @@ impl DOM {
             "Node index {}: Output state changed when node was not dirty!",
             node_idx
         );
-        
 
         // Recursively process children
         let children_indices = self.nodes[&node_idx].children.clone();
         let current_output_state = self.nodes[&node_idx].output_state.clone();
         for &child_idx in &children_indices {
-            self.force_recalc(child_idx,&current_output_state, nfa);
+            self.force_recalc(child_idx, &current_output_state, nfa);
         }
 
         // Reset dirty flags
@@ -380,9 +381,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
                 dbg!(&dom.nodes);
             }
 
-
-                        // BEGIN HACK
-
+            // BEGIN HACK
 
             // END HACK
         }
@@ -438,9 +437,7 @@ fn main() {
         ))
         .unwrap(),
     );
-    let mut s = unsafe {
-         STATE
-    };
+    let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {
         STATE = s;
@@ -457,7 +454,7 @@ fn main() {
     }
     let d = dom.get_root_node();
     dom.force_recalc(d, &get_input(&nfa), &nfa);
-    
+
     let final_matches = collect_rule_matches(&dom, &nfa, &selectors);
     println!("final_rule_matches:");
     for (k, v) in final_matches {

@@ -1,10 +1,12 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode, extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc
+    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
+    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
 use std::{
     collections::{HashMap, HashSet},
-    fs, process::exit,
+    fs,
+    process::exit,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
@@ -83,7 +85,7 @@ impl DOM {
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa, );
+        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa);
         new_node.output_state = output;
         new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
@@ -173,7 +175,8 @@ impl DOM {
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index = self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        let current_index =
+            self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
         if id == 5458 {
             if classes.contains(&"hidden".to_string()) {
@@ -258,7 +261,8 @@ impl DOM {
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_output_state, new_tri_state) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                let (new_output_state, new_tri_state) =
+                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
                 let node = self.nodes.get_mut(&node_idx).unwrap();
                 node.output_state = new_output_state.clone();
                 node.tri_state = new_tri_state.clone();
@@ -363,19 +367,19 @@ new_tri is {:?}
         (new_state, input.tri)
     }
 
-  fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
         self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
         self.nodes.get_mut(&node_idx).unwrap().dirty = false;
         // unsafe {
         //     MISS_CNT += 1;
         // }
-        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa, );
+        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
         self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
         self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
         for child_idx in self.nodes[&node_idx].children.clone() {
             self.nodes.get_mut(&child_idx).unwrap().set_dirty();
         }
-        
+
         // Debug check: if not dirty, recomputing should not change output
         // let original_output_state = self.nodes[&node_idx].output_state.clone();
         // let new_output_state = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
@@ -384,13 +388,12 @@ new_tri is {:?}
         //     "Node index {}: Output state changed when node was not dirty!",
         //     node_idx
         // );
-        
 
         // Recursively process children
         let children_indices = self.nodes[&node_idx].children.clone();
         let current_output_state = self.nodes[&node_idx].output_state.clone();
         for &child_idx in &children_indices {
-            self.force_recalc(child_idx,&current_output_state, nfa);
+            self.force_recalc(child_idx, &current_output_state, nfa);
         }
 
         // Reset dirty flags
@@ -400,7 +403,6 @@ new_tri is {:?}
         }
     }
 }
-
 
 fn get_input(nfa: &NFA) -> Vec<bool> {
     let mut input = vec![false; unsafe { STATE } + 1];
