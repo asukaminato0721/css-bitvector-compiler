@@ -1,5 +1,8 @@
 use cssparser::{Parser, ParserInput, Token};
-use std::fmt::Display;
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Display,
+};
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,
@@ -13,7 +16,7 @@ enum Combinator {
     None,       // 最后一个选择器没有组合器
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Selector {
+pub enum Selector {
     Type(String),
     Class(String),
     Id(String),
@@ -128,11 +131,15 @@ pub fn parse_trace() -> Vec<LayoutFrame> {
 }
 
 /// Extract path from command data
-pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<u64> {
+pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
     command_data
         .get("path")
         .and_then(|p| p.as_array())
-        .map(|arr| arr.iter().filter_map(|v| v.as_u64()).collect::<Vec<_>>())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|v| v.as_u64().map(|x| x as usize))
+                .collect::<Vec<_>>()
+        })
         .unwrap()
 }
 
@@ -263,4 +270,260 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     rules.sort();
     rules.dedup();
     rules
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct Nfacell(pub usize);
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
+pub struct SelectorId(pub usize);
+/// 转移规则: (输入选择器, 当前状态, 下一个状态)
+/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct NFA {
+    /// NFA 中所有状态的集合。
+    pub states: HashSet<Option<Nfacell>>,
+    /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
+    pub rules: Vec<Rule>,
+    /// 起始状态。
+    pub start_state: Option<Nfacell>,
+    pub max_state_id: Nfacell,
+    // for print match
+    pub accept_states: Vec<Nfacell>,
+}
+
+impl NFA {
+    pub fn is_accept_state(&self, state: Nfacell) -> bool {
+        !self
+            .rules
+            .iter()
+            .any(|Rule(_, prev, _)| *prev == Some(state))
+    }
+
+    pub fn get_accept_states(&self) -> HashSet<Option<Nfacell>> {
+        self.states
+            .iter()
+            .filter(|&&state| self.is_accept_state(state.unwrap()))
+            .copied()
+            .collect()
+    }
+    pub fn to_dot(&self, sm: &SelectorManager) -> String {
+        let mut s = String::new();
+        s.push_str("digraph NFA {\n");
+        s.push_str("  rankdir=LR;\n");
+        s.push_str("  node [shape=circle, fontsize=10];\n");
+
+        // Start marker
+        s.push_str("  __start [shape=point, label=\"\"];\n");
+        s.push_str(&format!("  __start -> {:?};\n", self.start_state));
+
+        // States
+        for st in &self.states {
+            s.push_str(&format!(
+                "  {} [label=\"{}\"];\n",
+                st.unwrap_or_default().0,
+                st.unwrap_or_default().0
+            ));
+        }
+
+        // Accept states styling
+        if !self.accept_states.is_empty() {
+            s.push_str("  { node [shape=doublecircle]; ");
+            for st in &self.accept_states {
+                s.push_str(&format!("{} ", st.0));
+            }
+            s.push_str("}\n");
+        }
+
+        // Edges
+        for Rule(selector_opt, from_opt, to) in &self.rules {
+            let from = from_opt.unwrap_or(self.start_state.unwrap_or_default()).0;
+            let label = match selector_opt {
+                None => "*".to_string(),
+                Some(sel_id) => match sm.id_to_selector.get(sel_id) {
+                    Some(Selector::Type(t)) => t.clone(),
+                    Some(Selector::Class(c)) => format!(".{}", c),
+                    Some(Selector::Id(i)) => format!("#{}", i),
+                    None => format!("sid:{}", sel_id.0),
+                },
+            };
+            s.push_str(&format!(
+                "  {} -> {} [label=\"{}\"];\n",
+                from,
+                to.0,
+                escape_dot_label(&label)
+            ));
+        }
+        s.push_str("}\n");
+        s
+    }
+}
+
+fn escape_dot_label(s: &str) -> String {
+    s.replace('\\', "\\\\").replace('"', "\\\"")
+}
+
+#[derive(Debug, Default)]
+pub struct SelectorManager {
+    pub selector_to_id: HashMap<Selector, SelectorId>,
+    pub id_to_selector: HashMap<SelectorId, Selector>,
+    next_id: SelectorId,
+}
+
+impl SelectorManager {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn get_or_create_id(&mut self, selector: Selector) -> SelectorId {
+        if let Some(&id) = self.selector_to_id.get(&selector) {
+            return id;
+        }
+
+        let id = self.next_id;
+        self.selector_to_id.insert(selector.clone(), id);
+        self.id_to_selector.insert(id, selector);
+        self.next_id = SelectorId(self.next_id.0 + 1);
+        id
+    }
+
+    /// 根据选择器获取ID
+    pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
+        self.selector_to_id.get(selector).copied()
+    }
+
+    pub fn get_or_create_type_id(&mut self, tag_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Type(tag_name.to_string()))
+    }
+
+    pub fn get_or_create_class_id(&mut self, class_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Class(class_name.to_string()))
+    }
+
+    pub fn get_or_create_id_selector_id(&mut self, id_name: &str) -> SelectorId {
+        self.get_or_create_id(Selector::Id(id_name.to_string()))
+    }
+}
+
+/// Encodes a slice of elements of type T using Run-Length Encoding.
+///
+/// # Arguments
+///
+/// * `data` - A slice of elements to be encoded.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of the elements in the slice. It must implement the `Copy` and `PartialEq` traits.
+///
+/// # Returns
+///
+/// A `Vec<(T, usize)>` where each tuple represents a run of an element and its count.
+pub fn encode<T>(data: &[T]) -> Vec<(T, usize)>
+where
+    T: Copy + PartialEq,
+{
+    if data.is_empty() {
+        return Vec::new();
+    }
+
+    let mut encoded = Vec::new();
+    let mut current_item = data[0];
+    let mut count = 1;
+
+    for &item in &data[1..] {
+        if item == current_item {
+            count += 1;
+        } else {
+            encoded.push((current_item, count));
+            current_item = item;
+            count = 1;
+        }
+    }
+
+    encoded.push((current_item, count));
+    encoded
+}
+
+pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut usize) -> NFA {
+    *state = 0;
+    let start_state = Option::<Nfacell>::None;
+    let mut states: HashSet<Option<Nfacell>> = [start_state].into_iter().collect();
+    let mut rules: Vec<Rule> = Vec::new();
+    let mut accept_states: Vec<Nfacell> = Vec::with_capacity(selectors.len());
+
+    for rule in selectors {
+        let t = rule.replace('>', " > ");
+        let parts: Vec<&str> = t.split_whitespace().collect();
+        let mut cur = start_state;
+
+        let mut i = 0;
+        while i < parts.len() {
+            if parts[i] == ">" {
+                i += 1;
+                continue;
+            }
+            let selector_str = parts[i];
+
+            // Look ahead to find the next selector and whether the combinator is direct (>)
+            let mut next_selector_index = i + 1;
+            let mut next_is_direct = false;
+            if next_selector_index < parts.len() && parts[next_selector_index] == ">" {
+                next_is_direct = true;
+                next_selector_index += 1;
+            }
+            let has_next_selector = next_selector_index < parts.len();
+
+            // Create new state and edge for current selector
+            *state += 1;
+
+            let new_state = Nfacell(*state);
+            states.insert(Some(new_state));
+
+            let selector = parse_selector(selector_str);
+            match selector {
+                Selector::Type(ref s) if s == "*" => {
+                    rules.push(Rule(None, cur, new_state));
+                }
+                other => {
+                    let selector_id = sm.get_or_create_id(other);
+                    rules.push(Rule(Some(selector_id), cur, new_state));
+                }
+            }
+
+            // Add self-loop only for descendant combinators (a b), not for child (a > b)
+            if has_next_selector && !next_is_direct {
+                rules.push(Rule(None, Some(new_state), new_state));
+            }
+
+            cur = Some(new_state);
+            i = next_selector_index;
+        }
+        accept_states.push(cur.unwrap());
+    }
+    NFA {
+        states,
+        rules,
+        start_state,
+        max_state_id: Nfacell(*state),
+        accept_states,
+    }
+}
+
+/// 解析CSS选择器字符串并生成对应的选择器对象
+pub fn parse_selector(selector_str: &str) -> Selector {
+    let trimmed = selector_str.trim();
+
+    if trimmed.starts_with('.') {
+        // 类选择器
+        Selector::Class(trimmed[1..].to_string())
+    } else if trimmed.starts_with('#') {
+        // ID选择器
+        Selector::Id(trimmed[1..].to_string())
+    } else {
+        // 标签选择器
+        Selector::Type(trimmed.to_string())
+    }
 }

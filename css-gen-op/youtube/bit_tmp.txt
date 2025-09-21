@@ -1,23 +1,82 @@
+warning: method `force_recalc` is never used
+   --> src/bit.rs:316:8
+    |
+46  | impl DOM {
+    | -------- method in this implementation
+...
+316 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-261358
-1119488
-2247481
-189525
-393440
-57595
-1208831
-319
-24617
-44208
-211
-18002
-189
-118
-29684
-434924
-120
-
-thread 'main' panicked at src/bit.rs:307:23:
-no entry found for key
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+254799
+2180802
+2278306
+260076
+838518
+103240
+2580664
+787
+25842
+65304
+318
+21511
+326
+420
+30115
+845014
+618
+411984
+585618
+242185
+531649
+1527431
+328413
+329857
+316859
+430163
+318748
+546488
+650
+229735
+271258
+641436
+307091
+322510
+303587
+325116
+372177
+338130
+736629
+230642
+324410
+320661
+392722
+242713
+345120
+406127
+303782
+453141
+1258845
+1596780
+2065131
+3121001
+1466910
+final_rule_matches:
+#masthead-skeleton-icons -> [379]
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+.masthead-skeleton-icon -> [382, 384, 386]
+body -> [233, 4487, 5866]
+dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
+dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
+html -> [5, 6, 4485, 5864]
+ps-dom-if -> [7640, 13850, 13856]
+ps-dom-repeat -> [12974]
+ytd-masthead #masthead-logo -> [284]
+ytd-masthead #masthead-logo #country-code -> [377]
+ytd-masthead .external-icon -> [274, 291, 336]
+ytd-masthead .yt-icons-ext -> [278]
+[src/bit.rs:472:5] unsafe { MISS_CNT } = 3581

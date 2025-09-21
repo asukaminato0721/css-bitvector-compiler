@@ -346,7 +346,7 @@ impl NaiveHtmlNode {
             }
             matches.sort_unstable();
             matches.dedup();
-            println!("MATCH {} -> {:?}", rule, matches);
+            println!("{} -> {:?}", rule, matches);
         }
     }
 }

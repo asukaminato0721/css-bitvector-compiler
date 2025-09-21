@@ -1,38 +1,90 @@
-warning: unused variable: `original_output_state`
-   --> src/tri.rs:341:17
-    |
-341 |             let original_output_state = self.nodes[&node_idx].output_state.clone();
-    |                 ^^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_original_output_state`
-    |
-    = note: `#[warn(unused_variables)]` on by default
+warning: unused import: `process::exit`
+ --> src/tri.rs:9:5
+  |
+9 |     process::exit,
+  |     ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
 
-warning: unused variable: `new_output_state`
-   --> src/tri.rs:342:18
+warning: method `force_recalc` is never used
+   --> src/tri.rs:370:8
     |
-342 |             let (new_output_state, _) = self.new_output_state(node_idx, input, nfa);
-    |                  ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_new_output_state`
+49  | impl DOM {
+    | -------- method in this implementation
+...
+370 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
 
-warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings
+warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-277343
-1257033
-4434971
-3368656
-617416
-88154
-8169828
-937
-4526049
-3311560
-432
-3359815
-397
-367
-3205660
-509179
-162
-
-thread 'main' panicked at src/tri.rs:317:23:
-no entry found for key
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+339
+376
+542
+308
+357
+136
+261
+247
+138
+127
+142
+120
+138
+138
+136
+146
+233
+7912
+146
+138
+136
+482
+221
+237
+250
+209
+306
+316
+223
+257
+302
+298
+212
+294
+132
+761
+304
+161
+130
+290
+343
+373
+249
+146
+403
+556
+322
+310
+191
+306
+8263
+375
+324
+final_rule_matches:
+#masthead-skeleton-icons -> [379]
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+.masthead-skeleton-icon -> [382, 384, 386]
+body -> [233, 4487, 5866]
+dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
+dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
+html -> [5, 6, 4485, 5864]
+ps-dom-if -> [7640, 13850, 13856]
+ps-dom-repeat -> [12974]
+ytd-masthead #masthead-logo -> [284]
+ytd-masthead #masthead-logo #country-code -> [377]
+ytd-masthead .external-icon -> [274, 291, 336]
+ytd-masthead .yt-icons-ext -> [278]
+[src/tri.rs:500:5] unsafe { MISS_CNT } = 235
