@@ -6,73 +6,80 @@ warning: unused import: `process::exit`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: method `force_recalc` is never used
-   --> src/quad.rs:370:8
+warning: unused variable: `nfa`
+   --> src/quad.rs:380:14
     |
-49  | impl DOM {
-    | -------- method in this implementation
-...
-370 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-    |        ^^^^^^^^^^^^
+380 | fn get_input(nfa: &NFA) -> Vec<OState> {
+    |              ^^^ help: if this is intentional, prefix it with an underscore: `_nfa`
     |
-    = note: `#[warn(dead_code)]` on by default
+    = note: `#[warn(unused_variables)]` on by default
 
-warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings (run `cargo fix --bin "quad"` to apply 1 suggestion)
+warning: variable does not need to be mutable
+   --> src/quad.rs:381:9
+    |
+381 |     let mut input = vec![OState::OZero; unsafe { STATE } + 1];
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 3 warnings (run `cargo fix --bin "quad"` to apply 2 suggestions)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/quad`
-308
-254
-274
-215
-440
-117
-199
-383
-166
-116
-116
-276
-123
-114
-114
-131
-121
-6838
-131
-128
-114
-286
-260
 229
-118
-122
-299
-337
-227
-120
-273
-328
-122
-290
-116
-288
-349
-124
-126
-460
-466
-126
-392
+219
+130
+96
+79
+83
+134
+237
+86
+81
+108
 135
-420
-462
-1365
-325
+116
+103
+110
 146
-260
-6767
-468
-424
+110
+7058
+95
+95
+120
+251
+136
+209
+241
+98
+243
+339
+111
+95
+346
+329
+134
+317
+469
+493
+1286
+94
+1225
+714
+106
+107
+280
+95
+252
+90
+397
+1156
+193
+138
+6686
+276
+114
 final_rule_matches:
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
@@ -85,6 +92,5 @@ ps-dom-if -> [7640, 13850, 13856]
 ps-dom-repeat -> [12974]
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
-[src/quad.rs:502:5] unsafe { MISS_CNT } = 235
+ytd-masthead .external-icon -> [274]
+[src/quad.rs:474:5] unsafe { MISS_CNT } = 23

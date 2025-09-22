@@ -18,6 +18,12 @@ pub enum IState {
     IZero,
     IUnused,
 }
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OState {
+    OOne,
+    OZero,
+    FromParent,
+}
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
@@ -28,7 +34,7 @@ pub struct DOMNode {
     pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
-    pub output_state: Vec<bool>,
+    pub output_state: Vec<OState>,
     pub tri_state: Vec<IState>,
 }
 
@@ -82,7 +88,7 @@ impl DOM {
             children: Vec::new(),
             dirty: true,
             recursive_dirty: true,
-            output_state: vec![false; unsafe { STATE } + 1],
+            output_state: vec![OState::OZero; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
         let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa);
@@ -235,11 +241,11 @@ impl DOM {
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
-    pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
+    pub fn recompute_styles(&mut self, nfa: &NFA, input: &[OState]) {
         let root_node = self.get_root_node();
         self.recompute_styles_recursive(root_node, nfa, input);
     }
-    fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
+    fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[OState]) {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
@@ -250,10 +256,12 @@ impl DOM {
             let need_re = !input
                 .iter()
                 .zip(node.tri_state.clone())
-                .all(|x: (&bool, IState)| {
+                .all(|x: (&OState, IState)| {
                     matches!(
                         x,
-                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+                        (&OState::OZero, IState::IZero)
+                            | (&OState::OOne, IState::IOne)
+                            | (_, IState::IUnused)
                     )
                 });
 
@@ -315,26 +323,27 @@ new_tri is {:?}
     fn new_output_state(
         &self,
         node: &DOMNode,
-        input: &[bool],
+        input: &[OState],
         nfa: &NFA,
-    ) -> (Vec<bool>, Vec<IState>) {
-        let mut new_state = vec![false; input.len()];
+    ) -> (Vec<OState>, Vec<IState>) {
+        let mut new_state = vec![OState::OZero; input.len()];
 
         struct Read {
-            input: Vec<bool>,
+            input: Vec<OState>,
             pub tri: Vec<IState>,
         }
         impl Read {
-            fn new(v: &[bool]) -> Self {
+            fn new(v: &[OState]) -> Self {
                 let l = v.len();
                 Self {
                     input: v.into(),
                     tri: vec![IState::IUnused; l],
                 }
             }
-            fn get(&mut self, idx: usize) -> bool {
-                self.tri[idx] = if self.input[idx] {
+            fn get(&mut self, idx: usize) -> OState {
+                self.tri[idx] = if self.input[idx] == OState::OOne {
                     IState::IOne
+                    // TODO
                 } else {
                     IState::IZero
                 };
@@ -344,70 +353,33 @@ new_tri is {:?}
         let mut input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
+                Rule(None, None, Nfacell(_)) => {
+                    unreachable!()
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) {
-                        new_state[c] = true;
+                    if input.get(b) == OState::OOne {
+                        new_state[c] = OState::FromParent;
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
                     if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
+                        new_state[c] = OState::OOne;
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) && input.get(b) {
-                        new_state[c] = true;
+                    if self.node_matches_selector(node, a) && input.get(b) == OState::OOne {
+                        new_state[c] = OState::OOne;
                     }
                 }
             }
         }
         (new_state, input.tri)
     }
-
-    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
-        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
-        // unsafe {
-        //     MISS_CNT += 1;
-        // }
-        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
-        self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
-        for child_idx in self.nodes[&node_idx].children.clone() {
-            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
-        }
-
-        // Debug check: if not dirty, recomputing should not change output
-        // let original_output_state = self.nodes[&node_idx].output_state.clone();
-        // let new_output_state = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
-        // assert_eq!(
-        //     original_output_state, new_output_state,
-        //     "Node index {}: Output state changed when node was not dirty!",
-        //     node_idx
-        // );
-
-        // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
-        for &child_idx in &children_indices {
-            self.force_recalc(child_idx, &current_output_state, nfa);
-        }
-
-        // Reset dirty flags
-        if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
-        }
-    }
 }
 
-fn get_input(nfa: &NFA) -> Vec<bool> {
-    let mut input = vec![false; unsafe { STATE } + 1];
-
-    input[nfa.start_state.unwrap_or_default().0] = true;
+fn get_input(nfa: &NFA) -> Vec<OState> {
+    let mut input = vec![OState::OZero; unsafe { STATE } + 1];
+    //    input[nfa.start_state.unwrap_or_default().0] = OState::OOne;
     input
 }
 
@@ -454,7 +426,7 @@ pub fn collect_rule_matches(
 
     for (node_id, node) in dom.nodes.iter() {
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if node.output_state[state_index] {
+            if node.output_state[state_index] == OState::OOne {
                 let rule = &selects[idx];
                 res.entry(rule.clone()).or_default().push(*node_id);
             }

@@ -1,67 +1,58 @@
-warning: unused import: `process::exit`
- --> src/tri.rs:9:5
-  |
-9 |     process::exit,
-  |     ^^^^^^^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-312
-250
-314
-2555
-428
-124
-138
-298
-116
-110
-114
-119
-146
-122
-119
-128
-158
-6856
-122
-122
-130
-266
-114
-233
-359
-119
-123
-325
-231
-118
-351
-328
-140
-341
-284
+249
+194
 252
-290
-120
-458
-481
-542
+225
+154
+172
+380
+409
+148
+164
+162
+173
+189
+172
+179
+183
+167
+7274
+134
+154
+154
+255
 125
-384
+247
+129
+255
+134
+354
+156
+156
+367
+354
+142
+308
+309
+298
+312
+1152
 125
-414
-400
-472
-412
-122
-128
-7141
-251
-288
+308
+341
+132
+394
+138
+17974
+555
+1294
+728
+140
+173
+8659
+418
+176
 final_rule_matches:
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
@@ -76,4 +67,4 @@ ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
-[src/tri.rs:460:5] unsafe { MISS_CNT } = 235
+[src/tri.rs:456:5] unsafe { MISS_CNT } = 235

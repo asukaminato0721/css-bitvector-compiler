@@ -36,11 +36,8 @@ pub struct DOM {
     root_node: Option<u64>,
 }
 
-fn get_input(nfa: &NFA) -> Vec<bool> {
-    let mut input = vec![false; unsafe { STATE } + 1];
-
-    input[nfa.start_state.unwrap_or_default().0] = true;
-    input
+fn get_input() -> Vec<bool> {
+    vec![false; unsafe { STATE } + 1]
 }
 
 impl DOM {
@@ -83,7 +80,7 @@ impl DOM {
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
         };
-        let o = self.new_output_state(&new_node, &get_input(nfa), nfa);
+        let o = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_state = o;
         self.nodes.insert(id, new_node);
 
@@ -290,8 +287,8 @@ impl DOM {
 
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
+                Rule(None, None, Nfacell(_)) => {
+                    unreachable!()
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
                     if input[b] {

@@ -6,7 +6,6 @@ use serde_json;
 use std::{
     collections::{HashMap, HashSet},
     fs,
-    process::exit,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
@@ -85,7 +84,7 @@ impl DOM {
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa);
+        let (output, tri) = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_state = output;
         new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
@@ -338,8 +337,8 @@ new_tri is {:?}
         let mut input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
+                Rule(None, None, Nfacell(_)) => {
+                    unreachable!()
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
                     if input.get(b) {
@@ -362,11 +361,8 @@ new_tri is {:?}
     }
 }
 
-fn get_input(nfa: &NFA) -> Vec<bool> {
-    let mut input = vec![false; unsafe { STATE } + 1];
-
-    input[nfa.start_state.unwrap_or_default().0] = true;
-    input
+fn get_input() -> Vec<bool> {
+    vec![false; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
@@ -376,20 +372,20 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node_data, None, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
 
-            dom.recompute_styles(nfa, &get_input(nfa));
+            dom.recompute_styles(nfa, &get_input());
 
             let end = rdtsc();
             println!("{}", end - start);
