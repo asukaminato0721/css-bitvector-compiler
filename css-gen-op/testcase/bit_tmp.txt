@@ -1,18 +1,6 @@
-warning: method `force_recalc` is never used
-   --> src/bit.rs:316:8
-    |
-46  | impl DOM {
-    | -------- method in this implementation
-...
-316 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-    |        ^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` on by default
-
-warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-[src/bit.rs:381:17] &dom.nodes = {
+[src/bit.rs:330:17] &dom.nodes = {
     1: DOMNode {
         tag_id: SelectorId(
             2,
@@ -86,7 +74,7 @@ warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
         ],
     },
 }
-[src/bit.rs:381:17] &dom.nodes = {
+[src/bit.rs:330:17] &dom.nodes = {
     1: DOMNode {
         tag_id: SelectorId(
             2,
@@ -110,31 +98,6 @@ warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
             false,
             false,
             true,
-            false,
-            false,
-        ],
-    },
-    3: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            true,
-            false,
-            false,
             false,
             false,
         ],
@@ -185,9 +148,34 @@ warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
             false,
         ],
     },
+    3: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-6457
+4252
 final_rule_matches:
 #b -> [3]
 #bb -> [4]
-[src/bit.rs:472:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:423:5] unsafe { MISS_CNT } = 4

@@ -37,9 +37,13 @@ def main():
 
     # Get the range for the diagonal line
     # Add a small constant to handle cases where min is 0 for log scale
-    min_val = min(df["trivector_cache_misses"].min(), df["bitvector_cache_misses"].min())
+    min_val = min(
+        df["trivector_cache_misses"].min(), df["bitvector_cache_misses"].min()
+    )
     min_misses = max(min_val, 1)  # Ensure at least 1 for log scale
-    max_misses = max(df["trivector_cache_misses"].max(), df["bitvector_cache_misses"].max())
+    max_misses = max(
+        df["trivector_cache_misses"].max(), df["bitvector_cache_misses"].max()
+    )
 
     # Add diagonal line (equal miss count)
     diagonal_range = np.logspace(
@@ -60,9 +64,11 @@ def main():
         ax.set_yscale("log")
 
     # Calculate miss count ratio statistics
-    df["miss_ratio"] = df["trivector_cache_misses"] / (df["bitvector_cache_misses"] + 1e-10)  # Avoid division by zero
+    df["miss_ratio"] = df["trivector_cache_misses"] / (
+        df["bitvector_cache_misses"] + 1e-10
+    )  # Avoid division by zero
     valid_ratios = df[df["miss_ratio"] > 0]["miss_ratio"]
-    
+
     geometric_mean_miss_ratio = (
         np.exp(np.log(valid_ratios).mean()) if len(valid_ratios) > 0 else 1.0
     )
@@ -93,7 +99,10 @@ def main():
     fig.tight_layout()
 
     # Save the plot
-    output_path = Path("css-gen-op", os.getenv("WEBSITE_NAME", "google")) / "cache_miss_comparison_scatter.png"
+    output_path = (
+        Path("css-gen-op", os.getenv("WEBSITE_NAME", "google"))
+        / "cache_miss_comparison_scatter.png"
+    )
     fig.savefig(
         output_path,
         dpi=300,
@@ -101,14 +110,16 @@ def main():
         facecolor="white",
         edgecolor="none",
     )
-    print(
-        f"✅ Cache miss comparison scatter plot saved to {output_path}"
-    )
+    print(f"✅ Cache miss comparison scatter plot saved to {output_path}")
 
     # Calculate statistics
     total_points = len(df)
-    points_below_diagonal = len(df[df["trivector_cache_misses"] < df["bitvector_cache_misses"]])
-    points_above_diagonal = len(df[df["trivector_cache_misses"] > df["bitvector_cache_misses"]])
+    points_below_diagonal = len(
+        df[df["trivector_cache_misses"] < df["bitvector_cache_misses"]]
+    )
+    points_above_diagonal = len(
+        df[df["trivector_cache_misses"] > df["bitvector_cache_misses"]]
+    )
     points_on_diagonal = total_points - points_below_diagonal - points_above_diagonal
 
     print(f"📈 Total data points: {total_points}")
@@ -140,8 +151,12 @@ def main():
     min_bitvector_misses = df["bitvector_cache_misses"].min()
     max_bitvector_misses = df["bitvector_cache_misses"].max()
 
-    print(f"\n📏 TriVector miss range: {min_trivector_misses:,} - {max_trivector_misses:,}")
-    print(f"📏 BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}")
+    print(
+        f"\n📏 TriVector miss range: {min_trivector_misses:,} - {max_trivector_misses:,}"
+    )
+    print(
+        f"📏 BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}"
+    )
 
     # Total miss counts
     total_bitvector_misses = df["bitvector_cache_misses"].sum()
@@ -149,11 +164,19 @@ def main():
     total_bitvector_hits = df["bitvector_cache_hits"].sum()
     total_trivector_hits = df["trivector_cache_hits"].sum()
 
-    bitvector_miss_rate = total_bitvector_misses / (total_bitvector_misses + total_bitvector_hits) * 100
-    trivector_miss_rate = total_trivector_misses / (total_trivector_misses + total_trivector_hits) * 100
+    bitvector_miss_rate = (
+        total_bitvector_misses / (total_bitvector_misses + total_bitvector_hits) * 100
+    )
+    trivector_miss_rate = (
+        total_trivector_misses / (total_trivector_misses + total_trivector_hits) * 100
+    )
 
-    print(f"\n🎯 BitVector total misses: {total_bitvector_misses:,} (miss rate: {bitvector_miss_rate:.1f}%)")
-    print(f"🎯 TriVector total misses: {total_trivector_misses:,} (miss rate: {trivector_miss_rate:.1f}%)")
+    print(
+        f"\n🎯 BitVector total misses: {total_bitvector_misses:,} (miss rate: {bitvector_miss_rate:.1f}%)"
+    )
+    print(
+        f"🎯 TriVector total misses: {total_trivector_misses:,} (miss rate: {trivector_miss_rate:.1f}%)"
+    )
 
     print("\n" + "=" * 60)
     plt.close(fig)

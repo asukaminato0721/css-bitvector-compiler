@@ -6,22 +6,11 @@ warning: unused import: `process::exit`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: method `force_recalc` is never used
-   --> src/tri.rs:370:8
-    |
-49  | impl DOM {
-    | -------- method in this implementation
-...
-370 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-    |        ^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-312
+294
 final_rule_matches:
 #b -> [3]
 #bb -> [4]
-[src/tri.rs:500:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:460:5] unsafe { MISS_CNT } = 3

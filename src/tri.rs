@@ -291,12 +291,6 @@ new_tri is {:?}
                 encode(&new_output),
                 encode(&new_tri)
             );
-
-            // assert_eq!(
-            //     original_output_state, new_output,
-            //     "Node index {}: Output state changed when node was not dirty!",
-            //     node_idx
-            // )
         }
 
         // Recursively process children
@@ -365,42 +359,6 @@ new_tri is {:?}
             }
         }
         (new_state, input.tri)
-    }
-
-    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
-        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
-        // unsafe {
-        //     MISS_CNT += 1;
-        // }
-        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
-        self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
-        for child_idx in self.nodes[&node_idx].children.clone() {
-            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
-        }
-
-        // Debug check: if not dirty, recomputing should not change output
-        // let original_output_state = self.nodes[&node_idx].output_state.clone();
-        // let new_output_state = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
-        // assert_eq!(
-        //     original_output_state, new_output_state,
-        //     "Node index {}: Output state changed when node was not dirty!",
-        //     node_idx
-        // );
-
-        // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
-        for &child_idx in &children_indices {
-            self.force_recalc(child_idx, &current_output_state, nfa);
-        }
-
-        // Reset dirty flags
-        if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
-        }
     }
 }
 

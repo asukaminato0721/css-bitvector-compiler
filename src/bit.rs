@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    LayoutFrame, NFA, Nfacell, Rule, SelectorId, SelectorManager,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
@@ -311,57 +311,6 @@ impl DOM {
             }
         }
         new_state
-    }
-
-    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
-        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
-        // unsafe {
-        //     MISS_CNT += 1;
-        // }
-        let new_output_state = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
-        for child_idx in self.nodes[&node_idx].children.clone() {
-            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
-        }
-
-        // Debug check: if not dirty, recomputing should not change output
-        let original_output_state = self.nodes[&node_idx].output_state.clone();
-        let new_output_state = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-        assert_eq!(
-            original_output_state, new_output_state,
-            "Node index {}: Output state changed when node was not dirty!",
-            node_idx
-        );
-
-        // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
-        for &child_idx in &children_indices {
-            self.force_recalc(child_idx, &current_output_state, nfa);
-        }
-
-        // Reset dirty flags
-        if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
-        }
-    }
-}
-
-/// 解析CSS选择器字符串并生成对应的选择器对象
-pub fn parse_selector(selector_str: &str) -> Selector {
-    let trimmed = selector_str.trim().to_lowercase();
-
-    if trimmed.starts_with('.') {
-        // 类选择器
-        Selector::Class(trimmed[1..].to_string())
-    } else if trimmed.starts_with('#') {
-        // ID选择器
-        Selector::Id(trimmed[1..].to_string())
-    } else {
-        // 标签选择器
-        Selector::Type(trimmed.to_string())
     }
 }
 

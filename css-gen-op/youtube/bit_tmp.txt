@@ -1,70 +1,58 @@
-warning: method `force_recalc` is never used
-   --> src/bit.rs:316:8
-    |
-46  | impl DOM {
-    | -------- method in this implementation
-...
-316 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-    |        ^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` on by default
-
-warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-254799
-2180802
-2278306
-260076
-838518
-103240
-2580664
-787
-25842
-65304
-318
-21511
-326
-420
-30115
-845014
-618
-411984
-585618
-242185
-531649
-1527431
-328413
-329857
-316859
-430163
-318748
-546488
-650
-229735
-271258
-641436
-307091
-322510
-303587
-325116
-372177
-338130
-736629
-230642
-324410
-320661
-392722
-242713
-345120
-406127
-303782
-453141
-1258845
-1596780
-2065131
-3121001
-1466910
+136001
+1069065
+1009095
+131043
+401877
+48472
+1147305
+292
+11643
+31390
+206
+9579
+168
+163
+14032
+406950
+261
+191801
+304775
+118288
+282741
+744630
+159637
+156247
+154821
+211471
+155135
+245318
+292
+125268
+131412
+156749
+156131
+156468
+158599
+156265
+156382
+155587
+353963
+107834
+159641
+155912
+196025
+117558
+159172
+154192
+156123
+229707
+591255
+741637
+917656
+2190235
+1018222
 final_rule_matches:
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
@@ -79,4 +67,4 @@ ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
-[src/bit.rs:472:5] unsafe { MISS_CNT } = 3581
+[src/bit.rs:423:5] unsafe { MISS_CNT } = 3581

@@ -482,7 +482,7 @@ fn main() {
     }
     let _ = fs::write(
         format!(
-            "css-gen-op/{0}/dot_tri.dot",
+            "css-gen-op/{0}/dot_quad.dot",
             std::env::var("WEBSITE_NAME").unwrap(),
         ),
         nfa.to_dot(&dom.selector_manager),
