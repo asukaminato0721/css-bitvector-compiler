@@ -413,10 +413,11 @@ fn main() {
         .into_iter()
         .collect::<Vec<_>>();
     final_matches.sort();
-    println!("final_rule_matches:");
+    println!("BEGIN");
     for (k, v) in final_matches {
         println!("{} -> {:?}", k, v);
     }
+    println!("END");
     dbg!(unsafe { MISS_CNT });
 }
 

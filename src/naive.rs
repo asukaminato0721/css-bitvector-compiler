@@ -32,7 +32,12 @@ struct SelectorPart {
 
 impl Display for SelectorPart {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} {}", self.selector, self.combinator)
+        write!(f, "{}", self.selector)?;
+        match self.combinator {
+            Combinator::Descendant => write!(f, " "),
+            Combinator::Child => write!(f, " > "),
+            Combinator::None => Ok(()),
+        }
     }
 }
 
@@ -464,7 +469,9 @@ fn main() {
     for i in &trace {
         apply_frame(&mut naive, &i);
     }
+    println!("BEGIN");
     naive.print_css_matches(&mut css);
+    println!("END");
     //  // dbg!(trace);
     //// dbg!(naive);
 }
