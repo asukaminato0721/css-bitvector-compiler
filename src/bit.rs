@@ -1,6 +1,6 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, SelectorId, SelectorManager, extract_path_from_command,
-    generate_nfa, parse_css, parse_trace, rdtsc,
+    AddNode, LayoutFrame, NFA, Nfacell, Rule, SelectorId, SelectorManager,
+    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
 use std::{
@@ -40,15 +40,8 @@ fn get_input() -> Vec<bool> {
     vec![false; unsafe { STATE } + 1]
 }
 
-impl DOM {
-    /// 创建一个新的、空的 DOM。
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    /// 向 DOM 中添加一个新节点。
-    /// 返回新节点的索引。
-    pub fn add_node(
+impl AddNode for DOM {
+    fn add_node(
         &mut self,
         id: u64,
         tag_name: &str,
@@ -94,6 +87,13 @@ impl DOM {
         }
 
         id
+    }
+}
+
+impl DOM {
+    /// 创建一个新的、空的 DOM。
+    pub fn new() -> Self {
+        Default::default()
     }
 
     /// 检查节点是否匹配给定的选择器ID

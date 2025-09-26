@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
+    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use serde_json;
@@ -45,14 +45,8 @@ pub struct DOM {
     root_node: Option<u64>,
 }
 
-impl DOM {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    /// 向 DOM 中添加一个新节点。
-    /// 返回新节点的索引。
-    pub fn add_node(
+impl AddNode for DOM {
+    fn add_node(
         &mut self,
         id: u64,
         tag_name: &str,
@@ -98,6 +92,12 @@ impl DOM {
                 .push(id);
         }
         id
+    }
+}
+
+impl DOM {
+    pub fn new() -> Self {
+        Default::default()
     }
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
