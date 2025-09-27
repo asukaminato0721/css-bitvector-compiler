@@ -245,6 +245,17 @@ impl DOM {
         let root_node = self.get_root_node();
         self.recompute_styles_recursive(root_node, nfa, input);
     }
+    fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
+        input
+            .iter()
+            .zip(output)
+            .map(|p| match p {
+                (&i, OState::OFromParent) => i,
+                (_, OState::OOne) => true,
+                (_, OState::OZero) => false,
+            })
+            .collect()
+    }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
@@ -267,7 +278,7 @@ impl DOM {
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_input_state, new_output_state, ) =
+                let (new_input_state, new_output_state) =
                     self.new_output_state(&self.nodes[&node_idx], input, nfa);
                 let node = self.nodes.get_mut(&node_idx).unwrap();
                 node.output_state = new_output_state.clone();
@@ -301,7 +312,8 @@ new_tri is {:?}
 
         // Recursively process children
         let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        let current_output_state =
+            self.materialize(input, &self.nodes[&node_idx].output_state.clone());
         for &child_idx in &children_indices {
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
         }
@@ -407,18 +419,41 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
 }
 
 pub fn collect_rule_matches(
-    dom: &DOM,
+    dom: &mut DOM,
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
+    let mut rule_match = vec![false; unsafe { STATE }];
+    let root = dom.get_root_node();
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
+    helper(
+        dom,
+        &dom.nodes[&root],
+        &mut rule_match,
+        nfas,
+        &mut res,
+        selects,
+    );
 
-    for (node_id, node) in dom.nodes.iter() {
-        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if node.output_state[state_index] {
-                let rule = &selects[idx];
-                res.entry(rule.clone()).or_default().push(*node_id);
+    fn helper(
+        dom: &DOM,
+        d: &DOMNode,
+        rule_match: &mut Vec<bool>,
+        nfas: &NFA,
+        res: &mut HashMap<String, Vec<u64>>,
+        selects: &[String],
+    ) {
+        *rule_match = dom.materialize(&rule_match, &d.output_state);
+        for node_id in dom.nodes.keys() {
+            for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
+                if rule_match[state_index] {
+                    let rule = &selects[idx];
+                    res.entry(rule.clone()).or_default().push(*node_id);
+                }
             }
+        }
+        for i in d.children.iter() {
+            helper(dom, &dom.nodes[i], rule_match, nfas, res, selects);
         }
     }
 
@@ -452,7 +487,7 @@ fn main() {
         apply_frame(&mut dom, &f, &nfa);
     }
 
-    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors)
+    let mut final_matches = collect_rule_matches(&mut dom, &nfa, &selectors)
         .into_iter()
         .collect::<Vec<_>>();
     final_matches.sort();
