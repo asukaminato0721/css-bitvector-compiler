@@ -2,7 +2,6 @@ use css_bitvector_compiler::{
     AddNode, LayoutFrame, NFA, Nfacell, Rule, SelectorId, SelectorManager,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
-use serde_json;
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -81,7 +80,7 @@ impl AddNode for DOM {
         if let Some(p_idx) = parent_index {
             self.nodes
                 .get_mut(&p_idx)
-                .expect(&format!("{p_idx} not found"))
+                .unwrap_or_else(|| panic!("{p_idx} not found"))
                 .children
                 .push(id);
         }
@@ -128,7 +127,7 @@ impl DOM {
                 .next()
                 .unwrap(),
         );
-        return self.root_node.unwrap();
+        self.root_node.unwrap()
     }
 
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
@@ -175,11 +174,10 @@ impl DOM {
         let current_index =
             self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
-        if id == 5458 {
-            if classes.contains(&"hidden".to_string()) {
+        if id == 5458
+            && classes.contains(&"hidden".to_string()) {
                 panic!()
             }
-        }
         //
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
@@ -199,7 +197,7 @@ impl DOM {
 
         // 遍历路径到目标父节点
         for &path_element in &path[..path.len() - 1] {
-            current_idx = self.nodes[&current_idx].children[path_element as usize];
+            current_idx = self.nodes[&current_idx].children[path_element];
         }
 
         // 在指定位置插入新节点
@@ -208,7 +206,7 @@ impl DOM {
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
             debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
             parent.children.pop();
-            parent.children.insert(insert_pos as usize, new_node_idx);
+            parent.children.insert(insert_pos, new_node_idx);
         }
         self.set_node_dirty(current_idx);
     }
@@ -223,7 +221,7 @@ impl DOM {
         }
 
         // 移除目标节点
-        let rm_pos = path[path.len() - 1] as usize;
+        let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
             .get_mut(&cur_idx)
@@ -323,7 +321,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            if std::env::var("WEBSITE_NAME").unwrap() == "testcase".to_string() {
+            if std::env::var("WEBSITE_NAME").unwrap() == "testcase" {
                 dbg!(&dom.nodes);
             }
 

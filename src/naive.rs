@@ -245,7 +245,7 @@ impl NaiveHtmlNode {
         node.children = json_node["children"]
             .as_array()
             .unwrap()
-            .into_iter()
+            .iter()
             .map(|x| self.json_to_node(x))
             .collect();
         node
@@ -467,7 +467,7 @@ fn main() {
     let trace = parse_trace();
 
     for i in &trace {
-        apply_frame(&mut naive, &i);
+        apply_frame(&mut naive, i);
     }
     println!("BEGIN");
     naive.print_css_matches(&mut css);

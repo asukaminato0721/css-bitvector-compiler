@@ -2,7 +2,6 @@ use css_bitvector_compiler::{
     AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
-use serde_json;
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -56,16 +55,16 @@ impl AddNode for DOM {
         nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
-        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.to_lowercase().into()));
+        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.to_lowercase()));
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase().into()));
+            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase()));
             class_ids.insert(class_id);
         }
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase().into())));
+            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase())));
 
         let mut new_node = DOMNode {
             tag_id,
@@ -87,7 +86,7 @@ impl AddNode for DOM {
         if let Some(p_idx) = parent_index {
             self.nodes
                 .get_mut(&p_idx)
-                .expect(&format!("{p_idx} not found"))
+                .unwrap_or_else(|| panic!("{p_idx} not found"))
                 .children
                 .push(id);
         }
@@ -130,7 +129,7 @@ impl DOM {
                 .next()
                 .unwrap(),
         );
-        return self.root_node.unwrap();
+        self.root_node.unwrap()
     }
 
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
@@ -177,11 +176,10 @@ impl DOM {
         let current_index =
             self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
-        if id == 5458 {
-            if classes.contains(&"hidden".to_string()) {
+        if id == 5458
+            && classes.contains(&"hidden".to_string()) {
                 panic!()
             }
-        }
         //
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
@@ -210,7 +208,7 @@ impl DOM {
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
             debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
             parent.children.pop();
-            parent.children.insert(insert_pos as usize, new_node_idx);
+            parent.children.insert(insert_pos, new_node_idx);
         }
         self.set_node_dirty(current_idx);
     }
@@ -224,7 +222,7 @@ impl DOM {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        let rm_pos = path[path.len() - 1] as usize;
+        let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
             .get_mut(&cur_idx)
@@ -331,7 +329,7 @@ new_tri is {:?}
                 } else {
                     IState::IZero
                 };
-                return self.input[idx];
+                self.input[idx]
             }
         }
         let mut input = Read::new(input);
