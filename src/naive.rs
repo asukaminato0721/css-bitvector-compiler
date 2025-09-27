@@ -204,7 +204,7 @@ impl NaiveHtmlNode {
     fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value) {
         assert!(!path.is_empty());
         if path.len() == 1 {
-            self.children.insert(path[0], self.json_to_node(node));
+            self.children.insert(path[0], Self::json_to_node(node));
             return;
         }
         self.children[path[0]].add_by_path(&path[1..], node);
@@ -219,7 +219,7 @@ impl NaiveHtmlNode {
         self.children[path[0]].remove_by_path(&path[1..]);
     }
 
-    fn json_to_node(&self, json_node: &serde_json::Value) -> Self {
+    fn json_to_node(json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
         //  // dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
@@ -246,7 +246,7 @@ impl NaiveHtmlNode {
             .as_array()
             .unwrap()
             .iter()
-            .map(|x| self.json_to_node(x))
+            .map(|x| Self::json_to_node(x))
             .collect();
         node
     }
@@ -424,7 +424,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     match frame.command_name.as_str() {
         "init" => {
             // dbg!(frame.frame_id, frame.command_name.as_str());
-            *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
+            *tree = NaiveHtmlNode::json_to_node(frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers();
         }
         "add" => {
