@@ -379,7 +379,7 @@ new_tri is {:?}
 }
 
 fn get_input() -> Vec<OState> {
-    vec![OState::OZero; unsafe { STATE } + 1]    
+    vec![OState::OZero; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
