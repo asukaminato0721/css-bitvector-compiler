@@ -176,10 +176,9 @@ impl DOM {
         let current_index =
             self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
-        if id == 5458
-            && classes.contains(&"hidden".to_string()) {
-                panic!()
-            }
+        if id == 5458 && classes.contains(&"hidden".to_string()) {
+            panic!()
+        }
         //
         // 递归处理子节点
         if let Some(children_array) = json_node["children"].as_array() {
