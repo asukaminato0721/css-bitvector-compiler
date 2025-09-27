@@ -1,119 +1,95 @@
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:251:17
-    |
-251 |                 (OState::OFromParent(index)) => {
-    |                 ^                          ^
-    |
-    = note: `#[warn(unused_parens)]` on by default
-help: remove these parentheses
-    |
-251 -                 (OState::OFromParent(index)) => {
-251 +                 OState::OFromParent(index) => {
-    |
-
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:254:17
-    |
-254 |                 ( OState::OOne) => true,
-    |                 ^^            ^
-    |
-help: remove these parentheses
-    |
-254 -                 ( OState::OOne) => true,
-254 +                 OState::OOne => true,
-    |
-
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:255:17
-    |
-255 |                 ( OState::OZero) => false,
-    |                 ^^             ^
-    |
-help: remove these parentheses
-    |
-255 -                 ( OState::OZero) => false,
-255 +                 OState::OZero => false,
-    |
-
 warning: field `input` is never read
-   --> src/quad.rs:336:13
+   --> src/quad.rs:332:13
     |
-335 |         struct Read {
+331 |         struct Read {
     |                ---- field in this struct
-336 |             input: Vec<bool>,
+332 |             input: Vec<bool>,
     |             ^^^^^
     |
     = note: `#[warn(dead_code)]` on by default
 
 warning: method `get` is never used
-   --> src/quad.rs:347:16
+   --> src/quad.rs:343:16
     |
-339 |         impl Read {
+335 |         impl Read {
     |         --------- method in this implementation
 ...
-347 |             fn get(&mut self, idx: usize) -> bool {
+343 |             fn get(&mut self, idx: usize) -> bool {
     |                ^^^
 
-warning: `css-bitvector-compiler` (bin "quad") generated 5 warnings (run `cargo fix --bin "quad"` to apply 3 suggestions)
+warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/quad`
-258
-239
-253
-146
-365
-124
+330
+355
 204
-380
-150
-137
-148
-235
-166
-144
-324
-284
-181
-77477
-296
-159
-144
-288
-148
-251
-359
+416
+369
+175
+249
+201
 161
-132
-454
-341
-379
-274
-408
-142
-339
+123
+130
+122
+128
+134
+128
+207
+191
+86026
+250
+152
 312
-305
-324
-135
-144
-363
-557
-215
-499
-132
-406
-450
-481
-484
-118
-146
-39337
-312
-177
-[src/quad.rs:460:5] &res = {
+258
+133
+232
+294
+122
+162
+236
+204
+39920
+162
+1179
+129
+350
+337
+235
+460
+113
+139
+478
+459
+1752
+292
+199
+300
+318
+351
+355
+203
+279
+33741
+483
+264
+[src/quad.rs:456:5] &res = {
     "#masthead-skeleton-icons": [
         379,
         379,
+    ],
+    ".masthead-skeleton-icon": [
+        382,
+        384,
+        386,
+        382,
+        384,
+        386,
+    ],
+    "body": [
+        233,
+        4487,
+        5866,
     ],
     ".hidden": [
         7245,
@@ -127,22 +103,27 @@ warning: `css-bitvector-compiler` (bin "quad") generated 5 warnings (run `cargo 
         13079,
         7245,
     ],
-    "body": [
-        233,
-        4487,
-        5866,
-    ],
-    "ps-dom-if": [
-        7640,
-        13850,
-        13856,
-        7640,
+    "dom-if": [
+        3659,
+        6318,
+        13190,
+        12165,
+        12212,
+        6035,
+        3694,
+        3699,
     ],
     "html": [
         5,
         6,
         4485,
         5864,
+    ],
+    "ps-dom-if": [
+        7640,
+        13850,
+        13856,
+        7640,
     ],
     "dom-repeat": [
         5129,
@@ -158,24 +139,6 @@ warning: `css-bitvector-compiler` (bin "quad") generated 5 warnings (run `cargo 
     "ps-dom-repeat": [
         12974,
     ],
-    "dom-if": [
-        3659,
-        6318,
-        13190,
-        12165,
-        12212,
-        6035,
-        3694,
-        3699,
-    ],
-    ".masthead-skeleton-icon": [
-        382,
-        384,
-        386,
-        382,
-        384,
-        386,
-    ],
 }
 BEGIN
 #masthead-skeleton-icons -> [379]
@@ -188,4 +151,4 @@ html -> [5, 6, 4485, 5864]
 ps-dom-if -> [7640, 13850, 13856]
 ps-dom-repeat -> [12974]
 END
-[src/quad.rs:502:5] unsafe { MISS_CNT } = 0
+[src/quad.rs:498:5] unsafe { MISS_CNT } = 0

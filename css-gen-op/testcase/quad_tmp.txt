@@ -1,64 +1,27 @@
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:251:17
-    |
-251 |                 (OState::OFromParent(index)) => {
-    |                 ^                          ^
-    |
-    = note: `#[warn(unused_parens)]` on by default
-help: remove these parentheses
-    |
-251 -                 (OState::OFromParent(index)) => {
-251 +                 OState::OFromParent(index) => {
-    |
-
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:254:17
-    |
-254 |                 ( OState::OOne) => true,
-    |                 ^^            ^
-    |
-help: remove these parentheses
-    |
-254 -                 ( OState::OOne) => true,
-254 +                 OState::OOne => true,
-    |
-
-warning: unnecessary parentheses around pattern
-   --> src/quad.rs:255:17
-    |
-255 |                 ( OState::OZero) => false,
-    |                 ^^             ^
-    |
-help: remove these parentheses
-    |
-255 -                 ( OState::OZero) => false,
-255 +                 OState::OZero => false,
-    |
-
 warning: field `input` is never read
-   --> src/quad.rs:336:13
+   --> src/quad.rs:332:13
     |
-335 |         struct Read {
+331 |         struct Read {
     |                ---- field in this struct
-336 |             input: Vec<bool>,
+332 |             input: Vec<bool>,
     |             ^^^^^
     |
     = note: `#[warn(dead_code)]` on by default
 
 warning: method `get` is never used
-   --> src/quad.rs:347:16
+   --> src/quad.rs:343:16
     |
-339 |         impl Read {
+335 |         impl Read {
     |         --------- method in this implementation
 ...
-347 |             fn get(&mut self, idx: usize) -> bool {
+343 |             fn get(&mut self, idx: usize) -> bool {
     |                ^^^
 
-warning: `css-bitvector-compiler` (bin "quad") generated 5 warnings (run `cargo fix --bin "quad"` to apply 3 suggestions)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
-334
-[src/quad.rs:460:5] &res = {
+339
+[src/quad.rs:456:5] &res = {
     "#bb": [
         4,
     ],
@@ -70,4 +33,4 @@ BEGIN
 #b -> [3]
 #bb -> [4]
 END
-[src/quad.rs:502:5] unsafe { MISS_CNT } = 0
+[src/quad.rs:498:5] unsafe { MISS_CNT } = 0
