@@ -6,7 +6,6 @@ use serde_json;
 use std::{
     collections::{HashMap, HashSet},
     fs,
-    process::exit,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
@@ -18,11 +17,12 @@ pub enum IState {
     IZero,
     IUnused,
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum OState {
     OOne,
     OZero,
-    FromParent,
+    OFromParent,
 }
 
 #[derive(Debug, Default)]
@@ -34,8 +34,8 @@ pub struct DOMNode {
     pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
+    pub input_state: Vec<IState>,
     pub output_state: Vec<OState>,
-    pub tri_state: Vec<IState>,
 }
 
 impl DOMNode {
@@ -83,11 +83,11 @@ impl AddNode for DOM {
             dirty: true,
             recursive_dirty: true,
             output_state: vec![OState::OZero; unsafe { STATE } + 1],
-            tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
+            input_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(), nfa);
+        let (input, output) = self.new_output_state(&new_node, &get_input(), nfa);
+        new_node.input_state = input;
         new_node.output_state = output;
-        new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
 
         // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
@@ -106,7 +106,6 @@ impl DOM {
     pub fn new() -> Self {
         Default::default()
     }
-
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
         if node.tag_id == SelectorId(sid) {
@@ -242,11 +241,11 @@ impl DOM {
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
-    pub fn recompute_styles(&mut self, nfa: &NFA, input: &[OState]) {
+    pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
         self.recompute_styles_recursive(root_node, nfa, input);
     }
-    fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[OState]) {
+    fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
@@ -256,13 +255,11 @@ impl DOM {
             // use prev to cal
             let need_re = !input
                 .iter()
-                .zip(node.tri_state.clone())
-                .all(|x: (&OState, IState)| {
+                .zip(node.input_state.clone())
+                .all(|x: (&bool, IState)| {
                     matches!(
                         x,
-                        (&OState::OZero, IState::IZero)
-                            | (&OState::OOne, IState::IOne)
-                            | (_, IState::IUnused)
+                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
                     )
                 });
 
@@ -270,23 +267,23 @@ impl DOM {
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_output_state, new_tri_state) =
+                let (new_input_state, new_output_state, ) =
                     self.new_output_state(&self.nodes[&node_idx], input, nfa);
                 let node = self.nodes.get_mut(&node_idx).unwrap();
                 node.output_state = new_output_state.clone();
-                node.tri_state = new_tri_state.clone();
+                node.input_state = new_input_state.clone();
                 for child_idx in self.nodes[&node_idx].children.clone() {
                     self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
                 }
             }
         } else {
             // Debug check: if not dirty, recomputing should not change output
-            let original_tri_state = self.nodes[&node_idx].tri_state.clone();
+            let original_input_state = self.nodes[&node_idx].input_state.clone();
             let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_output, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
+            let (new_input, new_output) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
             assert_eq!(
-                original_tri_state,
-                new_tri,
+                original_input_state,
+                new_input,
                 "input is {:?}
 old_tri is {:?}
 old_output is {:?}
@@ -295,17 +292,11 @@ new_tri is {:?}
 
                    ",
                 encode(input),
-                encode(&original_tri_state),
+                encode(&original_input_state),
                 encode(&original_output_state),
                 encode(&new_output),
-                encode(&new_tri)
+                encode(&new_input)
             );
-
-            // assert_eq!(
-            //     original_output_state, new_output,
-            //     "Node index {}: Output state changed when node was not dirty!",
-            //     node_idx
-            // )
         }
 
         // Recursively process children
@@ -324,27 +315,26 @@ new_tri is {:?}
     fn new_output_state(
         &self,
         node: &DOMNode,
-        input: &[OState],
+        input: &[bool],
         nfa: &NFA,
-    ) -> (Vec<OState>, Vec<IState>) {
-        let mut new_state = vec![OState::OZero; input.len()];
+    ) -> (Vec<IState>, Vec<OState>) {
+        let mut new_state = vec![false; input.len()];
 
         struct Read {
-            input: Vec<OState>,
+            input: Vec<bool>,
             pub tri: Vec<IState>,
         }
         impl Read {
-            fn new(v: &[OState]) -> Self {
+            fn new(v: &[bool]) -> Self {
                 let l = v.len();
                 Self {
                     input: v.into(),
                     tri: vec![IState::IUnused; l],
                 }
             }
-            fn get(&mut self, idx: usize) -> OState {
-                self.tri[idx] = if self.input[idx] == OState::OOne {
+            fn get(&mut self, idx: usize) -> bool {
+                self.tri[idx] = if self.input[idx] {
                     IState::IOne
-                    // TODO
                 } else {
                     IState::IZero
                 };
@@ -358,28 +348,28 @@ new_tri is {:?}
                     unreachable!()
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) == OState::OOne {
-                        new_state[c] = OState::FromParent;
+                    if input.get(b) {
+                        new_state[c] = true;
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
                     if self.node_matches_selector(node, a) {
-                        new_state[c] = OState::OOne;
+                        new_state[c] = true;
                     }
                 }
                 Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) && input.get(b) == OState::OOne {
-                        new_state[c] = OState::OOne;
+                    if self.node_matches_selector(node, a) && input.get(b) {
+                        new_state[c] = true;
                     }
                 }
             }
         }
-        (new_state, input.tri)
+        (input.tri, new_state)
     }
 }
 
-fn get_input() -> Vec<OState> {
-    vec![OState::OZero; unsafe { STATE } + 1]
+fn get_input() -> Vec<bool> {
+    vec![false; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
@@ -425,7 +415,7 @@ pub fn collect_rule_matches(
 
     for (node_id, node) in dom.nodes.iter() {
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if node.output_state[state_index] == OState::OOne {
+            if node.output_state[state_index] {
                 let rule = &selects[idx];
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
@@ -453,7 +443,7 @@ fn main() {
     }
     let _ = fs::write(
         format!(
-            "css-gen-op/{0}/dot_quad.dot",
+            "css-gen-op/{0}/dot_tri.dot",
             std::env::var("WEBSITE_NAME").unwrap(),
         ),
         nfa.to_dot(&dom.selector_manager),
