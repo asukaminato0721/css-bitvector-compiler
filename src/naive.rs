@@ -246,7 +246,7 @@ impl NaiveHtmlNode {
             .as_array()
             .unwrap()
             .iter()
-            .map(|x| Self::json_to_node(x))
+            .map(Self::json_to_node)
             .collect();
         node
     }
