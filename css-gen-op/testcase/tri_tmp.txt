@@ -1,6 +1,6 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-271
+264
 BEGIN
 #b -> [3]
 #bb -> [4]

@@ -22,7 +22,7 @@ pub enum IState {
 pub enum OState {
     OOne,
     OZero,
-    OFromParent,
+    OFromParent(usize),
 }
 
 #[derive(Debug, Default)]
@@ -250,7 +250,7 @@ impl DOM {
             .iter()
             .zip(output)
             .map(|p| match p {
-                (&i, OState::OFromParent) => i,
+                (&i, OState::OFromParent(_)) => i,
                 (_, OState::OOne) => true,
                 (_, OState::OZero) => false,
             })
@@ -330,7 +330,7 @@ new_tri is {:?}
         input: &[bool],
         nfa: &NFA,
     ) -> (Vec<IState>, Vec<OState>) {
-        let mut new_state = vec![false; input.len()];
+        let mut new_state = vec![OState::OZero; input.len()];
 
         struct Read {
             input: Vec<bool>,
@@ -353,25 +353,25 @@ new_tri is {:?}
                 return self.input[idx];
             }
         }
-        let mut input = Read::new(input);
+        let input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
                 Rule(None, None, Nfacell(_)) => {
                     unreachable!()
                 }
-                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) {
-                        new_state[c] = true;
+                Rule(a, Some(Nfacell(b)), Nfacell(c)) => {
+                    if match a {
+                        None => true,
+                        Some(a) => self.node_matches_selector(node, a),
+                    } {
+                        new_state[c] = OState::OFromParent(b);
+                    } else {
+                        new_state[c] = OState::OZero;
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
                     if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) && input.get(b) {
-                        new_state[c] = true;
+                        new_state[c] = OState::OOne;
                     }
                 }
             }
@@ -423,9 +423,31 @@ pub fn collect_rule_matches(
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
-    let mut rule_match = vec![false; unsafe { STATE }];
+    let mut rule_match = vec![false; unsafe { STATE }+1];
     let root = dom.get_root_node();
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
+
+    fn helper(
+        dom: &DOM,
+        d: &DOMNode,
+        output_state: &mut Vec<bool>,
+        nfas: &NFA,
+        res: &mut HashMap<String, Vec<u64>>,
+        selects: &[String],
+        index: u64,
+    ) {
+        *output_state = dom.materialize(&output_state, &d.output_state);
+        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
+            if output_state[state_index] {
+                let rule = &selects[idx];
+                res.entry(rule.clone()).or_default().push(index);
+            }
+        }
+        for i in d.children.iter() {
+            helper(dom, &dom.nodes[i], output_state, nfas, res, selects, *i);
+        }
+    }
+
     helper(
         dom,
         &dom.nodes[&root],
@@ -433,31 +455,11 @@ pub fn collect_rule_matches(
         nfas,
         &mut res,
         selects,
+        root,
     );
-
-    fn helper(
-        dom: &DOM,
-        d: &DOMNode,
-        rule_match: &mut Vec<bool>,
-        nfas: &NFA,
-        res: &mut HashMap<String, Vec<u64>>,
-        selects: &[String],
-    ) {
-        *rule_match = dom.materialize(&rule_match, &d.output_state);
-        for node_id in dom.nodes.keys() {
-            for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-                if rule_match[state_index] {
-                    let rule = &selects[idx];
-                    res.entry(rule.clone()).or_default().push(*node_id);
-                }
-            }
-        }
-        for i in d.children.iter() {
-            helper(dom, &dom.nodes[i], rule_match, nfas, res, selects);
-        }
-    }
-
+    dbg!(&res);
     for v in res.values_mut() {
+        v.dedup();
         v.sort_unstable();
     }
     res
@@ -492,7 +494,8 @@ fn main() {
         .collect::<Vec<_>>();
     final_matches.sort();
     println!("BEGIN");
-    for (k, v) in final_matches {
+    for (k,mut v) in final_matches {
+        v.dedup();
         println!("{} -> {:?}", k, v);
     }
     println!("END");

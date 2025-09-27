@@ -1,70 +1,154 @@
-   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-error[E0308]: mismatched types
-    --> src/quad.rs:85:32
-     |
-85   |             output_state: vec![false; unsafe { STATE } + 1],
-     |                           -----^^^^^-----------------------
-     |                           |    |
-     |                           |    expected `OState`, found `bool`
-     |                           arguments to this function are incorrect
-     |
-help: the return type of this call is `bool` due to the type of the argument passed
-    --> src/quad.rs:85:27
-     |
-85   |             output_state: vec![false; unsafe { STATE } + 1],
-     |                           ^^^^^-----^^^^^^^^^^^^^^^^^^^^^^^
-     |                                |
-     |                                this argument influences the return type of `from_elem`
-note: function defined here
-    --> /home/w/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:3251:8
-     |
-3251 | pub fn from_elem<T: Clone>(elem: T, n: usize) -> Vec<T> {
-     |        ^^^^^^^^^
-     = note: this error originates in the macro `vec` (in Nightly builds, run with -Z macro-backtrace for more info)
+warning: field `input` is never read
+   --> src/quad.rs:336:13
+    |
+335 |         struct Read {
+    |                ---- field in this struct
+336 |             input: Vec<bool>,
+    |             ^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
 
-error[E0308]: mismatched types
-  --> src/quad.rs:89:33
-   |
-89 |         new_node.output_state = output;
-   |         ---------------------   ^^^^^^ expected `Vec<OState>`, found `Vec<bool>`
-   |         |
-   |         expected due to the type of this binding
-   |
-   = note: expected struct `Vec<OState>`
-              found struct `Vec<bool>`
+warning: method `get` is never used
+   --> src/quad.rs:347:16
+    |
+339 |         impl Read {
+    |         --------- method in this implementation
+...
+347 |             fn get(&mut self, idx: usize) -> bool {
+    |                ^^^
 
-error[E0308]: mismatched types
-   --> src/quad.rs:273:37
-    |
-273 |                 node.output_state = new_output_state.clone();
-    |                 -----------------   ^^^^^^^^^^^^^^^^^^^^^^^^ expected `Vec<OState>`, found `Vec<bool>`
-    |                 |
-    |                 expected due to the type of this binding
-    |
-    = note: expected struct `Vec<OState>`
-               found struct `Vec<bool>`
-
-error[E0308]: mismatched types
-   --> src/quad.rs:306:61
-    |
-306 |             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
-    |                  --------------------------                 ^^^^^^^^^^^^^^^^^^^^^ expected `&[bool]`, found `&Vec<OState>`
-    |                  |
-    |                  arguments to this method are incorrect
-    |
-    = note: expected reference `&[bool]`
-               found reference `&Vec<OState>`
-note: method defined here
-   --> src/quad.rs:248:8
-    |
-248 |     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
-    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^                                      --------------
-
-error[E0308]: mismatched types
-   --> src/quad.rs:418:16
-    |
-418 |             if node.output_state[state_index] {
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `bool`, found `OState`
-
-For more information about this error, try `rustc --explain E0308`.
-error: could not compile `css-bitvector-compiler` (bin "quad") due to 5 previous errors
+warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+     Running `target/release/quad`
+305
+464
+300
+232
+410
+201
+140
+325
+205
+198
+225
+201
+148
+195
+201
+146
+150
+109277
+149
+136
+226
+274
+194
+241
+146
+150
+296
+361
+223
+138
+359
+146
+135
+314
+371
+274
+369
+140
+182
+573
+497
+142
+418
+154
+434
+495
+513
+490
+156
+269
+37761
+355
+350
+[src/quad.rs:460:5] &res = {
+    "dom-repeat": [
+        5129,
+        5141,
+        5320,
+        13614,
+        13626,
+        13797,
+        13036,
+        13047,
+        12772,
+    ],
+    "#masthead-skeleton-icons": [
+        379,
+        379,
+    ],
+    ".masthead-skeleton-icon": [
+        382,
+        384,
+        386,
+        382,
+        384,
+        386,
+    ],
+    "body": [
+        233,
+        4487,
+        5866,
+    ],
+    ".hidden": [
+        7245,
+        8803,
+        8862,
+        8921,
+        8980,
+        9039,
+        13784,
+        14120,
+        13079,
+        7245,
+    ],
+    "dom-if": [
+        3659,
+        6318,
+        13190,
+        12165,
+        12212,
+        6035,
+        3694,
+        3699,
+    ],
+    "ps-dom-if": [
+        7640,
+        13850,
+        13856,
+        7640,
+    ],
+    "html": [
+        5,
+        6,
+        4485,
+        5864,
+    ],
+    "ps-dom-repeat": [
+        12974,
+    ],
+}
+BEGIN
+#masthead-skeleton-icons -> [379]
+.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
+.masthead-skeleton-icon -> [382, 384, 386]
+body -> [233, 4487, 5866]
+dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
+dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
+html -> [5, 6, 4485, 5864]
+ps-dom-if -> [7640, 13850, 13856]
+ps-dom-repeat -> [12974]
+END
+[src/quad.rs:502:5] unsafe { MISS_CNT } = 0
