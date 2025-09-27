@@ -389,7 +389,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node_data, None, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
