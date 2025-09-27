@@ -85,7 +85,7 @@ impl AddNode for DOM {
             output_state: vec![OState::OZero; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa);
+        let (output, tri) = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_state = output;
         new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
@@ -378,10 +378,8 @@ new_tri is {:?}
     }
 }
 
-fn get_input(nfa: &NFA) -> Vec<OState> {
-    let mut input = vec![OState::OZero; unsafe { STATE } + 1];
-    //    input[nfa.start_state.unwrap_or_default().0] = OState::OOne;
-    input
+fn get_input() -> Vec<OState> {
+    vec![OState::OZero; unsafe { STATE } + 1]    
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
@@ -397,14 +395,14 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
 
-            dom.recompute_styles(nfa, &get_input(nfa));
+            dom.recompute_styles(nfa, &get_input());
 
             let end = rdtsc();
             println!("{}", end - start);

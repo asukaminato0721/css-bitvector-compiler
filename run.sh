@@ -9,8 +9,19 @@ for name in "${WEBSITE_NAMES[@]}"; do
     cargo run -r --bin bit &> css-gen-op/$name/bit_tmp.txt || true
     cargo run -r --bin tri &> css-gen-op/$name/tri_tmp.txt || true
     cargo run -r --bin quad &> css-gen-op/$name/quad_tmp.txt || true
-   # difft <(grep '^MATCH' tmp.txt | cut -d' ' -f2-) <(grep '^MATCH' bit_tmp.txt | cut -d' ' -f2-)
-   # difft <(grep '^MATCH' tmp.txt) <(grep '^MATCH' tri_tmp.txt)
+    difft \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/bit_tmp.txt | sort)
+
+    difft \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tri_tmp.txt | sort)
+
+    difft \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/quad_tmp.txt | sort)
+
+
 done
 
 ./scripts/collect_miss_cnt.py

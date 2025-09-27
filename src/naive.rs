@@ -134,13 +134,13 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                     });
                     pending_combinator = Combinator::None;
                 }
-                current_selector = Some(Selector::Id(id.to_string()));
+                current_selector = Some(Selector::Id(id.to_lowercase().to_string()));
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
                 let s = match next_selector {
-                    NextSelector::Class => Selector::Class(name.to_string()),
-                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
+                    NextSelector::Class => Selector::Class(name.to_lowercase().to_string()),
+                    NextSelector::Type => Selector::Type(name.to_lowercase().to_string()),
                 };
                 if let Some(prev_selector) = current_selector.take() {
                     selector_parts.push(SelectorPart {

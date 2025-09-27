@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/naive`
 BEGIN
 .ds -> [372, 392, 405, 916, 928]
@@ -43,9 +43,6 @@ BEGIN
 .lst -> [375]
 .sblc a -> [431]
 .sblc -> [426]
-#SIvCob a -> [452]
-#SIvCob -> [449]
-#WqQANb a -> [463, 466, 469, 472]
 #gb -> [42]
 #gbg .gbgt -> [259, 279]
 #gbg .gbm -> [296]

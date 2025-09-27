@@ -1,3 +1,4 @@
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
 warning: unused import: `process::exit`
  --> src/quad.rs:9:5
   |
@@ -6,91 +7,23 @@ warning: unused import: `process::exit`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: unused variable: `nfa`
-   --> src/quad.rs:380:14
+error[E0061]: this function takes 0 arguments but 1 argument was supplied
+   --> src/quad.rs:392:40
     |
-380 | fn get_input(nfa: &NFA) -> Vec<OState> {
-    |              ^^^ help: if this is intentional, prefix it with an underscore: `_nfa`
+392 |             dom.recompute_styles(nfa, &get_input(nfa)); // 
+    |                                        ^^^^^^^^^ --- unexpected argument of type `&NFA`
     |
-    = note: `#[warn(unused_variables)]` on by default
+note: function defined here
+   --> src/quad.rs:381:4
+    |
+381 | fn get_input() -> Vec<OState> {
+    |    ^^^^^^^^^
+help: remove the extra argument
+    |
+392 -             dom.recompute_styles(nfa, &get_input(nfa)); // 
+392 +             dom.recompute_styles(nfa, &get_input()); // 
+    |
 
-warning: variable does not need to be mutable
-   --> src/quad.rs:381:9
-    |
-381 |     let mut input = vec![OState::OZero; unsafe { STATE } + 1];
-    |         ----^^^^^
-    |         |
-    |         help: remove this `mut`
-    |
-    = note: `#[warn(unused_mut)]` on by default
-
-warning: `css-bitvector-compiler` (bin "quad") generated 3 warnings (run `cargo fix --bin "quad"` to apply 2 suggestions)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
-     Running `target/release/quad`
-229
-219
-130
-96
-79
-83
-134
-237
-86
-81
-108
-135
-116
-103
-110
-146
-110
-7058
-95
-95
-120
-251
-136
-209
-241
-98
-243
-339
-111
-95
-346
-329
-134
-317
-469
-493
-1286
-94
-1225
-714
-106
-107
-280
-95
-252
-90
-397
-1156
-193
-138
-6686
-276
-114
-final_rule_matches:
-#masthead-skeleton-icons -> [379]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
-ytd-masthead #masthead-logo -> [284]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274]
-[src/quad.rs:474:5] unsafe { MISS_CNT } = 23
+For more information about this error, try `rustc --explain E0061`.
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+error: could not compile `css-bitvector-compiler` (bin "quad") due to 1 previous error; 1 warning emitted
