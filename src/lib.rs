@@ -527,3 +527,17 @@ pub fn parse_selector(selector_str: &str) -> Selector {
         Selector::Type(trimmed.to_string())
     }
 }
+
+pub trait AddNode {
+    /// 向 DOM 中添加一个新节点。
+    /// 返回新节点的索引。
+    fn add_node(
+        &mut self,
+        id: u64,
+        tag_name: &str,
+        classes: Vec<String>,
+        html_id: Option<String>,
+        parent_index: Option<u64>,
+        nfa: &NFA,
+    ) -> u64;
+}

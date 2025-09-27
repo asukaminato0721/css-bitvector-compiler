@@ -32,7 +32,12 @@ struct SelectorPart {
 
 impl Display for SelectorPart {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} {}", self.selector, self.combinator)
+        write!(f, "{}", self.selector)?;
+        match self.combinator {
+            Combinator::Descendant => write!(f, " "),
+            Combinator::Child => write!(f, " > "),
+            Combinator::None => Ok(()),
+        }
     }
 }
 
@@ -129,13 +134,13 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                     });
                     pending_combinator = Combinator::None;
                 }
-                current_selector = Some(Selector::Id(id.to_string()));
+                current_selector = Some(Selector::Id(id.to_lowercase().to_string()));
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
                 let s = match next_selector {
-                    NextSelector::Class => Selector::Class(name.to_string()),
-                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
+                    NextSelector::Class => Selector::Class(name.to_lowercase().to_string()),
+                    NextSelector::Type => Selector::Type(name.to_lowercase().to_string()),
                 };
                 if let Some(prev_selector) = current_selector.take() {
                     selector_parts.push(SelectorPart {
@@ -199,7 +204,7 @@ impl NaiveHtmlNode {
     fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value) {
         assert!(!path.is_empty());
         if path.len() == 1 {
-            self.children.insert(path[0], self.json_to_node(node));
+            self.children.insert(path[0], Self::json_to_node(node));
             return;
         }
         self.children[path[0]].add_by_path(&path[1..], node);
@@ -214,7 +219,7 @@ impl NaiveHtmlNode {
         self.children[path[0]].remove_by_path(&path[1..]);
     }
 
-    fn json_to_node(&self, json_node: &serde_json::Value) -> Self {
+    fn json_to_node(json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
         //  // dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
@@ -240,8 +245,8 @@ impl NaiveHtmlNode {
         node.children = json_node["children"]
             .as_array()
             .unwrap()
-            .into_iter()
-            .map(|x| self.json_to_node(x))
+            .iter()
+            .map(Self::json_to_node)
             .collect();
         node
     }
@@ -419,7 +424,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
     match frame.command_name.as_str() {
         "init" => {
             // dbg!(frame.frame_id, frame.command_name.as_str());
-            *tree = tree.json_to_node(frame.command_data.get("node").unwrap());
+            *tree = NaiveHtmlNode::json_to_node(frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers();
         }
         "add" => {
@@ -462,9 +467,11 @@ fn main() {
     let trace = parse_trace();
 
     for i in &trace {
-        apply_frame(&mut naive, &i);
+        apply_frame(&mut naive, i);
     }
+    println!("BEGIN");
     naive.print_css_matches(&mut css);
+    println!("END");
     //  // dbg!(trace);
     //// dbg!(naive);
 }

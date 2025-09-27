@@ -15,6 +15,10 @@ name = "main"
 path = "src/main.rs"
 
 [[bin]]
+name = "quad"
+path = "src/quad.rs"
+
+[[bin]]
 name = "tri"
 path = "src/tri.rs"
 

@@ -1,12 +1,10 @@
 use css_bitvector_compiler::{
-    LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
+    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
-use serde_json;
 use std::{
     collections::{HashMap, HashSet},
     fs,
-    process::exit,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
@@ -46,14 +44,8 @@ pub struct DOM {
     root_node: Option<u64>,
 }
 
-impl DOM {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    /// 向 DOM 中添加一个新节点。
-    /// 返回新节点的索引。
-    pub fn add_node(
+impl AddNode for DOM {
+    fn add_node(
         &mut self,
         id: u64,
         tag_name: &str,
@@ -63,16 +55,16 @@ impl DOM {
         nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
-        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.to_lowercase().into()));
+        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.to_lowercase()));
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase().into()));
+            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase()));
             class_ids.insert(class_id);
         }
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase().into())));
+            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase())));
 
         let mut new_node = DOMNode {
             tag_id,
@@ -85,7 +77,7 @@ impl DOM {
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(nfa), nfa);
+        let (output, tri) = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_state = output;
         new_node.tri_state = tri;
         self.nodes.insert(id, new_node);
@@ -94,11 +86,17 @@ impl DOM {
         if let Some(p_idx) = parent_index {
             self.nodes
                 .get_mut(&p_idx)
-                .expect(&format!("{p_idx} not found"))
+                .unwrap_or_else(|| panic!("{p_idx} not found"))
                 .children
                 .push(id);
         }
         id
+    }
+}
+
+impl DOM {
+    pub fn new() -> Self {
+        Default::default()
     }
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
@@ -131,7 +129,7 @@ impl DOM {
                 .next()
                 .unwrap(),
         );
-        return self.root_node.unwrap();
+        self.root_node.unwrap()
     }
 
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
@@ -178,10 +176,8 @@ impl DOM {
         let current_index =
             self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
         // HACK
-        if id == 5458 {
-            if classes.contains(&"hidden".to_string()) {
-                panic!()
-            }
+        if id == 5458 && classes.contains(&"hidden".to_string()) {
+            panic!()
         }
         //
         // 递归处理子节点
@@ -211,7 +207,7 @@ impl DOM {
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
             debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
             parent.children.pop();
-            parent.children.insert(insert_pos as usize, new_node_idx);
+            parent.children.insert(insert_pos, new_node_idx);
         }
         self.set_node_dirty(current_idx);
     }
@@ -225,7 +221,7 @@ impl DOM {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        let rm_pos = path[path.len() - 1] as usize;
+        let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
             .get_mut(&cur_idx)
@@ -291,12 +287,6 @@ new_tri is {:?}
                 encode(&new_output),
                 encode(&new_tri)
             );
-
-            // assert_eq!(
-            //     original_output_state, new_output,
-            //     "Node index {}: Output state changed when node was not dirty!",
-            //     node_idx
-            // )
         }
 
         // Recursively process children
@@ -338,14 +328,14 @@ new_tri is {:?}
                 } else {
                     IState::IZero
                 };
-                return self.input[idx];
+                self.input[idx]
             }
         }
         let mut input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
+                Rule(None, None, Nfacell(_)) => {
+                    unreachable!()
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
                     if input.get(b) {
@@ -366,49 +356,10 @@ new_tri is {:?}
         }
         (new_state, input.tri)
     }
-
-    fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-        self.nodes.get_mut(&node_idx).unwrap().recursive_dirty = false;
-        self.nodes.get_mut(&node_idx).unwrap().dirty = false;
-        // unsafe {
-        //     MISS_CNT += 1;
-        // }
-        let (new_output_state, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-        self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
-        self.nodes.get_mut(&node_idx).unwrap().tri_state = new_tri;
-        for child_idx in self.nodes[&node_idx].children.clone() {
-            self.nodes.get_mut(&child_idx).unwrap().set_dirty();
-        }
-
-        // Debug check: if not dirty, recomputing should not change output
-        // let original_output_state = self.nodes[&node_idx].output_state.clone();
-        // let new_output_state = self.new_output_state_for_init(input, nfa, &self.nodes[&node_idx]);
-        // assert_eq!(
-        //     original_output_state, new_output_state,
-        //     "Node index {}: Output state changed when node was not dirty!",
-        //     node_idx
-        // );
-
-        // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
-        for &child_idx in &children_indices {
-            self.force_recalc(child_idx, &current_output_state, nfa);
-        }
-
-        // Reset dirty flags
-        if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
-        }
-    }
 }
 
-fn get_input(nfa: &NFA) -> Vec<bool> {
-    let mut input = vec![false; unsafe { STATE } + 1];
-
-    input[nfa.start_state.unwrap_or_default().0] = true;
-    input
+fn get_input() -> Vec<bool> {
+    vec![false; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
@@ -418,20 +369,20 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node_data, None, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            dom.recompute_styles(nfa, &get_input(nfa)); // 
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
 
-            dom.recompute_styles(nfa, &get_input(nfa));
+            dom.recompute_styles(nfa, &get_input());
 
             let end = rdtsc();
             println!("{}", end - start);
@@ -495,9 +446,10 @@ fn main() {
         .into_iter()
         .collect::<Vec<_>>();
     final_matches.sort();
-    println!("final_rule_matches:");
+    println!("BEGIN");
     for (k, v) in final_matches {
         println!("{} -> {:?}", k, v);
     }
+    println!("END");
     dbg!(unsafe { MISS_CNT });
 }
