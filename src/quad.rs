@@ -423,7 +423,7 @@ pub fn collect_rule_matches(
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
-    let mut rule_match = vec![false; unsafe { STATE }+1];
+    let mut rule_match = vec![false; unsafe { STATE } + 1];
     let root = dom.get_root_node();
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
 
@@ -494,7 +494,7 @@ fn main() {
         .collect::<Vec<_>>();
     final_matches.sort();
     println!("BEGIN");
-    for (k,mut v) in final_matches {
+    for (k, mut v) in final_matches {
         v.dedup();
         println!("{} -> {:?}", k, v);
     }
