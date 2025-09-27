@@ -20,17 +20,188 @@ warning: method `get` is never used
 warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
     Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
-339
-[src/quad.rs:456:5] &res = {
-    "#bb": [
-        4,
+[src/quad.rs:484:5] &nfa = NFA {
+    states: {
+        Some(
+            Nfacell(
+                2,
+            ),
+        ),
+        Some(
+            Nfacell(
+                1,
+            ),
+        ),
+        None,
+        Some(
+            Nfacell(
+                6,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
+            ),
+        ),
+        Some(
+            Nfacell(
+                3,
+            ),
+        ),
+        Some(
+            Nfacell(
+                7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                5,
+            ),
+        ),
+    },
+    rules: [
+        Rule(
+            Some(
+                SelectorId(
+                    0,
+                ),
+            ),
+            None,
+            Nfacell(
+                1,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    1,
+                ),
+            ),
+            None,
+            Nfacell(
+                2,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    2,
+                ),
+            ),
+            None,
+            Nfacell(
+                3,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    3,
+                ),
+            ),
+            Nfacell(
+                3,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    3,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    3,
+                ),
+            ),
+            Nfacell(
+                4,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    4,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    4,
+                ),
+            ),
+            Nfacell(
+                5,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    2,
+                ),
+            ),
+            None,
+            Nfacell(
+                6,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    6,
+                ),
+            ),
+            Nfacell(
+                6,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    4,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    6,
+                ),
+            ),
+            Nfacell(
+                7,
+            ),
+        ),
     ],
+    start_state: None,
+    max_state_id: Nfacell(
+        7,
+    ),
+    accept_states: [
+        Nfacell(
+            1,
+        ),
+        Nfacell(
+            2,
+        ),
+        Nfacell(
+            5,
+        ),
+        Nfacell(
+            7,
+        ),
+    ],
+}
+582
+[src/quad.rs:456:5] &res = {
     "#b": [
         3,
+    ],
+    "#bb": [
+        4,
     ],
 }
 BEGIN
 #b -> [3]
 #bb -> [4]
 END
-[src/quad.rs:498:5] unsafe { MISS_CNT } = 0
+[src/quad.rs:499:5] unsafe { MISS_CNT } = 0

@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/naive`
 BEGIN
 ._cropped-image-link_style_cropped-image-link__3winf -> [1662]
