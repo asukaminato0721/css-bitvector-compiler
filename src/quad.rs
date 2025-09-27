@@ -246,13 +246,12 @@ impl DOM {
         self.recompute_styles_recursive(root_node, nfa, input);
     }
     fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
-        input
-            .iter()
-            .zip(output)
+        (output)
+            .into_iter()
             .map(|p| match p {
-                (&i, OState::OFromParent(_)) => i,
-                (_, OState::OOne) => true,
-                (_, OState::OZero) => false,
+                (OState::OFromParent(index)) => input[*index],
+                (OState::OOne) => true,
+                (OState::OZero) => false,
             })
             .collect()
     }

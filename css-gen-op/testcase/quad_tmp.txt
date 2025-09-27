@@ -1,3 +1,40 @@
+warning: unnecessary parentheses around pattern
+   --> src/quad.rs:251:17
+    |
+251 |                 (OState::OFromParent(index)) => {
+    |                 ^                          ^
+    |
+    = note: `#[warn(unused_parens)]` on by default
+help: remove these parentheses
+    |
+251 -                 (OState::OFromParent(index)) => {
+251 +                 OState::OFromParent(index) => {
+    |
+
+warning: unnecessary parentheses around pattern
+   --> src/quad.rs:254:17
+    |
+254 |                 ( OState::OOne) => true,
+    |                 ^^            ^
+    |
+help: remove these parentheses
+    |
+254 -                 ( OState::OOne) => true,
+254 +                 OState::OOne => true,
+    |
+
+warning: unnecessary parentheses around pattern
+   --> src/quad.rs:255:17
+    |
+255 |                 ( OState::OZero) => false,
+    |                 ^^             ^
+    |
+help: remove these parentheses
+    |
+255 -                 ( OState::OZero) => false,
+255 +                 OState::OZero => false,
+    |
+
 warning: field `input` is never read
    --> src/quad.rs:336:13
     |
@@ -17,16 +54,16 @@ warning: method `get` is never used
 347 |             fn get(&mut self, idx: usize) -> bool {
     |                ^^^
 
-warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
+warning: `css-bitvector-compiler` (bin "quad") generated 5 warnings (run `cargo fix --bin "quad"` to apply 3 suggestions)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/quad`
-304
+334
 [src/quad.rs:460:5] &res = {
-    "#b": [
-        3,
-    ],
     "#bb": [
         4,
+    ],
+    "#b": [
+        3,
     ],
 }
 BEGIN

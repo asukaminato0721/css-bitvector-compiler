@@ -26,27 +26,6 @@
             false,
         ],
     },
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
     1: DOMNode {
         tag_id: SelectorId(
             2,
@@ -73,8 +52,6 @@
             false,
         ],
     },
-}
-[src/bit.rs:327:17] &dom.nodes = {
     2: DOMNode {
         tag_id: SelectorId(
             4,
@@ -96,6 +73,8 @@
             false,
         ],
     },
+}
+[src/bit.rs:327:17] &dom.nodes = {
     4: DOMNode {
         tag_id: SelectorId(
             5,
@@ -173,8 +152,29 @@
             false,
         ],
     },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-4441
+5015
 BEGIN
 #b -> [3]
 #bb -> [4]
