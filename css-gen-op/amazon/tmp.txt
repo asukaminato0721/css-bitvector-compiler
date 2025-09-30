@@ -1,4 +1,5 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.45s
      Running `target/release/naive`
 BEGIN
 ._cropped-image-link_style_cropped-image-link__3winf -> [1662]

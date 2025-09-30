@@ -338,6 +338,10 @@ impl NFA {
             s.push_str("}\n");
         }
 
+        // Add self-loop on the zero node
+        let zero_node = self.start_state.unwrap_or_default().0;
+        s.push_str(&format!("  {} -> {} [label=\"*\"];\n", zero_node, zero_node));
+
         // Edges
         for Rule(selector_opt, from_opt, to) in &self.rules {
             let from = from_opt.unwrap_or(self.start_state.unwrap_or_default()).0;
