@@ -20,11 +20,11 @@ warning: method `get` is never used
 warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/quad`
-[src/quad.rs:484:5] &nfa = NFA {
+[src/quad.rs:496:5] &nfa = NFA {
     states: {
         Some(
             Nfacell(
-                3,
+                6,
             ),
         ),
         Some(
@@ -34,28 +34,28 @@ warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
         ),
         Some(
             Nfacell(
-                2,
-            ),
-        ),
-        Some(
-            Nfacell(
-                1,
+                4,
             ),
         ),
         None,
         Some(
             Nfacell(
-                6,
+                2,
             ),
         ),
         Some(
             Nfacell(
-                4,
+                3,
             ),
         ),
         Some(
             Nfacell(
                 5,
+            ),
+        ),
+        Some(
+            Nfacell(
+                1,
             ),
         ),
     },
@@ -191,17 +191,10 @@ warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
         ),
     ],
 }
-284
-[src/quad.rs:456:5] &res = {
-    "#bb": [
-        4,
-    ],
-    "#b": [
-        3,
-    ],
-}
+270
 BEGIN
 #b -> [3]
 #bb -> [4]
+div p -> [2]
 END
-[src/quad.rs:499:5] unsafe { MISS_CNT } = 0
+[src/quad.rs:511:5] unsafe { MISS_CNT } = 0

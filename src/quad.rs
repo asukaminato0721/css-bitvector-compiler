@@ -360,8 +360,13 @@ new_tri is {:?}
                         None => true,
                         Some(a) => self.node_matches_selector(node, a),
                     } {
-                        new_state[c] = OState::OFromParent(b);
-                    } else {
+                        match (a, &new_state[c]) {
+                            (None, OState::OZero) => new_state[c] = OState::OFromParent(b),
+                            (None, _) => {}
+                            (_, OState::OOne) => {}
+                            _ => new_state[c] = OState::OFromParent(b),
+                        }
+                    } else if matches!(new_state[c], OState::OFromParent(_)) {
                         new_state[c] = OState::OZero;
                     }
                 }
@@ -419,41 +424,48 @@ pub fn collect_rule_matches(
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
-    let mut rule_match = vec![false; unsafe { STATE } + 1];
-    let root = dom.get_root_node();
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
 
-    fn helper(
+    let mut state_cache: HashMap<u64, Vec<bool>> = HashMap::new();
+
+    fn materialize_node(
         dom: &DOM,
-        d: &DOMNode,
-        output_state: &mut Vec<bool>,
-        nfas: &NFA,
-        res: &mut HashMap<String, Vec<u64>>,
-        selects: &[String],
-        index: u64,
-    ) {
-        *output_state = dom.materialize(output_state, &d.output_state);
-        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if output_state[state_index] {
-                let rule = &selects[idx];
-                res.entry(rule.clone()).or_default().push(index);
-            }
+        node_idx: u64,
+        cache: &mut HashMap<u64, Vec<bool>>,
+    ) -> Vec<bool> {
+        if let Some(existing) = cache.get(&node_idx) {
+            return existing.clone();
         }
-        for i in d.children.iter() {
-            helper(dom, &dom.nodes[i], output_state, nfas, res, selects, *i);
+
+        let node = &dom.nodes[&node_idx];
+        let parent_state = if let Some(parent_idx) = node.parent {
+            if dom.nodes.contains_key(&parent_idx) {
+                materialize_node(dom, parent_idx, cache)
+            } else {
+                vec![false; unsafe { STATE } + 1]
+            }
+        } else {
+            vec![false; unsafe { STATE } + 1]
+        };
+
+        let current_state = dom.materialize(&parent_state, &node.output_state);
+        cache.insert(node_idx, current_state.clone());
+        current_state
+    }
+
+    // Prime root cache if possible; this also ensures STATE has been initialised.
+    let _ = dom.get_root_node();
+
+    for (&node_id, _) in dom.nodes.iter() {
+        let current_state = materialize_node(dom, node_id, &mut state_cache);
+        for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
+            if current_state[state_index] {
+                let rule = &selects[idx];
+                res.entry(rule.clone()).or_default().push(node_id);
+            }
         }
     }
 
-    helper(
-        dom,
-        &dom.nodes[&root],
-        &mut rule_match,
-        nfas,
-        &mut res,
-        selects,
-        root,
-    );
-    dbg!(&res);
     for v in res.values_mut() {
         v.dedup();
         v.sort_unstable();
