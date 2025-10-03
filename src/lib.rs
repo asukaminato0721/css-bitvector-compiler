@@ -338,6 +338,13 @@ impl NFA {
             s.push_str("}\n");
         }
 
+        // Add self-loop on the zero node
+        let zero_node = self.start_state.unwrap_or_default().0;
+        s.push_str(&format!(
+            "  {} -> {} [label=\"*\"];\n",
+            zero_node, zero_node
+        ));
+
         // Edges
         for Rule(selector_opt, from_opt, to) in &self.rules {
             let from = from_opt.unwrap_or(self.start_state.unwrap_or_default()).0;
@@ -526,4 +533,18 @@ pub fn parse_selector(selector_str: &str) -> Selector {
         // 标签选择器
         Selector::Type(trimmed.to_string())
     }
+}
+
+pub trait AddNode {
+    /// 向 DOM 中添加一个新节点。
+    /// 返回新节点的索引。
+    fn add_node(
+        &mut self,
+        id: u64,
+        tag_name: &str,
+        classes: Vec<String>,
+        html_id: Option<String>,
+        parent_index: Option<u64>,
+        nfa: &NFA,
+    ) -> u64;
 }

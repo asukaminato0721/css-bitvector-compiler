@@ -1,79 +1,59 @@
-warning: unused import: `process::exit`
- --> src/tri.rs:9:5
-  |
-9 |     process::exit,
-  |     ^^^^^^^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` on by default
-
-warning: method `force_recalc` is never used
-   --> src/tri.rs:370:8
-    |
-49  | impl DOM {
-    | -------- method in this implementation
-...
-370 |     fn force_recalc(&mut self, node_idx: u64, input: &[bool], nfa: &NFA) {
-    |        ^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 2 warnings (run `cargo fix --bin "tri"` to apply 1 suggestion)
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-339
-376
-542
-308
-357
-136
-261
-247
-138
-127
-142
-120
-138
-138
-136
-146
-233
-7912
-146
-138
-136
-482
-221
-237
-250
-209
-306
-316
-223
-257
-302
-298
-212
-294
-132
-761
-304
+196
+299
+170
+284
+301
+113
+324
+225
+109
+116
 161
 130
+117
+121
+110
+113
+168
+6521
+125
+140
+140
+270
+127
+132
+304
+119
+235
+323
+152
+136
+132
 290
-343
-373
-249
-146
-403
-556
-322
-310
-191
+116
+286
+120
+284
 306
-8263
-375
-324
-final_rule_matches:
+118
+213
+430
+365
+116
+237
+136
+158
+130
+1178
+359
+118
+125
+6874
+268
+254
+BEGIN
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
 .masthead-skeleton-icon -> [382, 384, 386]
@@ -87,4 +67,5 @@ ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
-[src/tri.rs:500:5] unsafe { MISS_CNT } = 235
+END
+[src/tri.rs:454:5] unsafe { MISS_CNT } = 235

@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    AddNode, LayoutFrame, NFA, Nfacell, Rule, SelectorId, SelectorManager,
+    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use std::{
@@ -8,6 +8,21 @@ use std::{
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
+
+/// whether a part of input is: 1, 0, or unused
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IState {
+    IOne,
+    IZero,
+    IUnused,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OState {
+    OOne,
+    OZero,
+    OFromParent(usize),
+}
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
@@ -18,7 +33,8 @@ pub struct DOMNode {
     pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
-    pub output_state: Vec<bool>,
+    pub input_state: Vec<IState>,
+    pub output_state: Vec<OState>,
 }
 
 impl DOMNode {
@@ -30,13 +46,9 @@ impl DOMNode {
 
 #[derive(Debug, Default)]
 pub struct DOM {
-    pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
-    pub selector_manager: SelectorManager, // 选择器管理器
+    pub nodes: HashMap<u64, DOMNode>, // Arena: 所有节点都存储在这里
+    pub selector_manager: SelectorManager,
     root_node: Option<u64>,
-}
-
-fn get_input() -> Vec<bool> {
-    vec![false; unsafe { STATE } + 1]
 }
 
 impl AddNode for DOM {
@@ -50,17 +62,16 @@ impl AddNode for DOM {
         nfa: &NFA,
     ) -> u64 {
         let sm = &mut self.selector_manager;
-        let tag_id = sm.get_or_create_type_id(&tag_name.to_lowercase());
+        let tag_id = sm.get_or_create_id(Selector::Type(tag_name.to_lowercase()));
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_class_id(&class.to_lowercase());
+            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase()));
             class_ids.insert(class_id);
         }
-
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id_selector_id(&id.to_lowercase()));
+            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase())));
 
         let mut new_node = DOMNode {
             tag_id,
@@ -70,10 +81,12 @@ impl AddNode for DOM {
             children: Vec::new(),
             dirty: true,
             recursive_dirty: true,
-            output_state: vec![false; unsafe { STATE } + 1],
+            output_state: vec![OState::OZero; unsafe { STATE } + 1],
+            input_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let o = self.new_output_state(&new_node, &get_input(), nfa);
-        new_node.output_state = o;
+        let (input, output) = self.new_output_state(&new_node, &get_input(), nfa);
+        new_node.input_state = input;
+        new_node.output_state = output;
         self.nodes.insert(id, new_node);
 
         // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
@@ -84,36 +97,32 @@ impl AddNode for DOM {
                 .children
                 .push(id);
         }
-
         id
     }
 }
 
 impl DOM {
-    /// 创建一个新的、空的 DOM。
     pub fn new() -> Self {
         Default::default()
     }
-
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
-        if node.tag_id == selector_id {
+    pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
+        if node.tag_id == SelectorId(sid) {
             return true;
         }
 
-        if node.class_ids.contains(&selector_id) {
+        if node.class_ids.contains(&SelectorId(sid)) {
             return true;
         }
 
         if let Some(id_sel_id) = node.id_selector_id
-            && id_sel_id == selector_id
+            && id_sel_id == SelectorId(sid)
         {
             return true;
         }
 
         false
     }
-
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
             return r;
@@ -219,7 +228,6 @@ impl DOM {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        // 移除目标节点
         let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
@@ -234,37 +242,74 @@ impl DOM {
         let root_node = self.get_root_node();
         self.recompute_styles_recursive(root_node, nfa, input);
     }
+    fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
+        (output)
+            .iter()
+            .map(|p| match p {
+                OState::OFromParent(index) => input[*index],
+                OState::OOne => true,
+                OState::OZero => false,
+            })
+            .collect()
+    }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         if !self.nodes[&node_idx].recursive_dirty {
             return;
         }
-        let node = &self.nodes[&node_idx];
 
         if self.nodes[&node_idx].dirty {
-            unsafe {
-                MISS_CNT += 1;
-            }
-            let new_output_state = self.new_output_state(node, input, nfa);
-            if self.nodes[&node_idx].output_state != new_output_state {
-                self.nodes.get_mut(&node_idx).unwrap().output_state = new_output_state;
+            let node = self.nodes.get_mut(&node_idx).unwrap();
+            // use prev to cal
+            let need_re = !input
+                .iter()
+                .zip(node.input_state.clone())
+                .all(|x: (&bool, IState)| {
+                    matches!(
+                        x,
+                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+                    )
+                });
+
+            if need_re {
+                unsafe {
+                    MISS_CNT += 1;
+                }
+                let (new_input_state, new_output_state) =
+                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                let node = self.nodes.get_mut(&node_idx).unwrap();
+                node.output_state = new_output_state.clone();
+                node.input_state = new_input_state.clone();
                 for child_idx in self.nodes[&node_idx].children.clone() {
-                    self.nodes.get_mut(&child_idx).unwrap().set_dirty();
+                    self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
                 }
             }
         } else {
             // Debug check: if not dirty, recomputing should not change output
+            let original_input_state = self.nodes[&node_idx].input_state.clone();
             let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let new_output_state = self.new_output_state(node, input, nfa);
+            let (new_input, new_output) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
             assert_eq!(
-                original_output_state, new_output_state,
-                "Node index {}: Output state changed when node was not dirty!",
-                node_idx
+                original_input_state,
+                new_input,
+                "input is {:?}
+old_tri is {:?}
+old_output is {:?}
+new_output is {:?}
+new_tri is {:?}
+
+                   ",
+                encode(input),
+                encode(&original_input_state),
+                encode(&original_output_state),
+                encode(&new_output),
+                encode(&new_input)
             );
         }
 
         // Recursively process children
         let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        let current_output_state =
+            self.materialize(input, &self.nodes[&node_idx].output_state.clone());
         for &child_idx in &children_indices {
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
         }
@@ -275,37 +320,69 @@ impl DOM {
             node.recursive_dirty = false;
         }
     }
-    /// 传播规则是这样的
-    /// 对 NFA 来说, 每条边对应一个 Rule
-    /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
-    /// 当一个新的 input 传下来时, 已经亮的就不用检查了
-    fn new_output_state(&self, node: &DOMNode, input: &[bool], nfa: &NFA) -> Vec<bool> {
-        let mut new_state = vec![false; input.len()];
+    fn new_output_state(
+        &self,
+        node: &DOMNode,
+        input: &[bool],
+        nfa: &NFA,
+    ) -> (Vec<IState>, Vec<OState>) {
+        let mut new_state = vec![OState::OZero; input.len()];
 
+        struct Read {
+            input: Vec<bool>,
+            pub tri: Vec<IState>,
+        }
+        impl Read {
+            fn new(v: &[bool]) -> Self {
+                let l = v.len();
+                Self {
+                    input: v.into(),
+                    tri: vec![IState::IUnused; l],
+                }
+            }
+            fn get(&mut self, idx: usize) -> bool {
+                self.tri[idx] = if self.input[idx] {
+                    IState::IOne
+                } else {
+                    IState::IZero
+                };
+                self.input[idx]
+            }
+        }
+        let input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
                 Rule(None, None, Nfacell(_)) => {
                     unreachable!()
                 }
-                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input[b] {
-                        new_state[c] = true;
+                Rule(a, Some(Nfacell(b)), Nfacell(c)) => {
+                    if match a {
+                        None => true,
+                        Some(a) => self.node_matches_selector(node, a),
+                    } {
+                        match (a, &new_state[c]) {
+                            (None, OState::OZero) => new_state[c] = OState::OFromParent(b),
+                            (None, _) => {}
+                            (_, OState::OOne) => {}
+                            _ => new_state[c] = OState::OFromParent(b),
+                        }
+                    } else if matches!(new_state[c], OState::OFromParent(_)) {
+                        new_state[c] = OState::OZero;
                     }
                 }
                 Rule(Some(a), None, Nfacell(c)) => {
                     if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) && input[b] {
-                        new_state[c] = true;
+                        new_state[c] = OState::OOne;
                     }
                 }
             }
         }
-        new_state
+        (input.tri, new_state)
     }
+}
+
+fn get_input() -> Vec<bool> {
+    vec![false; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
@@ -315,26 +392,20 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node_data, None, nfa);
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "add" => {
             let path = extract_path_from_command(&frame.command_data);
             let node_data = frame.command_data.get("node").unwrap();
             dom.add_node_by_path(&path, node_data, nfa);
-            if std::env::var("WEBSITE_NAME").unwrap() == "testcase" {
-                dbg!(&dom.nodes);
-            }
-
-            // BEGIN HACK
-
-            // END HACK
+            dom.recompute_styles(nfa, &get_input()); // 
         }
         "replace_value" | "insert_value" => {}
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();
-            let mut input = vec![false; unsafe { STATE } + 1];
-            input[nfa.start_state.unwrap_or_default().0] = true;
-            dom.recompute_styles(nfa, &input);
+
+            dom.recompute_styles(nfa, &get_input());
 
             let end = rdtsc();
             println!("{}", end - start);
@@ -349,29 +420,59 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
 }
 
 pub fn collect_rule_matches(
-    dom: &DOM,
+    dom: &mut DOM,
     nfas: &NFA,
     selects: &[String],
 ) -> HashMap<String, Vec<u64>> {
     let mut res: HashMap<String, Vec<u64>> = HashMap::new();
 
-    for (node_id, node) in dom.nodes.iter() {
+    let mut state_cache: HashMap<u64, Vec<bool>> = HashMap::new();
+
+    fn materialize_node(
+        dom: &DOM,
+        node_idx: u64,
+        cache: &mut HashMap<u64, Vec<bool>>,
+    ) -> Vec<bool> {
+        if let Some(existing) = cache.get(&node_idx) {
+            return existing.clone();
+        }
+
+        let node = &dom.nodes[&node_idx];
+        let parent_state = if let Some(parent_idx) = node.parent {
+            if dom.nodes.contains_key(&parent_idx) {
+                materialize_node(dom, parent_idx, cache)
+            } else {
+                vec![false; unsafe { STATE } + 1]
+            }
+        } else {
+            vec![false; unsafe { STATE } + 1]
+        };
+
+        let current_state = dom.materialize(&parent_state, &node.output_state);
+        cache.insert(node_idx, current_state.clone());
+        current_state
+    }
+
+    // Prime root cache if possible; this also ensures STATE has been initialised.
+    let _ = dom.get_root_node();
+
+    for (&node_id, _) in dom.nodes.iter() {
+        let current_state = materialize_node(dom, node_id, &mut state_cache);
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if node.output_state[state_index] {
+            if current_state[state_index] {
                 let rule = &selects[idx];
-                res.entry(rule.clone()).or_default().push(*node_id);
+                res.entry(rule.clone()).or_default().push(node_id);
             }
         }
     }
 
     for v in res.values_mut() {
+        v.dedup();
         v.sort_unstable();
     }
     res
 }
-
 fn main() {
-    // 1. 构建 DOM 树
     let mut dom = DOM::new();
     let selectors = parse_css(
         &std::fs::read_to_string(format!(
@@ -380,7 +481,6 @@ fn main() {
         ))
         .unwrap(),
     );
-    // dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {
@@ -388,53 +488,25 @@ fn main() {
     }
     let _ = fs::write(
         format!(
-            "css-gen-op/{0}/dot.dot",
+            "css-gen-op/{0}/dot_quad.dot",
             std::env::var("WEBSITE_NAME").unwrap(),
         ),
         nfa.to_dot(&dom.selector_manager),
     );
-
-    // for Rule(a, b, c) in nfa.rules.iter() {
-    //     println!(
-    //         "{} {:?}  {:?}",
-    //         dom.selector_manager.id_to_selector[&a.unwrap_or_default()],
-    //         b,
-    //         c
-    //     );
-    // }
-
+    dbg!(&nfa);
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
-    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors)
+
+    let mut final_matches = collect_rule_matches(&mut dom, &nfa, &selectors)
         .into_iter()
         .collect::<Vec<_>>();
     final_matches.sort();
     println!("BEGIN");
-    for (k, v) in final_matches {
+    for (k, mut v) in final_matches {
+        v.dedup();
         println!("{} -> {:?}", k, v);
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });
-}
-
-#[cfg(test)]
-mod tests {
-    use std::fs::write;
-
-    use css_bitvector_compiler::generate_nfa;
-
-    use super::*;
-    #[test]
-    fn test_generate_nfa() {
-        // Reset global state for testing
-        let mut s = 0;
-        let mut selector_manager = SelectorManager::new();
-        let selectors = ["div a", "p", "h1 > h2", "h1 h2", "div a p"].map(|x| x.into());
-
-        let nfa = generate_nfa(&selectors, &mut selector_manager, &mut s);
-        // dbg!(&nfa);
-        let _ = write("./dot.dot", nfa.to_dot(&selector_manager));
-        dbg!(nfa.rules);
-    }
 }
