@@ -448,7 +448,7 @@ fn main() {
     final_matches.sort();
     println!("BEGIN");
     for (k, v) in final_matches {
-        println!("{} -> {:?}", k, v);
+        println!("{} -> {:?}", k.replace('>', " > "), v);
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });

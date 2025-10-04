@@ -24,12 +24,22 @@ warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
     states: {
         Some(
             Nfacell(
-                6,
+                1,
             ),
         ),
         Some(
             Nfacell(
                 7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                5,
+            ),
+        ),
+        Some(
+            Nfacell(
+                2,
             ),
         ),
         Some(
@@ -40,22 +50,12 @@ warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
         None,
         Some(
             Nfacell(
-                2,
+                6,
             ),
         ),
         Some(
             Nfacell(
                 3,
-            ),
-        ),
-        Some(
-            Nfacell(
-                5,
-            ),
-        ),
-        Some(
-            Nfacell(
-                1,
             ),
         ),
     },
@@ -191,7 +191,7 @@ warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
         ),
     ],
 }
-270
+245
 BEGIN
 #b -> [3]
 #bb -> [4]

@@ -1,0 +1,6 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+     Running `target/release/tri`
+
+thread 'main' panicked at src/tri.rs:427:10:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -505,7 +505,7 @@ fn main() {
     println!("BEGIN");
     for (k, mut v) in final_matches {
         v.dedup();
-        println!("{} -> {:?}", k, v);
+        println!("{} -> {:?}", k.replace('>', " > "), v);
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });

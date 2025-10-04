@@ -1,0 +1,26 @@
+warning: field `input` is never read
+   --> src/quad.rs:332:13
+    |
+331 |         struct Read {
+    |                ---- field in this struct
+332 |             input: Vec<bool>,
+    |             ^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: method `get` is never used
+   --> src/quad.rs:343:16
+    |
+335 |         impl Read {
+    |         --------- method in this implementation
+...
+343 |             fn get(&mut self, idx: usize) -> bool {
+    |                ^^^
+
+warning: `css-bitvector-compiler` (bin "quad") generated 2 warnings
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+     Running `target/release/quad`
+
+thread 'main' panicked at src/quad.rs:482:10:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
