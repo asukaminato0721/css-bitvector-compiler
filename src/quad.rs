@@ -349,34 +349,63 @@ new_tri is {:?}
                 self.input[idx]
             }
         }
-        let input = Read::new(input);
+        let mut input = Read::new(input);
+        let mut propagate_rules: Vec<Rule> = Vec::new();
+
         for &rule in nfa.rules.iter() {
             match rule {
                 Rule(None, None, Nfacell(_)) => {
                     unreachable!()
                 }
-                Rule(a, Some(Nfacell(b)), Nfacell(c)) => {
-                    if match a {
-                        None => true,
-                        Some(a) => self.node_matches_selector(node, a),
-                    } {
-                        match (a, &new_state[c]) {
-                            (None, OState::OZero) => new_state[c] = OState::OFromParent(b),
-                            (None, _) => {}
-                            (_, OState::OOne) => {}
-                            _ => new_state[c] = OState::OFromParent(b),
-                        }
-                    } else if matches!(new_state[c], OState::OFromParent(_)) {
-                        new_state[c] = OState::OZero;
+                Rule(Some(selector_id), None, Nfacell(c)) => {
+                    if self.node_matches_selector(node, selector_id) {
+                        new_state[c] = OState::OOne;
                     }
                 }
-                Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) {
-                        new_state[c] = OState::OOne;
+                Rule(_, Some(_), _) => {
+                    propagate_rules.push(rule);
+                }
+            }
+        }
+
+        for &Rule(selector_opt, parent_opt, Nfacell(target_idx)) in &propagate_rules {
+            let Some(Nfacell(parent_idx)) = parent_opt else {
+                unreachable!("propagate_rules should only contain transitions with predecessors");
+            };
+
+            match selector_opt {
+                None => {
+                    if matches!(new_state[target_idx], OState::OZero) {
+                        let _ = input.get(parent_idx);
+                        new_state[target_idx] = OState::OFromParent(parent_idx);
+                    }
+                }
+                Some(selector_id) => {
+                    if self.node_matches_selector(node, selector_id) {
+                        let parent_active = input.get(parent_idx);
+                        if parent_active {
+                            new_state[target_idx] = OState::OFromParent(parent_idx);
+                        } else {
+                            new_state[target_idx] = OState::OZero;
+                        }
+                    } else if matches!(new_state[target_idx], OState::OFromParent(_)) {
+                        new_state[target_idx] = OState::OZero;
                     }
                 }
             }
         }
+
+        for &Nfacell(state_idx) in &nfa.accept_states {
+            if let OState::OFromParent(parent_idx) = new_state[state_idx] {
+                let parent_active = input.get(parent_idx);
+                new_state[state_idx] = if parent_active {
+                    OState::OOne
+                } else {
+                    OState::OZero
+                };
+            }
+        }
+
         (input.tri, new_state)
     }
 }

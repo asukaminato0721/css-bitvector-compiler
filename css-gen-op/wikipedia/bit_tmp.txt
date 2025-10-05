@@ -1,9 +1,9 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
-5557447
-245
-108610
-83266
+5689492
+321
+131454
+88021
 BEGIN
 .app-badge -> [3542, 3557]
 .app-badge a -> [3545, 3560]

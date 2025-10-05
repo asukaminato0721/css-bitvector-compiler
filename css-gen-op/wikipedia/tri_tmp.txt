@@ -1,9 +1,9 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-239
-160
-162
-120
+229
+392
+114
+114
 BEGIN
 .app-badge -> [3542, 3557]
 .app-badge a -> [3545, 3560]
