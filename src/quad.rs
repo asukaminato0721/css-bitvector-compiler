@@ -1,5 +1,5 @@
 use css_bitvector_compiler::{
-    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
+    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
     extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
 };
 use std::{
@@ -24,6 +24,8 @@ pub enum OState {
     OFromParent(usize),
 }
 
+/// whether a part of input is: 1, 0, or unused
+
 #[derive(Debug, Default)]
 pub struct DOMNode {
     pub tag_id: SelectorId,                 // 标签选择器ID
@@ -31,18 +33,12 @@ pub struct DOMNode {
     pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
     pub parent: Option<u64>,                // 存储父节点在 arena 中的索引
     pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
-    pub dirty: bool,
-    pub recursive_dirty: bool,
     pub input_state: Vec<IState>,
     pub output_state: Vec<OState>,
+    pub recursive_tri_input: Vec<IState>,
 }
 
-impl DOMNode {
-    fn set_dirty(&mut self) {
-        self.dirty = true;
-        self.recursive_dirty = true;
-    }
-}
+impl DOMNode {}
 
 #[derive(Debug, Default)]
 pub struct DOM {
@@ -79,10 +75,9 @@ impl AddNode for DOM {
             id_selector_id,
             parent: parent_index,
             children: Vec::new(),
-            dirty: true,
-            recursive_dirty: true,
             output_state: vec![OState::OZero; unsafe { STATE } + 1],
             input_state: vec![IState::IUnused; unsafe { STATE } + 1],
+            recursive_tri_input: vec![IState::IUnused; unsafe { STATE } + 1],
         };
         let (input, output) = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.input_state = input;
@@ -139,21 +134,53 @@ impl DOM {
         self.root_node.unwrap()
     }
 
-    /// 设置指定节点为脏状态，并向上传播recursive_dirty位
+    /// 向上传播节点的 IState 信息，通知祖先节点需要重新计算
     pub fn set_node_dirty(&mut self, node_idx: u64) {
-        let node = self.nodes.get_mut(&node_idx).unwrap();
-        node.set_dirty();
+        self.propagate_input_state_up_from(node_idx);
+    }
 
-        // 向上传播 recursive_dirty
-        let mut current_idx = node.parent;
-        while let Some(parent_idx) = current_idx {
-            let parent_node = self.nodes.get_mut(&parent_idx).unwrap();
+    fn propagate_input_state_up_from(&mut self, node_idx: u64) {
+        let (mut current_parent, mut propagated_state, mut propagated_tri) = {
+            let node = self.nodes.get(&node_idx).unwrap();
+            (
+                node.parent,
+                node.input_state.clone(),
+                node.recursive_tri_input.clone(),
+            )
+        };
 
-            if parent_node.recursive_dirty {
-                break; // 如果父节点已经设置了recursive_dirty，停止传播
-            }
-            parent_node.recursive_dirty = true;
-            current_idx = parent_node.parent;
+        while let Some(parent_idx) = current_parent {
+            let (next_parent, next_state, next_tri) = {
+                let parent_node = self.nodes.get_mut(&parent_idx).unwrap();
+                let mut tri_changed = false;
+                let mut state_changed = false;
+                if parent_node.recursive_tri_input != propagated_tri {
+                    parent_node
+                        .recursive_tri_input
+                        .clone_from_slice(&propagated_tri);
+                    tri_changed = true;
+                }
+                for (parent_state, child_state) in
+                    parent_node.input_state.iter_mut().zip(propagated_state.iter())
+                {
+                    if matches!(*parent_state, IState::IUnused)
+                        && matches!(*child_state, IState::IOne | IState::IZero)
+                    {
+                        *parent_state = *child_state;
+                        state_changed = true;
+                    }
+                }
+                if !(tri_changed || state_changed) {
+                    return;
+                }
+                let next_state = parent_node.input_state.clone();
+                let next_tri = parent_node.recursive_tri_input.clone();
+                (parent_node.parent, next_state, next_tri)
+            };
+
+            propagated_state = next_state;
+            propagated_tri = next_tri;
+            current_parent = next_parent;
         }
     }
     fn json_to_html_node(
@@ -216,7 +243,7 @@ impl DOM {
             parent.children.pop();
             parent.children.insert(insert_pos, new_node_idx);
         }
-        self.set_node_dirty(current_idx);
+        self.set_node_dirty(new_node_idx);
     }
 
     /// 通过路径移除节点
@@ -253,71 +280,56 @@ impl DOM {
             .collect()
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
-        if !self.nodes[&node_idx].recursive_dirty {
-            return;
-        }
-
-        if self.nodes[&node_idx].dirty {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
-            // use prev to cal
-            let need_re = !input
+        let need_recompute = {
+            let node = self.nodes.get(&node_idx).unwrap();
+            let tri_mismatch = node.recursive_tri_input != node.input_state;
+            let value_mismatch = input
                 .iter()
-                .zip(node.input_state.clone())
-                .all(|x: (&bool, IState)| {
-                    matches!(
-                        x,
-                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
-                    )
-                });
+                .zip(node.input_state.iter())
+                .any(|(&val, tri)| matches!((val, *tri), (true, IState::IZero) | (false, IState::IOne)));
+            tri_mismatch || value_mismatch
+        };
 
-            if need_re {
-                unsafe {
-                    MISS_CNT += 1;
-                }
-                let (new_input_state, new_output_state) =
-                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
-                let node = self.nodes.get_mut(&node_idx).unwrap();
-                node.output_state = new_output_state.clone();
-                node.input_state = new_input_state.clone();
-                for child_idx in self.nodes[&node_idx].children.clone() {
-                    self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
-                }
+        if need_recompute {
+            unsafe {
+                MISS_CNT += 1;
             }
-        } else {
-            // Debug check: if not dirty, recomputing should not change output
-            let original_input_state = self.nodes[&node_idx].input_state.clone();
-            let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_input, new_output) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-            assert_eq!(
-                original_input_state,
-                new_input,
-                "input is {:?}
-old_tri is {:?}
-old_output is {:?}
-new_output is {:?}
-new_tri is {:?}
-
-                   ",
-                encode(input),
-                encode(&original_input_state),
-                encode(&original_output_state),
-                encode(&new_output),
-                encode(&new_input)
-            );
+            let (new_input_state, new_output_state) = {
+                let node = self.nodes.get(&node_idx).unwrap();
+                self.new_output_state(node, input, nfa)
+            };
+            {
+                let node = self.nodes.get_mut(&node_idx).unwrap();
+                debug_assert_eq!(node.recursive_tri_input.len(), new_input_state.len());
+                node.output_state = new_output_state;
+                node.input_state = new_input_state.clone();
+                node.recursive_tri_input.clone_from_slice(&new_input_state);
+            }
+            self.propagate_input_state_up_from(node_idx);
         }
 
-        // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
-        let current_output_state =
-            self.materialize(input, &self.nodes[&node_idx].output_state.clone());
-        for &child_idx in &children_indices {
+        let (children_indices, node_output_state, desired_tri_from_parent) = {
+            let node = self.nodes.get(&node_idx).unwrap();
+            (
+                node.children.clone(),
+                node.output_state.clone(),
+                node.recursive_tri_input.clone(),
+            )
+        };
+        let current_output_state = self.materialize(input, &node_output_state);
+        for child_idx in children_indices {
+            let tri_changed = {
+                let child = self.nodes.get(&child_idx).unwrap();
+                child.recursive_tri_input != desired_tri_from_parent
+            };
+            if tri_changed {
+                let child = self.nodes.get_mut(&child_idx).unwrap();
+                debug_assert_eq!(child.recursive_tri_input.len(), desired_tri_from_parent.len());
+                child
+                    .recursive_tri_input
+                    .clone_from_slice(&desired_tri_from_parent);
+            }
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
-        }
-
-        // Reset dirty flags
-        if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
         }
     }
     fn new_output_state(

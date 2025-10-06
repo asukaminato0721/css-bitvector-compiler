@@ -1,10 +1,11 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
-[src/quad.rs:525:5] &nfa = NFA {
+[src/quad.rs:537:5] &nfa = NFA {
     states: {
+        None,
         Some(
             Nfacell(
-                4,
+                2,
             ),
         ),
         Some(
@@ -12,15 +13,9 @@
                 6,
             ),
         ),
-        None,
         Some(
             Nfacell(
-                5,
-            ),
-        ),
-        Some(
-            Nfacell(
-                2,
+                3,
             ),
         ),
         Some(
@@ -30,12 +25,17 @@
         ),
         Some(
             Nfacell(
-                1,
+                4,
             ),
         ),
         Some(
             Nfacell(
-                3,
+                5,
+            ),
+        ),
+        Some(
+            Nfacell(
+                1,
             ),
         ),
     },
@@ -171,10 +171,10 @@
         ),
     ],
 }
-288
+6675
 BEGIN
 #b -> [3]
 #bb -> [4]
 div p -> [2]
 END
-[src/quad.rs:540:5] unsafe { MISS_CNT } = 3
+[src/quad.rs:552:5] unsafe { MISS_CNT } = 13

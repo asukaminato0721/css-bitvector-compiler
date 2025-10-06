@@ -1,29 +1,6 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/bit`
 [src/bit.rs:324:17] &dom.nodes = {
-    2: DOMNode {
-        tag_id: SelectorId(
-            4,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
     1: DOMNode {
         tag_id: SelectorId(
             2,
@@ -49,6 +26,29 @@
             false,
             false,
             true,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            4,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
             false,
         ],
     },
@@ -81,33 +81,6 @@
     },
 }
 [src/bit.rs:324:17] &dom.nodes = {
-    4: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                1,
-            ),
-        ),
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
     2: DOMNode {
         tag_id: SelectorId(
             4,
@@ -187,8 +160,35 @@
             false,
         ],
     },
+    4: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                1,
+            ),
+        ),
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
 }
-5871
+6351
 BEGIN
 #b -> [3]
 #bb -> [4]
