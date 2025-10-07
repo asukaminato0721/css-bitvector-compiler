@@ -160,8 +160,10 @@ impl DOM {
                         .clone_from_slice(&propagated_tri);
                     tri_changed = true;
                 }
-                for (parent_state, child_state) in
-                    parent_node.input_state.iter_mut().zip(propagated_state.iter())
+                for (parent_state, child_state) in parent_node
+                    .input_state
+                    .iter_mut()
+                    .zip(propagated_state.iter())
                 {
                     if matches!(*parent_state, IState::IUnused)
                         && matches!(*child_state, IState::IOne | IState::IZero)
@@ -286,7 +288,9 @@ impl DOM {
             let value_mismatch = input
                 .iter()
                 .zip(node.input_state.iter())
-                .any(|(&val, tri)| matches!((val, *tri), (true, IState::IZero) | (false, IState::IOne)));
+                .any(|(&val, tri)| {
+                    matches!((val, *tri), (true, IState::IZero) | (false, IState::IOne))
+                });
             tri_mismatch || value_mismatch
         };
 
@@ -324,7 +328,10 @@ impl DOM {
             };
             if tri_changed {
                 let child = self.nodes.get_mut(&child_idx).unwrap();
-                debug_assert_eq!(child.recursive_tri_input.len(), desired_tri_from_parent.len());
+                debug_assert_eq!(
+                    child.recursive_tri_input.len(),
+                    desired_tri_from_parent.len()
+                );
                 child
                     .recursive_tri_input
                     .clone_from_slice(&desired_tri_from_parent);
