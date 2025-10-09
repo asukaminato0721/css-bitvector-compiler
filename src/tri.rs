@@ -19,11 +19,12 @@ pub enum IState {
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: SelectorId,                 // 标签选择器ID
-    pub class_ids: HashSet<SelectorId>,     // CSS类选择器ID集合
-    pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
-    pub parent: Option<u64>,                // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
+    pub tag_id: SelectorId,                  // 标签选择器ID
+    pub class_ids: HashSet<SelectorId>,      // CSS类选择器ID集合
+    pub id_selector_id: Option<SelectorId>,  // HTML ID选择器ID
+    pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
+    pub parent: Option<u64>,                 // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,                  // 存储子节点在 arena 中的索引
     pub dirty: bool,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
@@ -51,6 +52,7 @@ impl AddNode for DOM {
         tag_name: &str,
         classes: Vec<String>,
         html_id: Option<String>,
+        attributes: HashMap<String, String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64 {
@@ -70,6 +72,7 @@ impl AddNode for DOM {
             tag_id,
             class_ids,
             id_selector_id,
+            attributes,
             parent: parent_index,
             children: Vec::new(),
             dirty: true,
@@ -99,22 +102,18 @@ impl DOM {
         Default::default()
     }
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
-        if node.tag_id == SelectorId(sid) {
-            return true;
+    pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
+        match self.selector_manager.id_to_selector.get(&selector_id) {
+            Some(Selector::Type(_)) => node.tag_id == selector_id,
+            Some(Selector::Class(_)) => node.class_ids.contains(&selector_id),
+            Some(Selector::Id(_)) => node.id_selector_id == Some(selector_id),
+            Some(Selector::AttributeEquals { name, value }) => node
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false),
+            None => false,
         }
-
-        if node.class_ids.contains(&SelectorId(sid)) {
-            return true;
-        }
-
-        if let Some(id_sel_id) = node.id_selector_id
-            && id_sel_id == SelectorId(sid)
-        {
-            return true;
-        }
-
-        false
     }
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
@@ -157,24 +156,39 @@ impl DOM {
     ) -> u64 {
         let tag_name = json_node["name"].as_str().unwrap();
         let id = json_node["id"].as_u64().unwrap();
-        let html_id = json_node["attributes"]
+        let attributes = json_node["attributes"]
             .as_object()
-            .and_then(|attrs| attrs.get("id"))
-            .and_then(|id| id.as_str())
-            .map(String::from);
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
 
-        let classes = json_node["attributes"]
-            .as_object()
-            .and_then(|attrs| attrs.get("class"))
-            .and_then(|class| class.as_str())
-            .unwrap_or_default()
+        let html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
+        let classes = class_attr
             .split_whitespace()
+            .filter(|s| !s.is_empty())
             .map(String::from)
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index =
-            self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        let current_index = self.add_node(
+            id,
+            tag_name,
+            classes.clone(),
+            html_id,
+            attributes,
+            parent_index,
+            nfa,
+        );
         // HACK
         if id == 5458 && classes.contains(&"hidden".to_string()) {
             panic!()

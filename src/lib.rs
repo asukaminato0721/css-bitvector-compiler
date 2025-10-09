@@ -1,4 +1,4 @@
-use cssparser::{Parser, ParserInput, Token};
+use cssparser::{ParseError, Parser, ParserInput, Token};
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
@@ -20,6 +20,7 @@ pub enum Selector {
     Type(String),
     Class(String),
     Id(String),
+    AttributeEquals { name: String, value: String },
 }
 
 impl Display for Selector {
@@ -28,6 +29,9 @@ impl Display for Selector {
             Selector::Type(tag) => write!(f, "{}", tag),
             Selector::Class(class) => write!(f, ".{}", class),
             Selector::Id(id) => write!(f, "#{}", id),
+            Selector::AttributeEquals { name, value } => {
+                write!(f, "[{}=\"{}\"]", name, value)
+            }
         }
     }
 }
@@ -197,6 +201,19 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
                     pending_combinator = Combinator::Child;
                 }
             }
+            Token::SquareBracketBlock => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                }
+                pending_combinator = Combinator::None;
+                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
+                    current_selector = Some(attribute_selector);
+                }
+                next_selector = NextSelector::Type;
+            }
             Token::IDHash(id) => {
                 if let Some(prev_selector) = current_selector.take() {
                     selector_parts.push(SelectorPart {
@@ -270,6 +287,46 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     rules.sort();
     rules.dedup();
     rules
+}
+
+fn parse_attribute_selector(raw: &str) -> Option<Selector> {
+    let raw = raw.trim();
+    if !raw.starts_with('[') || !raw.ends_with(']') {
+        return None;
+    }
+    let inner = &raw[1..raw.len() - 1];
+    let mut parts = inner.splitn(2, '=');
+    let name = parts.next()?.trim().to_lowercase();
+    let value_part = parts.next()?.trim();
+
+    if !value_part.starts_with('"') || !value_part.ends_with('"') || value_part.len() < 2 {
+        return None;
+    }
+    let mut value = value_part[1..value_part.len() - 1].to_string();
+    value = value.replace("\\\"", "\"");
+
+    Some(Selector::AttributeEquals { name, value })
+}
+
+fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
+    parser
+        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
+            nested.skip_whitespace();
+            let name = nested
+                .expect_ident_cloned()
+                .map_err(ParseError::from)?
+                .to_ascii_lowercase();
+            nested.skip_whitespace();
+            nested.expect_delim('=').map_err(ParseError::from)?;
+            nested.skip_whitespace();
+            let value = nested
+                .expect_string_cloned()
+                .map_err(ParseError::from)?
+                .to_string();
+            nested.skip_whitespace();
+            Ok(Selector::AttributeEquals { name, value })
+        })
+        .ok()
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
@@ -354,6 +411,9 @@ impl NFA {
                     Some(Selector::Type(t)) => t.clone(),
                     Some(Selector::Class(c)) => format!(".{}", c),
                     Some(Selector::Id(i)) => format!("#{}", i),
+                    Some(Selector::AttributeEquals { name, value }) => {
+                        format!("[{}=\"{}\"]", name, value)
+                    }
                     None => format!("sid:{}", sel_id.0),
                 },
             };
@@ -529,6 +589,8 @@ pub fn parse_selector(selector_str: &str) -> Selector {
     } else if trimmed.starts_with('#') {
         // ID选择器
         Selector::Id(trimmed[1..].to_string())
+    } else if let Some(attribute_selector) = parse_attribute_selector(trimmed) {
+        attribute_selector
     } else {
         // 标签选择器
         Selector::Type(trimmed.to_string())
@@ -544,7 +606,30 @@ pub trait AddNode {
         tag_name: &str,
         classes: Vec<String>,
         html_id: Option<String>,
+        attributes: HashMap<String, String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_css_handles_attribute_selector() {
+        let selectors = parse_css(r#"[data-test="value"] { color: red; }"#);
+        assert_eq!(selectors, vec![r#"[data-test="value"]"#.to_string()]);
+    }
+
+    #[test]
+    fn parse_selector_returns_attribute_variant() {
+        match parse_selector(r#"[data-id="item-1"]"#) {
+            Selector::AttributeEquals { name, value } => {
+                assert_eq!(name, "data-id");
+                assert_eq!(value, "item-1");
+            }
+            other => panic!("expected attribute selector, got {:?}", other),
+        }
+    }
 }

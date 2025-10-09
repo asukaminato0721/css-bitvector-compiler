@@ -1,6 +1,6 @@
-use cssparser::{Parser, ParserInput, Token};
+use cssparser::{ParseError, Parser, ParserInput, Token};
 use std::{
-    collections::HashSet,
+    collections::{HashMap, HashSet},
     fmt::{Debug, Display},
 };
 
@@ -63,6 +63,7 @@ enum Selector {
     Type(String),
     Class(String),
     Id(String),
+    AttributeEquals { name: String, value: String },
 }
 
 impl Display for Selector {
@@ -71,6 +72,9 @@ impl Display for Selector {
             Selector::Type(tag) => write!(f, "{}", tag),
             Selector::Class(class) => write!(f, ".{}", class),
             Selector::Id(id) => write!(f, "#{}", id),
+            Selector::AttributeEquals { name, value } => {
+                write!(f, "[{}=\"{}\"]", name, value)
+            }
         }
     }
 }
@@ -125,6 +129,19 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 if current_selector.is_some() {
                     pending_combinator = Combinator::Child;
                 }
+            }
+            Token::SquareBracketBlock => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                }
+                pending_combinator = Combinator::None;
+                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
+                    current_selector = Some(attribute_selector);
+                }
+                next_selector = NextSelector::Type;
             }
             Token::IDHash(id) => {
                 if let Some(prev_selector) = current_selector.take() {
@@ -195,6 +212,27 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules
 }
 
+fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
+    parser
+        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
+            nested.skip_whitespace();
+            let name = nested
+                .expect_ident_cloned()
+                .map_err(ParseError::from)?
+                .to_ascii_lowercase();
+            nested.skip_whitespace();
+            nested.expect_delim('=').map_err(ParseError::from)?;
+            nested.skip_whitespace();
+            let value = nested
+                .expect_string_cloned()
+                .map_err(ParseError::from)?
+                .to_string();
+            nested.skip_whitespace();
+            Ok(Selector::AttributeEquals { name, value })
+        })
+        .ok()
+}
+
 // note: do nt pull out bitvector result; - absvector will change that laters
 // to other type struct NaiveCache {
 // no dirty node anywhere, have to recompute from scratch
@@ -224,22 +262,28 @@ impl NaiveHtmlNode {
         //  // dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
-        node.html_id = json_node["attributes"]
+        let attributes = json_node["attributes"]
             .as_object()
-            .unwrap()
-            .get("id")
-            .and_then(|x| x.as_str())
-            .map(String::from);
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
+        node.html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
         // Add classes from attributes
-        node.classes = json_node["attributes"]
-            .as_object()
-            .unwrap()
-            .get("class")
-            .map(|x| x.as_str().unwrap())
-            .unwrap_or_default()
+        node.classes = class_attr
             .split_whitespace()
             .map(|x| x.into())
             .collect::<HashSet<String>>();
+        node.attributes = attributes;
 
         // Add children recursively
         node.children = json_node["children"]
@@ -268,6 +312,11 @@ impl NaiveHtmlNode {
                     false
                 }
             }
+            Selector::AttributeEquals { name, value } => self
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false),
         }
     }
 
@@ -361,6 +410,7 @@ struct NaiveHtmlNode {
     tag_name: String,
     id: u64,
     html_id: Option<String>,
+    attributes: HashMap<String, String>,
     classes: HashSet<String>,
     children: Vec<NaiveHtmlNode>,
     parent: Option<*mut NaiveHtmlNode>, // TODO: use u64 in future
@@ -477,11 +527,46 @@ fn main() {
 }
 #[cfg(test)]
 mod test {
-    use crate::parse_css;
+    use super::*;
 
     #[test]
     fn base_case() {
         let s = "div h1 > h2 p .a > .b #c";
         dbg!(parse_css(s));
+    }
+
+    #[test]
+    fn parse_attribute_selector() {
+        let rules = parse_css(r#"[data-role="hero"] { color: red; }"#);
+        assert_eq!(rules.len(), 1);
+        match &rules[0] {
+            CssRule::Complex { parts } => {
+                assert_eq!(parts.len(), 1);
+                match &parts[0].selector {
+                    Selector::AttributeEquals { name, value } => {
+                        assert_eq!(name, "data-role");
+                        assert_eq!(value, "hero");
+                    }
+                    other => panic!("unexpected selector: {:?}", other),
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn matches_attribute_selector_on_node() {
+        let mut node = NaiveHtmlNode::default();
+        node.attributes.insert("data-id".into(), "item-1".into());
+        let selector = Selector::AttributeEquals {
+            name: "data-id".into(),
+            value: "item-1".into(),
+        };
+        assert!(node.matches_simple_selector(&selector));
+
+        let mismatch = Selector::AttributeEquals {
+            name: "data-id".into(),
+            value: "item-2".into(),
+        };
+        assert!(!node.matches_simple_selector(&mismatch));
     }
 }
