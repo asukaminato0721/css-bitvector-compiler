@@ -1,6 +1,7 @@
 use css_bitvector_compiler::{
     AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,json_value_to_attr_string
+    extract_path_from_command, generate_nfa, json_value_to_attr_string, parse_css, parse_trace,
+    rdtsc,
 };
 use std::{
     collections::{HashMap, HashSet},
