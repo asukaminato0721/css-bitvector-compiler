@@ -1,6 +1,6 @@
 use css_bitvector_compiler::{
     AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
-    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
+    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,json_value_to_attr_string
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -108,6 +108,7 @@ impl DOM {
     pub fn new() -> Self {
         Default::default()
     }
+
     /// 检查节点是否匹配给定的选择器ID
     pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
         match self.selector_manager.id_to_selector.get(&selector_id) {
@@ -252,6 +253,74 @@ impl DOM {
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
+
+    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+        if self.nodes.is_empty() {
+            return None;
+        }
+        let mut current_idx = self.get_root_node();
+        for &segment in path {
+            let node = self.nodes.get(&current_idx)?;
+            current_idx = *node.children.get(segment)?;
+        }
+        Some(current_idx)
+    }
+
+    fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+        let key_lower = key.to_lowercase();
+        let store_value = new_value.clone();
+
+        match key_lower.as_str() {
+            "class" => {
+                let mut new_class_ids = HashSet::new();
+                if let Some(ref class_value) = new_value {
+                    for class_name in class_value
+                        .split_whitespace()
+                        .filter(|name| !name.is_empty())
+                    {
+                        let class_id = self
+                            .selector_manager
+                            .get_or_create_id(Selector::Class(class_name.to_lowercase()));
+                        new_class_ids.insert(class_id);
+                    }
+                }
+
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(val) = store_value {
+                        node.attributes.insert(key_lower.clone(), val);
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                    node.class_ids = new_class_ids;
+                }
+            }
+            "id" => {
+                let new_selector_id = new_value.as_ref().map(|value| {
+                    self.selector_manager
+                        .get_or_create_id(Selector::Id(value.to_lowercase()))
+                });
+
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(val) = store_value {
+                        node.attributes.insert(key_lower.clone(), val);
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                    node.id_selector_id = new_selector_id;
+                }
+            }
+            _ => {
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(val) = store_value {
+                        node.attributes.insert(key_lower.clone(), val);
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                }
+            }
+        }
+    }
+
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
         self.recompute_styles_recursive(root_node, nfa, input);
@@ -443,7 +512,78 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.add_node_by_path(&path, node_data, nfa);
             dom.recompute_styles(nfa, &get_input()); // 
         }
-        "replace_value" | "insert_value" => {}
+        "replace_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let node_idx = dom
+                .node_id_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
+            let key = frame.command_data["key"].as_str().unwrap();
+            if let Some(old_value) = frame.command_data.get("old_value") {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = dom
+                    .nodes
+                    .get(&node_idx)
+                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
+                    .cloned()
+                    .unwrap_or_default();
+                debug_assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            let new_value = frame
+                .command_data
+                .get("value")
+                .map(json_value_to_attr_string);
+            dom.update_attribute(node_idx, key, new_value);
+            dom.set_node_dirty(node_idx);
+        }
+        "insert_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let node_idx = dom
+                .node_id_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
+            let key = frame.command_data["key"].as_str().unwrap();
+            let new_value = frame
+                .command_data
+                .get("value")
+                .map(json_value_to_attr_string);
+            dom.update_attribute(node_idx, key, new_value);
+            dom.set_node_dirty(node_idx);
+        }
+        "delete_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let node_idx = dom
+                .node_id_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
+            let key = frame.command_data["key"].as_str().unwrap();
+            if let Some(old_value) = frame.command_data.get("old_value") {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = dom
+                    .nodes
+                    .get(&node_idx)
+                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
+                    .cloned()
+                    .unwrap_or_default();
+                debug_assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            dom.update_attribute(node_idx, key, None);
+            dom.set_node_dirty(node_idx);
+        }
         "recalculate" => {
             // Perform CSS matching using NFA
             let start = rdtsc();

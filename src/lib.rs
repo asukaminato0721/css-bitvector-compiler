@@ -597,6 +597,16 @@ pub fn parse_selector(selector_str: &str) -> Selector {
     }
 }
 
+pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
+    match value {
+        serde_json::Value::String(s) => s.clone(),
+        serde_json::Value::Number(n) => n.to_string(),
+        serde_json::Value::Bool(b) => b.to_string(),
+        serde_json::Value::Array(_) | serde_json::Value::Object(_) => value.to_string(),
+        serde_json::Value::Null => String::new(),
+    }
+}
+
 pub trait AddNode {
     /// 向 DOM 中添加一个新节点。
     /// 返回新节点的索引。

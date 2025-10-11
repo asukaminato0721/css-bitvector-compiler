@@ -1,9 +1,9 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/tri`
-899
+9213
 BEGIN
 #b -> [3]
 #bb -> [4]
 div p -> [2]
 END
-[src/tri.rs:468:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:603:5] unsafe { MISS_CNT } = 3

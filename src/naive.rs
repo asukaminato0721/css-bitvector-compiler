@@ -4,7 +4,7 @@ use std::{
     fmt::{Debug, Display},
 };
 
-use css_bitvector_compiler::Cache;
+use css_bitvector_compiler::{Cache, json_value_to_attr_string};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
@@ -257,6 +257,42 @@ impl NaiveHtmlNode {
         self.children[path[0]].remove_by_path(&path[1..]);
     }
 
+    fn node_mut_by_path(&mut self, path: &[usize]) -> Option<&mut Self> {
+        if path.is_empty() {
+            return Some(self);
+        }
+        let mut current = self;
+        for &idx in path {
+            current = current.children.get_mut(idx)?;
+        }
+        Some(current)
+    }
+
+    fn set_attribute(&mut self, key: &str, new_value: Option<String>) {
+        let key_lower = key.to_lowercase();
+        match key_lower.as_str() {
+            "class" => {
+                let mut new_classes = HashSet::new();
+                if let Some(ref value) = new_value {
+                    for class_name in value.split_whitespace().filter(|name| !name.is_empty()) {
+                        new_classes.insert(class_name.to_string());
+                    }
+                }
+                self.classes = new_classes;
+            }
+            "id" => {
+                self.html_id = new_value.clone();
+            }
+            _ => {}
+        }
+
+        if let Some(value) = new_value {
+            self.attributes.insert(key_lower, value);
+        } else {
+            self.attributes.remove(&key_lower);
+        }
+    }
+
     fn json_to_node(json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
         //  // dbg!(&json_node);
@@ -486,8 +522,72 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             tree.add_by_path(&path, frame.command_data.get("node").unwrap());
             tree.fix_parent_pointers(); // TODO: optimize
         }
-        "replace_value" | "insert_value" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
+        "replace_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let key = frame.command_data["key"].as_str().unwrap();
+            let node = tree
+                .node_mut_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
+            if let Some(old_value) = frame.command_data.get("old_value") {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = node
+                    .attributes
+                    .get(&key.to_lowercase())
+                    .cloned()
+                    .unwrap_or_default();
+                debug_assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            let new_value = frame
+                .command_data
+                .get("value")
+                .map(json_value_to_attr_string);
+            node.set_attribute(key, new_value);
+        }
+        "insert_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let key = frame.command_data["key"].as_str().unwrap();
+            let node = tree
+                .node_mut_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
+            let new_value = frame
+                .command_data
+                .get("value")
+                .map(json_value_to_attr_string);
+            node.set_attribute(key, new_value);
+        }
+        "delete_value" => {
+            if frame.command_data["type"].as_str() != Some("attributes") {
+                return;
+            }
+            let path = extract_path_from_command(&frame.command_data);
+            let key = frame.command_data["key"].as_str().unwrap();
+            let node = tree
+                .node_mut_by_path(&path)
+                .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
+            if let Some(old_value) = frame.command_data.get("old_value") {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = node
+                    .attributes
+                    .get(&key.to_lowercase())
+                    .cloned()
+                    .unwrap_or_default();
+                debug_assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            node.set_attribute(key, None);
         }
         "recalculate" => {
             // dbg!(frame.frame_id, frame.command_name.as_str());

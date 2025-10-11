@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/naive`
 BEGIN
 .app-badge a -> [3545, 3560]
@@ -30,6 +30,8 @@ BEGIN
 .js-enabled .central-featured -> [113]
 .js-enabled .jsl10n -> [106, 1070, 1103, 1261, 1676, 2399, 3275, 3464, 3491, 3503, 3524, 3528, 3535, 3550, 3565, 3598, 3603, 3628, 3633, 3658, 3663, 3688, 3693, 3718, 3723, 3748, 3753, 3778, 3783, 3808, 3813, 3838, 3843, 3868, 3873, 3898, 3903, 3928, 3933, 3958, 3963, 3977, 3985, 3992]
 .js-enabled .lang-list-container -> [1083]
+.jsl10n-visible .central-featured -> [113]
+.jsl10n-visible .jsl10n -> [106, 1070, 1103, 1261, 1676, 2399, 3275, 3464, 3491, 3503, 3524, 3528, 3535, 3550, 3565, 3598, 3603, 3628, 3633, 3658, 3663, 3688, 3693, 3718, 3723, 3748, 3753, 3778, 3783, 3808, 3813, 3838, 3843, 3868, 3873, 3898, 3903, 3928, 3933, 3958, 3963, 3977, 3985, 3992]
 .lang-list-border -> [1080]
 .lang-list-button i -> [1067, 1075]
 .lang-list-button -> [1061]
