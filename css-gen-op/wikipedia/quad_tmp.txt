@@ -1,290 +1,10 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/quad`
-[src/quad.rs:679:5] &nfa = NFA {
+[src/quad.rs:680:5] &nfa = NFA {
     states: {
         Some(
             Nfacell(
-                228,
-            ),
-        ),
-        Some(
-            Nfacell(
-                249,
-            ),
-        ),
-        Some(
-            Nfacell(
-                155,
-            ),
-        ),
-        Some(
-            Nfacell(
-                13,
-            ),
-        ),
-        Some(
-            Nfacell(
-                79,
-            ),
-        ),
-        Some(
-            Nfacell(
-                125,
-            ),
-        ),
-        Some(
-            Nfacell(
-                158,
-            ),
-        ),
-        Some(
-            Nfacell(
-                77,
-            ),
-        ),
-        Some(
-            Nfacell(
-                207,
-            ),
-        ),
-        Some(
-            Nfacell(
-                120,
-            ),
-        ),
-        Some(
-            Nfacell(
-                201,
-            ),
-        ),
-        Some(
-            Nfacell(
-                163,
-            ),
-        ),
-        Some(
-            Nfacell(
-                8,
-            ),
-        ),
-        Some(
-            Nfacell(
-                119,
-            ),
-        ),
-        Some(
-            Nfacell(
-                116,
-            ),
-        ),
-        Some(
-            Nfacell(
-                29,
-            ),
-        ),
-        Some(
-            Nfacell(
-                141,
-            ),
-        ),
-        Some(
-            Nfacell(
-                47,
-            ),
-        ),
-        Some(
-            Nfacell(
-                224,
-            ),
-        ),
-        Some(
-            Nfacell(
-                84,
-            ),
-        ),
-        Some(
-            Nfacell(
-                167,
-            ),
-        ),
-        Some(
-            Nfacell(
-                137,
-            ),
-        ),
-        Some(
-            Nfacell(
-                28,
-            ),
-        ),
-        Some(
-            Nfacell(
-                83,
-            ),
-        ),
-        Some(
-            Nfacell(
-                246,
-            ),
-        ),
-        Some(
-            Nfacell(
-                150,
-            ),
-        ),
-        Some(
-            Nfacell(
-                204,
-            ),
-        ),
-        Some(
-            Nfacell(
-                68,
-            ),
-        ),
-        Some(
-            Nfacell(
-                212,
-            ),
-        ),
-        Some(
-            Nfacell(
-                107,
-            ),
-        ),
-        Some(
-            Nfacell(
-                26,
-            ),
-        ),
-        Some(
-            Nfacell(
-                98,
-            ),
-        ),
-        Some(
-            Nfacell(
-                252,
-            ),
-        ),
-        Some(
-            Nfacell(
-                242,
-            ),
-        ),
-        Some(
-            Nfacell(
-                105,
-            ),
-        ),
-        Some(
-            Nfacell(
-                32,
-            ),
-        ),
-        Some(
-            Nfacell(
-                95,
-            ),
-        ),
-        Some(
-            Nfacell(
-                57,
-            ),
-        ),
-        Some(
-            Nfacell(
-                109,
-            ),
-        ),
-        Some(
-            Nfacell(
-                123,
-            ),
-        ),
-        Some(
-            Nfacell(
-                196,
-            ),
-        ),
-        Some(
-            Nfacell(
-                240,
-            ),
-        ),
-        Some(
-            Nfacell(
-                103,
-            ),
-        ),
-        Some(
-            Nfacell(
-                233,
-            ),
-        ),
-        Some(
-            Nfacell(
-                58,
-            ),
-        ),
-        Some(
-            Nfacell(
-                235,
-            ),
-        ),
-        Some(
-            Nfacell(
-                140,
-            ),
-        ),
-        Some(
-            Nfacell(
-                153,
-            ),
-        ),
-        Some(
-            Nfacell(
-                188,
-            ),
-        ),
-        Some(
-            Nfacell(
-                144,
-            ),
-        ),
-        Some(
-            Nfacell(
-                2,
-            ),
-        ),
-        Some(
-            Nfacell(
-                6,
-            ),
-        ),
-        Some(
-            Nfacell(
-                257,
-            ),
-        ),
-        Some(
-            Nfacell(
-                81,
-            ),
-        ),
-        Some(
-            Nfacell(
-                229,
-            ),
-        ),
-        Some(
-            Nfacell(
-                139,
-            ),
-        ),
-        Some(
-            Nfacell(
-                248,
+                185,
             ),
         ),
         Some(
@@ -294,52 +14,12 @@
         ),
         Some(
             Nfacell(
-                85,
-            ),
-        ),
-        Some(
-            Nfacell(
-                191,
-            ),
-        ),
-        Some(
-            Nfacell(
-                48,
-            ),
-        ),
-        Some(
-            Nfacell(
-                234,
-            ),
-        ),
-        Some(
-            Nfacell(
-                217,
-            ),
-        ),
-        Some(
-            Nfacell(
                 156,
             ),
         ),
         Some(
             Nfacell(
-                87,
-            ),
-        ),
-        Some(
-            Nfacell(
-                15,
-            ),
-        ),
-        Some(
-            Nfacell(
-                35,
-            ),
-        ),
-        Some(
-            Nfacell(
-                200,
+                171,
             ),
         ),
         Some(
@@ -349,637 +29,22 @@
         ),
         Some(
             Nfacell(
-                46,
+                240,
             ),
         ),
         Some(
             Nfacell(
-                72,
+                169,
             ),
         ),
         Some(
             Nfacell(
-                115,
+                68,
             ),
         ),
         Some(
             Nfacell(
-                195,
-            ),
-        ),
-        Some(
-            Nfacell(
-                89,
-            ),
-        ),
-        Some(
-            Nfacell(
-                127,
-            ),
-        ),
-        Some(
-            Nfacell(
-                31,
-            ),
-        ),
-        Some(
-            Nfacell(
-                19,
-            ),
-        ),
-        Some(
-            Nfacell(
-                135,
-            ),
-        ),
-        Some(
-            Nfacell(
-                214,
-            ),
-        ),
-        Some(
-            Nfacell(
-                182,
-            ),
-        ),
-        Some(
-            Nfacell(
-                14,
-            ),
-        ),
-        Some(
-            Nfacell(
-                202,
-            ),
-        ),
-        Some(
-            Nfacell(
-                101,
-            ),
-        ),
-        Some(
-            Nfacell(
-                100,
-            ),
-        ),
-        Some(
-            Nfacell(
-                110,
-            ),
-        ),
-        Some(
-            Nfacell(
-                152,
-            ),
-        ),
-        Some(
-            Nfacell(
-                143,
-            ),
-        ),
-        Some(
-            Nfacell(
-                130,
-            ),
-        ),
-        Some(
-            Nfacell(
-                243,
-            ),
-        ),
-        Some(
-            Nfacell(
-                106,
-            ),
-        ),
-        Some(
-            Nfacell(
-                80,
-            ),
-        ),
-        Some(
-            Nfacell(
-                238,
-            ),
-        ),
-        Some(
-            Nfacell(
-                39,
-            ),
-        ),
-        Some(
-            Nfacell(
-                170,
-            ),
-        ),
-        Some(
-            Nfacell(
-                76,
-            ),
-        ),
-        Some(
-            Nfacell(
-                70,
-            ),
-        ),
-        Some(
-            Nfacell(
-                73,
-            ),
-        ),
-        Some(
-            Nfacell(
-                91,
-            ),
-        ),
-        Some(
-            Nfacell(
-                55,
-            ),
-        ),
-        Some(
-            Nfacell(
-                262,
-            ),
-        ),
-        Some(
-            Nfacell(
-                64,
-            ),
-        ),
-        Some(
-            Nfacell(
-                117,
-            ),
-        ),
-        Some(
-            Nfacell(
-                154,
-            ),
-        ),
-        Some(
-            Nfacell(
-                258,
-            ),
-        ),
-        Some(
-            Nfacell(
-                261,
-            ),
-        ),
-        Some(
-            Nfacell(
-                267,
-            ),
-        ),
-        Some(
-            Nfacell(
-                255,
-            ),
-        ),
-        Some(
-            Nfacell(
-                97,
-            ),
-        ),
-        Some(
-            Nfacell(
-                7,
-            ),
-        ),
-        Some(
-            Nfacell(
-                69,
-            ),
-        ),
-        Some(
-            Nfacell(
-                102,
-            ),
-        ),
-        Some(
-            Nfacell(
-                259,
-            ),
-        ),
-        Some(
-            Nfacell(
-                266,
-            ),
-        ),
-        Some(
-            Nfacell(
-                111,
-            ),
-        ),
-        Some(
-            Nfacell(
-                45,
-            ),
-        ),
-        Some(
-            Nfacell(
-                192,
-            ),
-        ),
-        Some(
-            Nfacell(
-                131,
-            ),
-        ),
-        Some(
-            Nfacell(
-                133,
-            ),
-        ),
-        Some(
-            Nfacell(
-                1,
-            ),
-        ),
-        Some(
-            Nfacell(
-                236,
-            ),
-        ),
-        Some(
-            Nfacell(
-                221,
-            ),
-        ),
-        Some(
-            Nfacell(
-                94,
-            ),
-        ),
-        Some(
-            Nfacell(
-                184,
-            ),
-        ),
-        Some(
-            Nfacell(
-                90,
-            ),
-        ),
-        Some(
-            Nfacell(
-                268,
-            ),
-        ),
-        Some(
-            Nfacell(
-                54,
-            ),
-        ),
-        Some(
-            Nfacell(
-                173,
-            ),
-        ),
-        Some(
-            Nfacell(
-                175,
-            ),
-        ),
-        Some(
-            Nfacell(
-                227,
-            ),
-        ),
-        Some(
-            Nfacell(
-                12,
-            ),
-        ),
-        Some(
-            Nfacell(
-                75,
-            ),
-        ),
-        Some(
-            Nfacell(
-                18,
-            ),
-        ),
-        Some(
-            Nfacell(
-                199,
-            ),
-        ),
-        Some(
-            Nfacell(
-                205,
-            ),
-        ),
-        Some(
-            Nfacell(
-                93,
-            ),
-        ),
-        Some(
-            Nfacell(
-                96,
-            ),
-        ),
-        Some(
-            Nfacell(
-                241,
-            ),
-        ),
-        Some(
-            Nfacell(
-                33,
-            ),
-        ),
-        Some(
-            Nfacell(
-                219,
-            ),
-        ),
-        Some(
-            Nfacell(
-                23,
-            ),
-        ),
-        Some(
-            Nfacell(
-                60,
-            ),
-        ),
-        Some(
-            Nfacell(
-                151,
-            ),
-        ),
-        Some(
-            Nfacell(
-                160,
-            ),
-        ),
-        Some(
-            Nfacell(
-                40,
-            ),
-        ),
-        Some(
-            Nfacell(
-                159,
-            ),
-        ),
-        Some(
-            Nfacell(
-                124,
-            ),
-        ),
-        Some(
-            Nfacell(
-                112,
-            ),
-        ),
-        Some(
-            Nfacell(
-                161,
-            ),
-        ),
-        Some(
-            Nfacell(
-                10,
-            ),
-        ),
-        Some(
-            Nfacell(
-                66,
-            ),
-        ),
-        Some(
-            Nfacell(
-                51,
-            ),
-        ),
-        Some(
-            Nfacell(
-                30,
-            ),
-        ),
-        Some(
-            Nfacell(
-                86,
-            ),
-        ),
-        Some(
-            Nfacell(
-                247,
-            ),
-        ),
-        Some(
-            Nfacell(
-                185,
-            ),
-        ),
-        Some(
-            Nfacell(
-                34,
-            ),
-        ),
-        Some(
-            Nfacell(
-                239,
-            ),
-        ),
-        Some(
-            Nfacell(
-                186,
-            ),
-        ),
-        Some(
-            Nfacell(
-                145,
-            ),
-        ),
-        Some(
-            Nfacell(
-                121,
-            ),
-        ),
-        Some(
-            Nfacell(
-                27,
-            ),
-        ),
-        Some(
-            Nfacell(
-                162,
-            ),
-        ),
-        Some(
-            Nfacell(
-                180,
-            ),
-        ),
-        Some(
-            Nfacell(
-                187,
-            ),
-        ),
-        Some(
-            Nfacell(
-                208,
-            ),
-        ),
-        Some(
-            Nfacell(
-                62,
-            ),
-        ),
-        Some(
-            Nfacell(
-                206,
-            ),
-        ),
-        Some(
-            Nfacell(
-                3,
-            ),
-        ),
-        Some(
-            Nfacell(
-                210,
-            ),
-        ),
-        Some(
-            Nfacell(
-                223,
-            ),
-        ),
-        Some(
-            Nfacell(
-                232,
-            ),
-        ),
-        Some(
-            Nfacell(
-                11,
-            ),
-        ),
-        Some(
-            Nfacell(
-                126,
-            ),
-        ),
-        Some(
-            Nfacell(
-                147,
-            ),
-        ),
-        Some(
-            Nfacell(
-                132,
-            ),
-        ),
-        Some(
-            Nfacell(
-                216,
-            ),
-        ),
-        Some(
-            Nfacell(
-                222,
-            ),
-        ),
-        Some(
-            Nfacell(
-                61,
-            ),
-        ),
-        Some(
-            Nfacell(
-                172,
-            ),
-        ),
-        Some(
-            Nfacell(
-                263,
-            ),
-        ),
-        Some(
-            Nfacell(
-                9,
-            ),
-        ),
-        Some(
-            Nfacell(
-                177,
-            ),
-        ),
-        Some(
-            Nfacell(
-                194,
-            ),
-        ),
-        Some(
-            Nfacell(
-                189,
-            ),
-        ),
-        Some(
-            Nfacell(
-                178,
-            ),
-        ),
-        Some(
-            Nfacell(
-                215,
-            ),
-        ),
-        Some(
-            Nfacell(
-                65,
-            ),
-        ),
-        Some(
-            Nfacell(
-                122,
-            ),
-        ),
-        Some(
-            Nfacell(
-                17,
-            ),
-        ),
-        Some(
-            Nfacell(
-                71,
-            ),
-        ),
-        Some(
-            Nfacell(
-                104,
-            ),
-        ),
-        Some(
-            Nfacell(
-                250,
-            ),
-        ),
-        Some(
-            Nfacell(
-                211,
-            ),
-        ),
-        Some(
-            Nfacell(
-                226,
-            ),
-        ),
-        Some(
-            Nfacell(
-                21,
-            ),
-        ),
-        Some(
-            Nfacell(
-                193,
+                2,
             ),
         ),
         Some(
@@ -989,27 +54,22 @@
         ),
         Some(
             Nfacell(
-                56,
+                36,
             ),
         ),
         Some(
             Nfacell(
-                244,
+                116,
             ),
         ),
         Some(
             Nfacell(
-                49,
+                70,
             ),
         ),
         Some(
             Nfacell(
-                174,
-            ),
-        ),
-        Some(
-            Nfacell(
-                148,
+                121,
             ),
         ),
         Some(
@@ -1019,42 +79,7 @@
         ),
         Some(
             Nfacell(
-                197,
-            ),
-        ),
-        Some(
-            Nfacell(
-                213,
-            ),
-        ),
-        Some(
-            Nfacell(
-                251,
-            ),
-        ),
-        Some(
-            Nfacell(
-                225,
-            ),
-        ),
-        Some(
-            Nfacell(
-                176,
-            ),
-        ),
-        Some(
-            Nfacell(
-                67,
-            ),
-        ),
-        Some(
-            Nfacell(
-                168,
-            ),
-        ),
-        Some(
-            Nfacell(
-                231,
+                113,
             ),
         ),
         Some(
@@ -1064,7 +89,162 @@
         ),
         Some(
             Nfacell(
-                108,
+                179,
+            ),
+        ),
+        Some(
+            Nfacell(
+                155,
+            ),
+        ),
+        Some(
+            Nfacell(
+                69,
+            ),
+        ),
+        Some(
+            Nfacell(
+                157,
+            ),
+        ),
+        Some(
+            Nfacell(
+                54,
+            ),
+        ),
+        Some(
+            Nfacell(
+                19,
+            ),
+        ),
+        Some(
+            Nfacell(
+                174,
+            ),
+        ),
+        Some(
+            Nfacell(
+                122,
+            ),
+        ),
+        Some(
+            Nfacell(
+                71,
+            ),
+        ),
+        Some(
+            Nfacell(
+                78,
+            ),
+        ),
+        Some(
+            Nfacell(
+                215,
+            ),
+        ),
+        Some(
+            Nfacell(
+                110,
+            ),
+        ),
+        Some(
+            Nfacell(
+                184,
+            ),
+        ),
+        Some(
+            Nfacell(
+                209,
+            ),
+        ),
+        Some(
+            Nfacell(
+                10,
+            ),
+        ),
+        Some(
+            Nfacell(
+                175,
+            ),
+        ),
+        Some(
+            Nfacell(
+                205,
+            ),
+        ),
+        Some(
+            Nfacell(
+                219,
+            ),
+        ),
+        Some(
+            Nfacell(
+                103,
+            ),
+        ),
+        Some(
+            Nfacell(
+                26,
+            ),
+        ),
+        Some(
+            Nfacell(
+                163,
+            ),
+        ),
+        Some(
+            Nfacell(
+                164,
+            ),
+        ),
+        Some(
+            Nfacell(
+                238,
+            ),
+        ),
+        Some(
+            Nfacell(
+                104,
+            ),
+        ),
+        Some(
+            Nfacell(
+                24,
+            ),
+        ),
+        Some(
+            Nfacell(
+                11,
+            ),
+        ),
+        Some(
+            Nfacell(
+                56,
+            ),
+        ),
+        Some(
+            Nfacell(
+                85,
+            ),
+        ),
+        Some(
+            Nfacell(
+                151,
+            ),
+        ),
+        Some(
+            Nfacell(
+                161,
+            ),
+        ),
+        Some(
+            Nfacell(
+                109,
+            ),
+        ),
+        Some(
+            Nfacell(
+                182,
             ),
         ),
         Some(
@@ -1074,37 +254,227 @@
         ),
         Some(
             Nfacell(
+                25,
+            ),
+        ),
+        Some(
+            Nfacell(
+                100,
+            ),
+        ),
+        Some(
+            Nfacell(
+                194,
+            ),
+        ),
+        Some(
+            Nfacell(
+                212,
+            ),
+        ),
+        Some(
+            Nfacell(
+                51,
+            ),
+        ),
+        Some(
+            Nfacell(
+                29,
+            ),
+        ),
+        Some(
+            Nfacell(
+                236,
+            ),
+        ),
+        Some(
+            Nfacell(
+                16,
+            ),
+        ),
+        Some(
+            Nfacell(
+                8,
+            ),
+        ),
+        Some(
+            Nfacell(
+                126,
+            ),
+        ),
+        Some(
+            Nfacell(
+                228,
+            ),
+        ),
+        Some(
+            Nfacell(
+                42,
+            ),
+        ),
+        Some(
+            Nfacell(
+                87,
+            ),
+        ),
+        Some(
+            Nfacell(
+                195,
+            ),
+        ),
+        Some(
+            Nfacell(
+                57,
+            ),
+        ),
+        Some(
+            Nfacell(
+                158,
+            ),
+        ),
+        Some(
+            Nfacell(
+                224,
+            ),
+        ),
+        Some(
+            Nfacell(
+                95,
+            ),
+        ),
+        Some(
+            Nfacell(
+                45,
+            ),
+        ),
+        Some(
+            Nfacell(
+                243,
+            ),
+        ),
+        Some(
+            Nfacell(
+                226,
+            ),
+        ),
+        Some(
+            Nfacell(
+                187,
+            ),
+        ),
+        Some(
+            Nfacell(
+                74,
+            ),
+        ),
+        Some(
+            Nfacell(
+                234,
+            ),
+        ),
+        Some(
+            Nfacell(
                 5,
             ),
         ),
         Some(
             Nfacell(
-                146,
+                124,
             ),
         ),
         Some(
             Nfacell(
-                220,
+                30,
             ),
         ),
         Some(
             Nfacell(
-                253,
+                127,
             ),
         ),
         Some(
             Nfacell(
-                52,
+                170,
             ),
         ),
         Some(
             Nfacell(
-                264,
+                159,
             ),
         ),
         Some(
             Nfacell(
-                44,
+                166,
+            ),
+        ),
+        Some(
+            Nfacell(
+                88,
+            ),
+        ),
+        Some(
+            Nfacell(
+                64,
+            ),
+        ),
+        Some(
+            Nfacell(
+                67,
+            ),
+        ),
+        Some(
+            Nfacell(
+                96,
+            ),
+        ),
+        Some(
+            Nfacell(
+                102,
+            ),
+        ),
+        Some(
+            Nfacell(
+                28,
+            ),
+        ),
+        Some(
+            Nfacell(
+                168,
+            ),
+        ),
+        Some(
+            Nfacell(
+                118,
+            ),
+        ),
+        Some(
+            Nfacell(
+                129,
+            ),
+        ),
+        Some(
+            Nfacell(
+                34,
+            ),
+        ),
+        Some(
+            Nfacell(
+                153,
+            ),
+        ),
+        Some(
+            Nfacell(
+                20,
+            ),
+        ),
+        Some(
+            Nfacell(
+                183,
+            ),
+        ),
+        Some(
+            Nfacell(
+                207,
             ),
         ),
         Some(
@@ -1114,22 +484,552 @@
         ),
         Some(
             Nfacell(
+                81,
+            ),
+        ),
+        Some(
+            Nfacell(
+                165,
+            ),
+        ),
+        Some(
+            Nfacell(
+                9,
+            ),
+        ),
+        Some(
+            Nfacell(
+                46,
+            ),
+        ),
+        Some(
+            Nfacell(
+                58,
+            ),
+        ),
+        Some(
+            Nfacell(
+                55,
+            ),
+        ),
+        Some(
+            Nfacell(
+                97,
+            ),
+        ),
+        Some(
+            Nfacell(
+                125,
+            ),
+        ),
+        Some(
+            Nfacell(
+                131,
+            ),
+        ),
+        Some(
+            Nfacell(
+                136,
+            ),
+        ),
+        Some(
+            Nfacell(
+                62,
+            ),
+        ),
+        Some(
+            Nfacell(
+                167,
+            ),
+        ),
+        Some(
+            Nfacell(
+                7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                75,
+            ),
+        ),
+        Some(
+            Nfacell(
+                181,
+            ),
+        ),
+        Some(
+            Nfacell(
+                106,
+            ),
+        ),
+        Some(
+            Nfacell(
+                86,
+            ),
+        ),
+        Some(
+            Nfacell(
+                76,
+            ),
+        ),
+        Some(
+            Nfacell(
+                123,
+            ),
+        ),
+        Some(
+            Nfacell(
+                13,
+            ),
+        ),
+        Some(
+            Nfacell(
+                92,
+            ),
+        ),
+        Some(
+            Nfacell(
+                47,
+            ),
+        ),
+        Some(
+            Nfacell(
+                49,
+            ),
+        ),
+        Some(
+            Nfacell(
+                17,
+            ),
+        ),
+        Some(
+            Nfacell(
+                52,
+            ),
+        ),
+        Some(
+            Nfacell(
+                18,
+            ),
+        ),
+        Some(
+            Nfacell(
+                229,
+            ),
+        ),
+        Some(
+            Nfacell(
+                235,
+            ),
+        ),
+        Some(
+            Nfacell(
+                82,
+            ),
+        ),
+        Some(
+            Nfacell(
+                192,
+            ),
+        ),
+        Some(
+            Nfacell(
+                211,
+            ),
+        ),
+        Some(
+            Nfacell(
+                222,
+            ),
+        ),
+        Some(
+            Nfacell(
+                80,
+            ),
+        ),
+        Some(
+            Nfacell(
+                143,
+            ),
+        ),
+        Some(
+            Nfacell(
+                59,
+            ),
+        ),
+        Some(
+            Nfacell(
+                83,
+            ),
+        ),
+        Some(
+            Nfacell(
+                120,
+            ),
+        ),
+        Some(
+            Nfacell(
+                72,
+            ),
+        ),
+        Some(
+            Nfacell(
+                135,
+            ),
+        ),
+        Some(
+            Nfacell(
+                1,
+            ),
+        ),
+        Some(
+            Nfacell(
+                152,
+            ),
+        ),
+        Some(
+            Nfacell(
+                94,
+            ),
+        ),
+        Some(
+            Nfacell(
+                160,
+            ),
+        ),
+        Some(
+            Nfacell(
+                189,
+            ),
+        ),
+        Some(
+            Nfacell(
+                188,
+            ),
+        ),
+        Some(
+            Nfacell(
+                178,
+            ),
+        ),
+        Some(
+            Nfacell(
+                199,
+            ),
+        ),
+        Some(
+            Nfacell(
+                101,
+            ),
+        ),
+        Some(
+            Nfacell(
+                220,
+            ),
+        ),
+        Some(
+            Nfacell(
+                37,
+            ),
+        ),
+        Some(
+            Nfacell(
+                191,
+            ),
+        ),
+        Some(
+            Nfacell(
+                39,
+            ),
+        ),
+        Some(
+            Nfacell(
+                23,
+            ),
+        ),
+        Some(
+            Nfacell(
+                225,
+            ),
+        ),
+        Some(
+            Nfacell(
+                112,
+            ),
+        ),
+        Some(
+            Nfacell(
+                241,
+            ),
+        ),
+        Some(
+            Nfacell(
+                111,
+            ),
+        ),
+        Some(
+            Nfacell(
+                89,
+            ),
+        ),
+        Some(
+            Nfacell(
+                206,
+            ),
+        ),
+        Some(
+            Nfacell(
+                108,
+            ),
+        ),
+        Some(
+            Nfacell(
+                15,
+            ),
+        ),
+        Some(
+            Nfacell(
+                172,
+            ),
+        ),
+        Some(
+            Nfacell(
+                134,
+            ),
+        ),
+        Some(
+            Nfacell(
+                133,
+            ),
+        ),
+        Some(
+            Nfacell(
+                14,
+            ),
+        ),
+        Some(
+            Nfacell(
+                117,
+            ),
+        ),
+        Some(
+            Nfacell(
                 230,
             ),
         ),
         Some(
             Nfacell(
-                36,
+                35,
             ),
         ),
         Some(
             Nfacell(
-                237,
+                210,
             ),
         ),
         Some(
             Nfacell(
-                166,
+                98,
+            ),
+        ),
+        Some(
+            Nfacell(
+                176,
+            ),
+        ),
+        Some(
+            Nfacell(
+                40,
+            ),
+        ),
+        Some(
+            Nfacell(
+                213,
+            ),
+        ),
+        Some(
+            Nfacell(
+                77,
+            ),
+        ),
+        Some(
+            Nfacell(
+                84,
+            ),
+        ),
+        Some(
+            Nfacell(
+                137,
+            ),
+        ),
+        Some(
+            Nfacell(
+                144,
+            ),
+        ),
+        Some(
+            Nfacell(
+                150,
+            ),
+        ),
+        Some(
+            Nfacell(
+                99,
+            ),
+        ),
+        Some(
+            Nfacell(
+                196,
+            ),
+        ),
+        Some(
+            Nfacell(
+                44,
+            ),
+        ),
+        Some(
+            Nfacell(
+                139,
+            ),
+        ),
+        Some(
+            Nfacell(
+                227,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
+            ),
+        ),
+        Some(
+            Nfacell(
+                231,
+            ),
+        ),
+        Some(
+            Nfacell(
+                146,
+            ),
+        ),
+        Some(
+            Nfacell(
+                200,
+            ),
+        ),
+        Some(
+            Nfacell(
+                233,
+            ),
+        ),
+        Some(
+            Nfacell(
+                48,
+            ),
+        ),
+        Some(
+            Nfacell(
+                239,
+            ),
+        ),
+        Some(
+            Nfacell(
+                190,
+            ),
+        ),
+        Some(
+            Nfacell(
+                223,
+            ),
+        ),
+        Some(
+            Nfacell(
+                149,
+            ),
+        ),
+        Some(
+            Nfacell(
+                91,
+            ),
+        ),
+        Some(
+            Nfacell(
+                180,
+            ),
+        ),
+        Some(
+            Nfacell(
+                31,
+            ),
+        ),
+        Some(
+            Nfacell(
+                145,
+            ),
+        ),
+        Some(
+            Nfacell(
+                130,
+            ),
+        ),
+        Some(
+            Nfacell(
+                147,
+            ),
+        ),
+        Some(
+            Nfacell(
+                61,
+            ),
+        ),
+        Some(
+            Nfacell(
+                154,
+            ),
+        ),
+        Some(
+            Nfacell(
+                214,
+            ),
+        ),
+        Some(
+            Nfacell(
+                242,
+            ),
+        ),
+        Some(
+            Nfacell(
+                246,
+            ),
+        ),
+        Some(
+            Nfacell(
+                140,
+            ),
+        ),
+        Some(
+            Nfacell(
+                27,
+            ),
+        ),
+        Some(
+            Nfacell(
+                41,
+            ),
+        ),
+        Some(
+            Nfacell(
+                79,
+            ),
+        ),
+        Some(
+            Nfacell(
+                65,
+            ),
+        ),
+        Some(
+            Nfacell(
+                6,
             ),
         ),
         Some(
@@ -1144,138 +1044,27 @@
         ),
         Some(
             Nfacell(
-                99,
+                204,
             ),
         ),
         Some(
             Nfacell(
-                179,
+                186,
             ),
         ),
         Some(
             Nfacell(
-                41,
+                148,
             ),
         ),
         Some(
             Nfacell(
-                149,
+                32,
             ),
         ),
         Some(
             Nfacell(
-                169,
-            ),
-        ),
-        Some(
-            Nfacell(
-                20,
-            ),
-        ),
-        Some(
-            Nfacell(
-                129,
-            ),
-        ),
-        Some(
-            Nfacell(
-                74,
-            ),
-        ),
-        Some(
-            Nfacell(
-                118,
-            ),
-        ),
-        Some(
-            Nfacell(
-                265,
-            ),
-        ),
-        Some(
-            Nfacell(
-                136,
-            ),
-        ),
-        Some(
-            Nfacell(
-                4,
-            ),
-        ),
-        Some(
-            Nfacell(
-                16,
-            ),
-        ),
-        None,
-        Some(
-            Nfacell(
-                43,
-            ),
-        ),
-        Some(
-            Nfacell(
-                38,
-            ),
-        ),
-        Some(
-            Nfacell(
-                37,
-            ),
-        ),
-        Some(
-            Nfacell(
-                114,
-            ),
-        ),
-        Some(
-            Nfacell(
-                181,
-            ),
-        ),
-        Some(
-            Nfacell(
-                82,
-            ),
-        ),
-        Some(
-            Nfacell(
-                78,
-            ),
-        ),
-        Some(
-            Nfacell(
-                88,
-            ),
-        ),
-        Some(
-            Nfacell(
-                134,
-            ),
-        ),
-        Some(
-            Nfacell(
-                157,
-            ),
-        ),
-        Some(
-            Nfacell(
-                190,
-            ),
-        ),
-        Some(
-            Nfacell(
-                260,
-            ),
-        ),
-        Some(
-            Nfacell(
-                164,
-            ),
-        ),
-        Some(
-            Nfacell(
-                171,
+                244,
             ),
         ),
         Some(
@@ -1285,37 +1074,153 @@
         ),
         Some(
             Nfacell(
-                42,
+                216,
             ),
         ),
         Some(
             Nfacell(
-                59,
+                237,
             ),
         ),
         Some(
             Nfacell(
-                209,
+                107,
             ),
         ),
         Some(
             Nfacell(
-                256,
+                90,
             ),
         ),
         Some(
             Nfacell(
-                25,
+                114,
             ),
         ),
         Some(
             Nfacell(
-                183,
+                132,
             ),
         ),
         Some(
             Nfacell(
-                92,
+                60,
+            ),
+        ),
+        None,
+        Some(
+            Nfacell(
+                73,
+            ),
+        ),
+        Some(
+            Nfacell(
+                173,
+            ),
+        ),
+        Some(
+            Nfacell(
+                217,
+            ),
+        ),
+        Some(
+            Nfacell(
+                3,
+            ),
+        ),
+        Some(
+            Nfacell(
+                141,
+            ),
+        ),
+        Some(
+            Nfacell(
+                202,
+            ),
+        ),
+        Some(
+            Nfacell(
+                38,
+            ),
+        ),
+        Some(
+            Nfacell(
+                43,
+            ),
+        ),
+        Some(
+            Nfacell(
+                208,
+            ),
+        ),
+        Some(
+            Nfacell(
+                232,
+            ),
+        ),
+        Some(
+            Nfacell(
+                162,
+            ),
+        ),
+        Some(
+            Nfacell(
+                221,
+            ),
+        ),
+        Some(
+            Nfacell(
+                177,
+            ),
+        ),
+        Some(
+            Nfacell(
+                193,
+            ),
+        ),
+        Some(
+            Nfacell(
+                21,
+            ),
+        ),
+        Some(
+            Nfacell(
+                33,
+            ),
+        ),
+        Some(
+            Nfacell(
+                12,
+            ),
+        ),
+        Some(
+            Nfacell(
+                66,
+            ),
+        ),
+        Some(
+            Nfacell(
+                115,
+            ),
+        ),
+        Some(
+            Nfacell(
+                197,
+            ),
+        ),
+        Some(
+            Nfacell(
+                201,
+            ),
+        ),
+        Some(
+            Nfacell(
+                93,
+            ),
+        ),
+        Some(
+            Nfacell(
+                105,
             ),
         ),
         Some(
@@ -1325,22 +1230,7 @@
         ),
         Some(
             Nfacell(
-                24,
-            ),
-        ),
-        Some(
-            Nfacell(
-                113,
-            ),
-        ),
-        Some(
-            Nfacell(
-                254,
-            ),
-        ),
-        Some(
-            Nfacell(
-                165,
+                119,
             ),
         ),
     },
@@ -1370,12 +1260,38 @@
         Rule(
             Some(
                 SelectorId(
-                    2,
+                    1,
                 ),
             ),
             None,
             Nfacell(
                 3,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    3,
+                ),
+            ),
+            Nfacell(
+                3,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    2,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    3,
+                ),
+            ),
+            Nfacell(
+                4,
             ),
         ),
         Rule(
@@ -1386,7 +1302,18 @@
             ),
             None,
             Nfacell(
-                4,
+                5,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    5,
+                ),
+            ),
+            Nfacell(
+                5,
             ),
         ),
         Rule(
@@ -1395,18 +1322,11 @@
                     4,
                 ),
             ),
-            None,
-            Nfacell(
-                5,
-            ),
-        ),
-        Rule(
             Some(
-                SelectorId(
+                Nfacell(
                     5,
                 ),
             ),
-            None,
             Nfacell(
                 6,
             ),
@@ -1414,7 +1334,7 @@
         Rule(
             Some(
                 SelectorId(
-                    6,
+                    3,
                 ),
             ),
             None,
@@ -1423,12 +1343,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
+                Nfacell(
                     7,
                 ),
             ),
-            None,
+            Nfacell(
+                7,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    5,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    7,
+                ),
+            ),
             Nfacell(
                 8,
             ),
@@ -1436,7 +1371,7 @@
         Rule(
             Some(
                 SelectorId(
-                    8,
+                    3,
                 ),
             ),
             None,
@@ -1445,12 +1380,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
+                Nfacell(
                     9,
                 ),
             ),
-            None,
+            Nfacell(
+                9,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    6,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    9,
+                ),
+            ),
             Nfacell(
                 10,
             ),
@@ -1458,7 +1408,7 @@
         Rule(
             Some(
                 SelectorId(
-                    9,
+                    3,
                 ),
             ),
             None,
@@ -1480,7 +1430,7 @@
         Rule(
             Some(
                 SelectorId(
-                    10,
+                    7,
                 ),
             ),
             Some(
@@ -1495,21 +1445,10 @@
         Rule(
             Some(
                 SelectorId(
-                    11,
+                    8,
                 ),
             ),
             None,
-            Nfacell(
-                13,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    13,
-                ),
-            ),
             Nfacell(
                 13,
             ),
@@ -1517,12 +1456,19 @@
         Rule(
             Some(
                 SelectorId(
-                    12,
+                    8,
                 ),
             ),
+            None,
+            Nfacell(
+                14,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    13,
+                    14,
                 ),
             ),
             Nfacell(
@@ -1532,19 +1478,12 @@
         Rule(
             Some(
                 SelectorId(
-                    11,
+                    9,
                 ),
             ),
-            None,
-            Nfacell(
-                15,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    15,
+                    14,
                 ),
             ),
             Nfacell(
@@ -1554,14 +1493,10 @@
         Rule(
             Some(
                 SelectorId(
-                    13,
+                    10,
                 ),
             ),
-            Some(
-                Nfacell(
-                    15,
-                ),
-            ),
+            None,
             Nfacell(
                 16,
             ),
@@ -1578,27 +1513,12 @@
             ),
         ),
         Rule(
-            None,
-            Some(
-                Nfacell(
-                    17,
-                ),
-            ),
-            Nfacell(
-                17,
-            ),
-        ),
-        Rule(
             Some(
                 SelectorId(
-                    14,
+                    12,
                 ),
             ),
-            Some(
-                Nfacell(
-                    17,
-                ),
-            ),
+            None,
             Nfacell(
                 18,
             ),
@@ -1606,7 +1526,7 @@
         Rule(
             Some(
                 SelectorId(
-                    11,
+                    12,
                 ),
             ),
             None,
@@ -1628,7 +1548,7 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    13,
                 ),
             ),
             Some(
@@ -1643,7 +1563,7 @@
         Rule(
             Some(
                 SelectorId(
-                    16,
+                    12,
                 ),
             ),
             None,
@@ -1652,361 +1572,29 @@
             ),
         ),
         Rule(
-            Some(
-                SelectorId(
-                    16,
-                ),
-            ),
-            None,
-            Nfacell(
-                22,
-            ),
-        ),
-        Rule(
             None,
             Some(
                 Nfacell(
-                    22,
-                ),
-            ),
-            Nfacell(
-                22,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    17,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    22,
-                ),
-            ),
-            Nfacell(
-                23,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    18,
-                ),
-            ),
-            None,
-            Nfacell(
-                24,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    19,
-                ),
-            ),
-            None,
-            Nfacell(
-                25,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                26,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                27,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    27,
-                ),
-            ),
-            Nfacell(
-                27,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
                     21,
                 ),
             ),
-            Some(
-                Nfacell(
-                    27,
-                ),
-            ),
             Nfacell(
-                28,
+                21,
             ),
         ),
         Rule(
             Some(
                 SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                29,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    29,
-                ),
-            ),
-            Nfacell(
-                29,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    22,
+                    14,
                 ),
             ),
             Some(
                 Nfacell(
-                    29,
+                    21,
                 ),
             ),
             Nfacell(
-                30,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                31,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    31,
-                ),
-            ),
-            Nfacell(
-                31,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    23,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    31,
-                ),
-            ),
-            Nfacell(
-                32,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                33,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    33,
-                ),
-            ),
-            Nfacell(
-                33,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    24,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    33,
-                ),
-            ),
-            Nfacell(
-                34,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    20,
-                ),
-            ),
-            None,
-            Nfacell(
-                35,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    35,
-                ),
-            ),
-            Nfacell(
-                35,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    25,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    35,
-                ),
-            ),
-            Nfacell(
-                36,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    26,
-                ),
-            ),
-            None,
-            Nfacell(
-                37,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    27,
-                ),
-            ),
-            None,
-            Nfacell(
-                38,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    28,
-                ),
-            ),
-            None,
-            Nfacell(
-                39,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    29,
-                ),
-            ),
-            None,
-            Nfacell(
-                40,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    30,
-                ),
-            ),
-            None,
-            Nfacell(
-                41,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    30,
-                ),
-            ),
-            None,
-            Nfacell(
-                42,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    42,
-                ),
-            ),
-            Nfacell(
-                42,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    31,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    42,
-                ),
-            ),
-            Nfacell(
-                43,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    32,
-                ),
-            ),
-            None,
-            Nfacell(
-                44,
+                22,
             ),
         ),
         Rule(
@@ -2017,16 +1605,378 @@
             ),
             None,
             Nfacell(
+                23,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    23,
+                ),
+            ),
+            Nfacell(
+                23,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    14,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    23,
+                ),
+            ),
+            Nfacell(
+                24,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    24,
+                ),
+            ),
+            Nfacell(
+                24,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    15,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    24,
+                ),
+            ),
+            Nfacell(
+                25,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    12,
+                ),
+            ),
+            None,
+            Nfacell(
+                26,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    26,
+                ),
+            ),
+            Nfacell(
+                26,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    16,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    26,
+                ),
+            ),
+            Nfacell(
+                27,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    12,
+                ),
+            ),
+            None,
+            Nfacell(
+                28,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    28,
+                ),
+            ),
+            Nfacell(
+                28,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    17,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    28,
+                ),
+            ),
+            Nfacell(
+                29,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    12,
+                ),
+            ),
+            None,
+            Nfacell(
+                30,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    30,
+                ),
+            ),
+            Nfacell(
+                30,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    15,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    30,
+                ),
+            ),
+            Nfacell(
+                31,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    18,
+                ),
+            ),
+            None,
+            Nfacell(
+                32,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    19,
+                ),
+            ),
+            None,
+            Nfacell(
+                33,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    20,
+                ),
+            ),
+            None,
+            Nfacell(
+                34,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    21,
+                ),
+            ),
+            None,
+            Nfacell(
+                35,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    22,
+                ),
+            ),
+            None,
+            Nfacell(
+                36,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    22,
+                ),
+            ),
+            None,
+            Nfacell(
+                37,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    37,
+                ),
+            ),
+            Nfacell(
+                37,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    23,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    37,
+                ),
+            ),
+            Nfacell(
+                38,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    24,
+                ),
+            ),
+            None,
+            Nfacell(
+                39,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    4,
+                ),
+            ),
+            None,
+            Nfacell(
+                40,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    5,
+                ),
+            ),
+            None,
+            Nfacell(
+                41,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    25,
+                ),
+            ),
+            None,
+            Nfacell(
+                42,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    26,
+                ),
+            ),
+            None,
+            Nfacell(
+                43,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    43,
+                ),
+            ),
+            Nfacell(
+                43,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    27,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    43,
+                ),
+            ),
+            Nfacell(
+                44,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    26,
+                ),
+            ),
+            None,
+            Nfacell(
+                45,
+            ),
+        ),
+        Rule(
+            None,
+            Some(
+                Nfacell(
+                    45,
+                ),
+            ),
+            Nfacell(
                 45,
             ),
         ),
         Rule(
             Some(
                 SelectorId(
-                    13,
+                    27,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    45,
+                ),
+            ),
             Nfacell(
                 46,
             ),
@@ -2034,10 +1984,14 @@
         Rule(
             Some(
                 SelectorId(
-                    33,
+                    7,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    46,
+                ),
+            ),
             Nfacell(
                 47,
             ),
@@ -2045,7 +1999,7 @@
         Rule(
             Some(
                 SelectorId(
-                    34,
+                    26,
                 ),
             ),
             None,
@@ -2067,7 +2021,7 @@
         Rule(
             Some(
                 SelectorId(
-                    35,
+                    7,
                 ),
             ),
             Some(
@@ -2082,7 +2036,7 @@
         Rule(
             Some(
                 SelectorId(
-                    34,
+                    26,
                 ),
             ),
             None,
@@ -2104,7 +2058,7 @@
         Rule(
             Some(
                 SelectorId(
-                    35,
+                    7,
                 ),
             ),
             Some(
@@ -2117,9 +2071,20 @@
             ),
         ),
         Rule(
+            None,
+            Some(
+                Nfacell(
+                    51,
+                ),
+            ),
+            Nfacell(
+                51,
+            ),
+        ),
+        Rule(
             Some(
                 SelectorId(
-                    15,
+                    7,
                 ),
             ),
             Some(
@@ -2134,7 +2099,7 @@
         Rule(
             Some(
                 SelectorId(
-                    34,
+                    28,
                 ),
             ),
             None,
@@ -2156,7 +2121,7 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    11,
                 ),
             ),
             Some(
@@ -2171,7 +2136,7 @@
         Rule(
             Some(
                 SelectorId(
-                    34,
+                    28,
                 ),
             ),
             None,
@@ -2193,7 +2158,7 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    29,
                 ),
             ),
             Some(
@@ -2206,25 +2171,21 @@
             ),
         ),
         Rule(
-            None,
             Some(
-                Nfacell(
-                    56,
+                SelectorId(
+                    28,
                 ),
             ),
+            None,
             Nfacell(
-                56,
+                57,
             ),
         ),
         Rule(
-            Some(
-                SelectorId(
-                    15,
-                ),
-            ),
+            None,
             Some(
                 Nfacell(
-                    56,
+                    57,
                 ),
             ),
             Nfacell(
@@ -2234,19 +2195,12 @@
         Rule(
             Some(
                 SelectorId(
-                    36,
+                    30,
                 ),
             ),
-            None,
-            Nfacell(
-                58,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    58,
+                    57,
                 ),
             ),
             Nfacell(
@@ -2256,12 +2210,19 @@
         Rule(
             Some(
                 SelectorId(
-                    19,
+                    31,
                 ),
             ),
+            None,
+            Nfacell(
+                59,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    58,
+                    59,
                 ),
             ),
             Nfacell(
@@ -2271,19 +2232,12 @@
         Rule(
             Some(
                 SelectorId(
-                    36,
+                    11,
                 ),
             ),
-            None,
-            Nfacell(
-                60,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    60,
+                    59,
                 ),
             ),
             Nfacell(
@@ -2293,12 +2247,19 @@
         Rule(
             Some(
                 SelectorId(
-                    37,
+                    31,
                 ),
             ),
+            None,
+            Nfacell(
+                61,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    60,
+                    61,
                 ),
             ),
             Nfacell(
@@ -2308,19 +2269,12 @@
         Rule(
             Some(
                 SelectorId(
-                    36,
+                    29,
                 ),
             ),
-            None,
-            Nfacell(
-                62,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    62,
+                    61,
                 ),
             ),
             Nfacell(
@@ -2330,12 +2284,19 @@
         Rule(
             Some(
                 SelectorId(
-                    38,
+                    32,
                 ),
             ),
+            None,
+            Nfacell(
+                63,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    62,
+                    63,
                 ),
             ),
             Nfacell(
@@ -2345,19 +2306,12 @@
         Rule(
             Some(
                 SelectorId(
-                    39,
+                    33,
                 ),
             ),
-            None,
-            Nfacell(
-                64,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    64,
+                    63,
                 ),
             ),
             Nfacell(
@@ -2367,12 +2321,19 @@
         Rule(
             Some(
                 SelectorId(
-                    19,
+                    32,
                 ),
             ),
+            None,
+            Nfacell(
+                65,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    64,
+                    65,
                 ),
             ),
             Nfacell(
@@ -2382,19 +2343,12 @@
         Rule(
             Some(
                 SelectorId(
-                    39,
+                    34,
                 ),
             ),
-            None,
-            Nfacell(
-                66,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    66,
+                    65,
                 ),
             ),
             Nfacell(
@@ -2404,12 +2358,19 @@
         Rule(
             Some(
                 SelectorId(
-                    37,
+                    32,
                 ),
             ),
+            None,
+            Nfacell(
+                67,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    66,
+                    67,
                 ),
             ),
             Nfacell(
@@ -2419,19 +2380,12 @@
         Rule(
             Some(
                 SelectorId(
-                    40,
+                    30,
                 ),
             ),
-            None,
-            Nfacell(
-                68,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    68,
+                    67,
                 ),
             ),
             Nfacell(
@@ -2441,12 +2395,19 @@
         Rule(
             Some(
                 SelectorId(
-                    41,
+                    32,
                 ),
             ),
+            None,
+            Nfacell(
+                69,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    68,
+                    69,
                 ),
             ),
             Nfacell(
@@ -2456,19 +2417,12 @@
         Rule(
             Some(
                 SelectorId(
-                    40,
+                    35,
                 ),
             ),
-            None,
-            Nfacell(
-                70,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    70,
+                    69,
                 ),
             ),
             Nfacell(
@@ -2478,14 +2432,10 @@
         Rule(
             Some(
                 SelectorId(
-                    42,
+                    33,
                 ),
             ),
-            Some(
-                Nfacell(
-                    70,
-                ),
-            ),
+            None,
             Nfacell(
                 71,
             ),
@@ -2493,21 +2443,10 @@
         Rule(
             Some(
                 SelectorId(
-                    40,
+                    34,
                 ),
             ),
             None,
-            Nfacell(
-                72,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    72,
-                ),
-            ),
             Nfacell(
                 72,
             ),
@@ -2515,12 +2454,19 @@
         Rule(
             Some(
                 SelectorId(
-                    38,
+                    34,
                 ),
             ),
+            None,
+            Nfacell(
+                73,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    72,
+                    73,
                 ),
             ),
             Nfacell(
@@ -2530,19 +2476,12 @@
         Rule(
             Some(
                 SelectorId(
-                    40,
+                    36,
                 ),
             ),
-            None,
-            Nfacell(
-                74,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    74,
+                    73,
                 ),
             ),
             Nfacell(
@@ -2552,14 +2491,10 @@
         Rule(
             Some(
                 SelectorId(
-                    43,
+                    37,
                 ),
             ),
-            Some(
-                Nfacell(
-                    74,
-                ),
-            ),
+            None,
             Nfacell(
                 75,
             ),
@@ -2567,7 +2502,7 @@
         Rule(
             Some(
                 SelectorId(
-                    41,
+                    38,
                 ),
             ),
             None,
@@ -2578,7 +2513,7 @@
         Rule(
             Some(
                 SelectorId(
-                    42,
+                    30,
                 ),
             ),
             None,
@@ -2589,21 +2524,10 @@
         Rule(
             Some(
                 SelectorId(
-                    42,
+                    39,
                 ),
             ),
             None,
-            Nfacell(
-                78,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    78,
-                ),
-            ),
             Nfacell(
                 78,
             ),
@@ -2611,14 +2535,10 @@
         Rule(
             Some(
                 SelectorId(
-                    44,
+                    40,
                 ),
             ),
-            Some(
-                Nfacell(
-                    78,
-                ),
-            ),
+            None,
             Nfacell(
                 79,
             ),
@@ -2626,7 +2546,7 @@
         Rule(
             Some(
                 SelectorId(
-                    45,
+                    41,
                 ),
             ),
             None,
@@ -2637,7 +2557,7 @@
         Rule(
             Some(
                 SelectorId(
-                    46,
+                    42,
                 ),
             ),
             None,
@@ -2648,7 +2568,7 @@
         Rule(
             Some(
                 SelectorId(
-                    38,
+                    43,
                 ),
             ),
             None,
@@ -2659,7 +2579,7 @@
         Rule(
             Some(
                 SelectorId(
-                    47,
+                    44,
                 ),
             ),
             None,
@@ -2670,7 +2590,7 @@
         Rule(
             Some(
                 SelectorId(
-                    48,
+                    45,
                 ),
             ),
             None,
@@ -2681,7 +2601,7 @@
         Rule(
             Some(
                 SelectorId(
-                    49,
+                    46,
                 ),
             ),
             None,
@@ -2692,7 +2612,7 @@
         Rule(
             Some(
                 SelectorId(
-                    50,
+                    47,
                 ),
             ),
             None,
@@ -2703,7 +2623,7 @@
         Rule(
             Some(
                 SelectorId(
-                    51,
+                    48,
                 ),
             ),
             None,
@@ -2714,7 +2634,7 @@
         Rule(
             Some(
                 SelectorId(
-                    52,
+                    49,
                 ),
             ),
             None,
@@ -2725,7 +2645,7 @@
         Rule(
             Some(
                 SelectorId(
-                    53,
+                    50,
                 ),
             ),
             None,
@@ -2736,7 +2656,7 @@
         Rule(
             Some(
                 SelectorId(
-                    54,
+                    51,
                 ),
             ),
             None,
@@ -2747,7 +2667,7 @@
         Rule(
             Some(
                 SelectorId(
-                    55,
+                    50,
                 ),
             ),
             None,
@@ -2758,10 +2678,14 @@
         Rule(
             Some(
                 SelectorId(
-                    56,
+                    7,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    91,
+                ),
+            ),
             Nfacell(
                 92,
             ),
@@ -2769,7 +2693,7 @@
         Rule(
             Some(
                 SelectorId(
-                    57,
+                    50,
                 ),
             ),
             None,
@@ -2780,10 +2704,14 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    7,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    93,
+                ),
+            ),
             Nfacell(
                 94,
             ),
@@ -2791,10 +2719,14 @@
         Rule(
             Some(
                 SelectorId(
-                    59,
+                    27,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    94,
+                ),
+            ),
             Nfacell(
                 95,
             ),
@@ -2802,7 +2734,7 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    50,
                 ),
             ),
             None,
@@ -2813,7 +2745,7 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    7,
                 ),
             ),
             Some(
@@ -2828,10 +2760,25 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    27,
                 ),
             ),
+            Some(
+                Nfacell(
+                    97,
+                ),
+            ),
+            Nfacell(
+                98,
+            ),
+        ),
+        Rule(
             None,
+            Some(
+                Nfacell(
+                    98,
+                ),
+            ),
             Nfacell(
                 98,
             ),
@@ -2839,7 +2786,7 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    2,
                 ),
             ),
             Some(
@@ -2854,14 +2801,10 @@
         Rule(
             Some(
                 SelectorId(
-                    35,
+                    52,
                 ),
             ),
-            Some(
-                Nfacell(
-                    99,
-                ),
-            ),
+            None,
             Nfacell(
                 100,
             ),
@@ -2869,7 +2812,7 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    53,
                 ),
             ),
             None,
@@ -2878,9 +2821,20 @@
             ),
         ),
         Rule(
+            None,
+            Some(
+                Nfacell(
+                    101,
+                ),
+            ),
+            Nfacell(
+                101,
+            ),
+        ),
+        Rule(
             Some(
                 SelectorId(
-                    15,
+                    33,
                 ),
             ),
             Some(
@@ -2895,14 +2849,10 @@
         Rule(
             Some(
                 SelectorId(
-                    35,
+                    53,
                 ),
             ),
-            Some(
-                Nfacell(
-                    102,
-                ),
-            ),
+            None,
             Nfacell(
                 103,
             ),
@@ -2921,7 +2871,7 @@
         Rule(
             Some(
                 SelectorId(
-                    10,
+                    34,
                 ),
             ),
             Some(
@@ -2936,7 +2886,7 @@
         Rule(
             Some(
                 SelectorId(
-                    60,
+                    53,
                 ),
             ),
             None,
@@ -2945,36 +2895,47 @@
             ),
         ),
         Rule(
+            None,
+            Some(
+                Nfacell(
+                    105,
+                ),
+            ),
+            Nfacell(
+                105,
+            ),
+        ),
+        Rule(
             Some(
                 SelectorId(
-                    61,
+                    30,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    105,
+                ),
+            ),
+            Nfacell(
+                106,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    53,
                 ),
             ),
             None,
             Nfacell(
-                106,
+                107,
             ),
         ),
         Rule(
             None,
             Some(
                 Nfacell(
-                    106,
-                ),
-            ),
-            Nfacell(
-                106,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    41,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    106,
+                    107,
                 ),
             ),
             Nfacell(
@@ -2984,19 +2945,12 @@
         Rule(
             Some(
                 SelectorId(
-                    61,
+                    39,
                 ),
             ),
-            None,
-            Nfacell(
-                108,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    108,
+                    107,
                 ),
             ),
             Nfacell(
@@ -3006,12 +2960,19 @@
         Rule(
             Some(
                 SelectorId(
-                    42,
+                    53,
                 ),
             ),
+            None,
+            Nfacell(
+                109,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    108,
+                    109,
                 ),
             ),
             Nfacell(
@@ -3021,19 +2982,12 @@
         Rule(
             Some(
                 SelectorId(
-                    61,
+                    50,
                 ),
             ),
-            None,
-            Nfacell(
-                110,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    110,
+                    109,
                 ),
             ),
             Nfacell(
@@ -3043,7 +2997,7 @@
         Rule(
             Some(
                 SelectorId(
-                    38,
+                    7,
                 ),
             ),
             Some(
@@ -3058,7 +3012,7 @@
         Rule(
             Some(
                 SelectorId(
-                    61,
+                    53,
                 ),
             ),
             None,
@@ -3080,7 +3034,7 @@
         Rule(
             Some(
                 SelectorId(
-                    47,
+                    50,
                 ),
             ),
             Some(
@@ -3095,19 +3049,12 @@
         Rule(
             Some(
                 SelectorId(
-                    61,
+                    7,
                 ),
             ),
-            None,
-            Nfacell(
-                114,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    114,
+                    113,
                 ),
             ),
             Nfacell(
@@ -3117,7 +3064,7 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    27,
                 ),
             ),
             Some(
@@ -3132,14 +3079,10 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    54,
                 ),
             ),
-            Some(
-                Nfacell(
-                    115,
-                ),
-            ),
+            None,
             Nfacell(
                 116,
             ),
@@ -3147,7 +3090,7 @@
         Rule(
             Some(
                 SelectorId(
-                    61,
+                    54,
                 ),
             ),
             None,
@@ -3169,7 +3112,7 @@
         Rule(
             Some(
                 SelectorId(
-                    58,
+                    55,
                 ),
             ),
             Some(
@@ -3184,14 +3127,10 @@
         Rule(
             Some(
                 SelectorId(
-                    15,
+                    56,
                 ),
             ),
-            Some(
-                Nfacell(
-                    118,
-                ),
-            ),
+            None,
             Nfacell(
                 119,
             ),
@@ -3199,14 +3138,10 @@
         Rule(
             Some(
                 SelectorId(
-                    35,
+                    57,
                 ),
             ),
-            Some(
-                Nfacell(
-                    119,
-                ),
-            ),
+            None,
             Nfacell(
                 120,
             ),
@@ -3214,7 +3149,7 @@
         Rule(
             Some(
                 SelectorId(
-                    62,
+                    58,
                 ),
             ),
             None,
@@ -3225,21 +3160,10 @@
         Rule(
             Some(
                 SelectorId(
-                    62,
+                    59,
                 ),
             ),
             None,
-            Nfacell(
-                122,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    122,
-                ),
-            ),
             Nfacell(
                 122,
             ),
@@ -3247,14 +3171,10 @@
         Rule(
             Some(
                 SelectorId(
-                    63,
+                    60,
                 ),
             ),
-            Some(
-                Nfacell(
-                    122,
-                ),
-            ),
+            None,
             Nfacell(
                 123,
             ),
@@ -3262,7 +3182,7 @@
         Rule(
             Some(
                 SelectorId(
-                    64,
+                    61,
                 ),
             ),
             None,
@@ -3273,7 +3193,7 @@
         Rule(
             Some(
                 SelectorId(
-                    65,
+                    62,
                 ),
             ),
             None,
@@ -3284,7 +3204,7 @@
         Rule(
             Some(
                 SelectorId(
-                    66,
+                    63,
                 ),
             ),
             None,
@@ -3295,7 +3215,7 @@
         Rule(
             Some(
                 SelectorId(
-                    67,
+                    64,
                 ),
             ),
             None,
@@ -3306,7 +3226,7 @@
         Rule(
             Some(
                 SelectorId(
-                    68,
+                    65,
                 ),
             ),
             None,
@@ -3317,7 +3237,7 @@
         Rule(
             Some(
                 SelectorId(
-                    69,
+                    66,
                 ),
             ),
             None,
@@ -3326,12 +3246,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
-                    70,
+                Nfacell(
+                    129,
                 ),
             ),
-            None,
+            Nfacell(
+                129,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    67,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    129,
+                ),
+            ),
             Nfacell(
                 130,
             ),
@@ -3339,7 +3274,7 @@
         Rule(
             Some(
                 SelectorId(
-                    71,
+                    66,
                 ),
             ),
             None,
@@ -3348,12 +3283,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
-                    72,
+                Nfacell(
+                    131,
                 ),
             ),
-            None,
+            Nfacell(
+                131,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    68,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    131,
+                ),
+            ),
             Nfacell(
                 132,
             ),
@@ -3361,7 +3311,7 @@
         Rule(
             Some(
                 SelectorId(
-                    73,
+                    69,
                 ),
             ),
             None,
@@ -3372,21 +3322,10 @@
         Rule(
             Some(
                 SelectorId(
-                    74,
+                    70,
                 ),
             ),
             None,
-            Nfacell(
-                134,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    134,
-                ),
-            ),
             Nfacell(
                 134,
             ),
@@ -3394,12 +3333,19 @@
         Rule(
             Some(
                 SelectorId(
-                    75,
+                    70,
                 ),
             ),
+            None,
+            Nfacell(
+                135,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    134,
+                    135,
                 ),
             ),
             Nfacell(
@@ -3409,19 +3355,12 @@
         Rule(
             Some(
                 SelectorId(
-                    74,
+                    71,
                 ),
             ),
-            None,
-            Nfacell(
-                136,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    136,
+                    135,
                 ),
             ),
             Nfacell(
@@ -3431,12 +3370,19 @@
         Rule(
             Some(
                 SelectorId(
-                    76,
+                    70,
                 ),
             ),
+            None,
+            Nfacell(
+                137,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    136,
+                    137,
                 ),
             ),
             Nfacell(
@@ -3446,10 +3392,14 @@
         Rule(
             Some(
                 SelectorId(
-                    77,
+                    72,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    137,
+                ),
+            ),
             Nfacell(
                 138,
             ),
@@ -3457,7 +3407,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    70,
                 ),
             ),
             None,
@@ -3466,36 +3416,47 @@
             ),
         ),
         Rule(
+            None,
+            Some(
+                Nfacell(
+                    139,
+                ),
+            ),
+            Nfacell(
+                139,
+            ),
+        ),
+        Rule(
             Some(
                 SelectorId(
-                    78,
+                    73,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    139,
+                ),
+            ),
+            Nfacell(
+                140,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    70,
                 ),
             ),
             None,
             Nfacell(
-                140,
+                141,
             ),
         ),
         Rule(
             None,
             Some(
                 Nfacell(
-                    140,
-                ),
-            ),
-            Nfacell(
-                140,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    79,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    140,
+                    141,
                 ),
             ),
             Nfacell(
@@ -3505,10 +3466,14 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    74,
                 ),
             ),
-            None,
+            Some(
+                Nfacell(
+                    141,
+                ),
+            ),
             Nfacell(
                 142,
             ),
@@ -3527,7 +3492,7 @@
         Rule(
             Some(
                 SelectorId(
-                    80,
+                    71,
                 ),
             ),
             Some(
@@ -3542,7 +3507,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    70,
                 ),
             ),
             None,
@@ -3564,7 +3529,7 @@
         Rule(
             Some(
                 SelectorId(
-                    81,
+                    75,
                 ),
             ),
             Some(
@@ -3579,7 +3544,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    70,
                 ),
             ),
             None,
@@ -3601,7 +3566,7 @@
         Rule(
             Some(
                 SelectorId(
-                    82,
+                    75,
                 ),
             ),
             Some(
@@ -3627,7 +3592,7 @@
         Rule(
             Some(
                 SelectorId(
-                    79,
+                    76,
                 ),
             ),
             Some(
@@ -3642,7 +3607,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    70,
                 ),
             ),
             None,
@@ -3664,7 +3629,7 @@
         Rule(
             Some(
                 SelectorId(
-                    83,
+                    67,
                 ),
             ),
             Some(
@@ -3679,7 +3644,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    70,
                 ),
             ),
             None,
@@ -3701,7 +3666,7 @@
         Rule(
             Some(
                 SelectorId(
-                    83,
+                    68,
                 ),
             ),
             Some(
@@ -3714,27 +3679,12 @@
             ),
         ),
         Rule(
-            None,
-            Some(
-                Nfacell(
-                    152,
-                ),
-            ),
-            Nfacell(
-                152,
-            ),
-        ),
-        Rule(
             Some(
                 SelectorId(
-                    84,
+                    77,
                 ),
             ),
-            Some(
-                Nfacell(
-                    152,
-                ),
-            ),
+            None,
             Nfacell(
                 153,
             ),
@@ -3742,7 +3692,7 @@
         Rule(
             Some(
                 SelectorId(
-                    78,
+                    77,
                 ),
             ),
             None,
@@ -3764,7 +3714,7 @@
         Rule(
             Some(
                 SelectorId(
-                    75,
+                    17,
                 ),
             ),
             Some(
@@ -3788,27 +3738,12 @@
             ),
         ),
         Rule(
-            None,
-            Some(
-                Nfacell(
-                    156,
-                ),
-            ),
-            Nfacell(
-                156,
-            ),
-        ),
-        Rule(
             Some(
                 SelectorId(
-                    76,
+                    6,
                 ),
             ),
-            Some(
-                Nfacell(
-                    156,
-                ),
-            ),
+            None,
             Nfacell(
                 157,
             ),
@@ -3816,7 +3751,7 @@
         Rule(
             Some(
                 SelectorId(
-                    85,
+                    79,
                 ),
             ),
             None,
@@ -3827,7 +3762,7 @@
         Rule(
             Some(
                 SelectorId(
-                    85,
+                    79,
                 ),
             ),
             None,
@@ -3849,7 +3784,7 @@
         Rule(
             Some(
                 SelectorId(
-                    24,
+                    80,
                 ),
             ),
             Some(
@@ -3864,7 +3799,7 @@
         Rule(
             Some(
                 SelectorId(
-                    86,
+                    79,
                 ),
             ),
             None,
@@ -3873,12 +3808,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
-                    14,
+                Nfacell(
+                    161,
                 ),
             ),
-            None,
+            Nfacell(
+                161,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    81,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    161,
+                ),
+            ),
             Nfacell(
                 162,
             ),
@@ -3886,7 +3836,7 @@
         Rule(
             Some(
                 SelectorId(
-                    87,
+                    82,
                 ),
             ),
             None,
@@ -3897,7 +3847,7 @@
         Rule(
             Some(
                 SelectorId(
-                    87,
+                    83,
                 ),
             ),
             None,
@@ -3919,7 +3869,7 @@
         Rule(
             Some(
                 SelectorId(
-                    88,
+                    80,
                 ),
             ),
             Some(
@@ -3934,7 +3884,7 @@
         Rule(
             Some(
                 SelectorId(
-                    87,
+                    83,
                 ),
             ),
             None,
@@ -3956,7 +3906,7 @@
         Rule(
             Some(
                 SelectorId(
-                    89,
+                    81,
                 ),
             ),
             Some(
@@ -3971,7 +3921,7 @@
         Rule(
             Some(
                 SelectorId(
-                    90,
+                    83,
                 ),
             ),
             None,
@@ -3980,12 +3930,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
-                    91,
+                Nfacell(
+                    168,
                 ),
             ),
-            None,
+            Nfacell(
+                168,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    81,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    168,
+                ),
+            ),
             Nfacell(
                 169,
             ),
@@ -4004,7 +3969,7 @@
         Rule(
             Some(
                 SelectorId(
-                    88,
+                    84,
                 ),
             ),
             Some(
@@ -4019,21 +3984,10 @@
         Rule(
             Some(
                 SelectorId(
-                    91,
+                    74,
                 ),
             ),
             None,
-            Nfacell(
-                171,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    171,
-                ),
-            ),
             Nfacell(
                 171,
             ),
@@ -4041,12 +3995,19 @@
         Rule(
             Some(
                 SelectorId(
-                    89,
+                    74,
                 ),
             ),
+            None,
+            Nfacell(
+                172,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    171,
+                    172,
                 ),
             ),
             Nfacell(
@@ -4056,19 +4017,12 @@
         Rule(
             Some(
                 SelectorId(
-                    91,
+                    80,
                 ),
             ),
-            None,
-            Nfacell(
-                173,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    173,
+                    172,
                 ),
             ),
             Nfacell(
@@ -4078,14 +4032,10 @@
         Rule(
             Some(
                 SelectorId(
-                    89,
+                    74,
                 ),
             ),
-            Some(
-                Nfacell(
-                    173,
-                ),
-            ),
+            None,
             Nfacell(
                 174,
             ),
@@ -4104,7 +4054,7 @@
         Rule(
             Some(
                 SelectorId(
-                    92,
+                    81,
                 ),
             ),
             Some(
@@ -4119,7 +4069,7 @@
         Rule(
             Some(
                 SelectorId(
-                    82,
+                    85,
                 ),
             ),
             None,
@@ -4130,7 +4080,7 @@
         Rule(
             Some(
                 SelectorId(
-                    82,
+                    86,
                 ),
             ),
             None,
@@ -4139,14 +4089,14 @@
             ),
         ),
         Rule(
-            None,
             Some(
-                Nfacell(
-                    177,
+                SelectorId(
+                    87,
                 ),
             ),
+            None,
             Nfacell(
-                177,
+                178,
             ),
         ),
         Rule(
@@ -4155,35 +4105,31 @@
                     88,
                 ),
             ),
-            Some(
-                Nfacell(
-                    177,
-                ),
-            ),
+            None,
             Nfacell(
-                178,
+                179,
             ),
         ),
         Rule(
             Some(
                 SelectorId(
-                    82,
+                    88,
                 ),
             ),
             None,
             Nfacell(
-                179,
+                180,
             ),
         ),
         Rule(
             None,
             Some(
                 Nfacell(
-                    179,
+                    180,
                 ),
             ),
             Nfacell(
-                179,
+                180,
             ),
         ),
         Rule(
@@ -4194,20 +4140,9 @@
             ),
             Some(
                 Nfacell(
-                    179,
+                    180,
                 ),
             ),
-            Nfacell(
-                180,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    93,
-                ),
-            ),
-            None,
             Nfacell(
                 181,
             ),
@@ -4215,7 +4150,7 @@
         Rule(
             Some(
                 SelectorId(
-                    94,
+                    90,
                 ),
             ),
             None,
@@ -4226,7 +4161,7 @@
         Rule(
             Some(
                 SelectorId(
-                    95,
+                    89,
                 ),
             ),
             None,
@@ -4237,7 +4172,7 @@
         Rule(
             Some(
                 SelectorId(
-                    96,
+                    91,
                 ),
             ),
             None,
@@ -4248,21 +4183,10 @@
         Rule(
             Some(
                 SelectorId(
-                    96,
+                    92,
                 ),
             ),
             None,
-            Nfacell(
-                185,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    185,
-                ),
-            ),
             Nfacell(
                 185,
             ),
@@ -4270,14 +4194,10 @@
         Rule(
             Some(
                 SelectorId(
-                    97,
+                    93,
                 ),
             ),
-            Some(
-                Nfacell(
-                    185,
-                ),
-            ),
+            None,
             Nfacell(
                 186,
             ),
@@ -4285,7 +4205,7 @@
         Rule(
             Some(
                 SelectorId(
-                    98,
+                    94,
                 ),
             ),
             None,
@@ -4296,7 +4216,7 @@
         Rule(
             Some(
                 SelectorId(
-                    97,
+                    95,
                 ),
             ),
             None,
@@ -4307,7 +4227,7 @@
         Rule(
             Some(
                 SelectorId(
-                    99,
+                    96,
                 ),
             ),
             None,
@@ -4318,7 +4238,7 @@
         Rule(
             Some(
                 SelectorId(
-                    100,
+                    97,
                 ),
             ),
             None,
@@ -4329,7 +4249,7 @@
         Rule(
             Some(
                 SelectorId(
-                    101,
+                    98,
                 ),
             ),
             None,
@@ -4340,7 +4260,7 @@
         Rule(
             Some(
                 SelectorId(
-                    102,
+                    99,
                 ),
             ),
             None,
@@ -4351,7 +4271,7 @@
         Rule(
             Some(
                 SelectorId(
-                    103,
+                    100,
                 ),
             ),
             None,
@@ -4362,7 +4282,7 @@
         Rule(
             Some(
                 SelectorId(
-                    104,
+                    101,
                 ),
             ),
             None,
@@ -4373,7 +4293,7 @@
         Rule(
             Some(
                 SelectorId(
-                    105,
+                    102,
                 ),
             ),
             None,
@@ -4384,7 +4304,7 @@
         Rule(
             Some(
                 SelectorId(
-                    106,
+                    103,
                 ),
             ),
             None,
@@ -4395,7 +4315,7 @@
         Rule(
             Some(
                 SelectorId(
-                    107,
+                    104,
                 ),
             ),
             None,
@@ -4406,7 +4326,7 @@
         Rule(
             Some(
                 SelectorId(
-                    108,
+                    105,
                 ),
             ),
             None,
@@ -4417,7 +4337,7 @@
         Rule(
             Some(
                 SelectorId(
-                    109,
+                    106,
                 ),
             ),
             None,
@@ -4428,7 +4348,7 @@
         Rule(
             Some(
                 SelectorId(
-                    110,
+                    107,
                 ),
             ),
             None,
@@ -4439,7 +4359,7 @@
         Rule(
             Some(
                 SelectorId(
-                    111,
+                    35,
                 ),
             ),
             None,
@@ -4450,7 +4370,7 @@
         Rule(
             Some(
                 SelectorId(
-                    112,
+                    108,
                 ),
             ),
             None,
@@ -4461,7 +4381,7 @@
         Rule(
             Some(
                 SelectorId(
-                    113,
+                    109,
                 ),
             ),
             None,
@@ -4472,7 +4392,7 @@
         Rule(
             Some(
                 SelectorId(
-                    114,
+                    110,
                 ),
             ),
             None,
@@ -4483,7 +4403,7 @@
         Rule(
             Some(
                 SelectorId(
-                    115,
+                    111,
                 ),
             ),
             None,
@@ -4494,7 +4414,7 @@
         Rule(
             Some(
                 SelectorId(
-                    43,
+                    76,
                 ),
             ),
             None,
@@ -4505,7 +4425,7 @@
         Rule(
             Some(
                 SelectorId(
-                    116,
+                    112,
                 ),
             ),
             None,
@@ -4516,7 +4436,7 @@
         Rule(
             Some(
                 SelectorId(
-                    117,
+                    2,
                 ),
             ),
             None,
@@ -4527,7 +4447,7 @@
         Rule(
             Some(
                 SelectorId(
-                    118,
+                    113,
                 ),
             ),
             None,
@@ -4538,7 +4458,7 @@
         Rule(
             Some(
                 SelectorId(
-                    119,
+                    114,
                 ),
             ),
             None,
@@ -4549,7 +4469,7 @@
         Rule(
             Some(
                 SelectorId(
-                    84,
+                    115,
                 ),
             ),
             None,
@@ -4560,7 +4480,7 @@
         Rule(
             Some(
                 SelectorId(
-                    120,
+                    116,
                 ),
             ),
             None,
@@ -4571,7 +4491,7 @@
         Rule(
             Some(
                 SelectorId(
-                    10,
+                    117,
                 ),
             ),
             None,
@@ -4582,7 +4502,7 @@
         Rule(
             Some(
                 SelectorId(
-                    121,
+                    118,
                 ),
             ),
             None,
@@ -4593,7 +4513,7 @@
         Rule(
             Some(
                 SelectorId(
-                    122,
+                    75,
                 ),
             ),
             None,
@@ -4604,7 +4524,7 @@
         Rule(
             Some(
                 SelectorId(
-                    123,
+                    119,
                 ),
             ),
             None,
@@ -4615,7 +4535,7 @@
         Rule(
             Some(
                 SelectorId(
-                    124,
+                    120,
                 ),
             ),
             None,
@@ -4626,7 +4546,7 @@
         Rule(
             Some(
                 SelectorId(
-                    125,
+                    121,
                 ),
             ),
             None,
@@ -4637,7 +4557,7 @@
         Rule(
             Some(
                 SelectorId(
-                    126,
+                    122,
                 ),
             ),
             None,
@@ -4648,7 +4568,7 @@
         Rule(
             Some(
                 SelectorId(
-                    127,
+                    67,
                 ),
             ),
             None,
@@ -4659,7 +4579,7 @@
         Rule(
             Some(
                 SelectorId(
-                    128,
+                    123,
                 ),
             ),
             None,
@@ -4670,7 +4590,7 @@
         Rule(
             Some(
                 SelectorId(
-                    129,
+                    124,
                 ),
             ),
             None,
@@ -4681,7 +4601,7 @@
         Rule(
             Some(
                 SelectorId(
-                    83,
+                    23,
                 ),
             ),
             None,
@@ -4692,7 +4612,7 @@
         Rule(
             Some(
                 SelectorId(
-                    130,
+                    125,
                 ),
             ),
             None,
@@ -4703,7 +4623,7 @@
         Rule(
             Some(
                 SelectorId(
-                    131,
+                    125,
                 ),
             ),
             None,
@@ -4712,12 +4632,27 @@
             ),
         ),
         Rule(
+            None,
             Some(
-                SelectorId(
-                    132,
+                Nfacell(
+                    225,
                 ),
             ),
-            None,
+            Nfacell(
+                225,
+            ),
+        ),
+        Rule(
+            Some(
+                SelectorId(
+                    68,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    225,
+                ),
+            ),
             Nfacell(
                 226,
             ),
@@ -4725,7 +4660,7 @@
         Rule(
             Some(
                 SelectorId(
-                    133,
+                    126,
                 ),
             ),
             None,
@@ -4736,7 +4671,7 @@
         Rule(
             Some(
                 SelectorId(
-                    75,
+                    68,
                 ),
             ),
             None,
@@ -4747,7 +4682,7 @@
         Rule(
             Some(
                 SelectorId(
-                    134,
+                    127,
                 ),
             ),
             None,
@@ -4758,7 +4693,7 @@
         Rule(
             Some(
                 SelectorId(
-                    135,
+                    128,
                 ),
             ),
             None,
@@ -4769,7 +4704,7 @@
         Rule(
             Some(
                 SelectorId(
-                    136,
+                    129,
                 ),
             ),
             None,
@@ -4780,7 +4715,7 @@
         Rule(
             Some(
                 SelectorId(
-                    137,
+                    130,
                 ),
             ),
             None,
@@ -4791,7 +4726,7 @@
         Rule(
             Some(
                 SelectorId(
-                    138,
+                    131,
                 ),
             ),
             None,
@@ -4802,21 +4737,10 @@
         Rule(
             Some(
                 SelectorId(
-                    138,
+                    132,
                 ),
             ),
             None,
-            Nfacell(
-                234,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    234,
-                ),
-            ),
             Nfacell(
                 234,
             ),
@@ -4824,14 +4748,10 @@
         Rule(
             Some(
                 SelectorId(
-                    25,
+                    133,
                 ),
             ),
-            Some(
-                Nfacell(
-                    234,
-                ),
-            ),
+            None,
             Nfacell(
                 235,
             ),
@@ -4839,7 +4759,7 @@
         Rule(
             Some(
                 SelectorId(
-                    31,
+                    81,
                 ),
             ),
             None,
@@ -4850,7 +4770,7 @@
         Rule(
             Some(
                 SelectorId(
-                    139,
+                    17,
                 ),
             ),
             None,
@@ -4861,21 +4781,10 @@
         Rule(
             Some(
                 SelectorId(
-                    139,
+                    15,
                 ),
             ),
             None,
-            Nfacell(
-                238,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    238,
-                ),
-            ),
             Nfacell(
                 238,
             ),
@@ -4883,14 +4792,10 @@
         Rule(
             Some(
                 SelectorId(
-                    76,
+                    134,
                 ),
             ),
-            Some(
-                Nfacell(
-                    238,
-                ),
-            ),
+            None,
             Nfacell(
                 239,
             ),
@@ -4898,7 +4803,7 @@
         Rule(
             Some(
                 SelectorId(
-                    140,
+                    135,
                 ),
             ),
             None,
@@ -4909,7 +4814,7 @@
         Rule(
             Some(
                 SelectorId(
-                    76,
+                    136,
                 ),
             ),
             None,
@@ -4920,7 +4825,7 @@
         Rule(
             Some(
                 SelectorId(
-                    141,
+                    137,
                 ),
             ),
             None,
@@ -4931,7 +4836,7 @@
         Rule(
             Some(
                 SelectorId(
-                    142,
+                    138,
                 ),
             ),
             None,
@@ -4942,7 +4847,7 @@
         Rule(
             Some(
                 SelectorId(
-                    143,
+                    139,
                 ),
             ),
             None,
@@ -4953,7 +4858,7 @@
         Rule(
             Some(
                 SelectorId(
-                    144,
+                    140,
                 ),
             ),
             None,
@@ -4964,7 +4869,7 @@
         Rule(
             Some(
                 SelectorId(
-                    145,
+                    141,
                 ),
             ),
             None,
@@ -4972,297 +4877,10 @@
                 246,
             ),
         ),
-        Rule(
-            Some(
-                SelectorId(
-                    146,
-                ),
-            ),
-            None,
-            Nfacell(
-                247,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    247,
-                ),
-            ),
-            Nfacell(
-                247,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    147,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    247,
-                ),
-            ),
-            Nfacell(
-                248,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    248,
-                ),
-            ),
-            Nfacell(
-                248,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    148,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    248,
-                ),
-            ),
-            Nfacell(
-                249,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    149,
-                ),
-            ),
-            None,
-            Nfacell(
-                250,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    150,
-                ),
-            ),
-            None,
-            Nfacell(
-                251,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    151,
-                ),
-            ),
-            None,
-            Nfacell(
-                252,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    152,
-                ),
-            ),
-            None,
-            Nfacell(
-                253,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    153,
-                ),
-            ),
-            None,
-            Nfacell(
-                254,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    154,
-                ),
-            ),
-            None,
-            Nfacell(
-                255,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    147,
-                ),
-            ),
-            None,
-            Nfacell(
-                256,
-            ),
-        ),
-        Rule(
-            None,
-            Some(
-                Nfacell(
-                    256,
-                ),
-            ),
-            Nfacell(
-                256,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    148,
-                ),
-            ),
-            Some(
-                Nfacell(
-                    256,
-                ),
-            ),
-            Nfacell(
-                257,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    89,
-                ),
-            ),
-            None,
-            Nfacell(
-                258,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    24,
-                ),
-            ),
-            None,
-            Nfacell(
-                259,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    25,
-                ),
-            ),
-            None,
-            Nfacell(
-                260,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    155,
-                ),
-            ),
-            None,
-            Nfacell(
-                261,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    156,
-                ),
-            ),
-            None,
-            Nfacell(
-                262,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    157,
-                ),
-            ),
-            None,
-            Nfacell(
-                263,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    158,
-                ),
-            ),
-            None,
-            Nfacell(
-                264,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    159,
-                ),
-            ),
-            None,
-            Nfacell(
-                265,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    160,
-                ),
-            ),
-            None,
-            Nfacell(
-                266,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    161,
-                ),
-            ),
-            None,
-            Nfacell(
-                267,
-            ),
-        ),
-        Rule(
-            Some(
-                SelectorId(
-                    162,
-                ),
-            ),
-            None,
-            Nfacell(
-                268,
-            ),
-        ),
     ],
     start_state: None,
     max_state_id: Nfacell(
-        268,
+        246,
     ),
     accept_states: [
         Nfacell(
@@ -5272,25 +4890,13 @@
             2,
         ),
         Nfacell(
-            3,
-        ),
-        Nfacell(
             4,
-        ),
-        Nfacell(
-            5,
         ),
         Nfacell(
             6,
         ),
         Nfacell(
-            7,
-        ),
-        Nfacell(
             8,
-        ),
-        Nfacell(
-            9,
         ),
         Nfacell(
             10,
@@ -5299,10 +4905,16 @@
             12,
         ),
         Nfacell(
-            14,
+            13,
+        ),
+        Nfacell(
+            15,
         ),
         Nfacell(
             16,
+        ),
+        Nfacell(
+            17,
         ),
         Nfacell(
             18,
@@ -5311,37 +4923,34 @@
             20,
         ),
         Nfacell(
-            21,
-        ),
-        Nfacell(
-            23,
-        ),
-        Nfacell(
-            24,
+            22,
         ),
         Nfacell(
             25,
         ),
         Nfacell(
-            26,
+            27,
         ),
         Nfacell(
-            28,
+            29,
         ),
         Nfacell(
-            30,
+            31,
         ),
         Nfacell(
             32,
         ),
         Nfacell(
+            33,
+        ),
+        Nfacell(
             34,
         ),
         Nfacell(
-            36,
+            35,
         ),
         Nfacell(
-            37,
+            36,
         ),
         Nfacell(
             38,
@@ -5356,16 +4965,10 @@
             41,
         ),
         Nfacell(
-            43,
+            42,
         ),
         Nfacell(
             44,
-        ),
-        Nfacell(
-            45,
-        ),
-        Nfacell(
-            46,
         ),
         Nfacell(
             47,
@@ -5380,31 +4983,37 @@
             54,
         ),
         Nfacell(
-            57,
+            56,
         ),
         Nfacell(
-            59,
+            58,
         ),
         Nfacell(
-            61,
+            60,
         ),
         Nfacell(
-            63,
+            62,
         ),
         Nfacell(
-            65,
+            64,
         ),
         Nfacell(
-            67,
+            66,
         ),
         Nfacell(
-            69,
+            68,
+        ),
+        Nfacell(
+            70,
         ),
         Nfacell(
             71,
         ),
         Nfacell(
-            73,
+            72,
+        ),
+        Nfacell(
+            74,
         ),
         Nfacell(
             75,
@@ -5414,6 +5023,9 @@
         ),
         Nfacell(
             77,
+        ),
+        Nfacell(
+            78,
         ),
         Nfacell(
             79,
@@ -5452,52 +5064,52 @@
             90,
         ),
         Nfacell(
-            91,
-        ),
-        Nfacell(
             92,
-        ),
-        Nfacell(
-            93,
-        ),
-        Nfacell(
-            94,
         ),
         Nfacell(
             95,
         ),
         Nfacell(
-            97,
+            99,
         ),
         Nfacell(
             100,
         ),
         Nfacell(
+            102,
+        ),
+        Nfacell(
             104,
         ),
         Nfacell(
-            105,
+            106,
         ),
         Nfacell(
-            107,
-        ),
-        Nfacell(
-            109,
+            108,
         ),
         Nfacell(
             111,
         ),
         Nfacell(
-            113,
+            115,
         ),
         Nfacell(
             116,
+        ),
+        Nfacell(
+            118,
+        ),
+        Nfacell(
+            119,
         ),
         Nfacell(
             120,
         ),
         Nfacell(
             121,
+        ),
+        Nfacell(
+            122,
         ),
         Nfacell(
             123,
@@ -5518,13 +5130,7 @@
             128,
         ),
         Nfacell(
-            129,
-        ),
-        Nfacell(
             130,
-        ),
-        Nfacell(
-            131,
         ),
         Nfacell(
             132,
@@ -5533,19 +5139,16 @@
             133,
         ),
         Nfacell(
-            135,
+            134,
         ),
         Nfacell(
-            137,
+            136,
         ),
         Nfacell(
             138,
         ),
         Nfacell(
-            139,
-        ),
-        Nfacell(
-            141,
+            140,
         ),
         Nfacell(
             143,
@@ -5560,10 +5163,16 @@
             150,
         ),
         Nfacell(
+            152,
+        ),
+        Nfacell(
             153,
         ),
         Nfacell(
             155,
+        ),
+        Nfacell(
+            156,
         ),
         Nfacell(
             157,
@@ -5573,9 +5182,6 @@
         ),
         Nfacell(
             160,
-        ),
-        Nfacell(
-            161,
         ),
         Nfacell(
             162,
@@ -5590,13 +5196,13 @@
             167,
         ),
         Nfacell(
-            168,
-        ),
-        Nfacell(
             170,
         ),
         Nfacell(
-            172,
+            171,
+        ),
+        Nfacell(
+            173,
         ),
         Nfacell(
             175,
@@ -5605,10 +5211,13 @@
             176,
         ),
         Nfacell(
+            177,
+        ),
+        Nfacell(
             178,
         ),
         Nfacell(
-            180,
+            179,
         ),
         Nfacell(
             181,
@@ -5621,6 +5230,9 @@
         ),
         Nfacell(
             184,
+        ),
+        Nfacell(
+            185,
         ),
         Nfacell(
             186,
@@ -5740,9 +5352,6 @@
             224,
         ),
         Nfacell(
-            225,
-        ),
-        Nfacell(
             226,
         ),
         Nfacell(
@@ -5767,6 +5376,9 @@
             233,
         ),
         Nfacell(
+            234,
+        ),
+        Nfacell(
             235,
         ),
         Nfacell(
@@ -5774,6 +5386,9 @@
         ),
         Nfacell(
             237,
+        ),
+        Nfacell(
+            238,
         ),
         Nfacell(
             239,
@@ -5799,75 +5414,18 @@
         Nfacell(
             246,
         ),
-        Nfacell(
-            249,
-        ),
-        Nfacell(
-            250,
-        ),
-        Nfacell(
-            251,
-        ),
-        Nfacell(
-            252,
-        ),
-        Nfacell(
-            253,
-        ),
-        Nfacell(
-            254,
-        ),
-        Nfacell(
-            255,
-        ),
-        Nfacell(
-            257,
-        ),
-        Nfacell(
-            258,
-        ),
-        Nfacell(
-            259,
-        ),
-        Nfacell(
-            260,
-        ),
-        Nfacell(
-            261,
-        ),
-        Nfacell(
-            262,
-        ),
-        Nfacell(
-            263,
-        ),
-        Nfacell(
-            264,
-        ),
-        Nfacell(
-            265,
-        ),
-        Nfacell(
-            266,
-        ),
-        Nfacell(
-            267,
-        ),
-        Nfacell(
-            268,
-        ),
     ],
 }
-280
+426
 
-thread 'main' panicked at src/quad.rs:374:13:
-assertion `left == right` failed: input is [(false, 58), (true, 1), (false, 1), (true, 1), (false, 1), (true, 1), (false, 174), (true, 2), (false, 30)]
-old_tri is [(IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 6), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 24), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 48), (IZero, 1), (IUnused, 3), (IOne, 1), (IUnused, 8), (IZero, 2), (IUnused, 7), (IZero, 1), (IUnused, 12)]
-old_output is [(OZero, 11), (OFromParent(11), 1), (OZero, 1), (OFromParent(13), 1), (OZero, 1), (OFromParent(15), 1), (OZero, 1), (OFromParent(17), 1), (OZero, 1), (OFromParent(19), 1), (OZero, 2), (OFromParent(22), 1), (OZero, 4), (OFromParent(27), 1), (OZero, 1), (OFromParent(29), 1), (OZero, 1), (OFromParent(31), 1), (OZero, 1), (OFromParent(33), 1), (OZero, 1), (OFromParent(35), 1), (OZero, 6), (OFromParent(42), 1), (OZero, 5), (OFromParent(48), 1), (OZero, 1), (OFromParent(50), 1), (OZero, 2), (OFromParent(53), 1), (OZero, 1), (OFromParent(55), 1), (OFromParent(56), 1), (OZero, 1), (OFromParent(58), 1), (OZero, 1), (OFromParent(60), 1), (OZero, 1), (OFromParent(62), 1), (OZero, 1), (OFromParent(64), 1), (OZero, 1), (OFromParent(66), 1), (OZero, 1), (OFromParent(68), 1), (OZero, 1), (OFromParent(70), 1), (OZero, 1), (OFromParent(72), 1), (OZero, 1), (OFromParent(74), 1), (OZero, 3), (OFromParent(78), 1), (OZero, 24), (OFromParent(103), 1), (OZero, 2), (OFromParent(106), 1), (OZero, 1), (OFromParent(108), 1), (OZero, 1), (OFromParent(110), 1), (OZero, 1), (OFromParent(112), 1), (OZero, 1), (OFromParent(114), 1), (OZero, 2), (OFromParent(117), 1), (OZero, 4), (OFromParent(122), 1), (OZero, 11), (OFromParent(134), 1), (OZero, 1), (OFromParent(136), 1), (OZero, 3), (OFromParent(140), 1), (OZero, 1), (OFromParent(142), 1), (OZero, 1), (OFromParent(144), 1), (OZero, 1), (OFromParent(146), 1), (OFromParent(147), 1), (OZero, 1), (OFromParent(149), 1), (OZero, 1), (OFromParent(151), 1), (OFromParent(152), 1), (OZero, 1), (OFromParent(154), 1), (OZero, 1), (OFromParent(156), 1), (OZero, 2), (OFromParent(159), 1), (OZero, 4), (OFromParent(164), 1), (OZero, 1), (OFromParent(166), 1), (OZero, 2), (OFromParent(169), 1), (OZero, 1), (OFromParent(171), 1), (OZero, 1), (OFromParent(173), 1), (OFromParent(174), 1), (OZero, 2), (OFromParent(177), 1), (OZero, 1), (OFromParent(179), 1), (OZero, 5), (OFromParent(185), 1), (OZero, 36), (OOne, 1), (OZero, 11), (OFromParent(234), 1), (OZero, 3), (OFromParent(238), 1), (OZero, 8), (OFromParent(247), 1), (OFromParent(248), 1), (OZero, 7), (OFromParent(256), 1), (OZero, 12)]
-new_output is [(OZero, 11), (OFromParent(11), 1), (OZero, 1), (OFromParent(13), 1), (OZero, 1), (OFromParent(15), 1), (OZero, 1), (OFromParent(17), 1), (OZero, 1), (OFromParent(19), 1), (OZero, 2), (OFromParent(22), 1), (OZero, 4), (OFromParent(27), 1), (OZero, 1), (OFromParent(29), 1), (OZero, 1), (OFromParent(31), 1), (OZero, 1), (OFromParent(33), 1), (OZero, 1), (OFromParent(35), 1), (OZero, 6), (OFromParent(42), 1), (OZero, 5), (OFromParent(48), 1), (OZero, 1), (OFromParent(50), 1), (OZero, 2), (OFromParent(53), 1), (OZero, 1), (OFromParent(55), 1), (OFromParent(56), 1), (OZero, 1), (OFromParent(58), 1), (OZero, 1), (OFromParent(60), 1), (OZero, 1), (OFromParent(62), 1), (OZero, 1), (OOne, 1), (OZero, 1), (OOne, 1), (OZero, 1), (OFromParent(68), 1), (OZero, 1), (OFromParent(70), 1), (OZero, 1), (OFromParent(72), 1), (OZero, 1), (OFromParent(74), 1), (OZero, 3), (OFromParent(78), 1), (OZero, 24), (OFromParent(103), 1), (OZero, 2), (OFromParent(106), 1), (OZero, 1), (OFromParent(108), 1), (OZero, 1), (OFromParent(110), 1), (OZero, 1), (OFromParent(112), 1), (OZero, 1), (OFromParent(114), 1), (OZero, 2), (OFromParent(117), 1), (OZero, 4), (OFromParent(122), 1), (OZero, 11), (OFromParent(134), 1), (OZero, 1), (OFromParent(136), 1), (OZero, 3), (OFromParent(140), 1), (OZero, 1), (OFromParent(142), 1), (OZero, 1), (OFromParent(144), 1), (OZero, 1), (OFromParent(146), 1), (OFromParent(147), 1), (OZero, 1), (OFromParent(149), 1), (OZero, 1), (OFromParent(151), 1), (OFromParent(152), 1), (OZero, 1), (OFromParent(154), 1), (OZero, 1), (OFromParent(156), 1), (OZero, 2), (OFromParent(159), 1), (OZero, 4), (OFromParent(164), 1), (OZero, 1), (OFromParent(166), 1), (OZero, 2), (OFromParent(169), 1), (OZero, 1), (OFromParent(171), 1), (OZero, 1), (OFromParent(173), 1), (OFromParent(174), 1), (OZero, 2), (OFromParent(177), 1), (OZero, 1), (OFromParent(179), 1), (OZero, 5), (OFromParent(185), 1), (OZero, 36), (OOne, 1), (OZero, 11), (OFromParent(234), 1), (OZero, 3), (OFromParent(238), 1), (OZero, 8), (OFromParent(247), 1), (OFromParent(248), 1), (OZero, 7), (OFromParent(256), 1), (OZero, 12)]
-new_tri is [(IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 6), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 24), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 48), (IZero, 1), (IUnused, 3), (IOne, 1), (IUnused, 8), (IZero, 2), (IUnused, 7), (IZero, 1), (IUnused, 12)]
+thread 'main' panicked at src/quad.rs:375:13:
+assertion `left == right` failed: input is [(false, 53), (true, 1), (false, 1), (true, 1), (false, 1), (true, 1), (false, 166), (true, 2), (false, 21)]
+old_tri is [(IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 6), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 24), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 44), (IOne, 1), (IUnused, 21)]
+old_output is [(OZero, 3), (OFromParent(3), 1), (OZero, 1), (OFromParent(5), 1), (OZero, 1), (OFromParent(7), 1), (OZero, 1), (OFromParent(9), 1), (OZero, 1), (OFromParent(11), 1), (OZero, 2), (OFromParent(14), 1), (OZero, 4), (OFromParent(19), 1), (OZero, 1), (OFromParent(21), 1), (OZero, 1), (OFromParent(23), 1), (OFromParent(24), 1), (OZero, 1), (OFromParent(26), 1), (OZero, 1), (OFromParent(28), 1), (OZero, 1), (OFromParent(30), 1), (OZero, 6), (OFromParent(37), 1), (OZero, 5), (OFromParent(43), 1), (OZero, 1), (OFromParent(45), 1), (OZero, 2), (OFromParent(48), 1), (OZero, 1), (OFromParent(50), 1), (OFromParent(51), 1), (OZero, 1), (OFromParent(53), 1), (OZero, 1), (OFromParent(55), 1), (OZero, 1), (OFromParent(57), 1), (OZero, 1), (OFromParent(59), 1), (OZero, 1), (OFromParent(61), 1), (OZero, 1), (OFromParent(63), 1), (OZero, 1), (OFromParent(65), 1), (OZero, 1), (OFromParent(67), 1), (OZero, 1), (OFromParent(69), 1), (OZero, 3), (OFromParent(73), 1), (OZero, 24), (OFromParent(98), 1), (OZero, 2), (OFromParent(101), 1), (OZero, 1), (OFromParent(103), 1), (OZero, 1), (OFromParent(105), 1), (OZero, 1), (OFromParent(107), 1), (OZero, 1), (OFromParent(109), 1), (OZero, 2), (OFromParent(112), 1), (OZero, 4), (OFromParent(117), 1), (OZero, 11), (OFromParent(129), 1), (OZero, 1), (OFromParent(131), 1), (OZero, 3), (OFromParent(135), 1), (OZero, 1), (OFromParent(137), 1), (OZero, 1), (OFromParent(139), 1), (OZero, 1), (OFromParent(141), 1), (OFromParent(142), 1), (OZero, 1), (OFromParent(144), 1), (OZero, 1), (OFromParent(146), 1), (OFromParent(147), 1), (OZero, 1), (OFromParent(149), 1), (OZero, 1), (OFromParent(151), 1), (OZero, 2), (OFromParent(154), 1), (OZero, 4), (OFromParent(159), 1), (OZero, 1), (OFromParent(161), 1), (OZero, 2), (OFromParent(164), 1), (OZero, 1), (OFromParent(166), 1), (OZero, 1), (OFromParent(168), 1), (OFromParent(169), 1), (OZero, 2), (OFromParent(172), 1), (OZero, 1), (OFromParent(174), 1), (OZero, 5), (OFromParent(180), 1), (OZero, 33), (OOne, 1), (OZero, 10), (OFromParent(225), 1), (OZero, 21)]
+new_output is [(OZero, 3), (OFromParent(3), 1), (OZero, 1), (OFromParent(5), 1), (OZero, 1), (OFromParent(7), 1), (OZero, 1), (OFromParent(9), 1), (OZero, 1), (OFromParent(11), 1), (OZero, 2), (OFromParent(14), 1), (OZero, 4), (OFromParent(19), 1), (OZero, 1), (OFromParent(21), 1), (OZero, 1), (OFromParent(23), 1), (OFromParent(24), 1), (OZero, 1), (OFromParent(26), 1), (OZero, 1), (OFromParent(28), 1), (OZero, 1), (OFromParent(30), 1), (OZero, 6), (OFromParent(37), 1), (OZero, 5), (OFromParent(43), 1), (OZero, 1), (OFromParent(45), 1), (OZero, 2), (OFromParent(48), 1), (OZero, 1), (OFromParent(50), 1), (OFromParent(51), 1), (OZero, 1), (OFromParent(53), 1), (OZero, 1), (OFromParent(55), 1), (OZero, 1), (OFromParent(57), 1), (OZero, 1), (OOne, 1), (OZero, 1), (OOne, 1), (OZero, 1), (OFromParent(63), 1), (OZero, 1), (OFromParent(65), 1), (OZero, 1), (OFromParent(67), 1), (OZero, 1), (OFromParent(69), 1), (OZero, 3), (OFromParent(73), 1), (OZero, 24), (OFromParent(98), 1), (OZero, 2), (OFromParent(101), 1), (OZero, 1), (OFromParent(103), 1), (OZero, 1), (OFromParent(105), 1), (OZero, 1), (OFromParent(107), 1), (OZero, 1), (OFromParent(109), 1), (OZero, 2), (OFromParent(112), 1), (OZero, 4), (OFromParent(117), 1), (OZero, 11), (OFromParent(129), 1), (OZero, 1), (OFromParent(131), 1), (OZero, 3), (OFromParent(135), 1), (OZero, 1), (OFromParent(137), 1), (OZero, 1), (OFromParent(139), 1), (OZero, 1), (OFromParent(141), 1), (OFromParent(142), 1), (OZero, 1), (OFromParent(144), 1), (OZero, 1), (OFromParent(146), 1), (OFromParent(147), 1), (OZero, 1), (OFromParent(149), 1), (OZero, 1), (OFromParent(151), 1), (OZero, 2), (OFromParent(154), 1), (OZero, 4), (OFromParent(159), 1), (OZero, 1), (OFromParent(161), 1), (OZero, 2), (OFromParent(164), 1), (OZero, 1), (OFromParent(166), 1), (OZero, 1), (OFromParent(168), 1), (OFromParent(169), 1), (OZero, 2), (OFromParent(172), 1), (OZero, 1), (OFromParent(174), 1), (OZero, 5), (OFromParent(180), 1), (OZero, 33), (OOne, 1), (OZero, 10), (OFromParent(225), 1), (OZero, 21)]
+new_tri is [(IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 6), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 1), (IOne, 1), (IUnused, 5), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 24), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 11), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 3), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 4), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 1), (IZero, 2), (IUnused, 2), (IZero, 1), (IUnused, 1), (IZero, 1), (IUnused, 5), (IZero, 1), (IUnused, 44), (IOne, 1), (IUnused, 21)]
 
                    
-  left: [IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IZero, IUnused, IOne, IUnused, IOne, IUnused, IOne, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
- right: [IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IZero, IUnused, IOne, IUnused, IOne, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
+  left: [IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IZero, IUnused, IOne, IUnused, IOne, IUnused, IOne, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
+ right: [IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IZero, IUnused, IOne, IUnused, IOne, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IZero, IZero, IUnused, IUnused, IZero, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IZero, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IOne, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused, IUnused]
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

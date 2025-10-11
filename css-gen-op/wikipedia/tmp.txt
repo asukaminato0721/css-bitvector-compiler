@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/naive`
 BEGIN
 .app-badge a -> [3545, 3560]
@@ -10,6 +10,7 @@ BEGIN
 .bookshelf -> [1093, 1251, 1666, 2389, 3265]
 .bookshelf-container -> [1090, 1248, 1663, 2386, 3262]
 .central-featured -> [113]
+.central-featured-lang .link-box strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]
 .central-featured-lang .link-box -> [126, 150, 174, 198, 222, 246, 270, 294, 318, 342]
 .central-featured-lang small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352]
 .central-featured-lang strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]

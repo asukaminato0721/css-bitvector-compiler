@@ -1,12 +1,7 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
-[src/quad.rs:679:5] &nfa = NFA {
+[src/quad.rs:680:5] &nfa = NFA {
     states: {
-        Some(
-            Nfacell(
-                3,
-            ),
-        ),
         Some(
             Nfacell(
                 1,
@@ -14,15 +9,30 @@
         ),
         Some(
             Nfacell(
-                4,
+                2,
             ),
         ),
         Some(
             Nfacell(
-                2,
+                8,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
             ),
         ),
         None,
+        Some(
+            Nfacell(
+                7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                3,
+            ),
+        ),
         Some(
             Nfacell(
                 5,
@@ -31,11 +41,6 @@
         Some(
             Nfacell(
                 6,
-            ),
-        ),
-        Some(
-            Nfacell(
-                7,
             ),
         ),
     },
@@ -74,25 +79,21 @@
             ),
         ),
         Rule(
-            None,
-            Some(
-                Nfacell(
-                    3,
-                ),
-            ),
-            Nfacell(
-                3,
-            ),
-        ),
-        Rule(
             Some(
                 SelectorId(
                     3,
                 ),
             ),
+            None,
+            Nfacell(
+                4,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    3,
+                    4,
                 ),
             ),
             Nfacell(
@@ -117,19 +118,12 @@
         Rule(
             Some(
                 SelectorId(
-                    2,
+                    5,
                 ),
             ),
-            None,
-            Nfacell(
-                6,
-            ),
-        ),
-        Rule(
-            None,
             Some(
                 Nfacell(
-                    6,
+                    5,
                 ),
             ),
             Nfacell(
@@ -139,22 +133,44 @@
         Rule(
             Some(
                 SelectorId(
-                    4,
+                    3,
                 ),
             ),
+            None,
+            Nfacell(
+                7,
+            ),
+        ),
+        Rule(
+            None,
             Some(
                 Nfacell(
-                    6,
+                    7,
                 ),
             ),
             Nfacell(
                 7,
             ),
         ),
+        Rule(
+            Some(
+                SelectorId(
+                    5,
+                ),
+            ),
+            Some(
+                Nfacell(
+                    7,
+                ),
+            ),
+            Nfacell(
+                8,
+            ),
+        ),
     ],
     start_state: None,
     max_state_id: Nfacell(
-        7,
+        8,
     ),
     accept_states: [
         Nfacell(
@@ -164,17 +180,20 @@
             2,
         ),
         Nfacell(
-            5,
+            3,
         ),
         Nfacell(
-            7,
+            6,
+        ),
+        Nfacell(
+            8,
         ),
     ],
 }
-259
+21830
 BEGIN
 #b -> [3]
 #bb -> [4]
 div p -> [2]
 END
-[src/quad.rs:694:5] unsafe { MISS_CNT } = 3
+[src/quad.rs:695:5] unsafe { MISS_CNT } = 3

@@ -1,9 +1,9 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/bit`
-24151377
-104252
-348374
-2388602
+30217128
+124264
+403585
+2805607
 BEGIN
 .app-badge -> [3542, 3557]
 .app-badge a -> [3545, 3560]
@@ -16,6 +16,7 @@ BEGIN
 .central-featured -> [113]
 .central-featured-lang -> [121, 145, 169, 193, 217, 241, 265, 289, 313, 337]
 .central-featured-lang .link-box -> [126, 150, 174, 198, 222, 246, 270, 294, 318, 342]
+.central-featured-lang .link-box strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]
 .central-featured-lang small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352]
 .central-featured-lang strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]
 .central-featured-logo -> [91]
@@ -107,4 +108,4 @@ select -> [409]
 small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352, 3977, 3985, 3992]
 strong -> [106, 133, 157, 181, 205, 229, 253, 277, 301, 325, 349, 3524]
 END
-[src/bit.rs:566:5] unsafe { MISS_CNT } = 1941
+[src/bit.rs:567:5] unsafe { MISS_CNT } = 1941

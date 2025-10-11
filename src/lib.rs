@@ -155,6 +155,8 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
+    let mut skip_next_simple_selector = false;
+    let mut skip_at_rule = false;
 
     #[derive(PartialEq, Eq)]
     enum NextSelector {
@@ -186,9 +188,22 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
             }
         };
 
+        if skip_at_rule {
+            match token {
+                Token::CurlyBracketBlock | Token::Semicolon => {
+                    skip_at_rule = false;
+                    continue;
+                }
+                _ => continue,
+            }
+        }
+
         match token {
             Token::Comment(_) => continue,
             Token::WhiteSpace(_) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                }
                 if current_selector.is_some() && pending_combinator == Combinator::None {
                     pending_combinator = Combinator::Descendant;
                 }
@@ -199,6 +214,36 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
             Token::Delim('>') => {
                 if current_selector.is_some() {
                     pending_combinator = Combinator::Child;
+                }
+            }
+            Token::AtKeyword(_) => {
+                selector_parts.clear();
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                skip_next_simple_selector = false;
+                skip_at_rule = true;
+                continue;
+            }
+            Token::Colon => {
+                skip_next_simple_selector = true;
+                continue;
+            }
+            Token::Function(_) => {
+                if skip_next_simple_selector {
+                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
+                        while nested.next_including_whitespace_and_comments().is_ok() {}
+                        Ok(())
+                    });
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::ParenthesisBlock => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
                 }
             }
             Token::SquareBracketBlock => {
@@ -226,6 +271,11 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 let s = match next_selector {
                     NextSelector::Class => Selector::Class(name.to_string()),
                     NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
@@ -630,6 +680,17 @@ mod tests {
     fn parse_css_handles_attribute_selector() {
         let selectors = parse_css(r#"[data-test="value"] { color: red; }"#);
         assert_eq!(selectors, vec![r#"[data-test="value"]"#.to_string()]);
+    }
+
+    #[test]
+    fn parse_css_skips_media_queries() {
+        let selectors = parse_css(
+            r#"@media screen and (max-width: 600px) {
+                .hidden { display: none; }
+            }
+            .visible { display: block; }"#,
+        );
+        assert_eq!(selectors, vec![".visible".to_string()]);
     }
 
     #[test]

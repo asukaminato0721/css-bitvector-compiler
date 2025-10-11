@@ -87,6 +87,8 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
+    let mut skip_next_simple_selector = false;
+    let mut skip_at_rule = false;
 
     #[derive(PartialEq, Eq)]
     enum NextSelector {
@@ -115,9 +117,22 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
             }
         };
 
+        if skip_at_rule {
+            match token {
+                Token::CurlyBracketBlock | Token::Semicolon => {
+                    skip_at_rule = false;
+                    continue;
+                }
+                _ => continue,
+            }
+        }
+
         match token {
             Token::Comment(_) => continue,
             Token::WhiteSpace(_) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                }
                 if current_selector.is_some() && pending_combinator == Combinator::None {
                     pending_combinator = Combinator::Descendant;
                 }
@@ -128,6 +143,36 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
             Token::Delim('>') => {
                 if current_selector.is_some() {
                     pending_combinator = Combinator::Child;
+                }
+            }
+            Token::AtKeyword(_) => {
+                selector_parts.clear();
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                skip_next_simple_selector = false;
+                skip_at_rule = true;
+                continue;
+            }
+            Token::Colon => {
+                skip_next_simple_selector = true;
+                continue;
+            }
+            Token::Function(_) => {
+                if skip_next_simple_selector {
+                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
+                        while nested.next_including_whitespace_and_comments().is_ok() {}
+                        Ok(())
+                    });
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::ParenthesisBlock => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
                 }
             }
             Token::SquareBracketBlock => {
@@ -144,6 +189,11 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 next_selector = NextSelector::Type;
             }
             Token::IDHash(id) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 if let Some(prev_selector) = current_selector.take() {
                     selector_parts.push(SelectorPart {
                         selector: prev_selector,
@@ -155,6 +205,11 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 let s = match next_selector {
                     NextSelector::Class => Selector::Class(name.to_lowercase().to_string()),
                     NextSelector::Type => Selector::Type(name.to_lowercase().to_string()),
@@ -668,5 +723,25 @@ mod test {
             value: "item-2".into(),
         };
         assert!(!node.matches_simple_selector(&mismatch));
+    }
+
+    #[test]
+    fn parse_css_skips_pseudo_classes() {
+        let rules = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
+        assert_eq!(rules.len(), 1);
+        let CssRule::Complex { parts } = &rules[0];
+        assert_eq!(parts.len(), 3);
+        match (&parts[0].selector, &parts[0].combinator) {
+            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "wrapper"),
+            other => panic!("unexpected first part: {:?}", other),
+        }
+        match (&parts[1].selector, &parts[1].combinator) {
+            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "item"),
+            other => panic!("unexpected second part: {:?}", other),
+        }
+        match (&parts[2].selector, &parts[2].combinator) {
+            (Selector::Type(tag), Combinator::None) => assert_eq!(tag, "strong"),
+            other => panic!("unexpected third part: {:?}", other),
+        }
     }
 }
