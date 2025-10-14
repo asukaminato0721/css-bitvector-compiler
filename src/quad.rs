@@ -172,7 +172,7 @@ impl DOM {
             if parent_node.recursive_dirty {
                 break; // 如果父节点已经设置了recursive_dirty，停止传播
             }
-            parent_node.recursive_dirty = true;;
+            parent_node.recursive_dirty = true;
             current_idx = parent_node.parent;
         }
     }
