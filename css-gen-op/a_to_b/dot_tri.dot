@@ -7,5 +7,5 @@ digraph NFA {
   1 [label="1"];
   { node [shape=doublecircle]; 1 }
   0 -> 0 [label="*"];
-  0 -> 1 [label="a"];
+  0 -> 1 [label=".a"];
 }

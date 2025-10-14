@@ -1,32 +1,33 @@
-[tri-debug] recompute start node 1 <a>; input=00
-[tri-debug] node 1 <a> visit: dirty=node_changed input=00 cached_output=01 tri=__
-[tri-debug] node 1 <a> recompute (node_changed) -> output=01 (prev=01) tri=__ (prev=__)
-[tri-debug] node 1 <a> marking 1 children input_changed
-[tri-debug] node 1 <a> child node 2 <a> marked input_changed -> dirty=node_changed
-[tri-debug] node 1 <a> propagating to 1 children
-[tri-debug] node 2 <a> visit: dirty=node_changed input=01 cached_output=01 tri=__
-[tri-debug] node 2 <a> recompute (node_changed) -> output=01 (prev=01) tri=__ (prev=__)
-[tri-debug] node 2 <a> marking 0 children input_changed
-[tri-debug] node 2 <a> propagating to 0 children
-[tri-debug] node 2 <a> finished; dirty flags cleared
-[tri-debug] node 1 <a> finished; dirty flags cleared
-[tri-debug] recompute done node 1 <a>
-131519
-[tri-debug] recompute start node 1 <b>; input=00
-[tri-debug] node 1 <b> visit: dirty=node_changed input=00 cached_output=00 tri=__
-[tri-debug] node 1 <b> recompute (node_changed) -> output=00 (prev=00) tri=__ (prev=__)
-[tri-debug] node 1 <b> marking 1 children input_changed
-[tri-debug] node 1 <b> child node 2 <a> marked input_changed -> dirty=node_changed
-[tri-debug] node 1 <b> propagating to 1 children
-[tri-debug] node 2 <a> visit: dirty=node_changed input=00 cached_output=01 tri=__
-[tri-debug] node 2 <a> recompute (node_changed) -> output=01 (prev=01) tri=__ (prev=__)
-[tri-debug] node 2 <a> marking 0 children input_changed
-[tri-debug] node 2 <a> propagating to 0 children
-[tri-debug] node 2 <a> finished; dirty flags cleared
-[tri-debug] node 1 <b> finished; dirty flags cleared
-[tri-debug] recompute done node 1 <b>
-72927
+[tri-debug] recompute start node 1 <div .a>; input=00
+[tri-debug] node 1 <div .a> visit: dirty=node_changed input=00 cached_output=01 tri=__
+[tri-debug] node 1 <div .a> recompute (node_changed) -> output=01 (prev=01) tri=__ (prev=__)
+[tri-debug] node 1 <div .a> marking 1 children input_changed
+[tri-debug] node 1 <div .a> child node 2 <div .a> marked input_changed -> dirty=node_changed
+[tri-debug] node 1 <div .a> propagating to 1 children
+[tri-debug] node 2 <div .a> visit: dirty=node_changed input=01 cached_output=01 tri=__
+[tri-debug] node 2 <div .a> recompute (node_changed) -> output=01 (prev=01) tri=__ (prev=__)
+[tri-debug] node 2 <div .a> marking 0 children input_changed
+[tri-debug] node 2 <div .a> propagating to 0 children
+[tri-debug] node 2 <div .a> finished; dirty flags cleared
+[tri-debug] node 1 <div .a> finished; dirty flags cleared
+[tri-debug] recompute done node 1 <div .a>
+93219
+[tri-debug] recompute start node 1 <div .b>; input=00
+[tri-debug] node 1 <div .b> visit: dirty=node_changed input=00 cached_output=01 tri=__
+[tri-debug] node 1 <div .b> recompute (node_changed) -> output=00 (prev=01) tri=__ (prev=__)
+[tri-debug] node 1 <div .b> marking 1 children input_changed
+[tri-debug] node 1 <div .b> child node 2 <div .a> marked input_changed -> dirty=input_changed
+[tri-debug] node 1 <div .b> propagating to 1 children
+[tri-debug] node 2 <div .a> visit: dirty=input_changed input=00 cached_output=01 tri=__
+[tri-debug] node 2 <div .a> input_changed need_recompute=false tri=__
+[tri-debug] node 2 <div .a> input reused; output stays 01 tri stays __
+[tri-debug] node 2 <div .a> children remain clean
+[tri-debug] node 2 <div .a> propagating to 0 children
+[tri-debug] node 2 <div .a> finished; dirty flags cleared
+[tri-debug] node 1 <div .b> finished; dirty flags cleared
+[tri-debug] recompute done node 1 <div .b>
+77570
 BEGIN
-a -> [2]
+.a -> [2]
 END
-[src/tri.rs:848:5] unsafe { MISS_CNT } = 4
+[src/tri.rs:848:5] unsafe { MISS_CNT } = 3
