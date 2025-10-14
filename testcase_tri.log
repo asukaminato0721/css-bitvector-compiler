@@ -2,9 +2,9 @@
 [tri-debug] node 1 <div .aa> visit: dirty=node_changed input=000000000 cached_output=000010010 tri=____0__0_
 [tri-debug] node 1 <div .aa> recompute (node_changed) -> output=000110010 (prev=000010010) tri=____0__0_ (prev=____0__0_)
 [tri-debug] node 1 <div .aa> marking 3 children input_changed
-[tri-debug] node 1 <div .aa> child node 2 <p> marked input_changed
-[tri-debug] node 1 <div .aa> child node 4 <span #bb> marked input_changed
-[tri-debug] node 1 <div .aa> child node 3 <span #b> marked input_changed
+[tri-debug] node 1 <div .aa> child node 2 <p> marked input_changed -> dirty=node_changed
+[tri-debug] node 1 <div .aa> child node 4 <span #bb> marked input_changed -> dirty=node_changed
+[tri-debug] node 1 <div .aa> child node 3 <span #b> marked input_changed -> dirty=node_changed
 [tri-debug] node 1 <div .aa> propagating to 3 children
 [tri-debug] node 2 <p> visit: dirty=node_changed input=000110010 cached_output=000000000 tri=____00_0_
 [tri-debug] node 2 <p> recompute (node_changed) -> output=000010011 (prev=000000000) tri=____10_1_ (prev=____00_0_)
@@ -23,11 +23,11 @@
 [tri-debug] node 3 <span #b> finished; dirty flags cleared
 [tri-debug] node 1 <div .aa> finished; dirty flags cleared
 [tri-debug] recompute done node 1 <div .aa>
-323281
+708755
 BEGIN
 #b -> [3]
 #bb -> [4]
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/tri.rs:846:5] unsafe { MISS_CNT } = 4
+[src/tri.rs:848:5] unsafe { MISS_CNT } = 4

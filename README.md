@@ -12,3 +12,9 @@ put into css-gen-op folder
 ```
 ./run.sh
 ```
+
+to see steps
+
+```
+./debug.sh
+```

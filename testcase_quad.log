@@ -2,9 +2,9 @@
 [quad-debug] node 1 <div .aa> visit: dirty=node_changed input=000000000 cached_input=____0____ cached_output=0,0,0,0,1,0,0,1,0
 [quad-debug] node 1 <div .aa> recompute (node_changed) -> input=_________ (prev=____0____) output=0,0,0,1,1,0,0,1,0 (prev=0,0,0,0,1,0,0,1,0)
 [quad-debug] node 1 <div .aa> marking 3 children input_changed
-[quad-debug] node 1 <div .aa> child node 2 <p> marked input_changed
-[quad-debug] node 1 <div .aa> child node 4 <span #bb> marked input_changed
-[quad-debug] node 1 <div .aa> child node 3 <span #b> marked input_changed
+[quad-debug] node 1 <div .aa> child node 2 <p> marked input_changed -> dirty=node_changed
+[quad-debug] node 1 <div .aa> child node 4 <span #bb> marked input_changed -> dirty=node_changed
+[quad-debug] node 1 <div .aa> child node 3 <span #b> marked input_changed -> dirty=node_changed
 [quad-debug] node 1 <div .aa> propagating to 3 children with materialized output=000110010
 [quad-debug] node 2 <p> visit: dirty=node_changed input=000110010 cached_input=____00_0_ cached_output=0,0,0,0,P4,0,0,P7,0
 [quad-debug] node 2 <p> recompute (node_changed) -> input=____10_1_ (prev=____00_0_) output=0,0,0,0,P4,0,0,P7,1 (prev=0,0,0,0,P4,0,0,P7,0)
@@ -23,11 +23,11 @@
 [quad-debug] node 3 <span #b> finished; dirty flags cleared
 [quad-debug] node 1 <div .aa> finished; dirty flags cleared
 [quad-debug] recompute done node 1 <div .aa>
-292102
+296708
 BEGIN
 #b -> [3]
 #bb -> [4]
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/quad.rs:945:5] unsafe { MISS_CNT } = 4
+[src/quad.rs:947:5] unsafe { MISS_CNT } = 4

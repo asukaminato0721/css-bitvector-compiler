@@ -450,16 +450,21 @@ impl DOM {
                     let node = self.nodes.get_mut(&node_idx).unwrap();
                     node.output_state = new_output_state.clone();
                 }
+                let mut marked_children = Vec::new();
                 for &child_idx in &child_indices_snapshot {
-                    {
+                    let dirty_state = {
                         let child = self.nodes.get_mut(&child_idx).unwrap();
                         child.set_dirty();
-                    }
+                        child.dirty
+                    };
+                    marked_children.push((child_idx, dirty_state));
+                }
+                for (child_idx, dirty_state) in marked_children {
                     let child_desc = self.describe_node(child_idx);
                     debug_log(|| {
                         format!(
-                            "{} child {} marked dirty due to parent change",
-                            node_descriptor, child_desc
+                            "{} child {} marked dirty due to parent change -> dirty={}",
+                            node_descriptor, child_desc, dirty_state
                         )
                     });
                 }

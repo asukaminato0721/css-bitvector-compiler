@@ -647,15 +647,17 @@ new_tri is {:?}
             });
             let mut marked_children = Vec::new();
             for &child_idx in &child_indices_snapshot {
-                self.nodes.get_mut(&child_idx).unwrap().mark_input_changed();
-                marked_children.push(child_idx);
+                let child = self.nodes.get_mut(&child_idx).unwrap();
+                child.mark_input_changed();
+                let dirty_label = child.dirty.label();
+                marked_children.push((child_idx, dirty_label));
             }
-            for child_idx in marked_children {
+            for (child_idx, dirty_label) in marked_children {
                 let child_desc = self.describe_node(child_idx);
                 debug_log(|| {
                     format!(
-                        "{} child {} marked input_changed",
-                        node_descriptor, child_desc
+                        "{} child {} marked input_changed -> dirty={}",
+                        node_descriptor, child_desc, dirty_label
                     )
                 });
             }
