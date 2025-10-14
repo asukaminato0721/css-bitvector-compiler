@@ -1,33 +1,30 @@
-[bit-debug] recompute start node 1 <div .aa>; input=100000000
-[bit-debug] node 1 <div .aa> visit: dirty=true input=100000000
-[bit-debug] node 1 <div .aa> recompute -> output=000110010 (prev=000010010)
-[bit-debug] node 1 <div .aa> output changed; marking 3 children dirty
-[bit-debug] node 1 <div .aa> child node 2 <p> marked dirty due to parent change -> dirty=true
-[bit-debug] node 1 <div .aa> child node 4 <span #bb> marked dirty due to parent change -> dirty=true
-[bit-debug] node 1 <div .aa> child node 3 <span #b> marked dirty due to parent change -> dirty=true
-[bit-debug] node 1 <div .aa> propagating to 3 children
-[bit-debug] node 2 <p> visit: dirty=true input=000110010
-[bit-debug] node 2 <p> recompute -> output=000010011 (prev=000000000)
-[bit-debug] node 2 <p> output changed; marking 0 children dirty
-[bit-debug] node 2 <p> propagating to 0 children
-[bit-debug] node 2 <p> finished; dirty flags cleared
-[bit-debug] node 4 <span #bb> visit: dirty=true input=000110010
-[bit-debug] node 4 <span #bb> recompute -> output=001010010 (prev=001000000)
-[bit-debug] node 4 <span #bb> output changed; marking 0 children dirty
-[bit-debug] node 4 <span #bb> propagating to 0 children
-[bit-debug] node 4 <span #bb> finished; dirty flags cleared
-[bit-debug] node 3 <span #b> visit: dirty=true input=000110010
-[bit-debug] node 3 <span #b> recompute -> output=010010010 (prev=010000000)
-[bit-debug] node 3 <span #b> output changed; marking 0 children dirty
-[bit-debug] node 3 <span #b> propagating to 0 children
-[bit-debug] node 3 <span #b> finished; dirty flags cleared
-[bit-debug] node 1 <div .aa> finished; dirty flags cleared
-[bit-debug] recompute done node 1 <div .aa>
-261577
+[bit-debug] recompute start node 1 <a>; input=10
+[bit-debug] node 1 <a> visit: dirty=true input=10
+[bit-debug] node 1 <a> recompute -> output=01 (prev=01)
+[bit-debug] node 1 <a> output unchanged; children remain clean
+[bit-debug] node 1 <a> propagating to 1 children
+[bit-debug] node 2 <a> visit: dirty=true input=01
+[bit-debug] node 2 <a> recompute -> output=01 (prev=01)
+[bit-debug] node 2 <a> output unchanged; children remain clean
+[bit-debug] node 2 <a> propagating to 0 children
+[bit-debug] node 2 <a> finished; dirty flags cleared
+[bit-debug] node 1 <a> finished; dirty flags cleared
+[bit-debug] recompute done node 1 <a>
+120950
+[bit-debug] recompute start node 1 <b>; input=10
+[bit-debug] node 1 <b> visit: dirty=true input=10
+[bit-debug] node 1 <b> recompute -> output=00 (prev=00)
+[bit-debug] node 1 <b> output unchanged; children remain clean
+[bit-debug] node 1 <b> propagating to 1 children
+[bit-debug] node 2 <a> visit: dirty=true input=00
+[bit-debug] node 2 <a> recompute -> output=01 (prev=01)
+[bit-debug] node 2 <a> output unchanged; children remain clean
+[bit-debug] node 2 <a> propagating to 0 children
+[bit-debug] node 2 <a> finished; dirty flags cleared
+[bit-debug] node 1 <b> finished; dirty flags cleared
+[bit-debug] recompute done node 1 <b>
+64795
 BEGIN
-#b -> [3]
-#bb -> [4]
-[class="aa"] -> [1]
-div p -> [2]
+a -> [2]
 END
 [src/bit.rs:708:5] unsafe { MISS_CNT } = 4

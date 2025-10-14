@@ -1,0 +1,4 @@
+{"name": "init", "time": 0, "node": {"id": 1, "name": "a", "type": "element", "attributes": {}, "children": [{"id": 2, "name": "a", "type": "element", "attributes": {}, "children": []}]}}
+{"name": "recalculate", "time": 1}
+{"name": "init", "time": 2, "node": {"id": 1, "name": "b", "type": "element", "attributes": {}, "children": [{"id": 2, "name": "a", "type": "element", "attributes": {}, "children": []}]}}
+{"name": "recalculate", "time": 3}
