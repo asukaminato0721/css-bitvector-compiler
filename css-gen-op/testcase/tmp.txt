@@ -1,7 +1,7 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/naive`
 BEGIN
-[class="aa"] -> [2]
+[class="aa"] -> [1]
 #b -> [3]
 #bb -> [4]
 div p -> [2]

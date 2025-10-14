@@ -217,7 +217,7 @@ impl DOM {
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
-            debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
+            assert_eq!(parent.children.last().copied(), Some(new_node_idx));
             parent.children.pop();
             parent.children.insert(insert_pos, new_node_idx);
         }
@@ -413,7 +413,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
                     .and_then(|node| node.attributes.get(&key.to_lowercase()))
                     .cloned()
                     .unwrap_or_default();
-                debug_assert_eq!(
+                assert_eq!(
                     actual, expected,
                     "existing attribute value mismatch for key {} at path {:?}",
                     key, path
@@ -443,7 +443,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
                     .and_then(|node| node.attributes.get(&key.to_lowercase()))
                     .cloned()
                     .unwrap_or_default();
-                debug_assert_eq!(
+                assert_eq!(
                     actual, expected,
                     "existing attribute value mismatch for key {} at path {:?}",
                     key, path

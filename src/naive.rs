@@ -575,7 +575,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
                     .get(&key.to_lowercase())
                     .cloned()
                     .unwrap_or_default();
-                debug_assert_eq!(
+                assert_eq!(
                     actual, expected,
                     "existing attribute value mismatch for key {} at path {:?}",
                     key, path
@@ -602,7 +602,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
                     .get(&key.to_lowercase())
                     .cloned()
                     .unwrap_or_default();
-                debug_assert_eq!(
+                assert_eq!(
                     actual, expected,
                     "existing attribute value mismatch for key {} at path {:?}",
                     key, path

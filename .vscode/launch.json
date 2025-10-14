@@ -1,0 +1,80 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug bit (WEBSITE_NAME=testcase)",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin",
+                    "bit"
+                ],
+                "filter": {
+                    "name": "bit",
+                    "kind": "bin"
+                }
+            },
+            "env": {
+                "WEBSITE_NAME": "testcase"
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "name": "Debug tri (WEBSITE_NAME=testcase)",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin",
+                    "tri"
+                ],
+                "filter": {
+                    "name": "tri",
+                    "kind": "bin"
+                }
+            },
+            "env": {
+                "WEBSITE_NAME": "testcase"
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "name": "Debug quad (WEBSITE_NAME=testcase)",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin",
+                    "quad"
+                ],
+                "filter": {
+                    "name": "quad",
+                    "kind": "bin"
+                }
+            },
+            "env": {
+                "WEBSITE_NAME": "testcase"
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "sourceLanguages": [
+                "rust"
+            ]
+        }
+    ]
+}

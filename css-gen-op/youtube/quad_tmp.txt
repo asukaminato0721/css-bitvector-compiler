@@ -1,86 +1,7 @@
-warning: unnecessary trailing semicolon
-   --> src/quad.rs:175:48
-    |
-175 |             parent_node.recursive_dirty = true;;
-    |                                                ^ help: remove this semicolon
-    |
-    = note: `#[warn(redundant_semicolons)]` on by default
-
-warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
 [src/quad.rs:714:5] &nfa = NFA {
     states: {
-        Some(
-            Nfacell(
-                94,
-            ),
-        ),
-        Some(
-            Nfacell(
-                73,
-            ),
-        ),
-        Some(
-            Nfacell(
-                15,
-            ),
-        ),
-        Some(
-            Nfacell(
-                21,
-            ),
-        ),
-        Some(
-            Nfacell(
-                37,
-            ),
-        ),
-        Some(
-            Nfacell(
-                58,
-            ),
-        ),
-        Some(
-            Nfacell(
-                72,
-            ),
-        ),
-        Some(
-            Nfacell(
-                6,
-            ),
-        ),
-        Some(
-            Nfacell(
-                16,
-            ),
-        ),
-        Some(
-            Nfacell(
-                18,
-            ),
-        ),
-        Some(
-            Nfacell(
-                97,
-            ),
-        ),
-        Some(
-            Nfacell(
-                3,
-            ),
-        ),
-        Some(
-            Nfacell(
-                36,
-            ),
-        ),
-        Some(
-            Nfacell(
-                69,
-            ),
-        ),
         Some(
             Nfacell(
                 76,
@@ -88,42 +9,12 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                10,
+                26,
             ),
         ),
         Some(
             Nfacell(
-                43,
-            ),
-        ),
-        Some(
-            Nfacell(
-                32,
-            ),
-        ),
-        Some(
-            Nfacell(
-                2,
-            ),
-        ),
-        Some(
-            Nfacell(
-                68,
-            ),
-        ),
-        Some(
-            Nfacell(
-                23,
-            ),
-        ),
-        Some(
-            Nfacell(
-                70,
-            ),
-        ),
-        Some(
-            Nfacell(
-                100,
+                14,
             ),
         ),
         Some(
@@ -133,97 +24,12 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                81,
+                58,
             ),
         ),
         Some(
             Nfacell(
-                47,
-            ),
-        ),
-        Some(
-            Nfacell(
-                42,
-            ),
-        ),
-        Some(
-            Nfacell(
-                83,
-            ),
-        ),
-        Some(
-            Nfacell(
-                35,
-            ),
-        ),
-        Some(
-            Nfacell(
-                101,
-            ),
-        ),
-        Some(
-            Nfacell(
-                92,
-            ),
-        ),
-        Some(
-            Nfacell(
-                8,
-            ),
-        ),
-        Some(
-            Nfacell(
-                96,
-            ),
-        ),
-        Some(
-            Nfacell(
-                19,
-            ),
-        ),
-        Some(
-            Nfacell(
-                71,
-            ),
-        ),
-        Some(
-            Nfacell(
-                75,
-            ),
-        ),
-        Some(
-            Nfacell(
-                84,
-            ),
-        ),
-        Some(
-            Nfacell(
-                49,
-            ),
-        ),
-        Some(
-            Nfacell(
-                25,
-            ),
-        ),
-        Some(
-            Nfacell(
-                77,
-            ),
-        ),
-        Some(
-            Nfacell(
-                74,
-            ),
-        ),
-        Some(
-            Nfacell(
-                52,
-            ),
-        ),
-        Some(
-            Nfacell(
-                55,
+                24,
             ),
         ),
         Some(
@@ -233,62 +39,22 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                39,
-            ),
-        ),
-        Some(
-            Nfacell(
-                103,
-            ),
-        ),
-        Some(
-            Nfacell(
-                95,
-            ),
-        ),
-        Some(
-            Nfacell(
                 50,
             ),
         ),
         Some(
             Nfacell(
-                7,
+                74,
             ),
         ),
         Some(
             Nfacell(
-                33,
+                46,
             ),
         ),
         Some(
             Nfacell(
-                11,
-            ),
-        ),
-        Some(
-            Nfacell(
-                60,
-            ),
-        ),
-        Some(
-            Nfacell(
-                13,
-            ),
-        ),
-        Some(
-            Nfacell(
-                34,
-            ),
-        ),
-        Some(
-            Nfacell(
-                12,
-            ),
-        ),
-        Some(
-            Nfacell(
-                51,
+                81,
             ),
         ),
         Some(
@@ -298,27 +64,22 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                85,
+                35,
             ),
         ),
         Some(
             Nfacell(
-                86,
+                1,
             ),
         ),
         Some(
             Nfacell(
-                48,
+                56,
             ),
         ),
         Some(
             Nfacell(
-                63,
-            ),
-        ),
-        Some(
-            Nfacell(
-                88,
+                38,
             ),
         ),
         Some(
@@ -328,7 +89,47 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                79,
+                41,
+            ),
+        ),
+        Some(
+            Nfacell(
+                80,
+            ),
+        ),
+        Some(
+            Nfacell(
+                83,
+            ),
+        ),
+        Some(
+            Nfacell(
+                12,
+            ),
+        ),
+        Some(
+            Nfacell(
+                69,
+            ),
+        ),
+        Some(
+            Nfacell(
+                44,
+            ),
+        ),
+        Some(
+            Nfacell(
+                19,
+            ),
+        ),
+        Some(
+            Nfacell(
+                47,
+            ),
+        ),
+        Some(
+            Nfacell(
+                73,
             ),
         ),
         Some(
@@ -336,17 +137,32 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
                 45,
             ),
         ),
-        Some(
-            Nfacell(
-                61,
-            ),
-        ),
-        Some(
-            Nfacell(
-                90,
-            ),
-        ),
         None,
+        Some(
+            Nfacell(
+                60,
+            ),
+        ),
+        Some(
+            Nfacell(
+                65,
+            ),
+        ),
+        Some(
+            Nfacell(
+                71,
+            ),
+        ),
+        Some(
+            Nfacell(
+                92,
+            ),
+        ),
+        Some(
+            Nfacell(
+                23,
+            ),
+        ),
         Some(
             Nfacell(
                 5,
@@ -359,92 +175,7 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                67,
-            ),
-        ),
-        Some(
-            Nfacell(
-                98,
-            ),
-        ),
-        Some(
-            Nfacell(
-                4,
-            ),
-        ),
-        Some(
-            Nfacell(
-                27,
-            ),
-        ),
-        Some(
-            Nfacell(
-                31,
-            ),
-        ),
-        Some(
-            Nfacell(
-                46,
-            ),
-        ),
-        Some(
-            Nfacell(
-                93,
-            ),
-        ),
-        Some(
-            Nfacell(
-                102,
-            ),
-        ),
-        Some(
-            Nfacell(
-                91,
-            ),
-        ),
-        Some(
-            Nfacell(
-                104,
-            ),
-        ),
-        Some(
-            Nfacell(
-                105,
-            ),
-        ),
-        Some(
-            Nfacell(
-                80,
-            ),
-        ),
-        Some(
-            Nfacell(
-                89,
-            ),
-        ),
-        Some(
-            Nfacell(
-                1,
-            ),
-        ),
-        Some(
-            Nfacell(
-                17,
-            ),
-        ),
-        Some(
-            Nfacell(
-                40,
-            ),
-        ),
-        Some(
-            Nfacell(
-                53,
-            ),
-        ),
-        Some(
-            Nfacell(
-                54,
+                39,
             ),
         ),
         Some(
@@ -454,47 +185,27 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                99,
-            ),
-        ),
-        Some(
-            Nfacell(
-                28,
-            ),
-        ),
-        Some(
-            Nfacell(
-                14,
-            ),
-        ),
-        Some(
-            Nfacell(
-                78,
-            ),
-        ),
-        Some(
-            Nfacell(
                 106,
             ),
         ),
         Some(
             Nfacell(
-                62,
+                21,
             ),
         ),
         Some(
             Nfacell(
-                65,
+                105,
             ),
         ),
         Some(
             Nfacell(
-                24,
+                49,
             ),
         ),
         Some(
             Nfacell(
-                20,
+                48,
             ),
         ),
         Some(
@@ -504,32 +215,37 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
-                26,
+                34,
             ),
         ),
         Some(
             Nfacell(
-                29,
+                20,
             ),
         ),
         Some(
             Nfacell(
-                38,
+                78,
             ),
         ),
         Some(
             Nfacell(
-                41,
+                32,
             ),
         ),
         Some(
             Nfacell(
-                44,
+                27,
             ),
         ),
         Some(
             Nfacell(
-                56,
+                70,
+            ),
+        ),
+        Some(
+            Nfacell(
+                97,
             ),
         ),
         Some(
@@ -539,7 +255,282 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
         Some(
             Nfacell(
+                42,
+            ),
+        ),
+        Some(
+            Nfacell(
                 64,
+            ),
+        ),
+        Some(
+            Nfacell(
+                68,
+            ),
+        ),
+        Some(
+            Nfacell(
+                52,
+            ),
+        ),
+        Some(
+            Nfacell(
+                2,
+            ),
+        ),
+        Some(
+            Nfacell(
+                16,
+            ),
+        ),
+        Some(
+            Nfacell(
+                61,
+            ),
+        ),
+        Some(
+            Nfacell(
+                25,
+            ),
+        ),
+        Some(
+            Nfacell(
+                89,
+            ),
+        ),
+        Some(
+            Nfacell(
+                94,
+            ),
+        ),
+        Some(
+            Nfacell(
+                91,
+            ),
+        ),
+        Some(
+            Nfacell(
+                37,
+            ),
+        ),
+        Some(
+            Nfacell(
+                102,
+            ),
+        ),
+        Some(
+            Nfacell(
+                67,
+            ),
+        ),
+        Some(
+            Nfacell(
+                11,
+            ),
+        ),
+        Some(
+            Nfacell(
+                63,
+            ),
+        ),
+        Some(
+            Nfacell(
+                3,
+            ),
+        ),
+        Some(
+            Nfacell(
+                51,
+            ),
+        ),
+        Some(
+            Nfacell(
+                77,
+            ),
+        ),
+        Some(
+            Nfacell(
+                84,
+            ),
+        ),
+        Some(
+            Nfacell(
+                85,
+            ),
+        ),
+        Some(
+            Nfacell(
+                54,
+            ),
+        ),
+        Some(
+            Nfacell(
+                13,
+            ),
+        ),
+        Some(
+            Nfacell(
+                36,
+            ),
+        ),
+        Some(
+            Nfacell(
+                75,
+            ),
+        ),
+        Some(
+            Nfacell(
+                86,
+            ),
+        ),
+        Some(
+            Nfacell(
+                90,
+            ),
+        ),
+        Some(
+            Nfacell(
+                88,
+            ),
+        ),
+        Some(
+            Nfacell(
+                18,
+            ),
+        ),
+        Some(
+            Nfacell(
+                40,
+            ),
+        ),
+        Some(
+            Nfacell(
+                62,
+            ),
+        ),
+        Some(
+            Nfacell(
+                6,
+            ),
+        ),
+        Some(
+            Nfacell(
+                79,
+            ),
+        ),
+        Some(
+            Nfacell(
+                96,
+            ),
+        ),
+        Some(
+            Nfacell(
+                99,
+            ),
+        ),
+        Some(
+            Nfacell(
+                93,
+            ),
+        ),
+        Some(
+            Nfacell(
+                72,
+            ),
+        ),
+        Some(
+            Nfacell(
+                10,
+            ),
+        ),
+        Some(
+            Nfacell(
+                7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                55,
+            ),
+        ),
+        Some(
+            Nfacell(
+                28,
+            ),
+        ),
+        Some(
+            Nfacell(
+                31,
+            ),
+        ),
+        Some(
+            Nfacell(
+                98,
+            ),
+        ),
+        Some(
+            Nfacell(
+                17,
+            ),
+        ),
+        Some(
+            Nfacell(
+                29,
+            ),
+        ),
+        Some(
+            Nfacell(
+                15,
+            ),
+        ),
+        Some(
+            Nfacell(
+                43,
+            ),
+        ),
+        Some(
+            Nfacell(
+                101,
+            ),
+        ),
+        Some(
+            Nfacell(
+                8,
+            ),
+        ),
+        Some(
+            Nfacell(
+                100,
+            ),
+        ),
+        Some(
+            Nfacell(
+                95,
+            ),
+        ),
+        Some(
+            Nfacell(
+                53,
+            ),
+        ),
+        Some(
+            Nfacell(
+                103,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
+            ),
+        ),
+        Some(
+            Nfacell(
+                104,
+            ),
+        ),
+        Some(
+            Nfacell(
+                33,
             ),
         ),
     },
@@ -2673,59 +2664,59 @@ warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
         ),
     ],
 }
-985911
-3641629
-10660367
-1390297
-1187669
-528751
-4824032
-211284
-685097
-671468
-284
-620153
-249
-154
-671284
-1204741
-228196
-2304226
-1114526
-613224
-3007224
-3638213
-616585
-454259
-462277
-770604
-434072
-732190
-381
-387057
-415389
-462490
-480640
-448901
-448206
-459977
-484075
-437333
-1516000
-429981
-511053
-587907
-850815
-446038
-458226
-455151
-508418
-830865
-3046371
-4620363
-4046805
-8357138
-3608504
+1026473
+4138565
+10258491
+1414053
+1240674
+533470
+4743459
+235149
+686888
+677306
+280
+616899
+667
+207
+696968
+1706211
+300470
+2477239
+1077492
+455834
+1846192
+3695765
+670665
+444193
+467079
+752841
+452044
+726409
+361
+406519
+427027
+463077
+456329
+453334
+449791
+439105
+447862
+454342
+1271565
+414794
+448717
+449765
+627476
+406791
+469839
+454289
+450966
+809629
+5104695
+3212648
+3795540
+8291194
+3601897
 BEGIN
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]

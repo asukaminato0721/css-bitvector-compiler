@@ -1,5 +1,5 @@
 {"name": "init","node": {"id": 1,"name": "div", "type": "document", "attributes": { "class": "a" },"children": [{"id": 2,"name": "p","attributes": {},"children": [] }]}}
 {"name": "add","path": [1],"node":  {"id": 3,"name": "span","attributes": { "id": "b" },"children": []}}
 {"name": "add","path": [1],"node":  {"id": 4,"name": "span","attributes": { "id": "bb" },"children": []}}
-{"name": "replace_value", "path": [0],"on": "{id:1, name:'div', type:'document'}", "type": "attributes", "key": "class", "old_value": "a", "value": "aa"}
+{"name": "replace_value", "path": [],"on": "{id:1, name:'div', type:'document'}", "type": "attributes", "key": "class", "old_value": "a", "value": "aa"}
 {"name": "recalculate","node": {}}

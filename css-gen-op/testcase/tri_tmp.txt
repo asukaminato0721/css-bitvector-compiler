@@ -1,10 +1,10 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-11765
+13170
 BEGIN
 #b -> [3]
 #bb -> [4]
-[class="aa"] -> [2]
+[class="aa"] -> [1]
 div p -> [2]
 END
 [src/tri.rs:645:5] unsafe { MISS_CNT } = 4
