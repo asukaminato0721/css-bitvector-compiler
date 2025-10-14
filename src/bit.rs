@@ -563,12 +563,11 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node, None, nfa);
+            dom.recompute_styles(nfa, &get_input());
         }
         Command::Add { path, node } => {
             dom.add_node_by_path(&path, node, nfa);
-            if std::env::var("WEBSITE_NAME").unwrap() == "testcase" {
-                //     dbg!(&dom.nodes);
-            }
+            dom.recompute_styles(nfa, &get_input());
         }
         Command::ReplaceValue {
             path,
@@ -594,12 +593,14 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             let new_value = value.map(json_value_to_attr_string);
             dom.update_attribute(node_idx, key, new_value);
             dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
         }
         Command::InsertValue { path, key, value } => {
             let node_idx = dom.node_id_by_path(&path).unwrap();
             let new_value = value.map(json_value_to_attr_string);
             dom.update_attribute(node_idx, key, new_value);
             dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
         }
         Command::DeleteValue {
             path,
@@ -623,6 +624,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             }
             dom.update_attribute(node_idx, key, None);
             dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
         }
         Command::Recalculate => {
             let start = rdtsc();
@@ -634,6 +636,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
         }
         Command::Remove { path } => {
             dom.remove_node_by_path(&path);
+            dom.recompute_styles(nfa, &get_input());
         }
     }
 }

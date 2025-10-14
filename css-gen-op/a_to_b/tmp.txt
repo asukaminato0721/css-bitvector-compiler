@@ -1,0 +1,5 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+     Running `target/release/naive`
+BEGIN
+.a -> [2]
+END

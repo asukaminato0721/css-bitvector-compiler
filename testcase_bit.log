@@ -1,5 +1,5 @@
-[bit-debug] recompute start node 1 <div .a>; input=10
-[bit-debug] node 1 <div .a> visit: dirty=true input=10
+[bit-debug] recompute start node 1 <div .a>; input=00
+[bit-debug] node 1 <div .a> visit: dirty=true input=00
 [bit-debug] node 1 <div .a> recompute -> output=01 (prev=01)
 [bit-debug] node 1 <div .a> output unchanged; children remain clean
 [bit-debug] node 1 <div .a> propagating to 1 children
@@ -10,9 +10,12 @@
 [bit-debug] node 2 <div .a> finished; dirty flags cleared
 [bit-debug] node 1 <div .a> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .a>
-418748
-[bit-debug] recompute start node 1 <div .b>; input=10
-[bit-debug] node 1 <div .b> visit: dirty=true input=10
+[bit-debug] recompute start node 1 <div .a>; input=10
+[bit-debug] node 1 <div .a> ignored: recursive_dirty=false, input=10
+[bit-debug] recompute done node 1 <div .a>
+32931
+[bit-debug] recompute start node 1 <div .b>; input=00
+[bit-debug] node 1 <div .b> visit: dirty=true input=00
 [bit-debug] node 1 <div .b> recompute -> output=00 (prev=01)
 [bit-debug] node 1 <div .b> output changed; marking 1 children dirty
 [bit-debug] node 1 <div .b> child node 2 <div .a> marked dirty due to parent change -> dirty=true
@@ -24,8 +27,11 @@
 [bit-debug] node 2 <div .a> finished; dirty flags cleared
 [bit-debug] node 1 <div .b> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .b>
-360882
+[bit-debug] recompute start node 1 <div .b>; input=10
+[bit-debug] node 1 <div .b> ignored: recursive_dirty=false, input=10
+[bit-debug] recompute done node 1 <div .b>
+27206
 BEGIN
 .a -> [2]
 END
-[src/bit.rs:708:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:711:5] unsafe { MISS_CNT } = 4
