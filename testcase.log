@@ -1,0 +1,245 @@
+[src/bit.rs:565:17] &dom.nodes = {
+    3: DOMNode {
+        tag_id: SelectorId(
+            6,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        attributes: {
+            "id": "b",
+        },
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    1: DOMNode {
+        tag_id: SelectorId(
+            3,
+        ),
+        class_ids: {
+            SelectorId(
+                4,
+            ),
+        },
+        id_selector_id: None,
+        attributes: {
+            "class": "a",
+        },
+        parent: None,
+        children: [
+            2,
+            3,
+        ],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        attributes: {},
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+}
+[src/bit.rs:565:17] &dom.nodes = {
+    3: DOMNode {
+        tag_id: SelectorId(
+            6,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        attributes: {
+            "id": "b",
+        },
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    4: DOMNode {
+        tag_id: SelectorId(
+            6,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                1,
+            ),
+        ),
+        attributes: {
+            "id": "bb",
+        },
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    2: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        attributes: {},
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+    1: DOMNode {
+        tag_id: SelectorId(
+            3,
+        ),
+        class_ids: {
+            SelectorId(
+                4,
+            ),
+        },
+        id_selector_id: None,
+        attributes: {
+            "class": "a",
+        },
+        parent: None,
+        children: [
+            2,
+            4,
+            3,
+        ],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true,
+            false,
+        ],
+    },
+}
+[bit-debug] recompute start node 1 <div .aa>; input=100000000
+[bit-debug] node 1 <div .aa> visit: dirty=true input=100000000
+[bit-debug] node 1 <div .aa> recompute -> output=000110010 (prev=000010010)
+[bit-debug] node 1 <div .aa> output changed; marking 3 children dirty
+[bit-debug] node 1 <div .aa> child node 2 <p> marked dirty due to parent change
+[bit-debug] node 1 <div .aa> child node 4 <span #bb> marked dirty due to parent change
+[bit-debug] node 1 <div .aa> child node 3 <span #b> marked dirty due to parent change
+[bit-debug] node 1 <div .aa> propagating to 3 children
+[bit-debug] node 2 <p> visit: dirty=true input=000110010
+[bit-debug] node 2 <p> recompute -> output=000010011 (prev=000000000)
+[bit-debug] node 2 <p> output changed; marking 0 children dirty
+[bit-debug] node 2 <p> propagating to 0 children
+[bit-debug] node 2 <p> finished; dirty flags cleared
+[bit-debug] node 4 <span #bb> visit: dirty=true input=000110010
+[bit-debug] node 4 <span #bb> recompute -> output=001010010 (prev=001000000)
+[bit-debug] node 4 <span #bb> output changed; marking 0 children dirty
+[bit-debug] node 4 <span #bb> propagating to 0 children
+[bit-debug] node 4 <span #bb> finished; dirty flags cleared
+[bit-debug] node 3 <span #b> visit: dirty=true input=000110010
+[bit-debug] node 3 <span #b> recompute -> output=010010010 (prev=010000000)
+[bit-debug] node 3 <span #b> output changed; marking 0 children dirty
+[bit-debug] node 3 <span #b> propagating to 0 children
+[bit-debug] node 3 <span #b> finished; dirty flags cleared
+[bit-debug] node 1 <div .aa> finished; dirty flags cleared
+[bit-debug] recompute done node 1 <div .aa>
+330015
+BEGIN
+#b -> [3]
+#bb -> [4]
+[class="aa"] -> [1]
+div p -> [2]
+END
+[src/bit.rs:703:5] unsafe { MISS_CNT } = 4

@@ -5,9 +5,36 @@ use css_bitvector_compiler::{
 use std::{
     collections::{HashMap, HashSet},
     fs,
+    sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
 static mut STATE: usize = 0; // global state
+static DEBUG_MODE: OnceLock<bool> = OnceLock::new();
+
+fn debug_enabled() -> bool {
+    *DEBUG_MODE.get_or_init(|| match std::env::var("BIT_DEBUG") {
+        Ok(value) => {
+            let lower = value.to_ascii_lowercase();
+            matches!(lower.as_str(), "1" | "true" | "yes" | "on")
+        }
+        Err(_) => false,
+    })
+}
+
+fn debug_log<F>(build: F)
+where
+    F: FnOnce() -> String,
+{
+    if debug_enabled() {
+        eprintln!("[quad-debug] {}", build());
+    }
+}
+
+fn format_bits(bits: &[bool]) -> String {
+    bits.iter()
+        .map(|bit| if *bit { '1' } else { '0' })
+        .collect()
+}
 
 /// whether a part of input is: 1, 0, or unused
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -32,6 +59,16 @@ pub enum DirtyState {
     NodeChanged,
 }
 
+impl DirtyState {
+    fn label(self) -> &'static str {
+        match self {
+            DirtyState::Clean => "clean",
+            DirtyState::InputChanged => "input_changed",
+            DirtyState::NodeChanged => "node_changed",
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 pub struct DOMNode {
     pub tag_id: SelectorId,                  // 标签选择器ID
@@ -44,6 +81,29 @@ pub struct DOMNode {
     pub recursive_dirty: bool,
     pub input_state: Vec<IState>,
     pub output_state: Vec<OState>,
+}
+
+fn format_input_state(states: &[IState]) -> String {
+    states
+        .iter()
+        .map(|state| match state {
+            IState::IOne => '1',
+            IState::IZero => '0',
+            IState::IUnused => '_',
+        })
+        .collect()
+}
+
+fn format_output_state(states: &[OState]) -> String {
+    states
+        .iter()
+        .map(|state| match state {
+            OState::OOne => "1".to_string(),
+            OState::OZero => "0".to_string(),
+            OState::OFromParent(idx) => format!("P{}", idx),
+        })
+        .collect::<Vec<_>>()
+        .join(",")
 }
 
 impl DOMNode {
@@ -127,6 +187,50 @@ impl AddNode for DOM {
 impl DOM {
     pub fn new() -> Self {
         Default::default()
+    }
+
+    fn describe_node(&self, node_idx: u64) -> String {
+        if let Some(node) = self.nodes.get(&node_idx) {
+            let tag = self
+                .selector_manager
+                .id_to_selector
+                .get(&node.tag_id)
+                .map(|selector| selector.to_string())
+                .unwrap_or_else(|| format!("sid:{}", node.tag_id.0));
+            let mut class_parts = node
+                .class_ids
+                .iter()
+                .filter_map(|cid| {
+                    self.selector_manager
+                        .id_to_selector
+                        .get(cid)
+                        .map(|selector| selector.to_string())
+                })
+                .collect::<Vec<_>>();
+            class_parts.sort();
+            let id_part = node
+                .id_selector_id
+                .and_then(|sid| {
+                    self.selector_manager
+                        .id_to_selector
+                        .get(&sid)
+                        .map(|selector| selector.to_string())
+                })
+                .unwrap_or_default();
+            let mut descriptor = format!("<{}", tag);
+            if !id_part.is_empty() {
+                descriptor.push(' ');
+                descriptor.push_str(&id_part);
+            }
+            if !class_parts.is_empty() {
+                descriptor.push(' ');
+                descriptor.push_str(&class_parts.join(""));
+            }
+            descriptor.push('>');
+            format!("node {} {}", node_idx, descriptor)
+        } else {
+            format!("node {} <unknown>", node_idx)
+        }
     }
 
     /// 检查节点是否匹配给定的选择器ID
@@ -343,7 +447,15 @@ impl DOM {
 
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
+        debug_log(|| {
+            format!(
+                "recompute start {}; input={}",
+                self.describe_node(root_node),
+                format_bits(input)
+            )
+        });
         self.recompute_styles_recursive(root_node, nfa, input);
+        debug_log(|| format!("recompute done {}", self.describe_node(root_node)));
     }
     fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
         (output)
@@ -356,20 +468,62 @@ impl DOM {
             .collect()
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
-        if !self.nodes[&node_idx].recursive_dirty {
+        let node_descriptor = self.describe_node(node_idx);
+        let (
+            was_recursive_dirty,
+            dirty_state,
+            previous_input_state,
+            previous_output_state,
+            child_indices_snapshot,
+        ) = {
+            let node = &self.nodes[&node_idx];
+            (
+                node.recursive_dirty,
+                node.dirty,
+                node.input_state.clone(),
+                node.output_state.clone(),
+                node.children.clone(),
+            )
+        };
+
+        if !was_recursive_dirty {
+            debug_log(|| {
+                format!(
+                    "{} ignored: recursive_dirty=false, input={}",
+                    node_descriptor,
+                    format_bits(input)
+                )
+            });
             return;
         }
 
+        debug_log(|| {
+            format!(
+                "{} visit: dirty={} input={} cached_input={} cached_output={}",
+                node_descriptor,
+                dirty_state.label(),
+                format_bits(input),
+                format_input_state(&previous_input_state),
+                format_output_state(&previous_output_state)
+            )
+        });
+
         let mut should_mark_children = false;
-        match self.nodes[&node_idx].dirty {
+        match dirty_state {
             DirtyState::Clean => {
-                // Debug check: if not dirty, recomputing should not change output
-                let original_input_state = self.nodes[&node_idx].input_state.clone();
-                let original_output_state = self.nodes[&node_idx].output_state.clone();
+                debug_log(|| format!("{} clean validation start", node_descriptor));
                 let (new_input, new_output) =
                     self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                debug_log(|| {
+                    format!(
+                        "{} validation -> input={} output={}",
+                        node_descriptor,
+                        format_input_state(&new_input),
+                        format_output_state(&new_output)
+                    )
+                });
                 assert_eq!(
-                    original_input_state,
+                    previous_input_state,
                     new_input,
                     "input is {:?}
 old_tri is {:?}
@@ -379,19 +533,17 @@ new_tri is {:?}
 
                    ",
                     encode(input),
-                    encode(&original_input_state),
-                    encode(&original_output_state),
+                    encode(&previous_input_state),
+                    encode(&previous_output_state),
                     encode(&new_output),
                     encode(&new_input)
                 );
             }
             DirtyState::InputChanged => {
-                let original_input_state = self.nodes[&node_idx].input_state.clone();
-                let original_output_state = self.nodes[&node_idx].output_state.clone();
                 let need_re = !input
                     .iter()
                     .copied()
-                    .zip(original_input_state.iter().copied())
+                    .zip(previous_input_state.iter().copied())
                     .all(|(input_bit, state)| {
                         matches!(
                             (input_bit, state),
@@ -399,12 +551,31 @@ new_tri is {:?}
                         )
                     });
 
+                debug_log(|| {
+                    format!(
+                        "{} input_changed need_recompute={} input_state={}",
+                        node_descriptor,
+                        need_re,
+                        format_input_state(&previous_input_state)
+                    )
+                });
+
                 if need_re {
                     unsafe {
                         MISS_CNT += 1;
                     }
                     let (new_input_state, new_output_state) =
                         self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                    debug_log(|| {
+                        format!(
+                            "{} recompute -> input={} (prev={}) output={} (prev={})",
+                            node_descriptor,
+                            format_input_state(&new_input_state),
+                            format_input_state(&previous_input_state),
+                            format_output_state(&new_output_state),
+                            format_output_state(&previous_output_state)
+                        )
+                    });
                     {
                         let node = self.nodes.get_mut(&node_idx).unwrap();
                         node.output_state = new_output_state.clone();
@@ -414,8 +585,16 @@ new_tri is {:?}
                 } else {
                     let (new_input, new_output) =
                         self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                    debug_log(|| {
+                        format!(
+                            "{} input reused; output stays {} input stays {}",
+                            node_descriptor,
+                            format_output_state(&previous_output_state),
+                            format_input_state(&previous_input_state)
+                        )
+                    });
                     assert_eq!(
-                        original_input_state,
+                        previous_input_state,
                         new_input,
                         "input is {:?}
 old_tri is {:?}
@@ -425,8 +604,8 @@ new_tri is {:?}
 
                    ",
                         encode(input),
-                        encode(&original_input_state),
-                        encode(&original_output_state),
+                        encode(&previous_input_state),
+                        encode(&previous_output_state),
                         encode(&new_output),
                         encode(&new_input)
                     );
@@ -438,6 +617,16 @@ new_tri is {:?}
                 }
                 let (new_input_state, new_output_state) =
                     self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                debug_log(|| {
+                    format!(
+                        "{} recompute (node_changed) -> input={} (prev={}) output={} (prev={})",
+                        node_descriptor,
+                        format_input_state(&new_input_state),
+                        format_input_state(&previous_input_state),
+                        format_output_state(&new_output_state),
+                        format_output_state(&previous_output_state)
+                    )
+                });
                 {
                     let node = self.nodes.get_mut(&node_idx).unwrap();
                     node.output_state = new_output_state.clone();
@@ -448,17 +637,43 @@ new_tri is {:?}
         }
 
         // Propagate dirty state to children if this node's output changed.
-        let children_indices = self.nodes[&node_idx].children.clone();
         if should_mark_children {
-            for &child_idx in &children_indices {
+            debug_log(|| {
+                format!(
+                    "{} marking {} children input_changed",
+                    node_descriptor,
+                    child_indices_snapshot.len()
+                )
+            });
+            let mut marked_children = Vec::new();
+            for &child_idx in &child_indices_snapshot {
                 self.nodes.get_mut(&child_idx).unwrap().mark_input_changed();
+                marked_children.push(child_idx);
             }
+            for child_idx in marked_children {
+                let child_desc = self.describe_node(child_idx);
+                debug_log(|| {
+                    format!(
+                        "{} child {} marked input_changed",
+                        node_descriptor, child_desc
+                    )
+                });
+            }
+        } else {
+            debug_log(|| format!("{} children remain clean", node_descriptor));
         }
 
-        // Recursively process children
-        let current_output_state =
-            self.materialize(input, &self.nodes[&node_idx].output_state.clone());
-        for &child_idx in &children_indices {
+        let output_state_snapshot = self.nodes[&node_idx].output_state.clone();
+        let current_output_state = self.materialize(input, &output_state_snapshot);
+        debug_log(|| {
+            format!(
+                "{} propagating to {} children with materialized output={}",
+                node_descriptor,
+                child_indices_snapshot.len(),
+                format_bits(&current_output_state)
+            )
+        });
+        for &child_idx in &child_indices_snapshot {
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
         }
 
@@ -466,6 +681,7 @@ new_tri is {:?}
         if let Some(node) = self.nodes.get_mut(&node_idx) {
             node.clear_dirty();
         }
+        debug_log(|| format!("{} finished; dirty flags cleared", node_descriptor));
     }
     fn new_output_state(
         &self,
@@ -711,7 +927,7 @@ fn main() {
         ),
         nfa.to_dot(&dom.selector_manager),
     );
-    dbg!(&nfa);
+    // dbg!(&nfa);
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);
     }
