@@ -10,7 +10,7 @@
 [bit-debug] node 2 <div .a> finished; dirty flags cleared
 [bit-debug] node 1 <div .a> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .a>
-102823
+418748
 [bit-debug] recompute start node 1 <div .b>; input=10
 [bit-debug] node 1 <div .b> visit: dirty=true input=10
 [bit-debug] node 1 <div .b> recompute -> output=00 (prev=01)
@@ -24,7 +24,7 @@
 [bit-debug] node 2 <div .a> finished; dirty flags cleared
 [bit-debug] node 1 <div .b> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .b>
-72189
+360882
 BEGIN
 .a -> [2]
 END

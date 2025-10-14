@@ -11,7 +11,7 @@
 [quad-debug] node 2 <div .a> finished; dirty flags cleared
 [quad-debug] node 1 <div .a> finished; dirty flags cleared
 [quad-debug] recompute done node 1 <div .a>
-130597
+171106
 [quad-debug] recompute start node 1 <div .b>; input=00
 [quad-debug] node 1 <div .b> visit: dirty=node_changed input=00 cached_input=__ cached_output=0,1
 [quad-debug] node 1 <div .b> recompute (node_changed) -> input=__ (prev=__) output=0,0 (prev=0,1)
@@ -26,7 +26,7 @@
 [quad-debug] node 2 <div .a> finished; dirty flags cleared
 [quad-debug] node 1 <div .b> finished; dirty flags cleared
 [quad-debug] recompute done node 1 <div .b>
-79538
+135159
 BEGIN
 .a -> [2]
 END
