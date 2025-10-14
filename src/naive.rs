@@ -4,7 +4,7 @@ use std::{
     fmt::{Debug, Display},
 };
 
-use css_bitvector_compiler::{Cache, json_value_to_attr_string};
+use css_bitvector_compiler::{Cache, Command, json_value_to_attr_string, parse_command};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
@@ -548,45 +548,29 @@ fn parse_trace() -> Vec<LayoutFrame> {
     frames
 }
 
-fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
-    command_data
-        .get("path")
-        .and_then(|p| p.as_array())
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|v| v.as_u64())
-                .map(|v| v as usize)
-                .collect::<Vec<_>>()
-        })
-        .unwrap()
-}
-
 fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
-    match frame.command_name.as_str() {
-        "init" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            *tree = NaiveHtmlNode::json_to_node(frame.command_data.get("node").unwrap());
+    match parse_command(&frame.command_name, &frame.command_data) {
+        Command::Init { node } => {
+            *tree = NaiveHtmlNode::json_to_node(node);
             tree.fix_parent_pointers();
         }
-        "add" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            let path = extract_path_from_command(&frame.command_data);
+        Command::Add { path, node } => {
             if path.is_empty() {
                 return;
             }
-            tree.add_by_path(&path, frame.command_data.get("node").unwrap());
+            tree.add_by_path(&path, node);
             tree.fix_parent_pointers(); // TODO: optimize
         }
-        "replace_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
-            let key = frame.command_data["key"].as_str().unwrap();
+        Command::ReplaceValue {
+            path,
+            key,
+            value,
+            old_value,
+        } => {
             let node = tree
                 .node_mut_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
-            if let Some(old_value) = frame.command_data.get("old_value") {
+            if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = node
                     .attributes
@@ -599,37 +583,25 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
                     key, path
                 );
             }
-            let new_value = frame
-                .command_data
-                .get("value")
-                .map(json_value_to_attr_string);
+            let new_value = value.map(json_value_to_attr_string);
             node.set_attribute(key, new_value);
         }
-        "insert_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
-            let key = frame.command_data["key"].as_str().unwrap();
+        Command::InsertValue { path, key, value } => {
             let node = tree
                 .node_mut_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
-            let new_value = frame
-                .command_data
-                .get("value")
-                .map(json_value_to_attr_string);
+            let new_value = value.map(json_value_to_attr_string);
             node.set_attribute(key, new_value);
         }
-        "delete_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
-            let key = frame.command_data["key"].as_str().unwrap();
+        Command::DeleteValue {
+            path,
+            key,
+            old_value,
+        } => {
             let node = tree
                 .node_mut_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
-            if let Some(old_value) = frame.command_data.get("old_value") {
+            if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = node
                     .attributes
@@ -644,16 +616,9 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             }
             node.set_attribute(key, None);
         }
-        "recalculate" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-        }
-        "remove" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            let path = extract_path_from_command(&frame.command_data);
+        Command::Recalculate => {}
+        Command::Remove { path } => {
             tree.remove_by_path(&path);
-        }
-        _ => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
     }
 }

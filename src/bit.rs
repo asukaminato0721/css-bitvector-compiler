@@ -1,7 +1,6 @@
 use css_bitvector_compiler::{
-    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    extract_path_from_command, generate_nfa, json_value_to_attr_string, parse_css, parse_trace,
-    rdtsc,
+    AddNode, Command, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    generate_nfa, json_value_to_attr_string, parse_css, parse_trace, rdtsc,
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -387,35 +386,28 @@ impl DOM {
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
-    match frame.command_name.as_str() {
-        "init" => {
-            let node_data = frame.command_data.get("node").unwrap();
+    match frame.as_command() {
+        Command::Init { node } => {
             dom.nodes.clear();
             dom.root_node = None;
-            dom.json_to_html_node(node_data, None, nfa);
+            dom.json_to_html_node(node, None, nfa);
         }
-        "add" => {
-            let path = extract_path_from_command(&frame.command_data);
-            let node_data = frame.command_data.get("node").unwrap();
-            dom.add_node_by_path(&path, node_data, nfa);
+        Command::Add { path, node } => {
+            dom.add_node_by_path(&path, node, nfa);
             if std::env::var("WEBSITE_NAME").unwrap() == "testcase" {
                 dbg!(&dom.nodes);
             }
-
-            // BEGIN HACK
-
-            // END HACK
         }
-        "replace_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
+        Command::ReplaceValue {
+            path,
+            key,
+            value,
+            old_value,
+        } => {
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
-            let key = frame.command_data["key"].as_str().unwrap();
-            if let Some(old_value) = frame.command_data.get("old_value") {
+            if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = dom
                     .nodes
@@ -429,39 +421,27 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
                     key, path
                 );
             }
-            let new_value = frame
-                .command_data
-                .get("value")
-                .map(json_value_to_attr_string);
+            let new_value = value.map(json_value_to_attr_string);
             dom.update_attribute(node_idx, key, new_value);
             dom.set_node_dirty(node_idx);
         }
-        "insert_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
+        Command::InsertValue { path, key, value } => {
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
-            let key = frame.command_data["key"].as_str().unwrap();
-            let new_value = frame
-                .command_data
-                .get("value")
-                .map(json_value_to_attr_string);
+            let new_value = value.map(json_value_to_attr_string);
             dom.update_attribute(node_idx, key, new_value);
             dom.set_node_dirty(node_idx);
         }
-        "delete_value" => {
-            if frame.command_data["type"].as_str() != Some("attributes") {
-                return;
-            }
-            let path = extract_path_from_command(&frame.command_data);
+        Command::DeleteValue {
+            path,
+            key,
+            old_value,
+        } => {
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
-            let key = frame.command_data["key"].as_str().unwrap();
-            if let Some(old_value) = frame.command_data.get("old_value") {
+            if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = dom
                     .nodes
@@ -478,22 +458,17 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.update_attribute(node_idx, key, None);
             dom.set_node_dirty(node_idx);
         }
-        "recalculate" => {
-            // Perform CSS matching using NFA
+        Command::Recalculate => {
             let start = rdtsc();
             let mut input = vec![false; unsafe { STATE } + 1];
             input[nfa.start_state.unwrap_or_default().0] = true;
             dom.recompute_styles(nfa, &input);
-
             let end = rdtsc();
             println!("{}", end - start);
         }
-        "remove" => {
-            // Remove node at specified path
-            let path = extract_path_from_command(&frame.command_data);
+        Command::Remove { path } => {
             dom.remove_node_by_path(&path);
         }
-        _ => {}
     }
 }
 

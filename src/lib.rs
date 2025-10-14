@@ -104,6 +104,116 @@ pub struct LayoutFrame {
     pub command_data: serde_json::Value,
 }
 
+#[derive(Debug, Clone)]
+pub enum Command<'a> {
+    Init {
+        node: &'a serde_json::Value,
+    },
+    Add {
+        path: Vec<usize>,
+        node: &'a serde_json::Value,
+    },
+    ReplaceValue {
+        path: Vec<usize>,
+        key: &'a str,
+        value: Option<&'a serde_json::Value>,
+        old_value: Option<&'a serde_json::Value>,
+    },
+    InsertValue {
+        path: Vec<usize>,
+        key: &'a str,
+        value: Option<&'a serde_json::Value>,
+    },
+    DeleteValue {
+        path: Vec<usize>,
+        key: &'a str,
+        old_value: Option<&'a serde_json::Value>,
+    },
+    Recalculate,
+    Remove {
+        path: Vec<usize>,
+    },
+}
+
+pub fn parse_command<'a>(
+    command_name: &'a str,
+    command_data: &'a serde_json::Value,
+) -> Command<'a> {
+    match command_name {
+        "init" => {
+            let node = command_data
+                .get("node")
+                .unwrap_or_else(|| panic!("missing `node` field for `{command_name}`"));
+            Command::Init { node }
+        }
+        "add" => {
+            let node = command_data
+                .get("node")
+                .unwrap_or_else(|| panic!("missing `node` field for `{command_name}`"));
+            let path = extract_path_from_command(command_data);
+            Command::Add { path, node }
+        }
+        "replace_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data
+                .get("key")
+                .and_then(|v| v.as_str())
+                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let value = command_data.get("value");
+            let old_value = command_data.get("old_value");
+            Command::ReplaceValue {
+                path,
+                key,
+                value,
+                old_value,
+            }
+        }
+        "insert_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data
+                .get("key")
+                .and_then(|v| v.as_str())
+                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let value = command_data.get("value");
+            Command::InsertValue { path, key, value }
+        }
+        "delete_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data
+                .get("key")
+                .and_then(|v| v.as_str())
+                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let old_value = command_data.get("old_value");
+            Command::DeleteValue {
+                path,
+                key,
+                old_value,
+            }
+        }
+        "recalculate" => Command::Recalculate,
+        "remove" => {
+            let path = extract_path_from_command(command_data);
+            Command::Remove { path }
+        }
+        _ => unreachable!(),
+    }
+}
+
+impl LayoutFrame {
+    pub fn as_command(&self) -> Command<'_> {
+        parse_command(&self.command_name, &self.command_data)
+    }
+}
+
 /// Parse trace from command.json file
 pub fn parse_trace() -> Vec<LayoutFrame> {
     let content = std::fs::read_to_string(format!(
