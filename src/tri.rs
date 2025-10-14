@@ -517,11 +517,9 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.nodes.clear();
             dom.root_node = None;
             dom.json_to_html_node(node, None, nfa);
-            dom.recompute_styles(nfa, &get_input());
         }
         Command::Add { path, node } => {
             dom.add_node_by_path(&path, node, nfa);
-            dom.recompute_styles(nfa, &get_input());
         }
         Command::ReplaceValue {
             path,

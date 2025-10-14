@@ -1,20 +1,25 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: unnecessary trailing semicolon
+   --> src/quad.rs:175:48
+    |
+175 |             parent_node.recursive_dirty = true;;
+    |                                                ^ help: remove this semicolon
+    |
+    = note: `#[warn(redundant_semicolons)]` on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/quad`
-[src/quad.rs:720:5] &nfa = NFA {
+[src/quad.rs:714:5] &nfa = NFA {
     states: {
-        Some(
-            Nfacell(
-                4,
-            ),
-        ),
-        Some(
-            Nfacell(
-                8,
-            ),
-        ),
+        None,
         Some(
             Nfacell(
                 6,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
             ),
         ),
         Some(
@@ -24,15 +29,14 @@
         ),
         Some(
             Nfacell(
-                7,
+                2,
             ),
         ),
         Some(
             Nfacell(
-                2,
+                5,
             ),
         ),
-        None,
         Some(
             Nfacell(
                 1,
@@ -40,7 +44,12 @@
         ),
         Some(
             Nfacell(
-                5,
+                8,
+            ),
+        ),
+        Some(
+            Nfacell(
+                7,
             ),
         ),
     },
@@ -190,11 +199,11 @@
         ),
     ],
 }
-6975
+20805
 BEGIN
 #b -> [3]
 #bb -> [4]
 [class="aa"] -> [2]
 div p -> [2]
 END
-[src/quad.rs:735:5] unsafe { MISS_CNT } = 7
+[src/quad.rs:729:5] unsafe { MISS_CNT } = 4
