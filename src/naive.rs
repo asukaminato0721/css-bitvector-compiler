@@ -567,9 +567,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             value,
             old_value,
         } => {
-            let node = tree
-                .node_mut_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
+            let node = tree.node_mut_by_path(&path).unwrap();
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = node
@@ -587,9 +585,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             node.set_attribute(key, new_value);
         }
         Command::InsertValue { path, key, value } => {
-            let node = tree
-                .node_mut_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
+            let node = tree.node_mut_by_path(&path).unwrap();
             let new_value = value.map(json_value_to_attr_string);
             node.set_attribute(key, new_value);
         }
@@ -598,9 +594,7 @@ fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
             key,
             old_value,
         } => {
-            let node = tree
-                .node_mut_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
+            let node = tree.node_mut_by_path(&path).unwrap();
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = node

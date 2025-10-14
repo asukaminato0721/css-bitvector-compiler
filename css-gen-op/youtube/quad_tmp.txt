@@ -1,90 +1,20 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/quad`
-[src/quad.rs:658:5] &nfa = NFA {
+[src/quad.rs:652:5] &nfa = NFA {
     states: {
         Some(
             Nfacell(
-                24,
+                15,
             ),
         ),
         Some(
             Nfacell(
-                4,
+                53,
             ),
         ),
         Some(
             Nfacell(
-                44,
-            ),
-        ),
-        Some(
-            Nfacell(
-                7,
-            ),
-        ),
-        Some(
-            Nfacell(
-                40,
-            ),
-        ),
-        Some(
-            Nfacell(
-                52,
-            ),
-        ),
-        Some(
-            Nfacell(
-                36,
-            ),
-        ),
-        Some(
-            Nfacell(
-                56,
-            ),
-        ),
-        Some(
-            Nfacell(
-                58,
-            ),
-        ),
-        Some(
-            Nfacell(
-                66,
-            ),
-        ),
-        Some(
-            Nfacell(
-                28,
-            ),
-        ),
-        Some(
-            Nfacell(
-                70,
-            ),
-        ),
-        Some(
-            Nfacell(
-                77,
-            ),
-        ),
-        Some(
-            Nfacell(
-                18,
-            ),
-        ),
-        Some(
-            Nfacell(
-                32,
-            ),
-        ),
-        Some(
-            Nfacell(
-                42,
-            ),
-        ),
-        Some(
-            Nfacell(
-                68,
+                29,
             ),
         ),
         Some(
@@ -94,7 +24,278 @@
         ),
         Some(
             Nfacell(
-                93,
+                32,
+            ),
+        ),
+        Some(
+            Nfacell(
+                49,
+            ),
+        ),
+        Some(
+            Nfacell(
+                48,
+            ),
+        ),
+        Some(
+            Nfacell(
+                20,
+            ),
+        ),
+        Some(
+            Nfacell(
+                31,
+            ),
+        ),
+        None,
+        Some(
+            Nfacell(
+                52,
+            ),
+        ),
+        Some(
+            Nfacell(
+                60,
+            ),
+        ),
+        Some(
+            Nfacell(
+                83,
+            ),
+        ),
+        Some(
+            Nfacell(
+                9,
+            ),
+        ),
+        Some(
+            Nfacell(
+                6,
+            ),
+        ),
+        Some(
+            Nfacell(
+                4,
+            ),
+        ),
+        Some(
+            Nfacell(
+                90,
+            ),
+        ),
+        Some(
+            Nfacell(
+                91,
+            ),
+        ),
+        Some(
+            Nfacell(
+                100,
+            ),
+        ),
+        Some(
+            Nfacell(
+                19,
+            ),
+        ),
+        Some(
+            Nfacell(
+                21,
+            ),
+        ),
+        Some(
+            Nfacell(
+                43,
+            ),
+        ),
+        Some(
+            Nfacell(
+                42,
+            ),
+        ),
+        Some(
+            Nfacell(
+                40,
+            ),
+        ),
+        Some(
+            Nfacell(
+                11,
+            ),
+        ),
+        Some(
+            Nfacell(
+                56,
+            ),
+        ),
+        Some(
+            Nfacell(
+                72,
+            ),
+        ),
+        Some(
+            Nfacell(
+                80,
+            ),
+        ),
+        Some(
+            Nfacell(
+                103,
+            ),
+        ),
+        Some(
+            Nfacell(
+                105,
+            ),
+        ),
+        Some(
+            Nfacell(
+                99,
+            ),
+        ),
+        Some(
+            Nfacell(
+                94,
+            ),
+        ),
+        Some(
+            Nfacell(
+                25,
+            ),
+        ),
+        Some(
+            Nfacell(
+                26,
+            ),
+        ),
+        Some(
+            Nfacell(
+                47,
+            ),
+        ),
+        Some(
+            Nfacell(
+                96,
+            ),
+        ),
+        Some(
+            Nfacell(
+                97,
+            ),
+        ),
+        Some(
+            Nfacell(
+                106,
+            ),
+        ),
+        Some(
+            Nfacell(
+                63,
+            ),
+        ),
+        Some(
+            Nfacell(
+                33,
+            ),
+        ),
+        Some(
+            Nfacell(
+                68,
+            ),
+        ),
+        Some(
+            Nfacell(
+                70,
+            ),
+        ),
+        Some(
+            Nfacell(
+                92,
+            ),
+        ),
+        Some(
+            Nfacell(
+                82,
+            ),
+        ),
+        Some(
+            Nfacell(
+                102,
+            ),
+        ),
+        Some(
+            Nfacell(
+                1,
+            ),
+        ),
+        Some(
+            Nfacell(
+                73,
+            ),
+        ),
+        Some(
+            Nfacell(
+                12,
+            ),
+        ),
+        Some(
+            Nfacell(
+                88,
+            ),
+        ),
+        Some(
+            Nfacell(
+                59,
+            ),
+        ),
+        Some(
+            Nfacell(
+                38,
+            ),
+        ),
+        Some(
+            Nfacell(
+                50,
+            ),
+        ),
+        Some(
+            Nfacell(
+                54,
+            ),
+        ),
+        Some(
+            Nfacell(
+                89,
+            ),
+        ),
+        Some(
+            Nfacell(
+                95,
+            ),
+        ),
+        Some(
+            Nfacell(
+                28,
+            ),
+        ),
+        Some(
+            Nfacell(
+                75,
+            ),
+        ),
+        Some(
+            Nfacell(
+                39,
+            ),
+        ),
+        Some(
+            Nfacell(
+                8,
+            ),
+        ),
+        Some(
+            Nfacell(
+                23,
             ),
         ),
         Some(
@@ -109,308 +310,7 @@
         ),
         Some(
             Nfacell(
-                37,
-            ),
-        ),
-        Some(
-            Nfacell(
-                1,
-            ),
-        ),
-        Some(
-            Nfacell(
                 67,
-            ),
-        ),
-        Some(
-            Nfacell(
-                94,
-            ),
-        ),
-        Some(
-            Nfacell(
-                96,
-            ),
-        ),
-        Some(
-            Nfacell(
-                14,
-            ),
-        ),
-        Some(
-            Nfacell(
-                15,
-            ),
-        ),
-        Some(
-            Nfacell(
-                3,
-            ),
-        ),
-        Some(
-            Nfacell(
-                30,
-            ),
-        ),
-        Some(
-            Nfacell(
-                97,
-            ),
-        ),
-        Some(
-            Nfacell(
-                19,
-            ),
-        ),
-        Some(
-            Nfacell(
-                105,
-            ),
-        ),
-        Some(
-            Nfacell(
-                5,
-            ),
-        ),
-        Some(
-            Nfacell(
-                61,
-            ),
-        ),
-        Some(
-            Nfacell(
-                8,
-            ),
-        ),
-        Some(
-            Nfacell(
-                83,
-            ),
-        ),
-        Some(
-            Nfacell(
-                55,
-            ),
-        ),
-        Some(
-            Nfacell(
-                85,
-            ),
-        ),
-        Some(
-            Nfacell(
-                91,
-            ),
-        ),
-        Some(
-            Nfacell(
-                95,
-            ),
-        ),
-        Some(
-            Nfacell(
-                99,
-            ),
-        ),
-        Some(
-            Nfacell(
-                100,
-            ),
-        ),
-        Some(
-            Nfacell(
-                10,
-            ),
-        ),
-        Some(
-            Nfacell(
-                72,
-            ),
-        ),
-        Some(
-            Nfacell(
-                12,
-            ),
-        ),
-        Some(
-            Nfacell(
-                45,
-            ),
-        ),
-        Some(
-            Nfacell(
-                54,
-            ),
-        ),
-        Some(
-            Nfacell(
-                13,
-            ),
-        ),
-        Some(
-            Nfacell(
-                65,
-            ),
-        ),
-        Some(
-            Nfacell(
-                71,
-            ),
-        ),
-        Some(
-            Nfacell(
-                9,
-            ),
-        ),
-        Some(
-            Nfacell(
-                87,
-            ),
-        ),
-        Some(
-            Nfacell(
-                59,
-            ),
-        ),
-        Some(
-            Nfacell(
-                104,
-            ),
-        ),
-        Some(
-            Nfacell(
-                11,
-            ),
-        ),
-        Some(
-            Nfacell(
-                102,
-            ),
-        ),
-        Some(
-            Nfacell(
-                47,
-            ),
-        ),
-        Some(
-            Nfacell(
-                106,
-            ),
-        ),
-        Some(
-            Nfacell(
-                16,
-            ),
-        ),
-        Some(
-            Nfacell(
-                21,
-            ),
-        ),
-        Some(
-            Nfacell(
-                62,
-            ),
-        ),
-        Some(
-            Nfacell(
-                34,
-            ),
-        ),
-        Some(
-            Nfacell(
-                43,
-            ),
-        ),
-        Some(
-            Nfacell(
-                101,
-            ),
-        ),
-        Some(
-            Nfacell(
-                38,
-            ),
-        ),
-        Some(
-            Nfacell(
-                60,
-            ),
-        ),
-        Some(
-            Nfacell(
-                29,
-            ),
-        ),
-        Some(
-            Nfacell(
-                88,
-            ),
-        ),
-        Some(
-            Nfacell(
-                90,
-            ),
-        ),
-        Some(
-            Nfacell(
-                57,
-            ),
-        ),
-        Some(
-            Nfacell(
-                86,
-            ),
-        ),
-        Some(
-            Nfacell(
-                69,
-            ),
-        ),
-        Some(
-            Nfacell(
-                82,
-            ),
-        ),
-        Some(
-            Nfacell(
-                98,
-            ),
-        ),
-        Some(
-            Nfacell(
-                50,
-            ),
-        ),
-        Some(
-            Nfacell(
-                6,
-            ),
-        ),
-        Some(
-            Nfacell(
-                35,
-            ),
-        ),
-        Some(
-            Nfacell(
-                49,
-            ),
-        ),
-        Some(
-            Nfacell(
-                20,
-            ),
-        ),
-        None,
-        Some(
-            Nfacell(
-                2,
-            ),
-        ),
-        Some(
-            Nfacell(
-                26,
             ),
         ),
         Some(
@@ -420,7 +320,192 @@
         ),
         Some(
             Nfacell(
-                53,
+                104,
+            ),
+        ),
+        Some(
+            Nfacell(
+                45,
+            ),
+        ),
+        Some(
+            Nfacell(
+                16,
+            ),
+        ),
+        Some(
+            Nfacell(
+                37,
+            ),
+        ),
+        Some(
+            Nfacell(
+                27,
+            ),
+        ),
+        Some(
+            Nfacell(
+                2,
+            ),
+        ),
+        Some(
+            Nfacell(
+                3,
+            ),
+        ),
+        Some(
+            Nfacell(
+                55,
+            ),
+        ),
+        Some(
+            Nfacell(
+                69,
+            ),
+        ),
+        Some(
+            Nfacell(
+                81,
+            ),
+        ),
+        Some(
+            Nfacell(
+                86,
+            ),
+        ),
+        Some(
+            Nfacell(
+                101,
+            ),
+        ),
+        Some(
+            Nfacell(
+                7,
+            ),
+        ),
+        Some(
+            Nfacell(
+                98,
+            ),
+        ),
+        Some(
+            Nfacell(
+                58,
+            ),
+        ),
+        Some(
+            Nfacell(
+                93,
+            ),
+        ),
+        Some(
+            Nfacell(
+                61,
+            ),
+        ),
+        Some(
+            Nfacell(
+                5,
+            ),
+        ),
+        Some(
+            Nfacell(
+                14,
+            ),
+        ),
+        Some(
+            Nfacell(
+                24,
+            ),
+        ),
+        Some(
+            Nfacell(
+                18,
+            ),
+        ),
+        Some(
+            Nfacell(
+                30,
+            ),
+        ),
+        Some(
+            Nfacell(
+                10,
+            ),
+        ),
+        Some(
+            Nfacell(
+                35,
+            ),
+        ),
+        Some(
+            Nfacell(
+                13,
+            ),
+        ),
+        Some(
+            Nfacell(
+                41,
+            ),
+        ),
+        Some(
+            Nfacell(
+                46,
+            ),
+        ),
+        Some(
+            Nfacell(
+                57,
+            ),
+        ),
+        Some(
+            Nfacell(
+                17,
+            ),
+        ),
+        Some(
+            Nfacell(
+                34,
+            ),
+        ),
+        Some(
+            Nfacell(
+                62,
+            ),
+        ),
+        Some(
+            Nfacell(
+                65,
+            ),
+        ),
+        Some(
+            Nfacell(
+                66,
+            ),
+        ),
+        Some(
+            Nfacell(
+                71,
+            ),
+        ),
+        Some(
+            Nfacell(
+                36,
+            ),
+        ),
+        Some(
+            Nfacell(
+                76,
+            ),
+        ),
+        Some(
+            Nfacell(
+                44,
+            ),
+        ),
+        Some(
+            Nfacell(
+                77,
             ),
         ),
         Some(
@@ -435,102 +520,17 @@
         ),
         Some(
             Nfacell(
-                73,
-            ),
-        ),
-        Some(
-            Nfacell(
-                63,
-            ),
-        ),
-        Some(
-            Nfacell(
-                39,
-            ),
-        ),
-        Some(
-            Nfacell(
-                46,
-            ),
-        ),
-        Some(
-            Nfacell(
-                80,
-            ),
-        ),
-        Some(
-            Nfacell(
-                76,
-            ),
-        ),
-        Some(
-            Nfacell(
-                33,
-            ),
-        ),
-        Some(
-            Nfacell(
-                27,
-            ),
-        ),
-        Some(
-            Nfacell(
                 84,
             ),
         ),
         Some(
             Nfacell(
-                23,
+                85,
             ),
         ),
         Some(
             Nfacell(
-                103,
-            ),
-        ),
-        Some(
-            Nfacell(
-                25,
-            ),
-        ),
-        Some(
-            Nfacell(
-                75,
-            ),
-        ),
-        Some(
-            Nfacell(
-                81,
-            ),
-        ),
-        Some(
-            Nfacell(
-                92,
-            ),
-        ),
-        Some(
-            Nfacell(
-                89,
-            ),
-        ),
-        Some(
-            Nfacell(
-                17,
-            ),
-        ),
-        Some(
-            Nfacell(
-                31,
-            ),
-        ),
-        Some(
-            Nfacell(
-                48,
-            ),
-        ),
-        Some(
-            Nfacell(
-                41,
+                87,
             ),
         ),
     },
@@ -2664,59 +2664,59 @@
         ),
     ],
 }
-277
+493
+401
+765
 227
-282
-233
-420
-237
-338
-103827
-192
-127
-117
-132
-109
-113
-115
-152
-90530
-75691
-160
-248350
-87418
-193
-325
-278
-458
-138
-229
-144
-229
-336
+215
+180
+314
+214918
 223
-325
-106
-371
-308
-110
-245
-162
+282
+278
+691
+272
+257
+276
+219
+193189
+98369
+267
+203608
+130413
+298
+248
+195
+476
+193
+389
 209
-111
-286
-280
-333
-283
-108
-273
-175
-144
-176
-112
-48259
-359
+509
+189
+471
+142
+454
+574
+515
+210
+489
+152
+8087
+197
+524
+187
+738
+227
+211
+202
 177
+201
+310
+596
+65195
+661
+370
 BEGIN
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
@@ -2732,4 +2732,4 @@ ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/quad.rs:673:5] unsafe { MISS_CNT } = 235
+[src/quad.rs:667:5] unsafe { MISS_CNT } = 235

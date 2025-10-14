@@ -404,9 +404,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             value,
             old_value,
         } => {
-            let node_idx = dom
-                .node_id_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for replace_value", path));
+            let node_idx = dom.node_id_by_path(&path).unwrap();
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = dom
@@ -426,9 +424,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             dom.set_node_dirty(node_idx);
         }
         Command::InsertValue { path, key, value } => {
-            let node_idx = dom
-                .node_id_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for insert_value", path));
+            let node_idx = dom.node_id_by_path(&path).unwrap();
             let new_value = value.map(json_value_to_attr_string);
             dom.update_attribute(node_idx, key, new_value);
             dom.set_node_dirty(node_idx);
@@ -438,9 +434,7 @@ fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
             key,
             old_value,
         } => {
-            let node_idx = dom
-                .node_id_by_path(&path)
-                .unwrap_or_else(|| panic!("invalid path {:?} for delete_value", path));
+            let node_idx = dom.node_id_by_path(&path).unwrap();
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
                 let actual = dom

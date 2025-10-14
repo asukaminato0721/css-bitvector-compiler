@@ -141,15 +141,11 @@ pub fn parse_command<'a>(
 ) -> Command<'a> {
     match command_name {
         "init" => {
-            let node = command_data
-                .get("node")
-                .unwrap_or_else(|| panic!("missing `node` field for `{command_name}`"));
+            let node = command_data.get("node").unwrap();
             Command::Init { node }
         }
         "add" => {
-            let node = command_data
-                .get("node")
-                .unwrap_or_else(|| panic!("missing `node` field for `{command_name}`"));
+            let node = command_data.get("node").unwrap();
             let path = extract_path_from_command(command_data);
             Command::Add { path, node }
         }
@@ -158,10 +154,7 @@ pub fn parse_command<'a>(
                 unreachable!();
             }
             let path = extract_path_from_command(command_data);
-            let key = command_data
-                .get("key")
-                .and_then(|v| v.as_str())
-                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
             let value = command_data.get("value");
             let old_value = command_data.get("old_value");
             Command::ReplaceValue {
@@ -176,10 +169,7 @@ pub fn parse_command<'a>(
                 unreachable!();
             }
             let path = extract_path_from_command(command_data);
-            let key = command_data
-                .get("key")
-                .and_then(|v| v.as_str())
-                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
             let value = command_data.get("value");
             Command::InsertValue { path, key, value }
         }
@@ -188,10 +178,7 @@ pub fn parse_command<'a>(
                 unreachable!();
             }
             let path = extract_path_from_command(command_data);
-            let key = command_data
-                .get("key")
-                .and_then(|v| v.as_str())
-                .unwrap_or_else(|| panic!("missing `key` field for `{command_name}`"));
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
             let old_value = command_data.get("old_value");
             Command::DeleteValue {
                 path,

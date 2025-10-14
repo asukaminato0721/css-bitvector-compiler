@@ -1,6 +1,38 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/bit`
 [src/bit.rs:398:17] &dom.nodes = {
+    1: DOMNode {
+        tag_id: SelectorId(
+            3,
+        ),
+        class_ids: {
+            SelectorId(
+                4,
+            ),
+        },
+        id_selector_id: None,
+        attributes: {
+            "class": "a",
+        },
+        parent: None,
+        children: [
+            2,
+            3,
+        ],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true,
+            false,
+        ],
+    },
     2: DOMNode {
         tag_id: SelectorId(
             5,
@@ -57,40 +89,39 @@
             false,
         ],
     },
-    1: DOMNode {
+}
+[src/bit.rs:398:17] &dom.nodes = {
+    4: DOMNode {
         tag_id: SelectorId(
-            3,
+            6,
         ),
-        class_ids: {
+        class_ids: {},
+        id_selector_id: Some(
             SelectorId(
-                4,
+                1,
             ),
-        },
-        id_selector_id: None,
+        ),
         attributes: {
-            "class": "a",
+            "id": "bb",
         },
-        parent: None,
-        children: [
-            2,
-            3,
-        ],
+        parent: Some(
+            1,
+        ),
+        children: [],
         dirty: true,
         recursive_dirty: true,
         output_state: [
             false,
             false,
-            false,
-            false,
             true,
             false,
             false,
-            true,
+            false,
+            false,
+            false,
             false,
         ],
     },
-}
-[src/bit.rs:398:17] &dom.nodes = {
     1: DOMNode {
         tag_id: SelectorId(
             3,
@@ -149,37 +180,6 @@
             false,
         ],
     },
-    4: DOMNode {
-        tag_id: SelectorId(
-            6,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                1,
-            ),
-        ),
-        attributes: {
-            "id": "bb",
-        },
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
     3: DOMNode {
         tag_id: SelectorId(
             6,
@@ -212,11 +212,11 @@
         ],
     },
 }
-7420
+10321
 BEGIN
 #b -> [3]
 #bb -> [4]
 [class="aa"] -> [2]
 div p -> [2]
 END
-[src/bit.rs:542:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:536:5] unsafe { MISS_CNT } = 4
