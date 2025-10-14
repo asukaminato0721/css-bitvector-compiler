@@ -17,6 +17,14 @@ pub enum IState {
     IUnused,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum DirtyState {
+    #[default]
+    Clean,
+    InputChanged,
+    NodeChanged,
+}
+
 #[derive(Debug, Default)]
 pub struct DOMNode {
     pub tag_id: SelectorId,                  // 标签选择器ID
@@ -25,16 +33,28 @@ pub struct DOMNode {
     pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
     pub parent: Option<u64>,                 // 存储父节点在 arena 中的索引
     pub children: Vec<u64>,                  // 存储子节点在 arena 中的索引
-    pub dirty: bool,
+    pub dirty: DirtyState,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
     pub tri_state: Vec<IState>,
 }
 
 impl DOMNode {
-    fn set_dirty(&mut self) {
-        self.dirty = true;
+    fn mark_node_changed(&mut self) {
+        self.dirty = DirtyState::NodeChanged;
         self.recursive_dirty = true;
+    }
+
+    fn mark_input_changed(&mut self) {
+        if self.dirty != DirtyState::NodeChanged {
+            self.dirty = DirtyState::InputChanged;
+        }
+        self.recursive_dirty = true;
+    }
+
+    fn clear_dirty(&mut self) {
+        self.dirty = DirtyState::Clean;
+        self.recursive_dirty = false;
     }
 }
 
@@ -75,7 +95,7 @@ impl AddNode for DOM {
             attributes,
             parent: parent_index,
             children: Vec::new(),
-            dirty: true,
+            dirty: DirtyState::NodeChanged,
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
@@ -134,7 +154,7 @@ impl DOM {
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
     pub fn set_node_dirty(&mut self, node_idx: u64) {
         let node = self.nodes.get_mut(&node_idx).unwrap();
-        node.set_dirty();
+        node.mark_node_changed();
 
         // 向上传播 recursive_dirty
         let mut current_idx = node.parent;
@@ -318,57 +338,109 @@ impl DOM {
             return;
         }
 
-        if self.nodes[&node_idx].dirty {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
-            // use prev to cal
-            let need_re = !input
-                .iter()
-                .zip(node.tri_state.clone())
-                .all(|x: (&bool, IState)| {
-                    matches!(
-                        x,
-                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
-                    )
-                });
-
-            if need_re {
-                unsafe {
-                    MISS_CNT += 1;
-                }
-                let (new_output_state, new_tri_state) =
-                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
-                let node = self.nodes.get_mut(&node_idx).unwrap();
-                node.output_state = new_output_state.clone();
-                node.tri_state = new_tri_state.clone();
-                for child_idx in self.nodes[&node_idx].children.clone() {
-                    self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
-                }
-            }
-        } else {
-            // Debug check: if not dirty, recomputing should not change output
-            let original_tri_state = self.nodes[&node_idx].tri_state.clone();
-            let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_output, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-            assert_eq!(
-                original_tri_state,
-                new_tri,
-                "input is {:?}
+        let mut should_mark_children = false;
+        match self.nodes[&node_idx].dirty {
+            DirtyState::Clean => {
+                // Debug check: if not dirty, recomputing should not change output
+                let original_tri_state = self.nodes[&node_idx].tri_state.clone();
+                let original_output_state = self.nodes[&node_idx].output_state.clone();
+                let (new_output, new_tri) = {
+                    let node = &self.nodes[&node_idx];
+                    self.new_output_state(node, input, nfa)
+                };
+                assert_eq!(
+                    original_tri_state,
+                    new_tri,
+                    "input is {:?}
 old_tri is {:?}
 old_output is {:?}
 new_output is {:?}
 new_tri is {:?}
 
                    ",
-                encode(input),
-                encode(&original_tri_state),
-                encode(&original_output_state),
-                encode(&new_output),
-                encode(&new_tri)
-            );
+                    encode(input),
+                    encode(&original_tri_state),
+                    encode(&original_output_state),
+                    encode(&new_output),
+                    encode(&new_tri)
+                );
+            }
+            DirtyState::InputChanged => {
+                let original_tri_state = self.nodes[&node_idx].tri_state.clone();
+                let original_output_state = self.nodes[&node_idx].output_state.clone();
+                let need_re = !input
+                    .iter()
+                    .copied()
+                    .zip(original_tri_state.iter().copied())
+                    .all(|(input_bit, state)| {
+                        matches!(
+                            (input_bit, state),
+                            (false, IState::IZero) | (true, IState::IOne) | (_, IState::IUnused)
+                        )
+                    });
+
+                if need_re {
+                    unsafe {
+                        MISS_CNT += 1;
+                    }
+                    let (new_output_state, new_tri_state) = {
+                        let node = &self.nodes[&node_idx];
+                        self.new_output_state(node, input, nfa)
+                    };
+                    {
+                        let node = self.nodes.get_mut(&node_idx).unwrap();
+                        node.output_state = new_output_state.clone();
+                        node.tri_state = new_tri_state.clone();
+                    }
+                    should_mark_children = true;
+                } else {
+                    let (new_output, new_tri) = {
+                        let node = &self.nodes[&node_idx];
+                        self.new_output_state(node, input, nfa)
+                    };
+                    assert_eq!(
+                        original_tri_state,
+                        new_tri,
+                        "input is {:?}
+old_tri is {:?}
+old_output is {:?}
+new_output is {:?}
+new_tri is {:?}
+
+                   ",
+                        encode(input),
+                        encode(&original_tri_state),
+                        encode(&original_output_state),
+                        encode(&new_output),
+                        encode(&new_tri)
+                    );
+                }
+            }
+            DirtyState::NodeChanged => {
+                unsafe {
+                    MISS_CNT += 1;
+                }
+                let (new_output_state, new_tri_state) = {
+                    let node = &self.nodes[&node_idx];
+                    self.new_output_state(node, input, nfa)
+                };
+                {
+                    let node = self.nodes.get_mut(&node_idx).unwrap();
+                    node.output_state = new_output_state.clone();
+                    node.tri_state = new_tri_state.clone();
+                }
+                should_mark_children = true;
+            }
         }
 
         // Recursively process children
         let children_indices = self.nodes[&node_idx].children.clone();
+        if should_mark_children {
+            for &child_idx in &children_indices {
+                self.nodes.get_mut(&child_idx).unwrap().mark_input_changed();
+            }
+        }
+
         let current_output_state = self.nodes[&node_idx].output_state.clone();
         for &child_idx in &children_indices {
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
@@ -376,8 +448,7 @@ new_tri is {:?}
 
         // Reset dirty flags
         if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
+            node.clear_dirty();
         }
     }
     fn new_output_state(

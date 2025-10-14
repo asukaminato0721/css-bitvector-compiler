@@ -1,6 +1,31 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/bit`
 [src/bit.rs:398:17] &dom.nodes = {
+    2: DOMNode {
+        tag_id: SelectorId(
+            5,
+        ),
+        class_ids: {},
+        id_selector_id: None,
+        attributes: {},
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
     1: DOMNode {
         tag_id: SelectorId(
             3,
@@ -33,6 +58,39 @@
             false,
         ],
     },
+    3: DOMNode {
+        tag_id: SelectorId(
+            6,
+        ),
+        class_ids: {},
+        id_selector_id: Some(
+            SelectorId(
+                0,
+            ),
+        ),
+        attributes: {
+            "id": "b",
+        },
+        parent: Some(
+            1,
+        ),
+        children: [],
+        dirty: true,
+        recursive_dirty: true,
+        output_state: [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ],
+    },
+}
+[src/bit.rs:398:17] &dom.nodes = {
     2: DOMNode {
         tag_id: SelectorId(
             5,
@@ -89,8 +147,6 @@
             false,
         ],
     },
-}
-[src/bit.rs:398:17] &dom.nodes = {
     4: DOMNode {
         tag_id: SelectorId(
             6,
@@ -155,64 +211,8 @@
             false,
         ],
     },
-    2: DOMNode {
-        tag_id: SelectorId(
-            5,
-        ),
-        class_ids: {},
-        id_selector_id: None,
-        attributes: {},
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
-    3: DOMNode {
-        tag_id: SelectorId(
-            6,
-        ),
-        class_ids: {},
-        id_selector_id: Some(
-            SelectorId(
-                0,
-            ),
-        ),
-        attributes: {
-            "id": "b",
-        },
-        parent: Some(
-            1,
-        ),
-        children: [],
-        dirty: true,
-        recursive_dirty: true,
-        output_state: [
-            false,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-    },
 }
-10321
+9373
 BEGIN
 #b -> [3]
 #bb -> [4]
