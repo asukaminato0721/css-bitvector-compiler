@@ -1,9 +1,9 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-1230
-967
-1095
-1063
+1194
+1040
+1054
+1006
 BEGIN
 .app-badge -> [3542, 3557]
 .app-badge a -> [3545, 3560]
@@ -108,4 +108,6 @@ select -> [409]
 small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352, 3977, 3985, 3992]
 strong -> [106, 133, 157, 181, 205, 229, 253, 277, 301, 325, 349, 3524]
 END
-[src/tri.rs:854:5] unsafe { MISS_CNT } = 3687
+[src/tri.rs:862:5] unsafe { MISS_CNT } = 3687
+[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 1961
+[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 61

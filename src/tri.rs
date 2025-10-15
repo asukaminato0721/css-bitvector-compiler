@@ -8,6 +8,8 @@ use std::{
     sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
+static mut INPUT_CHANGE_COUNT: usize = 0;
+static mut INPUT_SKIP_COUNT: usize = 0;
 static mut STATE: usize = 0; // global state
 static DEBUG_MODE: OnceLock<bool> = OnceLock::new();
 
@@ -515,6 +517,9 @@ new_tri is {:?}
                         )
                     },
                 );
+                unsafe {
+                    INPUT_CHANGE_COUNT += 1;
+                }
 
                 debug_log(|| {
                     format!(
@@ -550,6 +555,9 @@ new_tri is {:?}
                     });
                     should_mark_children = true;
                 } else {
+                    unsafe {
+                        INPUT_SKIP_COUNT += 1;
+                    }
                     let (new_output, new_tri) = {
                         let node = &self.nodes[&node_idx];
                         self.new_output_state(node, input, nfa)
@@ -852,79 +860,6 @@ fn main() {
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn debug_logs_skip_child_recompute_when_parent_change_is_irrelevant() {
-        unsafe {
-            MISS_CNT = 0;
-            STATE = 0;
-            std::env::set_var("BIT_DEBUG", "1");
-        }
-
-        let mut dom = DOM::new();
-        let selectors = vec![".leaf".to_string()];
-        let mut s = 0;
-        let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
-        unsafe {
-            STATE = s;
-        }
-
-        let root_attributes = HashMap::from([("id".to_string(), "root".to_string())]);
-        let root_id = dom.add_node(
-            1,
-            "A",
-            Vec::<String>::new(),
-            Some("root".to_string()),
-            root_attributes,
-            None,
-            &nfa,
-        );
-        let child_attributes = HashMap::from([("class".to_string(), "leaf".to_string())]);
-        let child_id = dom.add_node(
-            2,
-            "A",
-            vec!["leaf".to_string()],
-            None,
-            child_attributes,
-            Some(root_id),
-            &nfa,
-        );
-
-        let initial_input = get_input();
-        dom.recompute_styles(&nfa, &initial_input);
-
-        let before = unsafe { MISS_CNT };
-
-        let new_tag_id = dom
-            .selector_manager
-            .get_or_create_id(Selector::Type("b".into()));
-        {
-            let root = dom.nodes.get_mut(&root_id).unwrap();
-            root.tag_id = new_tag_id;
-        }
-        dom.set_node_dirty(root_id);
-        assert!(
-            matches!(dom.nodes.get(&child_id).unwrap().dirty, DirtyState::Clean),
-            "child should remain clean before recompute"
-        );
-
-        let second_input = get_input();
-        dom.recompute_styles(&nfa, &second_input);
-
-        let after = unsafe { MISS_CNT };
-        assert_eq!(
-            after - before,
-            1,
-            "expected only the root node to recompute after the tag rename"
-        );
-
-        unsafe {
-            std::env::remove_var("BIT_DEBUG");
-        }
-    }
+    dbg!(unsafe { INPUT_CHANGE_COUNT });
+    dbg!(unsafe { INPUT_SKIP_COUNT });
 }

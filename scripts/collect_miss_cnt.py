@@ -11,9 +11,9 @@ def main(base_dir: str = "css-gen-op"):
         f = d / "bit_tmp.txt"
         f1 = d / "tri_tmp.txt"
         quad = d / "quad_tmp.txt"
-        value = f.read_text(encoding="utf-8", errors="ignore").splitlines()[-1].split(" = ")[-1]
-        value1 = f1.read_text(encoding="utf-8", errors="ignore").splitlines()[-1].split(" = ")[-1]
-        value2 = quad.read_text(encoding="utf-8", errors="ignore").splitlines()[-1].split(" = ")[-1]
+        value = f.read_text(encoding="utf-8", errors="ignore").strip().splitlines()[-1].split(" = ")[-1]
+        value1 = f1.read_text(encoding="utf-8", errors="ignore").strip().splitlines()[-3].split(" = ")[-1]
+        value2 = quad.read_text(encoding="utf-8", errors="ignore").strip().splitlines()[-3].split(" = ")[-1]
 
         rows.append((d.name, value, value1, value2))
     with redirect_stdout(Path("./misscnt.md").open("w")):

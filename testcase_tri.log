@@ -14,7 +14,7 @@
 [tri-debug] recompute start node 1 <div .a>; input=00
 [tri-debug] node 1 <div .a> ignored: recursive_dirty=false, input=00
 [tri-debug] recompute done node 1 <div .a>
-25767
+41250
 [tri-debug] recompute start node 1 <div .b>; input=00
 [tri-debug] node 1 <div .b> visit: dirty=node_changed input=00 cached_output=01 tri=__
 [tri-debug] node 1 <div .b> recompute (node_changed) -> output=00 (prev=01) tri=__ (prev=__)
@@ -32,8 +32,10 @@
 [tri-debug] recompute start node 1 <div .b>; input=00
 [tri-debug] node 1 <div .b> ignored: recursive_dirty=false, input=00
 [tri-debug] recompute done node 1 <div .b>
-26586
+24909
 BEGIN
 .a -> [2]
 END
-[src/tri.rs:854:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:862:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 1

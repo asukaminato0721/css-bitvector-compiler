@@ -1,58 +1,58 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
-1233
-1176
-1231
-1371
-1359
-1024
-1225
-951
+1691
+1557
+1097
+2423
+1892
+1057
+1503
+1279
+1422
+1134
+1118
+1014
+1119
+991
 1064
-997
-1042
-1077
-1028
-1000
-1004
-1113
-1024
-2874
-1124
-1091
-1156
-1517
-1284
-1267
-1047
-1050
-937
-1300
-1395
-1264
-1369
-1056
-1008
-1249
-1545
-968
-1144
-1331
-1104
-1024
-1053
-1032
-1233
-1977
-1031
-1056
+1289
+929
+1672
+1162
 1075
-1494
+1166
+1151
+995
+1164
+2409
 1099
-1309
-1408
-1856
-1401
+1571
+1119
+1322
+1001
+1318
+1042
+1122
+1369
+1182
+1111
+1070
+991
+1748
+1097
+1260
+1157
+1097
+989
+1032
+1512
+1154
+1129
+1291
+1320
+1653
+3202
+1210
 BEGIN
 #masthead-skeleton-icons -> [379]
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
@@ -68,4 +68,6 @@ ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/tri.rs:854:5] unsafe { MISS_CNT } = 4116
+[src/tri.rs:862:5] unsafe { MISS_CNT } = 4116
+[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 5229
+[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 5229

@@ -1,6 +1,6 @@
     Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/bit`
-1651
+1766
 BEGIN
 #b -> [3]
 #bb -> [4]

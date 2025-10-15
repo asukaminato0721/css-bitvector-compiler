@@ -8,6 +8,8 @@ use std::{
     sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
+static mut INPUT_CHANGE_COUNT: usize = 0;
+static mut INPUT_SKIP_COUNT: usize = 0;
 static mut STATE: usize = 0; // global state
 static DEBUG_MODE: OnceLock<bool> = OnceLock::new();
 
@@ -550,6 +552,9 @@ new_tri is {:?}
                             (false, IState::IZero) | (true, IState::IOne) | (_, IState::IUnused)
                         )
                     });
+                unsafe {
+                    INPUT_CHANGE_COUNT += 1;
+                }
 
                 debug_log(|| {
                     format!(
@@ -583,6 +588,9 @@ new_tri is {:?}
                     }
                     should_mark_children = true;
                 } else {
+                    unsafe {
+                        INPUT_SKIP_COUNT += 1;
+                    }
                     let (new_input, new_output) =
                         self.new_output_state(&self.nodes[&node_idx], input, nfa);
                     debug_log(|| {
@@ -951,4 +959,6 @@ fn main() {
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });
+    dbg!(unsafe { INPUT_CHANGE_COUNT });
+    dbg!(unsafe { INPUT_SKIP_COUNT });
 }

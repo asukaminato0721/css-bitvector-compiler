@@ -13,7 +13,7 @@
 [bit-debug] recompute start node 1 <div .a>; input=10
 [bit-debug] node 1 <div .a> ignored: recursive_dirty=false, input=10
 [bit-debug] recompute done node 1 <div .a>
-32931
+33183
 [bit-debug] recompute start node 1 <div .b>; input=00
 [bit-debug] node 1 <div .b> visit: dirty=true input=00
 [bit-debug] node 1 <div .b> recompute -> output=00 (prev=01)
@@ -30,7 +30,7 @@
 [bit-debug] recompute start node 1 <div .b>; input=10
 [bit-debug] node 1 <div .b> ignored: recursive_dirty=false, input=10
 [bit-debug] recompute done node 1 <div .b>
-27206
+33495
 BEGIN
 .a -> [2]
 END
