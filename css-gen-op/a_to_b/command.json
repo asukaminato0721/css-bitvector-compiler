@@ -1,0 +1,4 @@
+{"name": "init", "time": 0, "node": {"id": 1, "name": "div", "type": "element", "attributes": {"class": "a"}, "children": [{"id": 2, "name": "div", "type": "element", "attributes": {"class": "a"}, "children": []}]}}
+{"name": "recalculate", "time": 1}
+{"name": "replace_value", "path": [], "on": "{id:1, name:'div', type:'element'}", "type": "attributes", "key": "class", "old_value": "a", "value": "b"}
+{"name": "recalculate", "time": 2}

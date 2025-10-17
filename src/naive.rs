@@ -1,10 +1,10 @@
-use cssparser::{Parser, ParserInput, Token};
+use cssparser::{ParseError, Parser, ParserInput, Token};
 use std::{
-    collections::HashSet,
+    collections::{HashMap, HashSet},
     fmt::{Debug, Display},
 };
 
-use css_bitvector_compiler::Cache;
+use css_bitvector_compiler::{Cache, Command, json_value_to_attr_string, parse_command};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
@@ -63,6 +63,7 @@ enum Selector {
     Type(String),
     Class(String),
     Id(String),
+    AttributeEquals { name: String, value: String },
 }
 
 impl Display for Selector {
@@ -71,6 +72,9 @@ impl Display for Selector {
             Selector::Type(tag) => write!(f, "{}", tag),
             Selector::Class(class) => write!(f, ".{}", class),
             Selector::Id(id) => write!(f, "#{}", id),
+            Selector::AttributeEquals { name, value } => {
+                write!(f, "[{}=\"{}\"]", name, value)
+            }
         }
     }
 }
@@ -83,6 +87,8 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
+    let mut skip_next_simple_selector = false;
+    let mut skip_at_rule = false;
 
     #[derive(PartialEq, Eq)]
     enum NextSelector {
@@ -111,9 +117,22 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
             }
         };
 
+        if skip_at_rule {
+            match token {
+                Token::CurlyBracketBlock | Token::Semicolon => {
+                    skip_at_rule = false;
+                    continue;
+                }
+                _ => continue,
+            }
+        }
+
         match token {
             Token::Comment(_) => continue,
             Token::WhiteSpace(_) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                }
                 if current_selector.is_some() && pending_combinator == Combinator::None {
                     pending_combinator = Combinator::Descendant;
                 }
@@ -126,7 +145,55 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                     pending_combinator = Combinator::Child;
                 }
             }
+            Token::AtKeyword(_) => {
+                selector_parts.clear();
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                skip_next_simple_selector = false;
+                skip_at_rule = true;
+                continue;
+            }
+            Token::Colon => {
+                skip_next_simple_selector = true;
+                continue;
+            }
+            Token::Function(_) => {
+                if skip_next_simple_selector {
+                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
+                        while nested.next_including_whitespace_and_comments().is_ok() {}
+                        Ok(())
+                    });
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::ParenthesisBlock => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::SquareBracketBlock => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                }
+                pending_combinator = Combinator::None;
+                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
+                    current_selector = Some(attribute_selector);
+                }
+                next_selector = NextSelector::Type;
+            }
             Token::IDHash(id) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 if let Some(prev_selector) = current_selector.take() {
                     selector_parts.push(SelectorPart {
                         selector: prev_selector,
@@ -138,6 +205,11 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 let s = match next_selector {
                     NextSelector::Class => Selector::Class(name.to_lowercase().to_string()),
                     NextSelector::Type => Selector::Type(name.to_lowercase().to_string()),
@@ -195,6 +267,27 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules
 }
 
+fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
+    parser
+        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
+            nested.skip_whitespace();
+            let name = nested
+                .expect_ident_cloned()
+                .map_err(ParseError::from)?
+                .to_ascii_lowercase();
+            nested.skip_whitespace();
+            nested.expect_delim('=').map_err(ParseError::from)?;
+            nested.skip_whitespace();
+            let value = nested
+                .expect_string_cloned()
+                .map_err(ParseError::from)?
+                .to_string();
+            nested.skip_whitespace();
+            Ok(Selector::AttributeEquals { name, value })
+        })
+        .ok()
+}
+
 // note: do nt pull out bitvector result; - absvector will change that laters
 // to other type struct NaiveCache {
 // no dirty node anywhere, have to recompute from scratch
@@ -219,27 +312,69 @@ impl NaiveHtmlNode {
         self.children[path[0]].remove_by_path(&path[1..]);
     }
 
+    fn node_mut_by_path(&mut self, path: &[usize]) -> Option<&mut Self> {
+        if path.is_empty() {
+            return Some(self);
+        }
+        let mut current = self;
+        for &idx in path {
+            current = current.children.get_mut(idx)?;
+        }
+        Some(current)
+    }
+
+    fn set_attribute(&mut self, key: &str, new_value: Option<String>) {
+        let key_lower = key.to_lowercase();
+        match key_lower.as_str() {
+            "class" => {
+                let mut new_classes = HashSet::new();
+                if let Some(ref value) = new_value {
+                    for class_name in value.split_whitespace().filter(|name| !name.is_empty()) {
+                        new_classes.insert(class_name.to_string());
+                    }
+                }
+                self.classes = new_classes;
+            }
+            "id" => {
+                self.html_id = new_value.clone();
+            }
+            _ => {}
+        }
+
+        if let Some(value) = new_value {
+            self.attributes.insert(key_lower, value);
+        } else {
+            self.attributes.remove(&key_lower);
+        }
+    }
+
     fn json_to_node(json_node: &serde_json::Value) -> Self {
         let mut node = Self::default();
         //  // dbg!(&json_node);
         node.tag_name = json_node["name"].as_str().unwrap().into();
         node.id = json_node["id"].as_u64().unwrap();
-        node.html_id = json_node["attributes"]
+        let attributes = json_node["attributes"]
             .as_object()
-            .unwrap()
-            .get("id")
-            .and_then(|x| x.as_str())
-            .map(String::from);
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
+        node.html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
         // Add classes from attributes
-        node.classes = json_node["attributes"]
-            .as_object()
-            .unwrap()
-            .get("class")
-            .map(|x| x.as_str().unwrap())
-            .unwrap_or_default()
+        node.classes = class_attr
             .split_whitespace()
             .map(|x| x.into())
             .collect::<HashSet<String>>();
+        node.attributes = attributes;
 
         // Add children recursively
         node.children = json_node["children"]
@@ -268,6 +403,11 @@ impl NaiveHtmlNode {
                     false
                 }
             }
+            Selector::AttributeEquals { name, value } => self
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false),
         }
     }
 
@@ -361,6 +501,7 @@ struct NaiveHtmlNode {
     tag_name: String,
     id: u64,
     html_id: Option<String>,
+    attributes: HashMap<String, String>,
     classes: HashSet<String>,
     children: Vec<NaiveHtmlNode>,
     parent: Option<*mut NaiveHtmlNode>, // TODO: use u64 in future
@@ -407,48 +548,71 @@ fn parse_trace() -> Vec<LayoutFrame> {
     frames
 }
 
-fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
-    command_data
-        .get("path")
-        .and_then(|p| p.as_array())
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|v| v.as_u64())
-                .map(|v| v as usize)
-                .collect::<Vec<_>>()
-        })
-        .unwrap()
-}
-
 fn apply_frame(tree: &mut NaiveHtmlNode, frame: &LayoutFrame) {
-    match frame.command_name.as_str() {
-        "init" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            *tree = NaiveHtmlNode::json_to_node(frame.command_data.get("node").unwrap());
+    match parse_command(&frame.command_name, &frame.command_data) {
+        Command::Init { node } => {
+            *tree = NaiveHtmlNode::json_to_node(node);
             tree.fix_parent_pointers();
         }
-        "add" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            let path = extract_path_from_command(&frame.command_data);
+        Command::Add { path, node } => {
             if path.is_empty() {
                 return;
             }
-            tree.add_by_path(&path, frame.command_data.get("node").unwrap());
+            tree.add_by_path(&path, node);
             tree.fix_parent_pointers(); // TODO: optimize
         }
-        "replace_value" | "insert_value" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
+        Command::ReplaceValue {
+            path,
+            key,
+            value,
+            old_value,
+        } => {
+            let node = tree.node_mut_by_path(&path).unwrap();
+            if let Some(old_value) = old_value {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = node
+                    .attributes
+                    .get(&key.to_lowercase())
+                    .cloned()
+                    .unwrap_or_default();
+                assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            let new_value = value.map(json_value_to_attr_string);
+            node.set_attribute(key, new_value);
         }
-        "recalculate" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
+        Command::InsertValue { path, key, value } => {
+            let node = tree.node_mut_by_path(&path).unwrap();
+            let new_value = value.map(json_value_to_attr_string);
+            node.set_attribute(key, new_value);
         }
-        "remove" => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
-            let path = extract_path_from_command(&frame.command_data);
+        Command::DeleteValue {
+            path,
+            key,
+            old_value,
+        } => {
+            let node = tree.node_mut_by_path(&path).unwrap();
+            if let Some(old_value) = old_value {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = node
+                    .attributes
+                    .get(&key.to_lowercase())
+                    .cloned()
+                    .unwrap_or_default();
+                assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            node.set_attribute(key, None);
+        }
+        Command::Recalculate => {}
+        Command::Remove { path } => {
             tree.remove_by_path(&path);
-        }
-        _ => {
-            // dbg!(frame.frame_id, frame.command_name.as_str());
         }
     }
 }
@@ -477,11 +641,66 @@ fn main() {
 }
 #[cfg(test)]
 mod test {
-    use crate::parse_css;
+    use super::*;
 
     #[test]
     fn base_case() {
         let s = "div h1 > h2 p .a > .b #c";
         dbg!(parse_css(s));
+    }
+
+    #[test]
+    fn parse_attribute_selector() {
+        let rules = parse_css(r#"[data-role="hero"] { color: red; }"#);
+        assert_eq!(rules.len(), 1);
+        match &rules[0] {
+            CssRule::Complex { parts } => {
+                assert_eq!(parts.len(), 1);
+                match &parts[0].selector {
+                    Selector::AttributeEquals { name, value } => {
+                        assert_eq!(name, "data-role");
+                        assert_eq!(value, "hero");
+                    }
+                    other => panic!("unexpected selector: {:?}", other),
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn matches_attribute_selector_on_node() {
+        let mut node = NaiveHtmlNode::default();
+        node.attributes.insert("data-id".into(), "item-1".into());
+        let selector = Selector::AttributeEquals {
+            name: "data-id".into(),
+            value: "item-1".into(),
+        };
+        assert!(node.matches_simple_selector(&selector));
+
+        let mismatch = Selector::AttributeEquals {
+            name: "data-id".into(),
+            value: "item-2".into(),
+        };
+        assert!(!node.matches_simple_selector(&mismatch));
+    }
+
+    #[test]
+    fn parse_css_skips_pseudo_classes() {
+        let rules = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
+        assert_eq!(rules.len(), 1);
+        let CssRule::Complex { parts } = &rules[0];
+        assert_eq!(parts.len(), 3);
+        match (&parts[0].selector, &parts[0].combinator) {
+            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "wrapper"),
+            other => panic!("unexpected first part: {:?}", other),
+        }
+        match (&parts[1].selector, &parts[1].combinator) {
+            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "item"),
+            other => panic!("unexpected second part: {:?}", other),
+        }
+        match (&parts[2].selector, &parts[2].combinator) {
+            (Selector::Type(tag), Combinator::None) => assert_eq!(tag, "strong"),
+            other => panic!("unexpected third part: {:?}", other),
+        }
     }
 }

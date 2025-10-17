@@ -1,0 +1,41 @@
+[quad-debug] recompute start node 1 <div .a>; input=00
+[quad-debug] node 1 <div .a> visit: dirty=node_changed input=00 cached_input=__ cached_output=0,1
+[quad-debug] node 1 <div .a> recompute (node_changed) -> input=__ (prev=__) output=0,1 (prev=0,1)
+[quad-debug] node 1 <div .a> marking 1 children input_changed
+[quad-debug] node 1 <div .a> child node 2 <div .a> marked input_changed -> dirty=node_changed
+[quad-debug] node 1 <div .a> propagating to 1 children with materialized output=01
+[quad-debug] node 2 <div .a> visit: dirty=node_changed input=01 cached_input=__ cached_output=0,1
+[quad-debug] node 2 <div .a> recompute (node_changed) -> input=__ (prev=__) output=0,1 (prev=0,1)
+[quad-debug] node 2 <div .a> marking 0 children input_changed
+[quad-debug] node 2 <div .a> propagating to 0 children with materialized output=01
+[quad-debug] node 2 <div .a> finished; dirty flags cleared
+[quad-debug] node 1 <div .a> finished; dirty flags cleared
+[quad-debug] recompute done node 1 <div .a>
+[quad-debug] recompute start node 1 <div .a>; input=00
+[quad-debug] node 1 <div .a> ignored: recursive_dirty=false, input=00
+[quad-debug] recompute done node 1 <div .a>
+32656
+[quad-debug] recompute start node 1 <div .b>; input=00
+[quad-debug] node 1 <div .b> visit: dirty=node_changed input=00 cached_input=__ cached_output=0,1
+[quad-debug] node 1 <div .b> recompute (node_changed) -> input=__ (prev=__) output=0,0 (prev=0,1)
+[quad-debug] node 1 <div .b> marking 1 children input_changed
+[quad-debug] node 1 <div .b> child node 2 <div .a> marked input_changed -> dirty=input_changed
+[quad-debug] node 1 <div .b> propagating to 1 children with materialized output=00
+[quad-debug] node 2 <div .a> visit: dirty=input_changed input=00 cached_input=__ cached_output=0,1
+[quad-debug] node 2 <div .a> input_changed need_recompute=false input_state=__
+[quad-debug] node 2 <div .a> input reused; output stays 0,1 input stays __
+[quad-debug] node 2 <div .a> children remain clean
+[quad-debug] node 2 <div .a> propagating to 0 children with materialized output=01
+[quad-debug] node 2 <div .a> finished; dirty flags cleared
+[quad-debug] node 1 <div .b> finished; dirty flags cleared
+[quad-debug] recompute done node 1 <div .b>
+[quad-debug] recompute start node 1 <div .b>; input=00
+[quad-debug] node 1 <div .b> ignored: recursive_dirty=false, input=00
+[quad-debug] recompute done node 1 <div .b>
+30346
+BEGIN
+.a -> [2]
+END
+[src/quad.rs:961:5] unsafe { MISS_CNT } = 3
+[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 1

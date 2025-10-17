@@ -1,13 +1,42 @@
 use css_bitvector_compiler::{
-    AddNode, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager, encode,
-    extract_path_from_command, generate_nfa, parse_css, parse_trace, rdtsc,
+    AddNode, Command, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
+    encode, generate_nfa, json_value_to_attr_string, parse_css, parse_trace, rdtsc,
 };
 use std::{
     collections::{HashMap, HashSet},
     fs,
+    sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
+static mut INPUT_CHANGE_COUNT: usize = 0;
+static mut INPUT_SKIP_COUNT: usize = 0;
 static mut STATE: usize = 0; // global state
+static DEBUG_MODE: OnceLock<bool> = OnceLock::new();
+
+fn debug_enabled() -> bool {
+    *DEBUG_MODE.get_or_init(|| match std::env::var("BIT_DEBUG") {
+        Ok(value) => {
+            let lower = value.to_ascii_lowercase();
+            matches!(lower.as_str(), "1" | "true" | "yes" | "on")
+        }
+        Err(_) => false,
+    })
+}
+
+fn debug_log<F>(build: F)
+where
+    F: FnOnce() -> String,
+{
+    if debug_enabled() {
+        eprintln!("[tri-debug] {}", build());
+    }
+}
+
+fn format_bits(bits: &[bool]) -> String {
+    bits.iter()
+        .map(|bit| if *bit { '1' } else { '0' })
+        .collect()
+}
 
 /// whether a part of input is: 1, 0, or unused
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -17,23 +46,64 @@ pub enum IState {
     IUnused,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum DirtyState {
+    #[default]
+    Clean,
+    InputChanged,
+    NodeChanged,
+}
+
+impl DirtyState {
+    fn label(self) -> &'static str {
+        match self {
+            DirtyState::Clean => "clean",
+            DirtyState::InputChanged => "input_changed",
+            DirtyState::NodeChanged => "node_changed",
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: SelectorId,                 // 标签选择器ID
-    pub class_ids: HashSet<SelectorId>,     // CSS类选择器ID集合
-    pub id_selector_id: Option<SelectorId>, // HTML ID选择器ID
-    pub parent: Option<u64>,                // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,                 // 存储子节点在 arena 中的索引
-    pub dirty: bool,
+    pub tag_id: SelectorId,                  // 标签选择器ID
+    pub class_ids: HashSet<SelectorId>,      // CSS类选择器ID集合
+    pub id_selector_id: Option<SelectorId>,  // HTML ID选择器ID
+    pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
+    pub parent: Option<u64>,                 // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,                  // 存储子节点在 arena 中的索引
+    pub dirty: DirtyState,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
     pub tri_state: Vec<IState>,
 }
 
+fn format_tri_state(tri: &[IState]) -> String {
+    tri.iter()
+        .map(|state| match state {
+            IState::IOne => '1',
+            IState::IZero => '0',
+            IState::IUnused => '_',
+        })
+        .collect()
+}
+
 impl DOMNode {
-    fn set_dirty(&mut self) {
-        self.dirty = true;
+    fn mark_node_changed(&mut self) {
+        self.dirty = DirtyState::NodeChanged;
         self.recursive_dirty = true;
+    }
+
+    fn mark_input_changed(&mut self) {
+        if self.dirty != DirtyState::NodeChanged {
+            self.dirty = DirtyState::InputChanged;
+        }
+        self.recursive_dirty = true;
+    }
+
+    fn clear_dirty(&mut self) {
+        self.dirty = DirtyState::Clean;
+        self.recursive_dirty = false;
     }
 }
 
@@ -51,6 +121,7 @@ impl AddNode for DOM {
         tag_name: &str,
         classes: Vec<String>,
         html_id: Option<String>,
+        attributes: HashMap<String, String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64 {
@@ -70,9 +141,10 @@ impl AddNode for DOM {
             tag_id,
             class_ids,
             id_selector_id,
+            attributes,
             parent: parent_index,
             children: Vec::new(),
-            dirty: true,
+            dirty: DirtyState::NodeChanged,
             recursive_dirty: true,
             output_state: vec![false; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
@@ -98,23 +170,63 @@ impl DOM {
     pub fn new() -> Self {
         Default::default()
     }
+
+    fn describe_node(&self, node_idx: u64) -> String {
+        if let Some(node) = self.nodes.get(&node_idx) {
+            let tag = self
+                .selector_manager
+                .id_to_selector
+                .get(&node.tag_id)
+                .map(|selector| selector.to_string())
+                .unwrap_or_else(|| format!("sid:{}", node.tag_id.0));
+            let mut class_parts = node
+                .class_ids
+                .iter()
+                .filter_map(|cid| {
+                    self.selector_manager
+                        .id_to_selector
+                        .get(cid)
+                        .map(|selector| selector.to_string())
+                })
+                .collect::<Vec<_>>();
+            class_parts.sort();
+            let id_part = node
+                .id_selector_id
+                .and_then(|sid| {
+                    self.selector_manager
+                        .id_to_selector
+                        .get(&sid)
+                        .map(|selector| selector.to_string())
+                })
+                .unwrap_or_default();
+            let mut descriptor = format!("<{}", tag);
+            if !id_part.is_empty() {
+                descriptor.push(' ');
+                descriptor.push_str(&id_part);
+            }
+            if !class_parts.is_empty() {
+                descriptor.push(' ');
+                descriptor.push_str(&class_parts.join(""));
+            }
+            descriptor.push('>');
+            format!("node {} {}", node_idx, descriptor)
+        } else {
+            format!("node {} <unknown>", node_idx)
+        }
+    }
     /// 检查节点是否匹配给定的选择器ID
-    pub fn node_matches_selector(&self, node: &DOMNode, SelectorId(sid): SelectorId) -> bool {
-        if node.tag_id == SelectorId(sid) {
-            return true;
+    pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
+        match self.selector_manager.id_to_selector.get(&selector_id) {
+            Some(Selector::Type(_)) => node.tag_id == selector_id,
+            Some(Selector::Class(_)) => node.class_ids.contains(&selector_id),
+            Some(Selector::Id(_)) => node.id_selector_id == Some(selector_id),
+            Some(Selector::AttributeEquals { name, value }) => node
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false),
+            None => false,
         }
-
-        if node.class_ids.contains(&SelectorId(sid)) {
-            return true;
-        }
-
-        if let Some(id_sel_id) = node.id_selector_id
-            && id_sel_id == SelectorId(sid)
-        {
-            return true;
-        }
-
-        false
     }
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
@@ -135,7 +247,7 @@ impl DOM {
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
     pub fn set_node_dirty(&mut self, node_idx: u64) {
         let node = self.nodes.get_mut(&node_idx).unwrap();
-        node.set_dirty();
+        node.mark_node_changed();
 
         // 向上传播 recursive_dirty
         let mut current_idx = node.parent;
@@ -157,24 +269,39 @@ impl DOM {
     ) -> u64 {
         let tag_name = json_node["name"].as_str().unwrap();
         let id = json_node["id"].as_u64().unwrap();
-        let html_id = json_node["attributes"]
+        let attributes = json_node["attributes"]
             .as_object()
-            .and_then(|attrs| attrs.get("id"))
-            .and_then(|id| id.as_str())
-            .map(String::from);
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
 
-        let classes = json_node["attributes"]
-            .as_object()
-            .and_then(|attrs| attrs.get("class"))
-            .and_then(|class| class.as_str())
-            .unwrap_or_default()
+        let html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
+        let classes = class_attr
             .split_whitespace()
+            .filter(|s| !s.is_empty())
             .map(String::from)
             .collect::<Vec<String>>();
 
         // 创建当前节点
-        let current_index =
-            self.add_node(id, tag_name, classes.clone(), html_id, parent_index, nfa);
+        let current_index = self.add_node(
+            id,
+            tag_name,
+            classes.clone(),
+            html_id,
+            attributes,
+            parent_index,
+            nfa,
+        );
         // HACK
         if id == 5458 && classes.contains(&"hidden".to_string()) {
             panic!()
@@ -205,7 +332,7 @@ impl DOM {
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
-            debug_assert_eq!(parent.children.last().copied(), Some(new_node_idx));
+            assert_eq!(parent.children.last().copied(), Some(new_node_idx));
             parent.children.pop();
             parent.children.insert(insert_pos, new_node_idx);
         }
@@ -231,76 +358,309 @@ impl DOM {
         self.nodes.remove(&removed_child_id);
         self.set_node_dirty(cur_idx);
     }
+    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+        if self.nodes.is_empty() {
+            return None;
+        }
+        let mut current_idx = self.get_root_node();
+        for &segment in path {
+            let node = self.nodes.get(&current_idx)?;
+            current_idx = *node.children.get(segment)?;
+        }
+        Some(current_idx)
+    }
+
+    fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+        let key_lower = key.to_lowercase();
+        match key_lower.as_str() {
+            "class" => {
+                let mut new_class_ids = HashSet::new();
+                if let Some(ref class_value) = new_value {
+                    for class_name in class_value
+                        .split_whitespace()
+                        .filter(|name| !name.is_empty())
+                    {
+                        let class_id = self
+                            .selector_manager
+                            .get_or_create_id(Selector::Class(class_name.to_lowercase()));
+                        new_class_ids.insert(class_id);
+                    }
+                }
+
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(ref val) = new_value {
+                        node.attributes.insert(key_lower.clone(), val.clone());
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                    node.class_ids = new_class_ids;
+                }
+            }
+            "id" => {
+                let new_selector_id = new_value.as_ref().map(|value| {
+                    self.selector_manager
+                        .get_or_create_id(Selector::Id(value.to_lowercase()))
+                });
+
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(ref val) = new_value {
+                        node.attributes.insert(key_lower.clone(), val.clone());
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                    node.id_selector_id = new_selector_id;
+                }
+            }
+            _ => {
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
+                    if let Some(ref val) = new_value {
+                        node.attributes.insert(key_lower.clone(), val.clone());
+                    } else {
+                        node.attributes.remove(key_lower.as_str());
+                    }
+                }
+            }
+        }
+    }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
+        debug_log(|| {
+            format!(
+                "recompute start {}; input={}",
+                self.describe_node(root_node),
+                format_bits(input)
+            )
+        });
         self.recompute_styles_recursive(root_node, nfa, input);
+        debug_log(|| format!("recompute done {}", self.describe_node(root_node)));
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
-        if !self.nodes[&node_idx].recursive_dirty {
+        let node_descriptor = self.describe_node(node_idx);
+        let (
+            was_recursive_dirty,
+            dirty_state,
+            previous_output,
+            previous_tri,
+            child_indices_snapshot,
+        ) = {
+            let node = &self.nodes[&node_idx];
+            (
+                node.recursive_dirty,
+                node.dirty,
+                node.output_state.clone(),
+                node.tri_state.clone(),
+                node.children.clone(),
+            )
+        };
+
+        if !was_recursive_dirty {
+            debug_log(|| {
+                format!(
+                    "{} ignored: recursive_dirty=false, input={}",
+                    node_descriptor,
+                    format_bits(input)
+                )
+            });
             return;
         }
 
-        if self.nodes[&node_idx].dirty {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
-            // use prev to cal
-            let need_re = !input
-                .iter()
-                .zip(node.tri_state.clone())
-                .all(|x: (&bool, IState)| {
-                    matches!(
-                        x,
-                        (&false, IState::IZero) | (&true, IState::IOne) | (_, IState::IUnused)
+        debug_log(|| {
+            format!(
+                "{} visit: dirty={} input={} cached_output={} tri={}",
+                node_descriptor,
+                dirty_state.label(),
+                format_bits(input),
+                format_bits(&previous_output),
+                format_tri_state(&previous_tri)
+            )
+        });
+
+        let mut should_mark_children = false;
+        match dirty_state {
+            DirtyState::Clean => {
+                debug_log(|| format!("{} clean validation start", node_descriptor));
+                let (new_output, new_tri) = {
+                    let node = &self.nodes[&node_idx];
+                    self.new_output_state(node, input, nfa)
+                };
+                debug_log(|| {
+                    format!(
+                        "{} validation -> output={} tri={}",
+                        node_descriptor,
+                        format_bits(&new_output),
+                        format_tri_state(&new_tri)
                     )
                 });
-
-            if need_re {
-                unsafe {
-                    MISS_CNT += 1;
-                }
-                let (new_output_state, new_tri_state) =
-                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
-                let node = self.nodes.get_mut(&node_idx).unwrap();
-                node.output_state = new_output_state.clone();
-                node.tri_state = new_tri_state.clone();
-                for child_idx in self.nodes[&node_idx].children.clone() {
-                    self.nodes.get_mut(&child_idx).unwrap().set_dirty(); // recompute
-                }
-            }
-        } else {
-            // Debug check: if not dirty, recomputing should not change output
-            let original_tri_state = self.nodes[&node_idx].tri_state.clone();
-            let original_output_state = self.nodes[&node_idx].output_state.clone();
-            let (new_output, new_tri) = self.new_output_state(&self.nodes[&node_idx], input, nfa);
-            assert_eq!(
-                original_tri_state,
-                new_tri,
-                "input is {:?}
+                assert_eq!(
+                    previous_tri,
+                    new_tri,
+                    "input is {:?}
 old_tri is {:?}
 old_output is {:?}
 new_output is {:?}
 new_tri is {:?}
 
                    ",
-                encode(input),
-                encode(&original_tri_state),
-                encode(&original_output_state),
-                encode(&new_output),
-                encode(&new_tri)
-            );
+                    encode(input),
+                    encode(&previous_tri),
+                    encode(&previous_output),
+                    encode(&new_output),
+                    encode(&new_tri)
+                );
+            }
+            DirtyState::InputChanged => {
+                let need_re = !input.iter().copied().zip(previous_tri.iter().copied()).all(
+                    |(input_bit, state)| {
+                        matches!(
+                            (input_bit, state),
+                            (false, IState::IZero) | (true, IState::IOne) | (_, IState::IUnused)
+                        )
+                    },
+                );
+                unsafe {
+                    INPUT_CHANGE_COUNT += 1;
+                }
+
+                debug_log(|| {
+                    format!(
+                        "{} input_changed need_recompute={} tri={}",
+                        node_descriptor,
+                        need_re,
+                        format_tri_state(&previous_tri)
+                    )
+                });
+
+                if need_re {
+                    unsafe {
+                        MISS_CNT += 1;
+                    }
+                    let (new_output_state, new_tri_state) = {
+                        let node = &self.nodes[&node_idx];
+                        self.new_output_state(node, input, nfa)
+                    };
+                    {
+                        let node = self.nodes.get_mut(&node_idx).unwrap();
+                        node.output_state = new_output_state.clone();
+                        node.tri_state = new_tri_state.clone();
+                    }
+                    debug_log(|| {
+                        format!(
+                            "{} recompute -> output={} (prev={}) tri={} (prev={})",
+                            node_descriptor,
+                            format_bits(&new_output_state),
+                            format_bits(&previous_output),
+                            format_tri_state(&new_tri_state),
+                            format_tri_state(&previous_tri)
+                        )
+                    });
+                    should_mark_children = true;
+                } else {
+                    unsafe {
+                        INPUT_SKIP_COUNT += 1;
+                    }
+                    let (new_output, new_tri) = {
+                        let node = &self.nodes[&node_idx];
+                        self.new_output_state(node, input, nfa)
+                    };
+                    debug_log(|| {
+                        format!(
+                            "{} input reused; output stays {} tri stays {}",
+                            node_descriptor,
+                            format_bits(&previous_output),
+                            format_tri_state(&previous_tri)
+                        )
+                    });
+                    assert_eq!(
+                        previous_tri,
+                        new_tri,
+                        "input is {:?}
+old_tri is {:?}
+old_output is {:?}
+new_output is {:?}
+new_tri is {:?}
+
+                   ",
+                        encode(input),
+                        encode(&previous_tri),
+                        encode(&previous_output),
+                        encode(&new_output),
+                        encode(&new_tri)
+                    );
+                }
+            }
+            DirtyState::NodeChanged => {
+                unsafe {
+                    MISS_CNT += 1;
+                }
+                let (new_output_state, new_tri_state) = {
+                    let node = &self.nodes[&node_idx];
+                    self.new_output_state(node, input, nfa)
+                };
+                debug_log(|| {
+                    format!(
+                        "{} recompute (node_changed) -> output={} (prev={}) tri={} (prev={})",
+                        node_descriptor,
+                        format_bits(&new_output_state),
+                        format_bits(&previous_output),
+                        format_tri_state(&new_tri_state),
+                        format_tri_state(&previous_tri)
+                    )
+                });
+                {
+                    let node = self.nodes.get_mut(&node_idx).unwrap();
+                    node.output_state = new_output_state.clone();
+                    node.tri_state = new_tri_state.clone();
+                }
+                should_mark_children = true;
+            }
         }
 
         // Recursively process children
-        let children_indices = self.nodes[&node_idx].children.clone();
+        if should_mark_children {
+            debug_log(|| {
+                format!(
+                    "{} marking {} children input_changed",
+                    node_descriptor,
+                    child_indices_snapshot.len()
+                )
+            });
+            let mut marked_children = Vec::new();
+            for &child_idx in &child_indices_snapshot {
+                let child = self.nodes.get_mut(&child_idx).unwrap();
+                child.mark_input_changed();
+                let dirty_label = child.dirty.label();
+                marked_children.push((child_idx, dirty_label));
+            }
+            for (child_idx, dirty_label) in marked_children {
+                let child_desc = self.describe_node(child_idx);
+                debug_log(|| {
+                    format!(
+                        "{} child {} marked input_changed -> dirty={}",
+                        node_descriptor, child_desc, dirty_label
+                    )
+                });
+            }
+        } else {
+            debug_log(|| format!("{} children remain clean", node_descriptor));
+        }
+
         let current_output_state = self.nodes[&node_idx].output_state.clone();
-        for &child_idx in &children_indices {
+        debug_log(|| {
+            format!(
+                "{} propagating to {} children",
+                node_descriptor,
+                child_indices_snapshot.len()
+            )
+        });
+        for &child_idx in &child_indices_snapshot {
             self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
         }
 
         // Reset dirty flags
         if let Some(node) = self.nodes.get_mut(&node_idx) {
-            node.dirty = false;
-            node.recursive_dirty = false;
+            node.clear_dirty();
         }
+        debug_log(|| format!("{} finished; dirty flags cleared", node_descriptor));
     }
     fn new_output_state(
         &self,
@@ -363,36 +723,84 @@ fn get_input() -> Vec<bool> {
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
-    match frame.command_name.as_str() {
-        "init" => {
-            let node_data = frame.command_data.get("node").unwrap();
+    match frame.as_command() {
+        Command::Init { node } => {
             dom.nodes.clear();
             dom.root_node = None;
-            dom.json_to_html_node(node_data, None, nfa);
-            dom.recompute_styles(nfa, &get_input()); // 
-        }
-        "add" => {
-            let path = extract_path_from_command(&frame.command_data);
-            let node_data = frame.command_data.get("node").unwrap();
-            dom.add_node_by_path(&path, node_data, nfa);
-            dom.recompute_styles(nfa, &get_input()); // 
-        }
-        "replace_value" | "insert_value" => {}
-        "recalculate" => {
-            // Perform CSS matching using NFA
-            let start = rdtsc();
-
+            dom.json_to_html_node(node, None, nfa);
             dom.recompute_styles(nfa, &get_input());
-
+        }
+        Command::Add { path, node } => {
+            dom.add_node_by_path(&path, node, nfa);
+            dom.recompute_styles(nfa, &get_input());
+        }
+        Command::ReplaceValue {
+            path,
+            key,
+            value,
+            old_value,
+        } => {
+            let node_idx = dom.node_id_by_path(&path).unwrap();
+            if let Some(old_value) = old_value {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = dom
+                    .nodes
+                    .get(&node_idx)
+                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
+                    .cloned()
+                    .unwrap_or_default();
+                assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            let new_value = value.map(json_value_to_attr_string);
+            dom.update_attribute(node_idx, key, new_value);
+            dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
+        }
+        Command::InsertValue { path, key, value } => {
+            let node_idx = dom.node_id_by_path(&path).unwrap();
+            let new_value = value.map(json_value_to_attr_string);
+            dom.update_attribute(node_idx, key, new_value);
+            dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
+        }
+        Command::DeleteValue {
+            path,
+            key,
+            old_value,
+        } => {
+            let node_idx = dom.node_id_by_path(&path).unwrap();
+            if let Some(old_value) = old_value {
+                let expected = json_value_to_attr_string(old_value);
+                let actual = dom
+                    .nodes
+                    .get(&node_idx)
+                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
+                    .cloned()
+                    .unwrap_or_default();
+                assert_eq!(
+                    actual, expected,
+                    "existing attribute value mismatch for key {} at path {:?}",
+                    key, path
+                );
+            }
+            dom.update_attribute(node_idx, key, None);
+            dom.set_node_dirty(node_idx);
+            dom.recompute_styles(nfa, &get_input());
+        }
+        Command::Recalculate => {
+            let start = rdtsc();
+            dom.recompute_styles(nfa, &get_input());
             let end = rdtsc();
             println!("{}", end - start);
         }
-        "remove" => {
-            // Remove node at specified path
-            let path = extract_path_from_command(&frame.command_data);
+        Command::Remove { path } => {
             dom.remove_node_by_path(&path);
+            dom.recompute_styles(nfa, &get_input());
         }
-        _ => {}
     }
 }
 
@@ -448,8 +856,10 @@ fn main() {
     final_matches.sort();
     println!("BEGIN");
     for (k, v) in final_matches {
-        println!("{} -> {:?}", k, v);
+        println!("{} -> {:?}", k.replace('>', " > "), v);
     }
     println!("END");
     dbg!(unsafe { MISS_CNT });
+    dbg!(unsafe { INPUT_CHANGE_COUNT });
+    dbg!(unsafe { INPUT_SKIP_COUNT });
 }

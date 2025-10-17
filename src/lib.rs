@@ -1,4 +1,4 @@
-use cssparser::{Parser, ParserInput, Token};
+use cssparser::{ParseError, Parser, ParserInput, Token};
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
@@ -20,6 +20,7 @@ pub enum Selector {
     Type(String),
     Class(String),
     Id(String),
+    AttributeEquals { name: String, value: String },
 }
 
 impl Display for Selector {
@@ -28,6 +29,9 @@ impl Display for Selector {
             Selector::Type(tag) => write!(f, "{}", tag),
             Selector::Class(class) => write!(f, ".{}", class),
             Selector::Id(id) => write!(f, "#{}", id),
+            Selector::AttributeEquals { name, value } => {
+                write!(f, "[{}=\"{}\"]", name, value)
+            }
         }
     }
 }
@@ -100,6 +104,103 @@ pub struct LayoutFrame {
     pub command_data: serde_json::Value,
 }
 
+#[derive(Debug, Clone)]
+pub enum Command<'a> {
+    Init {
+        node: &'a serde_json::Value,
+    },
+    Add {
+        path: Vec<usize>,
+        node: &'a serde_json::Value,
+    },
+    ReplaceValue {
+        path: Vec<usize>,
+        key: &'a str,
+        value: Option<&'a serde_json::Value>,
+        old_value: Option<&'a serde_json::Value>,
+    },
+    InsertValue {
+        path: Vec<usize>,
+        key: &'a str,
+        value: Option<&'a serde_json::Value>,
+    },
+    DeleteValue {
+        path: Vec<usize>,
+        key: &'a str,
+        old_value: Option<&'a serde_json::Value>,
+    },
+    Recalculate,
+    Remove {
+        path: Vec<usize>,
+    },
+}
+
+pub fn parse_command<'a>(
+    command_name: &'a str,
+    command_data: &'a serde_json::Value,
+) -> Command<'a> {
+    match command_name {
+        "init" => {
+            let node = command_data.get("node").unwrap();
+            Command::Init { node }
+        }
+        "add" => {
+            let node = command_data.get("node").unwrap();
+            let path = extract_path_from_command(command_data);
+            Command::Add { path, node }
+        }
+        "replace_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
+            let value = command_data.get("value");
+            let old_value = command_data.get("old_value");
+            Command::ReplaceValue {
+                path,
+                key,
+                value,
+                old_value,
+            }
+        }
+        "insert_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
+            let value = command_data.get("value");
+            Command::InsertValue { path, key, value }
+        }
+        "delete_value" => {
+            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
+                unreachable!();
+            }
+            let path = extract_path_from_command(command_data);
+            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
+            let old_value = command_data.get("old_value");
+            Command::DeleteValue {
+                path,
+                key,
+                old_value,
+            }
+        }
+        "recalculate" => Command::Recalculate,
+        "remove" => {
+            let path = extract_path_from_command(command_data);
+            Command::Remove { path }
+        }
+        _ => unreachable!(),
+    }
+}
+
+impl LayoutFrame {
+    pub fn as_command(&self) -> Command<'_> {
+        parse_command(&self.command_name, &self.command_data)
+    }
+}
+
 /// Parse trace from command.json file
 pub fn parse_trace() -> Vec<LayoutFrame> {
     let content = std::fs::read_to_string(format!(
@@ -151,6 +252,8 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     let mut selector_parts: Vec<SelectorPart> = vec![];
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
+    let mut skip_next_simple_selector = false;
+    let mut skip_at_rule = false;
 
     #[derive(PartialEq, Eq)]
     enum NextSelector {
@@ -182,9 +285,22 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
             }
         };
 
+        if skip_at_rule {
+            match token {
+                Token::CurlyBracketBlock | Token::Semicolon => {
+                    skip_at_rule = false;
+                    continue;
+                }
+                _ => continue,
+            }
+        }
+
         match token {
             Token::Comment(_) => continue,
             Token::WhiteSpace(_) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                }
                 if current_selector.is_some() && pending_combinator == Combinator::None {
                     pending_combinator = Combinator::Descendant;
                 }
@@ -196,6 +312,49 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
                 if current_selector.is_some() {
                     pending_combinator = Combinator::Child;
                 }
+            }
+            Token::AtKeyword(_) => {
+                selector_parts.clear();
+                current_selector = None;
+                pending_combinator = Combinator::None;
+                skip_next_simple_selector = false;
+                skip_at_rule = true;
+                continue;
+            }
+            Token::Colon => {
+                skip_next_simple_selector = true;
+                continue;
+            }
+            Token::Function(_) => {
+                if skip_next_simple_selector {
+                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
+                        while nested.next_including_whitespace_and_comments().is_ok() {}
+                        Ok(())
+                    });
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::ParenthesisBlock => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
+            }
+            Token::SquareBracketBlock => {
+                if let Some(prev_selector) = current_selector.take() {
+                    selector_parts.push(SelectorPart {
+                        selector: prev_selector,
+                        combinator: pending_combinator.clone(),
+                    });
+                }
+                pending_combinator = Combinator::None;
+                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
+                    current_selector = Some(attribute_selector);
+                }
+                next_selector = NextSelector::Type;
             }
             Token::IDHash(id) => {
                 if let Some(prev_selector) = current_selector.take() {
@@ -209,6 +368,11 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
                 next_selector = NextSelector::Type;
             }
             Token::Ident(name) => {
+                if skip_next_simple_selector {
+                    skip_next_simple_selector = false;
+                    next_selector = NextSelector::Type;
+                    continue;
+                }
                 let s = match next_selector {
                     NextSelector::Class => Selector::Class(name.to_string()),
                     NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
@@ -270,6 +434,46 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     rules.sort();
     rules.dedup();
     rules
+}
+
+fn parse_attribute_selector(raw: &str) -> Option<Selector> {
+    let raw = raw.trim();
+    if !raw.starts_with('[') || !raw.ends_with(']') {
+        return None;
+    }
+    let inner = &raw[1..raw.len() - 1];
+    let mut parts = inner.splitn(2, '=');
+    let name = parts.next()?.trim().to_lowercase();
+    let value_part = parts.next()?.trim();
+
+    if !value_part.starts_with('"') || !value_part.ends_with('"') || value_part.len() < 2 {
+        return None;
+    }
+    let mut value = value_part[1..value_part.len() - 1].to_string();
+    value = value.replace("\\\"", "\"");
+
+    Some(Selector::AttributeEquals { name, value })
+}
+
+fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
+    parser
+        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
+            nested.skip_whitespace();
+            let name = nested
+                .expect_ident_cloned()
+                .map_err(ParseError::from)?
+                .to_ascii_lowercase();
+            nested.skip_whitespace();
+            nested.expect_delim('=').map_err(ParseError::from)?;
+            nested.skip_whitespace();
+            let value = nested
+                .expect_string_cloned()
+                .map_err(ParseError::from)?
+                .to_string();
+            nested.skip_whitespace();
+            Ok(Selector::AttributeEquals { name, value })
+        })
+        .ok()
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
@@ -354,6 +558,9 @@ impl NFA {
                     Some(Selector::Type(t)) => t.clone(),
                     Some(Selector::Class(c)) => format!(".{}", c),
                     Some(Selector::Id(i)) => format!("#{}", i),
+                    Some(Selector::AttributeEquals { name, value }) => {
+                        format!("[{}=\"{}\"]", name, value)
+                    }
                     None => format!("sid:{}", sel_id.0),
                 },
             };
@@ -529,9 +736,21 @@ pub fn parse_selector(selector_str: &str) -> Selector {
     } else if trimmed.starts_with('#') {
         // ID选择器
         Selector::Id(trimmed[1..].to_string())
+    } else if let Some(attribute_selector) = parse_attribute_selector(trimmed) {
+        attribute_selector
     } else {
         // 标签选择器
         Selector::Type(trimmed.to_string())
+    }
+}
+
+pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
+    match value {
+        serde_json::Value::String(s) => s.clone(),
+        serde_json::Value::Number(n) => n.to_string(),
+        serde_json::Value::Bool(b) => b.to_string(),
+        serde_json::Value::Array(_) | serde_json::Value::Object(_) => value.to_string(),
+        serde_json::Value::Null => String::new(),
     }
 }
 
@@ -544,7 +763,41 @@ pub trait AddNode {
         tag_name: &str,
         classes: Vec<String>,
         html_id: Option<String>,
+        attributes: HashMap<String, String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_css_handles_attribute_selector() {
+        let selectors = parse_css(r#"[data-test="value"] { color: red; }"#);
+        assert_eq!(selectors, vec![r#"[data-test="value"]"#.to_string()]);
+    }
+
+    #[test]
+    fn parse_css_skips_media_queries() {
+        let selectors = parse_css(
+            r#"@media screen and (max-width: 600px) {
+                .hidden { display: none; }
+            }
+            .visible { display: block; }"#,
+        );
+        assert_eq!(selectors, vec![".visible".to_string()]);
+    }
+
+    #[test]
+    fn parse_selector_returns_attribute_variant() {
+        match parse_selector(r#"[data-id="item-1"]"#) {
+            Selector::AttributeEquals { name, value } => {
+                assert_eq!(name, "data-id");
+                assert_eq!(value, "item-1");
+            }
+            other => panic!("expected attribute selector, got {:?}", other),
+        }
+    }
 }
