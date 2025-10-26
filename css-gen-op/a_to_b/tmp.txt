@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.23s
      Running `target/release/naive`
 BEGIN
 .a -> [2]

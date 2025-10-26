@@ -1,7 +1,7 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.18s
      Running `target/release/bit`
-3508
-1908
+4145
+2803
 BEGIN
 .a -> [2]
 END

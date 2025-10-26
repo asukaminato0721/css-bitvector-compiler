@@ -1,7 +1,7 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.22s
      Running `target/release/tri`
-2689
-1531
+3660
+2851
 BEGIN
 .a -> [2]
 END

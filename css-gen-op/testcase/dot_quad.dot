@@ -3,15 +3,15 @@ digraph NFA {
   node [shape=circle, fontsize=10];
   __start [shape=point, label=""];
   __start -> None;
-  6 [label="6"];
+  4 [label="4"];
+  1 [label="1"];
+  2 [label="2"];
+  7 [label="7"];
+  3 [label="3"];
   0 [label="0"];
   5 [label="5"];
-  4 [label="4"];
-  3 [label="3"];
-  2 [label="2"];
-  1 [label="1"];
   8 [label="8"];
-  7 [label="7"];
+  6 [label="6"];
   { node [shape=doublecircle]; 1 2 3 6 8 }
   0 -> 0 [label="*"];
   0 -> 1 [label="#b"];
