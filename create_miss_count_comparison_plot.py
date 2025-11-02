@@ -122,24 +122,24 @@ def main():
     )
     points_on_diagonal = total_points - points_below_diagonal - points_above_diagonal
 
-    print(f"📈 Total data points: {total_points}")
+    print(f" Total data points: {total_points}")
     print(
-        f"🟢 TriVector fewer misses (below diagonal): {points_below_diagonal} ({100 * points_below_diagonal / total_points:.1f}%)"
+        f" TriVector fewer misses (below diagonal): {points_below_diagonal} ({100 * points_below_diagonal / total_points:.1f}%)"
     )
     print(
-        f"🔴 TriVector more misses (above diagonal): {points_above_diagonal} ({100 * points_above_diagonal / total_points:.1f}%)"
+        f" TriVector more misses (above diagonal): {points_above_diagonal} ({100 * points_above_diagonal / total_points:.1f}%)"
     )
     print(
-        f"⚪ Equal misses (on diagonal): {points_on_diagonal} ({100 * points_on_diagonal / total_points:.1f}%)"
+        f" Equal misses (on diagonal): {points_on_diagonal} ({100 * points_on_diagonal / total_points:.1f}%)"
     )
 
     # Miss ratio analysis
     avg_miss_ratio = df["miss_ratio"].mean()
     median_miss_ratio = df["miss_ratio"].median()
 
-    print(f"\n📊 Average miss ratio (TriVector/BitVector): {avg_miss_ratio:.3f}x")
-    print(f"📊 Median miss ratio: {median_miss_ratio:.3f}x")
-    print(f"📊 Geometric mean miss ratio: {geometric_mean_miss_ratio:.3f}x")
+    print(f"\n Average miss ratio (TriVector/BitVector): {avg_miss_ratio:.3f}x")
+    print(f" Median miss ratio: {median_miss_ratio:.3f}x")
+    print(f" Geometric mean miss ratio: {geometric_mean_miss_ratio:.3f}x")
 
     # Save geometric mean to file
     with open("./geometric_mean_miss_ratio.txt", "w") as f:
@@ -152,10 +152,10 @@ def main():
     max_bitvector_misses = df["bitvector_cache_misses"].max()
 
     print(
-        f"\n📏 TriVector miss range: {min_trivector_misses:,} - {max_trivector_misses:,}"
+        f"\n TriVector miss range: {min_trivector_misses:,} - {max_trivector_misses:,}"
     )
     print(
-        f"📏 BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}"
+        f" BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}"
     )
 
     # Total miss counts

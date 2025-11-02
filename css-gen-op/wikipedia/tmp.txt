@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
      Running `target/release/naive`
 BEGIN
 .app-badge a -> [3901, 3916]
