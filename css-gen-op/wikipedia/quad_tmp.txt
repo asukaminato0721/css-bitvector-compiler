@@ -1,11 +1,11 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/quad`
-2839
-2600
-2589
-3321
-14331
-1889
+3188
+2957
+2950
+3419
+3607
+2435
 BEGIN
 .app-badge -> [3898, 3913]
 .app-badge a -> [3901, 3916]
