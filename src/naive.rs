@@ -532,8 +532,7 @@ impl SimpleDom {
     }
 
     fn collect_rule_matches(&self, rule: &CssRule) -> Vec<u64> {
-        self
-            .nodes
+        self.nodes
             .keys()
             .copied()
             .filter(|node_id| self.matches_css_rule(*node_id, rule))
