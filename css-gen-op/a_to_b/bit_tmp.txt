@@ -1,8 +1,8 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running `target/release/bit`
-1813
-1963
+2167
+1436
 BEGIN
 .a -> [2]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:708:5] unsafe { MISS_CNT } = 4

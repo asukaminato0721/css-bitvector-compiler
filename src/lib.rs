@@ -1,4 +1,9 @@
-use cssparser::{ParseError, Parser, ParserInput, Token};
+use lightningcss::{
+    rules::CssRule,
+    selector::{Combinator as LCombinator, Component as LComponent, Selector as LightningSelector},
+    stylesheet::{ParserOptions, StyleSheet},
+};
+use parcel_selectors::attr::AttrSelectorOperator;
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
@@ -245,195 +250,146 @@ pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize>
 }
 
 pub fn parse_css(css_content: &str) -> Vec<String> {
-    let mut rules = vec![];
-    let mut input = ParserInput::new(css_content);
-    let mut parser = Parser::new(&mut input);
+    let mut selectors = Vec::new();
+    let mut parser_options = ParserOptions::default();
+    parser_options.error_recovery = true;
 
-    let mut selector_parts: Vec<SelectorPart> = vec![];
+    let stylesheet = match StyleSheet::parse(css_content, parser_options) {
+        Ok(sheet) => sheet,
+        Err(_) => return selectors,
+    };
+
+    for rule in stylesheet.rules.0 {
+        if let CssRule::Style(style_rule) = rule {
+            selectors.extend(
+                style_rule
+                    .selectors
+                    .0
+                    .into_iter()
+                    .filter_map(|selector| lightning_selector_to_rule_string(&selector)),
+            );
+        }
+    }
+
+    selectors.sort();
+    selectors.dedup();
+    selectors
+}
+
+enum ComponentConversion {
+    Keep(Selector),
+    Skip,
+    Abort,
+}
+
+fn lightning_selector_to_rule_string(selector: &LightningSelector) -> Option<String> {
+    let mut selector_parts: Vec<SelectorPart> = Vec::new();
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
-    let mut skip_next_simple_selector = false;
-    let mut skip_at_rule = false;
 
-    #[derive(PartialEq, Eq)]
-    enum NextSelector {
-        Class,
-        Type,
-    }
-    let mut next_selector = NextSelector::Type;
-
-    loop {
-        let token = match parser.next_including_whitespace_and_comments() {
-            Ok(token) => token,
-            Err(_) => {
-                // End of input, finalize any pending rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
+    for component in selector.iter_raw_parse_order_from(0) {
+        match component {
+            LComponent::Combinator(combinator) => match combinator {
+                LCombinator::Descendant => {
+                    if current_selector.is_some() && matches!(pending_combinator, Combinator::None)
+                    {
+                        pending_combinator = Combinator::Descendant;
+                    }
                 }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
+                LCombinator::Child => {
+                    if current_selector.is_some() {
+                        pending_combinator = Combinator::Child;
+                    }
                 }
-                break;
-            }
-        };
-
-        if skip_at_rule {
-            match token {
-                Token::CurlyBracketBlock | Token::Semicolon => {
-                    skip_at_rule = false;
-                    continue;
+                LCombinator::PseudoElement => break,
+                _ => break,
+            },
+            _ => match convert_component(component) {
+                ComponentConversion::Keep(selector) => {
+                    if let Some(prev_selector) = current_selector.take() {
+                        selector_parts.push(SelectorPart {
+                            selector: prev_selector,
+                            combinator: pending_combinator.clone(),
+                        });
+                        pending_combinator = Combinator::None;
+                    }
+                    current_selector = Some(selector);
                 }
-                _ => continue,
-            }
-        }
-
-        match token {
-            Token::Comment(_) => continue,
-            Token::WhiteSpace(_) => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
-                }
-                if current_selector.is_some() && pending_combinator == Combinator::None {
-                    pending_combinator = Combinator::Descendant;
-                }
-            }
-            Token::Delim('.') => {
-                next_selector = NextSelector::Class;
-            }
-            Token::Delim('>') => {
-                if current_selector.is_some() {
-                    pending_combinator = Combinator::Child;
-                }
-            }
-            Token::AtKeyword(_) => {
-                selector_parts.clear();
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                skip_next_simple_selector = false;
-                skip_at_rule = true;
-                continue;
-            }
-            Token::Colon => {
-                skip_next_simple_selector = true;
-                continue;
-            }
-            Token::Function(_) => {
-                if skip_next_simple_selector {
-                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
-                        while nested.next_including_whitespace_and_comments().is_ok() {}
-                        Ok(())
-                    });
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-            }
-            Token::ParenthesisBlock => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-            }
-            Token::SquareBracketBlock => {
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                }
-                pending_combinator = Combinator::None;
-                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
-                    current_selector = Some(attribute_selector);
-                }
-                next_selector = NextSelector::Type;
-            }
-            Token::IDHash(id) => {
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(Selector::Id(id.to_string()));
-                next_selector = NextSelector::Type;
-            }
-            Token::Ident(name) => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-                let s = match next_selector {
-                    NextSelector::Class => Selector::Class(name.to_string()),
-                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
-                };
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(s);
-                next_selector = NextSelector::Type;
-            }
-            Token::CurlyBracketBlock => {
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
-            _ => {
-                // Any other token (like a comma) finalizes the current rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
+                ComponentConversion::Skip => {}
+                ComponentConversion::Abort => return None,
+            },
         }
     }
 
-    rules.sort();
-    rules.dedup();
-    rules
+    if let Some(selector) = current_selector {
+        selector_parts.push(SelectorPart {
+            selector,
+            combinator: Combinator::None,
+        });
+    }
+
+    if selector_parts.is_empty() {
+        None
+    } else {
+        Some(
+            selector_parts
+                .iter()
+                .map(|part| part.to_string())
+                .collect::<String>(),
+        )
+    }
+}
+
+fn convert_component(component: &LComponent) -> ComponentConversion {
+    match component {
+        LComponent::LocalName(local_name) => {
+            ComponentConversion::Keep(Selector::Type(local_name.name.as_ref().to_lowercase()))
+        }
+        LComponent::ExplicitUniversalType => {
+            ComponentConversion::Keep(Selector::Type("*".to_string()))
+        }
+        LComponent::ID(id) => ComponentConversion::Keep(Selector::Id(id.to_string())),
+        LComponent::Class(class) => ComponentConversion::Keep(Selector::Class(class.to_string())),
+        LComponent::AttributeInNoNamespace {
+            local_name,
+            operator,
+            value,
+            ..
+        } => {
+            if matches!(operator, AttrSelectorOperator::Equal) {
+                ComponentConversion::Keep(Selector::AttributeEquals {
+                    name: local_name.as_ref().to_ascii_lowercase(),
+                    value: value.to_string(),
+                })
+            } else {
+                ComponentConversion::Skip
+            }
+        }
+        LComponent::AttributeInNoNamespaceExists { .. } | LComponent::AttributeOther(_) => {
+            ComponentConversion::Skip
+        }
+        LComponent::Negation(_)
+        | LComponent::Root
+        | LComponent::Empty
+        | LComponent::Scope
+        | LComponent::Nth(_)
+        | LComponent::NthOf(_)
+        | LComponent::NonTSPseudoClass(_)
+        | LComponent::Slotted(_)
+        | LComponent::Part(_)
+        | LComponent::Host(_)
+        | LComponent::Where(_)
+        | LComponent::Is(_)
+        | LComponent::Any(_, _)
+        | LComponent::Has(_)
+        | LComponent::PseudoElement(_) => ComponentConversion::Skip,
+        LComponent::ExplicitAnyNamespace
+        | LComponent::ExplicitNoNamespace
+        | LComponent::DefaultNamespace(..)
+        | LComponent::Namespace(..)
+        | LComponent::Nesting => ComponentConversion::Abort,
+        LComponent::Combinator(_) => ComponentConversion::Skip,
+    }
 }
 
 fn parse_attribute_selector(raw: &str) -> Option<Selector> {
@@ -453,27 +409,6 @@ fn parse_attribute_selector(raw: &str) -> Option<Selector> {
     value = value.replace("\\\"", "\"");
 
     Some(Selector::AttributeEquals { name, value })
-}
-
-fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
-    parser
-        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
-            nested.skip_whitespace();
-            let name = nested
-                .expect_ident_cloned()
-                .map_err(ParseError::from)?
-                .to_ascii_lowercase();
-            nested.skip_whitespace();
-            nested.expect_delim('=').map_err(ParseError::from)?;
-            nested.skip_whitespace();
-            let value = nested
-                .expect_string_cloned()
-                .map_err(ParseError::from)?
-                .to_string();
-            nested.skip_whitespace();
-            Ok(Selector::AttributeEquals { name, value })
-        })
-        .ok()
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]

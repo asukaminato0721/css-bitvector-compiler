@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: field `frame_id` is never read
+   --> src/naive.rs:253:9
+    |
+252 | struct LayoutFrame {
+    |        ----------- field in this struct
+253 |     pub frame_id: usize,
+    |         ^^^^^^^^
+    |
+    = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/naive`
 BEGIN
 .hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]

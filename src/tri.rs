@@ -130,12 +130,12 @@ impl AddNode for DOM {
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_id(Selector::Class(class.to_lowercase()));
+            let class_id = sm.get_or_create_id(Selector::Class(class.clone()));
             class_ids.insert(class_id);
         }
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id(Selector::Id(id.to_lowercase())));
+            .map(|id| sm.get_or_create_id(Selector::Id(id.clone())));
 
         let mut new_node = DOMNode {
             tag_id,
@@ -382,7 +382,7 @@ impl DOM {
                     {
                         let class_id = self
                             .selector_manager
-                            .get_or_create_id(Selector::Class(class_name.to_lowercase()));
+                            .get_or_create_id(Selector::Class(class_name.to_string()));
                         new_class_ids.insert(class_id);
                     }
                 }
@@ -399,7 +399,7 @@ impl DOM {
             "id" => {
                 let new_selector_id = new_value.as_ref().map(|value| {
                     self.selector_manager
-                        .get_or_create_id(Selector::Id(value.to_lowercase()))
+                        .get_or_create_id(Selector::Id(value.to_string()))
                 });
 
                 if let Some(node) = self.nodes.get_mut(&node_idx) {
@@ -694,8 +694,8 @@ new_tri is {:?}
         let mut input = Read::new(input);
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(_)) => {
-                    unreachable!()
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
                     if input.get(b) {

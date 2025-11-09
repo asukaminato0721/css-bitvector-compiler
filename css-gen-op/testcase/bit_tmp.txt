@@ -1,10 +1,10 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
-2807
+1619
 BEGIN
 #b -> [3]
 #bb -> [4]
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 10
+[src/bit.rs:708:5] unsafe { MISS_CNT } = 10

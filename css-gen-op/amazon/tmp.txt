@@ -1,7 +1,51 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+warning: field `frame_id` is never read
+   --> src/naive.rs:253:9
+    |
+252 | struct LayoutFrame {
+    |        ----------- field in this struct
+253 |     pub frame_id: usize,
+    |         ^^^^^^^^
+    |
+    = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running `target/release/naive`
 BEGIN
+._cropped-image-link_style_centerImage-focusable__1JvMN -> [1666]
+._cropped-image-link_style_centerImage__1rzYI -> [1666]
 ._cropped-image-link_style_cropped-image-link__3winf -> [1662]
+._cropped-image-link_style_fluidImageContainer__2jd50 ._cropped-image-link_style_fluidImage__iJ3aE -> [1671]
+._cropped-image-link_style_fluidImageContainer__2jd50 -> [1669]
+._fluid-fat-image-link-v2_singleLinkStyle_bodyFooterLink__9LvH0 -> [1854, 2877, 5186]
+._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J -> [1844, 2867, 5176]
+._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr ._fluid-fat-image-link-v2_style_fluidImage__gTBjA -> [1861, 2884, 5193]
+._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr -> [1859, 2882, 5191]
+._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp -> [1857, 2880, 5189]
+._fluid-quad-image-label-v2_style_centerImage__30wh- -> [1922, 1940, 1960, 1978, 2051, 2069, 2089, 2107, 2180, 2198, 2218, 2236, 2500, 2518, 2538, 2556, 2629, 2647, 2667, 2685, 2758, 2776, 2796, 2814, 3370, 3388, 3408, 3426, 3499, 3517, 3537, 3555, 3628, 3646, 3666, 3684, 3762, 3780, 3800, 3818, 4281, 4299, 4319, 4337, 4410, 4428, 4448, 4466, 4544, 4562, 4582, 4600, 4673, 4691, 4711, 4729, 5255, 5273, 5293, 5311, 5383, 5401, 5421, 5439, 5511, 5529, 5549, 5567]
+._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr ._fluid-quad-image-label-v2_style_fluidImage__gTBjA -> [1928, 1946, 1966, 1984, 2057, 2075, 2095, 2113, 2186, 2204, 2224, 2242, 2506, 2524, 2544, 2562, 2635, 2653, 2673, 2691, 2764, 2782, 2802, 2820, 3376, 3394, 3414, 3432, 3505, 3523, 3543, 3561, 3634, 3652, 3672, 3690, 3768, 3786, 3806, 3824, 4287, 4305, 4325, 4343, 4416, 4434, 4454, 4472, 4550, 4568, 4588, 4606, 4679, 4697, 4717, 4735, 5261, 5279, 5299, 5317, 5389, 5407, 5427, 5445, 5517, 5535, 5555, 5573]
+._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr -> [1926, 1944, 1964, 1982, 2055, 2073, 2093, 2111, 2184, 2202, 2222, 2240, 2504, 2522, 2542, 2560, 2633, 2651, 2671, 2689, 2762, 2780, 2800, 2818, 3374, 3392, 3412, 3430, 3503, 3521, 3541, 3559, 3632, 3650, 3670, 3688, 3766, 3784, 3804, 3822, 4285, 4303, 4323, 4341, 4414, 4432, 4452, 4470, 4548, 4566, 4586, 4604, 4677, 4695, 4715, 4733, 5259, 5277, 5297, 5315, 5387, 5405, 5425, 5443, 5515, 5533, 5553, 5571]
+._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0 -> [1916, 2045, 2174, 2494, 2623, 2752, 3364, 3493, 3622, 3756, 4275, 4404, 4538, 4667, 5249, 5377, 5505]
+._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv -> [1906, 2035, 2164, 2484, 2613, 2742, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5239, 5367, 5495]
+._fluid-quad-image-label-v2_style_gridRowOne__1t0zL -> [1918, 2047, 2176, 2496, 2625, 2754, 3366, 3495, 3624, 3758, 4277, 4406, 4540, 4669, 5251, 5379, 5507]
+._fluid-quad-image-label-v2_style_gridRowTwo__15woW -> [1956, 2085, 2214, 2534, 2663, 2792, 3404, 3533, 3662, 3796, 4315, 4444, 4578, 4707, 5289, 5417, 5545]
+._fluid-quad-image-label-v2_style_imageLabel__3ANSV -> [1933, 1951, 1971, 1989, 2062, 2080, 2100, 2118, 2191, 2209, 2229, 2247, 2511, 2529, 2549, 2567, 2640, 2658, 2678, 2696, 2769, 2787, 2807, 2825, 3381, 3399, 3419, 3437, 3510, 3528, 3548, 3566, 3639, 3657, 3677, 3695, 3773, 3791, 3811, 3829, 4292, 4310, 4330, 4348, 4421, 4439, 4459, 4477, 4555, 4573, 4593, 4611, 4684, 4702, 4722, 4740, 5266, 5284, 5304, 5322, 5394, 5412, 5432, 5450, 5522, 5540, 5560, 5578]
+._fluid-quad-image-label-v2_style_leftQuadrant__21nVp -> [1920, 1958, 2049, 2087, 2178, 2216, 2498, 2536, 2627, 2665, 2756, 2794, 3368, 3406, 3497, 3535, 3626, 3664, 3760, 3798, 4279, 4317, 4408, 4446, 4542, 4580, 4671, 4709, 5253, 5291, 5381, 5419, 5509, 5547]
+._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG -> [1920, 1938, 1958, 1976, 2049, 2067, 2087, 2105, 2178, 2196, 2216, 2234, 2498, 2516, 2536, 2554, 2627, 2645, 2665, 2683, 2756, 2774, 2794, 2812, 3368, 3386, 3406, 3424, 3497, 3515, 3535, 3553, 3626, 3644, 3664, 3682, 3760, 3778, 3798, 3816, 4279, 4297, 4317, 4335, 4408, 4426, 4446, 4464, 4542, 4560, 4580, 4598, 4671, 4689, 4709, 4727, 5253, 5271, 5291, 5309, 5381, 5399, 5419, 5437, 5509, 5527, 5547, 5565]
+._fluid-quad-image-label-v2_style_rightQuadrant__PI01n -> [1938, 1976, 2067, 2105, 2196, 2234, 2516, 2554, 2645, 2683, 2774, 2812, 3386, 3424, 3515, 3553, 3644, 3682, 3778, 3816, 4297, 4335, 4426, 4464, 4560, 4598, 4689, 4727, 5271, 5309, 5399, 5437, 5527, 5565]
+._quad-category-card_desktopStyle_cardBody__3Rdh1 -> [2324]
+._quad-category-card_desktopStyle_categoryImage__35jKN -> [2363, 2392, 2421]
+._quad-category-card_desktopStyle_category__3flCQ -> [2357, 2386, 2415]
+._quad-category-card_desktopStyle_heroCategory__3KS3k -> [2326]
+._quad-category-card_desktopStyle_heroImage__2V8-9 -> [2332]
+._quad-category-card_desktopStyle_heroLink__1EhW2 -> [2328]
+._quad-category-card_desktopStyle_leftMost__1LmQB -> [2357]
+._quad-category-card_fluid_fluidCardBody__3TzJ4 -> [2324]
+._quad-category-card_fluid_fluidCard__3hmFA -> [2303]
+._quad-category-card_style_fluidImageContainer__2jd50 ._quad-category-card_style_fluidImage__iJ3aE -> [2336, 2367, 2396, 2425]
+._quad-category-card_style_fluidImageContainer__2jd50 -> [2334, 2365, 2394, 2423]
+._text-link-stripe-v2_style_textlinkstripe__3aQhz -> [1795]
 .gw-card-layout [data-order-ws="1"] -> [1822]
 .gw-card-layout [data-order-ws="10"] -> [2852, 4773, 4958]
 .gw-card-layout [data-order-ws="11"] -> [4965, 5150]

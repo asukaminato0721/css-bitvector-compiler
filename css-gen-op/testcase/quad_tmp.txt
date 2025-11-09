@@ -1,6 +1,6 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.07s
      Running `target/release/quad`
-1545
+3097
 BEGIN
 #b -> [3]
 #bb -> [4]
