@@ -1,7 +1,7 @@
 use css_bitvector_compiler::{
     AddNode, Command, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    encode, generate_nfa, json_value_to_attr_string, parse_css, parse_trace,
-    partition_simple_selectors, rdtsc, report_skipped_selectors,
+    encode, generate_nfa, json_value_to_attr_string, parse_css_with_pseudo, parse_trace,
+    partition_simple_selectors, rdtsc, report_pseudo_selectors, report_skipped_selectors,
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -925,14 +925,16 @@ pub fn collect_rule_matches(
 }
 fn main() {
     let mut dom = DOM::new();
-    let (selectors, skipped_simple) = partition_simple_selectors(parse_css(
+    let parsed = parse_css_with_pseudo(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
-    ));
+    );
+    let (selectors, skipped_simple) = partition_simple_selectors(parsed.selectors);
     report_skipped_selectors("quad", &skipped_simple);
+    report_pseudo_selectors("quad", &parsed.pseudo_selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {

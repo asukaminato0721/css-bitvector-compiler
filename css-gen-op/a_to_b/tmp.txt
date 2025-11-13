@@ -1,17 +1,20 @@
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
 warning: field `frame_id` is never read
-   --> src/naive.rs:253:9
+   --> src/naive.rs:273:9
     |
-252 | struct LayoutFrame {
+272 | struct LayoutFrame {
     |        ----------- field in this struct
-253 |     pub frame_id: usize,
+273 |     pub frame_id: usize,
     |         ^^^^^^^^
     |
     = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
+    Finished `release` profile [optimized + debuginfo] target(s) in 9.70s
      Running `target/release/naive`
+NOT_CONSIDERED[naive] 1 selector(s)
+NOT_CONSIDERED[naive] .a
+PSEUDO_SKIPPED[naive] none
 BEGIN
-.a -> [2]
 END

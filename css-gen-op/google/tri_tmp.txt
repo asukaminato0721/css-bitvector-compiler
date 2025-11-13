@@ -1,121 +1,254 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/tri`
-1446
-928
-1024
-1103
-939
-1091
-1253
-1391
-1212
-1073
-1148
-849
-2090
-1378
-900
-1273
-1807
-983
-1300
-2198
-1010
-1541
-1886
-838
-1300
-1628
-1004
-1620
-2462
-965
-1977
-2896
-1113
-1748
-1588
-1033
-1190
-1224
-793
-2681
-2458
-2048
-2539
-2239
+NOT_CONSIDERED[tri] 135 selector(s)
+NOT_CONSIDERED[tri] #SIvCob
+NOT_CONSIDERED[tri] #gb
+NOT_CONSIDERED[tri] #gbb
+NOT_CONSIDERED[tri] #gbbw
+NOT_CONSIDERED[tri] #gbg
+NOT_CONSIDERED[tri] #gbg4span
+NOT_CONSIDERED[tri] #gbg5
+NOT_CONSIDERED[tri] #gbg6span
+NOT_CONSIDERED[tri] #gbgs5
+NOT_CONSIDERED[tri] #gbi4i
+NOT_CONSIDERED[tri] #gbi4id
+NOT_CONSIDERED[tri] #gbi4m1
+NOT_CONSIDERED[tri] #gbi4s
+NOT_CONSIDERED[tri] #gbi4s1
+NOT_CONSIDERED[tri] #gbi4t
+NOT_CONSIDERED[tri] #gbi5
+NOT_CONSIDERED[tri] #gbmm
+NOT_CONSIDERED[tri] #gbmpal
+NOT_CONSIDERED[tri] #gbmpas
+NOT_CONSIDERED[tri] #gbmpdv
+NOT_CONSIDERED[tri] #gbmpi
+NOT_CONSIDERED[tri] #gbmpid
+NOT_CONSIDERED[tri] #gbmpiw
+NOT_CONSIDERED[tri] #gbmps
+NOT_CONSIDERED[tri] #gbpm
+NOT_CONSIDERED[tri] #gbpms
+NOT_CONSIDERED[tri] #gbprca
+NOT_CONSIDERED[tri] #gbprcs
+NOT_CONSIDERED[tri] #gbqfb
+NOT_CONSIDERED[tri] #gbqfbw
+NOT_CONSIDERED[tri] #gbqfqw
+NOT_CONSIDERED[tri] #gbs
+NOT_CONSIDERED[tri] #gbx3
+NOT_CONSIDERED[tri] #gbx4
+NOT_CONSIDERED[tri] #gbz
+NOT_CONSIDERED[tri] #gbztms1
+NOT_CONSIDERED[tri] #gog
+NOT_CONSIDERED[tri] #gssb_b
+NOT_CONSIDERED[tri] #gws-output-pages-elements-homepage_additional_languages__als
+NOT_CONSIDERED[tri] .H6sW5
+NOT_CONSIDERED[tri] .ds
+NOT_CONSIDERED[tri] .gbg4a
+NOT_CONSIDERED[tri] .gbgt
+NOT_CONSIDERED[tri] .gbgt-hvr
+NOT_CONSIDERED[tri] .gbgt-hvr#gbg6
+NOT_CONSIDERED[tri] .gbi4p
+NOT_CONSIDERED[tri] .gbibaa
+NOT_CONSIDERED[tri] .gbm
+NOT_CONSIDERED[tri] .gbm0l
+NOT_CONSIDERED[tri] .gbma
+NOT_CONSIDERED[tri] .gbmab
+NOT_CONSIDERED[tri] .gbmac
+NOT_CONSIDERED[tri] .gbmc
+NOT_CONSIDERED[tri] .gbmcc
+NOT_CONSIDERED[tri] .gbmh
+NOT_CONSIDERED[tri] .gbml1
+NOT_CONSIDERED[tri] .gbml1-hvr
+NOT_CONSIDERED[tri] .gbmlb
+NOT_CONSIDERED[tri] .gbmlb-hvr
+NOT_CONSIDERED[tri] .gbmlbw
+NOT_CONSIDERED[tri] .gbmpala
+NOT_CONSIDERED[tri] .gbmpalb
+NOT_CONSIDERED[tri] .gbmpia
+NOT_CONSIDERED[tri] .gbmpiaa
+NOT_CONSIDERED[tri] .gbmpiaw
+NOT_CONSIDERED[tri] .gbmpnw
+NOT_CONSIDERED[tri] .gbmt
+NOT_CONSIDERED[tri] .gbmtc
+NOT_CONSIDERED[tri] .gbp0
+NOT_CONSIDERED[tri] .gbpmc
+NOT_CONSIDERED[tri] .gbpms2
+NOT_CONSIDERED[tri] .gbprcb
+NOT_CONSIDERED[tri] .gbprcd
+NOT_CONSIDERED[tri] .gbprci
+NOT_CONSIDERED[tri] .gbprct
+NOT_CONSIDERED[tri] .gbps#gbmplp
+NOT_CONSIDERED[tri] .gbps2
+NOT_CONSIDERED[tri] .gbqfb
+NOT_CONSIDERED[tri] .gbqfb-hvr
+NOT_CONSIDERED[tri] .gbqfba
+NOT_CONSIDERED[tri] .gbqfba-hvr
+NOT_CONSIDERED[tri] .gbqfbb
+NOT_CONSIDERED[tri] .gbqfbb-hvr
+NOT_CONSIDERED[tri] .gbsb
+NOT_CONSIDERED[tri] .gbsbic
+NOT_CONSIDERED[tri] .gbt
+NOT_CONSIDERED[tri] .gbtb2
+NOT_CONSIDERED[tri] .gbtc
+NOT_CONSIDERED[tri] .gbtcb
+NOT_CONSIDERED[tri] .gbto
+NOT_CONSIDERED[tri] .gbts
+NOT_CONSIDERED[tri] .gbtsa
+NOT_CONSIDERED[tri] .gbxms
+NOT_CONSIDERED[tri] .gbxo
+NOT_CONSIDERED[tri] .gbxv
+NOT_CONSIDERED[tri] .gbxx
+NOT_CONSIDERED[tri] .gbzt
+NOT_CONSIDERED[tri] .gsdd_a
+NOT_CONSIDERED[tri] .gsfi
+NOT_CONSIDERED[tri] .gsfs
+NOT_CONSIDERED[tri] .gsib_a
+NOT_CONSIDERED[tri] .gsib_b
+NOT_CONSIDERED[tri] .gsls_a
+NOT_CONSIDERED[tri] .gsmq_a
+NOT_CONSIDERED[tri] .gsn_a
+NOT_CONSIDERED[tri] .gsn_b
+NOT_CONSIDERED[tri] .gsn_c
+NOT_CONSIDERED[tri] .gspqs_aa
+NOT_CONSIDERED[tri] .gspqs_b
+NOT_CONSIDERED[tri] .gsq_a
+NOT_CONSIDERED[tri] .gss_ifl
+NOT_CONSIDERED[tri] .gssb_a
+NOT_CONSIDERED[tri] .gssb_c
+NOT_CONSIDERED[tri] .gssb_e
+NOT_CONSIDERED[tri] .gssb_f
+NOT_CONSIDERED[tri] .gssb_g
+NOT_CONSIDERED[tri] .gssb_h
+NOT_CONSIDERED[tri] .gssb_i
+NOT_CONSIDERED[tri] .gssb_ja
+NOT_CONSIDERED[tri] .gssb_k
+NOT_CONSIDERED[tri] .gssb_l
+NOT_CONSIDERED[tri] .gssb_m
+NOT_CONSIDERED[tri] .h
+NOT_CONSIDERED[tri] .lsb
+NOT_CONSIDERED[tri] .lsbb
+NOT_CONSIDERED[tri] .lst
+NOT_CONSIDERED[tri] .sblc
+NOT_CONSIDERED[tri] .z4hgWe
+NOT_CONSIDERED[tri] a
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] em
+NOT_CONSIDERED[tri] form
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] p
+NOT_CONSIDERED[tri] td
+PSEUDO_SKIPPED[tri] 47 selector(s)
+PSEUDO_SKIPPED[tri] #GBMPAL:last-child:after
+PSEUDO_SKIPPED[tri] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[tri] #gbg6.gbgt:focus
+PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[tri] #gbprc .gbprcx:active
+PSEUDO_SKIPPED[tri] #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[tri] #gssb_b:hover
+PSEUDO_SKIPPED[tri] .GBMCC:last-child:after
+PSEUDO_SKIPPED[tri] .gbf .gbmt:visited
+PSEUDO_SKIPPED[tri] .gbgt:focus
+PSEUDO_SKIPPED[tri] .gbm0l:visited
+PSEUDO_SKIPPED[tri] .gbml1:focus
+PSEUDO_SKIPPED[tri] .gbml1:visited
+PSEUDO_SKIPPED[tri] .gbmlb:focus
+PSEUDO_SKIPPED[tri] .gbmlb:visited
+PSEUDO_SKIPPED[tri] .gbmt:focus
+PSEUDO_SKIPPED[tri] .gbmt:hover
+PSEUDO_SKIPPED[tri] .gbmt:visited
+PSEUDO_SKIPPED[tri] .gbn .gbmt:visited
+PSEUDO_SKIPPED[tri] .gbnd .gbmt:visited
+PSEUDO_SKIPPED[tri] .gbqfb-hvr:focus
+PSEUDO_SKIPPED[tri] .gbqfb-no-focus:focus
+PSEUDO_SKIPPED[tri] .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[tri] .gbqfb:active
+PSEUDO_SKIPPED[tri] .gbqfb:focus
+PSEUDO_SKIPPED[tri] .gbqfba-hvr:active
+PSEUDO_SKIPPED[tri] .gbqfba-hvr:focus
+PSEUDO_SKIPPED[tri] .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[tri] .gbqfba:active
+PSEUDO_SKIPPED[tri] .gbqfba:focus
+PSEUDO_SKIPPED[tri] .gbqfbb-hvr:active
+PSEUDO_SKIPPED[tri] .gbqfbb-hvr:focus
+PSEUDO_SKIPPED[tri] .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[tri] .gbqfbb:active
+PSEUDO_SKIPPED[tri] .gbqfbb:focus
+PSEUDO_SKIPPED[tri] .gbsb .gbsbb:after
+PSEUDO_SKIPPED[tri] .gbsb .gbsbt:after
+PSEUDO_SKIPPED[tri] .gbzt:focus
+PSEUDO_SKIPPED[tri] .gbzt:hover
+PSEUDO_SKIPPED[tri] .lsb:active
+PSEUDO_SKIPPED[tri] .lst:focus
+PSEUDO_SKIPPED[tri] a.gssb_j:hover
+PSEUDO_SKIPPED[tri] a:active
+PSEUDO_SKIPPED[tri] a:hover
+PSEUDO_SKIPPED[tri] a:visited
+3749
+2472
+2614
+2490
+2583
+2541
+2348
+2431
+2542
+2989
+2878
+2117
+2577
+2538
+2393
+3693
+2641
+2281
+3075
+2747
+2452
+3903
+2590
+2237
+3646
+2788
+2220
+3007
+2788
+2162
+3277
+3019
+2484
+3535
+2887
+4544
+4550
+3490
+2247
+5597
+6326
+4061
+4139
+2640
 BEGIN
-#SIvCob -> [449]
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
-#gb -> [42]
-#gbg -> [248]
 #gbg .gbgt -> [259, 279]
 #gbg .gbm -> [296]
 #gbg .gbtcb -> [253]
-#gbg5 -> [279]
-#gbgs5 -> [288]
-#gbi4s1 -> [270]
-#gbi5 -> [291]
-#gbmm -> [172]
-#gbx3 -> [321]
-#gbx4 -> [323]
-#gbz -> [49]
 #gbz .gbgt -> [146]
 #gbz .gbm -> [165]
 #gbz .gbtcb -> [51]
 #gbz .gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
-#gbztms1 -> [157]
-#gws-output-pages-elements-homepage_additional_languages__als -> [445]
-.ds -> [372, 392, 405, 916, 928]
 .fl a -> [431]
-.gbgt -> [146, 259, 279]
-.gbm -> [165, 296]
-.gbma -> [160]
-.gbmc -> [169, 300]
-.gbmcc -> [172, 302]
-.gbmh -> [233, 313]
-.gbmt -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
-.gbmtc -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
-.gbsb -> [169]
 .gbsb .gbsbb -> [246]
-.gbsb .gbsbt -> [244]
-.gbsbic -> [172]
 .gbsbis .gbsbb -> [246]
 .gbsbis .gbsbt -> [244]
-.gbt -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
 .gbtb .gbts -> [275]
-.gbtb2 -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
-.gbtc -> [53, 255]
-.gbtcb -> [51, 253]
-.gbts -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
-.gbtsa -> [154]
-.gbxx -> [250]
 .gbz0l .gbtb2 -> [62]
 .gbz0l .gbts -> [64]
-.gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
 .gbzt .gbts -> [64, 75, 86, 97, 108, 119, 130, 141]
-.gsfs -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gsq_a -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
-.gssb_a -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 .gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
-.gssb_c -> [499]
-.gssb_e -> [510]
-.gssb_f -> [507]
-.gssb_g -> [907]
-.gssb_m -> [513]
-.lsb -> [396, 409, 909, 921]
-.lsbb -> [394, 407, 917, 929]
-.lst -> [375]
-.sblc -> [426]
 .sblc a -> [431]
-a -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
-body -> [35]
-form -> [343]
-input -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
-p -> [475]
-td -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 END
-[src/tri.rs:862:5] unsafe { MISS_CNT } = 1777
-[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/tri.rs:866:5] unsafe { MISS_CNT } = 1777
+[src/tri.rs:867:5] unsafe { INPUT_CHANGE_COUNT } = 8099
+[src/tri.rs:868:5] unsafe { INPUT_SKIP_COUNT } = 8099

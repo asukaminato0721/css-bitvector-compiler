@@ -1,10 +1,13 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
+    Finished `release` profile [optimized + debuginfo] target(s) in 5.11s
      Running `target/release/quad`
-1862
-1312
+NOT_CONSIDERED[quad] 1 selector(s)
+NOT_CONSIDERED[quad] .a
+PSEUDO_SKIPPED[quad] none
+5759
+3222
 BEGIN
-.a -> [2]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 3
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 1
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 1
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 3
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 1

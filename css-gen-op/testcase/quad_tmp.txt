@@ -1,12 +1,14 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.07s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/quad`
-3097
+NOT_CONSIDERED[quad] 2 selector(s)
+NOT_CONSIDERED[quad] #b
+NOT_CONSIDERED[quad] #bb
+PSEUDO_SKIPPED[quad] none
+5428
 BEGIN
-#b -> [3]
-#bb -> [4]
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 7
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 6
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 6
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 7
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 6
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 6

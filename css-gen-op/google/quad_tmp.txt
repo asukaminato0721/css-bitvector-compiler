@@ -1,121 +1,254 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/quad`
-3046
-1949
-5627
-2533
-3323
-41165
-2924
-1596
-2354
-5505
-1523
-2557
-8766
-1630
-3210
-8076
-2083
-2517
-7051
-3177
-3003
-10267
-1876
-2418
-12713
-3399
-4175
-17646
-4078
-5187
-9452
-3091
-3687
-9515
-5333
-3348
-9571
-3143
-3350
-14813
-6205
-5214
-8058
-2811
+NOT_CONSIDERED[quad] 135 selector(s)
+NOT_CONSIDERED[quad] #SIvCob
+NOT_CONSIDERED[quad] #gb
+NOT_CONSIDERED[quad] #gbb
+NOT_CONSIDERED[quad] #gbbw
+NOT_CONSIDERED[quad] #gbg
+NOT_CONSIDERED[quad] #gbg4span
+NOT_CONSIDERED[quad] #gbg5
+NOT_CONSIDERED[quad] #gbg6span
+NOT_CONSIDERED[quad] #gbgs5
+NOT_CONSIDERED[quad] #gbi4i
+NOT_CONSIDERED[quad] #gbi4id
+NOT_CONSIDERED[quad] #gbi4m1
+NOT_CONSIDERED[quad] #gbi4s
+NOT_CONSIDERED[quad] #gbi4s1
+NOT_CONSIDERED[quad] #gbi4t
+NOT_CONSIDERED[quad] #gbi5
+NOT_CONSIDERED[quad] #gbmm
+NOT_CONSIDERED[quad] #gbmpal
+NOT_CONSIDERED[quad] #gbmpas
+NOT_CONSIDERED[quad] #gbmpdv
+NOT_CONSIDERED[quad] #gbmpi
+NOT_CONSIDERED[quad] #gbmpid
+NOT_CONSIDERED[quad] #gbmpiw
+NOT_CONSIDERED[quad] #gbmps
+NOT_CONSIDERED[quad] #gbpm
+NOT_CONSIDERED[quad] #gbpms
+NOT_CONSIDERED[quad] #gbprca
+NOT_CONSIDERED[quad] #gbprcs
+NOT_CONSIDERED[quad] #gbqfb
+NOT_CONSIDERED[quad] #gbqfbw
+NOT_CONSIDERED[quad] #gbqfqw
+NOT_CONSIDERED[quad] #gbs
+NOT_CONSIDERED[quad] #gbx3
+NOT_CONSIDERED[quad] #gbx4
+NOT_CONSIDERED[quad] #gbz
+NOT_CONSIDERED[quad] #gbztms1
+NOT_CONSIDERED[quad] #gog
+NOT_CONSIDERED[quad] #gssb_b
+NOT_CONSIDERED[quad] #gws-output-pages-elements-homepage_additional_languages__als
+NOT_CONSIDERED[quad] .H6sW5
+NOT_CONSIDERED[quad] .ds
+NOT_CONSIDERED[quad] .gbg4a
+NOT_CONSIDERED[quad] .gbgt
+NOT_CONSIDERED[quad] .gbgt-hvr
+NOT_CONSIDERED[quad] .gbgt-hvr#gbg6
+NOT_CONSIDERED[quad] .gbi4p
+NOT_CONSIDERED[quad] .gbibaa
+NOT_CONSIDERED[quad] .gbm
+NOT_CONSIDERED[quad] .gbm0l
+NOT_CONSIDERED[quad] .gbma
+NOT_CONSIDERED[quad] .gbmab
+NOT_CONSIDERED[quad] .gbmac
+NOT_CONSIDERED[quad] .gbmc
+NOT_CONSIDERED[quad] .gbmcc
+NOT_CONSIDERED[quad] .gbmh
+NOT_CONSIDERED[quad] .gbml1
+NOT_CONSIDERED[quad] .gbml1-hvr
+NOT_CONSIDERED[quad] .gbmlb
+NOT_CONSIDERED[quad] .gbmlb-hvr
+NOT_CONSIDERED[quad] .gbmlbw
+NOT_CONSIDERED[quad] .gbmpala
+NOT_CONSIDERED[quad] .gbmpalb
+NOT_CONSIDERED[quad] .gbmpia
+NOT_CONSIDERED[quad] .gbmpiaa
+NOT_CONSIDERED[quad] .gbmpiaw
+NOT_CONSIDERED[quad] .gbmpnw
+NOT_CONSIDERED[quad] .gbmt
+NOT_CONSIDERED[quad] .gbmtc
+NOT_CONSIDERED[quad] .gbp0
+NOT_CONSIDERED[quad] .gbpmc
+NOT_CONSIDERED[quad] .gbpms2
+NOT_CONSIDERED[quad] .gbprcb
+NOT_CONSIDERED[quad] .gbprcd
+NOT_CONSIDERED[quad] .gbprci
+NOT_CONSIDERED[quad] .gbprct
+NOT_CONSIDERED[quad] .gbps#gbmplp
+NOT_CONSIDERED[quad] .gbps2
+NOT_CONSIDERED[quad] .gbqfb
+NOT_CONSIDERED[quad] .gbqfb-hvr
+NOT_CONSIDERED[quad] .gbqfba
+NOT_CONSIDERED[quad] .gbqfba-hvr
+NOT_CONSIDERED[quad] .gbqfbb
+NOT_CONSIDERED[quad] .gbqfbb-hvr
+NOT_CONSIDERED[quad] .gbsb
+NOT_CONSIDERED[quad] .gbsbic
+NOT_CONSIDERED[quad] .gbt
+NOT_CONSIDERED[quad] .gbtb2
+NOT_CONSIDERED[quad] .gbtc
+NOT_CONSIDERED[quad] .gbtcb
+NOT_CONSIDERED[quad] .gbto
+NOT_CONSIDERED[quad] .gbts
+NOT_CONSIDERED[quad] .gbtsa
+NOT_CONSIDERED[quad] .gbxms
+NOT_CONSIDERED[quad] .gbxo
+NOT_CONSIDERED[quad] .gbxv
+NOT_CONSIDERED[quad] .gbxx
+NOT_CONSIDERED[quad] .gbzt
+NOT_CONSIDERED[quad] .gsdd_a
+NOT_CONSIDERED[quad] .gsfi
+NOT_CONSIDERED[quad] .gsfs
+NOT_CONSIDERED[quad] .gsib_a
+NOT_CONSIDERED[quad] .gsib_b
+NOT_CONSIDERED[quad] .gsls_a
+NOT_CONSIDERED[quad] .gsmq_a
+NOT_CONSIDERED[quad] .gsn_a
+NOT_CONSIDERED[quad] .gsn_b
+NOT_CONSIDERED[quad] .gsn_c
+NOT_CONSIDERED[quad] .gspqs_aa
+NOT_CONSIDERED[quad] .gspqs_b
+NOT_CONSIDERED[quad] .gsq_a
+NOT_CONSIDERED[quad] .gss_ifl
+NOT_CONSIDERED[quad] .gssb_a
+NOT_CONSIDERED[quad] .gssb_c
+NOT_CONSIDERED[quad] .gssb_e
+NOT_CONSIDERED[quad] .gssb_f
+NOT_CONSIDERED[quad] .gssb_g
+NOT_CONSIDERED[quad] .gssb_h
+NOT_CONSIDERED[quad] .gssb_i
+NOT_CONSIDERED[quad] .gssb_ja
+NOT_CONSIDERED[quad] .gssb_k
+NOT_CONSIDERED[quad] .gssb_l
+NOT_CONSIDERED[quad] .gssb_m
+NOT_CONSIDERED[quad] .h
+NOT_CONSIDERED[quad] .lsb
+NOT_CONSIDERED[quad] .lsbb
+NOT_CONSIDERED[quad] .lst
+NOT_CONSIDERED[quad] .sblc
+NOT_CONSIDERED[quad] .z4hgWe
+NOT_CONSIDERED[quad] a
+NOT_CONSIDERED[quad] body
+NOT_CONSIDERED[quad] em
+NOT_CONSIDERED[quad] form
+NOT_CONSIDERED[quad] input
+NOT_CONSIDERED[quad] p
+NOT_CONSIDERED[quad] td
+PSEUDO_SKIPPED[quad] 47 selector(s)
+PSEUDO_SKIPPED[quad] #GBMPAL:last-child:after
+PSEUDO_SKIPPED[quad] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[quad] #gbg6.gbgt:focus
+PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[quad] #gbprc .gbprcx:active
+PSEUDO_SKIPPED[quad] #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[quad] #gssb_b:hover
+PSEUDO_SKIPPED[quad] .GBMCC:last-child:after
+PSEUDO_SKIPPED[quad] .gbf .gbmt:visited
+PSEUDO_SKIPPED[quad] .gbgt:focus
+PSEUDO_SKIPPED[quad] .gbm0l:visited
+PSEUDO_SKIPPED[quad] .gbml1:focus
+PSEUDO_SKIPPED[quad] .gbml1:visited
+PSEUDO_SKIPPED[quad] .gbmlb:focus
+PSEUDO_SKIPPED[quad] .gbmlb:visited
+PSEUDO_SKIPPED[quad] .gbmt:focus
+PSEUDO_SKIPPED[quad] .gbmt:hover
+PSEUDO_SKIPPED[quad] .gbmt:visited
+PSEUDO_SKIPPED[quad] .gbn .gbmt:visited
+PSEUDO_SKIPPED[quad] .gbnd .gbmt:visited
+PSEUDO_SKIPPED[quad] .gbqfb-hvr:focus
+PSEUDO_SKIPPED[quad] .gbqfb-no-focus:focus
+PSEUDO_SKIPPED[quad] .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[quad] .gbqfb:active
+PSEUDO_SKIPPED[quad] .gbqfb:focus
+PSEUDO_SKIPPED[quad] .gbqfba-hvr:active
+PSEUDO_SKIPPED[quad] .gbqfba-hvr:focus
+PSEUDO_SKIPPED[quad] .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[quad] .gbqfba:active
+PSEUDO_SKIPPED[quad] .gbqfba:focus
+PSEUDO_SKIPPED[quad] .gbqfbb-hvr:active
+PSEUDO_SKIPPED[quad] .gbqfbb-hvr:focus
+PSEUDO_SKIPPED[quad] .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[quad] .gbqfbb:active
+PSEUDO_SKIPPED[quad] .gbqfbb:focus
+PSEUDO_SKIPPED[quad] .gbsb .gbsbb:after
+PSEUDO_SKIPPED[quad] .gbsb .gbsbt:after
+PSEUDO_SKIPPED[quad] .gbzt:focus
+PSEUDO_SKIPPED[quad] .gbzt:hover
+PSEUDO_SKIPPED[quad] .lsb:active
+PSEUDO_SKIPPED[quad] .lst:focus
+PSEUDO_SKIPPED[quad] a.gssb_j:hover
+PSEUDO_SKIPPED[quad] a:active
+PSEUDO_SKIPPED[quad] a:hover
+PSEUDO_SKIPPED[quad] a:visited
+8875
+5381
+13265
+6921
+5704
+101512
+5497
+4840
+6286
+13570
+3762
+5961
+21740
+6613
+6677
+19177
+4139
+6373
+13367
+4015
+5852
+23386
+4998
+6230
+15829
+4050
+5423
+19507
+5213
+5887
+18521
+4805
+6035
+18658
+4191
+7902
+23518
+6114
+7635
+15360
+4088
+6459
+17812
+5742
 BEGIN
-#SIvCob -> [449]
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
-#gb -> [42]
-#gbg -> [248]
 #gbg .gbgt -> [259, 279]
 #gbg .gbm -> [296]
 #gbg .gbtcb -> [253]
-#gbg5 -> [279]
-#gbgs5 -> [288]
-#gbi4s1 -> [270]
-#gbi5 -> [291]
-#gbmm -> [172]
-#gbx3 -> [321]
-#gbx4 -> [323]
-#gbz -> [49]
 #gbz .gbgt -> [146]
 #gbz .gbm -> [165]
 #gbz .gbtcb -> [51]
 #gbz .gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
-#gbztms1 -> [157]
-#gws-output-pages-elements-homepage_additional_languages__als -> [445]
-.ds -> [372, 392, 405, 916, 928]
 .fl a -> [431]
-.gbgt -> [146, 259, 279]
-.gbm -> [165, 296]
-.gbma -> [160]
-.gbmc -> [169, 300]
-.gbmcc -> [172, 302]
-.gbmh -> [233, 313]
-.gbmt -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
-.gbmtc -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
-.gbsb -> [169]
 .gbsb .gbsbb -> [246]
-.gbsb .gbsbt -> [244]
-.gbsbic -> [172]
 .gbsbis .gbsbb -> [246]
 .gbsbis .gbsbt -> [244]
-.gbt -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
 .gbtb .gbts -> [275]
-.gbtb2 -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
-.gbtc -> [53, 255]
-.gbtcb -> [51, 253]
-.gbts -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
-.gbtsa -> [154]
-.gbxx -> [250]
 .gbz0l .gbtb2 -> [62]
 .gbz0l .gbts -> [64]
-.gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
 .gbzt .gbts -> [64, 75, 86, 97, 108, 119, 130, 141]
-.gsfs -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gsq_a -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
-.gssb_a -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 .gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
-.gssb_c -> [499]
-.gssb_e -> [510]
-.gssb_f -> [507]
-.gssb_g -> [907]
-.gssb_m -> [513]
-.lsb -> [396, 409, 909, 921]
-.lsbb -> [394, 407, 917, 929]
-.lst -> [375]
-.sblc -> [426]
 .sblc a -> [431]
-a -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
-body -> [35]
-form -> [343]
-input -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
-p -> [475]
-td -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 1777
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 1777
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 8099
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 8099

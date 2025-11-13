@@ -3,13 +3,6 @@ digraph NFA {
   node [shape=circle, fontsize=10];
   __start [shape=point, label=""];
   __start -> None;
-  1 [label="1"];
   0 [label="0"];
-  3 [label="3"];
-  2 [label="2"];
-  { node [shape=doublecircle]; 1 2 3 }
   0 -> 0 [label="*"];
-  0 -> 1 [label=".container-dark"];
-  0 -> 2 [label=".emph.leaf"];
-  0 -> 3 [label=".leaf"];
 }

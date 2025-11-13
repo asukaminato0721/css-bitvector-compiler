@@ -1,326 +1,855 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/quad`
-3105
-3232
-18635
-3516
-3982
-5442
-5755
-9149
-4863
-3614
-4401
-4617
-3966
-3893
-4473
-4232
-3838
-3498
-3173
-4514
-3865
-4232
-3419
-3704
-4059
+NOT_CONSIDERED[quad] 429 selector(s)
+NOT_CONSIDERED[quad] #gw-desktop-herotator
+NOT_CONSIDERED[quad] #icp-touch-link-cop
+NOT_CONSIDERED[quad] #icp-touch-link-country
+NOT_CONSIDERED[quad] #icp-touch-link-language
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_header__1vGdj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_show-video__xX4WM._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container__LRY5p
+NOT_CONSIDERED[quad] ._cropped-image-link_image_round-corners__22iOW
+NOT_CONSIDERED[quad] ._cropped-image-link_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._cropped-image-link_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._cropped-image-link_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_centerImage__1rzYI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._cropped-image-link_style_cropped-image-link__3winf
+NOT_CONSIDERED[quad] ._cropped-image-link_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._cropped-image-link_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._cropped-image-link_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._cropped-image-link_style_dt-TextContainer__3nbU9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._cropped-image-link_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._cropped-image-link_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._cropped-image-link_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[quad] ._cropped-image-link_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._cropped-image-link_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._cropped-image-link_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._cropped-image-link_style_header__1vGdj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._cropped-image-link_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._cropped-image-link_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._cropped-image-link_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._cropped-image-link_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._cropped-image-link_style_show-video__xX4WM._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._cropped-image-link_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._cropped-image-link_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._cropped-image-link_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._cropped-image-link_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._cropped-image-link_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._cropped-image-link_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._cropped-image-link_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_singleLinkStyle_bodyFooterLink__9LvH0
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_centerImage__30wh-
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidFatImageLinkBody__1LsOX
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_header__1vGdj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mergedLinks__10JqZ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_show-video__xX4WM._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_centerImage__30wh-
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gridRowOne__1t0zL
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gridRowTwo__15woW
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_header__1vGdj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_leftQuadrant__21nVp
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_rightQuadrant__PI01n
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_show-video__xX4WM._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_cardBody__3Rdh1
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_categoryImage__35jKN
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_category__3flCQ
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroCategory__3KS3k
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroImage__2V8-9
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroLink__1EhW2
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_leftMost__1LmQB
+NOT_CONSIDERED[quad] ._quad-category-card_fluid_fluidCardBody__3TzJ4
+NOT_CONSIDERED[quad] ._quad-category-card_fluid_fluidCard__3hmFA
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container__LRY5p
+NOT_CONSIDERED[quad] ._quad-category-card_image_round-corners__22iOW
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_cardBody__3ODbW
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_categoryContainer__2xY0I
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_categoryImage__3hSFw
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_category__1amt4
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_heroImage__1SewP
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_leftMost__3WtU6
+NOT_CONSIDERED[quad] ._quad-category-card_style_dashboard-card-with-border__1e4z_
+NOT_CONSIDERED[quad] ._quad-category-card_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[quad] ._quad-category-card_style_gwm-link-footer__3EX7d
+NOT_CONSIDERED[quad] ._quad-category-card_style_heading__1mnEu
+NOT_CONSIDERED[quad] ._quad-category-card_style_themingTextColor__1w6Ut
+NOT_CONSIDERED[quad] ._text-link-stripe-v2_style_textlinkstripe__3aQhz
+NOT_CONSIDERED[quad] .a-size-base-plus.truncate-2line
+NOT_CONSIDERED[quad] .a-size-base.truncate-2line
+NOT_CONSIDERED[quad] .a-size-large.truncate-2line
+NOT_CONSIDERED[quad] .a-size-medium.truncate-2line
+NOT_CONSIDERED[quad] .a-size-small.truncate-2line
+NOT_CONSIDERED[quad] .gw-card-layout
+NOT_CONSIDERED[quad] .nav-access-image
+NOT_CONSIDERED[quad] .nav-focus#navSwmHolidaydiv
+NOT_CONSIDERED[quad] .nav-spinner
+NOT_CONSIDERED[quad] .nav-timeline-icon
+NOT_CONSIDERED[quad] .nav-timeline-prime-icon
+NOT_CONSIDERED[quad] .single-slide-hero.tall#gw-desktop-herotator
+NOT_CONSIDERED[quad] .tall#gw-desktop-herotator
+NOT_CONSIDERED[quad] .truncate-1line
+NOT_CONSIDERED[quad] .truncate-2line
+NOT_CONSIDERED[quad] .truncate-2lineh2
+PSEUDO_SKIPPED[quad] 132 selector(s)
+PSEUDO_SKIPPED[quad] #gw-desktop-herotator.tall .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad] #gw-desktop-herotator.tall.single-slide-hero .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p._ameyal-product-shoveler_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container-white-box__3Stwp:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p._cropped-image-link_image_border-radius-top-only__2tZ_O:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN._cropped-image-link_style_focus-visible__2YLxf:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN:focus-visible:before
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p._cropped-image-link_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad] ._cropped-image-link_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active ._fluid-fat-image-link-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-fat-image-link-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-fat-image-link-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p._fluid-fat-image-link-v2_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active ._fluid-quad-image-label-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-quad-image-label-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-quad-image-label-v2_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p._fluid-quad-image-label-v2_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container-white-box__3Stwp:before
+PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p._quad-category-card_image_border-radius-top-only__2tZ_O:after
+PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p:after
+PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p:before
+PSEUDO_SKIPPED[quad] ._quad-category-card_style_dashboard-card-with-border__1e4z_ a:after
+PSEUDO_SKIPPED[quad] .gw-card-layout .a-cardui .a-cardui-body:last-child
+PSEUDO_SKIPPED[quad] .gw-card-layout .a-cardui:last-child
+PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._cropped-image-link_image_asin-container-white-box__3Stwp._cropped-image-link_image_reduce-image-height__23dy8:before
+PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._cropped-image-link_image_asin-container__LRY5p._cropped-image-link_image_reduce-image-height__23dy8:before
+PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._quad-category-card_image_asin-container-white-box__3Stwp._quad-category-card_image_reduce-image-height__23dy8:before
+PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._quad-category-card_image_asin-container__LRY5p._quad-category-card_image_reduce-image-height__23dy8:before
+9820
+8018
+29428
+6728
+6616
+9907
+6168
+10556
+9009
+7164
+7344
+7993
+6544
+8612
+10675
+9658
+6592
+7160
+6659
+6578
+7341
+9313
+7835
+6731
+8125
+7087
+6807
+11017
+11817
+8644
+7730
+6454
+6313
+8367
+11324
+8048
+6901
+7507
+6514
+7849
+7233
+6734
+6600
+7083
+7931
+6481
+7075
+6702
+6355
+10564
+6746
+6785
+6860
+11315
+7549
+7255
+7357
+6716
+7957
+7898
+6343
+6643
+7835
+10761
+7348
+7296
+7042
+6739
+10800
+7054
+7168
+7768
+13565
+6923
+7424
+7055
+11744
+7480
+6454
+6570
+7170
+9701
+14379
+6797
+6388
+6625
+6774
+7446
+6616
+6937
+7042
+5967
+5986
+8468
+6124
+6148
+6267
+7369
+7312
+7300
+7738
+7055
+7827
+6467
+7626
+6978
+7008
+7025
+6408
+7373
+7675
+6537
 7241
-3600
-4094
-3610
-3502
-5915
-7333
-5301
-5491
-4185
-3873
-4062
-3285
-3208
-3885
-3813
-3855
-4230
-3409
-3492
-3841
-4098
-4295
-3631
-5129
-3930
-3573
-3212
-3930
-4019
-3696
-3334
-3494
-3048
-3342
-3688
-3133
-3543
-4986
-6097
-8671
-6459
-3875
-4607
-4824
-4256
-3890
-4852
-3303
-3287
-3619
-4242
-4108
-3737
-3924
-4173
-3224
-3791
-4516
-3540
-8059
-5548
-3001
-3928
-3606
-4603
-3800
-4128
-3364
-3520
-3784
-5724
-3206
-3851
-5390
-7979
-4690
-3961
-4719
-3820
-3644
-3782
-3721
-3524
-4262
-3042
-5219
-6150
-5319
-4143
-4820
-4294
-3210
-3009
-3101
-4989
-3859
-3792
-3664
-3565
-3962
-6663
-6941
-3817
-4230
-3615
-4224
-3419
-3648
-3425
-3804
-3162
-3541
-3876
-2920
-4202
-3461
-3993
-3443
-3540
-3960
-6908
-6421
-3054
-4447
-7657
-3332
-3595
-4317
-3133
-3232
-3425
-3696
-3561
-5862
-5469
-7736
-6051
-4283
-4854
-4678
-3554
-3517
-3685
-4053
-3764
-3950
-5526
-3538
-4520
-4583
-4857
-6162
-6400
-5519
-5297
-4497
-3360
-3786
-4161
-4185
-3938
-3737
-3267
-6771
-3874
-4157
-3375
-3029
-5827
-5742
-5378
-4319
-4120
-7647
-5119
-5714
-4155
-4579
-4360
-3589
-3489
-3577
-29127
-22579
-4491
-4666
-4502
-5370
-5280
-3291
-4787
-4341
-2800
-3848
-3358
-3421
-5189
-9292
-5804
-3698
-4090
-8551
-4956
-4214
-3786
-3147
-3350
-4707
-3486
-2969
-3973
-2991
-4455
-4763
-3836
-3618
-4228
-3115
-3250
-3153
-3601
-8066
-8436
-3451
-4007
-3106
-5938
-5737
-4636
-4747
-3496
-5535
-3944
-3819
-4376
-3186
-3589
-3435
-3987
-3827
-3175
-3084
-3230
-3411
-4446
-2997
-3226
-4603
-5274
-3742
-3423
-3049
-2800
-3839
-3598
+8109
+7391
+6818
+7425
+7025
+11856
+12396
+10020
+11504
+11506
+12185
+8940
+7458
+14162
+12491
+7390
+6754
+7574
+7282
+35365
+6501
+8082
+7488
+6078
+7150
+6077
+6220
+6596
+6031
+5920
+6643
+6927
+6507
+6643
+6505
+6011
+7584
+6947
+6209
+6416
+8468
+5901
+6785
+6613
+6194
+6382
+8117
+6764
+9082
+7342
+6548
+6157
+6905
+6944
+5901
+7296
+6854
+6333
+6138
+6799
+7338
+6369
+9162
+7039
+8835
+6965
+6432
+6035
+6205
+6039
+6862
+6617
+8180
+7385
+6292
+6566
+8675
+7813
+7614
+8511
+7659
+7008
+6570
+6125
+6497
+6550
+6994
+6363
+6263
+7856
+6704
+7775
+8155
+7065
+6088
+7205
+11187
+7999
+8017
+7004
+7004
+7360
+10962
+7286
+8663
+7312
+6767
+7827
+7450
+6878
+7574
+6767
+6742
+6951
+12771
+14002
+13367
+14123
+8210
+12280
+7582
+7438
+7665
+7387
+7501
+7402
+71254
+11181
+11080
+7448
+6586
+8459
+8357
+7872
+8103
+7025
+7053
+6971
+8241
+7119
+6673
+7266
+6963
+8924
+6716
+7460
+8253
+8284
+6333
+6905
+7766
+7545
+13274
+8593
+13170
+10076
+13678
+13809
+11972
+13939
+7089
+8936
+7918
+9078
+8760
+10751
+7724
+7829
 BEGIN
-#gw-desktop-herotator -> [1600]
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
-#icp-touch-link-cop -> [6278]
-#icp-touch-link-country -> [6295]
-#icp-touch-link-language -> [6252]
-._cropped-image-link_style_centerImage-focusable__1JvMN -> [1666]
-._cropped-image-link_style_centerImage__1rzYI -> [1666]
-._cropped-image-link_style_cropped-image-link__3winf -> [1662]
-._cropped-image-link_style_fluidImageContainer__2jd50 -> [1669]
 ._cropped-image-link_style_fluidImageContainer__2jd50 ._cropped-image-link_style_fluidImage__iJ3aE -> [1671]
-._fluid-fat-image-link-v2_singleLinkStyle_bodyFooterLink__9LvH0 -> [1854, 2877, 5186]
-._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J -> [1844, 2867, 5176]
-._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr -> [1859, 2882, 5191]
 ._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr ._fluid-fat-image-link-v2_style_fluidImage__gTBjA -> [1861, 2884, 5193]
-._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp -> [1857, 2880, 5189]
-._fluid-quad-image-label-v2_style_centerImage__30wh- -> [1922, 1940, 1960, 1978, 2051, 2069, 2089, 2107, 2180, 2198, 2218, 2236, 2500, 2518, 2538, 2556, 2629, 2647, 2667, 2685, 2758, 2776, 2796, 2814, 3370, 3388, 3408, 3426, 3499, 3517, 3537, 3555, 3628, 3646, 3666, 3684, 3762, 3780, 3800, 3818, 4281, 4299, 4319, 4337, 4410, 4428, 4448, 4466, 4544, 4562, 4582, 4600, 4673, 4691, 4711, 4729, 5255, 5273, 5293, 5311, 5383, 5401, 5421, 5439, 5511, 5529, 5549, 5567]
-._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr -> [1926, 1944, 1964, 1982, 2055, 2073, 2093, 2111, 2184, 2202, 2222, 2240, 2504, 2522, 2542, 2560, 2633, 2651, 2671, 2689, 2762, 2780, 2800, 2818, 3374, 3392, 3412, 3430, 3503, 3521, 3541, 3559, 3632, 3650, 3670, 3688, 3766, 3784, 3804, 3822, 4285, 4303, 4323, 4341, 4414, 4432, 4452, 4470, 4548, 4566, 4586, 4604, 4677, 4695, 4715, 4733, 5259, 5277, 5297, 5315, 5387, 5405, 5425, 5443, 5515, 5533, 5553, 5571]
 ._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr ._fluid-quad-image-label-v2_style_fluidImage__gTBjA -> [1928, 1946, 1966, 1984, 2057, 2075, 2095, 2113, 2186, 2204, 2224, 2242, 2506, 2524, 2544, 2562, 2635, 2653, 2673, 2691, 2764, 2782, 2802, 2820, 3376, 3394, 3414, 3432, 3505, 3523, 3543, 3561, 3634, 3652, 3672, 3690, 3768, 3786, 3806, 3824, 4287, 4305, 4325, 4343, 4416, 4434, 4454, 4472, 4550, 4568, 4588, 4606, 4679, 4697, 4717, 4735, 5261, 5279, 5299, 5317, 5389, 5407, 5427, 5445, 5517, 5535, 5555, 5573]
-._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0 -> [1916, 2045, 2174, 2494, 2623, 2752, 3364, 3493, 3622, 3756, 4275, 4404, 4538, 4667, 5249, 5377, 5505]
-._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv -> [1906, 2035, 2164, 2484, 2613, 2742, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5239, 5367, 5495]
-._fluid-quad-image-label-v2_style_gridRowOne__1t0zL -> [1918, 2047, 2176, 2496, 2625, 2754, 3366, 3495, 3624, 3758, 4277, 4406, 4540, 4669, 5251, 5379, 5507]
-._fluid-quad-image-label-v2_style_gridRowTwo__15woW -> [1956, 2085, 2214, 2534, 2663, 2792, 3404, 3533, 3662, 3796, 4315, 4444, 4578, 4707, 5289, 5417, 5545]
-._fluid-quad-image-label-v2_style_imageLabel__3ANSV -> [1933, 1951, 1971, 1989, 2062, 2080, 2100, 2118, 2191, 2209, 2229, 2247, 2511, 2529, 2549, 2567, 2640, 2658, 2678, 2696, 2769, 2787, 2807, 2825, 3381, 3399, 3419, 3437, 3510, 3528, 3548, 3566, 3639, 3657, 3677, 3695, 3773, 3791, 3811, 3829, 4292, 4310, 4330, 4348, 4421, 4439, 4459, 4477, 4555, 4573, 4593, 4611, 4684, 4702, 4722, 4740, 5266, 5284, 5304, 5322, 5394, 5412, 5432, 5450, 5522, 5540, 5560, 5578]
-._fluid-quad-image-label-v2_style_leftQuadrant__21nVp -> [1920, 1958, 2049, 2087, 2178, 2216, 2498, 2536, 2627, 2665, 2756, 2794, 3368, 3406, 3497, 3535, 3626, 3664, 3760, 3798, 4279, 4317, 4408, 4446, 4542, 4580, 4671, 4709, 5253, 5291, 5381, 5419, 5509, 5547]
-._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG -> [1920, 1938, 1958, 1976, 2049, 2067, 2087, 2105, 2178, 2196, 2216, 2234, 2498, 2516, 2536, 2554, 2627, 2645, 2665, 2683, 2756, 2774, 2794, 2812, 3368, 3386, 3406, 3424, 3497, 3515, 3535, 3553, 3626, 3644, 3664, 3682, 3760, 3778, 3798, 3816, 4279, 4297, 4317, 4335, 4408, 4426, 4446, 4464, 4542, 4560, 4580, 4598, 4671, 4689, 4709, 4727, 5253, 5271, 5291, 5309, 5381, 5399, 5419, 5437, 5509, 5527, 5547, 5565]
-._fluid-quad-image-label-v2_style_rightQuadrant__PI01n -> [1938, 1976, 2067, 2105, 2196, 2234, 2516, 2554, 2645, 2683, 2774, 2812, 3386, 3424, 3515, 3553, 3644, 3682, 3778, 3816, 4297, 4335, 4426, 4464, 4560, 4598, 4689, 4727, 5271, 5309, 5399, 5437, 5527, 5565]
-._quad-category-card_desktopStyle_cardBody__3Rdh1 -> [2324]
-._quad-category-card_desktopStyle_categoryImage__35jKN -> [2363, 2392, 2421]
-._quad-category-card_desktopStyle_category__3flCQ -> [2357, 2386, 2415]
-._quad-category-card_desktopStyle_heroCategory__3KS3k -> [2326]
-._quad-category-card_desktopStyle_heroImage__2V8-9 -> [2332]
-._quad-category-card_desktopStyle_heroLink__1EhW2 -> [2328]
-._quad-category-card_desktopStyle_leftMost__1LmQB -> [2357]
-._quad-category-card_fluid_fluidCardBody__3TzJ4 -> [2324]
-._quad-category-card_fluid_fluidCard__3hmFA -> [2303]
-._quad-category-card_style_fluidImageContainer__2jd50 -> [2334, 2365, 2394, 2423]
 ._quad-category-card_style_fluidImageContainer__2jd50 ._quad-category-card_style_fluidImage__iJ3aE -> [2336, 2367, 2396, 2425]
-._text-link-stripe-v2_style_textlinkstripe__3aQhz -> [1795]
-.gw-card-layout -> [1814, 2940]
 .gw-card-layout .a-cardui -> [1844, 1906, 2035, 2164, 2303, 2484, 2613, 2742, 2867, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5176, 5239, 5367, 5495]
 .gw-card-layout .a-cardui .a-cardui-body -> [2324]
 .gw-card-layout .a-cardui .a-cardui-footer -> [1866, 1994, 2123, 2252, 2444, 2572, 2701, 2830, 2889, 3442, 3571, 3700, 3834, 4353, 4482, 4616, 4745, 5198, 5327, 5455, 5583]
@@ -343,8 +872,7 @@ BEGIN
 .gw-card-layout h2 -> [1851, 1913, 2042, 2171, 2310, 2491, 2620, 2749, 2874, 2978, 3173, 3361, 3490, 3619, 3753, 3892, 4084, 4272, 4401, 4535, 4664, 4803, 4995, 5183, 5246, 5374, 5502, 5641]
 .nav-sprite-v1 .nav-icon -> [910, 1234, 1268, 1287, 1323]
 .nav-sprite-v1 .nav-sprite -> [771, 774, 804, 898, 1164, 1167, 1306, 1340, 1361, 6237, 6833]
-.truncate-2line -> [1851, 1913, 1935, 1953, 1973, 1991, 2042, 2064, 2082, 2102, 2120, 2171, 2193, 2211, 2231, 2249, 2491, 2513, 2531, 2551, 2569, 2620, 2642, 2660, 2680, 2698, 2749, 2771, 2789, 2809, 2827, 2874, 3361, 3383, 3401, 3421, 3439, 3490, 3512, 3530, 3550, 3568, 3619, 3641, 3659, 3679, 3697, 3753, 3775, 3793, 3813, 3831, 4272, 4294, 4312, 4332, 4350, 4401, 4423, 4441, 4461, 4479, 4535, 4557, 4575, 4595, 4613, 4664, 4686, 4704, 4724, 4742, 5183, 5246, 5268, 5286, 5306, 5324, 5374, 5396, 5414, 5434, 5452, 5502, 5524, 5542, 5562, 5580]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 3757
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 3899
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 3899
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 3757
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 3899
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 3899

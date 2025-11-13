@@ -1,27 +1,47 @@
 warning: field `frame_id` is never read
-   --> src/naive.rs:253:9
+   --> src/naive.rs:273:9
     |
-252 | struct LayoutFrame {
+272 | struct LayoutFrame {
     |        ----------- field in this struct
-253 |     pub frame_id: usize,
+273 |     pub frame_id: usize,
     |         ^^^^^^^^
     |
     = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/naive`
+NOT_CONSIDERED[naive] 21 selector(s)
+NOT_CONSIDERED[naive] .autoscrollbody
+NOT_CONSIDERED[naive] .dark.shellytd-masthead
+NOT_CONSIDERED[naive] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[naive] .grecaptcha-badge
+NOT_CONSIDERED[naive] .hidden
+NOT_CONSIDERED[naive] .masthead-skeleton-icon
+NOT_CONSIDERED[naive] .no-scrollbody
+NOT_CONSIDERED[naive] .no-y-scrollbody
+NOT_CONSIDERED[naive] .shellytd-masthead
+NOT_CONSIDERED[naive] .theater.shellytd-masthead
+NOT_CONSIDERED[naive] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[naive] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[naive] #masthead-skeleton-icons
+NOT_CONSIDERED[naive] body
+NOT_CONSIDERED[naive] dom-bind
+NOT_CONSIDERED[naive] dom-if
+NOT_CONSIDERED[naive] dom-repeat
+NOT_CONSIDERED[naive] html
+NOT_CONSIDERED[naive] ps-dom-if
+NOT_CONSIDERED[naive] ps-dom-repeat
+NOT_CONSIDERED[naive] textarea
+PSEUDO_SKIPPED[naive] 6 selector(s)
+PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[naive] :-stv-set-elsewhere
+PSEUDO_SKIPPED[naive] ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[naive] ytd-masthead.shell > :last-child
 BEGIN
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-#masthead-skeleton-icons -> [379]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 ytd-masthead #masthead-logo #country-code -> [377]

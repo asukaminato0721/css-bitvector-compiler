@@ -5,7 +5,8 @@ use std::{
 
 use css_bitvector_compiler::{
     Command, is_simple_selector, json_value_to_attr_string, parse_command,
-    parse_css as shared_parse_css, report_skipped_selectors,
+    parse_css_with_pseudo as shared_parse_css_with_pseudo, report_pseudo_selectors,
+    report_skipped_selectors,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -81,14 +82,16 @@ impl Display for Selector {
     }
 }
 
-fn parse_css(css_content: &str) -> Vec<CssRule> {
-    let mut rules: Vec<CssRule> = shared_parse_css(css_content)
+fn parse_css(css_content: &str) -> (Vec<CssRule>, Vec<String>) {
+    let parsed = shared_parse_css_with_pseudo(css_content);
+    let mut rules: Vec<CssRule> = parsed
+        .selectors
         .into_iter()
         .filter_map(|selector| convert_selector_string_to_rule(&selector))
         .collect();
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
-    rules
+    (rules, parsed.pseudo_selectors)
 }
 
 fn partition_rules(rules: Vec<CssRule>) -> (Vec<CssRule>, Vec<String>) {
@@ -613,14 +616,16 @@ fn apply_frame(dom: &mut SimpleDom, frame: &LayoutFrame) {
 
 fn main() {
     let mut dom = SimpleDom::default();
-    let (mut css, skipped_simple) = partition_rules(parse_css(
+    let (rules, pseudo_selectors) = parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
-    ));
+    );
+    let (mut css, skipped_simple) = partition_rules(rules);
     report_skipped_selectors("naive", &skipped_simple);
+    report_pseudo_selectors("naive", &pseudo_selectors);
     let trace = parse_trace();
 
     for frame in &trace {
@@ -638,12 +643,12 @@ mod test {
     #[test]
     fn base_case() {
         let s = "div h1 > h2 p .a > .b #c";
-        dbg!(parse_css(s));
+        dbg!(parse_css(s).0);
     }
 
     #[test]
     fn parse_attribute_selector() {
-        let rules = parse_css(r#"[data-role="hero"] { color: red; }"#);
+        let (rules, _) = parse_css(r#"[data-role="hero"] { color: red; }"#);
         assert_eq!(rules.len(), 1);
         match &rules[0] {
             CssRule::Complex { parts } => {
@@ -683,21 +688,8 @@ mod test {
 
     #[test]
     fn parse_css_skips_pseudo_classes() {
-        let rules = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
-        assert_eq!(rules.len(), 1);
-        let CssRule::Complex { parts } = &rules[0];
-        assert_eq!(parts.len(), 3);
-        match (&parts[0].selector, &parts[0].combinator) {
-            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "wrapper"),
-            other => panic!("unexpected first part: {:?}", other),
-        }
-        match (&parts[1].selector, &parts[1].combinator) {
-            (Selector::Class(class), Combinator::Descendant) => assert_eq!(class, "item"),
-            other => panic!("unexpected second part: {:?}", other),
-        }
-        match (&parts[2].selector, &parts[2].combinator) {
-            (Selector::Type(tag), Combinator::None) => assert_eq!(tag, "strong"),
-            other => panic!("unexpected third part: {:?}", other),
-        }
+        let (rules, pseudo) = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
+        assert_eq!(pseudo, vec![".wrapper .item:hover strong".to_string()]);
+        assert!(rules.is_empty());
     }
 }

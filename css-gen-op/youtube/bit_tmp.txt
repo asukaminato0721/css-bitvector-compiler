@@ -1,71 +1,91 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/bit`
-1381
-2052
-1268
-1022
-1423
-744
-894
-951
-15914
-1118
-1361
-815
-909
-935
-1560
-858
-799
-1189
-1010
-1115
-1058
-897
-785
-740
-857
-868
-1168
-1634
-1644
-998
-1841
-1042
-800
-901
-998
-996
-917
-805
-1057
-1110
-771
-908
-1230
-1380
-817
-1121
-878
-1034
-1024
-1022
-1156
-4130
-1675
+NOT_CONSIDERED[bit] 21 selector(s)
+NOT_CONSIDERED[bit] #masthead-skeleton-icons
+NOT_CONSIDERED[bit] .autoscrollbody
+NOT_CONSIDERED[bit] .dark.shellytd-masthead
+NOT_CONSIDERED[bit] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[bit] .grecaptcha-badge
+NOT_CONSIDERED[bit] .hidden
+NOT_CONSIDERED[bit] .masthead-skeleton-icon
+NOT_CONSIDERED[bit] .no-scrollbody
+NOT_CONSIDERED[bit] .no-y-scrollbody
+NOT_CONSIDERED[bit] .shellytd-masthead
+NOT_CONSIDERED[bit] .theater.shellytd-masthead
+NOT_CONSIDERED[bit] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[bit] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[bit] body
+NOT_CONSIDERED[bit] dom-bind
+NOT_CONSIDERED[bit] dom-if
+NOT_CONSIDERED[bit] dom-repeat
+NOT_CONSIDERED[bit] html
+NOT_CONSIDERED[bit] ps-dom-if
+NOT_CONSIDERED[bit] ps-dom-repeat
+NOT_CONSIDERED[bit] textarea
+PSEUDO_SKIPPED[bit] 6 selector(s)
+PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[bit] :-stv-set-elsewhere
+PSEUDO_SKIPPED[bit] ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[bit] ytd-masthead.shell > :last-child
+2883
+2582
+2669
+2387
+2542
+2543
+2344
+2418
+2324
+2314
+4157
+2143
+3753
+4557
+2254
+2447
+2269
+2512
+2464
+1979
+2461
+2283
+2920
+2695
+4143
+2352
+2202
+2074
+2160
+2048
+2213
+2904
+2104
+2834
+2289
+2131
+2220
+2825
+2401
+2336
+4978
+2224
+2336
+2216
+3693
+21182
+2533
+3534
+2391
+5256
+3431
+5106
+2593
 BEGIN
-#masthead-skeleton-icons -> [379]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/bit.rs:708:5] unsafe { MISS_CNT } = 4116
+[src/bit.rs:712:5] unsafe { MISS_CNT } = 4116

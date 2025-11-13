@@ -1,45 +1,223 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.13s
      Running `target/release/quad`
-4514
-3650
-2612
-4327
-2835
-2032
+NOT_CONSIDERED[quad] 139 selector(s)
+NOT_CONSIDERED[quad] #searchInput
+NOT_CONSIDERED[quad] .active.suggestion-link
+NOT_CONSIDERED[quad] .app-badge
+NOT_CONSIDERED[quad] .banner
+NOT_CONSIDERED[quad] .banner--visible.banner
+NOT_CONSIDERED[quad] .banner__button
+NOT_CONSIDERED[quad] .banner__close
+NOT_CONSIDERED[quad] .bookshelf
+NOT_CONSIDERED[quad] .bookshelf-container
+NOT_CONSIDERED[quad] .central-featured
+NOT_CONSIDERED[quad] .central-featured-lang
+NOT_CONSIDERED[quad] .central-featured-logo
+NOT_CONSIDERED[quad] .central-textlogo
+NOT_CONSIDERED[quad] .central-textlogo-wrapper
+NOT_CONSIDERED[quad] .central-textlogo__image
+NOT_CONSIDERED[quad] .footer
+NOT_CONSIDERED[quad] .footer-sidebar
+NOT_CONSIDERED[quad] .footer-sidebar-content
+NOT_CONSIDERED[quad] .footer-sidebar-icon.sprite
+NOT_CONSIDERED[quad] .footer-sidebar-text
+NOT_CONSIDERED[quad] .frb-conversation-open-icon
+NOT_CONSIDERED[quad] .hidden
+NOT_CONSIDERED[quad] .lang-list-border
+NOT_CONSIDERED[quad] .lang-list-button
+NOT_CONSIDERED[quad] .lang-list-button-text
+NOT_CONSIDERED[quad] .lang-list-button-wrapper
+NOT_CONSIDERED[quad] .lang-list-container
+NOT_CONSIDERED[quad] .lang-list-content
+NOT_CONSIDERED[quad] .lang1
+NOT_CONSIDERED[quad] .lang10
+NOT_CONSIDERED[quad] .lang2
+NOT_CONSIDERED[quad] .lang3
+NOT_CONSIDERED[quad] .lang4
+NOT_CONSIDERED[quad] .lang5
+NOT_CONSIDERED[quad] .lang6
+NOT_CONSIDERED[quad] .lang7
+NOT_CONSIDERED[quad] .lang8
+NOT_CONSIDERED[quad] .lang9
+NOT_CONSIDERED[quad] .langlist
+NOT_CONSIDERED[quad] .langlist-others
+NOT_CONSIDERED[quad] .localized-slogan
+NOT_CONSIDERED[quad] .no-js.styled-select
+NOT_CONSIDERED[quad] .other-project
+NOT_CONSIDERED[quad] .other-project-icon
+NOT_CONSIDERED[quad] .other-project-link
+NOT_CONSIDERED[quad] .other-project-linka
+NOT_CONSIDERED[quad] .other-project-tagline
+NOT_CONSIDERED[quad] .other-project-text
+NOT_CONSIDERED[quad] .other-project-title
+NOT_CONSIDERED[quad] .other-projects
+NOT_CONSIDERED[quad] .overlay-banner-main
+NOT_CONSIDERED[quad] .overlay-banner-main-amounts
+NOT_CONSIDERED[quad] .overlay-banner-main-footer-cta
+NOT_CONSIDERED[quad] .overlay-banner-main-footer-identity
+NOT_CONSIDERED[quad] .overlay-banner-main-frequency
+NOT_CONSIDERED[quad] .overlay-banner-main-header
+NOT_CONSIDERED[quad] .overlay-banner-main-message
+NOT_CONSIDERED[quad] .overlay-banner-main-message-greeting
+NOT_CONSIDERED[quad] .overlay-banner-main-message-subheading
+NOT_CONSIDERED[quad] .overlay-banner-main-scroll
+NOT_CONSIDERED[quad] .overlay-banner-mini
+NOT_CONSIDERED[quad] .overlay-banner-mini-message
+NOT_CONSIDERED[quad] .overlay-banner-mini-message-text
+NOT_CONSIDERED[quad] .pure-button
+NOT_CONSIDERED[quad] .pure-button-active
+NOT_CONSIDERED[quad] .pure-button-hover
+NOT_CONSIDERED[quad] .pure-button-primary-progressive
+NOT_CONSIDERED[quad] .screen-reader-text
+NOT_CONSIDERED[quad] .search-container
+NOT_CONSIDERED[quad] .site-license
+NOT_CONSIDERED[quad] .sprite
+NOT_CONSIDERED[quad] .sr-only
+NOT_CONSIDERED[quad] .styled-select
+NOT_CONSIDERED[quad] .styled-select-active-helper
+NOT_CONSIDERED[quad] .suggestion-description
+NOT_CONSIDERED[quad] .suggestion-highlight
+NOT_CONSIDERED[quad] .suggestion-link
+NOT_CONSIDERED[quad] .suggestion-thumbnail
+NOT_CONSIDERED[quad] .suggestion-title
+NOT_CONSIDERED[quad] .suggestions-dropdown
+NOT_CONSIDERED[quad] .svg-Commons-logo_sister
+NOT_CONSIDERED[quad] .svg-MediaWiki-logo_sister
+NOT_CONSIDERED[quad] .svg-Meta-Wiki-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikibooks-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikidata-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikifunctions-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikimedia-logo_black
+NOT_CONSIDERED[quad] .svg-Wikinews-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikipedia_wordmark
+NOT_CONSIDERED[quad] .svg-Wikiquote-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikisource-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikispecies-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikiversity-logo_sister
+NOT_CONSIDERED[quad] .svg-Wikivoyage-logo_sister
+NOT_CONSIDERED[quad] .svg-Wiktionary-logo_sister
+NOT_CONSIDERED[quad] .svg-arrow-down
+NOT_CONSIDERED[quad] .svg-arrow-down-blue
+NOT_CONSIDERED[quad] .svg-badge_google_play_store
+NOT_CONSIDERED[quad] .svg-badge_ios_app_store
+NOT_CONSIDERED[quad] .svg-language-icon
+NOT_CONSIDERED[quad] .svg-noimage
+NOT_CONSIDERED[quad] .svg-search-icon
+NOT_CONSIDERED[quad] .svg-wikipedia_app_tile
+NOT_CONSIDERED[quad] .visible.overlay-banner-mini
+NOT_CONSIDERED[quad] a
+NOT_CONSIDERED[quad] abbr
+NOT_CONSIDERED[quad] audio
+NOT_CONSIDERED[quad] b
+NOT_CONSIDERED[quad] body
+NOT_CONSIDERED[quad] button
+NOT_CONSIDERED[quad] canvas
+NOT_CONSIDERED[quad] code
+NOT_CONSIDERED[quad] details
+NOT_CONSIDERED[quad] dfn
+NOT_CONSIDERED[quad] fieldset
+NOT_CONSIDERED[quad] figure
+NOT_CONSIDERED[quad] h1
+NOT_CONSIDERED[quad] hr
+NOT_CONSIDERED[quad] html
+NOT_CONSIDERED[quad] img
+NOT_CONSIDERED[quad] input
+NOT_CONSIDERED[quad] kbd
+NOT_CONSIDERED[quad] legend
+NOT_CONSIDERED[quad] main
+NOT_CONSIDERED[quad] optgroup
+NOT_CONSIDERED[quad] pre
+NOT_CONSIDERED[quad] progress
+NOT_CONSIDERED[quad] samp
+NOT_CONSIDERED[quad] select
+NOT_CONSIDERED[quad] small
+NOT_CONSIDERED[quad] strong
+NOT_CONSIDERED[quad] sub
+NOT_CONSIDERED[quad] summary
+NOT_CONSIDERED[quad] sup
+NOT_CONSIDERED[quad] table
+NOT_CONSIDERED[quad] td
+NOT_CONSIDERED[quad] textarea
+NOT_CONSIDERED[quad] th
+NOT_CONSIDERED[quad] video
+PSEUDO_SKIPPED[quad] 56 selector(s)
+PSEUDO_SKIPPED[quad] #searchInput:focus
+PSEUDO_SKIPPED[quad] #searchInput:hover
+PSEUDO_SKIPPED[quad] .banner__button:hover
+PSEUDO_SKIPPED[quad] .central-featured-lang .link-box:hover strong
+PSEUDO_SKIPPED[quad] .central-featured-lang :hover
+PSEUDO_SKIPPED[quad] .footer:after
+PSEUDO_SKIPPED[quad] .footer:before
+PSEUDO_SKIPPED[quad] .hlist li > ul:after
+PSEUDO_SKIPPED[quad] .hlist li > ul:before
+PSEUDO_SKIPPED[quad] .hlist li:before
+PSEUDO_SKIPPED[quad] .hlist li:first-child:before
+PSEUDO_SKIPPED[quad] .lang-list-button:focus
+PSEUDO_SKIPPED[quad] .lang-list-button:hover
+PSEUDO_SKIPPED[quad] .langlist > ul > li:before
+PSEUDO_SKIPPED[quad] .other-project-link:hover
+PSEUDO_SKIPPED[quad] .overlay-banner-main .banner-button:focus
+PSEUDO_SKIPPED[quad] .overlay-banner-main .banner-button:focus-within
+PSEUDO_SKIPPED[quad] .overlay-banner-main .button-collapse:hover
+PSEUDO_SKIPPED[quad] .overlay-banner-main-header a:hover
+PSEUDO_SKIPPED[quad] .overlay-banner-mini .frb-submit:focus
+PSEUDO_SKIPPED[quad] .overlay-banner-mini .frb-submit:hover
+PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:active
+PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:focus
+PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:hover
+PSEUDO_SKIPPED[quad] .pure-button::-moz-focus-inner
+PSEUDO_SKIPPED[quad] .pure-button:active
+PSEUDO_SKIPPED[quad] .pure-button:focus
+PSEUDO_SKIPPED[quad] .pure-button:hover
+PSEUDO_SKIPPED[quad] .pure-form input:focus:invalid
+PSEUDO_SKIPPED[quad] .search-container input::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[quad] .search-container input[type="search"]::-webkit-search-results-button
+PSEUDO_SKIPPED[quad] .search-container input[type="search"]::-webkit-search-results-decoration
+PSEUDO_SKIPPED[quad] .site-license small:after
+PSEUDO_SKIPPED[quad] .site-license small:last-child:after
+PSEUDO_SKIPPED[quad] .styled-select select:focus
+PSEUDO_SKIPPED[quad] .styled-select select:hover
+PSEUDO_SKIPPED[quad] .styled-select.js-enabled select:focus + .styled-select-active-helper
+PSEUDO_SKIPPED[quad] .styled-select.js-enabled select:hover
+PSEUDO_SKIPPED[quad] .styled-select:hover
+PSEUDO_SKIPPED[quad] :root
+PSEUDO_SKIPPED[quad] a.suggestion-link:active
+PSEUDO_SKIPPED[quad] a.suggestion-link:focus
+PSEUDO_SKIPPED[quad] a.suggestion-link:hover
+PSEUDO_SKIPPED[quad] a:active
+PSEUDO_SKIPPED[quad] a:focus
+PSEUDO_SKIPPED[quad] a:hover
+PSEUDO_SKIPPED[quad] audio:not([controls])
+PSEUDO_SKIPPED[quad] button::-moz-focus-inner
+PSEUDO_SKIPPED[quad] input::-moz-focus-inner
+PSEUDO_SKIPPED[quad] input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[quad] input[type="number"]::-webkit-outer-spin-button
+PSEUDO_SKIPPED[quad] input[type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[quad] input[type="search"]::-webkit-search-decoration
+PSEUDO_SKIPPED[quad] input[type="search"]:focus
+PSEUDO_SKIPPED[quad] span.frb-conversation-close-icon:after
+PSEUDO_SKIPPED[quad] span.frb-conversation-close-icon:before
+6025
+6145
+6059
+8904
+7605
+4827
 BEGIN
-#searchInput -> [387]
-.app-badge -> [3898, 3913]
 .app-badge a -> [3901, 3916]
 .app-badges .footer-sidebar-content -> [3871]
 .app-badges .footer-sidebar-text -> [3874]
 .app-badges ul -> [3896]
-.banner -> [3476]
 .banner * -> [3480, 3483, 3486, 3490, 3493, 3499, 3500, 3505, 3508, 3510, 3513, 3516, 3519, 3521, 3523, 3525, 3526, 3528, 3529, 3531, 3532, 3533, 3535, 3536, 3538, 3539, 3541, 3542, 3543, 3545, 3546, 3549, 3552, 3555, 3557, 3558, 3560, 3561, 3562, 3563, 3565, 3566, 3568, 3569, 3570, 3572, 3573, 3574, 3576, 3577, 3580, 3584, 3586, 3591, 3594, 3596, 3601, 3603, 3605, 3607, 3612, 3614, 3616, 3618, 3623, 3625, 3627, 3629, 3634, 3636, 3638, 3640, 3645, 3647, 3649, 3651, 3656, 3658, 3660, 3662, 3667, 3671, 3674, 3676, 3678, 3682, 3684, 3689, 3691, 3693, 3698, 3702, 3706, 3708, 3711, 3714, 3721, 3724, 3728, 3730, 3732, 3735, 3738, 3740, 3743, 3748, 3751, 3756, 3759, 3765, 3766, 3771, 3776, 3780, 3783, 3786, 3788, 3795, 3798, 3802, 3804, 3806, 3807, 3808, 3810, 3811, 3813, 3814, 3815, 3816, 3817, 3820, 3823, 3826]
-.banner__button -> [3823]
-.bookshelf -> [1093, 1251, 1666, 2389, 3265]
 .bookshelf .text -> [1096, 1254, 1669, 2392, 3268]
-.bookshelf-container -> [1090, 1248, 1663, 2386, 3262]
-.central-featured -> [113]
-.central-featured-lang -> [121, 145, 169, 193, 217, 241, 265, 289, 313, 337]
 .central-featured-lang .link-box -> [126, 150, 174, 198, 222, 246, 270, 294, 318, 342]
-.central-featured-lang .link-box strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]
 .central-featured-lang small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352]
 .central-featured-lang strong -> [133, 157, 181, 205, 229, 253, 277, 301, 325, 349]
-.central-featured-logo -> [91]
-.central-textlogo -> [88]
-.central-textlogo-wrapper -> [99]
-.central-textlogo__image -> [102]
-.footer -> [3833]
 .footer hr -> [4328]
-.footer-sidebar -> [3837, 3868]
-.footer-sidebar-content -> [3840, 3871]
-.footer-sidebar-text -> [3847, 3852, 3874]
-.frb-conversation-open-icon -> [3756]
 .frb-conversation-open-icon svg -> [3759]
 .frb-message-icon circle -> [3724, 3798]
 .frb-message-icon path -> [3728, 3802]
 .hlist li -> [1117, 1126, 1132, 1139, 1146, 1155, 1161, 1167, 1176, 1182, 1189, 1195, 1201, 1207, 1213, 1220, 1226, 1232, 1239, 1275, 1281, 1288, 1294, 1300, 1307, 1314, 1321, 1328, 1334, 1340, 1346, 1352, 1358, 1365, 1371, 1377, 1384, 1391, 1398, 1405, 1411, 1417, 1426, 1433, 1439, 1445, 1451, 1457, 1463, 1470, 1476, 1483, 1490, 1496, 1503, 1507, 1512, 1518, 1525, 1531, 1548, 1554, 1560, 1566, 1573, 1579, 1585, 1591, 1597, 1604, 1610, 1617, 1624, 1631, 1640, 1646, 1655, 1690, 1696, 1702, 1709, 1715, 1722, 1728, 1735, 1741, 1747, 1754, 1761, 1767, 1774, 1780, 1786, 1792, 1799, 1805, 1814, 1820, 1826, 1832, 1838, 1844, 1850, 1856, 1862, 1871, 1878, 1884, 1890, 1896, 1902, 1908, 1914, 1920, 1926, 1933, 1939, 1945, 1952, 1958, 1965, 1971, 1977, 1990, 1999, 2006, 2013, 2019, 2025, 2031, 2037, 2044, 2051, 2058, 2067, 2074, 2081, 2087, 2094, 2101, 2107, 2113, 2120, 2127, 2134, 2141, 2150, 2159, 2165, 2171, 2177, 2183, 2189, 2196, 2203, 2210, 2217, 2224, 2230, 2236, 2242, 2249, 2258, 2264, 2270, 2276, 2282, 2288, 2295, 2301, 2307, 2313, 2319, 2325, 2331, 2338, 2345, 2354, 2360, 2366, 2372, 2378, 2413, 2426, 2433, 2439, 2446, 2453, 2460, 2466, 2472, 2478, 2487, 2493, 2500, 2506, 2512, 2518, 2525, 2531, 2538, 2545, 2551, 2557, 2563, 2569, 2575, 2582, 2588, 2597, 2603, 2609, 2616, 2622, 2628, 2634, 2640, 2646, 2652, 2658, 2665, 2671, 2677, 2687, 2693, 2700, 2706, 2712, 2718, 2724, 2730, 2736, 2742, 2749, 2756, 2762, 2768, 2777, 2783, 2789, 2795, 2802, 2809, 2815, 2822, 2828, 2834, 2840, 2846, 2852, 2858, 2864, 2870, 2876, 2882, 2888, 2894, 2901, 2907, 2913, 2920, 2926, 2932, 2938, 2944, 2950, 2956, 2962, 2968, 2975, 2981, 2987, 2993, 2999, 3005, 3011, 3018, 3024, 3030, 3036, 3042, 3048, 3054, 3060, 3066, 3072, 3078, 3085, 3092, 3098, 3104, 3110, 3116, 3123, 3129, 3135, 3141, 3147, 3153, 3160, 3166, 3172, 3178, 3185, 3192, 3200, 3206, 3212, 3218, 3224, 3230, 3236, 3242, 3248, 3254, 3289, 3295, 3301, 3307, 3314, 3321, 3327, 3333, 3339, 3346, 3352, 3358, 3364, 3370, 3377, 3383, 3389, 3396, 3402, 3409, 3416, 3422, 3428, 3434, 3440, 3446, 3452]
-.hlist li > ul -> [1506]
 .hlist ul -> [1115, 1273, 1506, 1688, 2411, 3287]
 .hlist ul ul -> [1506]
 .js-enabled .central-featured -> [113]
@@ -47,37 +225,10 @@ BEGIN
 .js-enabled .lang-list-container -> [1083]
 .jsl10n-visible .central-featured -> [113]
 .jsl10n-visible .jsl10n -> [106, 1070, 1103, 1261, 1676, 2399, 3275, 3464, 3847, 3859, 3880, 3884, 3891, 3906, 3921, 3954, 3959, 3984, 3989, 4014, 4019, 4044, 4049, 4074, 4079, 4104, 4109, 4134, 4139, 4164, 4169, 4194, 4199, 4224, 4229, 4254, 4259, 4284, 4289, 4314, 4319, 4333, 4341, 4348]
-.lang-list-border -> [1080]
-.lang-list-button -> [1061]
 .lang-list-button i -> [1067, 1075]
-.lang-list-button-text -> [1070]
-.lang-list-button-wrapper -> [1058]
-.lang-list-container -> [1083]
-.lang-list-content -> [1086]
-.lang1 -> [121]
-.lang10 -> [337]
-.lang2 -> [145]
-.lang3 -> [169]
-.lang4 -> [193]
-.lang5 -> [217]
-.lang6 -> [241]
-.lang7 -> [265]
-.lang8 -> [289]
-.lang9 -> [313]
-.langlist -> [1111, 1269, 1684, 2407, 3283, 3460]
-.langlist-others -> [3460]
 .langlist > ul -> [1115, 1273, 1688, 2411, 3287]
 .langlist > ul > li -> [1117, 1126, 1132, 1139, 1146, 1155, 1161, 1167, 1176, 1182, 1189, 1195, 1201, 1207, 1213, 1220, 1226, 1232, 1239, 1275, 1281, 1288, 1294, 1300, 1307, 1314, 1321, 1328, 1334, 1340, 1346, 1352, 1358, 1365, 1371, 1377, 1384, 1391, 1398, 1405, 1411, 1417, 1426, 1433, 1439, 1445, 1451, 1457, 1463, 1470, 1476, 1483, 1490, 1496, 1503, 1518, 1525, 1531, 1548, 1554, 1560, 1566, 1573, 1579, 1585, 1591, 1597, 1604, 1610, 1617, 1624, 1631, 1640, 1646, 1655, 1690, 1696, 1702, 1709, 1715, 1722, 1728, 1735, 1741, 1747, 1754, 1761, 1767, 1774, 1780, 1786, 1792, 1799, 1805, 1814, 1820, 1826, 1832, 1838, 1844, 1850, 1856, 1862, 1871, 1878, 1884, 1890, 1896, 1902, 1908, 1914, 1920, 1926, 1933, 1939, 1945, 1952, 1958, 1965, 1971, 1977, 1990, 1999, 2006, 2013, 2019, 2025, 2031, 2037, 2044, 2051, 2058, 2067, 2074, 2081, 2087, 2094, 2101, 2107, 2113, 2120, 2127, 2134, 2141, 2150, 2159, 2165, 2171, 2177, 2183, 2189, 2196, 2203, 2210, 2217, 2224, 2230, 2236, 2242, 2249, 2258, 2264, 2270, 2276, 2282, 2288, 2295, 2301, 2307, 2313, 2319, 2325, 2331, 2338, 2345, 2354, 2360, 2366, 2372, 2378, 2413, 2426, 2433, 2439, 2446, 2453, 2460, 2466, 2472, 2478, 2487, 2493, 2500, 2506, 2512, 2518, 2525, 2531, 2538, 2545, 2551, 2557, 2563, 2569, 2575, 2582, 2588, 2597, 2603, 2609, 2616, 2622, 2628, 2634, 2640, 2646, 2652, 2658, 2665, 2671, 2677, 2687, 2693, 2700, 2706, 2712, 2718, 2724, 2730, 2736, 2742, 2749, 2756, 2762, 2768, 2777, 2783, 2789, 2795, 2802, 2809, 2815, 2822, 2828, 2834, 2840, 2846, 2852, 2858, 2864, 2870, 2876, 2882, 2888, 2894, 2901, 2907, 2913, 2920, 2926, 2932, 2938, 2944, 2950, 2956, 2962, 2968, 2975, 2981, 2987, 2993, 2999, 3005, 3011, 3018, 3024, 3030, 3036, 3042, 3048, 3054, 3060, 3066, 3072, 3078, 3085, 3092, 3098, 3104, 3110, 3116, 3123, 3129, 3135, 3141, 3147, 3153, 3160, 3166, 3172, 3178, 3185, 3192, 3200, 3206, 3212, 3218, 3224, 3230, 3236, 3242, 3248, 3254, 3289, 3295, 3301, 3307, 3314, 3321, 3327, 3333, 3339, 3346, 3352, 3358, 3364, 3370, 3377, 3383, 3389, 3396, 3402, 3409, 3416, 3422, 3428, 3434, 3440, 3446, 3452]
 .langlist > ul > li a -> [1118, 1127, 1133, 1140, 1147, 1156, 1162, 1168, 1177, 1183, 1190, 1196, 1202, 1208, 1214, 1221, 1227, 1233, 1240, 1276, 1282, 1289, 1295, 1301, 1308, 1315, 1322, 1329, 1335, 1341, 1347, 1353, 1359, 1366, 1372, 1378, 1385, 1392, 1399, 1406, 1412, 1418, 1427, 1434, 1440, 1446, 1452, 1458, 1464, 1471, 1477, 1484, 1491, 1497, 1508, 1513, 1519, 1526, 1532, 1549, 1555, 1561, 1567, 1574, 1580, 1586, 1592, 1598, 1605, 1611, 1618, 1625, 1632, 1641, 1647, 1656, 1691, 1697, 1703, 1710, 1716, 1723, 1729, 1736, 1742, 1748, 1755, 1762, 1768, 1775, 1781, 1787, 1793, 1800, 1806, 1815, 1821, 1827, 1833, 1839, 1845, 1851, 1857, 1863, 1872, 1879, 1885, 1891, 1897, 1903, 1909, 1915, 1921, 1927, 1934, 1940, 1946, 1953, 1959, 1966, 1972, 1978, 1991, 2000, 2007, 2014, 2020, 2026, 2032, 2038, 2045, 2052, 2059, 2068, 2075, 2082, 2088, 2095, 2102, 2108, 2114, 2121, 2128, 2135, 2142, 2151, 2160, 2166, 2172, 2178, 2184, 2190, 2197, 2204, 2211, 2218, 2225, 2231, 2237, 2243, 2250, 2259, 2265, 2271, 2277, 2283, 2289, 2296, 2302, 2308, 2314, 2320, 2326, 2332, 2339, 2346, 2355, 2361, 2367, 2373, 2379, 2414, 2427, 2434, 2440, 2447, 2454, 2461, 2467, 2473, 2479, 2488, 2494, 2501, 2507, 2513, 2519, 2526, 2532, 2539, 2546, 2552, 2558, 2564, 2570, 2576, 2583, 2589, 2598, 2604, 2610, 2617, 2623, 2629, 2635, 2641, 2647, 2653, 2659, 2666, 2672, 2678, 2688, 2694, 2701, 2707, 2713, 2719, 2725, 2731, 2737, 2743, 2750, 2757, 2763, 2769, 2778, 2784, 2790, 2796, 2803, 2810, 2816, 2823, 2829, 2835, 2841, 2847, 2853, 2859, 2865, 2871, 2877, 2883, 2889, 2895, 2902, 2908, 2914, 2921, 2927, 2933, 2939, 2945, 2951, 2957, 2963, 2969, 2976, 2982, 2988, 2994, 3000, 3006, 3012, 3019, 3025, 3031, 3037, 3043, 3049, 3055, 3061, 3067, 3073, 3079, 3086, 3093, 3099, 3105, 3111, 3117, 3124, 3130, 3136, 3142, 3148, 3154, 3161, 3167, 3173, 3179, 3186, 3193, 3201, 3207, 3213, 3219, 3225, 3231, 3237, 3243, 3249, 3255, 3290, 3296, 3302, 3308, 3315, 3322, 3328, 3334, 3340, 3347, 3353, 3359, 3365, 3371, 3378, 3384, 3390, 3397, 3403, 3410, 3417, 3423, 3429, 3435, 3441, 3447, 3453]
-.localized-slogan -> [106]
-.other-project -> [3937, 3967, 3997, 4027, 4057, 4087, 4117, 4147, 4177, 4207, 4237, 4267, 4297]
-.other-project-icon -> [3944, 3974, 4004, 4034, 4064, 4094, 4124, 4154, 4184, 4214, 4244, 4274, 4304]
-.other-project-link -> [3940, 3970, 4000, 4030, 4060, 4090, 4120, 4150, 4180, 4210, 4240, 4270, 4300]
-.other-project-tagline -> [3959, 3989, 4019, 4049, 4079, 4109, 4139, 4169, 4199, 4229, 4259, 4289, 4319]
-.other-project-text -> [3951, 3981, 4011, 4041, 4071, 4101, 4131, 4161, 4191, 4221, 4251, 4281, 4311]
-.other-project-title -> [3954, 3984, 4014, 4044, 4074, 4104, 4134, 4164, 4194, 4224, 4254, 4284, 4314]
-.other-projects -> [3932]
-.overlay-banner-main -> [3483]
 .overlay-banner-main .banner-button -> [3584, 3594, 3605, 3616, 3627, 3638, 3649, 3660, 3682, 3691, 3702]
 .overlay-banner-main .banner-button-disabled -> [3702]
 .overlay-banner-main .button-33 -> [3584, 3594, 3605, 3616, 3627, 3638, 3649]
@@ -89,90 +240,31 @@ BEGIN
 .overlay-banner-main .frb-header-minimize -> [3486]
 .overlay-banner-main .frb-header-minimize-icon -> [3490]
 .overlay-banner-main .frb-header-minimize-icon svg -> [3493]
-.overlay-banner-main-amounts -> [3549]
 .overlay-banner-main-amounts .button-grid -> [3580]
 .overlay-banner-main-amounts .error-highlight -> [3555]
-.overlay-banner-main-footer-cta -> [3711]
-.overlay-banner-main-footer-identity -> [3732]
 .overlay-banner-main-footer-identity img -> [3735]
-.overlay-banner-main-frequency -> [3671]
 .overlay-banner-main-frequency .button-grid -> [3678]
 .overlay-banner-main-frequency .error-highlight -> [3674]
-.overlay-banner-main-header -> [3505]
 .overlay-banner-main-header a -> [3508]
-.overlay-banner-main-message -> [3516]
 .overlay-banner-main-message p -> [3523, 3531, 3538, 3541]
-.overlay-banner-main-message-greeting -> [3519]
-.overlay-banner-main-message-subheading -> [3523]
-.overlay-banner-main-scroll -> [3513]
-.overlay-banner-mini -> [3748]
 .overlay-banner-mini .frb-conversation-close -> [3771]
 .overlay-banner-mini .frb-conversation-open -> [3751]
 .overlay-banner-mini .frb-message-icon -> [3788]
 .overlay-banner-mini .frb-message-icon circle -> [3798]
 .overlay-banner-mini .frb-message-icon path -> [3802]
 .overlay-banner-mini .frb-submit -> [3823]
-.overlay-banner-mini-message -> [3780]
 .overlay-banner-mini-message h3 -> [3786]
 .overlay-banner-mini-message p -> [3806, 3813]
-.overlay-banner-mini-message-text -> [3783]
-.pure-button -> [1036]
-.pure-button-primary-progressive -> [1036]
 .pure-form fieldset -> [370]
-.pure-form input -> [372, 387, 1046]
-.screen-reader-text -> [381]
-.search-container -> [360]
 .search-container .js-langpicker-label -> [5798]
 .search-container .search-input -> [377]
 .search-container button -> [1036]
 .search-container button .svg-search-icon -> [1040]
 .search-container fieldset -> [370]
-.search-container input -> [372, 387, 1046]
-.site-license -> [4330]
-.site-license small -> [4333, 4341, 4348]
-.sprite -> [102, 1031, 1040, 1067, 1075, 3843, 3877, 3906, 3921, 3947, 3977, 4007, 4037, 4067, 4097, 4127, 4157, 4187, 4217, 4247, 4277, 4307]
-.sr-only -> [3586, 3596, 3607, 3618, 3629, 3640, 3651, 3662, 3684, 3693]
-.styled-select -> [403]
 .styled-select .hide-arrow -> [406]
 .styled-select select -> [409]
-.styled-select-active-helper -> [1027]
-.svg-Commons-logo_sister -> [3947]
-.svg-MediaWiki-logo_sister -> [4187]
-.svg-Meta-Wiki-logo_sister -> [4307]
-.svg-Wikibooks-logo_sister -> [4037]
-.svg-Wikidata-logo_sister -> [4097]
-.svg-Wikifunctions-logo_sister -> [4277]
-.svg-Wikimedia-logo_black -> [3843]
-.svg-Wikinews-logo_sister -> [4067]
-.svg-Wikipedia_wordmark -> [102]
-.svg-Wikiquote-logo_sister -> [4157]
-.svg-Wikisource-logo_sister -> [4217]
-.svg-Wikispecies-logo_sister -> [4247]
-.svg-Wikiversity-logo_sister -> [4127]
-.svg-Wikivoyage-logo_sister -> [3977]
-.svg-Wiktionary-logo_sister -> [4007]
-.svg-arrow-down -> [1031]
-.svg-arrow-down-blue -> [1075]
-.svg-badge_google_play_store -> [3906]
-.svg-badge_ios_app_store -> [3921]
-.svg-language-icon -> [1067]
-.svg-search-icon -> [1040]
-.svg-wikipedia_app_tile -> [3877]
-a -> [126, 150, 174, 198, 222, 246, 270, 294, 318, 342, 1118, 1127, 1133, 1140, 1147, 1156, 1162, 1168, 1177, 1183, 1190, 1196, 1202, 1208, 1214, 1221, 1227, 1233, 1240, 1276, 1282, 1289, 1295, 1301, 1308, 1315, 1322, 1329, 1335, 1341, 1347, 1353, 1359, 1366, 1372, 1378, 1385, 1392, 1399, 1406, 1412, 1418, 1427, 1434, 1440, 1446, 1452, 1458, 1464, 1471, 1477, 1484, 1491, 1497, 1508, 1513, 1519, 1526, 1532, 1549, 1555, 1561, 1567, 1574, 1580, 1586, 1592, 1598, 1605, 1611, 1618, 1625, 1632, 1641, 1647, 1656, 1691, 1697, 1703, 1710, 1716, 1723, 1729, 1736, 1742, 1748, 1755, 1762, 1768, 1775, 1781, 1787, 1793, 1800, 1806, 1815, 1821, 1827, 1833, 1839, 1845, 1851, 1857, 1863, 1872, 1879, 1885, 1891, 1897, 1903, 1909, 1915, 1921, 1927, 1934, 1940, 1946, 1953, 1959, 1966, 1972, 1978, 1991, 2000, 2007, 2014, 2020, 2026, 2032, 2038, 2045, 2052, 2059, 2068, 2075, 2082, 2088, 2095, 2102, 2108, 2114, 2121, 2128, 2135, 2142, 2151, 2160, 2166, 2172, 2178, 2184, 2190, 2197, 2204, 2211, 2218, 2225, 2231, 2237, 2243, 2250, 2259, 2265, 2271, 2277, 2283, 2289, 2296, 2302, 2308, 2314, 2320, 2326, 2332, 2339, 2346, 2355, 2361, 2367, 2373, 2379, 2414, 2427, 2434, 2440, 2447, 2454, 2461, 2467, 2473, 2479, 2488, 2494, 2501, 2507, 2513, 2519, 2526, 2532, 2539, 2546, 2552, 2558, 2564, 2570, 2576, 2583, 2589, 2598, 2604, 2610, 2617, 2623, 2629, 2635, 2641, 2647, 2653, 2659, 2666, 2672, 2678, 2688, 2694, 2701, 2707, 2713, 2719, 2725, 2731, 2737, 2743, 2750, 2757, 2763, 2769, 2778, 2784, 2790, 2796, 2803, 2810, 2816, 2823, 2829, 2835, 2841, 2847, 2853, 2859, 2865, 2871, 2877, 2883, 2889, 2895, 2902, 2908, 2914, 2921, 2927, 2933, 2939, 2945, 2951, 2957, 2963, 2969, 2976, 2982, 2988, 2994, 3000, 3006, 3012, 3019, 3025, 3031, 3037, 3043, 3049, 3055, 3061, 3067, 3073, 3079, 3086, 3093, 3099, 3105, 3111, 3117, 3124, 3130, 3136, 3142, 3148, 3154, 3161, 3167, 3173, 3179, 3186, 3193, 3201, 3207, 3213, 3219, 3225, 3231, 3237, 3243, 3249, 3255, 3290, 3296, 3302, 3308, 3315, 3322, 3328, 3334, 3340, 3347, 3353, 3359, 3365, 3371, 3378, 3384, 3390, 3397, 3403, 3410, 3417, 3423, 3429, 3435, 3441, 3447, 3453, 3464, 3508, 3702, 3823, 3855, 3884, 3901, 3916, 3940, 3970, 4000, 4030, 4060, 4090, 4120, 4150, 4180, 4210, 4240, 4270, 4300, 4337, 4344, 4351]
-body -> [83]
-button -> [1036, 1061, 3486, 3740]
-fieldset -> [370]
-h1 -> [99]
-hr -> [3474, 4328]
-html -> [13, 14]
 html input -> [372, 387, 1046, 3586, 3596, 3607, 3618, 3629, 3640, 3651, 3662, 3684, 3693]
-img -> [91, 3735]
-input -> [372, 387, 1046, 3586, 3596, 3607, 3618, 3629, 3640, 3651, 3662, 3684, 3693]
-main -> [86]
-select -> [409]
-small -> [136, 160, 184, 208, 232, 256, 280, 304, 328, 352, 4333, 4341, 4348]
-strong -> [106, 133, 157, 181, 205, 229, 253, 277, 301, 325, 349, 3880]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 3963
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 2102
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 67
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 3963
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 2102
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 67

@@ -1,73 +1,93 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/tri`
-1249
-1535
-1385
-975
-1111
-843
-1112
-1117
-860
-961
-3394
-923
-1066
-907
-823
-1007
-786
-2284
-1275
-951
-945
-1145
-870
-864
-857
-1125
-1120
-1093
-1160
-882
-931
-981
-882
-1016
-1294
-787
-837
-1040
-974
-1050
-997
-825
-824
-846
-1044
-1097
-1136
-1050
-1752
-1237
-1308
-1685
-1491
+NOT_CONSIDERED[tri] 21 selector(s)
+NOT_CONSIDERED[tri] #masthead-skeleton-icons
+NOT_CONSIDERED[tri] .autoscrollbody
+NOT_CONSIDERED[tri] .dark.shellytd-masthead
+NOT_CONSIDERED[tri] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[tri] .grecaptcha-badge
+NOT_CONSIDERED[tri] .hidden
+NOT_CONSIDERED[tri] .masthead-skeleton-icon
+NOT_CONSIDERED[tri] .no-scrollbody
+NOT_CONSIDERED[tri] .no-y-scrollbody
+NOT_CONSIDERED[tri] .shellytd-masthead
+NOT_CONSIDERED[tri] .theater.shellytd-masthead
+NOT_CONSIDERED[tri] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[tri] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] dom-bind
+NOT_CONSIDERED[tri] dom-if
+NOT_CONSIDERED[tri] dom-repeat
+NOT_CONSIDERED[tri] html
+NOT_CONSIDERED[tri] ps-dom-if
+NOT_CONSIDERED[tri] ps-dom-repeat
+NOT_CONSIDERED[tri] textarea
+PSEUDO_SKIPPED[tri] 6 selector(s)
+PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[tri] :-stv-set-elsewhere
+PSEUDO_SKIPPED[tri] ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[tri] ytd-masthead.shell > :last-child
+3798
+2604
+3474
+2586
+3560
+3028
+3422
+2581
+2886
+2452
+2539
+2808
+2705
+2541
+2336
+3352
+2382
+4539
+3877
+3123
+5150
+3818
+2730
+2659
+2350
+2943
+2663
+2964
+2719
+2615
+4891
+2472
+3977
+3224
+2920
+2537
+2662
+2843
+2993
+3840
+2423
+3745
+2861
+2744
+3031
+2800
+3881
+2963
+3963
+4027
+3614
+15227
+3285
 BEGIN
-#masthead-skeleton-icons -> [379]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/tri.rs:862:5] unsafe { MISS_CNT } = 4116
-[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 5229
-[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 5229
+[src/tri.rs:866:5] unsafe { MISS_CNT } = 4116
+[src/tri.rs:867:5] unsafe { INPUT_CHANGE_COUNT } = 5229
+[src/tri.rs:868:5] unsafe { INPUT_SKIP_COUNT } = 5229

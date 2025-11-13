@@ -1,73 +1,93 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/quad`
-4575
-2543
-3192
-2634
-8713
-2087
-5388
-1971
-3035
-2774
-1839
-2316
-1578
-1713
-4451
-9148
-2001
-53665
-14373
-1879
-3101
-7148
-2109
-2841
-2650
-3072
-2257
-3757
-2113
-13635
-14041
-2660
-2535
-3770
-2733
-2669
-2294
-2695
-2431
-17455
-2464
-2561
-2822
-9959
-2645
-3103
-2364
-3157
-3869
-9008
-39900
-267723
-4551
+NOT_CONSIDERED[quad] 21 selector(s)
+NOT_CONSIDERED[quad] #masthead-skeleton-icons
+NOT_CONSIDERED[quad] .autoscrollbody
+NOT_CONSIDERED[quad] .dark.shellytd-masthead
+NOT_CONSIDERED[quad] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[quad] .grecaptcha-badge
+NOT_CONSIDERED[quad] .hidden
+NOT_CONSIDERED[quad] .masthead-skeleton-icon
+NOT_CONSIDERED[quad] .no-scrollbody
+NOT_CONSIDERED[quad] .no-y-scrollbody
+NOT_CONSIDERED[quad] .shellytd-masthead
+NOT_CONSIDERED[quad] .theater.shellytd-masthead
+NOT_CONSIDERED[quad] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[quad] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[quad] body
+NOT_CONSIDERED[quad] dom-bind
+NOT_CONSIDERED[quad] dom-if
+NOT_CONSIDERED[quad] dom-repeat
+NOT_CONSIDERED[quad] html
+NOT_CONSIDERED[quad] ps-dom-if
+NOT_CONSIDERED[quad] ps-dom-repeat
+NOT_CONSIDERED[quad] textarea
+PSEUDO_SKIPPED[quad] 6 selector(s)
+PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[quad] :-stv-set-elsewhere
+PSEUDO_SKIPPED[quad] ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[quad] ytd-masthead.shell > :last-child
+17185
+6842
+7700
+9602
+25692
+6221
+8126
+6197
+7859
+6519
+3719
+6331
+3431
+3559
+11285
+34967
+5977
+152229
+39305
+8687
+6611
+19142
+5589
+7729
+6635
+6597
+6150
+7841
+4860
+31417
+33351
+7237
+7012
+7304
+7271
+6501
+6880
+6767
+6943
+27375
+7085
+7996
+8296
+25704
+8559
+9762
+7241
+7819
+10104
+22329
+76293
+546464
+11941
 BEGIN
-#masthead-skeleton-icons -> [379]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 4116
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 5229
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 5229
+[src/quad.rs:965:5] unsafe { MISS_CNT } = 4116
+[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 5229
+[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 5229

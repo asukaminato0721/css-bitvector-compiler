@@ -1,7 +1,8 @@
 use lightningcss::{
     rules::CssRule,
     selector::{Combinator as LCombinator, Component as LComponent, Selector as LightningSelector},
-    stylesheet::{ParserOptions, StyleSheet},
+    stylesheet::{ParserOptions, PrinterOptions, StyleSheet},
+    traits::ToCss,
 };
 use parcel_selectors::attr::AttrSelectorOperator;
 use std::{
@@ -249,31 +250,49 @@ pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize>
         .unwrap()
 }
 
+#[derive(Debug, Default, Clone)]
+pub struct ParsedSelectors {
+    pub selectors: Vec<String>,
+    pub pseudo_selectors: Vec<String>,
+}
+
 pub fn parse_css(css_content: &str) -> Vec<String> {
-    let mut selectors = Vec::new();
+    parse_css_with_pseudo(css_content).selectors
+}
+
+pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
     let mut parser_options = ParserOptions::default();
     parser_options.error_recovery = true;
 
     let stylesheet = match StyleSheet::parse(css_content, parser_options) {
         Ok(sheet) => sheet,
-        Err(_) => return selectors,
+        Err(_) => return ParsedSelectors::default(),
     };
+
+    let mut selectors = Vec::new();
+    let mut pseudo_selectors = Vec::new();
 
     for rule in stylesheet.rules.0 {
         if let CssRule::Style(style_rule) = rule {
-            selectors.extend(
-                style_rule
-                    .selectors
-                    .0
-                    .into_iter()
-                    .filter_map(|selector| lightning_selector_to_rule_string(&selector)),
-            );
+            for selector in style_rule.selectors.0 {
+                match lightning_selector_to_rule_string(&selector) {
+                    SelectorConversionResult::Keep(s) => selectors.push(s),
+                    SelectorConversionResult::RecordPseudo(s) => pseudo_selectors.push(s),
+                    SelectorConversionResult::Skip => {}
+                }
+            }
         }
     }
 
     selectors.sort();
     selectors.dedup();
-    selectors
+    pseudo_selectors.sort();
+    pseudo_selectors.dedup();
+
+    ParsedSelectors {
+        selectors,
+        pseudo_selectors,
+    }
 }
 
 /// Returns true if the selector is a single "simple" selector without combinators
@@ -322,13 +341,37 @@ pub fn report_skipped_selectors(label: &str, selectors: &[String]) {
     }
 }
 
+pub fn report_pseudo_selectors(label: &str, selectors: &[String]) {
+    if selectors.is_empty() {
+        println!("PSEUDO_SKIPPED[{label}] none");
+        return;
+    }
+
+    println!("PSEUDO_SKIPPED[{label}] {} selector(s)", selectors.len());
+    for selector in selectors {
+        println!("PSEUDO_SKIPPED[{label}] {selector}");
+    }
+}
+
 enum ComponentConversion {
     Keep(Selector),
     Skip,
     Abort,
 }
 
-fn lightning_selector_to_rule_string(selector: &LightningSelector) -> Option<String> {
+enum SelectorConversionResult {
+    Keep(String),
+    RecordPseudo(String),
+    Skip,
+}
+
+fn selector_to_string(selector: &LightningSelector) -> String {
+    selector
+        .to_css_string(PrinterOptions::default())
+        .unwrap_or_else(|_| format!("{:?}", selector))
+}
+
+fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorConversionResult {
     let mut selector_parts: Vec<SelectorPart> = Vec::new();
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
@@ -347,7 +390,9 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> Option<Str
                         pending_combinator = Combinator::Child;
                     }
                 }
-                LCombinator::PseudoElement => break,
+                LCombinator::PseudoElement => {
+                    return SelectorConversionResult::RecordPseudo(selector_to_string(selector));
+                }
                 _ => break,
             },
             _ => match convert_component(component) {
@@ -362,7 +407,9 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> Option<Str
                     current_selector = Some(selector);
                 }
                 ComponentConversion::Skip => {}
-                ComponentConversion::Abort => return None,
+                ComponentConversion::Abort => {
+                    return SelectorConversionResult::RecordPseudo(selector_to_string(selector));
+                }
             },
         }
     }
@@ -375,9 +422,9 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> Option<Str
     }
 
     if selector_parts.is_empty() {
-        None
+        SelectorConversionResult::Skip
     } else {
-        Some(
+        SelectorConversionResult::Keep(
             selector_parts
                 .iter()
                 .map(|part| part.to_string())
@@ -428,7 +475,7 @@ fn convert_component(component: &LComponent) -> ComponentConversion {
         | LComponent::Is(_)
         | LComponent::Any(_, _)
         | LComponent::Has(_)
-        | LComponent::PseudoElement(_) => ComponentConversion::Skip,
+        | LComponent::PseudoElement(_) => ComponentConversion::Abort,
         LComponent::ExplicitAnyNamespace
         | LComponent::ExplicitNoNamespace
         | LComponent::DefaultNamespace(..)

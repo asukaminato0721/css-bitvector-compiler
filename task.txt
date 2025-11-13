@@ -1,0 +1,2 @@
+now the naive.rs, bit.rs, tri.rs and quad.rs will use some of the css selectors, change it to not consider simple selector, like a { ... }, li { ... }, and print out all the currently not considered css selector.
+
