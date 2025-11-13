@@ -22,66 +22,71 @@ NOT_CONSIDERED[bit] html
 NOT_CONSIDERED[bit] ps-dom-if
 NOT_CONSIDERED[bit] ps-dom-repeat
 NOT_CONSIDERED[bit] textarea
-PSEUDO_SKIPPED[bit] 6 selector(s)
-PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
-PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
-PSEUDO_SKIPPED[bit] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
-PSEUDO_SKIPPED[bit] :-stv-set-elsewhere
-PSEUDO_SKIPPED[bit] ytd-masthead.shell > :first-child
-PSEUDO_SKIPPED[bit] ytd-masthead.shell > :last-child
-2883
-2582
-2669
-2387
-2542
-2543
-2344
-2418
-2324
-2314
-4157
-2143
-3753
-4557
-2254
-2447
-2269
-2512
-2464
-1979
-2461
-2283
-2920
-2695
-4143
-2352
-2202
-2074
-2160
+PSEUDO_SKIPPED[bit] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[bit] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[bit] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[bit] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[bit] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[bit] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :last-child
+2658
+2520
+2539
+4491
+5243
+2174
+2571
+2167
+2133
+1986
+2157
+1938
+2052
+2050
+2060
+2407
 2048
-2213
-2904
-2104
-2834
-2289
+3046
+2152
+2040
+2004
+2513
+2622
+2440
+2084
+2397
+2539
+2227
+1956
+2137
+2326
+2079
+2368
 2131
-2220
-2825
-2401
-2336
-4978
-2224
-2336
-2216
-3693
-21182
-2533
-3534
-2391
-5256
-3431
-5106
-2593
+2205
+2235
+2076
+2048
+2301
+2125
+2356
+2125
+2409
+2058
+1892
+2144
+2056
+2198
+2393
+2399
+2721
+8018
+2555
 BEGIN
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]

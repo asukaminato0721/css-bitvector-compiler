@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.14s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 135 selector(s)
 NOT_CONSIDERED[bit] #SIvCob
@@ -136,98 +136,94 @@ NOT_CONSIDERED[bit] form
 NOT_CONSIDERED[bit] input
 NOT_CONSIDERED[bit] p
 NOT_CONSIDERED[bit] td
-PSEUDO_SKIPPED[bit] 47 selector(s)
-PSEUDO_SKIPPED[bit] #GBMPAL:last-child:after
-PSEUDO_SKIPPED[bit] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-PSEUDO_SKIPPED[bit] #gbg6.gbgt:focus
-PSEUDO_SKIPPED[bit] #gbprc .gbprcbc:active
-PSEUDO_SKIPPED[bit] #gbprc .gbprcbc:focus
-PSEUDO_SKIPPED[bit] #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[bit] #gbprc .gbprcx:active
-PSEUDO_SKIPPED[bit] #gbprc .gbprcx:focus
-PSEUDO_SKIPPED[bit] #gssb_b:hover
-PSEUDO_SKIPPED[bit] .GBMCC:last-child:after
-PSEUDO_SKIPPED[bit] .gbf .gbmt:visited
-PSEUDO_SKIPPED[bit] .gbgt:focus
-PSEUDO_SKIPPED[bit] .gbm0l:visited
-PSEUDO_SKIPPED[bit] .gbml1:focus
-PSEUDO_SKIPPED[bit] .gbml1:visited
-PSEUDO_SKIPPED[bit] .gbmlb:focus
-PSEUDO_SKIPPED[bit] .gbmlb:visited
-PSEUDO_SKIPPED[bit] .gbmt:focus
-PSEUDO_SKIPPED[bit] .gbmt:hover
-PSEUDO_SKIPPED[bit] .gbmt:visited
-PSEUDO_SKIPPED[bit] .gbn .gbmt:visited
-PSEUDO_SKIPPED[bit] .gbnd .gbmt:visited
-PSEUDO_SKIPPED[bit] .gbqfb-hvr:focus
-PSEUDO_SKIPPED[bit] .gbqfb-no-focus:focus
-PSEUDO_SKIPPED[bit] .gbqfb::-moz-focus-inner
-PSEUDO_SKIPPED[bit] .gbqfb:active
-PSEUDO_SKIPPED[bit] .gbqfb:focus
-PSEUDO_SKIPPED[bit] .gbqfba-hvr:active
-PSEUDO_SKIPPED[bit] .gbqfba-hvr:focus
-PSEUDO_SKIPPED[bit] .gbqfba::-moz-focus-inner
-PSEUDO_SKIPPED[bit] .gbqfba:active
-PSEUDO_SKIPPED[bit] .gbqfba:focus
-PSEUDO_SKIPPED[bit] .gbqfbb-hvr:active
-PSEUDO_SKIPPED[bit] .gbqfbb-hvr:focus
-PSEUDO_SKIPPED[bit] .gbqfbb::-moz-focus-inner
-PSEUDO_SKIPPED[bit] .gbqfbb:active
-PSEUDO_SKIPPED[bit] .gbqfbb:focus
-PSEUDO_SKIPPED[bit] .gbsb .gbsbb:after
-PSEUDO_SKIPPED[bit] .gbsb .gbsbt:after
-PSEUDO_SKIPPED[bit] .gbzt:focus
-PSEUDO_SKIPPED[bit] .gbzt:hover
-PSEUDO_SKIPPED[bit] .lsb:active
-PSEUDO_SKIPPED[bit] .lst:focus
-PSEUDO_SKIPPED[bit] a.gssb_j:hover
-PSEUDO_SKIPPED[bit] a:active
-PSEUDO_SKIPPED[bit] a:hover
-PSEUDO_SKIPPED[bit] a:visited
-3504
-2251
-2160
-2138
-3127
-3333
+PSEUDO_SKIPPED[bit] :focus -> 16 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbg6.gbgt:focus
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[bit]    eg .gbgt:focus
+PSEUDO_SKIPPED[bit]    eg .gbml1:focus
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :active -> 9 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[bit]    eg .gbqfb:active
+PSEUDO_SKIPPED[bit]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[bit]    eg .gbqfba:active
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[bit]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[bit]    eg .gbm0l:visited
+PSEUDO_SKIPPED[bit]    eg .gbml1:visited
+PSEUDO_SKIPPED[bit]    eg .gbmlb:visited
+PSEUDO_SKIPPED[bit]    eg .gbmt:visited
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :hover -> 6 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[bit]    eg #gssb_b:hover
+PSEUDO_SKIPPED[bit]    eg .gbmt:hover
+PSEUDO_SKIPPED[bit]    eg .gbzt:hover
+PSEUDO_SKIPPED[bit]    eg a.gssb_j:hover
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :after -> 4 selector(s)
+PSEUDO_SKIPPED[bit]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[bit]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[bit]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[bit]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[bit] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[bit] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[bit]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[bit]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[bit] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[bit] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+3224
+2301
+2620
+13359
+2242
+4165
+3577
+3524
+2382
+2509
+2628
+2102
 2482
-2553
-1919
-2379
-2435
-2093
-2715
-2595
-2032
-2152
-2474
-1995
-2932
-2942
-2001
-2061
+2601
+2069
+4066
+4218
+2405
+2644
+2852
+2364
 2703
-2133
-2245
-2526
-2165
-4152
-3938
-2685
-3271
-3143
-2006
-2543
-2549
-3779
-4607
-4484
-2687
-2539
-6702
-4143
-6270
-2328
+2254
+2150
+2874
+4384
+2421
+2669
+4964
+3449
+2393
+4027
+4006
+2366
+4282
+2650
+4810
+4473
+2028
+2592
+2305
+2076
+2426
+2557
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]

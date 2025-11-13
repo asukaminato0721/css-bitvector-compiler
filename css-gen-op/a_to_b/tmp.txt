@@ -11,7 +11,7 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 9.70s
+    Finished `release` profile [optimized + debuginfo] target(s) in 10.84s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 1 selector(s)
 NOT_CONSIDERED[naive] .a

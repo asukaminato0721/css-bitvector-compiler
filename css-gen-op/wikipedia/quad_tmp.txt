@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.13s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 139 selector(s)
 NOT_CONSIDERED[quad] #searchInput
@@ -140,69 +140,74 @@ NOT_CONSIDERED[quad] td
 NOT_CONSIDERED[quad] textarea
 NOT_CONSIDERED[quad] th
 NOT_CONSIDERED[quad] video
-PSEUDO_SKIPPED[quad] 56 selector(s)
-PSEUDO_SKIPPED[quad] #searchInput:focus
-PSEUDO_SKIPPED[quad] #searchInput:hover
-PSEUDO_SKIPPED[quad] .banner__button:hover
-PSEUDO_SKIPPED[quad] .central-featured-lang .link-box:hover strong
-PSEUDO_SKIPPED[quad] .central-featured-lang :hover
-PSEUDO_SKIPPED[quad] .footer:after
-PSEUDO_SKIPPED[quad] .footer:before
-PSEUDO_SKIPPED[quad] .hlist li > ul:after
-PSEUDO_SKIPPED[quad] .hlist li > ul:before
-PSEUDO_SKIPPED[quad] .hlist li:before
-PSEUDO_SKIPPED[quad] .hlist li:first-child:before
-PSEUDO_SKIPPED[quad] .lang-list-button:focus
-PSEUDO_SKIPPED[quad] .lang-list-button:hover
-PSEUDO_SKIPPED[quad] .langlist > ul > li:before
-PSEUDO_SKIPPED[quad] .other-project-link:hover
-PSEUDO_SKIPPED[quad] .overlay-banner-main .banner-button:focus
-PSEUDO_SKIPPED[quad] .overlay-banner-main .banner-button:focus-within
-PSEUDO_SKIPPED[quad] .overlay-banner-main .button-collapse:hover
-PSEUDO_SKIPPED[quad] .overlay-banner-main-header a:hover
-PSEUDO_SKIPPED[quad] .overlay-banner-mini .frb-submit:focus
-PSEUDO_SKIPPED[quad] .overlay-banner-mini .frb-submit:hover
-PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:active
-PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:focus
-PSEUDO_SKIPPED[quad] .pure-button-primary-progressive:hover
-PSEUDO_SKIPPED[quad] .pure-button::-moz-focus-inner
-PSEUDO_SKIPPED[quad] .pure-button:active
-PSEUDO_SKIPPED[quad] .pure-button:focus
-PSEUDO_SKIPPED[quad] .pure-button:hover
-PSEUDO_SKIPPED[quad] .pure-form input:focus:invalid
-PSEUDO_SKIPPED[quad] .search-container input::-webkit-calendar-picker-indicator
-PSEUDO_SKIPPED[quad] .search-container input[type="search"]::-webkit-search-results-button
-PSEUDO_SKIPPED[quad] .search-container input[type="search"]::-webkit-search-results-decoration
-PSEUDO_SKIPPED[quad] .site-license small:after
-PSEUDO_SKIPPED[quad] .site-license small:last-child:after
-PSEUDO_SKIPPED[quad] .styled-select select:focus
-PSEUDO_SKIPPED[quad] .styled-select select:hover
-PSEUDO_SKIPPED[quad] .styled-select.js-enabled select:focus + .styled-select-active-helper
-PSEUDO_SKIPPED[quad] .styled-select.js-enabled select:hover
-PSEUDO_SKIPPED[quad] .styled-select:hover
-PSEUDO_SKIPPED[quad] :root
-PSEUDO_SKIPPED[quad] a.suggestion-link:active
-PSEUDO_SKIPPED[quad] a.suggestion-link:focus
-PSEUDO_SKIPPED[quad] a.suggestion-link:hover
-PSEUDO_SKIPPED[quad] a:active
-PSEUDO_SKIPPED[quad] a:focus
-PSEUDO_SKIPPED[quad] a:hover
-PSEUDO_SKIPPED[quad] audio:not([controls])
-PSEUDO_SKIPPED[quad] button::-moz-focus-inner
-PSEUDO_SKIPPED[quad] input::-moz-focus-inner
-PSEUDO_SKIPPED[quad] input[type="number"]::-webkit-inner-spin-button
-PSEUDO_SKIPPED[quad] input[type="number"]::-webkit-outer-spin-button
-PSEUDO_SKIPPED[quad] input[type="search"]::-webkit-search-cancel-button
-PSEUDO_SKIPPED[quad] input[type="search"]::-webkit-search-decoration
-PSEUDO_SKIPPED[quad] input[type="search"]:focus
-PSEUDO_SKIPPED[quad] span.frb-conversation-close-icon:after
-PSEUDO_SKIPPED[quad] span.frb-conversation-close-icon:before
-6025
-6145
-6059
-8904
-7605
-4827
+PSEUDO_SKIPPED[quad] :hover -> 16 selector(s)
+PSEUDO_SKIPPED[quad]    eg #searchInput:hover
+PSEUDO_SKIPPED[quad]    eg .banner__button:hover
+PSEUDO_SKIPPED[quad]    eg .central-featured-lang .link-box:hover strong
+PSEUDO_SKIPPED[quad]    eg .central-featured-lang :hover
+PSEUDO_SKIPPED[quad]    eg .lang-list-button:hover
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :focus -> 12 selector(s)
+PSEUDO_SKIPPED[quad]    eg #searchInput:focus
+PSEUDO_SKIPPED[quad]    eg .lang-list-button:focus
+PSEUDO_SKIPPED[quad]    eg .overlay-banner-main .banner-button:focus
+PSEUDO_SKIPPED[quad]    eg .overlay-banner-mini .frb-submit:focus
+PSEUDO_SKIPPED[quad]    eg .pure-button-primary-progressive:focus
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :before -> 6 selector(s)
+PSEUDO_SKIPPED[quad]    eg .footer:before
+PSEUDO_SKIPPED[quad]    eg .hlist li > ul:before
+PSEUDO_SKIPPED[quad]    eg .hlist li:before
+PSEUDO_SKIPPED[quad]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[quad]    eg .langlist > ul > li:before
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :after -> 5 selector(s)
+PSEUDO_SKIPPED[quad]    eg .footer:after
+PSEUDO_SKIPPED[quad]    eg .hlist li > ul:after
+PSEUDO_SKIPPED[quad]    eg .site-license small:after
+PSEUDO_SKIPPED[quad]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[quad]    eg span.frb-conversation-close-icon:after
+PSEUDO_SKIPPED[quad] :active -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg .pure-button-primary-progressive:active
+PSEUDO_SKIPPED[quad]    eg .pure-button:active
+PSEUDO_SKIPPED[quad]    eg a.suggestion-link:active
+PSEUDO_SKIPPED[quad]    eg a:active
+PSEUDO_SKIPPED[quad] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[quad]    eg .pure-button::-moz-focus-inner
+PSEUDO_SKIPPED[quad]    eg button::-moz-focus-inner
+PSEUDO_SKIPPED[quad]    eg input::-moz-focus-inner
+PSEUDO_SKIPPED[quad] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .search-container input::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[quad] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[quad] ::-webkit-outer-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg input[type="number"]::-webkit-outer-spin-button
+PSEUDO_SKIPPED[quad] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg input[type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[quad] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg input[type="search"]::-webkit-search-decoration
+PSEUDO_SKIPPED[quad] ::-webkit-search-results-button -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .search-container input[type="search"]::-webkit-search-results-button
+PSEUDO_SKIPPED[quad] ::-webkit-search-results-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .search-container input[type="search"]::-webkit-search-results-decoration
+PSEUDO_SKIPPED[quad] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[quad] :focus-within -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .overlay-banner-main .banner-button:focus-within
+PSEUDO_SKIPPED[quad] :invalid -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .pure-form input:focus:invalid
+PSEUDO_SKIPPED[quad] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[quad] :not -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg audio:not([controls])
+PSEUDO_SKIPPED[quad] :root -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg :root
+6712
+5896
+7395
+10618
+7166
+5459
 BEGIN
 .app-badge a -> [3901, 3916]
 .app-badges .footer-sidebar-content -> [3871]

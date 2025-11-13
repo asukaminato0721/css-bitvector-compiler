@@ -1,27 +1,27 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 3 selector(s)
 NOT_CONSIDERED[tri] .container-dark
 NOT_CONSIDERED[tri] .emph.leaf
 NOT_CONSIDERED[tri] .leaf
 PSEUDO_SKIPPED[tri] none
-7085
-4745
-3800
-4032
-4248
-4072
-4037
-4165
-4380
-4392
-3658
-4019
-3808
-3567
-4036
-3625
-3882
+7768
+4749
+3977
+3861
+4613
+4082
+4204
+5824
+4222
+3889
+4007
+3912
+3766
+3561
+3802
+3684
+4144
 BEGIN
 END
 [src/tri.rs:866:5] unsafe { MISS_CNT } = 81

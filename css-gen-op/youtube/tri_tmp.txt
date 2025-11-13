@@ -22,66 +22,71 @@ NOT_CONSIDERED[tri] html
 NOT_CONSIDERED[tri] ps-dom-if
 NOT_CONSIDERED[tri] ps-dom-repeat
 NOT_CONSIDERED[tri] textarea
-PSEUDO_SKIPPED[tri] 6 selector(s)
-PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
-PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
-PSEUDO_SKIPPED[tri] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
-PSEUDO_SKIPPED[tri] :-stv-set-elsewhere
-PSEUDO_SKIPPED[tri] ytd-masthead.shell > :first-child
-PSEUDO_SKIPPED[tri] ytd-masthead.shell > :last-child
-3798
-2604
-3474
-2586
-3560
-3028
-3422
-2581
-2886
-2452
-2539
-2808
-2705
-2541
-2336
-3352
-2382
-4539
-3877
-3123
-5150
-3818
-2730
-2659
-2350
-2943
-2663
-2964
-2719
-2615
-4891
-2472
-3977
-3224
-2920
+PSEUDO_SKIPPED[tri] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[tri] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[tri] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[tri] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[tri] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[tri] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ytd-masthead.shell > :last-child
+3676
+2606
+3058
+2427
+3250
+2308
+3003
+2409
+2298
+2063
+3543
+2055
+3539
+3642
+2532
+2660
+2428
+3343
+3679
+2863
+2562
+2762
+3504
+2438
+2078
+2833
+16407
+2332
+4335
+2529
+2127
+3325
+2421
+2082
+2405
+2030
+3946
+2547
+2551
+2105
+2223
+2311
+4265
+3804
+2782
+2577
+2089
+2417
 2537
-2662
-2843
-2993
-3840
-2423
-3745
-2861
-2744
-3031
-2800
-3881
-2963
-3963
-4027
-3614
-15227
-3285
+2940
+6598
+4597
+2768
 BEGIN
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]

@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 429 selector(s)
 NOT_CONSIDERED[quad] #gw-desktop-herotator
@@ -430,420 +430,375 @@ NOT_CONSIDERED[quad] .tall#gw-desktop-herotator
 NOT_CONSIDERED[quad] .truncate-1line
 NOT_CONSIDERED[quad] .truncate-2line
 NOT_CONSIDERED[quad] .truncate-2lineh2
-PSEUDO_SKIPPED[quad] 132 selector(s)
-PSEUDO_SKIPPED[quad] #gw-desktop-herotator.tall .a-carousel-viewport:before
-PSEUDO_SKIPPED[quad] #gw-desktop-herotator.tall.single-slide-hero .a-carousel-viewport:before
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_asin-container__2jyCM:after
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_force-square__yjzpK:before
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_image_override-square__2e4Zf:before
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_aspect-text__S4PU1:first-letter
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1::-webkit-scrollbar
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p._ameyal-product-shoveler_style_focus-visible__3HkmX:after
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:after
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[quad] ._ameyal-product-shoveler_style_wd-card-link-focus__sm6Xn:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container-white-box__3Stwp:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__2jyCM:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p._cropped-image-link_image_border-radius-top-only__2tZ_O:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_asin-container__LRY5p:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_force-square__yjzpK:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_image_override-square__2e4Zf:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_aspect-text__S4PU1:first-letter
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_carouselContainer__3N7M1::-webkit-scrollbar
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN._cropped-image-link_style_focus-visible__2YLxf:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_centerImage-focusable__1JvMN:focus-visible:before
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(3)
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(4)
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_five-pack__1-Tql > :nth-child(5)
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p._cropped-image-link_style_focus-visible__3HkmX:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[quad] ._cropped-image-link_style_wd-card-link-focus__sm6Xn:after
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_asin-container__2jyCM:after
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_force-square__yjzpK:before
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_image_override-square__2e4Zf:before
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_aspect-text__S4PU1:first-letter
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(3)
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(4)
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :nth-child(5)
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:active ._fluid-fat-image-link-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-fat-image-link-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-fat-image-link-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-fat-image-link-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p._fluid-fat-image-link-v2_style_focus-visible__3HkmX:after
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:after
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[quad] ._fluid-fat-image-link-v2_style_wd-card-link-focus__sm6Xn:after
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_asin-container__2jyCM:after
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_force-square__yjzpK:before
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_image_override-square__2e4Zf:before
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_aspect-text__S4PU1:first-letter
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(3)
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(4)
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql > :nth-child(5)
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:active ._fluid-quad-image-label-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:focus ._fluid-quad-image-label-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-quad-image-label-v2_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ:hover ._fluid-quad-image-label-v2_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p._fluid-quad-image-label-v2_style_focus-visible__3HkmX:after
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:after
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[quad] ._fluid-quad-image-label-v2_style_wd-card-link-focus__sm6Xn:after
-PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container-white-box__3Stwp:before
-PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p._quad-category-card_image_border-radius-top-only__2tZ_O:after
-PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p:after
-PSEUDO_SKIPPED[quad] ._quad-category-card_image_asin-container__LRY5p:before
-PSEUDO_SKIPPED[quad] ._quad-category-card_style_dashboard-card-with-border__1e4z_ a:after
-PSEUDO_SKIPPED[quad] .gw-card-layout .a-cardui .a-cardui-body:last-child
-PSEUDO_SKIPPED[quad] .gw-card-layout .a-cardui:last-child
-PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._cropped-image-link_image_asin-container-white-box__3Stwp._cropped-image-link_image_reduce-image-height__23dy8:before
-PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._cropped-image-link_image_asin-container__LRY5p._cropped-image-link_image_reduce-image-height__23dy8:before
-PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._quad-category-card_image_asin-container-white-box__3Stwp._quad-category-card_image_reduce-image-height__23dy8:before
-PSEUDO_SKIPPED[quad] [data-variant="mosaic"] ._quad-category-card_image_asin-container__LRY5p._quad-category-card_image_reduce-image-height__23dy8:before
-9820
-8018
-29428
-6728
-6616
-9907
-6168
-10556
-9009
-7164
-7344
-7993
-6544
-8612
-10675
-9658
-6592
-7160
-6659
-6578
-7341
-9313
-7835
-6731
-8125
-7087
-6807
-11017
-11817
-8644
-7730
-6454
-6313
-8367
-11324
-8048
-6901
-7507
-6514
-7849
-7233
-6734
-6600
-7083
-7931
-6481
-7075
-6702
-6355
-10564
-6746
-6785
-6860
-11315
-7549
-7255
-7357
-6716
-7957
-7898
-6343
-6643
-7835
-10761
-7348
-7296
-7042
-6739
-10800
-7054
-7168
-7768
-13565
-6923
-7424
-7055
-11744
+PSEUDO_SKIPPED[quad] :after -> 25 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p._ameyal-product-shoveler_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :before -> 21 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gw-desktop-herotator.tall .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad]    eg #gw-desktop-herotator.tall.single-slide-hero .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_image_asin-container-white-box__3Stwp:before
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :nth-child -> 16 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :active -> 12 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :focus -> 12 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :hover -> 12 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :first-child -> 8 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :focus-visible -> 5 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_centerImage-focusable__1JvMN:focus-visible:before
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-panel -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-panel-container -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-start-playback-button -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ::-webkit-scrollbar -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] :first-letter -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] :not -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
+PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui:last-child
+6540
+7495
+59576
+10190
+10701
+7967
+13584
+11809
+14547
+11465
+13518
+14476
+12212
+12909
+12313
+10495
+10318
+11161
 7480
-6454
-6570
-7170
-9701
-14379
-6797
-6388
-6625
-6774
-7446
-6616
-6937
-7042
-5967
-5986
-8468
-6124
-6148
-6267
-7369
-7312
-7300
-7738
-7055
-7827
-6467
-7626
-6978
-7008
-7025
-6408
-7373
-7675
-6537
-7241
-8109
-7391
-6818
-7425
-7025
-11856
-12396
-10020
-11504
-11506
-12185
-8940
-7458
-14162
-12491
-7390
-6754
-7574
-7282
-35365
-6501
-8082
-7488
-6078
-7150
-6077
-6220
-6596
-6031
-5920
-6643
-6927
-6507
-6643
-6505
-6011
-7584
-6947
-6209
-6416
-8468
-5901
-6785
-6613
-6194
-6382
-8117
-6764
-9082
-7342
-6548
-6157
-6905
-6944
-5901
-7296
-6854
-6333
-6138
-6799
-7338
-6369
-9162
-7039
-8835
-6965
-6432
-6035
-6205
-6039
-6862
-6617
-8180
-7385
-6292
-6566
-8675
-7813
-7614
-8511
-7659
-7008
-6570
+7537
+7476
+10198
+6475
+6326
+7227
+6250
+8008
+6812
+6278
+6635
 6125
-6497
-6550
-6994
-6363
-6263
-7856
-6704
-7775
-8155
-7065
-6088
-7205
-11187
-7999
-8017
-7004
-7004
-7360
-10962
-7286
-8663
-7312
-6767
-7827
-7450
-6878
-7574
-6767
-6742
-6951
-12771
-14002
-13367
-14123
-8210
-12280
-7582
-7438
-7665
-7387
-7501
-7402
-71254
-11181
-11080
-7448
-6586
-8459
-8357
-7872
-8103
-7025
-7053
-6971
-8241
-7119
-6673
-7266
-6963
-8924
-6716
-7460
+5698
+7081
+6998
+6672
+6472
+5773
+11627
+7874
+7853
+7859
+6964
+6152
+8308
+8156
+6501
+7427
+8614
+8443
+6574
+8989
+12753
+12844
+13138
+13191
+12667
+11978
+12621
+13880
+10250
+12165
+14046
+12813
+12169
+13049
+11912
+13094
+11392
+11268
+8598
+12364
+12127
+11508
+8730
 8253
-8284
-6333
+7797
+8626
+13440
+8829
 6905
-7766
-7545
-13274
-8593
-13170
-10076
-13678
-13809
-11972
-13939
-7089
-8936
-7918
-9078
-8760
-10751
-7724
-7829
+6420
+6621
+7189
+8845
+7081
+6996
+6741
+7549
+8845
+8571
+6547
+5412
+9869
+5897
+6140
+6016
+5917
+5848
+6615
+6964
+6947
+6559
+7140
+5548
+6720
+6112
+6692
+7821
+6682
+6562
+7146
+8432
+8998
+7280
+6851
+5719
+6554
+4912
+8942
+7275
+6601
+5716
+6195
+5118
+5001
+5639
+6781
+6627
+5440
+7797
+6384
+8918
+6420
+5812
+8326
+7377
+7540
+7793
+6654
+7635
+6312
+93816
+5313
+7618
+6529
+6544
+5970
+6193
+63964
+7669
+6432
+6197
+9668
+6501
+7519
+6351
+5852
+6727
+5490
+6102
+6400
+5895
+5830
+5254
+5110
+6501
+6075
+7081
+5637
+5858
+5291
+6079
+6669
+6969
+9482
+6793
+5357
+6047
+6031
+5855
+5605
+6249
+8464
+6463
+7117
+8614
+7635
+6521
+6329
+7334
+6439
+9380
+6321
+6694
+5572
+5874
+5652
+5873
+5828
+6749
+6185
+5556
+5803
+13071
+7178
+9863
+6876
+5978
+10250
+6992
+6874
+6627
+7316
+7703
+7947
+6103
+6574
+7302
+6559
+6821
+5844
+7002
+6824
+6817
+12988
+9899
+11364
+6647
+7888
+6647
+7026
+6047
+7775
+6424
+7258
+6862
+6146
+6892
+6246
+6809
+8132
+7665
+7124
+7790
+7976
+6483
+7120
+6453
+6862
+6075
+6732
+6738
+6566
+5413
+6826
+6578
+6925
+5513
+7338
+7239
+7847
+5563
+5937
+5822
+8137
+7158
+5960
+5978
+7503
+5958
+6823
+6440
+6905
+6530
+6308
+6396
+7442
+6013
+6392
+5889
+6323
 BEGIN
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
 ._cropped-image-link_style_fluidImageContainer__2jd50 ._cropped-image-link_style_fluidImage__iJ3aE -> [1671]

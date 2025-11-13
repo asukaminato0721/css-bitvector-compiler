@@ -10,7 +10,7 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 866 selector(s)
 NOT_CONSIDERED[naive] .accordion
@@ -879,371 +879,201 @@ NOT_CONSIDERED[naive] th
 NOT_CONSIDERED[naive] thead
 NOT_CONSIDERED[naive] tr
 NOT_CONSIDERED[naive] ul
-PSEUDO_SKIPPED[naive] 364 selector(s)
-PSEUDO_SKIPPED[naive] .accordion-button:after
-PSEUDO_SKIPPED[naive] .accordion-button:focus
-PSEUDO_SKIPPED[naive] .accordion-button:hover
-PSEUDO_SKIPPED[naive] .accordion-button:not(.collapsed)
-PSEUDO_SKIPPED[naive] .accordion-button:not(.collapsed):after
-PSEUDO_SKIPPED[naive] .accordion-flush > .accordion-item:first-child
-PSEUDO_SKIPPED[naive] .accordion-flush > .accordion-item:last-child
-PSEUDO_SKIPPED[naive] .accordion-item:first-of-type
-PSEUDO_SKIPPED[naive] .accordion-item:first-of-type > .accordion-header .accordion-button
-PSEUDO_SKIPPED[naive] .accordion-item:last-of-type
-PSEUDO_SKIPPED[naive] .accordion-item:last-of-type > .accordion-collapse
-PSEUDO_SKIPPED[naive] .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed
-PSEUDO_SKIPPED[naive] .accordion-item:not(:first-of-type)
-PSEUDO_SKIPPED[naive] .badge:empty
-PSEUDO_SKIPPED[naive] .blockquote > :last-child
-PSEUDO_SKIPPED[naive] .blockquote-footer:before
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="top"] > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-auto[data-popper-placement^="top"] > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-bottom .popover-header:before
-PSEUDO_SKIPPED[naive] .bs-popover-bottom > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-bottom > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-end > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-end > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-start > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-start > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-popover-top > .popover-arrow:after
-PSEUDO_SKIPPED[naive] .bs-popover-top > .popover-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-bottom .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-end .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-start .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .bs-tooltip-top .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .btn-check:checked + .btn
-PSEUDO_SKIPPED[naive] .btn-check:checked + .btn:focus-visible
-PSEUDO_SKIPPED[naive] .btn-check:checked:focus-visible + .btn
-PSEUDO_SKIPPED[naive] .btn-check:disabled + .btn
-PSEUDO_SKIPPED[naive] .btn-check:focus-visible + .btn
-PSEUDO_SKIPPED[naive] .btn-close:disabled
-PSEUDO_SKIPPED[naive] .btn-close:focus
-PSEUDO_SKIPPED[naive] .btn-close:hover
-PSEUDO_SKIPPED[naive] .btn-group > .btn-check:checked + .btn
-PSEUDO_SKIPPED[naive] .btn-group > .btn-check:focus + .btn
-PSEUDO_SKIPPED[naive] .btn-group > .btn-group:not(:first-child)
-PSEUDO_SKIPPED[naive] .btn-group > .btn-group:not(:first-child) > .btn
-PSEUDO_SKIPPED[naive] .btn-group > .btn-group:not(:last-child) > .btn
-PSEUDO_SKIPPED[naive] .btn-group > .btn.dropdown-toggle-split:first-child
-PSEUDO_SKIPPED[naive] .btn-group > .btn:active
-PSEUDO_SKIPPED[naive] .btn-group > .btn:focus
-PSEUDO_SKIPPED[naive] .btn-group > .btn:hover
-PSEUDO_SKIPPED[naive] .btn-group > .btn:not(:last-child):not(.dropdown-toggle)
-PSEUDO_SKIPPED[naive] .btn-group > .btn:nth-child(n+3)
-PSEUDO_SKIPPED[naive] .btn-group > :not(.btn-check) + .btn
-PSEUDO_SKIPPED[naive] .btn-group > :not(.btn-check:first-child) + .btn
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn-check:checked + .btn
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn-check:focus + .btn
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn-group:not(:first-child)
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn-group:not(:first-child) > .btn
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn-group:not(:last-child) > .btn
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:active
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:focus
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:hover
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:not(:first-child)
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle)
-PSEUDO_SKIPPED[naive] .btn-group-vertical > .btn:nth-child(n+3)
-PSEUDO_SKIPPED[naive] .btn-group-vertical > :not(.btn-check) + .btn
-PSEUDO_SKIPPED[naive] .btn-link:focus-visible
-PSEUDO_SKIPPED[naive] .btn-link:hover
-PSEUDO_SKIPPED[naive] .btn.active:focus-visible
-PSEUDO_SKIPPED[naive] .btn.show:focus-visible
-PSEUDO_SKIPPED[naive] .btn:disabled
-PSEUDO_SKIPPED[naive] .btn:first-child:active
-PSEUDO_SKIPPED[naive] .btn:first-child:active:focus-visible
-PSEUDO_SKIPPED[naive] .btn:focus-visible
-PSEUDO_SKIPPED[naive] .btn:hover
-PSEUDO_SKIPPED[naive] .card > .list-group:first-child
-PSEUDO_SKIPPED[naive] .card > .list-group:last-child
-PSEUDO_SKIPPED[naive] .card-footer:last-child
-PSEUDO_SKIPPED[naive] .card-header:first-child
-PSEUDO_SKIPPED[naive] .card-text:last-child
-PSEUDO_SKIPPED[naive] .carousel-control-next:focus
-PSEUDO_SKIPPED[naive] .carousel-control-next:hover
-PSEUDO_SKIPPED[naive] .carousel-control-prev:focus
-PSEUDO_SKIPPED[naive] .carousel-control-prev:hover
-PSEUDO_SKIPPED[naive] .carousel-inner:after
-PSEUDO_SKIPPED[naive] .carousel-item-next:not(.carousel-item-start)
-PSEUDO_SKIPPED[naive] .carousel-item-prev:not(.carousel-item-end)
-PSEUDO_SKIPPED[naive] .clearfix:after
-PSEUDO_SKIPPED[naive] .collapse:not(.show)
-PSEUDO_SKIPPED[naive] .dropdown-item:active
-PSEUDO_SKIPPED[naive] .dropdown-item:disabled
-PSEUDO_SKIPPED[naive] .dropdown-item:focus
-PSEUDO_SKIPPED[naive] .dropdown-item:hover
-PSEUDO_SKIPPED[naive] .dropdown-toggle-split:after
-PSEUDO_SKIPPED[naive] .dropdown-toggle:after
-PSEUDO_SKIPPED[naive] .dropdown-toggle:empty:after
-PSEUDO_SKIPPED[naive] .dropend .dropdown-toggle-split:after
-PSEUDO_SKIPPED[naive] .dropend .dropdown-toggle:after
-PSEUDO_SKIPPED[naive] .dropend .dropdown-toggle:empty:after
-PSEUDO_SKIPPED[naive] .dropstart .dropdown-toggle-split:before
-PSEUDO_SKIPPED[naive] .dropstart .dropdown-toggle:after
-PSEUDO_SKIPPED[naive] .dropstart .dropdown-toggle:before
-PSEUDO_SKIPPED[naive] .dropstart .dropdown-toggle:empty:after
-PSEUDO_SKIPPED[naive] .dropup .dropdown-toggle-split:after
-PSEUDO_SKIPPED[naive] .dropup .dropdown-toggle:after
-PSEUDO_SKIPPED[naive] .dropup .dropdown-toggle:empty:after
-PSEUDO_SKIPPED[naive] .fade:not(.show)
-PSEUDO_SKIPPED[naive] .focus-ring:focus
-PSEUDO_SKIPPED[naive] .form-check-input.is-invalid:checked
-PSEUDO_SKIPPED[naive] .form-check-input.is-invalid:focus
-PSEUDO_SKIPPED[naive] .form-check-input.is-valid:checked
-PSEUDO_SKIPPED[naive] .form-check-input.is-valid:focus
-PSEUDO_SKIPPED[naive] .form-check-input:active
-PSEUDO_SKIPPED[naive] .form-check-input:checked
-PSEUDO_SKIPPED[naive] .form-check-input:checked[type="checkbox"]
-PSEUDO_SKIPPED[naive] .form-check-input:checked[type="radio"]
-PSEUDO_SKIPPED[naive] .form-check-input:disabled
-PSEUDO_SKIPPED[naive] .form-check-input:disabled ~ .form-check-label
-PSEUDO_SKIPPED[naive] .form-check-input:focus
-PSEUDO_SKIPPED[naive] .form-check-input[type="checkbox"]:indeterminate
-PSEUDO_SKIPPED[naive] .form-control-color::-moz-color-swatch
-PSEUDO_SKIPPED[naive] .form-control-color::-webkit-color-swatch
-PSEUDO_SKIPPED[naive] .form-control-color:not(:disabled):not([readonly])
-PSEUDO_SKIPPED[naive] .form-control-lg::-webkit-file-upload-button
-PSEUDO_SKIPPED[naive] .form-control-lg::file-selector-button
-PSEUDO_SKIPPED[naive] .form-control-plaintext:focus
-PSEUDO_SKIPPED[naive] .form-control-sm::-webkit-file-upload-button
-PSEUDO_SKIPPED[naive] .form-control-sm::file-selector-button
-PSEUDO_SKIPPED[naive] .form-control.is-invalid:focus
-PSEUDO_SKIPPED[naive] .form-control.is-valid:focus
-PSEUDO_SKIPPED[naive] .form-control::-webkit-date-and-time-value
-PSEUDO_SKIPPED[naive] .form-control::-webkit-datetime-edit
-PSEUDO_SKIPPED[naive] .form-control::-webkit-file-upload-button
-PSEUDO_SKIPPED[naive] .form-control::file-selector-button
-PSEUDO_SKIPPED[naive] .form-control::placeholder
-PSEUDO_SKIPPED[naive] .form-control:disabled
-PSEUDO_SKIPPED[naive] .form-control:focus
-PSEUDO_SKIPPED[naive] .form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button
-PSEUDO_SKIPPED[naive] .form-control:hover:not(:disabled):not([readonly])::file-selector-button
-PSEUDO_SKIPPED[naive] .form-control[type="file"]:not(:disabled):not([readonly])
-PSEUDO_SKIPPED[naive] .form-floating > .form-control-plaintext:-webkit-autofill
-PSEUDO_SKIPPED[naive] .form-floating > .form-control-plaintext::placeholder
-PSEUDO_SKIPPED[naive] .form-floating > .form-control-plaintext:focus
-PSEUDO_SKIPPED[naive] .form-floating > .form-control-plaintext:not(:placeholder-shown)
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:-webkit-autofill
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:-webkit-autofill ~ label
-PSEUDO_SKIPPED[naive] .form-floating > .form-control::placeholder
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:disabled ~ label
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:focus
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:focus ~ label
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:not(:placeholder-shown)
-PSEUDO_SKIPPED[naive] .form-floating > .form-control:not(:placeholder-shown) ~ label
-PSEUDO_SKIPPED[naive] .form-floating > :disabled ~ label
-PSEUDO_SKIPPED[naive] .form-floating > textarea:disabled ~ label:after
-PSEUDO_SKIPPED[naive] .form-floating > textarea:focus ~ label:after
-PSEUDO_SKIPPED[naive] .form-floating > textarea:not(:placeholder-shown) ~ label:after
-PSEUDO_SKIPPED[naive] .form-range::-moz-focus-outer
-PSEUDO_SKIPPED[naive] .form-range::-moz-range-thumb
-PSEUDO_SKIPPED[naive] .form-range::-moz-range-thumb:active
-PSEUDO_SKIPPED[naive] .form-range::-moz-range-track
-PSEUDO_SKIPPED[naive] .form-range::-webkit-slider-runnable-track
-PSEUDO_SKIPPED[naive] .form-range::-webkit-slider-thumb
-PSEUDO_SKIPPED[naive] .form-range::-webkit-slider-thumb:active
-PSEUDO_SKIPPED[naive] .form-range:disabled
-PSEUDO_SKIPPED[naive] .form-range:disabled::-moz-range-thumb
-PSEUDO_SKIPPED[naive] .form-range:disabled::-webkit-slider-thumb
-PSEUDO_SKIPPED[naive] .form-range:focus
-PSEUDO_SKIPPED[naive] .form-range:focus::-moz-range-thumb
-PSEUDO_SKIPPED[naive] .form-range:focus::-webkit-slider-thumb
-PSEUDO_SKIPPED[naive] .form-select.is-invalid:focus
-PSEUDO_SKIPPED[naive] .form-select.is-invalid:not([multiple]):not([size])
-PSEUDO_SKIPPED[naive] .form-select.is-invalid:not([multiple])[size="1"]
-PSEUDO_SKIPPED[naive] .form-select.is-valid:focus
-PSEUDO_SKIPPED[naive] .form-select.is-valid:not([multiple]):not([size])
-PSEUDO_SKIPPED[naive] .form-select.is-valid:not([multiple])[size="1"]
-PSEUDO_SKIPPED[naive] .form-select:-moz-focusring
-PSEUDO_SKIPPED[naive] .form-select:disabled
-PSEUDO_SKIPPED[naive] .form-select:focus
-PSEUDO_SKIPPED[naive] .form-select[size]:not([size="1"])
-PSEUDO_SKIPPED[naive] .form-switch .form-check-input:checked
-PSEUDO_SKIPPED[naive] .form-switch .form-check-input:focus
-PSEUDO_SKIPPED[naive] .icon-link-hover:focus-visible > .bi
-PSEUDO_SKIPPED[naive] .icon-link-hover:hover > .bi
-PSEUDO_SKIPPED[naive] .input-group .btn:focus
-PSEUDO_SKIPPED[naive] .input-group > .form-control:focus
-PSEUDO_SKIPPED[naive] .input-group > .form-control:not(:focus).is-invalid
-PSEUDO_SKIPPED[naive] .input-group > .form-control:not(:focus).is-valid
-PSEUDO_SKIPPED[naive] .input-group > .form-floating:focus-within
-PSEUDO_SKIPPED[naive] .input-group > .form-floating:not(:first-child) > .form-control
-PSEUDO_SKIPPED[naive] .input-group > .form-floating:not(:first-child) > .form-select
-PSEUDO_SKIPPED[naive] .input-group > .form-floating:not(:focus-within).is-invalid
-PSEUDO_SKIPPED[naive] .input-group > .form-floating:not(:focus-within).is-valid
-PSEUDO_SKIPPED[naive] .input-group > .form-select:focus
-PSEUDO_SKIPPED[naive] .input-group > .form-select:not(:focus).is-invalid
-PSEUDO_SKIPPED[naive] .input-group > .form-select:not(:focus).is-valid
-PSEUDO_SKIPPED[naive] .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback)
-PSEUDO_SKIPPED[naive] .input-group.has-validation > .dropdown-toggle:nth-last-child(n+4)
-PSEUDO_SKIPPED[naive] .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-control
-PSEUDO_SKIPPED[naive] .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-select
-PSEUDO_SKIPPED[naive] .input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
-PSEUDO_SKIPPED[naive] .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3)
-PSEUDO_SKIPPED[naive] .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control
-PSEUDO_SKIPPED[naive] .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select
-PSEUDO_SKIPPED[naive] .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
-PSEUDO_SKIPPED[naive] .link-body-emphasis:focus
-PSEUDO_SKIPPED[naive] .link-body-emphasis:hover
-PSEUDO_SKIPPED[naive] .link-danger:focus
-PSEUDO_SKIPPED[naive] .link-danger:hover
-PSEUDO_SKIPPED[naive] .link-dark:focus
-PSEUDO_SKIPPED[naive] .link-dark:hover
-PSEUDO_SKIPPED[naive] .link-info:focus
-PSEUDO_SKIPPED[naive] .link-info:hover
-PSEUDO_SKIPPED[naive] .link-light:focus
-PSEUDO_SKIPPED[naive] .link-light:hover
-PSEUDO_SKIPPED[naive] .link-offset-1-hover:hover
-PSEUDO_SKIPPED[naive] .link-offset-2-hover:hover
-PSEUDO_SKIPPED[naive] .link-offset-3-hover:hover
-PSEUDO_SKIPPED[naive] .link-opacity-10-hover:hover
-PSEUDO_SKIPPED[naive] .link-opacity-100-hover:hover
-PSEUDO_SKIPPED[naive] .link-opacity-25-hover:hover
-PSEUDO_SKIPPED[naive] .link-opacity-50-hover:hover
-PSEUDO_SKIPPED[naive] .link-opacity-75-hover:hover
-PSEUDO_SKIPPED[naive] .link-primary:focus
-PSEUDO_SKIPPED[naive] .link-primary:hover
-PSEUDO_SKIPPED[naive] .link-secondary:focus
-PSEUDO_SKIPPED[naive] .link-secondary:hover
-PSEUDO_SKIPPED[naive] .link-success:focus
-PSEUDO_SKIPPED[naive] .link-success:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-0-hover:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-10-hover:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-100-hover:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-25-hover:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-50-hover:hover
-PSEUDO_SKIPPED[naive] .link-underline-opacity-75-hover:hover
-PSEUDO_SKIPPED[naive] .link-warning:focus
-PSEUDO_SKIPPED[naive] .link-warning:hover
-PSEUDO_SKIPPED[naive] .list-group-flush > .list-group-item:last-child
-PSEUDO_SKIPPED[naive] .list-group-horizontal > .list-group-item:first-child:not(:last-child)
-PSEUDO_SKIPPED[naive] .list-group-horizontal > .list-group-item:last-child:not(:first-child)
-PSEUDO_SKIPPED[naive] .list-group-item-action:not(.active):active
-PSEUDO_SKIPPED[naive] .list-group-item-action:not(.active):focus
-PSEUDO_SKIPPED[naive] .list-group-item-action:not(.active):hover
-PSEUDO_SKIPPED[naive] .list-group-item:disabled
-PSEUDO_SKIPPED[naive] .list-group-item:first-child
-PSEUDO_SKIPPED[naive] .list-group-item:last-child
-PSEUDO_SKIPPED[naive] .list-group-numbered > .list-group-item:before
-PSEUDO_SKIPPED[naive] .list-inline-item:not(:last-child)
-PSEUDO_SKIPPED[naive] .nav-link:disabled
-PSEUDO_SKIPPED[naive] .nav-link:focus
-PSEUDO_SKIPPED[naive] .nav-link:focus-visible
-PSEUDO_SKIPPED[naive] .nav-link:hover
-PSEUDO_SKIPPED[naive] .nav-tabs .nav-link:focus
-PSEUDO_SKIPPED[naive] .nav-tabs .nav-link:hover
-PSEUDO_SKIPPED[naive] .nav-underline .nav-link:focus
-PSEUDO_SKIPPED[naive] .nav-underline .nav-link:hover
-PSEUDO_SKIPPED[naive] .navbar-brand:focus
-PSEUDO_SKIPPED[naive] .navbar-brand:hover
-PSEUDO_SKIPPED[naive] .navbar-text a:focus
-PSEUDO_SKIPPED[naive] .navbar-text a:hover
-PSEUDO_SKIPPED[naive] .navbar-toggler:focus
-PSEUDO_SKIPPED[naive] .navbar-toggler:hover
-PSEUDO_SKIPPED[naive] .offcanvas.show:not(.hiding)
-PSEUDO_SKIPPED[naive] .page-item:first-child .page-link
-PSEUDO_SKIPPED[naive] .page-item:last-child .page-link
-PSEUDO_SKIPPED[naive] .page-item:not(:first-child) .page-link
-PSEUDO_SKIPPED[naive] .page-link:focus
-PSEUDO_SKIPPED[naive] .page-link:hover
-PSEUDO_SKIPPED[naive] .placeholder.btn:before
-PSEUDO_SKIPPED[naive] .popover .popover-arrow:after
-PSEUDO_SKIPPED[naive] .popover .popover-arrow:before
-PSEUDO_SKIPPED[naive] .popover-header:empty
-PSEUDO_SKIPPED[naive] .ratio:before
-PSEUDO_SKIPPED[naive] .stretched-link:after
-PSEUDO_SKIPPED[naive] .table > :not(caption) > * > *
-PSEUDO_SKIPPED[naive] .table-bordered > :not(caption) > *
-PSEUDO_SKIPPED[naive] .table-bordered > :not(caption) > * > *
-PSEUDO_SKIPPED[naive] .table-borderless > :not(:first-child)
-PSEUDO_SKIPPED[naive] .table-borderless > :not(caption) > * > *
-PSEUDO_SKIPPED[naive] .table-hover > tbody > tr:hover > *
-PSEUDO_SKIPPED[naive] .table-sm > :not(caption) > * > *
-PSEUDO_SKIPPED[naive] .table-striped > tbody > tr:nth-of-type(odd) > *
-PSEUDO_SKIPPED[naive] .table-striped-columns > :not(caption) > tr > :nth-child(2n)
-PSEUDO_SKIPPED[naive] .toast-container > :not(:last-child)
-PSEUDO_SKIPPED[naive] .toast:not(.show)
-PSEUDO_SKIPPED[naive] .tooltip .tooltip-arrow:before
-PSEUDO_SKIPPED[naive] .visually-hidden-focusable:not(:focus):not(:focus-within)
-PSEUDO_SKIPPED[naive] .visually-hidden-focusable:not(:focus):not(:focus-within) *
-PSEUDO_SKIPPED[naive] .visually-hidden-focusable:not(:focus):not(:focus-within):not(caption)
-PSEUDO_SKIPPED[naive] .visually-hidden:not(caption)
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:invalid
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:invalid ~ .form-check-label
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:invalid:checked
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:invalid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:valid
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:valid ~ .form-check-label
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:valid:checked
-PSEUDO_SKIPPED[naive] .was-validated .form-check-input:valid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-control-color:invalid
-PSEUDO_SKIPPED[naive] .was-validated .form-control-color:valid
-PSEUDO_SKIPPED[naive] .was-validated .form-control:invalid
-PSEUDO_SKIPPED[naive] .was-validated .form-control:invalid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-control:valid
-PSEUDO_SKIPPED[naive] .was-validated .form-control:valid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-select:invalid
-PSEUDO_SKIPPED[naive] .was-validated .form-select:invalid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-select:invalid:not([multiple]):not([size])
-PSEUDO_SKIPPED[naive] .was-validated .form-select:invalid:not([multiple])[size="1"]
-PSEUDO_SKIPPED[naive] .was-validated .form-select:valid
-PSEUDO_SKIPPED[naive] .was-validated .form-select:valid:focus
-PSEUDO_SKIPPED[naive] .was-validated .form-select:valid:not([multiple]):not([size])
-PSEUDO_SKIPPED[naive] .was-validated .form-select:valid:not([multiple])[size="1"]
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-control:not(:focus):invalid
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-control:not(:focus):valid
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-floating:not(:focus-within):invalid
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-floating:not(:focus-within):valid
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-select:not(:focus):invalid
-PSEUDO_SKIPPED[naive] .was-validated .input-group > .form-select:not(:focus):valid
-PSEUDO_SKIPPED[naive] .was-validated :invalid ~ .invalid-feedback
-PSEUDO_SKIPPED[naive] .was-validated :invalid ~ .invalid-tooltip
-PSEUDO_SKIPPED[naive] .was-validated :valid ~ .valid-feedback
-PSEUDO_SKIPPED[naive] .was-validated :valid ~ .valid-tooltip
-PSEUDO_SKIPPED[naive] .was-validated textarea.form-control:invalid
-PSEUDO_SKIPPED[naive] .was-validated textarea.form-control:valid
-PSEUDO_SKIPPED[naive] ::-moz-focus-inner
-PSEUDO_SKIPPED[naive] ::-webkit-color-swatch-wrapper
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-day-field
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-fields-wrapper
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-hour-field
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-minute
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-month-field
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-text
-PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-year-field
-PSEUDO_SKIPPED[naive] ::-webkit-file-upload-button
-PSEUDO_SKIPPED[naive] ::-webkit-inner-spin-button
-PSEUDO_SKIPPED[naive] ::-webkit-search-decoration
-PSEUDO_SKIPPED[naive] ::file-selector-button
-PSEUDO_SKIPPED[naive] :after
-PSEUDO_SKIPPED[naive] :before
-PSEUDO_SKIPPED[naive] :not(.btn-check) + .btn:active
-PSEUDO_SKIPPED[naive] :not(.btn-check) + .btn:active:focus-visible
-PSEUDO_SKIPPED[naive] :root
-PSEUDO_SKIPPED[naive] [data-bs-theme="dark"] .accordion-button:after
-PSEUDO_SKIPPED[naive] [data-bs-theme="dark"] .form-switch .form-check-input:not(:checked):not(:focus)
-PSEUDO_SKIPPED[naive] [list]:not([type="date"]):not([type="datetime-local"]):not([type="month"]):not([type="week"]):not([type="time"])::-webkit-calendar-picker-indicator
-PSEUDO_SKIPPED[naive] [type="button"]:not(:disabled)
-PSEUDO_SKIPPED[naive] [type="reset"]:not(:disabled)
-PSEUDO_SKIPPED[naive] [type="search"]::-webkit-search-cancel-button
-PSEUDO_SKIPPED[naive] [type="submit"]:not(:disabled)
-PSEUDO_SKIPPED[naive] a:hover
-PSEUDO_SKIPPED[naive] a:not([href]):not([class])
-PSEUDO_SKIPPED[naive] a:not([href]):not([class]):hover
-PSEUDO_SKIPPED[naive] button:focus:not(:focus-visible)
-PSEUDO_SKIPPED[naive] button:not(:disabled)
-PSEUDO_SKIPPED[naive] fieldset:disabled .btn
-PSEUDO_SKIPPED[naive] select:disabled
+PSEUDO_SKIPPED[naive] :not -> 88 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-button:not(.collapsed)
+PSEUDO_SKIPPED[naive]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[naive]    eg .accordion-item:not(:first-of-type)
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn-group:not(:first-child)
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn-group:not(:first-child) > .btn
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :focus -> 55 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-button:focus
+PSEUDO_SKIPPED[naive]    eg .btn-close:focus
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn-check:focus + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn:focus
+PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn-check:focus + .btn
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :hover -> 46 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-button:hover
+PSEUDO_SKIPPED[naive]    eg .btn-close:hover
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn:hover
+PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn:hover
+PSEUDO_SKIPPED[naive]    eg .btn-link:hover
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :after -> 30 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-button:after
+PSEUDO_SKIPPED[naive]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:after
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :before -> 27 selector(s)
+PSEUDO_SKIPPED[naive]    eg .blockquote-footer:before
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
+PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :disabled -> 18 selector(s)
+PSEUDO_SKIPPED[naive]    eg .btn-check:disabled + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-close:disabled
+PSEUDO_SKIPPED[naive]    eg .btn:disabled
+PSEUDO_SKIPPED[naive]    eg .dropdown-item:disabled
+PSEUDO_SKIPPED[naive]    eg .form-check-input:disabled
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :invalid -> 17 selector(s)
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:invalid
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:invalid ~ .form-check-label
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:invalid:checked
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:invalid:focus
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-control-color:invalid
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :valid -> 17 selector(s)
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:valid
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:valid ~ .form-check-label
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:valid:checked
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-check-input:valid:focus
+PSEUDO_SKIPPED[naive]    eg .was-validated .form-control-color:valid
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :checked -> 13 selector(s)
+PSEUDO_SKIPPED[naive]    eg .btn-check:checked + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[naive]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn-check:checked + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn-check:checked + .btn
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :active -> 11 selector(s)
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn:active
+PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn:active
+PSEUDO_SKIPPED[naive]    eg .btn:first-child:active
+PSEUDO_SKIPPED[naive]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[naive]    eg .dropdown-item:active
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :focus-visible -> 11 selector(s)
+PSEUDO_SKIPPED[naive]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[naive]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-check:focus-visible + .btn
+PSEUDO_SKIPPED[naive]    eg .btn-link:focus-visible
+PSEUDO_SKIPPED[naive]    eg .btn.active:focus-visible
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :first-child -> 9 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-flush > .accordion-item:first-child
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn.dropdown-toggle-split:first-child
+PSEUDO_SKIPPED[naive]    eg .btn:first-child:active
+PSEUDO_SKIPPED[naive]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[naive]    eg .card > .list-group:first-child
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :last-child -> 9 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-flush > .accordion-item:last-child
+PSEUDO_SKIPPED[naive]    eg .blockquote > :last-child
+PSEUDO_SKIPPED[naive]    eg .card > .list-group:last-child
+PSEUDO_SKIPPED[naive]    eg .card-footer:last-child
+PSEUDO_SKIPPED[naive]    eg .card-text:last-child
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :empty -> 6 selector(s)
+PSEUDO_SKIPPED[naive]    eg .badge:empty
+PSEUDO_SKIPPED[naive]    eg .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[naive]    eg .dropend .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[naive]    eg .dropstart .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[naive]    eg .dropup .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] ::-webkit-file-upload-button -> 5 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control-lg::-webkit-file-upload-button
+PSEUDO_SKIPPED[naive]    eg .form-control-sm::-webkit-file-upload-button
+PSEUDO_SKIPPED[naive]    eg .form-control::-webkit-file-upload-button
+PSEUDO_SKIPPED[naive]    eg .form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button
+PSEUDO_SKIPPED[naive]    eg ::-webkit-file-upload-button
+PSEUDO_SKIPPED[naive] ::file-selector-button -> 5 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control-lg::file-selector-button
+PSEUDO_SKIPPED[naive]    eg .form-control-sm::file-selector-button
+PSEUDO_SKIPPED[naive]    eg .form-control::file-selector-button
+PSEUDO_SKIPPED[naive]    eg .form-control:hover:not(:disabled):not([readonly])::file-selector-button
+PSEUDO_SKIPPED[naive]    eg ::file-selector-button
+PSEUDO_SKIPPED[naive] :nth-last-child -> 5 selector(s)
+PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .dropdown-toggle:nth-last-child(n+4)
+PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-control
+PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-select
+PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
+PSEUDO_SKIPPED[naive]    eg .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3)
+PSEUDO_SKIPPED[naive] ::-moz-range-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-range::-moz-range-thumb
+PSEUDO_SKIPPED[naive]    eg .form-range::-moz-range-thumb:active
+PSEUDO_SKIPPED[naive]    eg .form-range:disabled::-moz-range-thumb
+PSEUDO_SKIPPED[naive]    eg .form-range:focus::-moz-range-thumb
+PSEUDO_SKIPPED[naive] ::-webkit-slider-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-range::-webkit-slider-thumb
+PSEUDO_SKIPPED[naive]    eg .form-range::-webkit-slider-thumb:active
+PSEUDO_SKIPPED[naive]    eg .form-range:disabled::-webkit-slider-thumb
+PSEUDO_SKIPPED[naive]    eg .form-range:focus::-webkit-slider-thumb
+PSEUDO_SKIPPED[naive] :-webkit-autofill -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control-plaintext:-webkit-autofill
+PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control:-webkit-autofill
+PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control:-webkit-autofill ~ label
+PSEUDO_SKIPPED[naive] ::placeholder -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control::placeholder
+PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control-plaintext::placeholder
+PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control::placeholder
+PSEUDO_SKIPPED[naive] :last-of-type -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type
+PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type > .accordion-collapse
+PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed
+PSEUDO_SKIPPED[naive] :nth-child -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .btn-group > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[naive]    eg .table-striped-columns > :not(caption) > tr > :nth-child(2n)
+PSEUDO_SKIPPED[naive] :first-of-type -> 2 selector(s)
+PSEUDO_SKIPPED[naive]    eg .accordion-item:first-of-type
+PSEUDO_SKIPPED[naive]    eg .accordion-item:first-of-type > .accordion-header .accordion-button
+PSEUDO_SKIPPED[naive] :-moz-focusring -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-select:-moz-focusring
+PSEUDO_SKIPPED[naive] ::-moz-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control-color::-moz-color-swatch
+PSEUDO_SKIPPED[naive] ::-moz-focus-inner -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-moz-focus-inner
+PSEUDO_SKIPPED[naive] ::-moz-focus-outer -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-range::-moz-focus-outer
+PSEUDO_SKIPPED[naive] ::-moz-range-track -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-range::-moz-range-track
+PSEUDO_SKIPPED[naive] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg [list]:not([type="date"]):not([type="datetime-local"]):not([type="month"]):not([type="week"]):not([type="time"])::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[naive] ::-webkit-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control-color::-webkit-color-swatch
+PSEUDO_SKIPPED[naive] ::-webkit-color-swatch-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-color-swatch-wrapper
+PSEUDO_SKIPPED[naive] ::-webkit-date-and-time-value -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control::-webkit-date-and-time-value
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-control::-webkit-datetime-edit
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-day-field -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-day-field
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-fields-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-fields-wrapper
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-hour-field -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-hour-field
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-minute -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-minute
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-month-field -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-month-field
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-text -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-text
+PSEUDO_SKIPPED[naive] ::-webkit-datetime-edit-year-field -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-datetime-edit-year-field
+PSEUDO_SKIPPED[naive] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-inner-spin-button
+PSEUDO_SKIPPED[naive] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg [type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[naive] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ::-webkit-search-decoration
+PSEUDO_SKIPPED[naive] ::-webkit-slider-runnable-track -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-range::-webkit-slider-runnable-track
+PSEUDO_SKIPPED[naive] :focus-within -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .input-group > .form-floating:focus-within
+PSEUDO_SKIPPED[naive] :indeterminate -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .form-check-input[type="checkbox"]:indeterminate
+PSEUDO_SKIPPED[naive] :nth-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .table-striped > tbody > tr:nth-of-type(odd) > *
+PSEUDO_SKIPPED[naive] :root -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg :root
 BEGIN
 [data-bs-theme="light"] -> [6]
 [role="button"] -> [5325]

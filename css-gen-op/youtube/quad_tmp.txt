@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 21 selector(s)
 NOT_CONSIDERED[quad] #masthead-skeleton-icons
@@ -22,66 +22,71 @@ NOT_CONSIDERED[quad] html
 NOT_CONSIDERED[quad] ps-dom-if
 NOT_CONSIDERED[quad] ps-dom-repeat
 NOT_CONSIDERED[quad] textarea
-PSEUDO_SKIPPED[quad] 6 selector(s)
-PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
-PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
-PSEUDO_SKIPPED[quad] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
-PSEUDO_SKIPPED[quad] :-stv-set-elsewhere
-PSEUDO_SKIPPED[quad] ytd-masthead.shell > :first-child
-PSEUDO_SKIPPED[quad] ytd-masthead.shell > :last-child
-17185
-6842
-7700
-9602
-25692
-6221
-8126
-6197
-7859
-6519
-3719
-6331
-3431
-3559
-11285
-34967
-5977
-152229
-39305
-8687
-6611
-19142
-5589
-7729
-6635
-6597
-6150
-7841
-4860
-31417
-33351
-7237
-7012
-7304
-7271
-6501
-6880
-6767
-6943
-27375
-7085
-7996
-8296
-25704
-8559
-9762
-7241
-7819
-10104
-22329
-76293
-546464
-11941
+PSEUDO_SKIPPED[quad] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[quad] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[quad] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[quad] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[quad] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[quad] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :last-child
+9571
+6671
+8093
+9521
+22863
+5082
+8152
+5911
+7139
+6349
+4256
+9508
+6426
+6059
+17516
+29078
+5098
+132090
+53215
+4699
+6022
+17656
+5550
+6781
+8129
+6626
+5435
+6555
+4111
+27207
+28869
+6517
+6807
+6047
+6113
+8995
+6337
+5947
+6219
+21454
+6509
+6000
+6574
+22853
+5915
+6244
+8618
+8093
+8833
+14618
+70962
+499800
+10731
 BEGIN
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]

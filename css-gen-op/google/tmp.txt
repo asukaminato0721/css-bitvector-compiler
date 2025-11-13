@@ -10,7 +10,7 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 135 selector(s)
 NOT_CONSIDERED[naive] .H6sW5
@@ -148,54 +148,50 @@ NOT_CONSIDERED[naive] form
 NOT_CONSIDERED[naive] input
 NOT_CONSIDERED[naive] p
 NOT_CONSIDERED[naive] td
-PSEUDO_SKIPPED[naive] 47 selector(s)
-PSEUDO_SKIPPED[naive] #GBMPAL:last-child:after
-PSEUDO_SKIPPED[naive] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-PSEUDO_SKIPPED[naive] #gbg6.gbgt:focus
-PSEUDO_SKIPPED[naive] #gbprc .gbprcbc:active
-PSEUDO_SKIPPED[naive] #gbprc .gbprcbc:focus
-PSEUDO_SKIPPED[naive] #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[naive] #gbprc .gbprcx:active
-PSEUDO_SKIPPED[naive] #gbprc .gbprcx:focus
-PSEUDO_SKIPPED[naive] #gssb_b:hover
-PSEUDO_SKIPPED[naive] .GBMCC:last-child:after
-PSEUDO_SKIPPED[naive] .gbf .gbmt:visited
-PSEUDO_SKIPPED[naive] .gbgt:focus
-PSEUDO_SKIPPED[naive] .gbm0l:visited
-PSEUDO_SKIPPED[naive] .gbml1:focus
-PSEUDO_SKIPPED[naive] .gbml1:visited
-PSEUDO_SKIPPED[naive] .gbmlb:focus
-PSEUDO_SKIPPED[naive] .gbmlb:visited
-PSEUDO_SKIPPED[naive] .gbmt:focus
-PSEUDO_SKIPPED[naive] .gbmt:hover
-PSEUDO_SKIPPED[naive] .gbmt:visited
-PSEUDO_SKIPPED[naive] .gbn .gbmt:visited
-PSEUDO_SKIPPED[naive] .gbnd .gbmt:visited
-PSEUDO_SKIPPED[naive] .gbqfb-hvr:focus
-PSEUDO_SKIPPED[naive] .gbqfb-no-focus:focus
-PSEUDO_SKIPPED[naive] .gbqfb::-moz-focus-inner
-PSEUDO_SKIPPED[naive] .gbqfb:active
-PSEUDO_SKIPPED[naive] .gbqfb:focus
-PSEUDO_SKIPPED[naive] .gbqfba-hvr:active
-PSEUDO_SKIPPED[naive] .gbqfba-hvr:focus
-PSEUDO_SKIPPED[naive] .gbqfba::-moz-focus-inner
-PSEUDO_SKIPPED[naive] .gbqfba:active
-PSEUDO_SKIPPED[naive] .gbqfba:focus
-PSEUDO_SKIPPED[naive] .gbqfbb-hvr:active
-PSEUDO_SKIPPED[naive] .gbqfbb-hvr:focus
-PSEUDO_SKIPPED[naive] .gbqfbb::-moz-focus-inner
-PSEUDO_SKIPPED[naive] .gbqfbb:active
-PSEUDO_SKIPPED[naive] .gbqfbb:focus
-PSEUDO_SKIPPED[naive] .gbsb .gbsbb:after
-PSEUDO_SKIPPED[naive] .gbsb .gbsbt:after
-PSEUDO_SKIPPED[naive] .gbzt:focus
-PSEUDO_SKIPPED[naive] .gbzt:hover
-PSEUDO_SKIPPED[naive] .lsb:active
-PSEUDO_SKIPPED[naive] .lst:focus
-PSEUDO_SKIPPED[naive] a.gssb_j:hover
-PSEUDO_SKIPPED[naive] a:active
-PSEUDO_SKIPPED[naive] a:hover
-PSEUDO_SKIPPED[naive] a:visited
+PSEUDO_SKIPPED[naive] :focus -> 16 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gbg6.gbgt:focus
+PSEUDO_SKIPPED[naive]    eg #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[naive]    eg #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[naive]    eg .gbgt:focus
+PSEUDO_SKIPPED[naive]    eg .gbml1:focus
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :active -> 9 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[naive]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[naive]    eg .gbqfb:active
+PSEUDO_SKIPPED[naive]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[naive]    eg .gbqfba:active
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[naive]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[naive]    eg .gbm0l:visited
+PSEUDO_SKIPPED[naive]    eg .gbml1:visited
+PSEUDO_SKIPPED[naive]    eg .gbmlb:visited
+PSEUDO_SKIPPED[naive]    eg .gbmt:visited
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :hover -> 6 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[naive]    eg #gssb_b:hover
+PSEUDO_SKIPPED[naive]    eg .gbmt:hover
+PSEUDO_SKIPPED[naive]    eg .gbzt:hover
+PSEUDO_SKIPPED[naive]    eg a.gssb_j:hover
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :after -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[naive]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[naive]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[naive]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[naive] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[naive]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[naive]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[naive] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[naive]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[naive]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[naive] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[naive] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 BEGIN
 .fl a -> [431]
 .gbsb .gbsbb -> [246]

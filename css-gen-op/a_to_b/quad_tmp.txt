@@ -1,11 +1,11 @@
    Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 5.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 4.62s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 1 selector(s)
 NOT_CONSIDERED[quad] .a
 PSEUDO_SKIPPED[quad] none
-5759
-3222
+5222
+3352
 BEGIN
 END
 [src/quad.rs:965:5] unsafe { MISS_CNT } = 3

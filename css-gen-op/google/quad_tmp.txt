@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 135 selector(s)
 NOT_CONSIDERED[quad] #SIvCob
@@ -136,98 +136,94 @@ NOT_CONSIDERED[quad] form
 NOT_CONSIDERED[quad] input
 NOT_CONSIDERED[quad] p
 NOT_CONSIDERED[quad] td
-PSEUDO_SKIPPED[quad] 47 selector(s)
-PSEUDO_SKIPPED[quad] #GBMPAL:last-child:after
-PSEUDO_SKIPPED[quad] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-PSEUDO_SKIPPED[quad] #gbg6.gbgt:focus
-PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:active
-PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:focus
-PSEUDO_SKIPPED[quad] #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[quad] #gbprc .gbprcx:active
-PSEUDO_SKIPPED[quad] #gbprc .gbprcx:focus
-PSEUDO_SKIPPED[quad] #gssb_b:hover
-PSEUDO_SKIPPED[quad] .GBMCC:last-child:after
-PSEUDO_SKIPPED[quad] .gbf .gbmt:visited
-PSEUDO_SKIPPED[quad] .gbgt:focus
-PSEUDO_SKIPPED[quad] .gbm0l:visited
-PSEUDO_SKIPPED[quad] .gbml1:focus
-PSEUDO_SKIPPED[quad] .gbml1:visited
-PSEUDO_SKIPPED[quad] .gbmlb:focus
-PSEUDO_SKIPPED[quad] .gbmlb:visited
-PSEUDO_SKIPPED[quad] .gbmt:focus
-PSEUDO_SKIPPED[quad] .gbmt:hover
-PSEUDO_SKIPPED[quad] .gbmt:visited
-PSEUDO_SKIPPED[quad] .gbn .gbmt:visited
-PSEUDO_SKIPPED[quad] .gbnd .gbmt:visited
-PSEUDO_SKIPPED[quad] .gbqfb-hvr:focus
-PSEUDO_SKIPPED[quad] .gbqfb-no-focus:focus
-PSEUDO_SKIPPED[quad] .gbqfb::-moz-focus-inner
-PSEUDO_SKIPPED[quad] .gbqfb:active
-PSEUDO_SKIPPED[quad] .gbqfb:focus
-PSEUDO_SKIPPED[quad] .gbqfba-hvr:active
-PSEUDO_SKIPPED[quad] .gbqfba-hvr:focus
-PSEUDO_SKIPPED[quad] .gbqfba::-moz-focus-inner
-PSEUDO_SKIPPED[quad] .gbqfba:active
-PSEUDO_SKIPPED[quad] .gbqfba:focus
-PSEUDO_SKIPPED[quad] .gbqfbb-hvr:active
-PSEUDO_SKIPPED[quad] .gbqfbb-hvr:focus
-PSEUDO_SKIPPED[quad] .gbqfbb::-moz-focus-inner
-PSEUDO_SKIPPED[quad] .gbqfbb:active
-PSEUDO_SKIPPED[quad] .gbqfbb:focus
-PSEUDO_SKIPPED[quad] .gbsb .gbsbb:after
-PSEUDO_SKIPPED[quad] .gbsb .gbsbt:after
-PSEUDO_SKIPPED[quad] .gbzt:focus
-PSEUDO_SKIPPED[quad] .gbzt:hover
-PSEUDO_SKIPPED[quad] .lsb:active
-PSEUDO_SKIPPED[quad] .lst:focus
-PSEUDO_SKIPPED[quad] a.gssb_j:hover
-PSEUDO_SKIPPED[quad] a:active
-PSEUDO_SKIPPED[quad] a:hover
-PSEUDO_SKIPPED[quad] a:visited
-8875
-5381
-13265
-6921
-5704
-101512
-5497
-4840
-6286
-13570
-3762
-5961
-21740
-6613
-6677
-19177
-4139
-6373
-13367
-4015
-5852
-23386
-4998
-6230
-15829
-4050
-5423
-19507
-5213
-5887
-18521
-4805
-6035
-18658
-4191
-7902
-23518
-6114
-7635
-15360
-4088
-6459
-17812
-5742
+PSEUDO_SKIPPED[quad] :focus -> 16 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gbg6.gbgt:focus
+PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[quad]    eg .gbgt:focus
+PSEUDO_SKIPPED[quad]    eg .gbml1:focus
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :active -> 9 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[quad]    eg .gbqfb:active
+PSEUDO_SKIPPED[quad]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[quad]    eg .gbqfba:active
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[quad]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[quad]    eg .gbm0l:visited
+PSEUDO_SKIPPED[quad]    eg .gbml1:visited
+PSEUDO_SKIPPED[quad]    eg .gbmlb:visited
+PSEUDO_SKIPPED[quad]    eg .gbmt:visited
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :hover -> 6 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[quad]    eg #gssb_b:hover
+PSEUDO_SKIPPED[quad]    eg .gbmt:hover
+PSEUDO_SKIPPED[quad]    eg .gbzt:hover
+PSEUDO_SKIPPED[quad]    eg a.gssb_j:hover
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :after -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[quad]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[quad]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[quad]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[quad] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[quad]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[quad]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[quad]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[quad] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[quad]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[quad]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[quad] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[quad] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+8825
+6093
+13067
+5869
+5214
+93150
+6272
+4219
+8024
+11362
+6329
+5641
+16926
+6213
+77785
+19162
+6229
+6269
+21359
+6910
+6509
+22952
+7829
+6540
+14697
+5657
+5528
+19941
+4449
+5544
+12706
+3893
+5166
+17123
+3853
+5321
+21643
+4579
+6021
+14148
+3851
+5719
+15310
+4858
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]

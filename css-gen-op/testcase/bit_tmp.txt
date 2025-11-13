@@ -1,10 +1,10 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.14s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 2 selector(s)
 NOT_CONSIDERED[bit] #b
 NOT_CONSIDERED[bit] #bb
 PSEUDO_SKIPPED[bit] none
-3460
+3321
 BEGIN
 [class="aa"] -> [1]
 div p -> [2]

@@ -136,98 +136,94 @@ NOT_CONSIDERED[tri] form
 NOT_CONSIDERED[tri] input
 NOT_CONSIDERED[tri] p
 NOT_CONSIDERED[tri] td
-PSEUDO_SKIPPED[tri] 47 selector(s)
-PSEUDO_SKIPPED[tri] #GBMPAL:last-child:after
-PSEUDO_SKIPPED[tri] #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-PSEUDO_SKIPPED[tri] #gbg6.gbgt:focus
-PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:active
-PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:focus
-PSEUDO_SKIPPED[tri] #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[tri] #gbprc .gbprcx:active
-PSEUDO_SKIPPED[tri] #gbprc .gbprcx:focus
-PSEUDO_SKIPPED[tri] #gssb_b:hover
-PSEUDO_SKIPPED[tri] .GBMCC:last-child:after
-PSEUDO_SKIPPED[tri] .gbf .gbmt:visited
-PSEUDO_SKIPPED[tri] .gbgt:focus
-PSEUDO_SKIPPED[tri] .gbm0l:visited
-PSEUDO_SKIPPED[tri] .gbml1:focus
-PSEUDO_SKIPPED[tri] .gbml1:visited
-PSEUDO_SKIPPED[tri] .gbmlb:focus
-PSEUDO_SKIPPED[tri] .gbmlb:visited
-PSEUDO_SKIPPED[tri] .gbmt:focus
-PSEUDO_SKIPPED[tri] .gbmt:hover
-PSEUDO_SKIPPED[tri] .gbmt:visited
-PSEUDO_SKIPPED[tri] .gbn .gbmt:visited
-PSEUDO_SKIPPED[tri] .gbnd .gbmt:visited
-PSEUDO_SKIPPED[tri] .gbqfb-hvr:focus
-PSEUDO_SKIPPED[tri] .gbqfb-no-focus:focus
-PSEUDO_SKIPPED[tri] .gbqfb::-moz-focus-inner
-PSEUDO_SKIPPED[tri] .gbqfb:active
-PSEUDO_SKIPPED[tri] .gbqfb:focus
-PSEUDO_SKIPPED[tri] .gbqfba-hvr:active
-PSEUDO_SKIPPED[tri] .gbqfba-hvr:focus
-PSEUDO_SKIPPED[tri] .gbqfba::-moz-focus-inner
-PSEUDO_SKIPPED[tri] .gbqfba:active
-PSEUDO_SKIPPED[tri] .gbqfba:focus
-PSEUDO_SKIPPED[tri] .gbqfbb-hvr:active
-PSEUDO_SKIPPED[tri] .gbqfbb-hvr:focus
-PSEUDO_SKIPPED[tri] .gbqfbb::-moz-focus-inner
-PSEUDO_SKIPPED[tri] .gbqfbb:active
-PSEUDO_SKIPPED[tri] .gbqfbb:focus
-PSEUDO_SKIPPED[tri] .gbsb .gbsbb:after
-PSEUDO_SKIPPED[tri] .gbsb .gbsbt:after
-PSEUDO_SKIPPED[tri] .gbzt:focus
-PSEUDO_SKIPPED[tri] .gbzt:hover
-PSEUDO_SKIPPED[tri] .lsb:active
-PSEUDO_SKIPPED[tri] .lst:focus
-PSEUDO_SKIPPED[tri] a.gssb_j:hover
-PSEUDO_SKIPPED[tri] a:active
-PSEUDO_SKIPPED[tri] a:hover
-PSEUDO_SKIPPED[tri] a:visited
-3749
-2472
-2614
-2490
-2583
-2541
-2348
+PSEUDO_SKIPPED[tri] :focus -> 16 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbg6.gbgt:focus
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:focus
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcx:focus
+PSEUDO_SKIPPED[tri]    eg .gbgt:focus
+PSEUDO_SKIPPED[tri]    eg .gbml1:focus
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :active -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[tri]    eg .gbqfb:active
+PSEUDO_SKIPPED[tri]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[tri]    eg .gbqfba:active
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[tri]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[tri]    eg .gbm0l:visited
+PSEUDO_SKIPPED[tri]    eg .gbml1:visited
+PSEUDO_SKIPPED[tri]    eg .gbmlb:visited
+PSEUDO_SKIPPED[tri]    eg .gbmt:visited
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :hover -> 6 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:hover
+PSEUDO_SKIPPED[tri]    eg #gssb_b:hover
+PSEUDO_SKIPPED[tri]    eg .gbmt:hover
+PSEUDO_SKIPPED[tri]    eg .gbzt:hover
+PSEUDO_SKIPPED[tri]    eg a.gssb_j:hover
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :after -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[tri]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[tri]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[tri]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[tri] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[tri]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[tri]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[tri] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[tri]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[tri] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+3190
+1971
+2847
+4495
+2687
+4743
 2431
 2542
-2989
-2878
-2117
-2577
-2538
-2393
-3693
-2641
-2281
-3075
-2747
-2452
-3903
-2590
-2237
-3646
-2788
-2220
+2951
+2680
+2287
+1917
+2255
+2486
+2312
+2716
+2567
+2587
+3074
+2699
+2121
+2758
+2551
+2073
+2912
+5090
+2153
+3366
+2663
+2312
+3492
+2506
+3695
 3007
-2788
-2162
-3277
-3019
-2484
-3535
-2887
-4544
-4550
-3490
-2247
-5597
-6326
-4061
-4139
-2640
+2265
+1806
+7419
+5329
+4003
+8269
+4427
+4422
+3752
+2594
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]

@@ -1,27 +1,27 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 3 selector(s)
 NOT_CONSIDERED[quad] .container-dark
 NOT_CONSIDERED[quad] .emph.leaf
 NOT_CONSIDERED[quad] .leaf
 PSEUDO_SKIPPED[quad] none
-7501
-5305
-4248
-6523
-5763
-5909
-7909
-4449
-4607
-4491
-8208
-8111
-8379
-6292
-8089
-6964
-8176
+7363
+4818
+4021
+4234
+3842
+3946
+3745
+3843
+4102
+4149
+4226
+4480
+4382
+3865
+3810
+3660
+3997
 BEGIN
 END
 [src/quad.rs:965:5] unsafe { MISS_CNT } = 81

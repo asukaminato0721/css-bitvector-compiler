@@ -4,7 +4,7 @@ NOT_CONSIDERED[quad] 2 selector(s)
 NOT_CONSIDERED[quad] #b
 NOT_CONSIDERED[quad] #bb
 PSEUDO_SKIPPED[quad] none
-5428
+4071
 BEGIN
 [class="aa"] -> [1]
 div p -> [2]

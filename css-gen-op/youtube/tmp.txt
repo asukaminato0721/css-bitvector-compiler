@@ -10,7 +10,7 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 21 selector(s)
 NOT_CONSIDERED[naive] .autoscrollbody
@@ -34,13 +34,18 @@ NOT_CONSIDERED[naive] html
 NOT_CONSIDERED[naive] ps-dom-if
 NOT_CONSIDERED[naive] ps-dom-repeat
 NOT_CONSIDERED[naive] textarea
-PSEUDO_SKIPPED[naive] 6 selector(s)
-PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
-PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
-PSEUDO_SKIPPED[naive] #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
-PSEUDO_SKIPPED[naive] :-stv-set-elsewhere
-PSEUDO_SKIPPED[naive] ytd-masthead.shell > :first-child
-PSEUDO_SKIPPED[naive] ytd-masthead.shell > :last-child
+PSEUDO_SKIPPED[naive] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[naive] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[naive] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[naive] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[naive] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[naive] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ytd-masthead.shell > :last-child
 BEGIN
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]

@@ -1,5 +1,5 @@
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, HashMap, HashSet},
     fmt::{Debug, Display},
 };
 
@@ -82,7 +82,7 @@ impl Display for Selector {
     }
 }
 
-fn parse_css(css_content: &str) -> (Vec<CssRule>, Vec<String>) {
+fn parse_css(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>) {
     let parsed = shared_parse_css_with_pseudo(css_content);
     let mut rules: Vec<CssRule> = parsed
         .selectors
@@ -689,7 +689,11 @@ mod test {
     #[test]
     fn parse_css_skips_pseudo_classes() {
         let (rules, pseudo) = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
-        assert_eq!(pseudo, vec![".wrapper .item:hover strong".to_string()]);
+        assert_eq!(pseudo.len(), 1);
+        assert_eq!(
+            pseudo.get(":hover"),
+            Some(&vec![".wrapper .item:hover strong".to_string()])
+        );
         assert!(rules.is_empty());
     }
 }

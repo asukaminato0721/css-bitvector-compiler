@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 139 selector(s)
 NOT_CONSIDERED[bit] #searchInput
@@ -140,69 +140,74 @@ NOT_CONSIDERED[bit] td
 NOT_CONSIDERED[bit] textarea
 NOT_CONSIDERED[bit] th
 NOT_CONSIDERED[bit] video
-PSEUDO_SKIPPED[bit] 56 selector(s)
-PSEUDO_SKIPPED[bit] #searchInput:focus
-PSEUDO_SKIPPED[bit] #searchInput:hover
-PSEUDO_SKIPPED[bit] .banner__button:hover
-PSEUDO_SKIPPED[bit] .central-featured-lang .link-box:hover strong
-PSEUDO_SKIPPED[bit] .central-featured-lang :hover
-PSEUDO_SKIPPED[bit] .footer:after
-PSEUDO_SKIPPED[bit] .footer:before
-PSEUDO_SKIPPED[bit] .hlist li > ul:after
-PSEUDO_SKIPPED[bit] .hlist li > ul:before
-PSEUDO_SKIPPED[bit] .hlist li:before
-PSEUDO_SKIPPED[bit] .hlist li:first-child:before
-PSEUDO_SKIPPED[bit] .lang-list-button:focus
-PSEUDO_SKIPPED[bit] .lang-list-button:hover
-PSEUDO_SKIPPED[bit] .langlist > ul > li:before
-PSEUDO_SKIPPED[bit] .other-project-link:hover
-PSEUDO_SKIPPED[bit] .overlay-banner-main .banner-button:focus
-PSEUDO_SKIPPED[bit] .overlay-banner-main .banner-button:focus-within
-PSEUDO_SKIPPED[bit] .overlay-banner-main .button-collapse:hover
-PSEUDO_SKIPPED[bit] .overlay-banner-main-header a:hover
-PSEUDO_SKIPPED[bit] .overlay-banner-mini .frb-submit:focus
-PSEUDO_SKIPPED[bit] .overlay-banner-mini .frb-submit:hover
-PSEUDO_SKIPPED[bit] .pure-button-primary-progressive:active
-PSEUDO_SKIPPED[bit] .pure-button-primary-progressive:focus
-PSEUDO_SKIPPED[bit] .pure-button-primary-progressive:hover
-PSEUDO_SKIPPED[bit] .pure-button::-moz-focus-inner
-PSEUDO_SKIPPED[bit] .pure-button:active
-PSEUDO_SKIPPED[bit] .pure-button:focus
-PSEUDO_SKIPPED[bit] .pure-button:hover
-PSEUDO_SKIPPED[bit] .pure-form input:focus:invalid
-PSEUDO_SKIPPED[bit] .search-container input::-webkit-calendar-picker-indicator
-PSEUDO_SKIPPED[bit] .search-container input[type="search"]::-webkit-search-results-button
-PSEUDO_SKIPPED[bit] .search-container input[type="search"]::-webkit-search-results-decoration
-PSEUDO_SKIPPED[bit] .site-license small:after
-PSEUDO_SKIPPED[bit] .site-license small:last-child:after
-PSEUDO_SKIPPED[bit] .styled-select select:focus
-PSEUDO_SKIPPED[bit] .styled-select select:hover
-PSEUDO_SKIPPED[bit] .styled-select.js-enabled select:focus + .styled-select-active-helper
-PSEUDO_SKIPPED[bit] .styled-select.js-enabled select:hover
-PSEUDO_SKIPPED[bit] .styled-select:hover
-PSEUDO_SKIPPED[bit] :root
-PSEUDO_SKIPPED[bit] a.suggestion-link:active
-PSEUDO_SKIPPED[bit] a.suggestion-link:focus
-PSEUDO_SKIPPED[bit] a.suggestion-link:hover
-PSEUDO_SKIPPED[bit] a:active
-PSEUDO_SKIPPED[bit] a:focus
-PSEUDO_SKIPPED[bit] a:hover
-PSEUDO_SKIPPED[bit] audio:not([controls])
-PSEUDO_SKIPPED[bit] button::-moz-focus-inner
-PSEUDO_SKIPPED[bit] input::-moz-focus-inner
-PSEUDO_SKIPPED[bit] input[type="number"]::-webkit-inner-spin-button
-PSEUDO_SKIPPED[bit] input[type="number"]::-webkit-outer-spin-button
-PSEUDO_SKIPPED[bit] input[type="search"]::-webkit-search-cancel-button
-PSEUDO_SKIPPED[bit] input[type="search"]::-webkit-search-decoration
-PSEUDO_SKIPPED[bit] input[type="search"]:focus
-PSEUDO_SKIPPED[bit] span.frb-conversation-close-icon:after
-PSEUDO_SKIPPED[bit] span.frb-conversation-close-icon:before
-2760
-2512
-2210
-2204
-2306
-2358
+PSEUDO_SKIPPED[bit] :hover -> 16 selector(s)
+PSEUDO_SKIPPED[bit]    eg #searchInput:hover
+PSEUDO_SKIPPED[bit]    eg .banner__button:hover
+PSEUDO_SKIPPED[bit]    eg .central-featured-lang .link-box:hover strong
+PSEUDO_SKIPPED[bit]    eg .central-featured-lang :hover
+PSEUDO_SKIPPED[bit]    eg .lang-list-button:hover
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :focus -> 12 selector(s)
+PSEUDO_SKIPPED[bit]    eg #searchInput:focus
+PSEUDO_SKIPPED[bit]    eg .lang-list-button:focus
+PSEUDO_SKIPPED[bit]    eg .overlay-banner-main .banner-button:focus
+PSEUDO_SKIPPED[bit]    eg .overlay-banner-mini .frb-submit:focus
+PSEUDO_SKIPPED[bit]    eg .pure-button-primary-progressive:focus
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :before -> 6 selector(s)
+PSEUDO_SKIPPED[bit]    eg .footer:before
+PSEUDO_SKIPPED[bit]    eg .hlist li > ul:before
+PSEUDO_SKIPPED[bit]    eg .hlist li:before
+PSEUDO_SKIPPED[bit]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[bit]    eg .langlist > ul > li:before
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :after -> 5 selector(s)
+PSEUDO_SKIPPED[bit]    eg .footer:after
+PSEUDO_SKIPPED[bit]    eg .hlist li > ul:after
+PSEUDO_SKIPPED[bit]    eg .site-license small:after
+PSEUDO_SKIPPED[bit]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[bit]    eg span.frb-conversation-close-icon:after
+PSEUDO_SKIPPED[bit] :active -> 4 selector(s)
+PSEUDO_SKIPPED[bit]    eg .pure-button-primary-progressive:active
+PSEUDO_SKIPPED[bit]    eg .pure-button:active
+PSEUDO_SKIPPED[bit]    eg a.suggestion-link:active
+PSEUDO_SKIPPED[bit]    eg a:active
+PSEUDO_SKIPPED[bit] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .pure-button::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg button::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg input::-moz-focus-inner
+PSEUDO_SKIPPED[bit] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .search-container input::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[bit] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[bit] ::-webkit-outer-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg input[type="number"]::-webkit-outer-spin-button
+PSEUDO_SKIPPED[bit] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg input[type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[bit] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg input[type="search"]::-webkit-search-decoration
+PSEUDO_SKIPPED[bit] ::-webkit-search-results-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .search-container input[type="search"]::-webkit-search-results-button
+PSEUDO_SKIPPED[bit] ::-webkit-search-results-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .search-container input[type="search"]::-webkit-search-results-decoration
+PSEUDO_SKIPPED[bit] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[bit] :focus-within -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .overlay-banner-main .banner-button:focus-within
+PSEUDO_SKIPPED[bit] :invalid -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .pure-form input:focus:invalid
+PSEUDO_SKIPPED[bit] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[bit] :not -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg audio:not([controls])
+PSEUDO_SKIPPED[bit] :root -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg :root
+2573
+2340
+2355
+2117
+3602
+3742
 BEGIN
 .app-badge a -> [3901, 3916]
 .app-badges .footer-sidebar-content -> [3871]

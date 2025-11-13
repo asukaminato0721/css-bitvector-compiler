@@ -6,7 +6,7 @@ use lightningcss::{
 };
 use parcel_selectors::attr::AttrSelectorOperator;
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, HashMap, HashSet},
     fmt::Display,
 };
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -253,7 +253,7 @@ pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize>
 #[derive(Debug, Default, Clone)]
 pub struct ParsedSelectors {
     pub selectors: Vec<String>,
-    pub pseudo_selectors: Vec<String>,
+    pub pseudo_selectors: BTreeMap<String, Vec<String>>,
 }
 
 pub fn parse_css(css_content: &str) -> Vec<String> {
@@ -270,14 +270,21 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
     };
 
     let mut selectors = Vec::new();
-    let mut pseudo_selectors = Vec::new();
+    let mut pseudo_selectors: BTreeMap<String, Vec<String>> = BTreeMap::new();
 
     for rule in stylesheet.rules.0 {
         if let CssRule::Style(style_rule) = rule {
             for selector in style_rule.selectors.0 {
                 match lightning_selector_to_rule_string(&selector) {
                     SelectorConversionResult::Keep(s) => selectors.push(s),
-                    SelectorConversionResult::RecordPseudo(s) => pseudo_selectors.push(s),
+                    SelectorConversionResult::RecordPseudo { selector, pseudos } => {
+                        for pseudo in pseudos {
+                            pseudo_selectors
+                                .entry(pseudo)
+                                .or_default()
+                                .push(selector.clone());
+                        }
+                    }
                     SelectorConversionResult::Skip => {}
                 }
             }
@@ -286,8 +293,10 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
 
     selectors.sort();
     selectors.dedup();
-    pseudo_selectors.sort();
-    pseudo_selectors.dedup();
+    for selectors in pseudo_selectors.values_mut() {
+        selectors.sort();
+        selectors.dedup();
+    }
 
     ParsedSelectors {
         selectors,
@@ -341,15 +350,26 @@ pub fn report_skipped_selectors(label: &str, selectors: &[String]) {
     }
 }
 
-pub fn report_pseudo_selectors(label: &str, selectors: &[String]) {
+pub fn report_pseudo_selectors(label: &str, selectors: &BTreeMap<String, Vec<String>>) {
     if selectors.is_empty() {
         println!("PSEUDO_SKIPPED[{label}] none");
         return;
     }
 
-    println!("PSEUDO_SKIPPED[{label}] {} selector(s)", selectors.len());
-    for selector in selectors {
-        println!("PSEUDO_SKIPPED[{label}] {selector}");
+    let mut entries: Vec<_> = selectors.iter().collect();
+    entries.sort_by(|a, b| b.1.len().cmp(&a.1.len()).then_with(|| a.0.cmp(b.0)));
+
+    for (pseudo, sels) in entries {
+        println!(
+            "PSEUDO_SKIPPED[{label}] {pseudo} -> {} selector(s)",
+            sels.len()
+        );
+        for example in sels.iter().take(5) {
+            println!("PSEUDO_SKIPPED[{label}]    eg {example}");
+        }
+        if sels.len() > 5 {
+            println!("PSEUDO_SKIPPED[{label}]    ...");
+        }
     }
 }
 
@@ -361,7 +381,10 @@ enum ComponentConversion {
 
 enum SelectorConversionResult {
     Keep(String),
-    RecordPseudo(String),
+    RecordPseudo {
+        selector: String,
+        pseudos: Vec<String>,
+    },
     Skip,
 }
 
@@ -369,6 +392,18 @@ fn selector_to_string(selector: &LightningSelector) -> String {
     selector
         .to_css_string(PrinterOptions::default())
         .unwrap_or_else(|_| format!("{:?}", selector))
+}
+
+fn record_pseudo_selector(selector: &LightningSelector) -> SelectorConversionResult {
+    let selector_string = selector_to_string(selector);
+    let mut pseudos = extract_pseudo_tokens(&selector_string);
+    if pseudos.is_empty() {
+        pseudos.push("<pseudo>".to_string());
+    }
+    SelectorConversionResult::RecordPseudo {
+        selector: selector_string,
+        pseudos,
+    }
 }
 
 fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorConversionResult {
@@ -391,10 +426,27 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorCo
                     }
                 }
                 LCombinator::PseudoElement => {
-                    return SelectorConversionResult::RecordPseudo(selector_to_string(selector));
+                    return record_pseudo_selector(selector);
                 }
                 _ => break,
             },
+            LComponent::Negation(_)
+            | LComponent::Root
+            | LComponent::Empty
+            | LComponent::Scope
+            | LComponent::Nth(_)
+            | LComponent::NthOf(_)
+            | LComponent::NonTSPseudoClass(_)
+            | LComponent::Slotted(_)
+            | LComponent::Part(_)
+            | LComponent::Host(_)
+            | LComponent::Where(_)
+            | LComponent::Is(_)
+            | LComponent::Any(_, _)
+            | LComponent::Has(_)
+            | LComponent::PseudoElement(_) => {
+                return record_pseudo_selector(selector);
+            }
             _ => match convert_component(component) {
                 ComponentConversion::Keep(selector) => {
                     if let Some(prev_selector) = current_selector.take() {
@@ -408,7 +460,7 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorCo
                 }
                 ComponentConversion::Skip => {}
                 ComponentConversion::Abort => {
-                    return SelectorConversionResult::RecordPseudo(selector_to_string(selector));
+                    return SelectorConversionResult::Skip;
                 }
             },
         }
@@ -483,6 +535,53 @@ fn convert_component(component: &LComponent) -> ComponentConversion {
         | LComponent::Nesting => ComponentConversion::Abort,
         LComponent::Combinator(_) => ComponentConversion::Skip,
     }
+}
+
+fn extract_pseudo_tokens(selector: &str) -> Vec<String> {
+    let mut tokens = Vec::new();
+    let chars: Vec<char> = selector.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i] == ':' {
+            let mut end = i + 1;
+            if end < chars.len() && chars[end] == ':' {
+                end += 1;
+            }
+            while end < chars.len() {
+                let c = chars[end];
+                if c.is_ascii_alphanumeric() || c == '-' || c == '_' {
+                    end += 1;
+                } else {
+                    break;
+                }
+            }
+            if end > i + 1 {
+                let mut token: String = chars[i..end].iter().collect();
+                token.make_ascii_lowercase();
+                tokens.push(token);
+            }
+            if end < chars.len() && chars[end] == '(' {
+                let mut depth = 1;
+                let mut j = end + 1;
+                while j < chars.len() && depth > 0 {
+                    match chars[j] {
+                        '(' => depth += 1,
+                        ')' => depth -= 1,
+                        _ => {}
+                    }
+                    j += 1;
+                }
+                i = j;
+            } else {
+                i = end;
+            }
+            continue;
+        }
+        i += 1;
+    }
+    tokens.sort();
+    tokens.dedup();
+    tokens
 }
 
 fn parse_attribute_selector(raw: &str) -> Option<Selector> {

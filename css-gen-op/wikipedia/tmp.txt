@@ -10,7 +10,7 @@ warning: field `frame_id` is never read
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.13s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 139 selector(s)
 NOT_CONSIDERED[naive] .active.suggestion-link
@@ -152,63 +152,68 @@ NOT_CONSIDERED[naive] td
 NOT_CONSIDERED[naive] textarea
 NOT_CONSIDERED[naive] th
 NOT_CONSIDERED[naive] video
-PSEUDO_SKIPPED[naive] 56 selector(s)
-PSEUDO_SKIPPED[naive] #searchInput:focus
-PSEUDO_SKIPPED[naive] #searchInput:hover
-PSEUDO_SKIPPED[naive] .banner__button:hover
-PSEUDO_SKIPPED[naive] .central-featured-lang .link-box:hover strong
-PSEUDO_SKIPPED[naive] .central-featured-lang :hover
-PSEUDO_SKIPPED[naive] .footer:after
-PSEUDO_SKIPPED[naive] .footer:before
-PSEUDO_SKIPPED[naive] .hlist li > ul:after
-PSEUDO_SKIPPED[naive] .hlist li > ul:before
-PSEUDO_SKIPPED[naive] .hlist li:before
-PSEUDO_SKIPPED[naive] .hlist li:first-child:before
-PSEUDO_SKIPPED[naive] .lang-list-button:focus
-PSEUDO_SKIPPED[naive] .lang-list-button:hover
-PSEUDO_SKIPPED[naive] .langlist > ul > li:before
-PSEUDO_SKIPPED[naive] .other-project-link:hover
-PSEUDO_SKIPPED[naive] .overlay-banner-main .banner-button:focus
-PSEUDO_SKIPPED[naive] .overlay-banner-main .banner-button:focus-within
-PSEUDO_SKIPPED[naive] .overlay-banner-main .button-collapse:hover
-PSEUDO_SKIPPED[naive] .overlay-banner-main-header a:hover
-PSEUDO_SKIPPED[naive] .overlay-banner-mini .frb-submit:focus
-PSEUDO_SKIPPED[naive] .overlay-banner-mini .frb-submit:hover
-PSEUDO_SKIPPED[naive] .pure-button-primary-progressive:active
-PSEUDO_SKIPPED[naive] .pure-button-primary-progressive:focus
-PSEUDO_SKIPPED[naive] .pure-button-primary-progressive:hover
-PSEUDO_SKIPPED[naive] .pure-button::-moz-focus-inner
-PSEUDO_SKIPPED[naive] .pure-button:active
-PSEUDO_SKIPPED[naive] .pure-button:focus
-PSEUDO_SKIPPED[naive] .pure-button:hover
-PSEUDO_SKIPPED[naive] .pure-form input:focus:invalid
-PSEUDO_SKIPPED[naive] .search-container input::-webkit-calendar-picker-indicator
-PSEUDO_SKIPPED[naive] .search-container input[type="search"]::-webkit-search-results-button
-PSEUDO_SKIPPED[naive] .search-container input[type="search"]::-webkit-search-results-decoration
-PSEUDO_SKIPPED[naive] .site-license small:after
-PSEUDO_SKIPPED[naive] .site-license small:last-child:after
-PSEUDO_SKIPPED[naive] .styled-select select:focus
-PSEUDO_SKIPPED[naive] .styled-select select:hover
-PSEUDO_SKIPPED[naive] .styled-select.js-enabled select:focus + .styled-select-active-helper
-PSEUDO_SKIPPED[naive] .styled-select.js-enabled select:hover
-PSEUDO_SKIPPED[naive] .styled-select:hover
-PSEUDO_SKIPPED[naive] :root
-PSEUDO_SKIPPED[naive] a.suggestion-link:active
-PSEUDO_SKIPPED[naive] a.suggestion-link:focus
-PSEUDO_SKIPPED[naive] a.suggestion-link:hover
-PSEUDO_SKIPPED[naive] a:active
-PSEUDO_SKIPPED[naive] a:focus
-PSEUDO_SKIPPED[naive] a:hover
-PSEUDO_SKIPPED[naive] audio:not([controls])
-PSEUDO_SKIPPED[naive] button::-moz-focus-inner
-PSEUDO_SKIPPED[naive] input::-moz-focus-inner
-PSEUDO_SKIPPED[naive] input[type="number"]::-webkit-inner-spin-button
-PSEUDO_SKIPPED[naive] input[type="number"]::-webkit-outer-spin-button
-PSEUDO_SKIPPED[naive] input[type="search"]::-webkit-search-cancel-button
-PSEUDO_SKIPPED[naive] input[type="search"]::-webkit-search-decoration
-PSEUDO_SKIPPED[naive] input[type="search"]:focus
-PSEUDO_SKIPPED[naive] span.frb-conversation-close-icon:after
-PSEUDO_SKIPPED[naive] span.frb-conversation-close-icon:before
+PSEUDO_SKIPPED[naive] :hover -> 16 selector(s)
+PSEUDO_SKIPPED[naive]    eg #searchInput:hover
+PSEUDO_SKIPPED[naive]    eg .banner__button:hover
+PSEUDO_SKIPPED[naive]    eg .central-featured-lang .link-box:hover strong
+PSEUDO_SKIPPED[naive]    eg .central-featured-lang :hover
+PSEUDO_SKIPPED[naive]    eg .lang-list-button:hover
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :focus -> 12 selector(s)
+PSEUDO_SKIPPED[naive]    eg #searchInput:focus
+PSEUDO_SKIPPED[naive]    eg .lang-list-button:focus
+PSEUDO_SKIPPED[naive]    eg .overlay-banner-main .banner-button:focus
+PSEUDO_SKIPPED[naive]    eg .overlay-banner-mini .frb-submit:focus
+PSEUDO_SKIPPED[naive]    eg .pure-button-primary-progressive:focus
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :before -> 6 selector(s)
+PSEUDO_SKIPPED[naive]    eg .footer:before
+PSEUDO_SKIPPED[naive]    eg .hlist li > ul:before
+PSEUDO_SKIPPED[naive]    eg .hlist li:before
+PSEUDO_SKIPPED[naive]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[naive]    eg .langlist > ul > li:before
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :after -> 5 selector(s)
+PSEUDO_SKIPPED[naive]    eg .footer:after
+PSEUDO_SKIPPED[naive]    eg .hlist li > ul:after
+PSEUDO_SKIPPED[naive]    eg .site-license small:after
+PSEUDO_SKIPPED[naive]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[naive]    eg span.frb-conversation-close-icon:after
+PSEUDO_SKIPPED[naive] :active -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg .pure-button-primary-progressive:active
+PSEUDO_SKIPPED[naive]    eg .pure-button:active
+PSEUDO_SKIPPED[naive]    eg a.suggestion-link:active
+PSEUDO_SKIPPED[naive]    eg a:active
+PSEUDO_SKIPPED[naive] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[naive]    eg .pure-button::-moz-focus-inner
+PSEUDO_SKIPPED[naive]    eg button::-moz-focus-inner
+PSEUDO_SKIPPED[naive]    eg input::-moz-focus-inner
+PSEUDO_SKIPPED[naive] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .search-container input::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[naive] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[naive] ::-webkit-outer-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg input[type="number"]::-webkit-outer-spin-button
+PSEUDO_SKIPPED[naive] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg input[type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[naive] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg input[type="search"]::-webkit-search-decoration
+PSEUDO_SKIPPED[naive] ::-webkit-search-results-button -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .search-container input[type="search"]::-webkit-search-results-button
+PSEUDO_SKIPPED[naive] ::-webkit-search-results-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .search-container input[type="search"]::-webkit-search-results-decoration
+PSEUDO_SKIPPED[naive] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .hlist li:first-child:before
+PSEUDO_SKIPPED[naive] :focus-within -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .overlay-banner-main .banner-button:focus-within
+PSEUDO_SKIPPED[naive] :invalid -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .pure-form input:focus:invalid
+PSEUDO_SKIPPED[naive] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg .site-license small:last-child:after
+PSEUDO_SKIPPED[naive] :not -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg audio:not([controls])
+PSEUDO_SKIPPED[naive] :root -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg :root
 BEGIN
 .app-badge a -> [3901, 3916]
 .app-badges .footer-sidebar-content -> [3871]
