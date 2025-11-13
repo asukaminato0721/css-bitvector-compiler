@@ -1,3 +1,4 @@
+use css_bitvector_compiler::is_simple_selector;
 use std::env;
 use std::error::Error;
 use std::fs;
@@ -53,7 +54,7 @@ fn filter_single_selectors(css: &str) -> String {
                     if let Some(block_end) = find_block_end(css, i) {
                         let selector_start = find_selector_start(css, i);
                         let selector_text = cleaned_selector(&css[selector_start..i]);
-                        let is_basic = is_basic_selector(&selector_text);
+                        let is_basic = is_simple_selector(&selector_text);
 
                         let prefix = &css[cursor..selector_start];
                         if is_basic {
@@ -147,19 +148,6 @@ fn cleaned_selector(raw: &str) -> String {
     }
 
     cleaned.trim().to_string()
-}
-
-fn is_basic_selector(selector: &str) -> bool {
-    if selector.is_empty() {
-        return false;
-    }
-    if selector.starts_with('@') || selector.contains(',') {
-        return false;
-    }
-
-    selector
-        .chars()
-        .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.' | '#'))
 }
 
 fn find_block_end(css: &str, open_idx: usize) -> Option<usize> {

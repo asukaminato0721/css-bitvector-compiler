@@ -276,6 +276,52 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     selectors
 }
 
+/// Returns true if the selector is a single "simple" selector without combinators
+/// (e.g. `a`, `.button`, `#header`). Those selectors consist only of alphanumeric
+/// characters or the symbols `-`, `_`, `.`, and `#`.
+pub fn is_simple_selector(selector: &str) -> bool {
+    let trimmed = selector.trim();
+    if trimmed.is_empty() {
+        return false;
+    }
+    if trimmed.starts_with('@') || trimmed.contains(',') {
+        return false;
+    }
+
+    trimmed
+        .chars()
+        .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.' | '#'))
+}
+
+/// Splits selectors into the ones we keep and the simple ones we skip.
+pub fn partition_simple_selectors(selectors: Vec<String>) -> (Vec<String>, Vec<String>) {
+    let mut considered = Vec::new();
+    let mut skipped = Vec::new();
+
+    for selector in selectors {
+        if is_simple_selector(&selector) {
+            skipped.push(selector);
+        } else {
+            considered.push(selector);
+        }
+    }
+
+    (considered, skipped)
+}
+
+/// Prints the selectors we currently skip so runs can surface missing coverage.
+pub fn report_skipped_selectors(label: &str, selectors: &[String]) {
+    if selectors.is_empty() {
+        println!("NOT_CONSIDERED[{label}] none");
+        return;
+    }
+
+    println!("NOT_CONSIDERED[{label}] {} selector(s)", selectors.len());
+    for selector in selectors {
+        println!("NOT_CONSIDERED[{label}] {selector}");
+    }
+}
+
 enum ComponentConversion {
     Keep(Selector),
     Skip,

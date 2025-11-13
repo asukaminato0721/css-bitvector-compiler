@@ -4,7 +4,8 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    Command, json_value_to_attr_string, parse_command, parse_css as shared_parse_css,
+    Command, is_simple_selector, json_value_to_attr_string, parse_command,
+    parse_css as shared_parse_css, report_skipped_selectors,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -88,6 +89,22 @@ fn parse_css(css_content: &str) -> Vec<CssRule> {
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
     rules
+}
+
+fn partition_rules(rules: Vec<CssRule>) -> (Vec<CssRule>, Vec<String>) {
+    let mut considered = Vec::new();
+    let mut skipped = Vec::new();
+
+    for rule in rules {
+        let printable = rule.to_string();
+        if is_simple_selector(&printable) {
+            skipped.push(printable);
+        } else {
+            considered.push(rule);
+        }
+    }
+
+    (considered, skipped)
 }
 
 fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
@@ -596,13 +613,14 @@ fn apply_frame(dom: &mut SimpleDom, frame: &LayoutFrame) {
 
 fn main() {
     let mut dom = SimpleDom::default();
-    let mut css = parse_css(
+    let (mut css, skipped_simple) = partition_rules(parse_css(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
-    );
+    ));
+    report_skipped_selectors("naive", &skipped_simple);
     let trace = parse_trace();
 
     for frame in &trace {
