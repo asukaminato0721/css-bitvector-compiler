@@ -1,13 +1,12 @@
-   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 4.36s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 1 selector(s)
 NOT_CONSIDERED[tri] .a
 PSEUDO_SKIPPED[tri] none
-5077
-3102
+8077
+6410
 BEGIN
 END
-[src/tri.rs:866:5] unsafe { MISS_CNT } = 3
-[src/tri.rs:867:5] unsafe { INPUT_CHANGE_COUNT } = 1
-[src/tri.rs:868:5] unsafe { INPUT_SKIP_COUNT } = 1
+[src/tri.rs:995:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 1

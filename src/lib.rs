@@ -6,7 +6,7 @@ use lightningcss::{
 };
 use parcel_selectors::attr::AttrSelectorOperator;
 use std::{
-    collections::{BTreeMap, HashMap, HashSet},
+    collections::{BTreeMap, BTreeSet, HashMap, HashSet},
     fmt::Display,
 };
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -27,6 +27,50 @@ pub enum Selector {
     Class(String),
     Id(String),
     AttributeEquals { name: String, value: String },
+    Compound(CompoundSelector),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub struct CompoundSelector {
+    pub tag: Option<String>,
+    pub id: Option<String>,
+    pub classes: BTreeSet<String>,
+    pub attributes: Vec<(String, String)>,
+    pub pseudos: BTreeSet<String>,
+}
+
+impl CompoundSelector {
+    fn is_simple_class_only(&self) -> bool {
+        self.id.is_none()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+            && self.classes.len() == 1
+            && self.tag.is_none()
+    }
+
+    fn is_simple_tag_only(&self) -> bool {
+        self.tag.as_deref().is_some()
+            && self.id.is_none()
+            && self.classes.is_empty()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+    }
+
+    fn is_simple_id_only(&self) -> bool {
+        self.id.is_some()
+            && self.tag.is_none()
+            && self.classes.is_empty()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+    }
+
+    fn is_simple_attr_only(&self) -> bool {
+        self.attributes.len() == 1
+            && self.tag.is_none()
+            && self.id.is_none()
+            && self.classes.is_empty()
+            && self.pseudos.is_empty()
+    }
 }
 
 impl Display for Selector {
@@ -38,7 +82,33 @@ impl Display for Selector {
             Selector::AttributeEquals { name, value } => {
                 write!(f, "[{}=\"{}\"]", name, value)
             }
+            Selector::Compound(compound) => write!(f, "{}", compound),
         }
+    }
+}
+
+impl Display for CompoundSelector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut text = String::new();
+        if let Some(tag) = &self.tag {
+            text.push_str(tag);
+        }
+        if let Some(id) = &self.id {
+            text.push('#');
+            text.push_str(id);
+        }
+        for class in &self.classes {
+            text.push('.');
+            text.push_str(class);
+        }
+        for (name, value) in &self.attributes {
+            text.push_str(&format!("[{}=\"{}\"]", name, value));
+        }
+        for pseudo in &self.pseudos {
+            text.push(':');
+            text.push_str(pseudo);
+        }
+        write!(f, "{}", text)
     }
 }
 impl Display for SelectorPart {
@@ -298,6 +368,19 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
         selectors.dedup();
     }
 
+    let mut supported_with_pseudo = Vec::new();
+    pseudo_selectors.retain(|pseudo, sels| {
+        if is_supported_pseudo_class(pseudo) {
+            supported_with_pseudo.extend(sels.iter().cloned());
+            false
+        } else {
+            true
+        }
+    });
+    selectors.extend(supported_with_pseudo);
+    selectors.sort();
+    selectors.dedup();
+
     ParsedSelectors {
         selectors,
         pseudo_selectors,
@@ -371,6 +454,14 @@ pub fn report_pseudo_selectors(label: &str, selectors: &BTreeMap<String, Vec<Str
             println!("PSEUDO_SKIPPED[{label}]    ...");
         }
     }
+}
+
+fn is_supported_pseudo_class(name: &str) -> bool {
+    matches!(normalize_pseudo_name(name), "hover")
+}
+
+fn normalize_pseudo_name(name: &str) -> &str {
+    name.trim_start_matches(':')
 }
 
 enum ComponentConversion {
@@ -688,6 +779,7 @@ impl NFA {
                     Some(Selector::AttributeEquals { name, value }) => {
                         format!("[{}=\"{}\"]", name, value)
                     }
+                    Some(Selector::Compound(comp)) => comp.to_string(),
                     None => format!("sid:{}", sel_id.0),
                 },
             };
@@ -856,19 +948,145 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
 /// 解析CSS选择器字符串并生成对应的选择器对象
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim();
-
-    if trimmed.starts_with('.') {
-        // 类选择器
-        Selector::Class(trimmed[1..].to_string())
-    } else if trimmed.starts_with('#') {
-        // ID选择器
-        Selector::Id(trimmed[1..].to_string())
-    } else if let Some(attribute_selector) = parse_attribute_selector(trimmed) {
-        attribute_selector
-    } else {
-        // 标签选择器
-        Selector::Type(trimmed.to_string())
+    if trimmed.is_empty() {
+        return Selector::Type("*".to_string());
     }
+
+    let mut compound = CompoundSelector::default();
+    let mut pos = 0;
+    let len = trimmed.len();
+
+    while pos < len {
+        let ch = trimmed[pos..].chars().next().unwrap();
+        match ch {
+            '.' => {
+                pos += ch.len_utf8();
+                let (class_name, next_pos) = consume_identifier(trimmed, pos);
+                if !class_name.is_empty() {
+                    compound.classes.insert(class_name.to_ascii_lowercase());
+                }
+                pos = next_pos;
+            }
+            '#' => {
+                pos += ch.len_utf8();
+                let (id_name, next_pos) = consume_identifier(trimmed, pos);
+                if !id_name.is_empty() {
+                    compound.id = Some(id_name);
+                }
+                pos = next_pos;
+            }
+            ':' => {
+                let (pseudo, next_pos) = consume_pseudo(trimmed, pos);
+                if !pseudo.is_empty() {
+                    compound.pseudos.insert(pseudo);
+                }
+                pos = next_pos;
+            }
+            '[' => {
+                if let Some((attribute, next_pos)) = consume_attribute(trimmed, pos) {
+                    compound.attributes.push(attribute);
+                    pos = next_pos;
+                } else {
+                    break;
+                }
+            }
+            '*' => {
+                compound.tag = Some("*".to_string());
+                pos += ch.len_utf8();
+            }
+            _ => {
+                let (tag_name, next_pos) = consume_identifier(trimmed, pos);
+                if !tag_name.is_empty() {
+                    compound.tag = Some(tag_name.to_ascii_lowercase());
+                }
+                pos = next_pos;
+            }
+        }
+    }
+
+    compound.attributes.sort();
+
+    if compound.is_simple_class_only() {
+        let class_name = compound.classes.iter().next().cloned().unwrap_or_default();
+        Selector::Class(class_name)
+    } else if compound.is_simple_id_only() {
+        Selector::Id(compound.id.unwrap())
+    } else if compound.is_simple_attr_only() {
+        let (name, value) = compound.attributes.into_iter().next().unwrap();
+        Selector::AttributeEquals { name, value }
+    } else if compound.is_simple_tag_only() {
+        Selector::Type(compound.tag.unwrap())
+    } else {
+        Selector::Compound(compound)
+    }
+}
+
+fn consume_identifier(selector: &str, start: usize) -> (String, usize) {
+    let mut pos = start;
+    let mut ident = String::new();
+    while pos < selector.len() {
+        let ch = selector[pos..].chars().next().unwrap();
+        if matches!(ch, '.' | '#' | ':' | '[' | ']' | ' ' | '>') {
+            break;
+        }
+        ident.push(ch);
+        pos += ch.len_utf8();
+    }
+    (ident, pos)
+}
+
+fn consume_attribute(selector: &str, start: usize) -> Option<((String, String), usize)> {
+    let remainder = &selector[start..];
+    let closing = remainder.find(']')?;
+    let end = start + closing + 1;
+    let slice = &selector[start..end];
+    if let Some(Selector::AttributeEquals { name, value }) = parse_attribute_selector(slice) {
+        Some(((name, value), end))
+    } else {
+        None
+    }
+}
+
+fn consume_pseudo(selector: &str, start: usize) -> (String, usize) {
+    let mut idx = start;
+    let mut colon_count = 0;
+    while idx < selector.len() {
+        let ch = selector[idx..].chars().next().unwrap();
+        if ch == ':' {
+            colon_count += 1;
+            idx += ch.len_utf8();
+        } else {
+            break;
+        }
+    }
+
+    let mut name = String::new();
+    let mut paren_depth = 0;
+    while idx < selector.len() {
+        let ch = selector[idx..].chars().next().unwrap();
+        if paren_depth == 0 && matches!(ch, '.' | '#' | ':' | '[' | ']') {
+            break;
+        }
+        if ch == '(' {
+            paren_depth += 1;
+        } else if ch == ')' {
+            if paren_depth > 0 {
+                paren_depth -= 1;
+            }
+        }
+        name.push(ch);
+        idx += ch.len_utf8();
+    }
+
+    if colon_count == 0 || name.is_empty() {
+        return (String::new(), idx);
+    }
+
+    let mut pseudo = name.to_ascii_lowercase();
+    if colon_count >= 2 {
+        pseudo = format!("::{}", pseudo);
+    }
+    (pseudo, idx)
 }
 
 pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
@@ -881,6 +1099,66 @@ pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
     }
 }
 
+pub const PSEUDO_CLASS_HOVER: &str = "hover";
+pub const PSEUDO_CLASS_HOVER_ROOT: &str = "hover-root";
+
+pub fn derive_hover_state(pseudo_flags: &HashSet<String>, parent_hover: bool) -> bool {
+    parent_hover
+        || pseudo_flags.contains(PSEUDO_CLASS_HOVER_ROOT)
+        || pseudo_flags.contains(PSEUDO_CLASS_HOVER)
+}
+
+pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
+    fn collect_from_value(value: &serde_json::Value, target: &mut HashSet<String>) {
+        match value {
+            serde_json::Value::Array(items) => {
+                for item in items {
+                    collect_from_value(item, target);
+                }
+            }
+            serde_json::Value::Object(map) => {
+                for (key, val) in map {
+                    let normalized = key.to_ascii_lowercase();
+                    match val {
+                        serde_json::Value::Bool(active) => {
+                            if *active {
+                                target.insert(normalized.clone());
+                            }
+                        }
+                        serde_json::Value::String(s) => {
+                            if !s.is_empty() {
+                                target.insert(s.to_ascii_lowercase());
+                            } else {
+                                target.insert(normalized.clone());
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            serde_json::Value::String(s) => {
+                if !s.is_empty() {
+                    target.insert(s.to_ascii_lowercase());
+                }
+            }
+            _ => {}
+        }
+    }
+
+    let mut result = HashSet::new();
+    for key in [
+        "pseudoclasses",
+        "pseudo_classes",
+        "pseudoclass",
+        "pseudo_class",
+    ] {
+        if let Some(value) = node.get(key) {
+            collect_from_value(value, &mut result);
+        }
+    }
+    result
+}
+
 pub trait AddNode {
     /// 向 DOM 中添加一个新节点。
     /// 返回新节点的索引。
@@ -891,6 +1169,7 @@ pub trait AddNode {
         classes: Vec<String>,
         html_id: Option<String>,
         attributes: HashMap<String, String>,
+        pseudo_classes: HashSet<String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64;
@@ -925,6 +1204,17 @@ mod tests {
                 assert_eq!(value, "item-1");
             }
             other => panic!("expected attribute selector, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn parse_selector_handles_class_and_pseudo() {
+        match parse_selector(".foo:hover") {
+            Selector::Compound(compound) => {
+                assert!(compound.classes.contains("foo"));
+                assert!(compound.pseudos.contains("hover"));
+            }
+            other => panic!("expected compound selector, got {:?}", other),
         }
     }
 }

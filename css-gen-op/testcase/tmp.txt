@@ -1,16 +1,16 @@
 warning: field `frame_id` is never read
-   --> src/naive.rs:273:9
+   --> src/naive.rs:220:9
     |
-272 | struct LayoutFrame {
+219 | struct LayoutFrame {
     |        ----------- field in this struct
-273 |     pub frame_id: usize,
+220 |     pub frame_id: usize,
     |         ^^^^^^^^
     |
     = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 2 selector(s)
 NOT_CONSIDERED[naive] #b

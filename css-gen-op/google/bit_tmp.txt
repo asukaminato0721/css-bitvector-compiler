@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.14s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.13s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 135 selector(s)
 NOT_CONSIDERED[bit] #SIvCob
@@ -157,13 +157,6 @@ PSEUDO_SKIPPED[bit]    eg .gbml1:visited
 PSEUDO_SKIPPED[bit]    eg .gbmlb:visited
 PSEUDO_SKIPPED[bit]    eg .gbmt:visited
 PSEUDO_SKIPPED[bit]    ...
-PSEUDO_SKIPPED[bit] :hover -> 6 selector(s)
-PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[bit]    eg #gssb_b:hover
-PSEUDO_SKIPPED[bit]    eg .gbmt:hover
-PSEUDO_SKIPPED[bit]    eg .gbzt:hover
-PSEUDO_SKIPPED[bit]    eg a.gssb_j:hover
-PSEUDO_SKIPPED[bit]    ...
 PSEUDO_SKIPPED[bit] :after -> 4 selector(s)
 PSEUDO_SKIPPED[bit]    eg #GBMPAL:last-child:after
 PSEUDO_SKIPPED[bit]    eg .GBMCC:last-child:after
@@ -180,50 +173,50 @@ PSEUDO_SKIPPED[bit] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[bit] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-3224
-2301
-2620
-13359
-2242
-4165
-3577
-3524
-2382
-2509
-2628
-2102
-2482
-2601
-2069
-4066
-4218
-2405
-2644
-2852
-2364
-2703
-2254
-2150
-2874
-4384
-2421
-2669
-4964
-3449
-2393
-4027
-4006
-2366
-4282
-2650
-4810
-4473
-2028
-2592
-2305
-2076
-2426
-2557
+3841
+2535
+2302
+4603
+2313
+3946
+2346
+5110
+2542
+2733
+4104
+3316
+2440
+4257
+2259
+2873
+5032
+4635
+2452
+4904
+2503
+2456
+4077
+2429
+3165
+4371
+4704
+2691
+5128
+2346
+2932
+4765
+2945
+4834
+4688
+5123
+3084
+4779
+2427
+2817
+2822
+2555
+5343
+2839
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
@@ -245,4 +238,4 @@ BEGIN
 .gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
 .sblc a -> [431]
 END
-[src/bit.rs:712:5] unsafe { MISS_CNT } = 1777
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 1777

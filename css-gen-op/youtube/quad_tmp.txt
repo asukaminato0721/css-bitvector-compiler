@@ -34,65 +34,66 @@ PSEUDO_SKIPPED[quad] :first-child -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :first-child
 PSEUDO_SKIPPED[quad] :last-child -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :last-child
-9571
-6671
-8093
-9521
-22863
-5082
-8152
-5911
-7139
-6349
-4256
-9508
-6426
-6059
-17516
-29078
-5098
-132090
-53215
-4699
-6022
-17656
-5550
-6781
-8129
-6626
-5435
-6555
-4111
-27207
-28869
-6517
-6807
-6047
-6113
-8995
-6337
-5947
-6219
-21454
-6509
-6000
-6574
-22853
-5915
-6244
-8618
-8093
-8833
-14618
-70962
-499800
-10731
+17894
+11577
+10698
+8795
+29360
+5428
+14815
+6629
+35615
+6424
+4499
+7034
+4483
+4307
+13818
+31161
+7523
+194609
+39629
+5897
+7033
+23084
+5956
+8486
+7154
+8196
+7824
+8703
+4840
+31917
+33872
+7833
+11808
+6623
+7324
+12041
+6831
+7547
+8028
+27259
+7227
+9842
+7298
+29007
+7652
+7241
+10410
+11327
+8796
+15683
+73864
+551059
+11599
 BEGIN
+.ytd-searchbox-spt#search-input input -> [258]
 ytd-masthead #masthead-logo -> [284]
 ytd-masthead #masthead-logo #country-code -> [377]
 ytd-masthead .external-icon -> [274, 291, 336]
 ytd-masthead .yt-icons-ext -> [278]
 END
-[src/quad.rs:965:5] unsafe { MISS_CNT } = 4116
-[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 5229
-[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 5229
+[src/quad.rs:1091:5] unsafe { MISS_CNT } = 4116
+[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 5229
+[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 5229

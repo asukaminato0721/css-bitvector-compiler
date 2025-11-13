@@ -157,13 +157,6 @@ PSEUDO_SKIPPED[quad]    eg .gbml1:visited
 PSEUDO_SKIPPED[quad]    eg .gbmlb:visited
 PSEUDO_SKIPPED[quad]    eg .gbmt:visited
 PSEUDO_SKIPPED[quad]    ...
-PSEUDO_SKIPPED[quad] :hover -> 6 selector(s)
-PSEUDO_SKIPPED[quad]    eg #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[quad]    eg #gssb_b:hover
-PSEUDO_SKIPPED[quad]    eg .gbmt:hover
-PSEUDO_SKIPPED[quad]    eg .gbzt:hover
-PSEUDO_SKIPPED[quad]    eg a.gssb_j:hover
-PSEUDO_SKIPPED[quad]    ...
 PSEUDO_SKIPPED[quad] :after -> 4 selector(s)
 PSEUDO_SKIPPED[quad]    eg #GBMPAL:last-child:after
 PSEUDO_SKIPPED[quad]    eg .GBMCC:last-child:after
@@ -180,50 +173,50 @@ PSEUDO_SKIPPED[quad] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[quad] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-8825
-6093
-13067
-5869
-5214
-93150
-6272
-4219
-8024
-11362
-6329
-5641
-16926
-6213
-77785
-19162
-6229
-6269
-21359
-6910
-6509
-22952
-7829
-6540
-14697
-5657
-5528
-19941
-4449
-5544
-12706
-3893
-5166
-17123
-3853
-5321
-21643
-4579
-6021
-14148
-3851
-5719
-15310
-4858
+7691
+5707
+15146
+7622
+6000
+105597
+7505
+7983
+6686
+12471
+5573
+6175
+20432
+6700
+6444
+93183
+7687
+6888
+16443
+8060
+8813
+35812
+8345
+7300
+17550
+6580
+7803
+21616
+7588
+6051
+16111
+7901
+6205
+17607
+4997
+6450
+20590
+7622
+6300
+18903
+4729
+6446
+19276
+10082
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
@@ -245,6 +238,6 @@ BEGIN
 .gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
 .sblc a -> [431]
 END
-[src/quad.rs:965:5] unsafe { MISS_CNT } = 1777
-[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/quad.rs:1091:5] unsafe { MISS_CNT } = 1777
+[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 8099
+[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 8099

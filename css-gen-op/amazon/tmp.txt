@@ -1,16 +1,16 @@
 warning: field `frame_id` is never read
-   --> src/naive.rs:273:9
+   --> src/naive.rs:220:9
     |
-272 | struct LayoutFrame {
+219 | struct LayoutFrame {
     |        ----------- field in this struct
-273 |     pub frame_id: usize,
+220 |     pub frame_id: usize,
     |         ^^^^^^^^
     |
     = note: `LayoutFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 429 selector(s)
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
@@ -65,11 +65,11 @@ NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_header-link__cUhOK
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_header__1vGdj
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_image-container__2OiZA
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logo__2ZQ-N
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoGap__nKNZ9
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoRectangle__1VJwu
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoSquare__3NZyi
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mixed-button__2og-m
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mobile-close-button__3PB07
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mosaic-card-body__1HmTs
@@ -80,18 +80,17 @@ NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_oneLineTruncation__2WWse
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_overlay__3Sx3u
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_positive-button__3UOC3
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_poster-image__1W0yA
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_show-video__xX4WM._ameyal-product-shoveler_style_video-container__1hKS1
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_smartText__ubpEw
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_stacking-context__3PbQE
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_theming-background-override__1HfzJ
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_theming-text-color__2f7xc
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColorWhite__1zryO
-NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__2LCvL
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColorWhite__1zryO
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_three-pack__5s3hP
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_threeLineTruncation__UkUjj
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_tile-container__1QgAV
@@ -162,11 +161,11 @@ NOT_CONSIDERED[naive] ._cropped-image-link_style_haulRibbon__3VZNi
 NOT_CONSIDERED[naive] ._cropped-image-link_style_header-link__cUhOK
 NOT_CONSIDERED[naive] ._cropped-image-link_style_header__1vGdj
 NOT_CONSIDERED[naive] ._cropped-image-link_style_image-container__2OiZA
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logo__2ZQ-N
 NOT_CONSIDERED[naive] ._cropped-image-link_style_logoGap__nKNZ9
 NOT_CONSIDERED[naive] ._cropped-image-link_style_logoRectangle__1VJwu
-NOT_CONSIDERED[naive] ._cropped-image-link_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._cropped-image-link_style_logoSquare__3NZyi
-NOT_CONSIDERED[naive] ._cropped-image-link_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._cropped-image-link_style_mixed-button__2og-m
 NOT_CONSIDERED[naive] ._cropped-image-link_style_mobile-close-button__3PB07
 NOT_CONSIDERED[naive] ._cropped-image-link_style_mosaic-card-body__1HmTs
@@ -177,17 +176,16 @@ NOT_CONSIDERED[naive] ._cropped-image-link_style_oneLineTruncation__2WWse
 NOT_CONSIDERED[naive] ._cropped-image-link_style_overlay__3Sx3u
 NOT_CONSIDERED[naive] ._cropped-image-link_style_positive-button__3UOC3
 NOT_CONSIDERED[naive] ._cropped-image-link_style_poster-image__1W0yA
-NOT_CONSIDERED[naive] ._cropped-image-link_style_show-video__xX4WM._cropped-image-link_style_video-container__1hKS1
 NOT_CONSIDERED[naive] ._cropped-image-link_style_smartText__ubpEw
 NOT_CONSIDERED[naive] ._cropped-image-link_style_spacer__7Pyg3
 NOT_CONSIDERED[naive] ._cropped-image-link_style_stacking-context__3PbQE
 NOT_CONSIDERED[naive] ._cropped-image-link_style_theming-background-override__1HfzJ
 NOT_CONSIDERED[naive] ._cropped-image-link_style_theming-text-color__2f7xc
-NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColorWhite__1zryO
-NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__2LCvL
 NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColorWhite__1zryO
 NOT_CONSIDERED[naive] ._cropped-image-link_style_three-pack__5s3hP
 NOT_CONSIDERED[naive] ._cropped-image-link_style_threeLineTruncation__UkUjj
 NOT_CONSIDERED[naive] ._cropped-image-link_style_tile-container__1QgAV
@@ -245,8 +243,8 @@ NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_displayCount__1MVut
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_empty-footer__2d59h
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_five-pack__1-Tql
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluid-lazy-video__fInMS
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidFatImageLinkBody__1LsOX
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidFatImageLinkBody__1LsOX
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_four-pack__1ufgr
@@ -258,11 +256,11 @@ NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_header__1vGdj
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_image-container__2OiZA
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_imageLabel__3ANSV
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logo__2ZQ-N
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoGap__nKNZ9
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoRectangle__1VJwu
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoSquare__3NZyi
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mergedLinks__10JqZ
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mixed-button__2og-m
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mobile-close-button__3PB07
@@ -274,18 +272,17 @@ NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_oneLineTruncation__2WWse
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_overlay__3Sx3u
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_positive-button__3UOC3
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_poster-image__1W0yA
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_show-video__xX4WM._fluid-fat-image-link-v2_style_video-container__1hKS1
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_smartText__ubpEw
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_stacking-context__3PbQE
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_theming-background-override__1HfzJ
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_theming-text-color__2f7xc
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColorWhite__1zryO
-NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__2LCvL
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColorWhite__1zryO
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_three-pack__5s3hP
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_threeLineTruncation__UkUjj
 NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_tile-container__1QgAV
@@ -343,8 +340,8 @@ NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_empty-footer__2d59h
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_five-pack__1-Tql
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluid-lazy-video__fInMS
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_four-pack__1ufgr
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gridRowOne__1t0zL
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gridRowTwo__15woW
@@ -357,11 +354,11 @@ NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_image-container__2OiZA
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_imageLabel__3ANSV
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_inlineErrorDetails__1NBx-
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_leftQuadrant__21nVp
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logo__2ZQ-N
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoGap__nKNZ9
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoRectangle__1VJwu
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoSquare__3NZyi
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoSquareContainer__3Paoc
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mixed-button__2og-m
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mobile-close-button__3PB07
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mosaic-card-body__1HmTs
@@ -374,18 +371,17 @@ NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_positive-button__3UOC3
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_poster-image__1W0yA
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_rightQuadrant__PI01n
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_show-video__xX4WM._fluid-quad-image-label-v2_style_video-container__1hKS1
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_smartText__ubpEw
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_spCSRFTreatment__-hwVO
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_stacking-context__3PbQE
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_theming-background-override__1HfzJ
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_theming-text-color__2f7xc
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColorWhite__1zryO
-NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__1YKkf
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__2LCvL
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColorWhite__1zryO
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_three-pack__5s3hP
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_threeLineTruncation__UkUjj
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_tile-container__1QgAV
@@ -398,22 +394,22 @@ NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_video-container__1hKS1
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_wd-backdrop-data__1znxG
 NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_wdHeader__Edrev
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_cardBody__3Rdh1
-NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_categoryImage__35jKN
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_category__3flCQ
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_categoryImage__35jKN
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroCategory__3KS3k
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroImage__2V8-9
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroLink__1EhW2
 NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_leftMost__1LmQB
-NOT_CONSIDERED[naive] ._quad-category-card_fluid_fluidCardBody__3TzJ4
 NOT_CONSIDERED[naive] ._quad-category-card_fluid_fluidCard__3hmFA
+NOT_CONSIDERED[naive] ._quad-category-card_fluid_fluidCardBody__3TzJ4
 NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container-full-height__MOKlF
 NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container-white-box__3Stwp
 NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container__LRY5p
 NOT_CONSIDERED[naive] ._quad-category-card_image_round-corners__22iOW
 NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_cardBody__3ODbW
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_category__1amt4
 NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_categoryContainer__2xY0I
 NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_categoryImage__3hSFw
-NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_category__1amt4
 NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_heroImage__1SewP
 NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_leftMost__3WtU6
 NOT_CONSIDERED[naive] ._quad-category-card_style_dashboard-card-with-border__1e4z_
@@ -422,22 +418,26 @@ NOT_CONSIDERED[naive] ._quad-category-card_style_gwm-link-footer__3EX7d
 NOT_CONSIDERED[naive] ._quad-category-card_style_heading__1mnEu
 NOT_CONSIDERED[naive] ._quad-category-card_style_themingTextColor__1w6Ut
 NOT_CONSIDERED[naive] ._text-link-stripe-v2_style_textlinkstripe__3aQhz
-NOT_CONSIDERED[naive] .a-size-base-plus.truncate-2line
-NOT_CONSIDERED[naive] .a-size-base.truncate-2line
-NOT_CONSIDERED[naive] .a-size-large.truncate-2line
-NOT_CONSIDERED[naive] .a-size-medium.truncate-2line
-NOT_CONSIDERED[naive] .a-size-small.truncate-2line
 NOT_CONSIDERED[naive] .gw-card-layout
 NOT_CONSIDERED[naive] .nav-access-image
-NOT_CONSIDERED[naive] .nav-focus#navSwmHolidaydiv
 NOT_CONSIDERED[naive] .nav-spinner
 NOT_CONSIDERED[naive] .nav-timeline-icon
 NOT_CONSIDERED[naive] .nav-timeline-prime-icon
-NOT_CONSIDERED[naive] .single-slide-hero.tall#gw-desktop-herotator
-NOT_CONSIDERED[naive] .tall#gw-desktop-herotator
 NOT_CONSIDERED[naive] .truncate-1line
 NOT_CONSIDERED[naive] .truncate-2line
 NOT_CONSIDERED[naive] .truncate-2lineh2
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_show-video__xX4WM._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._cropped-image-link_style_show-video__xX4WM._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_show-video__xX4WM._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_show-video__xX4WM._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] .a-size-base.truncate-2line
+NOT_CONSIDERED[naive] .a-size-base-plus.truncate-2line
+NOT_CONSIDERED[naive] .a-size-large.truncate-2line
+NOT_CONSIDERED[naive] .a-size-medium.truncate-2line
+NOT_CONSIDERED[naive] .a-size-small.truncate-2line
+NOT_CONSIDERED[naive] .single-slide-hero.tall#gw-desktop-herotator
+NOT_CONSIDERED[naive] .tall#gw-desktop-herotator
+NOT_CONSIDERED[naive] .nav-focus#navSwmHolidaydiv
 NOT_CONSIDERED[naive] #gw-desktop-herotator
 NOT_CONSIDERED[naive] #icp-touch-link-cop
 NOT_CONSIDERED[naive] #icp-touch-link-country
@@ -476,13 +476,6 @@ PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :hover -> 12 selector(s)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:hover ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover
-PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:hover ._cropped-image-link_style_close-black-icon__3hkbe
 PSEUDO_SKIPPED[naive]    ...
 PSEUDO_SKIPPED[naive] :first-child -> 8 selector(s)
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
@@ -531,10 +524,6 @@ PSEUDO_SKIPPED[naive] :last-child -> 2 selector(s)
 PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
 PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui:last-child
 BEGIN
-._cropped-image-link_style_fluidImageContainer__2jd50 ._cropped-image-link_style_fluidImage__iJ3aE -> [1671]
-._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr ._fluid-fat-image-link-v2_style_fluidImage__gTBjA -> [1861, 2884, 5193]
-._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr ._fluid-quad-image-label-v2_style_fluidImage__gTBjA -> [1928, 1946, 1966, 1984, 2057, 2075, 2095, 2113, 2186, 2204, 2224, 2242, 2506, 2524, 2544, 2562, 2635, 2653, 2673, 2691, 2764, 2782, 2802, 2820, 3376, 3394, 3414, 3432, 3505, 3523, 3543, 3561, 3634, 3652, 3672, 3690, 3768, 3786, 3806, 3824, 4287, 4305, 4325, 4343, 4416, 4434, 4454, 4472, 4550, 4568, 4588, 4606, 4679, 4697, 4717, 4735, 5261, 5279, 5299, 5317, 5389, 5407, 5427, 5445, 5517, 5535, 5555, 5573]
-._quad-category-card_style_fluidImageContainer__2jd50 ._quad-category-card_style_fluidImage__iJ3aE -> [2336, 2367, 2396, 2425]
 .gw-card-layout [data-order-ws="1"] -> [1822]
 .gw-card-layout [data-order-ws="10"] -> [2852, 4773, 4958]
 .gw-card-layout [data-order-ws="11"] -> [4965, 5150]
@@ -557,5 +546,17 @@ BEGIN
 .gw-card-layout h2 -> [1851, 1913, 2042, 2171, 2310, 2491, 2620, 2749, 2874, 2978, 3173, 3361, 3490, 3619, 3753, 3892, 4084, 4272, 4401, 4535, 4664, 4803, 4995, 5183, 5246, 5374, 5502, 5641]
 .nav-sprite-v1 .nav-icon -> [910, 1234, 1268, 1287, 1323]
 .nav-sprite-v1 .nav-sprite -> [771, 774, 804, 898, 1164, 1167, 1306, 1340, 1361, 6237, 6833]
+[data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
+[data-flow-dir="h"].gw-card-layout > .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout > .gw-col -> [1822, 1884, 2016, 2145, 2281, 2465, 2594, 2723, 2859, 2945, 3143, 3335, 3464, 3593, 3727, 3862, 4054, 4246, 4375, 4509, 4638, 4773, 4965, 5157, 5221, 5349, 5477, 5611]
+[data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-flow-dir="h"].gw-card-layout .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout .gw-auto-height -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-flow-dir="h"].gw-card-layout -> [1814, 2940]
+.tall#gw-desktop-herotator .a-carousel-container -> [1605]
+.tall#gw-desktop-herotator .a-carousel-controls -> [1617]
+.tall#gw-desktop-herotator .a-carousel-left -> [1621]
+.tall#gw-desktop-herotator .a-carousel-right -> [1748]
+.tall#gw-desktop-herotator .a-carousel-viewport -> [1634]
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
 END

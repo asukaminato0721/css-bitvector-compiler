@@ -1,11 +1,10 @@
-   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
-    Finished `release` profile [optimized + debuginfo] target(s) in 3.97s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 1 selector(s)
 NOT_CONSIDERED[bit] .a
 PSEUDO_SKIPPED[bit] none
-5197
-3173
+5804
+3697
 BEGIN
 END
-[src/bit.rs:712:5] unsafe { MISS_CNT } = 3
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 3

@@ -1,29 +1,29 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.14s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 3 selector(s)
 NOT_CONSIDERED[quad] .container-dark
 NOT_CONSIDERED[quad] .emph.leaf
 NOT_CONSIDERED[quad] .leaf
 PSEUDO_SKIPPED[quad] none
-7363
-4818
-4021
-4234
-3842
-3946
-3745
-3843
-4102
-4149
-4226
-4480
-4382
-3865
-3810
-3660
-3997
+8134
+6734
+6600
+6031
+4569
+7389
+6528
+4315
+4410
+4513
+4950
+4179
+4246
+4186
+4109
+3958
+6467
 BEGIN
 END
-[src/quad.rs:965:5] unsafe { MISS_CNT } = 81
-[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 1024
-[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 1024
+[src/quad.rs:1091:5] unsafe { MISS_CNT } = 81
+[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 1024
+[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 1024

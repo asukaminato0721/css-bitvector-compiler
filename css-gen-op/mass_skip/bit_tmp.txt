@@ -1,27 +1,27 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.16s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 3 selector(s)
 NOT_CONSIDERED[bit] .container-dark
 NOT_CONSIDERED[bit] .emph.leaf
 NOT_CONSIDERED[bit] .leaf
 PSEUDO_SKIPPED[bit] none
-8129
-4135
-4346
-3919
-3569
-3473
-3634
-3778
-3528
-3646
-3778
-4111
-3646
-3684
-3676
-3542
-3427
+11161
+8426
+7621
+8358
+8342
+5854
+3762
+4250
+4581
+4560
+4002
+4003
+3977
+4131
+4011
+4076
+3648
 BEGIN
 END
-[src/bit.rs:712:5] unsafe { MISS_CNT } = 81
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 81

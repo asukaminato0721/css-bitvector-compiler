@@ -4,25 +4,24 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    Command, is_simple_selector, json_value_to_attr_string, parse_command,
-    parse_css_with_pseudo as shared_parse_css_with_pseudo, report_pseudo_selectors,
-    report_skipped_selectors,
+    Command, CompoundSelector, PSEUDO_CLASS_HOVER, Selector, derive_hover_state,
+    extract_pseudoclasses, is_simple_selector, json_value_to_attr_string, parse_command,
+    parse_css_with_pseudo as shared_parse_css_with_pseudo, parse_selector as shared_parse_selector,
+    report_pseudo_selectors, report_skipped_selectors,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum CssRule {
-    Complex { parts: Vec<SelectorPart> },
+    Complex {
+        parts: Vec<SelectorPart>,
+        source: String,
+    },
 }
 
 impl Display for CssRule {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            CssRule::Complex { parts } => {
-                for part in parts {
-                    write!(f, "{}", part)?;
-                }
-                Ok(())
-            }
+            CssRule::Complex { source, .. } => write!(f, "{}", source),
         }
     }
 }
@@ -57,27 +56,6 @@ impl Display for Combinator {
             Combinator::Descendant => write!(f, " "),
             Combinator::Child => write!(f, ">"),
             Combinator::None => write!(f, ""),
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Selector {
-    Type(String),
-    Class(String),
-    Id(String),
-    AttributeEquals { name: String, value: String },
-}
-
-impl Display for Selector {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Selector::Type(tag) => write!(f, "{}", tag),
-            Selector::Class(class) => write!(f, ".{}", class),
-            Selector::Id(id) => write!(f, "#{}", id),
-            Selector::AttributeEquals { name, value } => {
-                write!(f, "[{}=\"{}\"]", name, value)
-            }
         }
     }
 }
@@ -119,7 +97,10 @@ fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
     for token in tokens {
         match token {
             RuleToken::Selector(text) => {
-                let selector = parse_simple_selector(&text)?;
+                if text.trim().is_empty() {
+                    continue;
+                }
+                let selector = shared_parse_selector(&text);
                 if let Some(prev) = current_selector.replace(selector) {
                     parts.push(SelectorPart {
                         selector: prev,
@@ -152,45 +133,11 @@ fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
     if parts.is_empty() {
         None
     } else {
-        Some(CssRule::Complex { parts })
+        Some(CssRule::Complex {
+            parts,
+            source: selector.trim().to_string(),
+        })
     }
-}
-
-fn parse_simple_selector(selector_str: &str) -> Option<Selector> {
-    let trimmed = selector_str.trim();
-    if trimmed.is_empty() {
-        return None;
-    }
-    if trimmed.starts_with('.') {
-        Some(Selector::Class(trimmed[1..].to_string()))
-    } else if trimmed.starts_with('#') {
-        Some(Selector::Id(trimmed[1..].to_string()))
-    } else if trimmed.starts_with('[') {
-        parse_attribute_selector(trimmed)
-    } else if trimmed == "*" {
-        Some(Selector::Type("*".to_string()))
-    } else {
-        Some(Selector::Type(trimmed.to_lowercase()))
-    }
-}
-
-fn parse_attribute_selector(raw: &str) -> Option<Selector> {
-    let raw = raw.trim();
-    if !raw.starts_with('[') || !raw.ends_with(']') {
-        return None;
-    }
-    let inner = &raw[1..raw.len() - 1];
-    let mut parts = inner.splitn(2, '=');
-    let name = parts.next()?.trim().to_lowercase();
-    let value_part = parts.next()?.trim();
-
-    if !value_part.starts_with('"') || !value_part.ends_with('"') || value_part.len() < 2 {
-        return None;
-    }
-    let mut value = value_part[1..value_part.len() - 1].to_string();
-    value = value.replace("\\\"", "\"");
-
-    Some(Selector::AttributeEquals { name, value })
 }
 
 #[derive(Debug)]
@@ -311,6 +258,8 @@ struct SimpleDomNode {
     html_id: Option<String>,
     attributes: HashMap<String, String>,
     classes: HashSet<String>,
+    pseudo_classes: HashSet<String>,
+    computed_pseudo_classes: HashSet<String>,
     parent: Option<u64>,
     children: Vec<u64>,
 }
@@ -341,6 +290,7 @@ impl SimpleDomNode {
             .map(|x| x.to_string())
             .collect();
         node.attributes = attributes;
+        node.pseudo_classes = extract_pseudoclasses(json_node);
         node
     }
 
@@ -478,6 +428,30 @@ impl SimpleDom {
         }
     }
 
+    fn recompute_pseudo_states(&mut self) {
+        if let Some(root_id) = self.root_id {
+            self.refresh_pseudo_recursive(root_id, false);
+        }
+    }
+
+    fn refresh_pseudo_recursive(&mut self, node_id: u64, parent_hover: bool) {
+        let mut hover_active = parent_hover;
+        if let Some(node) = self.nodes.get_mut(&node_id) {
+            hover_active = derive_hover_state(&node.pseudo_classes, parent_hover);
+            if hover_active {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_HOVER.to_string());
+            } else {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_HOVER);
+            }
+        }
+        if let Some(children) = self.nodes.get(&node_id).map(|n| n.children.clone()) {
+            for child_id in children {
+                self.refresh_pseudo_recursive(child_id, hover_active);
+            }
+        }
+    }
+
     fn matches_simple_selector(&self, node_id: u64, selector: &Selector) -> bool {
         let Some(node) = self.nodes.get(&node_id) else {
             return false;
@@ -497,7 +471,43 @@ impl SimpleDom {
                 .get(name)
                 .map(|v| v == value)
                 .unwrap_or(false),
+            Selector::Compound(compound) => self.matches_compound_selector(node, compound),
         }
+    }
+
+    fn matches_compound_selector(&self, node: &SimpleDomNode, compound: &CompoundSelector) -> bool {
+        if let Some(tag) = &compound.tag {
+            if tag != "*" && !node.tag_name.eq_ignore_ascii_case(tag) {
+                return false;
+            }
+        }
+        if let Some(id_value) = &compound.id {
+            if node.html_id.as_deref() != Some(id_value.as_str()) {
+                return false;
+            }
+        }
+        for class_name in &compound.classes {
+            if !node.classes.contains(class_name) {
+                return false;
+            }
+        }
+        for (name, value) in &compound.attributes {
+            if node
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false)
+            {
+                continue;
+            }
+            return false;
+        }
+        for pseudo in &compound.pseudos {
+            if !node.computed_pseudo_classes.contains(pseudo) {
+                return false;
+            }
+        }
+        true
     }
 
     fn matches_complex_selector(&self, node_id: u64, parts: &[SelectorPart]) -> bool {
@@ -547,7 +557,7 @@ impl SimpleDom {
 
     fn matches_css_rule(&self, node_id: u64, rule: &CssRule) -> bool {
         match rule {
-            CssRule::Complex { parts } => self.matches_complex_selector(node_id, parts),
+            CssRule::Complex { parts, .. } => self.matches_complex_selector(node_id, parts),
         }
     }
 
@@ -559,7 +569,8 @@ impl SimpleDom {
             .collect()
     }
 
-    fn print_css_matches(&self, rules: &mut [CssRule]) {
+    fn print_css_matches(&mut self, rules: &mut [CssRule]) {
+        self.recompute_pseudo_states();
         rules.sort_by_key(|x| format!("{x:?}"));
         for rule in rules.iter() {
             let mut matches = self.collect_rule_matches(rule);
@@ -568,7 +579,8 @@ impl SimpleDom {
             }
             matches.sort_unstable();
             matches.dedup();
-            println!("{} -> {:?}", rule, matches);
+            let printable = rule.to_string().replace('>', " > ");
+            println!("{} -> {:?}", printable, matches);
         }
     }
 }
@@ -651,7 +663,7 @@ mod test {
         let (rules, _) = parse_css(r#"[data-role="hero"] { color: red; }"#);
         assert_eq!(rules.len(), 1);
         match &rules[0] {
-            CssRule::Complex { parts } => {
+            CssRule::Complex { parts, .. } => {
                 assert_eq!(parts.len(), 1);
                 match &parts[0].selector {
                     Selector::AttributeEquals { name, value } => {
@@ -687,13 +699,21 @@ mod test {
     }
 
     #[test]
-    fn parse_css_skips_pseudo_classes() {
+    fn parse_css_handles_pseudo_classes() {
         let (rules, pseudo) = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
-        assert_eq!(pseudo.len(), 1);
-        assert_eq!(
-            pseudo.get(":hover"),
-            Some(&vec![".wrapper .item:hover strong".to_string()])
-        );
-        assert!(rules.is_empty());
+        assert!(pseudo.get(":hover").is_none());
+        assert_eq!(rules.len(), 1);
+        match &rules[0] {
+            CssRule::Complex { parts, .. } => {
+                assert_eq!(parts.len(), 3);
+                match &parts[1].selector {
+                    Selector::Compound(comp) => {
+                        assert!(comp.classes.contains("item"));
+                        assert!(comp.pseudos.contains("hover"));
+                    }
+                    other => panic!("expected compound selector, got {:?}", other),
+                }
+            }
+        }
     }
 }

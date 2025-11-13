@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 139 selector(s)
 NOT_CONSIDERED[quad] #searchInput
@@ -140,13 +140,6 @@ NOT_CONSIDERED[quad] td
 NOT_CONSIDERED[quad] textarea
 NOT_CONSIDERED[quad] th
 NOT_CONSIDERED[quad] video
-PSEUDO_SKIPPED[quad] :hover -> 16 selector(s)
-PSEUDO_SKIPPED[quad]    eg #searchInput:hover
-PSEUDO_SKIPPED[quad]    eg .banner__button:hover
-PSEUDO_SKIPPED[quad]    eg .central-featured-lang .link-box:hover strong
-PSEUDO_SKIPPED[quad]    eg .central-featured-lang :hover
-PSEUDO_SKIPPED[quad]    eg .lang-list-button:hover
-PSEUDO_SKIPPED[quad]    ...
 PSEUDO_SKIPPED[quad] :focus -> 12 selector(s)
 PSEUDO_SKIPPED[quad]    eg #searchInput:focus
 PSEUDO_SKIPPED[quad]    eg .lang-list-button:focus
@@ -202,15 +195,16 @@ PSEUDO_SKIPPED[quad] :not -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg audio:not([controls])
 PSEUDO_SKIPPED[quad] :root -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg :root
-6712
-5896
-7395
-10618
-7166
-5459
+8492
+6201
+7336
+8896
+8425
+5613
 BEGIN
 .app-badge a -> [3901, 3916]
 .app-badges .footer-sidebar-content -> [3871]
+.app-badges .footer-sidebar-icon.sprite -> [3877]
 .app-badges .footer-sidebar-text -> [3874]
 .app-badges ul -> [3896]
 .banner * -> [3480, 3483, 3486, 3490, 3493, 3499, 3500, 3505, 3508, 3510, 3513, 3516, 3519, 3521, 3523, 3525, 3526, 3528, 3529, 3531, 3532, 3533, 3535, 3536, 3538, 3539, 3541, 3542, 3543, 3545, 3546, 3549, 3552, 3555, 3557, 3558, 3560, 3561, 3562, 3563, 3565, 3566, 3568, 3569, 3570, 3572, 3573, 3574, 3576, 3577, 3580, 3584, 3586, 3591, 3594, 3596, 3601, 3603, 3605, 3607, 3612, 3614, 3616, 3618, 3623, 3625, 3627, 3629, 3634, 3636, 3638, 3640, 3645, 3647, 3649, 3651, 3656, 3658, 3660, 3662, 3667, 3671, 3674, 3676, 3678, 3682, 3684, 3689, 3691, 3693, 3698, 3702, 3706, 3708, 3711, 3714, 3721, 3724, 3728, 3730, 3732, 3735, 3738, 3740, 3743, 3748, 3751, 3756, 3759, 3765, 3766, 3771, 3776, 3780, 3783, 3786, 3788, 3795, 3798, 3802, 3804, 3806, 3807, 3808, 3810, 3811, 3813, 3814, 3815, 3816, 3817, 3820, 3823, 3826]
@@ -228,6 +222,9 @@ BEGIN
 .js-enabled .central-featured -> [113]
 .js-enabled .jsl10n -> [106, 1070, 1103, 1261, 1676, 2399, 3275, 3464, 3847, 3859, 3880, 3884, 3891, 3906, 3921, 3954, 3959, 3984, 3989, 4014, 4019, 4044, 4049, 4074, 4079, 4104, 4109, 4134, 4139, 4164, 4169, 4194, 4199, 4224, 4229, 4254, 4259, 4284, 4289, 4314, 4319, 4333, 4341, 4348]
 .js-enabled .lang-list-container -> [1083]
+.js-enabled.styled-select .hide-arrow -> [406]
+.js-enabled.styled-select select -> [409]
+.js-enabled.styled-select select option -> [429, 435, 444, 453, 460, 467, 476, 485, 494, 503, 510, 517, 524, 531, 538, 545, 554, 562, 571, 578, 585, 594, 601, 610, 619, 628, 637, 644, 651, 658, 667, 676, 683, 690, 697, 704, 711, 720, 727, 736, 745, 754, 761, 770, 777, 786, 793, 800, 809, 816, 823, 830, 837, 844, 851, 858, 865, 874, 881, 888, 895, 902, 909, 918, 925, 934, 943, 952, 961, 968, 977, 986, 993, 1000, 1009, 1018]
 .jsl10n-visible .central-featured -> [113]
 .jsl10n-visible .jsl10n -> [106, 1070, 1103, 1261, 1676, 2399, 3275, 3464, 3847, 3859, 3880, 3884, 3891, 3906, 3921, 3954, 3959, 3984, 3989, 4014, 4019, 4044, 4049, 4074, 4079, 4104, 4109, 4134, 4139, 4164, 4169, 4194, 4199, 4224, 4229, 4254, 4259, 4284, 4289, 4314, 4319, 4333, 4341, 4348]
 .lang-list-button i -> [1067, 1075]
@@ -260,16 +257,19 @@ BEGIN
 .overlay-banner-mini .frb-submit -> [3823]
 .overlay-banner-mini-message h3 -> [3786]
 .overlay-banner-mini-message p -> [3806, 3813]
+.pure-form [type="search"]input -> [387]
 .pure-form fieldset -> [370]
 .search-container .js-langpicker-label -> [5798]
 .search-container .search-input -> [377]
+.search-container .svg-arrow-down.sprite -> [1031]
 .search-container button -> [1036]
 .search-container button .svg-search-icon -> [1040]
 .search-container fieldset -> [370]
 .styled-select .hide-arrow -> [406]
 .styled-select select -> [409]
+[type="search"]input -> [387]
 html input -> [372, 387, 1046, 3586, 3596, 3607, 3618, 3629, 3640, 3651, 3662, 3684, 3693]
 END
-[src/quad.rs:965:5] unsafe { MISS_CNT } = 3963
-[src/quad.rs:966:5] unsafe { INPUT_CHANGE_COUNT } = 2102
-[src/quad.rs:967:5] unsafe { INPUT_SKIP_COUNT } = 67
+[src/quad.rs:1091:5] unsafe { MISS_CNT } = 3963
+[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 2102
+[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 67

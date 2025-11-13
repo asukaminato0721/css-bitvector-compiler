@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 135 selector(s)
 NOT_CONSIDERED[tri] #SIvCob
@@ -157,13 +157,6 @@ PSEUDO_SKIPPED[tri]    eg .gbml1:visited
 PSEUDO_SKIPPED[tri]    eg .gbmlb:visited
 PSEUDO_SKIPPED[tri]    eg .gbmt:visited
 PSEUDO_SKIPPED[tri]    ...
-PSEUDO_SKIPPED[tri] :hover -> 6 selector(s)
-PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:hover
-PSEUDO_SKIPPED[tri]    eg #gssb_b:hover
-PSEUDO_SKIPPED[tri]    eg .gbmt:hover
-PSEUDO_SKIPPED[tri]    eg .gbzt:hover
-PSEUDO_SKIPPED[tri]    eg a.gssb_j:hover
-PSEUDO_SKIPPED[tri]    ...
 PSEUDO_SKIPPED[tri] :after -> 4 selector(s)
 PSEUDO_SKIPPED[tri]    eg #GBMPAL:last-child:after
 PSEUDO_SKIPPED[tri]    eg .GBMCC:last-child:after
@@ -180,50 +173,50 @@ PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[tri] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-3190
-1971
-2847
-4495
-2687
-4743
-2431
-2542
-2951
-2680
-2287
-1917
-2255
-2486
-2312
-2716
-2567
-2587
-3074
-2699
-2121
-2758
-2551
-2073
-2912
-5090
-2153
-3366
-2663
-2312
-3492
-2506
-3695
-3007
-2265
-1806
-7419
-5329
-4003
-8269
-4427
-4422
-3752
-2594
+4188
+4350
+2756
+2726
+2719
+3513
+2904
+18826
+2371
+3441
+2893
+2415
+2453
+2792
+2342
+4080
+3467
+2529
+4023
+4840
+2804
+6732
+5302
+4161
+6416
+5578
+5247
+7630
+5554
+5376
+7052
+12423
+3914
+6476
+7932
+5345
+5909
+5591
+2438
+8121
+7841
+4475
+3761
+2525
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
@@ -245,6 +238,6 @@ BEGIN
 .gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
 .sblc a -> [431]
 END
-[src/tri.rs:866:5] unsafe { MISS_CNT } = 1777
-[src/tri.rs:867:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/tri.rs:868:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/tri.rs:995:5] unsafe { MISS_CNT } = 1777
+[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 8099
+[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 8099

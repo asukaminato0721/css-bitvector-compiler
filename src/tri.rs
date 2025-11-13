@@ -1,6 +1,7 @@
 use css_bitvector_compiler::{
-    AddNode, Command, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    encode, generate_nfa, json_value_to_attr_string, parse_css_with_pseudo, parse_trace,
+    AddNode, Command, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_HOVER, Rule,
+    Selector, SelectorId, SelectorManager, derive_hover_state, encode, extract_pseudoclasses,
+    generate_nfa, json_value_to_attr_string, parse_css_with_pseudo, parse_trace,
     partition_simple_selectors, rdtsc, report_pseudo_selectors, report_skipped_selectors,
 };
 use std::{
@@ -67,12 +68,14 @@ impl DirtyState {
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: SelectorId,                  // 标签选择器ID
-    pub class_ids: HashSet<SelectorId>,      // CSS类选择器ID集合
-    pub id_selector_id: Option<SelectorId>,  // HTML ID选择器ID
-    pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
-    pub parent: Option<u64>,                 // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,                  // 存储子节点在 arena 中的索引
+    pub tag_id: SelectorId,                       // 标签选择器ID
+    pub class_ids: HashSet<SelectorId>,           // CSS类选择器ID集合
+    pub id_selector_id: Option<SelectorId>,       // HTML ID选择器ID
+    pub attributes: HashMap<String, String>,      // 节点属性键值对（小写键）
+    pub pseudo_classes: HashSet<String>,          // 原始伪类集合
+    pub computed_pseudo_classes: HashSet<String>, // 计算后的伪类状态
+    pub parent: Option<u64>,                      // 存储父节点在 arena 中的索引
+    pub children: Vec<u64>,                       // 存储子节点在 arena 中的索引
     pub dirty: DirtyState,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
@@ -123,6 +126,7 @@ impl AddNode for DOM {
         classes: Vec<String>,
         html_id: Option<String>,
         attributes: HashMap<String, String>,
+        pseudo_classes: HashSet<String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64 {
@@ -138,11 +142,23 @@ impl AddNode for DOM {
             .as_ref()
             .map(|id| sm.get_or_create_id(Selector::Id(id.clone())));
 
+        let parent_hover_active = parent_index
+            .and_then(|pid| self.nodes.get(&pid))
+            .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
+            .unwrap_or(false);
+
+        let mut computed_pseudo_classes = HashSet::new();
+        if derive_hover_state(&pseudo_classes, parent_hover_active) {
+            computed_pseudo_classes.insert(PSEUDO_CLASS_HOVER.to_string());
+        }
+
         let mut new_node = DOMNode {
             tag_id,
             class_ids,
             id_selector_id,
             attributes,
+            pseudo_classes,
+            computed_pseudo_classes,
             parent: parent_index,
             children: Vec::new(),
             dirty: DirtyState::NodeChanged,
@@ -226,6 +242,68 @@ impl DOM {
                 .get(name)
                 .map(|v| v == value)
                 .unwrap_or(false),
+            Some(Selector::Compound(compound)) => self.node_matches_compound(node, compound),
+            None => false,
+        }
+    }
+
+    fn node_matches_compound(&self, node: &DOMNode, compound: &CompoundSelector) -> bool {
+        if let Some(tag) = &compound.tag {
+            if !self.node_has_tag(node, tag) {
+                return false;
+            }
+        }
+        if let Some(id_value) = &compound.id {
+            if !self.node_has_id(node, id_value) {
+                return false;
+            }
+        }
+        for class_name in &compound.classes {
+            if !self.node_has_class(node, class_name) {
+                return false;
+            }
+        }
+        for (name, value) in &compound.attributes {
+            if !node
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false)
+            {
+                return false;
+            }
+        }
+        for pseudo in &compound.pseudos {
+            if !node.computed_pseudo_classes.contains(pseudo) {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn node_has_class(&self, node: &DOMNode, class_name: &str) -> bool {
+        let selector = Selector::Class(class_name.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(class_id) => node.class_ids.contains(&class_id),
+            None => false,
+        }
+    }
+
+    fn node_has_id(&self, node: &DOMNode, id_value: &str) -> bool {
+        let selector = Selector::Id(id_value.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(id) => node.id_selector_id == Some(id),
+            None => false,
+        }
+    }
+
+    fn node_has_tag(&self, node: &DOMNode, tag_name: &str) -> bool {
+        if tag_name == "*" {
+            return true;
+        }
+        let selector = Selector::Type(tag_name.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(tag_id) => node.tag_id == tag_id,
             None => false,
         }
     }
@@ -247,19 +325,67 @@ impl DOM {
 
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
     pub fn set_node_dirty(&mut self, node_idx: u64) {
-        let node = self.nodes.get_mut(&node_idx).unwrap();
-        node.mark_node_changed();
+        let parent_idx = {
+            let node = self.nodes.get_mut(&node_idx).unwrap();
+            node.mark_node_changed();
+            node.parent
+        };
+        self.propagate_recursive_dirty(parent_idx);
+    }
 
-        // 向上传播 recursive_dirty
-        let mut current_idx = node.parent;
+    fn propagate_recursive_dirty(&mut self, mut current_idx: Option<u64>) {
         while let Some(parent_idx) = current_idx {
-            let parent_node = self.nodes.get_mut(&parent_idx).unwrap();
+            let parent_node = match self.nodes.get_mut(&parent_idx) {
+                Some(node) => node,
+                None => break,
+            };
 
             if parent_node.recursive_dirty {
-                break; // 如果父节点已经设置了recursive_dirty，停止传播
+                break;
             }
             parent_node.recursive_dirty = true;
             current_idx = parent_node.parent;
+        }
+    }
+
+    fn refresh_computed_pseudos(&mut self, node_idx: u64) {
+        let (parent_idx, parent_hover) = {
+            let node = &self.nodes[&node_idx];
+            let parent_hover = node
+                .parent
+                .and_then(|pid| self.nodes.get(&pid))
+                .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
+                .unwrap_or(false);
+            (node.parent, parent_hover)
+        };
+
+        let mut changed = false;
+        {
+            let node = self.nodes.get_mut(&node_idx).unwrap();
+            let hover_active = derive_hover_state(&node.pseudo_classes, parent_hover);
+            let had_hover = node.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER);
+            if hover_active && !had_hover {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_HOVER.to_string());
+                if node.dirty == DirtyState::Clean {
+                    node.mark_input_changed();
+                } else {
+                    node.recursive_dirty = true;
+                }
+                changed = true;
+            } else if !hover_active && had_hover {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_HOVER);
+                if node.dirty == DirtyState::Clean {
+                    node.mark_input_changed();
+                } else {
+                    node.recursive_dirty = true;
+                }
+                changed = true;
+            }
+        }
+
+        if changed {
+            self.propagate_recursive_dirty(parent_idx);
         }
     }
     fn json_to_html_node(
@@ -292,6 +418,7 @@ impl DOM {
             .filter(|s| !s.is_empty())
             .map(String::from)
             .collect::<Vec<String>>();
+        let pseudo_classes = extract_pseudoclasses(json_node);
 
         // 创建当前节点
         let current_index = self.add_node(
@@ -300,6 +427,7 @@ impl DOM {
             classes.clone(),
             html_id,
             attributes,
+            pseudo_classes,
             parent_index,
             nfa,
         );
@@ -437,6 +565,7 @@ impl DOM {
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         let node_descriptor = self.describe_node(node_idx);
+        self.refresh_computed_pseudos(node_idx);
         let (
             was_recursive_dirty,
             dirty_state,

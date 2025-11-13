@@ -1,14 +1,14 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 2 selector(s)
 NOT_CONSIDERED[tri] #b
 NOT_CONSIDERED[tri] #bb
 PSEUDO_SKIPPED[tri] none
-3855
+3956
 BEGIN
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/tri.rs:866:5] unsafe { MISS_CNT } = 7
-[src/tri.rs:867:5] unsafe { INPUT_CHANGE_COUNT } = 6
-[src/tri.rs:868:5] unsafe { INPUT_SKIP_COUNT } = 6
+[src/tri.rs:995:5] unsafe { MISS_CNT } = 7
+[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 6
+[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 6
