@@ -11,6 +11,60 @@ use std::{
 };
 
 pub mod runtime_shared;
+
+// Helpers used by naive implementation
+mod naive_util {
+    use crate::extract_pseudoclasses;
+    use std::collections::{HashMap, HashSet};
+
+    #[derive(Debug)]
+    pub struct BasicNode {
+        pub tag_name: String,
+        pub id: u64,
+        pub attributes: HashMap<String, String>,
+        pub classes: HashSet<String>,
+        pub html_id: Option<String>,
+        pub pseudo_classes: HashSet<String>,
+    }
+
+    pub fn basic_node_from_json(json_node: &serde_json::Value) -> BasicNode {
+        let tag_name = json_node["name"].as_str().unwrap().to_string();
+        let id = json_node["id"].as_u64().unwrap();
+        let attributes = json_node["attributes"]
+            .as_object()
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
+
+        let html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
+        let classes = class_attr
+            .split_whitespace()
+            .filter(|s| !s.is_empty())
+            .map(String::from)
+            .collect::<HashSet<_>>();
+        let pseudo_classes = extract_pseudoclasses(json_node);
+
+        BasicNode {
+            tag_name,
+            id,
+            attributes,
+            classes,
+            html_id,
+            pseudo_classes,
+        }
+    }
+}
+pub use naive_util::*;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,

@@ -4,10 +4,10 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    Command, CompoundSelector, LayoutFrame, PSEUDO_CLASS_HOVER, Selector, derive_hover_state,
-    extract_pseudoclasses, is_simple_selector, json_value_to_attr_string, parse_command,
-    parse_css_with_pseudo, parse_selector, parse_trace, report_pseudo_selectors,
-    report_skipped_selectors,
+    CompoundSelector, PSEUDO_CLASS_HOVER, Selector, basic_node_from_json, derive_hover_state,
+    is_simple_selector, parse_css_with_pseudo, parse_selector, parse_trace,
+    report_pseudo_selectors, report_skipped_selectors,
+    runtime_shared::{BasicDomOps, apply_frame_basic},
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -214,32 +214,16 @@ struct SimpleDomNode {
 
 impl SimpleDomNode {
     fn from_json(json_node: &serde_json::Value) -> Self {
-        let mut node = SimpleDomNode::default();
-        node.tag_name = json_node["name"].as_str().unwrap().into();
-        node.id = json_node["id"].as_u64().unwrap();
-        let attributes = json_node["attributes"]
-            .as_object()
-            .map(|attrs| {
-                attrs
-                    .iter()
-                    .filter_map(|(name, value)| match value {
-                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
-                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
-                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
-                        _ => None,
-                    })
-                    .collect::<HashMap<_, _>>()
-            })
-            .unwrap_or_default();
-        node.html_id = attributes.get("id").cloned();
-        let class_attr = attributes.get("class").cloned().unwrap_or_default();
-        node.classes = class_attr
-            .split_whitespace()
-            .map(|x| x.to_string())
-            .collect();
-        node.attributes = attributes;
-        node.pseudo_classes = extract_pseudoclasses(json_node);
-        node
+        let basic = basic_node_from_json(json_node);
+        SimpleDomNode {
+            tag_name: basic.tag_name,
+            id: basic.id,
+            html_id: basic.html_id,
+            attributes: basic.attributes,
+            classes: basic.classes,
+            pseudo_classes: basic.pseudo_classes,
+            ..Default::default()
+        }
     }
 
     fn set_attribute(&mut self, key: &str, new_value: Option<String>) {
@@ -533,44 +517,21 @@ impl SimpleDom {
     }
 }
 
-fn apply_frame(dom: &mut SimpleDom, frame: &LayoutFrame) {
-    match parse_command(&frame.command_name, &frame.command_data) {
-        Command::Init { node } => {
-            dom.init(node);
-        }
-        Command::Add { path, node } => {
-            dom.add_by_path(&path, node);
-        }
-        Command::ReplaceValue {
-            path,
-            key,
-            value,
-            old_value,
-        } => {
-            if let Some(old_value) = old_value {
-                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
-            }
-            let new_value = value.map(json_value_to_attr_string);
-            dom.set_attribute(&path, key, new_value);
-        }
-        Command::InsertValue { path, key, value } => {
-            let new_value = value.map(json_value_to_attr_string);
-            dom.set_attribute(&path, key, new_value);
-        }
-        Command::DeleteValue {
-            path,
-            key,
-            old_value,
-        } => {
-            if let Some(old_value) = old_value {
-                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
-            }
-            dom.set_attribute(&path, key, None);
-        }
-        Command::Recalculate => {}
-        Command::Remove { path } => {
-            dom.remove_by_path(&path);
-        }
+impl BasicDomOps for SimpleDom {
+    fn init(&mut self, root: &serde_json::Value) {
+        SimpleDom::init(self, root);
+    }
+    fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value) {
+        self.add_by_path(path, node);
+    }
+    fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>) {
+        self.set_attribute(path, key, new_value);
+    }
+    fn assert_attribute_value(&self, path: &[usize], key: &str, expected: &str) {
+        self.assert_attribute_value(path, key, expected);
+    }
+    fn remove_by_path(&mut self, path: &[usize]) {
+        self.remove_by_path(path);
     }
 }
 
@@ -605,7 +566,7 @@ fn main() {
     let trace = parse_trace();
 
     for frame in &trace {
-        apply_frame(&mut dom, frame);
+        apply_frame_basic(&mut dom, frame);
     }
     println!("BEGIN");
     dom.print_css_matches(&mut css);

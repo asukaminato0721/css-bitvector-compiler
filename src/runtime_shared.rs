@@ -1,6 +1,9 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{LayoutFrame, NFA, Selector, SelectorId, SelectorManager, json_value_to_attr_string};
+use crate::{
+    Command, LayoutFrame, NFA, Selector, SelectorId, SelectorManager, json_value_to_attr_string,
+    parse_command,
+};
 
 /// Access to selector manager from a DOM implementation.
 pub trait HasSelectorManager {
@@ -186,5 +189,50 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
             dom.remove_node_by_path(&path);
             dom.recompute_styles(nfa, &make_input());
         }
+    }
+}
+
+/// Minimal DOM interface for selector-less flows (no NFA/recompute).
+pub trait BasicDomOps {
+    fn init(&mut self, root: &serde_json::Value);
+    fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value);
+    fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>);
+    fn assert_attribute_value(&self, path: &[usize], key: &str, expected: &str);
+    fn remove_by_path(&mut self, path: &[usize]);
+}
+
+/// Shared apply_frame variant that does not rely on NFA or recompute_styles.
+pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &LayoutFrame) {
+    match parse_command(&frame.command_name, &frame.command_data) {
+        Command::Init { node } => dom.init(node),
+        Command::Add { path, node } => dom.add_by_path(&path, node),
+        Command::ReplaceValue {
+            path,
+            key,
+            value,
+            old_value,
+        } => {
+            if let Some(old_value) = old_value {
+                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
+            }
+            let new_value = value.map(json_value_to_attr_string);
+            dom.set_attribute(&path, key, new_value);
+        }
+        Command::InsertValue { path, key, value } => {
+            let new_value = value.map(json_value_to_attr_string);
+            dom.set_attribute(&path, key, new_value);
+        }
+        Command::DeleteValue {
+            path,
+            key,
+            old_value,
+        } => {
+            if let Some(old_value) = old_value {
+                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
+            }
+            dom.set_attribute(&path, key, None);
+        }
+        Command::Recalculate => {}
+        Command::Remove { path } => dom.remove_by_path(&path),
     }
 }
