@@ -1,8 +1,11 @@
 use css_bitvector_compiler::{
-    AddNode, Command, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_HOVER, Rule,
-    Selector, SelectorId, SelectorManager, derive_hover_state, encode, extract_pseudoclasses,
-    generate_nfa, json_value_to_attr_string, parse_css_with_pseudo, parse_trace,
-    partition_simple_selectors, rdtsc, report_pseudo_selectors, report_skipped_selectors,
+    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_HOVER, Rule, Selector,
+    SelectorId, SelectorManager, derive_hover_state, encode, extract_pseudoclasses, generate_nfa,
+    parse_css_with_pseudo, parse_trace, partition_simple_selectors, report_pseudo_selectors,
+    report_skipped_selectors,
+    runtime_shared::{
+        HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common, update_attribute_common,
+    },
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -136,6 +139,30 @@ pub struct DOM {
     pub nodes: HashMap<u64, DOMNode>, // Arena: 所有节点都存储在这里
     pub selector_manager: SelectorManager,
     root_node: Option<u64>,
+}
+
+impl NodeAttributes for DOMNode {
+    fn attributes(&mut self) -> &mut HashMap<String, String> {
+        &mut self.attributes
+    }
+    fn class_ids(&mut self) -> &mut HashSet<SelectorId> {
+        &mut self.class_ids
+    }
+    fn id_selector_id(&mut self) -> &mut Option<SelectorId> {
+        &mut self.id_selector_id
+    }
+}
+
+impl HasSelectorManager for DOM {
+    fn selector_manager(&mut self) -> &mut SelectorManager {
+        &mut self.selector_manager
+    }
+}
+
+impl HasNodes<DOMNode> for DOM {
+    fn nodes_mut(&mut self) -> &mut HashMap<u64, DOMNode> {
+        &mut self.nodes
+    }
 }
 
 impl AddNode for DOM {
@@ -406,7 +433,7 @@ impl DOM {
             self.propagate_recursive_dirty(parent_idx);
         }
     }
-    fn json_to_html_node(
+    pub fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
         parent_index: Option<u64>,
@@ -506,7 +533,7 @@ impl DOM {
         self.set_node_dirty(cur_idx);
     }
 
-    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+    pub fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
         if self.nodes.is_empty() {
             return None;
         }
@@ -519,58 +546,7 @@ impl DOM {
     }
 
     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-        let key_lower = key.to_lowercase();
-        let store_value = new_value.clone();
-
-        match key_lower.as_str() {
-            "class" => {
-                let mut new_class_ids = HashSet::new();
-                if let Some(ref class_value) = new_value {
-                    for class_name in class_value
-                        .split_whitespace()
-                        .filter(|name| !name.is_empty())
-                    {
-                        let class_id = self
-                            .selector_manager
-                            .get_or_create_id(Selector::Class(class_name.to_string()));
-                        new_class_ids.insert(class_id);
-                    }
-                }
-
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(val) = store_value {
-                        node.attributes.insert(key_lower.clone(), val);
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                    node.class_ids = new_class_ids;
-                }
-            }
-            "id" => {
-                let new_selector_id = new_value.as_ref().map(|value| {
-                    self.selector_manager
-                        .get_or_create_id(Selector::Id(value.to_string()))
-                });
-
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(val) = store_value {
-                        node.attributes.insert(key_lower.clone(), val);
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                    node.id_selector_id = new_selector_id;
-                }
-            }
-            _ => {
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(val) = store_value {
-                        node.attributes.insert(key_lower.clone(), val);
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                }
-            }
-        }
+        update_attribute_common(self, node_idx, key, new_value);
     }
 
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
@@ -910,90 +886,39 @@ new_tri is {:?}
     }
 }
 
+impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
+    fn reset_dom(&mut self) {
+        self.nodes.clear();
+        self.root_node = None;
+    }
+    fn json_to_html_node(&mut self, node: &serde_json::Value, parent: Option<u64>, nfa: &NFA) {
+        self.json_to_html_node(node, parent, nfa);
+    }
+    fn add_node_by_path(&mut self, path: &[usize], node: &serde_json::Value, nfa: &NFA) {
+        self.add_node_by_path(path, node, nfa);
+    }
+    fn remove_node_by_path(&mut self, path: &[usize]) {
+        self.remove_node_by_path(path);
+    }
+    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+        self.node_id_by_path(path)
+    }
+    fn set_node_dirty(&mut self, node_idx: u64) {
+        self.set_node_dirty(node_idx);
+    }
+    fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
+        self.recompute_styles(nfa, input);
+    }
+}
+
 fn get_input() -> Vec<bool> {
     vec![false; unsafe { STATE } + 1]
 }
 
 fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
-    match frame.as_command() {
-        Command::Init { node } => {
-            dom.nodes.clear();
-            dom.root_node = None;
-            dom.json_to_html_node(node, None, nfa);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::Add { path, node } => {
-            dom.add_node_by_path(&path, node, nfa);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::ReplaceValue {
-            path,
-            key,
-            value,
-            old_value,
-        } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            if let Some(old_value) = old_value {
-                let expected = json_value_to_attr_string(old_value);
-                let actual = dom
-                    .nodes
-                    .get(&node_idx)
-                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
-                    .cloned()
-                    .unwrap_or_default();
-                assert_eq!(
-                    actual, expected,
-                    "existing attribute value mismatch for key {} at path {:?}",
-                    key, path
-                );
-            }
-            let new_value = value.map(json_value_to_attr_string);
-            dom.update_attribute(node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::InsertValue { path, key, value } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            let new_value = value.map(json_value_to_attr_string);
-            dom.update_attribute(node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::DeleteValue {
-            path,
-            key,
-            old_value,
-        } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            if let Some(old_value) = old_value {
-                let expected = json_value_to_attr_string(old_value);
-                let actual = dom
-                    .nodes
-                    .get(&node_idx)
-                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
-                    .cloned()
-                    .unwrap_or_default();
-                assert_eq!(
-                    actual, expected,
-                    "existing attribute value mismatch for key {} at path {:?}",
-                    key, path
-                );
-            }
-            dom.update_attribute(node_idx, key, None);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::Recalculate => {
-            let start = rdtsc();
-            dom.recompute_styles(nfa, &get_input());
-            let end = rdtsc();
-            println!("{}", end - start);
-        }
-        Command::Remove { path } => {
-            dom.remove_node_by_path(&path);
-            dom.recompute_styles(nfa, &get_input());
-        }
-    }
+    let make_input = || get_input();
+    let make_recalc_input = |_nfa: &NFA| get_input();
+    apply_frame_common(dom, frame, nfa, make_input, make_recalc_input);
 }
 
 pub fn collect_rule_matches(

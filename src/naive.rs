@@ -4,10 +4,10 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    Command, CompoundSelector, PSEUDO_CLASS_HOVER, Selector, derive_hover_state,
+    Command, CompoundSelector, LayoutFrame, PSEUDO_CLASS_HOVER, Selector, derive_hover_state,
     extract_pseudoclasses, is_simple_selector, json_value_to_attr_string, parse_command,
-    parse_css_with_pseudo as shared_parse_css_with_pseudo, parse_selector as shared_parse_selector,
-    report_pseudo_selectors, report_skipped_selectors,
+    parse_css_with_pseudo, parse_selector, parse_trace, report_pseudo_selectors,
+    report_skipped_selectors,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -60,8 +60,8 @@ impl Display for Combinator {
     }
 }
 
-fn parse_css(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>) {
-    let parsed = shared_parse_css_with_pseudo(css_content);
+fn parse_css_rules(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>) {
+    let parsed = parse_css_with_pseudo(css_content);
     let mut rules: Vec<CssRule> = parsed
         .selectors
         .into_iter()
@@ -70,22 +70,6 @@ fn parse_css(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>)
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
     (rules, parsed.pseudo_selectors)
-}
-
-fn partition_rules(rules: Vec<CssRule>) -> (Vec<CssRule>, Vec<String>) {
-    let mut considered = Vec::new();
-    let mut skipped = Vec::new();
-
-    for rule in rules {
-        let printable = rule.to_string();
-        if is_simple_selector(&printable) {
-            skipped.push(printable);
-        } else {
-            considered.push(rule);
-        }
-    }
-
-    (considered, skipped)
 }
 
 fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
@@ -100,7 +84,7 @@ fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
                 if text.trim().is_empty() {
                     continue;
                 }
-                let selector = shared_parse_selector(&text);
+                let selector = parse_selector(&text);
                 if let Some(prev) = current_selector.replace(selector) {
                     parts.push(SelectorPart {
                         selector: prev,
@@ -215,53 +199,17 @@ fn tokenize_rule(selector: &str) -> Vec<RuleToken> {
     tokens
 }
 
-#[derive(Debug, Clone)]
-struct LayoutFrame {
-    pub frame_id: usize,
-    pub command_name: String,
-    pub command_data: serde_json::Value,
-}
-
-fn parse_trace() -> Vec<LayoutFrame> {
-    let content = std::fs::read_to_string(format!(
-        "css-gen-op/{0}/command.json",
-        std::env::var("WEBSITE_NAME").unwrap()
-    ))
-    .unwrap();
-
-    let mut frames = vec![];
-    for (frame_id, line) in content.lines().enumerate() {
-        if line.trim().is_empty() {
-            continue;
-        }
-        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
-
-        let command_name = command_data["name"].as_str().unwrap().to_string();
-        if command_name.starts_with("layout_") {
-            continue;
-        }
-
-        frames.push(LayoutFrame {
-            frame_id,
-            command_name,
-            command_data,
-        });
-    }
-
-    frames
-}
-
 #[derive(Debug, Default)]
 struct SimpleDomNode {
-    tag_name: String,
-    id: u64,
-    html_id: Option<String>,
-    attributes: HashMap<String, String>,
-    classes: HashSet<String>,
-    pseudo_classes: HashSet<String>,
-    computed_pseudo_classes: HashSet<String>,
-    parent: Option<u64>,
-    children: Vec<u64>,
+    pub tag_name: String,
+    pub id: u64,
+    pub html_id: Option<String>,
+    pub attributes: HashMap<String, String>,
+    pub classes: HashSet<String>,
+    pub pseudo_classes: HashSet<String>,
+    pub computed_pseudo_classes: HashSet<String>,
+    pub parent: Option<u64>,
+    pub children: Vec<u64>,
 }
 
 impl SimpleDomNode {
@@ -626,9 +574,25 @@ fn apply_frame(dom: &mut SimpleDom, frame: &LayoutFrame) {
     }
 }
 
+fn partition_rules(rules: Vec<CssRule>) -> (Vec<CssRule>, Vec<String>) {
+    let mut considered = Vec::new();
+    let mut skipped = Vec::new();
+
+    for rule in rules {
+        let printable = rule.to_string();
+        if is_simple_selector(&printable) {
+            skipped.push(printable);
+        } else {
+            considered.push(rule);
+        }
+    }
+
+    (considered, skipped)
+}
+
 fn main() {
     let mut dom = SimpleDom::default();
-    let (rules, pseudo_selectors) = parse_css(
+    let (rules, pseudo_selectors) = parse_css_rules(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
@@ -649,18 +613,18 @@ fn main() {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
     fn base_case() {
         let s = "div h1 > h2 p .a > .b #c";
-        dbg!(parse_css(s).0);
+        dbg!(parse_css_rules(s).0);
     }
 
     #[test]
     fn parse_attribute_selector() {
-        let (rules, _) = parse_css(r#"[data-role="hero"] { color: red; }"#);
+        let (rules, _) = parse_css_rules(r#"[data-role="hero"] { color: red; }"#);
         assert_eq!(rules.len(), 1);
         match &rules[0] {
             CssRule::Complex { parts, .. } => {
@@ -700,7 +664,7 @@ mod test {
 
     #[test]
     fn parse_css_handles_pseudo_classes() {
-        let (rules, pseudo) = parse_css(".wrapper .item:hover strong { font-weight: bold; }");
+        let (rules, pseudo) = parse_css_rules(".wrapper .item:hover strong { font-weight: bold; }");
         assert!(pseudo.get(":hover").is_none());
         assert_eq!(rules.len(), 1);
         match &rules[0] {
