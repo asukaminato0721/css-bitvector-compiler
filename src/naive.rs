@@ -4,8 +4,9 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    CompoundSelector, PSEUDO_CLASS_HOVER, Selector, basic_node_from_json, derive_hover_state,
-    is_simple_selector, parse_css_with_pseudo, parse_selector, parse_trace,
+    CompoundSelector, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN,
+    PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, Selector, basic_node_from_json,
+    derive_hover_state, is_simple_selector, parse_css_with_pseudo, parse_selector, parse_trace,
     report_pseudo_selectors, report_skipped_selectors,
     runtime_shared::{BasicDomOps, apply_frame_basic},
 };
@@ -249,6 +250,27 @@ impl SimpleDomNode {
                     self.attributes.remove("id");
                 }
             }
+            "is_hovered_root" | "is_focus_root" => {
+                let pseudo = if key_lower == "is_hovered_root" {
+                    PSEUDO_CLASS_HOVER_ROOT
+                } else {
+                    PSEUDO_CLASS_FOCUS_ROOT
+                };
+                let should_set = new_value
+                    .as_deref()
+                    .map(|value| value.eq_ignore_ascii_case("true"))
+                    .unwrap_or(false);
+                if should_set {
+                    self.pseudo_classes.insert(pseudo.to_string());
+                } else {
+                    self.pseudo_classes.remove(pseudo);
+                }
+                if let Some(value) = new_value.clone() {
+                    self.attributes.insert(key_lower, value);
+                } else {
+                    self.attributes.remove(key_lower.as_str());
+                }
+            }
             _ => {
                 if let Some(value) = new_value {
                     self.attributes.insert(key_lower, value);
@@ -366,8 +388,9 @@ impl SimpleDom {
         }
     }
 
-    fn refresh_pseudo_recursive(&mut self, node_id: u64, parent_hover: bool) {
+    fn refresh_pseudo_recursive(&mut self, node_id: u64, parent_hover: bool) -> bool {
         let mut hover_active = parent_hover;
+        let mut focus_root_active = false;
         if let Some(node) = self.nodes.get_mut(&node_id) {
             hover_active = derive_hover_state(&node.pseudo_classes, parent_hover);
             if hover_active {
@@ -376,12 +399,34 @@ impl SimpleDom {
             } else {
                 node.computed_pseudo_classes.remove(PSEUDO_CLASS_HOVER);
             }
+
+            focus_root_active = node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS_ROOT)
+                || node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
         }
+        let mut focus_within_active = focus_root_active;
         if let Some(children) = self.nodes.get(&node_id).map(|n| n.children.clone()) {
             for child_id in children {
-                self.refresh_pseudo_recursive(child_id, hover_active);
+                if self.refresh_pseudo_recursive(child_id, hover_active) {
+                    focus_within_active = true;
+                }
             }
         }
+        if let Some(node) = self.nodes.get_mut(&node_id) {
+            if focus_root_active {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS.to_string());
+            } else {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_FOCUS);
+            }
+            if focus_within_active {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS_WITHIN.to_string());
+            } else {
+                node.computed_pseudo_classes
+                    .remove(PSEUDO_CLASS_FOCUS_WITHIN);
+            }
+        }
+        focus_within_active
     }
 
     fn matches_simple_selector(&self, node_id: u64, selector: &Selector) -> bool {

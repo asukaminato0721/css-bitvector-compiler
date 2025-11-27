@@ -513,7 +513,10 @@ pub fn report_pseudo_selectors(label: &str, selectors: &BTreeMap<String, Vec<Str
 }
 
 fn is_supported_pseudo_class(name: &str) -> bool {
-    matches!(normalize_pseudo_name(name), "hover")
+    matches!(
+        normalize_pseudo_name(name),
+        "hover" | "focus" | "focus-within"
+    )
 }
 
 fn normalize_pseudo_name(name: &str) -> &str {
@@ -1157,6 +1160,9 @@ pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
 
 pub const PSEUDO_CLASS_HOVER: &str = "hover";
 pub const PSEUDO_CLASS_HOVER_ROOT: &str = "hover-root";
+pub const PSEUDO_CLASS_FOCUS: &str = "focus";
+pub const PSEUDO_CLASS_FOCUS_ROOT: &str = "focus-root";
+pub const PSEUDO_CLASS_FOCUS_WITHIN: &str = "focus-within";
 
 pub fn derive_hover_state(pseudo_flags: &HashSet<String>, parent_hover: bool) -> bool {
     parent_hover
@@ -1210,6 +1216,22 @@ pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
     ] {
         if let Some(value) = node.get(key) {
             collect_from_value(value, &mut result);
+        }
+    }
+    if let Some(attrs) = node.get("attributes").and_then(|attrs| attrs.as_object()) {
+        if attrs
+            .get("is_hovered_root")
+            .and_then(|value| value.as_bool())
+            .unwrap_or(false)
+        {
+            result.insert(PSEUDO_CLASS_HOVER_ROOT.to_string());
+        }
+        if attrs
+            .get("is_focus_root")
+            .and_then(|value| value.as_bool())
+            .unwrap_or(false)
+        {
+            result.insert(PSEUDO_CLASS_FOCUS_ROOT.to_string());
         }
     }
     result

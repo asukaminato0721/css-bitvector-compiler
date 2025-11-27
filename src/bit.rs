@@ -1,5 +1,6 @@
 use css_bitvector_compiler::{
-    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_HOVER, Rule, Selector,
+    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_FOCUS,
+    PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, Rule, Selector,
     SelectorId, SelectorManager, derive_hover_state, extract_pseudoclasses, generate_nfa,
     parse_css_with_pseudo, parse_trace, partition_simple_selectors, report_pseudo_selectors,
     report_skipped_selectors,
@@ -79,6 +80,9 @@ impl NodeAttributes for DOMNode {
     }
     fn id_selector_id(&mut self) -> &mut Option<SelectorId> {
         &mut self.id_selector_id
+    }
+    fn pseudo_classes(&mut self) -> &mut HashSet<String> {
+        &mut self.pseudo_classes
     }
 }
 
@@ -362,6 +366,59 @@ impl DOM {
             self.propagate_recursive_dirty(parent_idx);
         }
     }
+
+    fn recompute_focus_states(&mut self, node_idx: u64) -> bool {
+        let (child_indices, parent_idx, focus_root_active) = {
+            let node = &self.nodes[&node_idx];
+            let active = node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS_ROOT)
+                || node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
+            (node.children.clone(), node.parent, active)
+        };
+
+        let mut focus_within_active = focus_root_active;
+        for child_idx in child_indices {
+            if self.recompute_focus_states(child_idx) {
+                focus_within_active = true;
+            }
+        }
+
+        let mut changed = false;
+        {
+            let node = self.nodes.get_mut(&node_idx).unwrap();
+            let has_focus = node.computed_pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
+            if focus_root_active && !has_focus {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS.to_string());
+                node.set_dirty();
+                changed = true;
+            } else if !focus_root_active && has_focus {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_FOCUS);
+                node.set_dirty();
+                changed = true;
+            }
+
+            let has_focus_within = node
+                .computed_pseudo_classes
+                .contains(PSEUDO_CLASS_FOCUS_WITHIN);
+            if focus_within_active && !has_focus_within {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS_WITHIN.to_string());
+                node.set_dirty();
+                changed = true;
+            } else if !focus_within_active && has_focus_within {
+                node.computed_pseudo_classes
+                    .remove(PSEUDO_CLASS_FOCUS_WITHIN);
+                node.set_dirty();
+                changed = true;
+            }
+        }
+
+        if changed {
+            self.propagate_recursive_dirty(parent_idx);
+        }
+
+        focus_within_active
+    }
     pub fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
@@ -487,6 +544,7 @@ impl DOM {
                 format_bits(input)
             )
         });
+        self.recompute_focus_states(root_node);
         self.recompute_styles_recursive(root_node, nfa, input);
         debug_log(|| format!("recompute done {}", self.describe_node(root_node)));
     }

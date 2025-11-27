@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
 use crate::{
-    Command, LayoutFrame, NFA, Selector, SelectorId, SelectorManager, json_value_to_attr_string,
-    parse_command,
+    Command, LayoutFrame, NFA, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_HOVER_ROOT, Selector,
+    SelectorId, SelectorManager, json_value_to_attr_string, parse_command,
 };
 
 /// Access to selector manager from a DOM implementation.
@@ -20,6 +20,7 @@ pub trait NodeAttributes {
     fn attributes(&mut self) -> &mut HashMap<String, String>;
     fn class_ids(&mut self) -> &mut HashSet<SelectorId>;
     fn id_selector_id(&mut self) -> &mut Option<SelectorId>;
+    fn pseudo_classes(&mut self) -> &mut HashSet<String>;
 }
 
 /// Common update_attribute used by bit/tri/quad DOMs.
@@ -70,6 +71,29 @@ pub fn update_attribute_common<D, N>(
                     node.attributes().remove(key_lower.as_str());
                 }
                 *node.id_selector_id() = new_selector_id;
+            }
+        }
+        "is_hovered_root" | "is_focus_root" => {
+            let pseudo_name = if key_lower == "is_hovered_root" {
+                PSEUDO_CLASS_HOVER_ROOT
+            } else {
+                PSEUDO_CLASS_FOCUS_ROOT
+            };
+            let should_set = new_value
+                .as_deref()
+                .map(|value| value.eq_ignore_ascii_case("true"))
+                .unwrap_or(false);
+            if let Some(node) = dom.nodes_mut().get_mut(&node_idx) {
+                if should_set {
+                    node.pseudo_classes().insert(pseudo_name.to_string());
+                } else {
+                    node.pseudo_classes().remove(pseudo_name);
+                }
+                if let Some(ref val) = new_value {
+                    node.attributes().insert(key_lower.clone(), val.clone());
+                } else {
+                    node.attributes().remove(key_lower.as_str());
+                }
             }
         }
         _ => {
