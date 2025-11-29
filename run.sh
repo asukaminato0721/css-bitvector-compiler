@@ -8,6 +8,7 @@ else
 fi
 
 readarray -t WEBSITE_NAMES < <(ls css-gen-op/)
+rm -rf css-gen-op/__pycache__
 
 for name in "${WEBSITE_NAMES[@]}"; do
    if test ! -d "css-gen-op/$name"; then

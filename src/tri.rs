@@ -398,19 +398,11 @@ impl DOM {
             if hover_active && !had_hover {
                 node.computed_pseudo_classes
                     .insert(PSEUDO_CLASS_HOVER.to_string());
-                if node.dirty == DirtyState::Clean {
-                    node.mark_input_changed();
-                } else {
-                    node.recursive_dirty = true;
-                }
+                node.mark_node_changed();
                 changed = true;
             } else if !hover_active && had_hover {
                 node.computed_pseudo_classes.remove(PSEUDO_CLASS_HOVER);
-                if node.dirty == DirtyState::Clean {
-                    node.mark_input_changed();
-                } else {
-                    node.recursive_dirty = true;
-                }
+                node.mark_node_changed();
                 changed = true;
             }
         }
@@ -455,11 +447,7 @@ impl DOM {
             let focus_within_changed = update_flag(PSEUDO_CLASS_FOCUS_WITHIN, focus_within_active);
 
             if focus_changed || focus_within_changed {
-                if node.dirty == DirtyState::Clean {
-                    node.mark_input_changed();
-                } else {
-                    node.recursive_dirty = true;
-                }
+                node.mark_node_changed();
                 changed = true;
             }
         }

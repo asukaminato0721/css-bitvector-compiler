@@ -386,6 +386,23 @@ pub fn parse_css(css_content: &str) -> Vec<String> {
     parse_css_with_pseudo(css_content).selectors
 }
 
+pub fn drain_supported_pseudo_selectors(
+    pseudo_selectors: &mut BTreeMap<String, Vec<String>>,
+) -> Vec<String> {
+    let keys: Vec<String> = pseudo_selectors
+        .keys()
+        .filter(|name| is_supported_pseudo_class(name))
+        .cloned()
+        .collect();
+    let mut collected = Vec::new();
+    for key in keys {
+        if let Some(mut selectors) = pseudo_selectors.remove(&key) {
+            collected.append(&mut selectors);
+        }
+    }
+    collected
+}
+
 pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
     let mut parser_options = ParserOptions::default();
     parser_options.error_recovery = true;

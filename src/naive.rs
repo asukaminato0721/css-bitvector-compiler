@@ -4,9 +4,10 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    CompoundSelector, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN,
-    PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, Selector, basic_node_from_json,
-    derive_hover_state, is_simple_selector, parse_css_with_pseudo, parse_selector, parse_trace,
+    CompoundSelector, ParsedSelectors, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT,
+    PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, Selector,
+    basic_node_from_json, drain_supported_pseudo_selectors, derive_hover_state,
+    is_simple_selector, parse_css_with_pseudo, parse_selector, parse_trace,
     report_pseudo_selectors, report_skipped_selectors,
     runtime_shared::{BasicDomOps, apply_frame_basic},
 };
@@ -62,15 +63,23 @@ impl Display for Combinator {
 }
 
 fn parse_css_rules(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>) {
-    let parsed = parse_css_with_pseudo(css_content);
-    let mut rules: Vec<CssRule> = parsed
-        .selectors
+    let ParsedSelectors {
+        mut selectors,
+        mut pseudo_selectors,
+    } = parse_css_with_pseudo(css_content);
+
+    selectors.extend(drain_supported_pseudo_selectors(&mut pseudo_selectors));
+    selectors.sort();
+    selectors.dedup();
+
+    let mut rules: Vec<CssRule> = selectors
         .into_iter()
         .filter_map(|selector| convert_selector_string_to_rule(&selector))
         .collect();
+
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
-    (rules, parsed.pseudo_selectors)
+    (rules, pseudo_selectors)
 }
 
 fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
@@ -679,6 +688,24 @@ mod tests {
                 match &parts[1].selector {
                     Selector::Compound(comp) => {
                         assert!(comp.classes.contains("item"));
+                        assert!(comp.pseudos.contains("hover"));
+                    }
+                    other => panic!("expected compound selector, got {:?}", other),
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn parse_css_keeps_descendant_hover_selector() {
+        let (rules, pseudo) = parse_css_rules(".wrapper :hover { color: blue; }");
+        assert!(pseudo.get(":hover").is_none());
+        assert_eq!(rules.len(), 1, "hover selector should be preserved");
+        match &rules[0] {
+            CssRule::Complex { parts, .. } => {
+                assert_eq!(parts.len(), 2);
+                match &parts[1].selector {
+                    Selector::Compound(comp) => {
                         assert!(comp.pseudos.contains("hover"));
                     }
                     other => panic!("expected compound selector, got {:?}", other),

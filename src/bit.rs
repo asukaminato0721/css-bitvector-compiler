@@ -1,9 +1,9 @@
 use css_bitvector_compiler::{
-    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_FOCUS,
+    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, ParsedSelectors, PSEUDO_CLASS_FOCUS,
     PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, Rule, Selector,
-    SelectorId, SelectorManager, derive_hover_state, extract_pseudoclasses, generate_nfa,
-    parse_css_with_pseudo, parse_trace, partition_simple_selectors, report_pseudo_selectors,
-    report_skipped_selectors,
+    SelectorId, SelectorManager, derive_hover_state, drain_supported_pseudo_selectors,
+    extract_pseudoclasses, generate_nfa, parse_css_with_pseudo, parse_trace,
+    partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
     runtime_shared::{
         HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common, update_attribute_common,
     },
@@ -778,16 +778,22 @@ pub fn collect_rule_matches(
 fn main() {
     // 1. 构建 DOM 树
     let mut dom = DOM::new();
-    let parsed = parse_css_with_pseudo(
+    let ParsedSelectors {
+        mut selectors,
+        mut pseudo_selectors,
+    } = parse_css_with_pseudo(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
     );
-    let (selectors, skipped_simple) = partition_simple_selectors(parsed.selectors);
+    selectors.extend(drain_supported_pseudo_selectors(&mut pseudo_selectors));
+    selectors.sort();
+    selectors.dedup();
+    let (selectors, skipped_simple) = partition_simple_selectors(selectors);
     report_skipped_selectors("bit", &skipped_simple);
-    report_pseudo_selectors("bit", &parsed.pseudo_selectors);
+    report_pseudo_selectors("bit", &pseudo_selectors);
     // dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
