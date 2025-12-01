@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.10s
+warning: method `update_attribute` is never used
+   --> src/quad.rs:603:8
+    |
+237 | impl DOM {
+    | -------- method in this implementation
+...
+603 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 21 selector(s)
 NOT_CONSIDERED[quad] #masthead-skeleton-icons
@@ -34,66 +46,13 @@ PSEUDO_SKIPPED[quad] :first-child -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :first-child
 PSEUDO_SKIPPED[quad] :last-child -> 1 selector(s)
 PSEUDO_SKIPPED[quad]    eg ytd-masthead.shell > :last-child
-17894
-11577
-10698
-8795
-29360
-5428
-14815
-6629
-35615
-6424
-4499
-7034
-4483
-4307
-13818
-31161
-7523
-194609
-39629
-5897
-7033
-23084
-5956
-8486
-7154
-8196
-7824
-8703
-4840
-31917
-33872
-7833
-11808
-6623
-7324
-12041
-6831
-7547
-8028
-27259
-7227
-9842
-7298
-29007
-7652
-7241
-10410
-11327
-8796
-15683
-73864
-551059
-11599
 BEGIN
-.ytd-searchbox-spt#search-input input -> [258]
-ytd-masthead #masthead-logo -> [284]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
+.ytd-searchbox-spt#search-input input -> [266]
+ytd-masthead #masthead-logo -> [292]
+ytd-masthead #masthead-logo #country-code -> [362]
+ytd-masthead .external-icon -> [282, 332]
+ytd-masthead .yt-icons-ext -> [286]
 END
-[src/quad.rs:1091:5] unsafe { MISS_CNT } = 4116
-[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 5229
-[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 5229
+[src/quad.rs:1072:5] unsafe { MISS_CNT } = 20072
+[src/quad.rs:1073:5] unsafe { INPUT_CHANGE_COUNT } = 26076
+[src/quad.rs:1074:5] unsafe { INPUT_SKIP_COUNT } = 26076

@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
+warning: method `update_attribute` is never used
+   --> src/tri.rs:572:8
+    |
+217 | impl DOM {
+    | -------- method in this implementation
+...
+572 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 429 selector(s)
 NOT_CONSIDERED[tri] #gw-desktop-herotator
@@ -458,13 +470,6 @@ PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__
 PSEUDO_SKIPPED[tri]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
 PSEUDO_SKIPPED[tri]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
 PSEUDO_SKIPPED[tri]    ...
-PSEUDO_SKIPPED[tri] :focus -> 12 selector(s)
-PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[tri]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[tri]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[tri]    ...
 PSEUDO_SKIPPED[tri] :first-child -> 8 selector(s)
 PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
 PSEUDO_SKIPPED[tri]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
@@ -511,287 +516,6 @@ PSEUDO_SKIPPED[tri]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3
 PSEUDO_SKIPPED[tri] :last-child -> 2 selector(s)
 PSEUDO_SKIPPED[tri]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
 PSEUDO_SKIPPED[tri]    eg .gw-card-layout .a-cardui:last-child
-3804
-5135
-40618
-5544
-3940
-3281
-5947
-6122
-3423
-3480
-5536
-3427
-3747
-2847
-3607
-2891
-3196
-2782
-6315
-7158
-6965
-5392
-5951
-6325
-6085
-6755
-8004
-6344
-6716
-5242
-7304
-6509
-5621
-3482
-6187
-6075
-6221
-3528
-3084
-3388
-3225
-3329
-3808
-4431
-3164
-3401
-4465
-3319
-5775
-5367
-5350
-3847
-7489
-6901
-7846
-6560
-7799
-3332
-3297
-3299
-3109
-6270
-5439
-3616
-5033
-4406
-6442
-4104
-6333
-8050
-7090
-7511
-6803
-6708
-7300
-4761
-6450
-3677
-4027
-6326
-5394
-3263
-5728
-3380
-2997
-3944
-3092
-7144
-3565
-3315
-3019
-5775
-7596
-3573
-3362
-4380
-7264
-5819
-4153
-3767
-5911
-5939
-5856
-5887
-3650
-6188
-3997
-2871
-3199
-4701
-2782
-3074
-2826
-3380
-2567
-3676
-2933
-3250
-3482
-3637
-2588
-2615
-2368
-5327
-3285
-2466
-2592
-2768
-3727
-5389
-3096
-3152
-2610
-2384
-2450
-3451
-4238
-3109
-2681
-2411
-2886
-3661
-3224
-2841
-5144
-2918
-5736
-3025
-2965
-3076
-5788
-5208
-3187
-3693
-3169
-3504
-3173
-2920
-7004
-5398
-7114
-6171
-6308
-5241
-5145
-5511
-4696
-4719
-7116
-5755
-5925
-6094
-3281
-3052
-2981
-4007
-3453
-2853
-3287
-2616
-2547
-3398
-4106
-4526
-2514
-3321
-3015
-2752
-3258
-3621
-3170
-3001
-2511
-2728
-4613
-4065
-2434
-3153
-3557
-2535
-2693
-3798
-4211
-3263
-3264
-2701
-3962
-6868
-3186
-3388
-2575
-2979
-3315
-2942
-2770
-4951
-4070
-5570
-3147
-3177
-2847
-3707
-4088
-3169
-3237
-3297
-2972
-5978
-4376
-2770
-2591
-2822
-3139
-3058
-5716
-3206
-2463
-3646
-2551
-7354
-3800
-3320
-3780
-4269
-2766
-6124
-3431
-2723
-3423
-3340
-3993
-5702
-8803
-3970
-3127
-2969
-2979
-3220
-2628
-3170
-4568
-3263
-6365
-5977
-3839
-5853
-6471
-3379
-4599
-6647
-5132
-5763
-5568
-6059
-6181
-3573
-4526
-7433
-5519
-3169
-5333
 BEGIN
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
 .gw-card-layout .a-cardui -> [1844, 1906, 2035, 2164, 2303, 2484, 2613, 2742, 2867, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5176, 5239, 5367, 5495]
@@ -829,6 +553,6 @@ BEGIN
 [data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
 [data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
 END
-[src/tri.rs:995:5] unsafe { MISS_CNT } = 3757
-[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 3899
-[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 3899
+[src/tri.rs:966:5] unsafe { MISS_CNT } = 3757
+[src/tri.rs:967:5] unsafe { INPUT_CHANGE_COUNT } = 3899
+[src/tri.rs:968:5] unsafe { INPUT_SKIP_COUNT } = 3899

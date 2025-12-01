@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
+warning: method `update_attribute` is never used
+   --> src/tri.rs:572:8
+    |
+217 | impl DOM {
+    | -------- method in this implementation
+...
+572 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 135 selector(s)
 NOT_CONSIDERED[tri] #SIvCob
@@ -136,13 +148,6 @@ NOT_CONSIDERED[tri] form
 NOT_CONSIDERED[tri] input
 NOT_CONSIDERED[tri] p
 NOT_CONSIDERED[tri] td
-PSEUDO_SKIPPED[tri] :focus -> 16 selector(s)
-PSEUDO_SKIPPED[tri]    eg #gbg6.gbgt:focus
-PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:focus
-PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcx:focus
-PSEUDO_SKIPPED[tri]    eg .gbgt:focus
-PSEUDO_SKIPPED[tri]    eg .gbml1:focus
-PSEUDO_SKIPPED[tri]    ...
 PSEUDO_SKIPPED[tri] :active -> 9 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:active
 PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcx:active
@@ -173,50 +178,6 @@ PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[tri] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
-4188
-4350
-2756
-2726
-2719
-3513
-2904
-18826
-2371
-3441
-2893
-2415
-2453
-2792
-2342
-4080
-3467
-2529
-4023
-4840
-2804
-6732
-5302
-4161
-6416
-5578
-5247
-7630
-5554
-5376
-7052
-12423
-3914
-6476
-7932
-5345
-5909
-5591
-2438
-8121
-7841
-4475
-3761
-2525
 BEGIN
 #SIvCob a -> [452]
 #WqQANb a -> [463, 466, 469, 472]
@@ -228,6 +189,7 @@ BEGIN
 #gbz .gbtcb -> [51]
 #gbz .gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
 .fl a -> [431]
+.gbgt:focus -> [146]
 .gbsb .gbsbb -> [246]
 .gbsbis .gbsbb -> [246]
 .gbsbis .gbsbt -> [244]
@@ -235,9 +197,9 @@ BEGIN
 .gbz0l .gbtb2 -> [62]
 .gbz0l .gbts -> [64]
 .gbzt .gbts -> [64, 75, 86, 97, 108, 119, 130, 141]
-.gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
+.gssb_a td -> [566, 602, 637, 672, 707, 742, 777, 812, 847, 882]
 .sblc a -> [431]
 END
-[src/tri.rs:995:5] unsafe { MISS_CNT } = 1777
-[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/tri.rs:966:5] unsafe { MISS_CNT } = 3806
+[src/tri.rs:967:5] unsafe { INPUT_CHANGE_COUNT } = 38363
+[src/tri.rs:968:5] unsafe { INPUT_SKIP_COUNT } = 38219

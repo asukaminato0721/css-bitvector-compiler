@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+warning: method `update_attribute` is never used
+   --> src/quad.rs:603:8
+    |
+237 | impl DOM {
+    | -------- method in this implementation
+...
+603 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/quad`
 NOT_CONSIDERED[quad] 429 selector(s)
 NOT_CONSIDERED[quad] #gw-desktop-herotator
@@ -458,13 +470,6 @@ PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button_
 PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
 PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
 PSEUDO_SKIPPED[quad]    ...
-PSEUDO_SKIPPED[quad] :focus -> 12 selector(s)
-PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:focus ._ameyal-product-shoveler_style_close-text__2-gwn
-PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus
-PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:focus ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[quad]    ...
 PSEUDO_SKIPPED[quad] :first-child -> 8 selector(s)
 PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
 PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
@@ -511,287 +516,6 @@ PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_carouselContainer__
 PSEUDO_SKIPPED[quad] :last-child -> 2 selector(s)
 PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
 PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui:last-child
-13073
-11564
-32692
-6251
-7300
-7866
-7185
-9885
-9589
-11189
-8906
-9096
-12162
-9273
-9896
-8506
-10640
-14750
-13604
-13772
-9297
-9843
-8308
-6957
-7328
-7563
-12150
-11272
-8983
-12874
-10662
-11203
-8287
-7906
-9203
-7921
-13770
-11557
-12755
-12810
-14162
-13375
-11372
-12410
-12591
-8039
-7906
-7292
-12114
-8773
-8415
-7764
-8115
-8232
-10129
-7038
-8924
-7498
-8124
-11388
-17141
-7484
-7754
-7290
-7044
-12489
-16622
-7181
-10708
-7939
-11104
-8022
-7651
-6509
-10426
-7938
-7923
-10411
-8221
-9153
-7576
-7085
-8527
-9311
-9687
-7917
-8636
-6647
-8507
-8843
-11532
-12763
-15365
-13501
-12118
-12444
-12215
-7073
-8928
-8610
-9147
-8292
-8581
-7606
-8863
-12615
-12142
-9496
-13674
-6456
-7585
-7987
-7519
-7223
-10717
-7798
-7259
-7866
-9301
-8335
-7214
-7724
-7506
-7600
-7251
-8003
-7551
-9314
-6701
-43787
-7649
-9614
-8481
-11753
-14119
-13694
-10273
-10614
-8251
-10752
-9279
-6778
-7095
-7641
-7470
-8279
-8425
-7957
-7631
-7914
-7439
-9352
-6797
-8349
-7355
-8304
-7742
-9356
-8687
-7758
-7694
-7486
-8591
-7385
-7359
-6979
-8079
-7206
-7499
-7908
-9477
-6923
-13608
-8189
-7444
-7894
-8920
-9112
-7781
-8176
-7211
-9518
-6797
-7784
-7267
-7255
-7324
-11178
-6697
-7346
-8001
-7982
-7353
-6161
-7405
-8034
-8220
-8360
-7138
-5813
-10427
-8067
-8046
-9605
-7748
-13292
-8868
-8691
-10892
-7191
-8373
-7957
-8146
-7923
-8214
-7118
-8034
-8291
-12879
-7587
-7522
-10478
-12955
-11907
-11422
-10644
-12733
-12353
-8971
-13215
-13071
-13982
-12530
-12235
-11968
-10662
-8000
-7999
-13857
-10581
-12102
-12187
-9837
-6454
-8847
-8734
-8382
-8555
-6842
-7729
-12264
-16587
-14024
-10818
-8701
-7442
-7908
-8107
-7882
-8121
-10032
-8841
-11769
-7663
-9849
-12539
-9151
-9876
-8494
-7919
-8030
-12124
-9340
-13231
-9196
-7928
-7215
-7805
-7326
-7769
-9745
 BEGIN
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
 .gw-card-layout .a-cardui -> [1844, 1906, 2035, 2164, 2303, 2484, 2613, 2742, 2867, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5176, 5239, 5367, 5495]
@@ -829,6 +553,6 @@ BEGIN
 [data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
 [data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
 END
-[src/quad.rs:1091:5] unsafe { MISS_CNT } = 3757
-[src/quad.rs:1092:5] unsafe { INPUT_CHANGE_COUNT } = 3899
-[src/quad.rs:1093:5] unsafe { INPUT_SKIP_COUNT } = 3899
+[src/quad.rs:1072:5] unsafe { MISS_CNT } = 3757
+[src/quad.rs:1073:5] unsafe { INPUT_CHANGE_COUNT } = 3899
+[src/quad.rs:1074:5] unsafe { INPUT_SKIP_COUNT } = 3899

@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.16s
+warning: method `update_attribute` is never used
+   --> src/tri.rs:572:8
+    |
+217 | impl DOM {
+    | -------- method in this implementation
+...
+572 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 21 selector(s)
 NOT_CONSIDERED[tri] #masthead-skeleton-icons
@@ -34,66 +46,13 @@ PSEUDO_SKIPPED[tri] :first-child -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg ytd-masthead.shell > :first-child
 PSEUDO_SKIPPED[tri] :last-child -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg ytd-masthead.shell > :last-child
-3963
-3401
-4011
-4057
-5429
-3224
-4702
-2807
-4463
-2821
-2804
-2796
-2615
-2534
-2670
-2936
-2641
-3044
-3241
-4637
-3298
-4759
-3157
-5922
-3139
-2774
-2810
-5005
-5133
-5179
-5706
-2349
-5402
-4706
-5556
-6412
-5542
-5154
-5153
-4714
-5007
-4792
-5742
-5531
-5276
-5623
-5487
-5363
-5692
-5274
-5532
-16104
-6394
 BEGIN
-.ytd-searchbox-spt#search-input input -> [258]
-ytd-masthead #masthead-logo -> [284]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
+.ytd-searchbox-spt#search-input input -> [266]
+ytd-masthead #masthead-logo -> [292]
+ytd-masthead #masthead-logo #country-code -> [362]
+ytd-masthead .external-icon -> [282, 332]
+ytd-masthead .yt-icons-ext -> [286]
 END
-[src/tri.rs:995:5] unsafe { MISS_CNT } = 4116
-[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 5229
-[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 5229
+[src/tri.rs:966:5] unsafe { MISS_CNT } = 20258
+[src/tri.rs:967:5] unsafe { INPUT_CHANGE_COUNT } = 27066
+[src/tri.rs:968:5] unsafe { INPUT_SKIP_COUNT } = 27066

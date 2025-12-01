@@ -1,4 +1,16 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.12s
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 21 selector(s)
 NOT_CONSIDERED[bit] #masthead-skeleton-icons
@@ -34,64 +46,11 @@ PSEUDO_SKIPPED[bit] :first-child -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :first-child
 PSEUDO_SKIPPED[bit] :last-child -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :last-child
-11956
-3589
-3375
-2792
-3352
-2861
-2525
-2587
-2679
-2675
-2460
-3257
-5094
-4423
-5096
-2727
-2585
-6674
-4723
-3036
-3040
-3032
-2671
-2593
-4952
-2808
-2748
-2977
-2863
-3022
-3254
-2894
-2752
-2555
-2541
-2482
-2391
-2286
-5031
-3045
-2728
-3340
-4875
-2646
-2922
-4224
-2833
-2971
-3512
-5124
-3887
-16228
-4137
 BEGIN
-.ytd-searchbox-spt#search-input input -> [258]
-ytd-masthead #masthead-logo -> [284]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
+.ytd-searchbox-spt#search-input input -> [266]
+ytd-masthead #masthead-logo -> [292]
+ytd-masthead #masthead-logo #country-code -> [362]
+ytd-masthead .external-icon -> [282, 332]
+ytd-masthead .yt-icons-ext -> [286]
 END
-[src/bit.rs:832:5] unsafe { MISS_CNT } = 4116
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 20258

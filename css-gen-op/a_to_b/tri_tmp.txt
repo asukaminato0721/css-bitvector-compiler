@@ -1,12 +1,22 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+warning: method `update_attribute` is never used
+   --> src/tri.rs:572:8
+    |
+217 | impl DOM {
+    | -------- method in this implementation
+...
+572 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 1 selector(s)
 NOT_CONSIDERED[tri] .a
 PSEUDO_SKIPPED[tri] none
-8077
-6410
 BEGIN
 END
-[src/tri.rs:995:5] unsafe { MISS_CNT } = 3
-[src/tri.rs:996:5] unsafe { INPUT_CHANGE_COUNT } = 1
-[src/tri.rs:997:5] unsafe { INPUT_SKIP_COUNT } = 1
+[src/tri.rs:966:5] unsafe { MISS_CNT } = 3
+[src/tri.rs:967:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/tri.rs:968:5] unsafe { INPUT_SKIP_COUNT } = 1
