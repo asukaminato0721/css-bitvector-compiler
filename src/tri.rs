@@ -633,7 +633,7 @@ impl DOM {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
                 let (new_output, new_tri) = {
                     let node = &self.nodes[&node_idx];
-                    self.new_output_state(node, input, nfa)
+                    self.new_output_state(&node, input, nfa)
                 };
                 debug_log(|| {
                     format!(
@@ -688,8 +688,9 @@ new_tri is {:?}
                     }
                     let (new_output_state, new_tri_state) = {
                         let node = &self.nodes[&node_idx];
-                        self.new_output_state(node, input, nfa)
+                        self.new_output_state(&node, input, nfa)
                     };
+                    let output_changed = new_output_state != previous_output;
                     {
                         let node = self.nodes.get_mut(&node_idx).unwrap();
                         node.output_state = new_output_state.clone();
@@ -705,14 +706,16 @@ new_tri is {:?}
                             format_tri_state(&previous_tri)
                         )
                     });
-                    should_mark_children = true;
+                    if output_changed {
+                        should_mark_children = true;
+                    }
                 } else {
                     unsafe {
                         INPUT_SKIP_COUNT += 1;
                     }
                     let (new_output, new_tri) = {
                         let node = &self.nodes[&node_idx];
-                        self.new_output_state(node, input, nfa)
+                        self.new_output_state(&node, input, nfa)
                     };
                     debug_log(|| {
                         format!(
@@ -746,8 +749,9 @@ new_tri is {:?}
                 }
                 let (new_output_state, new_tri_state) = {
                     let node = &self.nodes[&node_idx];
-                    self.new_output_state(node, input, nfa)
+                    self.new_output_state(&node, input, nfa)
                 };
+                let output_changed = new_output_state != previous_output;
                 debug_log(|| {
                     format!(
                         "{} recompute (node_changed) -> output={} (prev={}) tri={} (prev={})",
@@ -763,7 +767,9 @@ new_tri is {:?}
                     node.output_state = new_output_state.clone();
                     node.tri_state = new_tri_state.clone();
                 }
-                should_mark_children = true;
+                if output_changed {
+                    should_mark_children = true;
+                }
             }
         }
 
@@ -805,7 +811,14 @@ new_tri is {:?}
             )
         });
         for &child_idx in &child_indices_snapshot {
-            self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            let child_needs_visit = if should_mark_children {
+                true
+            } else {
+                self.nodes[&child_idx].recursive_dirty
+            };
+            if child_needs_visit {
+                self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            }
         }
 
         // Reset dirty flags
@@ -871,6 +884,7 @@ new_tri is {:?}
 }
 
 impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
+    type AttrState = (Vec<bool>, Vec<IState>);
     fn reset_dom(&mut self) {
         self.nodes.clear();
         self.root_node = None;
@@ -892,6 +906,33 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
     }
     fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         self.recompute_styles(nfa, input);
+    }
+    fn attr_state_and_parent_input<F>(
+        &self,
+        node_idx: u64,
+        make_root_input: &F,
+    ) -> (Self::AttrState, Vec<bool>)
+    where
+        F: Fn() -> Vec<bool>,
+    {
+        let node = &self.nodes[&node_idx];
+        let parent_bits = node
+            .parent
+            .map(|pid| self.nodes[&pid].output_state.clone())
+            .unwrap_or_else(|| make_root_input());
+        (
+            (node.output_state.clone(), node.tri_state.clone()),
+            parent_bits,
+        )
+    }
+    fn recompute_attr_state(
+        &self,
+        node_idx: u64,
+        parent_bits: &[bool],
+        nfa: &NFA,
+    ) -> Self::AttrState {
+        let node = &self.nodes[&node_idx];
+        self.new_output_state(&node, parent_bits, nfa)
     }
 }
 

@@ -673,7 +673,14 @@ impl DOM {
             )
         });
         for &child_idx in &child_indices_snapshot {
-            self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            let child_needs_visit = self
+                .nodes
+                .get(&child_idx)
+                .map(|child| child.recursive_dirty)
+                .unwrap_or(false);
+            if child_needs_visit {
+                self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            }
         }
 
         // Reset dirty flags
@@ -717,6 +724,7 @@ impl DOM {
 }
 
 impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
+    type AttrState = Vec<bool>;
     fn reset_dom(&mut self) {
         self.nodes.clear();
         self.root_node = None;
@@ -738,6 +746,31 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
     }
     fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         self.recompute_styles(nfa, input);
+    }
+    fn attr_state_and_parent_input<F>(
+        &self,
+        node_idx: u64,
+        make_root_input: &F,
+    ) -> (Self::AttrState, Vec<bool>)
+    where
+        F: Fn() -> Vec<bool>,
+    {
+        let node = &self.nodes[&node_idx];
+        let parent_bits = node
+            .parent
+            .and_then(|pid| self.nodes.get(&pid))
+            .map(|parent| parent.output_state.clone())
+            .unwrap_or_else(|| make_root_input());
+        (node.output_state.clone(), parent_bits)
+    }
+    fn recompute_attr_state(
+        &self,
+        node_idx: u64,
+        parent_bits: &[bool],
+        nfa: &NFA,
+    ) -> Self::AttrState {
+        let node = &self.nodes[&node_idx];
+        self.new_output_state(node, parent_bits, nfa)
     }
 }
 

@@ -627,6 +627,21 @@ impl DOM {
             })
             .collect()
     }
+    fn materialize_chain<F>(&self, node_idx: u64, make_root_input: &F) -> Vec<bool>
+    where
+        F: Fn() -> Vec<bool>,
+    {
+        let node = self
+            .nodes
+            .get(&node_idx)
+            .unwrap_or_else(|| panic!("node {node_idx} not found"));
+        let parent_bits = if let Some(parent_idx) = node.parent {
+            self.materialize_chain(parent_idx, make_root_input)
+        } else {
+            make_root_input()
+        };
+        self.materialize(&parent_bits, &node.output_state)
+    }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         let node_descriptor = self.describe_node(node_idx);
         self.refresh_computed_pseudos(node_idx);
@@ -730,6 +745,7 @@ new_tri is {:?}
                     }
                     let (new_input_state, new_output_state) =
                         self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                    let output_changed = new_output_state != previous_output_state;
                     debug_log(|| {
                         format!(
                             "{} recompute -> input={} (prev={}) output={} (prev={})",
@@ -745,7 +761,9 @@ new_tri is {:?}
                         node.output_state = new_output_state.clone();
                         node.input_state = new_input_state.clone();
                     }
-                    should_mark_children = true;
+                    if output_changed {
+                        should_mark_children = true;
+                    }
                 } else {
                     unsafe {
                         INPUT_SKIP_COUNT += 1;
@@ -784,6 +802,7 @@ new_tri is {:?}
                 }
                 let (new_input_state, new_output_state) =
                     self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                let output_changed = new_output_state != previous_output_state;
                 debug_log(|| {
                     format!(
                         "{} recompute (node_changed) -> input={} (prev={}) output={} (prev={})",
@@ -799,7 +818,9 @@ new_tri is {:?}
                     node.output_state = new_output_state.clone();
                     node.input_state = new_input_state.clone();
                 }
-                should_mark_children = true;
+                if output_changed {
+                    should_mark_children = true;
+                }
             }
         }
 
@@ -843,7 +864,17 @@ new_tri is {:?}
             )
         });
         for &child_idx in &child_indices_snapshot {
-            self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            let child_needs_visit = if should_mark_children {
+                true
+            } else {
+                self.nodes
+                    .get(&child_idx)
+                    .map(|child| child.recursive_dirty)
+                    .unwrap_or(false)
+            };
+            if child_needs_visit {
+                self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            }
         }
 
         // Reset dirty flags
@@ -943,6 +974,7 @@ new_tri is {:?}
 }
 
 impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
+    type AttrState = (Vec<IState>, Vec<OState>);
     fn reset_dom(&mut self) {
         self.nodes.clear();
         self.root_node = None;
@@ -964,6 +996,39 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
     }
     fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         self.recompute_styles(nfa, input);
+    }
+    fn attr_state_and_parent_input<F>(
+        &self,
+        node_idx: u64,
+        make_root_input: &F,
+    ) -> (Self::AttrState, Vec<bool>)
+    where
+        F: Fn() -> Vec<bool>,
+    {
+        let node = self
+            .nodes
+            .get(&node_idx)
+            .unwrap_or_else(|| panic!("node {node_idx} not found"));
+        let parent_bits = node
+            .parent
+            .map(|pid| self.materialize_chain(pid, make_root_input))
+            .unwrap_or_else(|| make_root_input());
+        (
+            (node.input_state.clone(), node.output_state.clone()),
+            parent_bits,
+        )
+    }
+    fn recompute_attr_state(
+        &self,
+        node_idx: u64,
+        parent_bits: &[bool],
+        nfa: &NFA,
+    ) -> Self::AttrState {
+        let node = self
+            .nodes
+            .get(&node_idx)
+            .unwrap_or_else(|| panic!("node {node_idx} not found"));
+        self.new_output_state(node, parent_bits, nfa)
     }
 }
 

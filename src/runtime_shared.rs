@@ -113,6 +113,7 @@ pub trait FrameDom<N>: HasSelectorManager + HasNodes<N>
 where
     N: NodeAttributes,
 {
+    type AttrState: PartialEq;
     fn reset_dom(&mut self);
     fn json_to_html_node(&mut self, node: &serde_json::Value, parent: Option<u64>, nfa: &NFA);
     fn add_node_by_path(&mut self, path: &[usize], node: &serde_json::Value, nfa: &NFA);
@@ -120,6 +121,46 @@ where
     fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64>;
     fn set_node_dirty(&mut self, node_idx: u64);
     fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]);
+    fn attr_state_and_parent_input<F>(
+        &self,
+        node_idx: u64,
+        make_root_input: &F,
+    ) -> (Self::AttrState, Vec<bool>)
+    where
+        F: Fn() -> Vec<bool>;
+    fn recompute_attr_state(
+        &self,
+        node_idx: u64,
+        parent_bits: &[bool],
+        nfa: &NFA,
+    ) -> Self::AttrState;
+    fn force_attribute_recompute(&self, key_lower: &str) -> bool {
+        matches!(key_lower, "is_hovered_root" | "is_focus_root")
+    }
+    fn update_attribute_with_shortcut<F>(
+        &mut self,
+        node_idx: u64,
+        key: &str,
+        new_value: Option<String>,
+        nfa: &NFA,
+        make_root_input: &F,
+    ) -> bool
+    where
+        F: Fn() -> Vec<bool>,
+        Self: Sized,
+    {
+        let key_lower = key.to_ascii_lowercase();
+        if self.force_attribute_recompute(&key_lower) {
+            update_attribute_common(self, node_idx, key, new_value);
+            return true;
+        }
+
+        let (previous_state, parent_bits) =
+            self.attr_state_and_parent_input(node_idx, make_root_input);
+        update_attribute_common(self, node_idx, key, new_value);
+        let new_state = self.recompute_attr_state(node_idx, &parent_bits, nfa);
+        previous_state != new_state
+    }
 }
 
 /// Shared apply_frame logic for bit/tri/quad style DOMs.
@@ -168,18 +209,22 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                 );
             }
             let new_value = value.map(json_value_to_attr_string);
-            update_attribute_common(dom, node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &make_input());
+            if dom.update_attribute_with_shortcut(node_idx, key, new_value, nfa, &make_input) {
+                dom.set_node_dirty(node_idx);
+                let root_input = make_input();
+                dom.recompute_styles(nfa, &root_input);
+            }
         }
         crate::Command::InsertValue { path, key, value } => {
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path for InsertValue {:?}", path));
             let new_value = value.map(json_value_to_attr_string);
-            update_attribute_common(dom, node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &make_input());
+            if dom.update_attribute_with_shortcut(node_idx, key, new_value, nfa, &make_input) {
+                dom.set_node_dirty(node_idx);
+                let root_input = make_input();
+                dom.recompute_styles(nfa, &root_input);
+            }
         }
         crate::Command::DeleteValue {
             path,
@@ -202,9 +247,11 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                     key, path
                 );
             }
-            update_attribute_common(dom, node_idx, key, None);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &make_input());
+            if dom.update_attribute_with_shortcut(node_idx, key, None, nfa, &make_input) {
+                dom.set_node_dirty(node_idx);
+                let root_input = make_input();
+                dom.recompute_styles(nfa, &root_input);
+            }
         }
         crate::Command::Recalculate => {
             dom.recompute_styles(nfa, &make_recalc_input(nfa));
