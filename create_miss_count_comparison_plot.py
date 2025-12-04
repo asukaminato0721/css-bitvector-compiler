@@ -127,10 +127,7 @@ def main():
     fig.tight_layout()
 
     # Save the plot
-    output_path = (
-        Path("css-gen-op", os.getenv("WEBSITE_NAME", "google"))
-        / "cache_miss_comparison_scatter.png"
-    )
+    output_path = Path("css-gen-op") / "cache_miss_comparison_scatter.png"
     fig.savefig(
         output_path,
         dpi=300,
@@ -182,20 +179,14 @@ def main():
     print(
         f"\n TriVector miss range: {min_trivector_misses:,} - {max_trivector_misses:,}"
     )
-    print(
-        f" BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}"
-    )
+    print(f" BitVector miss range: {min_bitvector_misses:,} - {max_bitvector_misses:,}")
 
     # Total miss counts
     total_bitvector_misses = df["bitvector_cache_misses"].sum()
     total_trivector_misses = df["trivector_cache_misses"].sum()
 
-    print(
-        f"\nBitVector total misses: {total_bitvector_misses:,}"
-    )
-    print(
-        f"TriVector total misses: {total_trivector_misses:,}"
-    )
+    print(f"\nBitVector total misses: {total_bitvector_misses:,}")
+    print(f"TriVector total misses: {total_trivector_misses:,}")
 
     if {"bitvector_cache_hits", "trivector_cache_hits"}.issubset(df.columns):
         total_bitvector_hits = df["bitvector_cache_hits"].sum()
