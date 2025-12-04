@@ -1,0 +1,449 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
+     Running `target/release/tri`
+NOT_CONSIDERED[tri] 153 selector(s)
+NOT_CONSIDERED[tri] #onetrust-accept-btn-handler
+NOT_CONSIDERED[tri] #onetrust-banner-sdk
+NOT_CONSIDERED[tri] #onetrust-button-group
+NOT_CONSIDERED[tri] #onetrust-button-group-parent
+NOT_CONSIDERED[tri] #onetrust-group-container
+NOT_CONSIDERED[tri] #onetrust-pc-btn-handler
+NOT_CONSIDERED[tri] #onetrust-pc-sdk
+NOT_CONSIDERED[tri] #onetrust-policy
+NOT_CONSIDERED[tri] #onetrust-reject-all-handler
+NOT_CONSIDERED[tri] #ot-sdk-cookie-policy
+NOT_CONSIDERED[tri] #ot-sync-ntfy
+NOT_CONSIDERED[tri] .category-vendors-list-handler
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-10ll711
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-11en623
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-120l5y1
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1297vql
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-12ymzig
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-13jjo4r
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1426rit
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-14ojy7f
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-151puk8
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-15fecvd
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1695avs
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-16dbgco
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-16wghjg
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-172bb5x
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-17hp4kx
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-180snrw
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-18zqjlh
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-194g8oa
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-19j6xtr
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-19slw8k
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1abfllx
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1agcupc
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1alfmy6
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1dsadu1
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1e3ydum
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1f97ztc
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1fw1w6f
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1gjcfa0
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1gllndz
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1gp2q9k
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1i8lfih
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1icom9b
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1it3med
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1j6jwcf
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1kcfskf
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1kv3we2
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1lcdkt2
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1mumos5
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1nu0xuw
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1olxzr7
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1oyxqqs
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1q5p6qn
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1qf7wc7
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1sapncu
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1skz2f4
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1tlz4mq
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1ulhx3w
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1xj9xsy
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1xngvc9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-1yemzkh
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-2lmy8v
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-30wzus
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-3kx5aj
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-3nfjpg
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-3xjlkv
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-4b5q1b
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-5kxri9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-5ur8x
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-6d2ivc
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-6ukeej
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-73ljnh
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-7y4fmk
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-8dk3vg
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-8ylunr
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-9eds4
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-b2gxp3
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-b61fpv
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-bg95xu
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-bjn8wh
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-bz4hbi
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-cf8xw5
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-d5jsr5
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-diaegy
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-dk2b7y
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-dn1fyv
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-dulgtd
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-e5bvtn
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-e9xyaj
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-emz1d1
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-hl6y5f
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-hqt62i
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-ht77aj
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-jcy5wx
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-jtcpfi
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-jzt3h
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-k0evtb
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-km743h
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-llzyc9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-lnyyxe
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-lp0v6f
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-lzvpb0
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-ncu7el
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-noi56b
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-osb48f
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-pg371s
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-pw7jst
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-pxoil9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-qku0ge
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-r1prx9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-r55oms
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-raue2m
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-rd8qhi
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-rv48g6
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-sdgghz
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-slza4h
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-t1swus
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-ut53x9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-uvpx8v
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-v3940b
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-w4vho9
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-w5php0
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-x1aagf
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-x7pcmx
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-xohhoj
+NOT_CONSIDERED[tri] .default-ltr-iqcdef-cache-zmloej
+NOT_CONSIDERED[tri] .grecaptcha-badge
+NOT_CONSIDERED[tri] .onetrust-pc-dark-filter
+NOT_CONSIDERED[tri] .optanon-show-settings#ot-sdk-btn
+NOT_CONSIDERED[tri] .ot-close-btn-link#onetrust-banner-sdk
+NOT_CONSIDERED[tri] .ot-cookie-label
+NOT_CONSIDERED[tri] .ot-fade-in#onetrust-banner-sdk
+NOT_CONSIDERED[tri] .ot-fade-in#onetrust-pc-sdk
+NOT_CONSIDERED[tri] .ot-fade-in.onetrust-pc-dark-filter
+NOT_CONSIDERED[tri] .ot-fade-in.ot-confirm-dialog-overlay
+NOT_CONSIDERED[tri] .ot-floating-button__front
+NOT_CONSIDERED[tri] .ot-ftr-stacked#onetrust-pc-sdk
+NOT_CONSIDERED[tri] .ot-hide#onetrust-pc-sdk
+NOT_CONSIDERED[tri] .ot-hide.onetrust-pc-dark-filter
+NOT_CONSIDERED[tri] .ot-sdk-cookie-policy
+NOT_CONSIDERED[tri] .ot-sdk-cookie-policy#ot-sdk-cookie-policy-v2
+NOT_CONSIDERED[tri] .ot-sdk-show-settings#ot-sdk-btn
+NOT_CONSIDERED[tri] .otFlat#onetrust-banner-sdk
+NOT_CONSIDERED[tri] .otRelFont#onetrust-banner-sdk
+NOT_CONSIDERED[tri] .otRelFont#onetrust-pc-sdk
+NOT_CONSIDERED[tri] .otRelFont.ot-sdk-cookie-policy
+NOT_CONSIDERED[tri] .top.otFlat#onetrust-banner-sdk
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] html
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] select
+NOT_CONSIDERED[tri] textarea
+PSEUDO_SKIPPED[tri] :not -> 87 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .banner-option:not(:first-child)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .ot-optout-signal svg:not(.ot-source-sprite)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .ot-optout-signal svg:not(.ot-source-sprite) path
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk :not(.ot-leg-btn-container) > button:focus
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk :not(.ot-leg-btn-container):not(.ot-confirm-dialog-buttons) > button:not(.ot-link-btn):focus
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :after -> 56 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .checkbox:after
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .ot-sdk-container:after
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .ot-sdk-row:after
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk :after
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk label:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :before -> 33 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .checkbox:before
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk :before
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk label:before
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk #ot-pc-lst .ot-vs-list .ot-vnd-item .ot-acc-hdr .ot-chkbox label:before
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .checkbox:before
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :active -> 26 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-desc-cntr:active
+PSEUDO_SKIPPED[tri]    eg #ot-sdk-btn.optanon-show-settings:active
+PSEUDO_SKIPPED[tri]    eg #ot-sdk-btn.ot-sdk-show-settings:active
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-13jjo4r:not([aria-disabled]):active
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-13jjo4r:not([aria-disabled]):active:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :last-child -> 17 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk #ot-pc-lst .ot-vs-list .ot-vnd-item .ot-acc-hdr div:last-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout .ot-hlst-cntr:last-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout .ot-vlst-cntr:last-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout.ot-checkbox-consent .ot-acc-hdr div:last-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pli-hdr span:last-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :first-child -> 14 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .banner-option-header :first-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk .banner-option:first-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk #ot-pc-lst .ot-vs-list .ot-vnd-item .ot-acc-hdr div:first-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout .ot-vlst-cntr:first-child
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout.ot-checkbox-consent .ot-acc-hdr div:first-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :-webkit-autofill -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-194g8oa [data-wct-form-control-wrapper] > select:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1gjcfa0 [data-wct-form-control-wrapper] > select:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1sapncu [data-wct-form-control-wrapper] > input:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > input:-webkit-autofill
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :autofill -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-194g8oa [data-wct-form-control-wrapper] > select:autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input:autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1gjcfa0 [data-wct-form-control-wrapper] > select:autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1sapncu [data-wct-form-control-wrapper] > input:autofill
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > input:autofill
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :checked -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-consent-sdk #onetrust-pc-sdk .ot-tgl input:checked + .ot-switch .ot-switch-nob
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk #ot-pc-lst .ot-acc-cntr > input[type="checkbox"]:checked ~ .ot-acc-hdr
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-chkbox input:checked + label:after
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-chkbox input:checked ~ label:before
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-tgl input:checked + .ot-switch .ot-switch-nob
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :visited -> 7 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1dsadu1:visited
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1e3ydum a:visited
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-5kxri9 a:visited
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-9eds4:visited
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-hl6y5f:visited
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :first-of-type -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-accordion-layout.ot-cat-item:first-of-type
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-always-active-group .ot-grp-hdr1 .ot-tgl-cntr:first-of-type
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-desc-cntr .ot-tgl-cntr:first-of-type
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pc-footer .ot-btn-container.ot-button-order-container [class*="ot-button-order-"]:first-of-type
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-hqt62i:first-of-type
+PSEUDO_SKIPPED[tri] :nth-child -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc .disc-pur:nth-child(-n+1)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc p:nth-child(-n+2):not(.disc-pur):not([role="heading"])
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc:nth-child(n+3) p
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc:nth-child(n+3) p:nth-of-type(2n)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc:nth-child(n+3) p:nth-of-type(odd)
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk::-webkit-scrollbar
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-grps-cntr ::-webkit-scrollbar
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pc-scrollbar::-webkit-scrollbar
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-r1prx9::-webkit-scrollbar
+PSEUDO_SKIPPED[tri] :focus-visible -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-desc-cntr:focus-visible
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > input:focus-visible
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > select:focus-visible
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > textarea:focus-visible
+PSEUDO_SKIPPED[tri] :nth-of-type -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pc-footer .ot-btn-container.ot-button-order-container [class*="ot-button-order-"]:nth-of-type(2)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pc-footer .ot-btn-container.ot-button-order-container [class*="ot-button-order-"]:nth-of-type(3)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc:nth-child(n+3) p:nth-of-type(2n)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc:nth-child(n+3) p:nth-of-type(odd)
+PSEUDO_SKIPPED[tri] :-webkit-autofill-strong-password -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > input:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > select:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > textarea:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri] ::-webkit-date-and-time-value -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-date-and-time-value
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1sapncu [data-wct-form-control-wrapper] > input[type="date"]::-webkit-date-and-time-value
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-date-and-time-value
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-thumb -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-banner-sdk::-webkit-scrollbar-thumb
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-grps-cntr ::-webkit-scrollbar-thumb
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-pc-scrollbar::-webkit-scrollbar-thumb
+PSEUDO_SKIPPED[tri] ::-webkit-textfield-decoration-container -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > input:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > select:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-7y4fmk > textarea:-webkit-autofill-strong-password::-webkit-textfield-decoration-container
+PSEUDO_SKIPPED[tri] :disabled -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk [type="checkbox"]:disabled + label
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk [type="checkbox"]:disabled + label:after
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk [type="checkbox"]:disabled + label:before
+PSEUDO_SKIPPED[tri] ::-webkit-calendar-picker-indicator -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-day-field -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-day-field:focus
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-day-field:focus
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-fields-wrapper -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-fields-wrapper
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-fields-wrapper
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-month-field -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-month-field:focus
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-month-field:focus
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-year-field -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-year-field:focus
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="date"]::-webkit-datetime-edit-year-field:focus
+PSEUDO_SKIPPED[tri] ::-webkit-inner-spin-button -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-1alfmy6 [data-wct-form-control-wrapper] > input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-dk2b7y [data-wct-form-control-wrapper] > input[type="number"]::-webkit-inner-spin-button
+PSEUDO_SKIPPED[tri] ::placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk #ot-pc-hdr input::placeholder
+PSEUDO_SKIPPED[tri] :last-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .default-ltr-iqcdef-cache-hqt62i:last-of-type
+PSEUDO_SKIPPED[tri] :nth-last-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #onetrust-pc-sdk .ot-ven-dets .ot-ven-disc p:nth-last-child(-n+1)
+[tri-match] frame_id=0 command=init miss_delta=40 node_match_changes=0 total_misses=40
+[tri-match] frame_id=1 command=add miss_delta=1116 node_match_changes=1091 total_misses=1156
+[tri-match] frame_id=2 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1156
+[tri-match] frame_id=3 command=add miss_delta=2 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=4 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=5 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=6 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=7 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=8 command=add miss_delta=3 node_match_changes=0 total_misses=1161
+[tri-match] frame_id=9 command=add miss_delta=243 node_match_changes=240 total_misses=1404
+[tri-match] frame_id=10 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1404
+[tri-match] frame_id=11 command=add miss_delta=3 node_match_changes=0 total_misses=1407
+[tri-match] frame_id=12 command=add miss_delta=3 node_match_changes=0 total_misses=1410
+[tri-match] frame_id=13 command=add miss_delta=3 node_match_changes=0 total_misses=1413
+[tri-match] frame_id=14 command=add miss_delta=3 node_match_changes=2 total_misses=1416
+[tri-match] frame_id=15 command=add miss_delta=3 node_match_changes=2 total_misses=1419
+[tri-match] frame_id=16 command=add miss_delta=3 node_match_changes=2 total_misses=1422
+[tri-match] frame_id=17 command=add miss_delta=3 node_match_changes=2 total_misses=1425
+[tri-match] frame_id=18 command=add miss_delta=3 node_match_changes=2 total_misses=1428
+[tri-match] frame_id=19 command=add miss_delta=3 node_match_changes=2 total_misses=1431
+[tri-match] frame_id=20 command=add miss_delta=3 node_match_changes=2 total_misses=1434
+[tri-match] frame_id=21 command=add miss_delta=3 node_match_changes=2 total_misses=1437
+[tri-match] frame_id=22 command=add miss_delta=3 node_match_changes=2 total_misses=1440
+[tri-match] frame_id=23 command=add miss_delta=3 node_match_changes=2 total_misses=1443
+[tri-match] frame_id=24 command=add miss_delta=3 node_match_changes=2 total_misses=1446
+[tri-match] frame_id=25 command=add miss_delta=3 node_match_changes=2 total_misses=1449
+[tri-match] frame_id=26 command=add miss_delta=3 node_match_changes=2 total_misses=1452
+[tri-match] frame_id=27 command=add miss_delta=3 node_match_changes=2 total_misses=1455
+[tri-match] frame_id=28 command=add miss_delta=3 node_match_changes=2 total_misses=1458
+[tri-match] frame_id=29 command=add miss_delta=3 node_match_changes=2 total_misses=1461
+[tri-match] frame_id=30 command=add miss_delta=3 node_match_changes=2 total_misses=1464
+[tri-match] frame_id=31 command=add miss_delta=3 node_match_changes=2 total_misses=1467
+[tri-match] frame_id=32 command=add miss_delta=3 node_match_changes=2 total_misses=1470
+[tri-match] frame_id=33 command=add miss_delta=3 node_match_changes=2 total_misses=1473
+[tri-match] frame_id=34 command=add miss_delta=3 node_match_changes=2 total_misses=1476
+[tri-match] frame_id=35 command=add miss_delta=3 node_match_changes=2 total_misses=1479
+[tri-match] frame_id=36 command=add miss_delta=3 node_match_changes=2 total_misses=1482
+[tri-match] frame_id=37 command=add miss_delta=3 node_match_changes=2 total_misses=1485
+[tri-match] frame_id=38 command=add miss_delta=3 node_match_changes=2 total_misses=1488
+[tri-match] frame_id=39 command=add miss_delta=3 node_match_changes=2 total_misses=1491
+[tri-match] frame_id=40 command=add miss_delta=3 node_match_changes=2 total_misses=1494
+[tri-match] frame_id=41 command=add miss_delta=3 node_match_changes=2 total_misses=1497
+[tri-match] frame_id=42 command=add miss_delta=3 node_match_changes=2 total_misses=1500
+[tri-match] frame_id=43 command=add miss_delta=3 node_match_changes=2 total_misses=1503
+[tri-match] frame_id=44 command=add miss_delta=3 node_match_changes=2 total_misses=1506
+[tri-match] frame_id=45 command=add miss_delta=3 node_match_changes=2 total_misses=1509
+[tri-match] frame_id=46 command=add miss_delta=3 node_match_changes=2 total_misses=1512
+[tri-match] frame_id=47 command=add miss_delta=3 node_match_changes=2 total_misses=1515
+[tri-match] frame_id=48 command=add miss_delta=3 node_match_changes=2 total_misses=1518
+[tri-match] frame_id=49 command=add miss_delta=3 node_match_changes=2 total_misses=1521
+[tri-match] frame_id=50 command=add miss_delta=3 node_match_changes=2 total_misses=1524
+[tri-match] frame_id=51 command=add miss_delta=3 node_match_changes=2 total_misses=1527
+[tri-match] frame_id=52 command=add miss_delta=3 node_match_changes=2 total_misses=1530
+[tri-match] frame_id=53 command=add miss_delta=3 node_match_changes=2 total_misses=1533
+[tri-match] frame_id=54 command=add miss_delta=3 node_match_changes=2 total_misses=1536
+[tri-match] frame_id=55 command=add miss_delta=3 node_match_changes=2 total_misses=1539
+[tri-match] frame_id=56 command=add miss_delta=3 node_match_changes=2 total_misses=1542
+[tri-match] frame_id=57 command=add miss_delta=3 node_match_changes=2 total_misses=1545
+[tri-match] frame_id=58 command=add miss_delta=3 node_match_changes=2 total_misses=1548
+[tri-match] frame_id=59 command=add miss_delta=3 node_match_changes=2 total_misses=1551
+[tri-match] frame_id=60 command=add miss_delta=3 node_match_changes=2 total_misses=1554
+[tri-match] frame_id=61 command=add miss_delta=3 node_match_changes=2 total_misses=1557
+[tri-match] frame_id=62 command=add miss_delta=3 node_match_changes=2 total_misses=1560
+[tri-match] frame_id=63 command=add miss_delta=3 node_match_changes=2 total_misses=1563
+[tri-match] frame_id=64 command=add miss_delta=3 node_match_changes=2 total_misses=1566
+[tri-match] frame_id=65 command=add miss_delta=3 node_match_changes=2 total_misses=1569
+[tri-match] frame_id=66 command=add miss_delta=3 node_match_changes=2 total_misses=1572
+[tri-match] frame_id=67 command=add miss_delta=3 node_match_changes=2 total_misses=1575
+[tri-match] frame_id=68 command=add miss_delta=3 node_match_changes=2 total_misses=1578
+[tri-match] frame_id=69 command=add miss_delta=3 node_match_changes=2 total_misses=1581
+[tri-match] frame_id=70 command=add miss_delta=3 node_match_changes=2 total_misses=1584
+[tri-match] frame_id=71 command=add miss_delta=3 node_match_changes=2 total_misses=1587
+[tri-match] frame_id=72 command=add miss_delta=3 node_match_changes=2 total_misses=1590
+[tri-match] frame_id=73 command=add miss_delta=3 node_match_changes=2 total_misses=1593
+[tri-match] frame_id=74 command=add miss_delta=3 node_match_changes=2 total_misses=1596
+[tri-match] frame_id=75 command=add miss_delta=3 node_match_changes=2 total_misses=1599
+[tri-match] frame_id=76 command=add miss_delta=3 node_match_changes=2 total_misses=1602
+[tri-match] frame_id=77 command=add miss_delta=3 node_match_changes=2 total_misses=1605
+[tri-match] frame_id=78 command=add miss_delta=3 node_match_changes=2 total_misses=1608
+[tri-match] frame_id=79 command=add miss_delta=3 node_match_changes=2 total_misses=1611
+[tri-match] frame_id=80 command=add miss_delta=3 node_match_changes=2 total_misses=1614
+[tri-match] frame_id=81 command=add miss_delta=3 node_match_changes=2 total_misses=1617
+[tri-match] frame_id=82 command=add miss_delta=3 node_match_changes=2 total_misses=1620
+[tri-match] frame_id=83 command=add miss_delta=3 node_match_changes=2 total_misses=1623
+[tri-match] frame_id=84 command=add miss_delta=3 node_match_changes=2 total_misses=1626
+[tri-match] frame_id=85 command=add miss_delta=3 node_match_changes=2 total_misses=1629
+[tri-match] frame_id=86 command=add miss_delta=3 node_match_changes=2 total_misses=1632
+[tri-match] frame_id=87 command=add miss_delta=3 node_match_changes=2 total_misses=1635
+[tri-match] frame_id=88 command=add miss_delta=3 node_match_changes=2 total_misses=1638
+[tri-match] frame_id=89 command=add miss_delta=3 node_match_changes=2 total_misses=1641
+[tri-match] frame_id=90 command=add miss_delta=3 node_match_changes=2 total_misses=1644
+[tri-match] frame_id=91 command=add miss_delta=3 node_match_changes=2 total_misses=1647
+[tri-match] frame_id=92 command=add miss_delta=3 node_match_changes=2 total_misses=1650
+[tri-match] frame_id=93 command=add miss_delta=3 node_match_changes=2 total_misses=1653
+[tri-match] frame_id=94 command=add miss_delta=3 node_match_changes=2 total_misses=1656
+[tri-match] frame_id=95 command=add miss_delta=3 node_match_changes=2 total_misses=1659
+[tri-match] frame_id=96 command=add miss_delta=3 node_match_changes=2 total_misses=1662
+[tri-match] frame_id=97 command=add miss_delta=3 node_match_changes=2 total_misses=1665
+[tri-match] frame_id=98 command=add miss_delta=3 node_match_changes=2 total_misses=1668
+[tri-match] frame_id=99 command=add miss_delta=3 node_match_changes=2 total_misses=1671
+[tri-match] frame_id=100 command=add miss_delta=3 node_match_changes=2 total_misses=1674
+[tri-match] frame_id=101 command=add miss_delta=3 node_match_changes=2 total_misses=1677
+[tri-match] frame_id=102 command=add miss_delta=3 node_match_changes=2 total_misses=1680
+[tri-match] frame_id=103 command=add miss_delta=3 node_match_changes=2 total_misses=1683
+[tri-match] frame_id=104 command=add miss_delta=3 node_match_changes=2 total_misses=1686
+[tri-match] frame_id=105 command=add miss_delta=3 node_match_changes=2 total_misses=1689
+[tri-match] frame_id=106 command=add miss_delta=3 node_match_changes=2 total_misses=1692
+[tri-match] frame_id=107 command=add miss_delta=3 node_match_changes=2 total_misses=1695
+[tri-match] frame_id=108 command=add miss_delta=3 node_match_changes=2 total_misses=1698
+[tri-match] frame_id=109 command=add miss_delta=3 node_match_changes=2 total_misses=1701
+[tri-match] frame_id=110 command=add miss_delta=3 node_match_changes=2 total_misses=1704
+[tri-match] frame_id=111 command=add miss_delta=3 node_match_changes=2 total_misses=1707
+[tri-match] frame_id=112 command=add miss_delta=3 node_match_changes=2 total_misses=1710
+[tri-match] frame_id=113 command=add miss_delta=3 node_match_changes=2 total_misses=1713
+[tri-match] frame_id=114 command=add miss_delta=3 node_match_changes=2 total_misses=1716
+[tri-match] frame_id=115 command=add miss_delta=3 node_match_changes=2 total_misses=1719
+[tri-match] frame_id=116 command=add miss_delta=3 node_match_changes=2 total_misses=1722
+[tri-match] frame_id=117 command=add miss_delta=3 node_match_changes=2 total_misses=1725
+[tri-match] frame_id=118 command=add miss_delta=3 node_match_changes=2 total_misses=1728
+[tri-match] frame_id=119 command=add miss_delta=3 node_match_changes=2 total_misses=1731
+[tri-match] frame_id=120 command=add miss_delta=3 node_match_changes=2 total_misses=1734
+[tri-match] frame_id=121 command=add miss_delta=3 node_match_changes=2 total_misses=1737
+[tri-match] frame_id=122 command=add miss_delta=3 node_match_changes=2 total_misses=1740
+[tri-match] frame_id=123 command=add miss_delta=3 node_match_changes=2 total_misses=1743
+[tri-match] frame_id=124 command=add miss_delta=3 node_match_changes=2 total_misses=1746
+[tri-match] frame_id=125 command=add miss_delta=3 node_match_changes=2 total_misses=1749
+[tri-match] frame_id=126 command=add miss_delta=3 node_match_changes=2 total_misses=1752
+[tri-match] frame_id=127 command=add miss_delta=3 node_match_changes=2 total_misses=1755
+[tri-match] frame_id=128 command=add miss_delta=3 node_match_changes=2 total_misses=1758
+[tri-match] frame_id=129 command=add miss_delta=3 node_match_changes=2 total_misses=1761
+[tri-match] frame_id=130 command=add miss_delta=3 node_match_changes=2 total_misses=1764
+[tri-match] frame_id=131 command=add miss_delta=3 node_match_changes=2 total_misses=1767
+[tri-match] frame_id=132 command=add miss_delta=3 node_match_changes=2 total_misses=1770
+[tri-match] frame_id=133 command=add miss_delta=3 node_match_changes=2 total_misses=1773
+[tri-match] frame_id=134 command=add miss_delta=3 node_match_changes=2 total_misses=1776
+[tri-match] frame_id=135 command=add miss_delta=3 node_match_changes=0 total_misses=1779
+
+thread 'main' (2460002) panicked at src/tri.rs:421:35:
+no entry found for key
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

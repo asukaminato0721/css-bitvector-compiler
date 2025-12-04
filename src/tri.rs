@@ -19,14 +19,18 @@ static mut INPUT_SKIP_COUNT: usize = 0;
 static mut STATE: usize = 0; // global state
 static DEBUG_MODE: OnceLock<bool> = OnceLock::new();
 
-fn debug_enabled() -> bool {
-    *DEBUG_MODE.get_or_init(|| match std::env::var("BIT_DEBUG") {
+fn env_flag(name: &str) -> bool {
+    match std::env::var(name) {
         Ok(value) => {
             let lower = value.to_ascii_lowercase();
             matches!(lower.as_str(), "1" | "true" | "yes" | "on")
         }
         Err(_) => false,
-    })
+    }
+}
+
+fn debug_enabled() -> bool {
+    *DEBUG_MODE.get_or_init(|| env_flag("BIT_DEBUG"))
 }
 
 fn debug_log<F>(build: F)
@@ -967,14 +971,43 @@ pub fn collect_rule_matches(
     }
     res
 }
+
+fn matches_grouped_by_node(rule_matches: &HashMap<String, Vec<u64>>) -> HashMap<u64, Vec<String>> {
+    let mut by_node: HashMap<u64, Vec<String>> = HashMap::new();
+    for (selector, node_ids) in rule_matches {
+        for &node_id in node_ids {
+            by_node.entry(node_id).or_default().push(selector.clone());
+        }
+    }
+    for selectors in by_node.values_mut() {
+        selectors.sort();
+    }
+    by_node
+}
+
+fn count_node_match_changes(
+    previous: &HashMap<u64, Vec<String>>,
+    current: &HashMap<u64, Vec<String>>,
+) -> usize {
+    let mut changed = 0;
+    for (&node_id, previous_matches) in previous {
+        if current.get(&node_id) != Some(previous_matches) {
+            changed += 1;
+        }
+    }
+    for (&node_id, current_matches) in current {
+        if !previous.contains_key(&node_id) && !current_matches.is_empty() {
+            changed += 1;
+        }
+    }
+    changed
+}
 fn main() {
     let mut dom = DOM::new();
+    let website_name = std::env::var("WEBSITE_NAME").unwrap();
+    let log_match_deltas = env_flag("TRI_LOG_MATCH_DELTAS");
     let parsed = parse_css_with_pseudo(
-        &std::fs::read_to_string(format!(
-            "css-gen-op/{0}/{0}.css",
-            std::env::var("WEBSITE_NAME").unwrap(),
-        ))
-        .unwrap(),
+        &std::fs::read_to_string(format!("css-gen-op/{0}/{0}.css", website_name)).unwrap(),
     );
     let (selectors, skipped_simple) = partition_simple_selectors(parsed.selectors);
     report_skipped_selectors("tri", &skipped_simple);
@@ -985,19 +1018,52 @@ fn main() {
         STATE = s;
     }
     let _ = fs::write(
-        format!(
-            "css-gen-op/{0}/dot_tri.dot",
-            std::env::var("WEBSITE_NAME").unwrap(),
-        ),
+        format!("css-gen-op/{0}/dot_tri.dot", website_name),
         nfa.to_dot(&dom.selector_manager),
     );
+
+    let mut prev_node_matches = if log_match_deltas {
+        Some(HashMap::<u64, Vec<String>>::new())
+    } else {
+        None
+    };
+    let mut cached_rule_matches: Option<HashMap<String, Vec<u64>>> = None;
+
     for f in parse_trace() {
+        let before_miss = if log_match_deltas {
+            unsafe { MISS_CNT }
+        } else {
+            0
+        };
         apply_frame(&mut dom, &f, &nfa);
+        if log_match_deltas {
+            let after_miss = unsafe { MISS_CNT };
+            let rule_matches = collect_rule_matches(&dom, &nfa, &selectors);
+            let node_matches = matches_grouped_by_node(&rule_matches);
+            let changed_nodes = prev_node_matches
+                .as_ref()
+                .map(|previous| count_node_match_changes(previous, &node_matches))
+                .unwrap_or_else(|| node_matches.len());
+            println!(
+                "[tri-match] frame_id={} command={} miss_delta={} node_match_changes={} total_misses={}",
+                f.frame_id,
+                f.command_name,
+                after_miss - before_miss,
+                changed_nodes,
+                after_miss
+            );
+            prev_node_matches = Some(node_matches);
+            cached_rule_matches = Some(rule_matches);
+        }
     }
 
-    let mut final_matches = collect_rule_matches(&dom, &nfa, &selectors)
-        .into_iter()
-        .collect::<Vec<_>>();
+    let mut final_matches = if let Some(matches) = cached_rule_matches {
+        matches.into_iter().collect::<Vec<_>>()
+    } else {
+        collect_rule_matches(&dom, &nfa, &selectors)
+            .into_iter()
+            .collect::<Vec<_>>()
+    };
     final_matches.sort();
     println!("BEGIN");
     for (k, v) in final_matches {

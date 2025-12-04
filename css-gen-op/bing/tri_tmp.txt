@@ -1,0 +1,199 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+     Running `target/release/tri`
+NOT_CONSIDERED[tri] 45 selector(s)
+NOT_CONSIDERED[tri] #b_headerheader
+NOT_CONSIDERED[tri] #bnc-hc
+NOT_CONSIDERED[tri] #carousel
+NOT_CONSIDERED[tri] #dsbflyout
+NOT_CONSIDERED[tri] #dsbflyout_hide
+NOT_CONSIDERED[tri] #dummyIdentifier
+NOT_CONSIDERED[tri] #idCont
+NOT_CONSIDERED[tri] #id_nc
+NOT_CONSIDERED[tri] #id_rbh
+NOT_CONSIDERED[tri] #id_rh
+NOT_CONSIDERED[tri] #id_sc
+NOT_CONSIDERED[tri] #rh_rwm
+NOT_CONSIDERED[tri] #sb_sbi
+NOT_CONSIDERED[tri] #shdlg-main
+NOT_CONSIDERED[tri] #thp_notf_div
+NOT_CONSIDERED[tri] .below_sbox
+NOT_CONSIDERED[tri] .bottom_row
+NOT_CONSIDERED[tri] .cdxConv
+NOT_CONSIDERED[tri] .cdxConv_slsboxl
+NOT_CONSIDERED[tri] .dynamic_footer.footer
+NOT_CONSIDERED[tri] .feedback_button
+NOT_CONSIDERED[tri] .footer
+NOT_CONSIDERED[tri] .hb_section
+NOT_CONSIDERED[tri] .id_vnext
+NOT_CONSIDERED[tri] .image-feed
+NOT_CONSIDERED[tri] .margin_inc#idCont
+NOT_CONSIDERED[tri] .mc_caro
+NOT_CONSIDERED[tri] .no_mod.footer
+NOT_CONSIDERED[tri] .row.vs_cont
+NOT_CONSIDERED[tri] .sb_feedback_button
+NOT_CONSIDERED[tri] .sc_hide.scopes
+NOT_CONSIDERED[tri] .scopes
+NOT_CONSIDERED[tri] .show#carousel
+NOT_CONSIDERED[tri] .show_footer.dynamic_footer.footer
+NOT_CONSIDERED[tri] .skeleton-bg
+NOT_CONSIDERED[tri] .skeleton-container
+NOT_CONSIDERED[tri] .static_footer.footer
+NOT_CONSIDERED[tri] .switch_lang
+NOT_CONSIDERED[tri] .tooltip
+NOT_CONSIDERED[tri] .tooltipCN
+NOT_CONSIDERED[tri] .tooltip_sb
+NOT_CONSIDERED[tri] .vs_cont
+NOT_CONSIDERED[tri] .vsmodule#vert_mbhpf
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] html
+PSEUDO_SKIPPED[tri] :after -> 89 selector(s)
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:active:after
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:after
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:focus:after
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:hover:after
+PSEUDO_SKIPPED[tri]    eg #carousel .nav .edit_interests:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :before -> 88 selector(s)
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:active:before
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:before
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:focus:before
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:hover:before
+PSEUDO_SKIPPED[tri]    eg #dsbflyout .close:before
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :not -> 47 selector(s)
+PSEUDO_SKIPPED[tri]    eg .b_dark .no_image .below_sbox .cdxPrompt .cdxButton:not(.cdxAltButton)
+PSEUDO_SKIPPED[tri]    eg .below_sbox .cdxPrompt .cdxAcrylic .cdxButton:not(.cdxAltButton)
+PSEUDO_SKIPPED[tri]    eg .below_sbox .cdxPrompt .cdxAcrylic .cdxHeader .cdxPagination .cdxPage.selected:not(.paused) span.cdxPageIndicator
+PSEUDO_SKIPPED[tri]    eg .footer .items .item body:not(.b_dark) .hp_body.no_image #carousel .nav .a_bold
+PSEUDO_SKIPPED[tri]    eg .footer .items .item body:not(.b_dark) .hp_body.no_image #carousel .nav .a_bold .nav-arrow
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :active -> 46 selector(s)
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:active:after
+PSEUDO_SKIPPED[tri]    eg #bnc-hc:active:before
+PSEUDO_SKIPPED[tri]    eg #id_nc:active:after
+PSEUDO_SKIPPED[tri]    eg #id_nc:active:before
+PSEUDO_SKIPPED[tri]    eg #id_rbh:active:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :first-child -> 6 selector(s)
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane .itile .crs_item .crs_item_ctnt.crs_wea .deg_switch > :first-child
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane .pntile .crs_item .crs_item_ctnt.crs_wea .deg_switch > :first-child
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane .tile_grp:first-child
+PSEUDO_SKIPPED[tri]    eg #vert_bawcrs.vsmodule .vert_bawcrs .carousel-content .carousel-scroll-wrapper .carousel-scroll-content .items .vscrs_bawtile:first-child
+PSEUDO_SKIPPED[tri]    eg .vsmodule .mit .item:first-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :first-of-type -> 6 selector(s)
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane .itile.no_margin_left:first-of-type
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane .pntile.no_margin_left:first-of-type
+PSEUDO_SKIPPED[tri]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type
+PSEUDO_SKIPPED[tri]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type .card-img
+PSEUDO_SKIPPED[tri]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type .card-label
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg #carousel #crs_pane::-webkit-scrollbar
+PSEUDO_SKIPPED[tri]    eg #carousel::-webkit-scrollbar
+PSEUDO_SKIPPED[tri]    eg .bottom_row .scroll_cont::-webkit-scrollbar
+PSEUDO_SKIPPED[tri] :focus-visible -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .below_sbox .cdxPrompt .cdxMain .nudgeFocusEnabled:focus-visible
+PSEUDO_SKIPPED[tri]    eg .hb_section:focus-visible
+PSEUDO_SKIPPED[tri]    eg .vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_img:focus-visible
+PSEUDO_SKIPPED[tri] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .vsmodule .otd .item:last-child
+PSEUDO_SKIPPED[tri] :last-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .mc_caro .musCard .musCardCont .share li:last-of-type
+PSEUDO_SKIPPED[tri] :nth-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .below_sbox .mvs_cont .tileContainer #mvs li:nth-child(-n+3)
+[tri-match] frame_id=0 command=init miss_delta=295 node_match_changes=81 total_misses=295
+[tri-match] frame_id=1 command=replace_value miss_delta=0 node_match_changes=0 total_misses=295
+[tri-match] frame_id=2 command=replace_value miss_delta=0 node_match_changes=0 total_misses=295
+[tri-match] frame_id=3 command=replace_value miss_delta=11 node_match_changes=0 total_misses=306
+[tri-match] frame_id=4 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=5 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=6 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=7 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=8 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=9 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=10 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=11 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=12 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=13 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=14 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=15 command=recalculate miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=16 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=17 command=replace_value miss_delta=0 node_match_changes=0 total_misses=306
+[tri-match] frame_id=18 command=add miss_delta=2 node_match_changes=0 total_misses=308
+[tri-match] frame_id=19 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=20 command=replace_value miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=21 command=replace_value miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=22 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=23 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=24 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=25 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=26 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=27 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=28 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=29 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=30 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=31 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=32 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=33 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=34 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=35 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=36 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=37 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=38 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=39 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=40 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=41 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=42 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=43 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=44 command=recalculate miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=45 command=replace_value miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=46 command=replace_value miss_delta=0 node_match_changes=0 total_misses=308
+[tri-match] frame_id=47 command=add miss_delta=2 node_match_changes=0 total_misses=310
+[tri-match] frame_id=48 command=recalculate miss_delta=0 node_match_changes=0 total_misses=310
+BEGIN
+#idCont .sw_mktsw -> [520]
+#idCont .sw_mktsw * -> [523, 528]
+.bottom_row .scroll_cont -> [632]
+.bottom_row .show_none.scroll_cont -> [632]
+.scopes .dots.scope -> [236]
+.scopes .dots.scope .dots_tab_selection -> [242]
+.scopes .overflow_menu .try_exp.overflow_item -> [250, 276, 289]
+.scopes .scope -> [158, 184, 197, 210, 223, 236]
+.scopes .scope .overflow_menu -> [247, 347]
+.scopes .scope .overflow_menu .divider.overflow_item -> [302]
+.scopes .scope .overflow_menu .has_sub.overflow_item a -> [336, 356, 373, 390, 407, 424, 441, 458, 475, 492]
+.scopes .scope .overflow_menu .overflow_container -> [343]
+.scopes .scope .overflow_menu .overflow_item -> [250, 263, 276, 289, 302, 315, 328, 350, 367, 384, 401, 418, 435, 452, 469, 486, 503]
+.scopes .scope .overflow_menu .overflow_item a -> [256, 269, 282, 295, 308, 321, 336, 356, 373, 390, 407, 424, 441, 458, 475, 492, 509]
+.scopes .scope .overflow_menu .submenu -> [345]
+.scopes .scope .overflow_menu .submenu .overflow_item .icon -> [362, 379, 396, 413, 430, 447, 464, 481, 498]
+.scopes .scope .overflow_menu .submenu .overflow_item .text -> [364, 381, 398, 415, 432, 449, 466, 483, 500]
+.scopes .scope a -> [163, 189, 202, 215, 228, 256, 269, 282, 295, 308, 321, 336, 356, 373, 390, 407, 424, 441, 458, 475, 492, 509]
+.scopes .try_exp.scope -> [197, 210, 223]
+.vs_cont .five_col.mc_caro -> [638]
+.vs_cont .mc_caro -> [638]
+.vs_cont .module -> [765]
+.vs_cont .vert_make_default -> [842]
+.vs_cont .vert_make_default .button -> [849]
+.vs_cont .vert_make_default .text -> [852]
+.vs_cont .vert_make_default .text .desc -> [857]
+.vs_cont .vert_make_default .text .title -> [854]
+.vs_cont .vert_make_default > * -> [845, 852]
+.vs_cont .vs -> [750]
+END
+[src/tri.rs:1073:5] unsafe { MISS_CNT } = 310
+[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 0
+[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 0
