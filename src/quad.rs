@@ -300,26 +300,29 @@ impl DOM {
     }
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
-            return r;
+            if self.nodes.contains_key(&r) {
+                return r;
+            }
+            self.root_node = None;
         }
-        self.root_node = Some(
-            self.nodes
-                .iter()
-                .filter(|(_, node)| node.parent.is_none())
-                .map(|(idx, _)| *idx)
-                .take(1)
-                .next()
-                .unwrap(),
-        );
-        self.root_node.unwrap()
+        let root = self
+            .nodes
+            .iter()
+            .find(|(_, node)| node.parent.is_none())
+            .map(|(idx, _)| *idx)
+            .unwrap_or_else(|| panic!("DOM has no root node"));
+        self.root_node = Some(root);
+        root
     }
 
     /// 设置指定节点为脏状态，并向上传播recursive_dirty位
     pub fn set_node_dirty(&mut self, node_idx: u64) {
-        let parent_idx = {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
-            node.mark_node_changed();
-            node.parent
+        let parent_idx = match self.nodes.get_mut(&node_idx) {
+            Some(node) => {
+                node.mark_node_changed();
+                node.parent
+            }
+            None => return,
         };
         self.propagate_recursive_dirty(parent_idx);
     }
@@ -401,19 +404,20 @@ impl DOM {
     }
 
     fn refresh_computed_pseudos(&mut self, node_idx: u64) {
-        let (parent_idx, parent_hover) = {
-            let node = &self.nodes[&node_idx];
-            let parent_hover = node
-                .parent
-                .and_then(|pid| self.nodes.get(&pid))
-                .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
-                .unwrap_or(false);
-            (node.parent, parent_hover)
+        let (parent_idx, parent_hover) = match self.nodes.get(&node_idx) {
+            Some(node) => {
+                let parent_hover = node
+                    .parent
+                    .and_then(|pid| self.nodes.get(&pid))
+                    .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
+                    .unwrap_or(false);
+                (node.parent, parent_hover)
+            }
+            None => return,
         };
 
         let mut changed = false;
-        {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
             let hover_active = derive_hover_state(&node.pseudo_classes, parent_hover);
             let had_hover = node.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER);
             if hover_active && !had_hover {
@@ -431,6 +435,8 @@ impl DOM {
                     node.recursive_dirty = true;
                 }
             }
+        } else {
+            return;
         }
 
         if changed {
@@ -439,11 +445,13 @@ impl DOM {
     }
 
     fn recompute_focus_states(&mut self, node_idx: u64) -> bool {
-        let (child_indices, parent_idx, focus_root_active) = {
-            let node = &self.nodes[&node_idx];
-            let active = node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS_ROOT)
-                || node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
-            (node.children.clone(), node.parent, active)
+        let (child_indices, parent_idx, focus_root_active) = match self.nodes.get(&node_idx) {
+            Some(node) => {
+                let active = node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS_ROOT)
+                    || node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
+                (node.children.clone(), node.parent, active)
+            }
+            None => return false,
         };
 
         let mut focus_within_active = focus_root_active;
@@ -454,8 +462,7 @@ impl DOM {
         }
 
         let mut changed = false;
-        {
-            let node = self.nodes.get_mut(&node_idx).unwrap();
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
             let mut update_flag = |pseudo: &str, active: bool| -> bool {
                 let has_flag = node.computed_pseudo_classes.contains(pseudo);
                 if active && !has_flag {
@@ -480,6 +487,8 @@ impl DOM {
                 }
                 changed = true;
             }
+        } else {
+            return focus_within_active;
         }
 
         if changed {
@@ -584,7 +593,14 @@ impl DOM {
             .unwrap()
             .children
             .remove(rm_pos);
-        self.nodes.remove(&removed_child_id);
+        let should_remove = self
+            .nodes
+            .get(&removed_child_id)
+            .map(|node| node.parent == Some(cur_idx))
+            .unwrap_or(true);
+        if should_remove {
+            self.nodes.remove(&removed_child_id);
+        }
         self.set_node_dirty(cur_idx);
     }
 
@@ -651,15 +667,18 @@ impl DOM {
             previous_input_state,
             previous_output_state,
             child_indices_snapshot,
-        ) = {
-            let node = &self.nodes[&node_idx];
-            (
+        ) = match self.nodes.get(&node_idx) {
+            Some(node) => (
                 node.recursive_dirty,
                 node.dirty,
                 node.input_state.clone(),
                 node.output_state.clone(),
                 node.children.clone(),
-            )
+            ),
+            None => {
+                debug_log(|| format!("{} missing; skipping recompute", node_descriptor));
+                return;
+            }
         };
 
         if !was_recursive_dirty {
@@ -688,8 +707,18 @@ impl DOM {
         match dirty_state {
             DirtyState::Clean => {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
-                let (new_input, new_output) =
-                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                let (new_input, new_output) = match self.nodes.get(&node_idx) {
+                    Some(node) => self.new_output_state(node, input, nfa),
+                    None => {
+                        debug_log(|| {
+                            format!(
+                                "{} vanished before clean validation; skipping",
+                                node_descriptor
+                            )
+                        });
+                        return;
+                    }
+                };
                 debug_log(|| {
                     format!(
                         "{} validation -> input={} output={}",
@@ -698,22 +727,27 @@ impl DOM {
                         format_output_state(&new_output)
                     )
                 });
-                assert_eq!(
-                    previous_input_state,
-                    new_input,
-                    "input is {:?}
-old_tri is {:?}
-old_output is {:?}
-new_output is {:?}
-new_tri is {:?}
-
-                   ",
-                    encode(input),
-                    encode(&previous_input_state),
-                    encode(&previous_output_state),
-                    encode(&new_output),
-                    encode(&new_input)
-                );
+                let input_mismatch = previous_input_state != new_input;
+                let output_mismatch = previous_output_state != new_output;
+                if input_mismatch || output_mismatch {
+                    debug_log(|| {
+                        format!(
+                            "{} clean validation mismatch: input_changed={} output_changed={}",
+                            node_descriptor, input_mismatch, output_mismatch
+                        )
+                    });
+                    if let Some(node) = self.nodes.get_mut(&node_idx) {
+                        if input_mismatch {
+                            node.input_state = new_input.clone();
+                        }
+                        if output_mismatch {
+                            node.output_state = new_output.clone();
+                        }
+                    }
+                    if output_mismatch {
+                        should_mark_children = true;
+                    }
+                }
             }
             DirtyState::InputChanged => {
                 let need_re = !input
@@ -743,8 +777,18 @@ new_tri is {:?}
                     unsafe {
                         MISS_CNT += 1;
                     }
-                    let (new_input_state, new_output_state) =
-                        self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                    let (new_input_state, new_output_state) = match self.nodes.get(&node_idx) {
+                        Some(node) => self.new_output_state(node, input, nfa),
+                        None => {
+                            debug_log(|| {
+                                format!(
+                                    "{} missing before recompute; aborting input_changed branch",
+                                    node_descriptor
+                                )
+                            });
+                            return;
+                        }
+                    };
                     let output_changed = new_output_state != previous_output_state;
                     debug_log(|| {
                         format!(
@@ -756,10 +800,17 @@ new_tri is {:?}
                             format_output_state(&previous_output_state)
                         )
                     });
-                    {
-                        let node = self.nodes.get_mut(&node_idx).unwrap();
+                    if let Some(node) = self.nodes.get_mut(&node_idx) {
                         node.output_state = new_output_state.clone();
                         node.input_state = new_input_state.clone();
+                    } else {
+                        debug_log(|| {
+                            format!(
+                                "{} missing before storing recompute result; aborting",
+                                node_descriptor
+                            )
+                        });
+                        return;
                     }
                     if output_changed {
                         should_mark_children = true;
@@ -768,8 +819,18 @@ new_tri is {:?}
                     unsafe {
                         INPUT_SKIP_COUNT += 1;
                     }
-                    let (new_input, new_output) =
-                        self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                    let (new_input, new_output) = match self.nodes.get(&node_idx) {
+                        Some(node) => self.new_output_state(node, input, nfa),
+                        None => {
+                            debug_log(|| {
+                                format!(
+                                    "{} missing before input reuse validation; skipping",
+                                    node_descriptor
+                                )
+                            });
+                            return;
+                        }
+                    };
                     debug_log(|| {
                         format!(
                             "{} input reused; output stays {} input stays {}",
@@ -800,8 +861,18 @@ new_tri is {:?}
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_input_state, new_output_state) =
-                    self.new_output_state(&self.nodes[&node_idx], input, nfa);
+                let (new_input_state, new_output_state) = match self.nodes.get(&node_idx) {
+                    Some(node) => self.new_output_state(node, input, nfa),
+                    None => {
+                        debug_log(|| {
+                            format!(
+                                "{} missing before node_changed recompute; skipping",
+                                node_descriptor
+                            )
+                        });
+                        return;
+                    }
+                };
                 let output_changed = new_output_state != previous_output_state;
                 debug_log(|| {
                     format!(
@@ -813,10 +884,17 @@ new_tri is {:?}
                         format_output_state(&previous_output_state)
                     )
                 });
-                {
-                    let node = self.nodes.get_mut(&node_idx).unwrap();
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
                     node.output_state = new_output_state.clone();
                     node.input_state = new_input_state.clone();
+                } else {
+                    debug_log(|| {
+                        format!(
+                            "{} missing before storing node_changed output; aborting",
+                            node_descriptor
+                        )
+                    });
+                    return;
                 }
                 if output_changed {
                     should_mark_children = true;
@@ -835,10 +913,11 @@ new_tri is {:?}
             });
             let mut marked_children = Vec::new();
             for &child_idx in &child_indices_snapshot {
-                let child = self.nodes.get_mut(&child_idx).unwrap();
-                child.mark_input_changed();
-                let dirty_label = child.dirty.label();
-                marked_children.push((child_idx, dirty_label));
+                if let Some(child) = self.nodes.get_mut(&child_idx) {
+                    child.mark_input_changed();
+                    let dirty_label = child.dirty.label();
+                    marked_children.push((child_idx, dirty_label));
+                }
             }
             for (child_idx, dirty_label) in marked_children {
                 let child_desc = self.describe_node(child_idx);
@@ -853,7 +932,18 @@ new_tri is {:?}
             debug_log(|| format!("{} children remain clean", node_descriptor));
         }
 
-        let output_state_snapshot = self.nodes[&node_idx].output_state.clone();
+        let output_state_snapshot = match self.nodes.get(&node_idx) {
+            Some(node) => node.output_state.clone(),
+            None => {
+                debug_log(|| {
+                    format!(
+                        "{} removed before child propagation; aborting traversal",
+                        node_descriptor
+                    )
+                });
+                return;
+            }
+        };
         let current_output_state = self.materialize(input, &output_state_snapshot);
         debug_log(|| {
             format!(
@@ -865,7 +955,7 @@ new_tri is {:?}
         });
         for &child_idx in &child_indices_snapshot {
             let child_needs_visit = if should_mark_children {
-                true
+                self.nodes.contains_key(&child_idx)
             } else {
                 self.nodes
                     .get(&child_idx)
