@@ -14,6 +14,10 @@ for name in "${WEBSITE_NAMES[@]}"; do
    if test ! -d "css-gen-op/$name"; then
       continue
    fi
+   # skip the reddit folder
+   if [[ "$name" == "reddit" ]]; then
+      continue
+   fi
     export WEBSITE_NAME=$name
     cargo run -r --bin naive &> css-gen-op/$name/tmp.txt || true
     cargo run -r --bin bit &> css-gen-op/$name/bit_tmp.txt || true
