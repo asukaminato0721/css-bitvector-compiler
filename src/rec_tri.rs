@@ -338,16 +338,14 @@ impl DOM {
     }
 
     fn node_matches_compound(&self, node: &DOMNode, compound: &CompoundSelector) -> bool {
-        if let Some(tag) = &compound.tag {
-            if !self.node_has_tag(node, tag) {
+        if let Some(tag) = &compound.tag
+            && !self.node_has_tag(node, tag) {
                 return false;
             }
-        }
-        if let Some(id_value) = &compound.id {
-            if !self.node_has_id(node, id_value) {
+        if let Some(id_value) = &compound.id
+            && !self.node_has_id(node, id_value) {
                 return false;
             }
-        }
         for class_name in &compound.classes {
             if !self.node_has_class(node, class_name) {
                 return false;
@@ -1152,7 +1150,7 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
             .parent
             .and_then(|pid| self.nodes.get(&pid))
             .map(|parent| parent.output_bits.clone())
-            .unwrap_or_else(|| make_root_input());
+            .unwrap_or_else(make_root_input);
         (
             (node.output_bits.clone(), node.tri_state.clone()),
             parent_bits,

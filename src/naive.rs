@@ -393,16 +393,15 @@ impl SimpleDom {
     }
 
     fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>) {
-        if let Some(node_id) = self.node_id_by_path(path) {
-            if let Some(node) = self.nodes.get_mut(&node_id) {
+        if let Some(node_id) = self.node_id_by_path(path)
+            && let Some(node) = self.nodes.get_mut(&node_id) {
                 node.set_attribute(key, new_value);
             }
-        }
     }
 
     fn assert_attribute_value(&self, path: &[usize], key: &str, expected: &str) {
-        if let Some(node_id) = self.node_id_by_path(path) {
-            if let Some(node) = self.nodes.get(&node_id) {
+        if let Some(node_id) = self.node_id_by_path(path)
+            && let Some(node) = self.nodes.get(&node_id) {
                 let actual = node
                     .attributes
                     .get(&key.to_lowercase())
@@ -414,7 +413,6 @@ impl SimpleDom {
                     key, path
                 );
             }
-        }
     }
 
     fn recompute_pseudo_states(&mut self) {
@@ -488,16 +486,14 @@ impl SimpleDom {
     }
 
     fn matches_compound_selector(&self, node: &SimpleDomNode, compound: &CompoundSelector) -> bool {
-        if let Some(tag) = &compound.tag {
-            if tag != "*" && !node.tag_name.eq_ignore_ascii_case(tag) {
+        if let Some(tag) = &compound.tag
+            && tag != "*" && !node.tag_name.eq_ignore_ascii_case(tag) {
                 return false;
             }
-        }
-        if let Some(id_value) = &compound.id {
-            if node.html_id.as_deref() != Some(id_value.as_str()) {
+        if let Some(id_value) = &compound.id
+            && node.html_id.as_deref() != Some(id_value.as_str()) {
                 return false;
             }
-        }
         for class_name in &compound.classes {
             if !node.classes.contains(class_name) {
                 return false;

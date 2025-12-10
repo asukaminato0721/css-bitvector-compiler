@@ -1146,11 +1146,10 @@ fn consume_pseudo(selector: &str, start: usize) -> (String, usize) {
         }
         if ch == '(' {
             paren_depth += 1;
-        } else if ch == ')' {
-            if paren_depth > 0 {
+        } else if ch == ')'
+            && paren_depth > 0 {
                 paren_depth -= 1;
             }
-        }
         name.push(ch);
         idx += ch.len_utf8();
     }
