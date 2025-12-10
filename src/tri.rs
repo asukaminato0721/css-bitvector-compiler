@@ -4,9 +4,7 @@ use css_bitvector_compiler::{
     SelectorId, SelectorManager, derive_hover_state, encode, extract_pseudoclasses, generate_nfa,
     parse_css_with_pseudo, parse_trace, partition_simple_selectors, report_pseudo_selectors,
     report_skipped_selectors,
-    runtime_shared::{
-        HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common, update_attribute_common,
-    },
+    runtime_shared::{HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common},
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -283,15 +281,15 @@ impl DOM {
     }
 
     fn node_matches_compound(&self, node: &DOMNode, compound: &CompoundSelector) -> bool {
-        if let Some(tag) = &compound.tag {
-            if !self.node_has_tag(node, tag) {
-                return false;
-            }
+        if let Some(tag) = &compound.tag
+            && !self.node_has_tag(node, tag)
+        {
+            return false;
         }
-        if let Some(id_value) = &compound.id {
-            if !self.node_has_id(node, id_value) {
-                return false;
-            }
+        if let Some(id_value) = &compound.id
+            && !self.node_has_id(node, id_value)
+        {
+            return false;
         }
         for class_name in &compound.classes {
             if !self.node_has_class(node, class_name) {
@@ -597,9 +595,6 @@ impl DOM {
         Some(current_idx)
     }
 
-    fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-        update_attribute_common(self, node_idx, key, new_value);
-    }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
         debug_log(|| {
@@ -663,7 +658,7 @@ impl DOM {
             DirtyState::Clean => {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
                 let (new_output, new_tri) = match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(&node, input, nfa),
+                    Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
                             format!(
@@ -726,7 +721,7 @@ new_tri is {:?}
                         MISS_CNT += 1;
                     }
                     let (new_output_state, new_tri_state) = match self.nodes.get(&node_idx) {
-                        Some(node) => self.new_output_state(&node, input, nfa),
+                        Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
                                 format!(
@@ -768,7 +763,7 @@ new_tri is {:?}
                         INPUT_SKIP_COUNT += 1;
                     }
                     let (new_output, new_tri) = match self.nodes.get(&node_idx) {
-                        Some(node) => self.new_output_state(&node, input, nfa),
+                        Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
                                 format!(
@@ -810,7 +805,7 @@ new_tri is {:?}
                     MISS_CNT += 1;
                 }
                 let (new_output_state, new_tri_state) = match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(&node, input, nfa),
+                    Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
                             format!(
@@ -1012,7 +1007,7 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
             .parent
             .and_then(|pid| self.nodes.get(&pid))
             .map(|parent| parent.output_state.clone())
-            .unwrap_or_else(|| make_root_input());
+            .unwrap_or_else(make_root_input);
         (
             (node.output_state.clone(), node.tri_state.clone()),
             parent_bits,
@@ -1025,7 +1020,7 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         nfa: &NFA,
     ) -> Self::AttrState {
         let node = &self.nodes[&node_idx];
-        self.new_output_state(&node, parent_bits, nfa)
+        self.new_output_state(node, parent_bits, nfa)
     }
 }
 

@@ -4,9 +4,7 @@ use css_bitvector_compiler::{
     Selector, SelectorId, SelectorManager, derive_hover_state, drain_supported_pseudo_selectors,
     extract_pseudoclasses, generate_nfa, parse_css_with_pseudo, parse_trace,
     partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
-    runtime_shared::{
-        HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common, update_attribute_common,
-    },
+    runtime_shared::{HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common},
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -554,10 +552,6 @@ impl DOM {
             current_idx = *node.children.get(segment)?;
         }
         Some(current_idx)
-    }
-
-    fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-        update_attribute_common(self, node_idx, key, new_value);
     }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
