@@ -699,7 +699,8 @@ impl DOM {
                     )
                 });
                 assert_eq!(
-                    previous_output_bits, new_output_bits,
+                    previous_output_bits,
+                    new_output_bits,
                     "input is {:?}\nold_output is {:?}\nnew_output is {:?}\nquad was {:?}\nquad now {:?}",
                     encode(input),
                     encode(&previous_output_bits),
@@ -708,7 +709,8 @@ impl DOM {
                     format_output_state(&new_quad_output)
                 );
                 assert_eq!(
-                    previous_quad_output, new_quad_output,
+                    previous_quad_output,
+                    new_quad_output,
                     "input is {:?}\ncached_quad is {:?}\nnew_quad is {:?}",
                     encode(input),
                     format_output_state(&previous_quad_output),
@@ -803,14 +805,16 @@ impl DOM {
                         )
                     });
                     assert_eq!(
-                        previous_output_bits, new_output,
+                        previous_output_bits,
+                        new_output,
                         "input is {:?}\nold_output is {:?}\nnew_output is {:?}",
                         encode(input),
                         encode(&previous_output_bits),
                         encode(&new_output)
                     );
                     assert_eq!(
-                        previous_quad_output, new_quad,
+                        previous_quad_output,
+                        new_quad,
                         "input is {:?}\nold_quad is {:?}\nnew_quad is {:?}",
                         encode(input),
                         format_output_state(&previous_quad_output),
