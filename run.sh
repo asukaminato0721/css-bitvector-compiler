@@ -21,7 +21,7 @@ for name in "${WEBSITE_NAMES[@]}"; do
     cargo run -r --bin naive &> css-gen-op/$name/tmp.txt || true
     cargo run -r --bin bit &> css-gen-op/$name/bit_tmp.txt || true
     TRI_LOG_MATCH_DELTAS=1 cargo run -r --bin tri &> css-gen-op/$name/tri_tmp.txt || true
-    cargo run -r --bin quad &> css-gen-op/$name/quad_tmp.txt || true
+    TRI_LOG_MATCH_DELTAS=1 cargo run -r --bin rec_tri &> css-gen-op/$name/rec_tri_tmp.txt || true
     "${DIFF_CMD[@]}" \
        <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
        <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/bit_tmp.txt | sort)
@@ -32,8 +32,7 @@ for name in "${WEBSITE_NAMES[@]}"; do
 
     "${DIFF_CMD[@]}" \
        <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
-       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/quad_tmp.txt | sort)
-
+       <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/rec_tri_tmp.txt | sort)
 
 done
 
