@@ -14,7 +14,6 @@ for name in "${WEBSITE_NAMES[@]}"; do
    if test ! -d "css-gen-op/$name"; then
       continue
    fi
-   # skip the reddit folder
    if [[ "$name" == "reddit" ]]; then
       continue
    fi

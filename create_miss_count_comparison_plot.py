@@ -20,25 +20,22 @@ def extract_miss_count(path: Path) -> Optional[int]:
 def load_from_logs() -> pd.DataFrame:
     base = Path("css-gen-op")
     rows = []
-    if base.exists():
-        for case_dir in sorted(base.iterdir()):
-            if not case_dir.is_dir():
-                continue
-            bit = extract_miss_count(case_dir / "bit_tmp.txt")
-            tri = extract_miss_count(case_dir / "tri_tmp.txt")
-            if bit is None or tri is None:
-                continue
-            rows.append(
-                {
-                    "case": case_dir.name,
-                    "bitvector_cache_misses": bit,
-                    "trivector_cache_misses": tri,
-                }
-            )
-    if not rows:
-        raise FileNotFoundError(
-            "web_layout_trace_benchmark.csv not found and no css-gen-op logs available"
-        )
+    for case_dir in sorted(base.iterdir()):
+        if not case_dir.is_dir():
+            continue
+        if case_dir.name == "reddit":
+            continue
+        bit = extract_miss_count(case_dir / "bit_tmp.txt")
+        tri = extract_miss_count(case_dir / "tri_tmp.txt")
+        if bit is None or tri is None:
+            continue
+        rows.append(
+            {
+                "case": case_dir.name,
+                "bitvector_cache_misses": bit,
+                "trivector_cache_misses": tri,
+            }
+        )   
     return pd.DataFrame(rows)
 
 

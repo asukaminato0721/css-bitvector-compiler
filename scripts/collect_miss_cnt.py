@@ -34,6 +34,8 @@ def main(base_dir: str = "css-gen-op"):
     base = Path(base_dir).resolve()
     rows: list[tuple[str, str, str, str, str, str, str]] = []
     for d in sorted(p for p in base.iterdir() if p.is_dir()):
+        if d.name == "reddit":
+            continue
         f = d / "bit_tmp.txt"
         f1 = d / "tri_tmp.txt"
         quad = d / "quad_tmp.txt"

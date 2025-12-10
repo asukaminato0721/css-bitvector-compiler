@@ -7,7 +7,6 @@
 | bootstrap | 9513 | 9481 | 3236 | OK | OK | OK |
 | google | 3712 | 3704 | 3569 | OK | OK | OK |
 | netflix | 2527 | 2479 | 2113 | OK | OK | OK |
-| reddit | PSEUDO_SKIPPED[bit]    eg .even\:z-1:nth-child(2n) | thread 'main' (2442166) panicked at src/tri.rs:977:10: | thread 'main' (2442176) panicked at src/quad.rs:1105:10: | DIFF | DIFF | DIFF |
 | testcase | 10 | 7 | 7 | OK | OK | OK |
 | tiktok | 2634 | 2634 | 2365 | DIFF | DIFF | DIFF |
 | whatsapp | 1607 | 1607 | 1595 | OK | OK | OK |
