@@ -234,13 +234,15 @@ impl DOM {
 
     fn node_matches_compound(&self, node: &DOMNode, compound: &CompoundSelector) -> bool {
         if let Some(tag) = &compound.tag
-            && !self.node_has_tag(node, tag) {
-                return false;
-            }
+            && !self.node_has_tag(node, tag)
+        {
+            return false;
+        }
         if let Some(id_value) = &compound.id
-            && !self.node_has_id(node, id_value) {
-                return false;
-            }
+            && !self.node_has_id(node, id_value)
+        {
+            return false;
+        }
         for class_name in &compound.classes {
             if !self.node_has_class(node, class_name) {
                 return false;

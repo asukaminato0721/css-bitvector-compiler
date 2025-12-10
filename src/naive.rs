@@ -394,25 +394,27 @@ impl SimpleDom {
 
     fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>) {
         if let Some(node_id) = self.node_id_by_path(path)
-            && let Some(node) = self.nodes.get_mut(&node_id) {
-                node.set_attribute(key, new_value);
-            }
+            && let Some(node) = self.nodes.get_mut(&node_id)
+        {
+            node.set_attribute(key, new_value);
+        }
     }
 
     fn assert_attribute_value(&self, path: &[usize], key: &str, expected: &str) {
         if let Some(node_id) = self.node_id_by_path(path)
-            && let Some(node) = self.nodes.get(&node_id) {
-                let actual = node
-                    .attributes
-                    .get(&key.to_lowercase())
-                    .cloned()
-                    .unwrap_or_default();
-                assert_eq!(
-                    actual, expected,
-                    "existing attribute value mismatch for key {} at path {:?}",
-                    key, path
-                );
-            }
+            && let Some(node) = self.nodes.get(&node_id)
+        {
+            let actual = node
+                .attributes
+                .get(&key.to_lowercase())
+                .cloned()
+                .unwrap_or_default();
+            assert_eq!(
+                actual, expected,
+                "existing attribute value mismatch for key {} at path {:?}",
+                key, path
+            );
+        }
     }
 
     fn recompute_pseudo_states(&mut self) {
@@ -487,13 +489,16 @@ impl SimpleDom {
 
     fn matches_compound_selector(&self, node: &SimpleDomNode, compound: &CompoundSelector) -> bool {
         if let Some(tag) = &compound.tag
-            && tag != "*" && !node.tag_name.eq_ignore_ascii_case(tag) {
-                return false;
-            }
+            && tag != "*"
+            && !node.tag_name.eq_ignore_ascii_case(tag)
+        {
+            return false;
+        }
         if let Some(id_value) = &compound.id
-            && node.html_id.as_deref() != Some(id_value.as_str()) {
-                return false;
-            }
+            && node.html_id.as_deref() != Some(id_value.as_str())
+        {
+            return false;
+        }
         for class_name in &compound.classes {
             if !node.classes.contains(class_name) {
                 return false;
