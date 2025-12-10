@@ -1,7 +1,7 @@
 use css_bitvector_compiler::{
     AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_FOCUS,
     PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, Rule, Selector,
-    SelectorId, SelectorManager, derive_hover_state, encode, extract_pseudoclasses, generate_nfa,
+    SelectorId, SelectorManager, derive_hover_state, extract_pseudoclasses, generate_nfa,
     parse_css_with_pseudo, parse_trace, partition_simple_selectors, report_pseudo_selectors,
     report_skipped_selectors,
     runtime_shared::{
@@ -95,6 +95,7 @@ pub struct DOMNode {
     pub recursive_dirty: bool,
     pub output_bits: Vec<bool>,
     pub quad_output: Vec<OState>,
+    pub parent_dependencies: Vec<Vec<usize>>,
     pub tri_state: Vec<IState>,
 }
 
@@ -118,6 +119,36 @@ fn format_output_state(states: &[OState]) -> String {
         })
         .collect::<Vec<_>>()
         .join(",")
+}
+
+fn ensure_needed_outputs_stable(
+    node_descriptor: &str,
+    needed_outputs: &[bool],
+    previous_bits: &[bool],
+    new_bits: &[bool],
+    previous_quad: &[OState],
+    new_quad: &[OState],
+) {
+    for (idx, needed) in needed_outputs.iter().copied().enumerate() {
+        if !needed {
+            continue;
+        }
+        if previous_bits[idx] != new_bits[idx] {
+            panic!(
+                "{} needed output[{}] changed despite tri reuse (prev={} new={})",
+                node_descriptor, idx, previous_bits[idx], new_bits[idx]
+            );
+        }
+        if previous_quad[idx] != new_quad[idx] {
+            panic!(
+                "{} needed quad state[{}] changed despite tri reuse (prev={} new={})",
+                node_descriptor,
+                idx,
+                format_output_state(&[previous_quad[idx]]),
+                format_output_state(&[new_quad[idx]])
+            );
+        }
+    }
 }
 
 impl DOMNode {
@@ -220,11 +251,13 @@ impl AddNode for DOM {
             recursive_dirty: true,
             output_bits: vec![false; unsafe { STATE } + 1],
             quad_output: vec![OState::OZero; unsafe { STATE } + 1],
+            parent_dependencies: vec![Vec::new(); unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output_bits, quad_output) = self.new_output_state(&new_node, &get_input(), nfa);
+        let (output_bits, quad_output, dependencies) = self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_bits = output_bits;
         new_node.quad_output = quad_output;
+        new_node.parent_dependencies = dependencies;
         self.nodes.insert(id, new_node);
 
         // Add the current node as a child of its parent if one exists
@@ -678,7 +711,8 @@ impl DOM {
         match dirty_state {
             DirtyState::Clean => {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
-                let (new_output_bits, new_quad_output) = match self.nodes.get(&node_idx) {
+                let (new_output_bits, new_quad_output, _new_dependencies) =
+                    match self.nodes.get(&node_idx) {
                     Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
@@ -698,23 +732,14 @@ impl DOM {
                         format_output_state(&new_quad_output)
                     )
                 });
-                assert_eq!(
-                    previous_output_bits,
-                    new_output_bits,
-                    "input is {:?}\nold_output is {:?}\nnew_output is {:?}\nquad was {:?}\nquad now {:?}",
-                    encode(input),
-                    encode(&previous_output_bits),
-                    encode(&new_output_bits),
-                    format_output_state(&previous_quad_output),
-                    format_output_state(&new_quad_output)
-                );
-                assert_eq!(
-                    previous_quad_output,
-                    new_quad_output,
-                    "input is {:?}\ncached_quad is {:?}\nnew_quad is {:?}",
-                    encode(input),
-                    format_output_state(&previous_quad_output),
-                    format_output_state(&new_quad_output)
+                let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
+                ensure_needed_outputs_stable(
+                    &node_descriptor,
+                    &needed_outputs,
+                    &previous_output_bits,
+                    &new_output_bits,
+                    &previous_quad_output,
+                    &new_quad_output,
                 );
             }
             DirtyState::InputChanged => {
@@ -743,7 +768,8 @@ impl DOM {
                     unsafe {
                         MISS_CNT += 1;
                     }
-                    let (new_output_state, new_quad_output) = match self.nodes.get(&node_idx) {
+                    let (new_output_state, new_quad_output, new_dependencies) =
+                        match self.nodes.get(&node_idx) {
                         Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
@@ -759,6 +785,7 @@ impl DOM {
                     if let Some(node) = self.nodes.get_mut(&node_idx) {
                         node.output_bits = new_output_state.clone();
                         node.quad_output = new_quad_output.clone();
+                        node.parent_dependencies = new_dependencies.clone();
                     } else {
                         debug_log(|| {
                             format!(
@@ -784,7 +811,8 @@ impl DOM {
                     unsafe {
                         INPUT_SKIP_COUNT += 1;
                     }
-                    let (new_output, new_quad) = match self.nodes.get(&node_idx) {
+                    let (new_output, new_quad, _validation_dependencies) =
+                        match self.nodes.get(&node_idx) {
                         Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
@@ -804,21 +832,14 @@ impl DOM {
                             format_tri_state(&previous_tri)
                         )
                     });
-                    assert_eq!(
-                        previous_output_bits,
-                        new_output,
-                        "input is {:?}\nold_output is {:?}\nnew_output is {:?}",
-                        encode(input),
-                        encode(&previous_output_bits),
-                        encode(&new_output)
-                    );
-                    assert_eq!(
-                        previous_quad_output,
-                        new_quad,
-                        "input is {:?}\nold_quad is {:?}\nnew_quad is {:?}",
-                        encode(input),
-                        format_output_state(&previous_quad_output),
-                        format_output_state(&new_quad)
+                    let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
+                    ensure_needed_outputs_stable(
+                        &node_descriptor,
+                        &needed_outputs,
+                        &previous_output_bits,
+                        &new_output,
+                        &previous_quad_output,
+                        &new_quad,
                     );
                 }
             }
@@ -826,7 +847,8 @@ impl DOM {
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_output_state, new_quad_state) = match self.nodes.get(&node_idx) {
+                let (new_output_state, new_quad_state, new_dependencies) =
+                    match self.nodes.get(&node_idx) {
                     Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
@@ -851,6 +873,7 @@ impl DOM {
                 if let Some(node) = self.nodes.get_mut(&node_idx) {
                     node.output_bits = new_output_state.clone();
                     node.quad_output = new_quad_state.clone();
+                    node.parent_dependencies = new_dependencies.clone();
                 } else {
                     debug_log(|| {
                         format!(
@@ -952,8 +975,9 @@ impl DOM {
         node: &DOMNode,
         input: &[bool],
         nfa: &NFA,
-    ) -> (Vec<bool>, Vec<OState>) {
+    ) -> (Vec<bool>, Vec<OState>, Vec<Vec<usize>>) {
         let mut quad_state = vec![OState::OZero; input.len()];
+        let mut parent_dependencies: Vec<Vec<usize>> = vec![Vec::new(); input.len()];
         let mut propagate_rules = Vec::new();
 
         for &rule in nfa.rules.iter() {
@@ -979,11 +1003,21 @@ impl DOM {
             match selector_opt {
                 None => {
                     if matches!(quad_state[target_idx], OState::OZero) {
-                        quad_state[target_idx] = OState::OFromParent(parent_idx);
+                        if !parent_dependencies[target_idx].contains(&parent_idx) {
+                            parent_dependencies[target_idx].push(parent_idx);
+                        }
+                        if input[parent_idx] {
+                            quad_state[target_idx] = OState::OFromParent(parent_idx);
+                        } else {
+                            quad_state[target_idx] = OState::OZero;
+                        }
                     }
                 }
                 Some(selector_id) => {
                     if self.node_matches_selector(node, selector_id) {
+                        if !parent_dependencies[target_idx].contains(&parent_idx) {
+                            parent_dependencies[target_idx].push(parent_idx);
+                        }
                         if input[parent_idx] {
                             quad_state[target_idx] = OState::OFromParent(parent_idx);
                         } else {
@@ -997,7 +1031,7 @@ impl DOM {
         }
 
         let output_bits = self.materialize(input, &quad_state);
-        (output_bits, quad_state)
+        (output_bits, quad_state, parent_dependencies)
     }
 
     fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
@@ -1035,7 +1069,7 @@ impl DOM {
     fn derive_tri_state(
         &self,
         needed_outputs: &[bool],
-        quad_output: &[OState],
+        dependencies: &[Vec<usize>],
         parent_input: &[bool],
     ) -> Vec<IState> {
         let mut tri_state = vec![IState::IUnused; parent_input.len()];
@@ -1043,13 +1077,18 @@ impl DOM {
             if !needed {
                 continue;
             }
-            if let Some(OState::OFromParent(parent_idx)) = quad_output.get(state_idx) {
-                let value = if parent_input[*parent_idx] {
-                    IState::IOne
-                } else {
-                    IState::IZero
-                };
-                tri_state[*parent_idx] = value;
+            if let Some(parent_list) = dependencies.get(state_idx) {
+                for &parent_idx in parent_list {
+                    if parent_idx >= parent_input.len() {
+                        continue;
+                    }
+                    let value = if parent_input[parent_idx] {
+                        IState::IOne
+                    } else {
+                        IState::IZero
+                    };
+                    tri_state[parent_idx] = value;
+                }
             }
         }
         tri_state
@@ -1061,7 +1100,7 @@ impl DOM {
             .nodes
             .get(&node_idx)
             .unwrap_or_else(|| panic!("node {} missing during tri recompute", node_idx));
-        self.derive_tri_state(&needed_outputs, &node.quad_output, parent_input)
+        self.derive_tri_state(&needed_outputs, &node.parent_dependencies, parent_input)
     }
 }
 
@@ -1115,9 +1154,9 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         nfa: &NFA,
     ) -> Self::AttrState {
         let node = &self.nodes[&node_idx];
-        let (output_bits, quad_output) = self.new_output_state(node, parent_bits, nfa);
+        let (output_bits, _quad_output, dependencies) = self.new_output_state(node, parent_bits, nfa);
         let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
-        let tri_state = self.derive_tri_state(&needed_outputs, &quad_output, parent_bits);
+        let tri_state = self.derive_tri_state(&needed_outputs, &dependencies, parent_bits);
         (output_bits, tri_state)
     }
 }

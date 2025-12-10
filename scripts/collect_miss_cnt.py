@@ -15,15 +15,19 @@ def load_sorted_rules(path: Path) -> Optional[Tuple[str, ...]]:
         return None
     collecting = False
     body: list[str] = []
+    saw_begin = False
     for line in lines:
         if "BEGIN" in line:
             collecting = True
+            saw_begin = True
             continue
         if "END" in line:
             collecting = False
             continue
         if collecting:
             body.append(line.rstrip("\n"))
+    if not saw_begin:
+        return None
     return tuple(sorted(body))
 
 
@@ -44,7 +48,7 @@ def miss_cnt_from_log(path: Path) -> str:
 
 def main(base_dir: str = "css-gen-op"):
     base = Path(base_dir).resolve()
-    rows = []
+    rows: list[tuple[str, ...]] = []
     for d in sorted(p for p in base.iterdir() if p.is_dir()):
         if d.name == "reddit":
             continue
@@ -76,10 +80,10 @@ def main(base_dir: str = "css-gen-op"):
         print(
             r"| Folder | MISS\_CNT | TRI MISS\_CNT | REC\_TRI MISS\_CNT | bit vs tmp | tri vs tmp | rec_tri vs tmp |"
         )
-        print("|---|---:|---:|---:|---:|:---:|:---:|:---:|:---:|")
-        for name, v, v1, v2, v3, bit_state, tri_state, rec_state in rows:
+        print("|---|---:|---:|---:|:---:|:---:|:---:|")
+        for name, v, v1, v2, bit_state, tri_state, rec_state in rows:
             print(
-                f"| {name} | {v} | {v1} | {v2} | {v3} | {bit_state} | {tri_state} | {rec_state} |"
+                f"| {name} | {v} | {v1} | {v2} | {bit_state} | {tri_state} | {rec_state} |"
             )
 
 
