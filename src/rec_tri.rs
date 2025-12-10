@@ -38,7 +38,7 @@ where
     F: FnOnce() -> String,
 {
     if debug_enabled() {
-        eprintln!("[tri-debug] {}", build());
+        eprintln!("[rec-tri-debug] {}", build());
     }
 }
 
@@ -54,6 +54,13 @@ pub enum IState {
     IOne,
     IZero,
     IUnused,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OState {
+    OOne,
+    OZero,
+    OFromParent(usize),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -86,7 +93,8 @@ pub struct DOMNode {
     pub children: Vec<u64>,                       // Indices of child nodes in the arena
     pub dirty: DirtyState,
     pub recursive_dirty: bool,
-    pub output_state: Vec<bool>,
+    pub output_bits: Vec<bool>,
+    pub quad_output: Vec<OState>,
     pub tri_state: Vec<IState>,
 }
 
@@ -98,6 +106,18 @@ fn format_tri_state(tri: &[IState]) -> String {
             IState::IUnused => '_',
         })
         .collect()
+}
+
+fn format_output_state(states: &[OState]) -> String {
+    states
+        .iter()
+        .map(|state| match state {
+            OState::OOne => "1".to_string(),
+            OState::OZero => "0".to_string(),
+            OState::OFromParent(idx) => format!("P{}", idx),
+        })
+        .collect::<Vec<_>>()
+        .join(",")
 }
 
 impl DOMNode {
@@ -198,12 +218,13 @@ impl AddNode for DOM {
             children: Vec::new(),
             dirty: DirtyState::NodeChanged,
             recursive_dirty: true,
-            output_state: vec![false; unsafe { STATE } + 1],
+            output_bits: vec![false; unsafe { STATE } + 1],
+            quad_output: vec![OState::OZero; unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output, tri) = self.new_output_state(&new_node, &get_input(), nfa);
-        new_node.output_state = output;
-        new_node.tri_state = tri;
+        let (output_bits, quad_output) = self.new_output_state(&new_node, &get_input(), nfa);
+        new_node.output_bits = output_bits;
+        new_node.quad_output = quad_output;
         self.nodes.insert(id, new_node);
 
         // Add the current node as a child of its parent if one exists
@@ -611,14 +632,16 @@ impl DOM {
         let (
             was_recursive_dirty,
             dirty_state,
-            previous_output,
+            previous_output_bits,
+            previous_quad_output,
             previous_tri,
             child_indices_snapshot,
         ) = match self.nodes.get(&node_idx) {
             Some(node) => (
                 node.recursive_dirty,
                 node.dirty,
-                node.output_state.clone(),
+                node.output_bits.clone(),
+                node.quad_output.clone(),
                 node.tri_state.clone(),
                 node.children.clone(),
             ),
@@ -641,11 +664,12 @@ impl DOM {
 
         debug_log(|| {
             format!(
-                "{} visit: dirty={} input={} cached_output={} tri={}",
+                "{} visit: dirty={} input={} cached_output={} cached_quad={} tri={}",
                 node_descriptor,
                 dirty_state.label(),
                 format_bits(input),
-                format_bits(&previous_output),
+                format_bits(&previous_output_bits),
+                format_output_state(&previous_quad_output),
                 format_tri_state(&previous_tri)
             )
         });
@@ -654,8 +678,8 @@ impl DOM {
         match dirty_state {
             DirtyState::Clean => {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
-                let (new_output, new_tri) = match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(&node, input, nfa),
+                let (new_output_bits, new_quad_output) = match self.nodes.get(&node_idx) {
+                    Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
                             format!(
@@ -668,27 +692,27 @@ impl DOM {
                 };
                 debug_log(|| {
                     format!(
-                        "{} validation -> output={} tri={}",
+                        "{} validation -> output={} quad={}",
                         node_descriptor,
-                        format_bits(&new_output),
-                        format_tri_state(&new_tri)
+                        format_bits(&new_output_bits),
+                        format_output_state(&new_quad_output)
                     )
                 });
                 assert_eq!(
-                    previous_tri,
-                    new_tri,
-                    "input is {:?}
-old_tri is {:?}
-old_output is {:?}
-new_output is {:?}
-new_tri is {:?}
-
-                   ",
+                    previous_output_bits, new_output_bits,
+                    "input is {:?}\nold_output is {:?}\nnew_output is {:?}\nquad was {:?}\nquad now {:?}",
                     encode(input),
-                    encode(&previous_tri),
-                    encode(&previous_output),
-                    encode(&new_output),
-                    encode(&new_tri)
+                    encode(&previous_output_bits),
+                    encode(&new_output_bits),
+                    format_output_state(&previous_quad_output),
+                    format_output_state(&new_quad_output)
+                );
+                assert_eq!(
+                    previous_quad_output, new_quad_output,
+                    "input is {:?}\ncached_quad is {:?}\nnew_quad is {:?}",
+                    encode(input),
+                    format_output_state(&previous_quad_output),
+                    format_output_state(&new_quad_output)
                 );
             }
             DirtyState::InputChanged => {
@@ -717,8 +741,8 @@ new_tri is {:?}
                     unsafe {
                         MISS_CNT += 1;
                     }
-                    let (new_output_state, new_tri_state) = match self.nodes.get(&node_idx) {
-                        Some(node) => self.new_output_state(&node, input, nfa),
+                    let (new_output_state, new_quad_output) = match self.nodes.get(&node_idx) {
+                        Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
                                 format!(
@@ -729,10 +753,10 @@ new_tri is {:?}
                             return;
                         }
                     };
-                    let output_changed = new_output_state != previous_output;
+                    let output_changed = new_output_state != previous_output_bits;
                     if let Some(node) = self.nodes.get_mut(&node_idx) {
-                        node.output_state = new_output_state.clone();
-                        node.tri_state = new_tri_state.clone();
+                        node.output_bits = new_output_state.clone();
+                        node.quad_output = new_quad_output.clone();
                     } else {
                         debug_log(|| {
                             format!(
@@ -744,12 +768,11 @@ new_tri is {:?}
                     }
                     debug_log(|| {
                         format!(
-                            "{} recompute -> output={} (prev={}) tri={} (prev={})",
+                            "{} recompute -> output={} (prev={}) quad={}",
                             node_descriptor,
                             format_bits(&new_output_state),
-                            format_bits(&previous_output),
-                            format_tri_state(&new_tri_state),
-                            format_tri_state(&previous_tri)
+                            format_bits(&previous_output_bits),
+                            format_output_state(&new_quad_output)
                         )
                     });
                     if output_changed {
@@ -759,8 +782,8 @@ new_tri is {:?}
                     unsafe {
                         INPUT_SKIP_COUNT += 1;
                     }
-                    let (new_output, new_tri) = match self.nodes.get(&node_idx) {
-                        Some(node) => self.new_output_state(&node, input, nfa),
+                    let (new_output, new_quad) = match self.nodes.get(&node_idx) {
+                        Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
                                 format!(
@@ -775,25 +798,23 @@ new_tri is {:?}
                         format!(
                             "{} input reused; output stays {} tri stays {}",
                             node_descriptor,
-                            format_bits(&previous_output),
+                            format_bits(&previous_output_bits),
                             format_tri_state(&previous_tri)
                         )
                     });
                     assert_eq!(
-                        previous_tri,
-                        new_tri,
-                        "input is {:?}
-old_tri is {:?}
-old_output is {:?}
-new_output is {:?}
-new_tri is {:?}
-
-                   ",
+                        previous_output_bits, new_output,
+                        "input is {:?}\nold_output is {:?}\nnew_output is {:?}",
                         encode(input),
-                        encode(&previous_tri),
-                        encode(&previous_output),
-                        encode(&new_output),
-                        encode(&new_tri)
+                        encode(&previous_output_bits),
+                        encode(&new_output)
+                    );
+                    assert_eq!(
+                        previous_quad_output, new_quad,
+                        "input is {:?}\nold_quad is {:?}\nnew_quad is {:?}",
+                        encode(input),
+                        format_output_state(&previous_quad_output),
+                        format_output_state(&new_quad)
                     );
                 }
             }
@@ -801,8 +822,8 @@ new_tri is {:?}
                 unsafe {
                     MISS_CNT += 1;
                 }
-                let (new_output_state, new_tri_state) = match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(&node, input, nfa),
+                let (new_output_state, new_quad_state) = match self.nodes.get(&node_idx) {
+                    Some(node) => self.new_output_state(node, input, nfa),
                     None => {
                         debug_log(|| {
                             format!(
@@ -813,20 +834,19 @@ new_tri is {:?}
                         return;
                     }
                 };
-                let output_changed = new_output_state != previous_output;
+                let output_changed = new_output_state != previous_output_bits;
                 debug_log(|| {
                     format!(
-                        "{} recompute (node_changed) -> output={} (prev={}) tri={} (prev={})",
+                        "{} recompute (node_changed) -> output={} (prev={}) quad={}",
                         node_descriptor,
                         format_bits(&new_output_state),
-                        format_bits(&previous_output),
-                        format_tri_state(&new_tri_state),
-                        format_tri_state(&previous_tri)
+                        format_bits(&previous_output_bits),
+                        format_output_state(&new_quad_state)
                     )
                 });
                 if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    node.output_state = new_output_state.clone();
-                    node.tri_state = new_tri_state.clone();
+                    node.output_bits = new_output_state.clone();
+                    node.quad_output = new_quad_state.clone();
                 } else {
                     debug_log(|| {
                         format!(
@@ -842,7 +862,6 @@ new_tri is {:?}
             }
         }
 
-        // Recursively process children
         if should_mark_children {
             debug_log(|| {
                 format!(
@@ -872,8 +891,8 @@ new_tri is {:?}
             debug_log(|| format!("{} children remain clean", node_descriptor));
         }
 
-        let current_output_state = match self.nodes.get(&node_idx) {
-            Some(node) => node.output_state.clone(),
+        let current_output_bits = match self.nodes.get(&node_idx) {
+            Some(node) => node.output_bits.clone(),
             None => {
                 debug_log(|| {
                     format!(
@@ -901,69 +920,144 @@ new_tri is {:?}
                     .unwrap_or(false)
             };
             if child_needs_visit {
-                self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+                self.recompute_styles_recursive(child_idx, nfa, &current_output_bits);
             }
         }
 
-        // Reset dirty flags
+        let new_tri_state = self.recompute_tri_state(node_idx, input, nfa);
+        let tri_changed = new_tri_state != previous_tri;
+        if tri_changed {
+            debug_log(|| {
+                format!(
+                    "{} tri updated -> {} (prev={})",
+                    node_descriptor,
+                    format_tri_state(&new_tri_state),
+                    format_tri_state(&previous_tri)
+                )
+            });
+        }
         if let Some(node) = self.nodes.get_mut(&node_idx) {
+            node.tri_state = new_tri_state;
             node.clear_dirty();
         }
         debug_log(|| format!("{} finished; dirty flags cleared", node_descriptor));
     }
+
     fn new_output_state(
         &self,
         node: &DOMNode,
         input: &[bool],
         nfa: &NFA,
-    ) -> (Vec<bool>, Vec<IState>) {
-        let mut new_state = vec![false; input.len()];
+    ) -> (Vec<bool>, Vec<OState>) {
+        let mut quad_state = vec![OState::OZero; input.len()];
+        let mut propagate_rules = Vec::new();
 
-        struct Read {
-            input: Vec<bool>,
-            pub tri: Vec<IState>,
-        }
-        impl Read {
-            fn new(v: &[bool]) -> Self {
-                let l = v.len();
-                Self {
-                    input: v.into(),
-                    tri: vec![IState::IUnused; l],
+        for &rule in nfa.rules.iter() {
+            match rule {
+                Rule(None, None, Nfacell(target)) => {
+                    quad_state[target] = OState::OOne;
+                }
+                Rule(Some(selector_id), None, Nfacell(target)) => {
+                    if self.node_matches_selector(node, selector_id) {
+                        quad_state[target] = OState::OOne;
+                    }
+                }
+                Rule(_, Some(_), _) => {
+                    propagate_rules.push(rule);
                 }
             }
-            fn get(&mut self, idx: usize) -> bool {
-                self.tri[idx] = if self.input[idx] {
+        }
+
+        for &Rule(selector_opt, parent_opt, Nfacell(target_idx)) in &propagate_rules {
+            let Some(Nfacell(parent_idx)) = parent_opt else {
+                continue;
+            };
+            match selector_opt {
+                None => {
+                    if matches!(quad_state[target_idx], OState::OZero) {
+                        quad_state[target_idx] = OState::OFromParent(parent_idx);
+                    }
+                }
+                Some(selector_id) => {
+                    if self.node_matches_selector(node, selector_id) {
+                        if input[parent_idx] {
+                            quad_state[target_idx] = OState::OFromParent(parent_idx);
+                        } else {
+                            quad_state[target_idx] = OState::OZero;
+                        }
+                    } else if matches!(quad_state[target_idx], OState::OFromParent(_)) {
+                        quad_state[target_idx] = OState::OZero;
+                    }
+                }
+            }
+        }
+
+        let output_bits = self.materialize(input, &quad_state);
+        (output_bits, quad_state)
+    }
+
+    fn materialize(&self, input: &[bool], output: &[OState]) -> Vec<bool> {
+        output
+            .iter()
+            .map(|state| match state {
+                OState::OOne => true,
+                OState::OZero => false,
+                OState::OFromParent(idx) => input[*idx],
+            })
+            .collect()
+    }
+
+    fn compute_needed_outputs(&self, node_idx: u64, nfa: &NFA) -> Vec<bool> {
+        let mut needed = vec![false; unsafe { STATE } + 1];
+        for &Nfacell(state_idx) in &nfa.accept_states {
+            needed[state_idx] = true;
+        }
+
+        if let Some(node) = self.nodes.get(&node_idx) {
+            for &child_idx in &node.children {
+                if let Some(child) = self.nodes.get(&child_idx) {
+                    for (state_idx, usage) in child.tri_state.iter().enumerate() {
+                        if !matches!(usage, IState::IUnused) {
+                            needed[state_idx] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        needed
+    }
+
+    fn derive_tri_state(
+        &self,
+        needed_outputs: &[bool],
+        quad_output: &[OState],
+        parent_input: &[bool],
+    ) -> Vec<IState> {
+        let mut tri_state = vec![IState::IUnused; parent_input.len()];
+        for (state_idx, needed) in needed_outputs.iter().copied().enumerate() {
+            if !needed {
+                continue;
+            }
+            if let Some(OState::OFromParent(parent_idx)) = quad_output.get(state_idx) {
+                let value = if parent_input[*parent_idx] {
                     IState::IOne
                 } else {
                     IState::IZero
                 };
-                self.input[idx]
+                tri_state[*parent_idx] = value;
             }
         }
-        let mut input = Read::new(input);
-        for &rule in nfa.rules.iter() {
-            match rule {
-                Rule(None, None, Nfacell(c)) => {
-                    new_state[c] = true;
-                }
-                Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
-                    if input.get(b) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), None, Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) {
-                        new_state[c] = true;
-                    }
-                }
-                Rule(Some(a), Some(Nfacell(b)), Nfacell(c)) => {
-                    if self.node_matches_selector(node, a) && input.get(b) {
-                        new_state[c] = true;
-                    }
-                }
-            }
-        }
-        (new_state, input.tri)
+        tri_state
+    }
+
+    fn recompute_tri_state(&self, node_idx: u64, parent_input: &[bool], nfa: &NFA) -> Vec<IState> {
+        let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
+        let node = self
+            .nodes
+            .get(&node_idx)
+            .unwrap_or_else(|| panic!("node {} missing during tri recompute", node_idx));
+        self.derive_tri_state(&needed_outputs, &node.quad_output, parent_input)
     }
 }
 
@@ -1003,10 +1097,10 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         let parent_bits = node
             .parent
             .and_then(|pid| self.nodes.get(&pid))
-            .map(|parent| parent.output_state.clone())
+            .map(|parent| parent.output_bits.clone())
             .unwrap_or_else(|| make_root_input());
         (
-            (node.output_state.clone(), node.tri_state.clone()),
+            (node.output_bits.clone(), node.tri_state.clone()),
             parent_bits,
         )
     }
@@ -1017,7 +1111,10 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         nfa: &NFA,
     ) -> Self::AttrState {
         let node = &self.nodes[&node_idx];
-        self.new_output_state(&node, parent_bits, nfa)
+        let (output_bits, quad_output) = self.new_output_state(node, parent_bits, nfa);
+        let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
+        let tri_state = self.derive_tri_state(&needed_outputs, &quad_output, parent_bits);
+        (output_bits, tri_state)
     }
 }
 
@@ -1040,7 +1137,7 @@ pub fn collect_rule_matches(
 
     for (node_id, node) in dom.nodes.iter() {
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
-            if node.output_state[state_index] {
+            if node.output_bits[state_index] {
                 let rule = &selects[idx];
                 res.entry(rule.clone()).or_default().push(*node_id);
             }
@@ -1091,15 +1188,15 @@ fn main() {
         &std::fs::read_to_string(format!("css-gen-op/{0}/{0}.css", website_name)).unwrap(),
     );
     let (selectors, skipped_simple) = partition_simple_selectors(parsed.selectors);
-    report_skipped_selectors("tri", &skipped_simple);
-    report_pseudo_selectors("tri", &parsed.pseudo_selectors);
+    report_skipped_selectors("rec_tri", &skipped_simple);
+    report_pseudo_selectors("rec_tri", &parsed.pseudo_selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
     unsafe {
         STATE = s;
     }
     let _ = fs::write(
-        format!("css-gen-op/{0}/dot_tri.dot", website_name),
+        format!("css-gen-op/{0}/dot_rec_tri.dot", website_name),
         nfa.to_dot(&dom.selector_manager),
     );
 
@@ -1126,7 +1223,7 @@ fn main() {
                 .map(|previous| count_node_match_changes(previous, &node_matches))
                 .unwrap_or_else(|| node_matches.len());
             println!(
-                "[tri-match] frame_id={} command={} miss_delta={} node_match_changes={} total_misses={}",
+                "[rec-tri-match] frame_id={} command={} miss_delta={} node_match_changes={} total_misses={}",
                 f.frame_id,
                 f.command_name,
                 after_miss - before_miss,

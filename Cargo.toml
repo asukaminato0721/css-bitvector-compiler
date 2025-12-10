@@ -23,6 +23,10 @@ name = "tri"
 path = "src/tri.rs"
 
 [[bin]]
+name = "rec_tri"
+path = "src/rec_tri.rs"
+
+[[bin]]
 name = "bit"
 path = "src/bit.rs"
 [[bin]]

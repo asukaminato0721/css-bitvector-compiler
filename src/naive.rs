@@ -47,9 +47,9 @@ impl Display for SelectorPart {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Combinator {
-    Descendant, // 空格
+    Descendant, // Space combinator
     Child,      // >
-    None,       // 最后一个选择器没有组合器
+    None,       // The last selector has no combinator
 }
 
 impl Display for Combinator {

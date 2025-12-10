@@ -44,14 +44,14 @@ fn format_bits(bits: &[bool]) -> String {
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: SelectorId,                  // 标签选择器ID
-    pub class_ids: HashSet<SelectorId>,      // CSS类选择器ID集合
-    pub id_selector_id: Option<SelectorId>,  // HTML ID选择器ID
-    pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
+    pub tag_id: SelectorId,                  // Tag selector ID
+    pub class_ids: HashSet<SelectorId>,      // Collection of CSS class selector IDs
+    pub id_selector_id: Option<SelectorId>,  // HTML ID selector ID
+    pub attributes: HashMap<String, String>, // Node attribute key-value pairs (lowercase keys)
     pub pseudo_classes: HashSet<String>,
     pub computed_pseudo_classes: HashSet<String>,
-    pub parent: Option<u64>, // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,  // 存储子节点在 arena 中的索引
+    pub parent: Option<u64>, // Index of the parent node in the arena
+    pub children: Vec<u64>,  // Indices of child nodes in the arena
     pub dirty: bool,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
@@ -66,8 +66,8 @@ impl DOMNode {
 
 #[derive(Debug, Default)]
 pub struct DOM {
-    pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
-    pub selector_manager: SelectorManager, // 选择器管理器
+    pub nodes: HashMap<u64, DOMNode>,      // Arena storage for all nodes
+    pub selector_manager: SelectorManager, // Selector manager
     root_node: Option<u64>,
 }
 
@@ -153,7 +153,7 @@ impl AddNode for DOM {
         new_node.output_state = o;
         self.nodes.insert(id, new_node);
 
-        // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
+        // Add the current node as a child of its parent if one exists
         if let Some(p_idx) = parent_index {
             self.nodes
                 .get_mut(&p_idx)
@@ -167,7 +167,7 @@ impl AddNode for DOM {
 }
 
 impl DOM {
-    /// 创建一个新的、空的 DOM。
+    /// Create a new empty DOM.
     pub fn new() -> Self {
         Default::default()
     }
@@ -216,7 +216,7 @@ impl DOM {
         }
     }
 
-    /// 检查节点是否匹配给定的选择器ID
+    /// Check whether a node matches the given selector ID.
     pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
         match self.selector_manager.id_to_selector.get(&selector_id) {
             Some(Selector::Type(_)) => node.tag_id == selector_id,
@@ -310,7 +310,7 @@ impl DOM {
         root
     }
 
-    /// 设置指定节点为脏状态，并向上传播recursive_dirty位
+    /// Mark the specified node dirty and propagate the recursive_dirty flag upward.
     pub fn set_node_dirty(&mut self, node_idx: u64) {
         let parent_idx = match self.nodes.get_mut(&node_idx) {
             Some(node) => {
@@ -460,7 +460,7 @@ impl DOM {
             .collect::<Vec<String>>();
         let pseudo_classes = extract_pseudoclasses(json_node);
 
-        // 创建当前节点
+        // Create the current node
         let current_index = self.add_node(
             id,
             tag_name,
@@ -476,7 +476,7 @@ impl DOM {
             panic!()
         }
         //
-        // 递归处理子节点
+        // Recursively process child nodes
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
                 self.json_to_html_node(child_json, Some(current_index), nfa);
@@ -485,19 +485,19 @@ impl DOM {
         current_index
     }
 
-    /// 通过路径添加节点
+    /// Add a node specified by a path.
     pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value, nfa: &NFA) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
         let mut current_idx = root_node;
 
-        // 遍历路径到目标父节点
+        // Walk the path to the target parent node
         for &path_element in &path[..path.len() - 1] {
             current_idx = self.nodes[&current_idx].children[path_element];
         }
 
-        // 在指定位置插入新节点
+        // Insert the new node at the specified position
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
@@ -508,16 +508,16 @@ impl DOM {
         self.set_node_dirty(current_idx);
     }
 
-    /// 通过路径移除节点
+    /// Remove a node specified by a path.
     pub fn remove_node_by_path(&mut self, path: &[usize]) {
         let root_nodes = self.get_root_node();
-        // 递归到目标父节点
+        // Descend to the target parent node
         let mut cur_idx = root_nodes;
         for &path_idx in &path[..path.len() - 1] {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        // 移除目标节点
+        // Remove the target node
         let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
@@ -744,10 +744,10 @@ impl DOM {
         }
         debug_log(|| format!("{} finished; dirty flags cleared", node_descriptor));
     }
-    /// 传播规则是这样的
-    /// 对 NFA 来说, 每条边对应一个 Rule
-    /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
-    /// 当一个新的 input 传下来时, 已经亮的就不用检查了
+    /// Propagation follows these rules.
+    /// For an NFA, each edge corresponds to a `Rule`.
+    /// Collect the rules in a `Vec` indexed by state to track which edges are already active.
+    /// When new input arrives, you can skip edges that are already active.
     fn new_output_state(&self, node: &DOMNode, input: &[bool], nfa: &NFA) -> Vec<bool> {
         let mut new_state = vec![false; input.len()];
 
@@ -863,7 +863,7 @@ pub fn collect_rule_matches(
 }
 
 fn main() {
-    // 1. 构建 DOM 树
+    // 1. Build the DOM tree
     let mut dom = DOM::new();
     let ParsedSelectors {
         mut selectors,

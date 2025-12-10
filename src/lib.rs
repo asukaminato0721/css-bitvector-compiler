@@ -73,9 +73,9 @@ struct SelectorPart {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Combinator {
-    Descendant, // 空格
+    Descendant, // Space combinator
     Child,      // >
-    None,       // 最后一个选择器没有组合器
+    None,       // The last selector has no combinator
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Selector {
@@ -775,18 +775,19 @@ pub struct Nfacell(pub usize);
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
 pub struct SelectorId(pub usize);
-/// 转移规则: (输入选择器, 当前状态, 下一个状态)
-/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
+/// Transition rule: (input selector, current state, next state)
+/// When the input selector is None it represents a wildcard/epsilon or special match; a current
+/// state of None can be used for start logic.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
-    /// NFA 中所有状态的集合。
+    /// Set of all NFA states.
     pub states: HashSet<Option<Nfacell>>,
-    /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
+    /// Rule list: (optional predicate, optional predecessor state, successor state)
     pub rules: Vec<Rule>,
-    /// 起始状态。
+    /// Start state.
     pub start_state: Option<Nfacell>,
     pub max_state_id: Nfacell,
     // for print match
@@ -899,7 +900,7 @@ impl SelectorManager {
         id
     }
 
-    /// 根据选择器获取ID
+    /// Get the ID for a selector.
     pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
         self.selector_to_id.get(selector).copied()
     }
@@ -1021,7 +1022,7 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
     }
 }
 
-/// 解析CSS选择器字符串并生成对应的选择器对象
+/// Parse a CSS selector string and produce the corresponding selector object.
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim();
     if trimmed.is_empty() {
@@ -1255,8 +1256,8 @@ pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
 }
 
 pub trait AddNode {
-    /// 向 DOM 中添加一个新节点。
-    /// 返回新节点的索引。
+    /// Add a new node to the DOM.
+    /// Returns the index of the new node.
     fn add_node(
         &mut self,
         id: u64,
