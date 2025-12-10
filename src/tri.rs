@@ -573,9 +573,17 @@ impl DOM {
             .map(|node| node.parent == Some(cur_idx))
             .unwrap_or(true);
         if should_remove {
-            self.nodes.remove(&removed_child_id);
+            self.remove_subtree(removed_child_id);
         }
         self.set_node_dirty(cur_idx);
+    }
+
+    fn remove_subtree(&mut self, node_id: u64) {
+        if let Some(node) = self.nodes.remove(&node_id) {
+            for child in node.children {
+                self.remove_subtree(child);
+            }
+        }
     }
     pub fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
         if self.nodes.is_empty() {

@@ -350,17 +350,43 @@ impl SimpleDom {
         }
     }
 
+    fn remove_subtree(&mut self, node_id: u64) {
+        if let Some(node) = self.nodes.remove(&node_id) {
+            for child_id in node.children {
+                self.remove_subtree(child_id);
+            }
+        }
+    }
+
     fn remove_by_path(&mut self, path: &[usize]) {
         if path.is_empty() {
+            self.nodes.clear();
+            self.root_id = None;
             return;
         }
         let parent_path = &path[..path.len() - 1];
         let child_idx = *path.last().unwrap();
         if let Some(parent_id) = self.node_id_by_path(parent_path) {
-            if let Some(parent_node) = self.nodes.get_mut(&parent_id) {
-                if child_idx < parent_node.children.len() {
-                    let child_id = parent_node.children.remove(child_idx);
-                    self.nodes.remove(&child_id);
+            let child_id = {
+                let parent_node_opt = self.nodes.get_mut(&parent_id);
+                if let Some(parent_node) = parent_node_opt {
+                    if child_idx < parent_node.children.len() {
+                        Some(parent_node.children.remove(child_idx))
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            };
+            if let Some(child_id) = child_id {
+                let should_remove = self
+                    .nodes
+                    .get(&child_id)
+                    .map(|node| node.parent == Some(parent_id))
+                    .unwrap_or(true);
+                if should_remove {
+                    self.remove_subtree(child_id);
                 }
             }
         }

@@ -8,7 +8,7 @@
 | google | 3712 | 3704 | 3580 | OK | OK | OK |
 | netflix | 2527 | 2479 | 2388 | OK | OK | OK |
 | testcase | 10 | 7 | 7 | OK | OK | OK |
-| tiktok | 2634 | 2634 | 2361 | DIFF | DIFF | DIFF |
+| tiktok | 2634 | 2634 | 2361 | OK | OK | OK |
 | whatsapp | 1607 | 1607 | 1607 | OK | OK | OK |
 | wikipedia | 8778 | 8771 | 2716 | OK | OK | OK |
 | yahoo | 489 | 488 | 488 | OK | OK | OK |
