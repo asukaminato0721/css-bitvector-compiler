@@ -254,7 +254,8 @@ impl AddNode for DOM {
             parent_dependencies: vec![Vec::new(); unsafe { STATE } + 1],
             tri_state: vec![IState::IUnused; unsafe { STATE } + 1],
         };
-        let (output_bits, quad_output, dependencies) = self.new_output_state(&new_node, &get_input(), nfa);
+        let (output_bits, quad_output, dependencies) =
+            self.new_output_state(&new_node, &get_input(), nfa);
         new_node.output_bits = output_bits;
         new_node.quad_output = quad_output;
         new_node.parent_dependencies = dependencies;
@@ -721,17 +722,17 @@ impl DOM {
                 debug_log(|| format!("{} clean validation start", node_descriptor));
                 let (new_output_bits, new_quad_output, _new_dependencies) =
                     match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(node, input, nfa),
-                    None => {
-                        debug_log(|| {
-                            format!(
-                                "{} vanished during clean validation; skipping",
-                                node_descriptor
-                            )
-                        });
-                        return;
-                    }
-                };
+                        Some(node) => self.new_output_state(node, input, nfa),
+                        None => {
+                            debug_log(|| {
+                                format!(
+                                    "{} vanished during clean validation; skipping",
+                                    node_descriptor
+                                )
+                            });
+                            return;
+                        }
+                    };
                 debug_log(|| {
                     format!(
                         "{} validation -> output={} quad={}",
@@ -776,8 +777,10 @@ impl DOM {
                     unsafe {
                         MISS_CNT += 1;
                     }
-                    let (new_output_state, new_quad_output, new_dependencies) =
-                        match self.nodes.get(&node_idx) {
+                    let (new_output_state, new_quad_output, new_dependencies) = match self
+                        .nodes
+                        .get(&node_idx)
+                    {
                         Some(node) => self.new_output_state(node, input, nfa),
                         None => {
                             debug_log(|| {
@@ -821,17 +824,17 @@ impl DOM {
                     }
                     let (new_output, new_quad, _validation_dependencies) =
                         match self.nodes.get(&node_idx) {
-                        Some(node) => self.new_output_state(node, input, nfa),
-                        None => {
-                            debug_log(|| {
-                                format!(
-                                    "{} missing before input reuse validation; skipping",
-                                    node_descriptor
-                                )
-                            });
-                            return;
-                        }
-                    };
+                            Some(node) => self.new_output_state(node, input, nfa),
+                            None => {
+                                debug_log(|| {
+                                    format!(
+                                        "{} missing before input reuse validation; skipping",
+                                        node_descriptor
+                                    )
+                                });
+                                return;
+                            }
+                        };
                     debug_log(|| {
                         format!(
                             "{} input reused; output stays {} tri stays {}",
@@ -857,17 +860,17 @@ impl DOM {
                 }
                 let (new_output_state, new_quad_state, new_dependencies) =
                     match self.nodes.get(&node_idx) {
-                    Some(node) => self.new_output_state(node, input, nfa),
-                    None => {
-                        debug_log(|| {
-                            format!(
-                                "{} missing before node_changed recompute; skipping",
-                                node_descriptor
-                            )
-                        });
-                        return;
-                    }
-                };
+                        Some(node) => self.new_output_state(node, input, nfa),
+                        None => {
+                            debug_log(|| {
+                                format!(
+                                    "{} missing before node_changed recompute; skipping",
+                                    node_descriptor
+                                )
+                            });
+                            return;
+                        }
+                    };
                 let output_changed = new_output_state != previous_output_bits;
                 debug_log(|| {
                     format!(
@@ -1162,7 +1165,8 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         nfa: &NFA,
     ) -> Self::AttrState {
         let node = &self.nodes[&node_idx];
-        let (output_bits, _quad_output, dependencies) = self.new_output_state(node, parent_bits, nfa);
+        let (output_bits, _quad_output, dependencies) =
+            self.new_output_state(node, parent_bits, nfa);
         let needed_outputs = self.compute_needed_outputs(node_idx, nfa);
         let tri_state = self.derive_tri_state(&needed_outputs, &dependencies, parent_bits);
         (output_bits, tri_state)
