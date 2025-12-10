@@ -1,6 +1,10 @@
 use css_bitvector_compiler::{
-    AddNode, Command, LayoutFrame, NFA, Nfacell, Rule, Selector, SelectorId, SelectorManager,
-    generate_nfa, json_value_to_attr_string, parse_css, parse_trace, rdtsc,
+    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_FOCUS,
+    PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, ParsedSelectors, Rule,
+    Selector, SelectorId, SelectorManager, derive_hover_state, drain_supported_pseudo_selectors,
+    extract_pseudoclasses, generate_nfa, parse_css_with_pseudo, parse_trace,
+    partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
+    runtime_shared::{HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common},
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -38,12 +42,14 @@ fn format_bits(bits: &[bool]) -> String {
 
 #[derive(Debug, Default)]
 pub struct DOMNode {
-    pub tag_id: SelectorId,                  // 标签选择器ID
-    pub class_ids: HashSet<SelectorId>,      // CSS类选择器ID集合
-    pub id_selector_id: Option<SelectorId>,  // HTML ID选择器ID
-    pub attributes: HashMap<String, String>, // 节点属性键值对（小写键）
-    pub parent: Option<u64>,                 // 存储父节点在 arena 中的索引
-    pub children: Vec<u64>,                  // 存储子节点在 arena 中的索引
+    pub tag_id: SelectorId,                  // Tag selector ID
+    pub class_ids: HashSet<SelectorId>,      // Collection of CSS class selector IDs
+    pub id_selector_id: Option<SelectorId>,  // HTML ID selector ID
+    pub attributes: HashMap<String, String>, // Node attribute key-value pairs (lowercase keys)
+    pub pseudo_classes: HashSet<String>,
+    pub computed_pseudo_classes: HashSet<String>,
+    pub parent: Option<u64>, // Index of the parent node in the arena
+    pub children: Vec<u64>,  // Indices of child nodes in the arena
     pub dirty: bool,
     pub recursive_dirty: bool,
     pub output_state: Vec<bool>,
@@ -58,9 +64,36 @@ impl DOMNode {
 
 #[derive(Debug, Default)]
 pub struct DOM {
-    pub nodes: HashMap<u64, DOMNode>,      // Arena: 所有节点都存储在这里
-    pub selector_manager: SelectorManager, // 选择器管理器
+    pub nodes: HashMap<u64, DOMNode>,      // Arena storage for all nodes
+    pub selector_manager: SelectorManager, // Selector manager
     root_node: Option<u64>,
+}
+
+impl NodeAttributes for DOMNode {
+    fn attributes(&mut self) -> &mut HashMap<String, String> {
+        &mut self.attributes
+    }
+    fn class_ids(&mut self) -> &mut HashSet<SelectorId> {
+        &mut self.class_ids
+    }
+    fn id_selector_id(&mut self) -> &mut Option<SelectorId> {
+        &mut self.id_selector_id
+    }
+    fn pseudo_classes(&mut self) -> &mut HashSet<String> {
+        &mut self.pseudo_classes
+    }
+}
+
+impl HasSelectorManager for DOM {
+    fn selector_manager(&mut self) -> &mut SelectorManager {
+        &mut self.selector_manager
+    }
+}
+
+impl HasNodes<DOMNode> for DOM {
+    fn nodes_mut(&mut self) -> &mut HashMap<u64, DOMNode> {
+        &mut self.nodes
+    }
 }
 
 fn get_input() -> Vec<bool> {
@@ -75,6 +108,7 @@ impl AddNode for DOM {
         classes: Vec<String>,
         html_id: Option<String>,
         attributes: HashMap<String, String>,
+        pseudo_classes: HashSet<String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64 {
@@ -83,19 +117,30 @@ impl AddNode for DOM {
 
         let mut class_ids = HashSet::new();
         for class in &classes {
-            let class_id = sm.get_or_create_class_id(&class.to_lowercase());
+            let class_id = sm.get_or_create_class_id(class);
             class_ids.insert(class_id);
         }
 
         let id_selector_id = html_id
             .as_ref()
-            .map(|id| sm.get_or_create_id_selector_id(&id.to_lowercase()));
+            .map(|id| sm.get_or_create_id_selector_id(id));
+
+        let parent_hover_active = parent_index
+            .and_then(|pid| self.nodes.get(&pid))
+            .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
+            .unwrap_or(false);
+        let mut computed_pseudo_classes = HashSet::new();
+        if derive_hover_state(&pseudo_classes, parent_hover_active) {
+            computed_pseudo_classes.insert(PSEUDO_CLASS_HOVER.to_string());
+        }
 
         let mut new_node = DOMNode {
             tag_id,
             class_ids,
             id_selector_id,
             attributes,
+            pseudo_classes,
+            computed_pseudo_classes,
             parent: parent_index,
             children: Vec::new(),
             dirty: true,
@@ -106,7 +151,7 @@ impl AddNode for DOM {
         new_node.output_state = o;
         self.nodes.insert(id, new_node);
 
-        // 如果有父节点，将当前节点作为子节点添加到父节点的 children 列表中
+        // Add the current node as a child of its parent if one exists
         if let Some(p_idx) = parent_index {
             self.nodes
                 .get_mut(&p_idx)
@@ -120,7 +165,7 @@ impl AddNode for DOM {
 }
 
 impl DOM {
-    /// 创建一个新的、空的 DOM。
+    /// Create a new empty DOM.
     pub fn new() -> Self {
         Default::default()
     }
@@ -169,7 +214,7 @@ impl DOM {
         }
     }
 
-    /// 检查节点是否匹配给定的选择器ID
+    /// Check whether a node matches the given selector ID.
     pub fn node_matches_selector(&self, node: &DOMNode, selector_id: SelectorId) -> bool {
         match self.selector_manager.id_to_selector.get(&selector_id) {
             Some(Selector::Type(_)) => node.tag_id == selector_id,
@@ -180,44 +225,208 @@ impl DOM {
                 .get(name)
                 .map(|v| v == value)
                 .unwrap_or(false),
+            Some(Selector::Compound(compound)) => self.node_matches_compound(node, compound),
+            None => false,
+        }
+    }
+
+    fn node_matches_compound(&self, node: &DOMNode, compound: &CompoundSelector) -> bool {
+        if let Some(tag) = &compound.tag
+            && !self.node_has_tag(node, tag)
+        {
+            return false;
+        }
+        if let Some(id_value) = &compound.id
+            && !self.node_has_id(node, id_value)
+        {
+            return false;
+        }
+        for class_name in &compound.classes {
+            if !self.node_has_class(node, class_name) {
+                return false;
+            }
+        }
+        for (name, value) in &compound.attributes {
+            if !node
+                .attributes
+                .get(name)
+                .map(|v| v == value)
+                .unwrap_or(false)
+            {
+                return false;
+            }
+        }
+        for pseudo in &compound.pseudos {
+            if !node.computed_pseudo_classes.contains(pseudo) {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn node_has_class(&self, node: &DOMNode, class_name: &str) -> bool {
+        let selector = Selector::Class(class_name.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(class_id) => node.class_ids.contains(&class_id),
+            None => false,
+        }
+    }
+
+    fn node_has_id(&self, node: &DOMNode, id_value: &str) -> bool {
+        let selector = Selector::Id(id_value.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(id) => node.id_selector_id == Some(id),
+            None => false,
+        }
+    }
+
+    fn node_has_tag(&self, node: &DOMNode, tag_name: &str) -> bool {
+        if tag_name == "*" {
+            return true;
+        }
+        let selector = Selector::Type(tag_name.to_string());
+        match self.selector_manager.get_id(&selector) {
+            Some(tag_id) => node.tag_id == tag_id,
             None => false,
         }
     }
 
     pub fn get_root_node(&mut self) -> u64 {
         if let Some(r) = self.root_node {
-            return r;
+            if self.nodes.contains_key(&r) {
+                return r;
+            }
+            self.root_node = None;
         }
-        self.root_node = Some(
-            self.nodes
-                .iter()
-                .filter(|(_, node)| node.parent.is_none())
-                .map(|(idx, _)| *idx)
-                .take(1)
-                .next()
-                .unwrap(),
-        );
-        self.root_node.unwrap()
+        let root = self
+            .nodes
+            .iter()
+            .find(|(_, node)| node.parent.is_none())
+            .map(|(idx, _)| *idx)
+            .unwrap_or_else(|| panic!("DOM has no root node"));
+        self.root_node = Some(root);
+        root
     }
 
-    /// 设置指定节点为脏状态，并向上传播recursive_dirty位
+    /// Mark the specified node dirty and propagate the recursive_dirty flag upward.
     pub fn set_node_dirty(&mut self, node_idx: u64) {
-        let node = self.nodes.get_mut(&node_idx).unwrap();
-        node.set_dirty();
+        let parent_idx = match self.nodes.get_mut(&node_idx) {
+            Some(node) => {
+                node.set_dirty();
+                node.parent
+            }
+            None => return,
+        };
+        self.propagate_recursive_dirty(parent_idx);
+    }
 
-        // 向上传播 recursive_dirty
-        let mut current_idx = node.parent;
+    fn propagate_recursive_dirty(&mut self, mut current_idx: Option<u64>) {
         while let Some(parent_idx) = current_idx {
-            let parent_node = self.nodes.get_mut(&parent_idx).unwrap();
+            let parent_node = match self.nodes.get_mut(&parent_idx) {
+                Some(node) => node,
+                None => break,
+            };
 
             if parent_node.recursive_dirty {
-                break; // 如果父节点已经设置了recursive_dirty，停止传播
+                break;
             }
             parent_node.recursive_dirty = true;
             current_idx = parent_node.parent;
         }
     }
-    fn json_to_html_node(
+
+    fn refresh_computed_pseudos(&mut self, node_idx: u64) {
+        let (parent_idx, parent_hover) = match self.nodes.get(&node_idx) {
+            Some(node) => {
+                let parent_hover = node
+                    .parent
+                    .and_then(|pid| self.nodes.get(&pid))
+                    .map(|parent| parent.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER))
+                    .unwrap_or(false);
+                (node.parent, parent_hover)
+            }
+            None => return,
+        };
+
+        let mut changed = false;
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
+            let hover_active = derive_hover_state(&node.pseudo_classes, parent_hover);
+            let had_hover = node.computed_pseudo_classes.contains(PSEUDO_CLASS_HOVER);
+            if hover_active && !had_hover {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_HOVER.to_string());
+                node.set_dirty();
+                changed = true;
+            } else if !hover_active && had_hover {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_HOVER);
+                node.set_dirty();
+                changed = true;
+            }
+        } else {
+            return;
+        }
+
+        if changed {
+            self.propagate_recursive_dirty(parent_idx);
+        }
+    }
+
+    fn recompute_focus_states(&mut self, node_idx: u64) -> bool {
+        let (child_indices, parent_idx, focus_root_active) = match self.nodes.get(&node_idx) {
+            Some(node) => {
+                let active = node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS_ROOT)
+                    || node.pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
+                (node.children.clone(), node.parent, active)
+            }
+            None => return false,
+        };
+
+        let mut focus_within_active = focus_root_active;
+        for child_idx in child_indices {
+            if self.recompute_focus_states(child_idx) {
+                focus_within_active = true;
+            }
+        }
+
+        let mut changed = false;
+        if let Some(node) = self.nodes.get_mut(&node_idx) {
+            let has_focus = node.computed_pseudo_classes.contains(PSEUDO_CLASS_FOCUS);
+            if focus_root_active && !has_focus {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS.to_string());
+                node.set_dirty();
+                changed = true;
+            } else if !focus_root_active && has_focus {
+                node.computed_pseudo_classes.remove(PSEUDO_CLASS_FOCUS);
+                node.set_dirty();
+                changed = true;
+            }
+
+            let has_focus_within = node
+                .computed_pseudo_classes
+                .contains(PSEUDO_CLASS_FOCUS_WITHIN);
+            if focus_within_active && !has_focus_within {
+                node.computed_pseudo_classes
+                    .insert(PSEUDO_CLASS_FOCUS_WITHIN.to_string());
+                node.set_dirty();
+                changed = true;
+            } else if !focus_within_active && has_focus_within {
+                node.computed_pseudo_classes
+                    .remove(PSEUDO_CLASS_FOCUS_WITHIN);
+                node.set_dirty();
+                changed = true;
+            }
+        } else {
+            return focus_within_active;
+        }
+
+        if changed {
+            self.propagate_recursive_dirty(parent_idx);
+        }
+
+        focus_within_active
+    }
+    pub fn json_to_html_node(
         &mut self,
         json_node: &serde_json::Value,
         parent_index: Option<u64>,
@@ -247,14 +456,16 @@ impl DOM {
             .filter(|s| !s.is_empty())
             .map(String::from)
             .collect::<Vec<String>>();
+        let pseudo_classes = extract_pseudoclasses(json_node);
 
-        // 创建当前节点
+        // Create the current node
         let current_index = self.add_node(
             id,
             tag_name,
             classes.clone(),
             html_id,
             attributes,
+            pseudo_classes,
             parent_index,
             nfa,
         );
@@ -263,7 +474,7 @@ impl DOM {
             panic!()
         }
         //
-        // 递归处理子节点
+        // Recursively process child nodes
         if let Some(children_array) = json_node["children"].as_array() {
             for child_json in children_array {
                 self.json_to_html_node(child_json, Some(current_index), nfa);
@@ -272,19 +483,19 @@ impl DOM {
         current_index
     }
 
-    /// 通过路径添加节点
+    /// Add a node specified by a path.
     pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value, nfa: &NFA) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
         let mut current_idx = root_node;
 
-        // 遍历路径到目标父节点
+        // Walk the path to the target parent node
         for &path_element in &path[..path.len() - 1] {
             current_idx = self.nodes[&current_idx].children[path_element];
         }
 
-        // 在指定位置插入新节点
+        // Insert the new node at the specified position
         let new_node_idx = self.json_to_html_node(json_node, Some(current_idx), nfa);
         let insert_pos = path[path.len() - 1];
         if let Some(parent) = self.nodes.get_mut(&current_idx) {
@@ -295,16 +506,16 @@ impl DOM {
         self.set_node_dirty(current_idx);
     }
 
-    /// 通过路径移除节点
+    /// Remove a node specified by a path.
     pub fn remove_node_by_path(&mut self, path: &[usize]) {
         let root_nodes = self.get_root_node();
-        // 递归到目标父节点
+        // Descend to the target parent node
         let mut cur_idx = root_nodes;
         for &path_idx in &path[..path.len() - 1] {
             cur_idx = self.nodes[&cur_idx].children[path_idx];
         }
 
-        // 移除目标节点
+        // Remove the target node
         let rm_pos = path[path.len() - 1];
         let removed_child_id = self
             .nodes
@@ -312,11 +523,26 @@ impl DOM {
             .unwrap()
             .children
             .remove(rm_pos);
-        self.nodes.remove(&removed_child_id);
+        let should_remove = self
+            .nodes
+            .get(&removed_child_id)
+            .map(|node| node.parent == Some(cur_idx))
+            .unwrap_or(true);
+        if should_remove {
+            self.remove_subtree(removed_child_id);
+        }
         self.set_node_dirty(cur_idx);
     }
 
-    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+    fn remove_subtree(&mut self, node_id: u64) {
+        if let Some(node) = self.nodes.remove(&node_id) {
+            for child in node.children {
+                self.remove_subtree(child);
+            }
+        }
+    }
+
+    pub fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
         if self.nodes.is_empty() {
             return None;
         }
@@ -327,57 +553,6 @@ impl DOM {
         }
         Some(current_idx)
     }
-
-    fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-        let key_lower = key.to_lowercase();
-        match key_lower.as_str() {
-            "class" => {
-                let mut new_class_ids = HashSet::new();
-                if let Some(ref class_value) = new_value {
-                    for class_name in class_value
-                        .split_whitespace()
-                        .filter(|name| !name.is_empty())
-                    {
-                        let class_id = self
-                            .selector_manager
-                            .get_or_create_class_id(&class_name.to_lowercase());
-                        new_class_ids.insert(class_id);
-                    }
-                }
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(ref val) = new_value {
-                        node.attributes.insert(key_lower.clone(), val.clone());
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                    node.class_ids = new_class_ids;
-                }
-            }
-            "id" => {
-                let new_selector_id = new_value.as_ref().map(|value| {
-                    self.selector_manager
-                        .get_or_create_id_selector_id(&value.to_lowercase())
-                });
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(ref val) = new_value {
-                        node.attributes.insert(key_lower.clone(), val.clone());
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                    node.id_selector_id = new_selector_id;
-                }
-            }
-            _ => {
-                if let Some(node) = self.nodes.get_mut(&node_idx) {
-                    if let Some(ref val) = new_value {
-                        node.attributes.insert(key_lower.clone(), val.clone());
-                    } else {
-                        node.attributes.remove(key_lower.as_str());
-                    }
-                }
-            }
-        }
-    }
     pub fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
         let root_node = self.get_root_node();
         debug_log(|| {
@@ -387,20 +562,26 @@ impl DOM {
                 format_bits(input)
             )
         });
+        self.recompute_focus_states(root_node);
         self.recompute_styles_recursive(root_node, nfa, input);
         debug_log(|| format!("recompute done {}", self.describe_node(root_node)));
     }
     fn recompute_styles_recursive(&mut self, node_idx: u64, nfa: &NFA, input: &[bool]) {
         let node_descriptor = self.describe_node(node_idx);
-        let (was_recursive_dirty, was_dirty, previous_output, child_indices_snapshot) = {
-            let node = &self.nodes[&node_idx];
-            (
-                node.recursive_dirty,
-                node.dirty,
-                node.output_state.clone(),
-                node.children.clone(),
-            )
-        };
+        self.refresh_computed_pseudos(node_idx);
+        let (was_recursive_dirty, was_dirty, previous_output, child_indices_snapshot) =
+            match self.nodes.get(&node_idx) {
+                Some(node) => (
+                    node.recursive_dirty,
+                    node.dirty,
+                    node.output_state.clone(),
+                    node.children.clone(),
+                ),
+                None => {
+                    debug_log(|| format!("{} missing; skipping recompute", node_descriptor));
+                    return;
+                }
+            };
 
         if !was_recursive_dirty {
             debug_log(|| {
@@ -427,8 +608,17 @@ impl DOM {
                 MISS_CNT += 1;
             }
             let new_output_state = {
-                let node = self.nodes.get(&node_idx).unwrap();
-                self.new_output_state(node, input, nfa)
+                if let Some(node) = self.nodes.get(&node_idx) {
+                    self.new_output_state(node, input, nfa)
+                } else {
+                    debug_log(|| {
+                        format!(
+                            "{} vanished before recompute; aborting dirty propagation",
+                            node_descriptor
+                        )
+                    });
+                    return;
+                }
             };
             debug_log(|| {
                 format!(
@@ -446,18 +636,23 @@ impl DOM {
                         child_indices_snapshot.len()
                     )
                 });
-                {
-                    let node = self.nodes.get_mut(&node_idx).unwrap();
+                if let Some(node) = self.nodes.get_mut(&node_idx) {
                     node.output_state = new_output_state.clone();
+                } else {
+                    debug_log(|| {
+                        format!(
+                            "{} missing before storing output_state; aborting child propagation",
+                            node_descriptor
+                        )
+                    });
+                    return;
                 }
                 let mut marked_children = Vec::new();
                 for &child_idx in &child_indices_snapshot {
-                    let dirty_state = {
-                        let child = self.nodes.get_mut(&child_idx).unwrap();
+                    if let Some(child) = self.nodes.get_mut(&child_idx) {
                         child.set_dirty();
-                        child.dirty
-                    };
-                    marked_children.push((child_idx, dirty_state));
+                        marked_children.push((child_idx, child.dirty));
+                    }
                 }
                 for (child_idx, dirty_state) in marked_children {
                     let child_desc = self.describe_node(child_idx);
@@ -487,8 +682,17 @@ impl DOM {
                 )
             });
             let new_output_state = {
-                let node = self.nodes.get(&node_idx).unwrap();
-                self.new_output_state(node, input, nfa)
+                if let Some(node) = self.nodes.get(&node_idx) {
+                    self.new_output_state(node, input, nfa)
+                } else {
+                    debug_log(|| {
+                        format!(
+                            "{} missing before validation recompute; skipping check",
+                            node_descriptor
+                        )
+                    });
+                    return;
+                }
             };
             debug_log(|| {
                 format!(
@@ -505,7 +709,18 @@ impl DOM {
         }
 
         // Recursively process children
-        let current_output_state = self.nodes[&node_idx].output_state.clone();
+        let current_output_state = match self.nodes.get(&node_idx) {
+            Some(node) => node.output_state.clone(),
+            None => {
+                debug_log(|| {
+                    format!(
+                        "{} removed before propagating to children; aborting subtree traversal",
+                        node_descriptor
+                    )
+                });
+                return;
+            }
+        };
         debug_log(|| {
             format!(
                 "{} propagating to {} children",
@@ -514,7 +729,14 @@ impl DOM {
             )
         });
         for &child_idx in &child_indices_snapshot {
-            self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            let child_needs_visit = self
+                .nodes
+                .get(&child_idx)
+                .map(|child| child.recursive_dirty)
+                .unwrap_or(false);
+            if child_needs_visit {
+                self.recompute_styles_recursive(child_idx, nfa, &current_output_state);
+            }
         }
 
         // Reset dirty flags
@@ -524,17 +746,17 @@ impl DOM {
         }
         debug_log(|| format!("{} finished; dirty flags cleared", node_descriptor));
     }
-    /// 传播规则是这样的
-    /// 对 NFA 来说, 每条边对应一个 Rule
-    /// 用一个 Vec 收集这些 Rule, 下标对应 state 的下标, 表示哪些边已经被激活了.
-    /// 当一个新的 input 传下来时, 已经亮的就不用检查了
+    /// Propagation follows these rules.
+    /// For an NFA, each edge corresponds to a `Rule`.
+    /// Collect the rules in a `Vec` indexed by state to track which edges are already active.
+    /// When new input arrives, you can skip edges that are already active.
     fn new_output_state(&self, node: &DOMNode, input: &[bool], nfa: &NFA) -> Vec<bool> {
         let mut new_state = vec![false; input.len()];
 
         for &rule in nfa.rules.iter() {
             match rule {
-                Rule(None, None, Nfacell(_)) => {
-                    unreachable!()
+                Rule(None, None, Nfacell(c)) => {
+                    new_state[c] = true;
                 }
                 Rule(None, Some(Nfacell(b)), Nfacell(c)) => {
                     if input[b] {
@@ -557,88 +779,67 @@ impl DOM {
     }
 }
 
-fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
-    match frame.as_command() {
-        Command::Init { node } => {
-            dom.nodes.clear();
-            dom.root_node = None;
-            dom.json_to_html_node(node, None, nfa);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::Add { path, node } => {
-            dom.add_node_by_path(&path, node, nfa);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::ReplaceValue {
-            path,
-            key,
-            value,
-            old_value,
-        } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            if let Some(old_value) = old_value {
-                let expected = json_value_to_attr_string(old_value);
-                let actual = dom
-                    .nodes
-                    .get(&node_idx)
-                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
-                    .cloned()
-                    .unwrap_or_default();
-                assert_eq!(
-                    actual, expected,
-                    "existing attribute value mismatch for key {} at path {:?}",
-                    key, path
-                );
-            }
-            let new_value = value.map(json_value_to_attr_string);
-            dom.update_attribute(node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::InsertValue { path, key, value } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            let new_value = value.map(json_value_to_attr_string);
-            dom.update_attribute(node_idx, key, new_value);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::DeleteValue {
-            path,
-            key,
-            old_value,
-        } => {
-            let node_idx = dom.node_id_by_path(&path).unwrap();
-            if let Some(old_value) = old_value {
-                let expected = json_value_to_attr_string(old_value);
-                let actual = dom
-                    .nodes
-                    .get(&node_idx)
-                    .and_then(|node| node.attributes.get(&key.to_lowercase()))
-                    .cloned()
-                    .unwrap_or_default();
-                assert_eq!(
-                    actual, expected,
-                    "existing attribute value mismatch for key {} at path {:?}",
-                    key, path
-                );
-            }
-            dom.update_attribute(node_idx, key, None);
-            dom.set_node_dirty(node_idx);
-            dom.recompute_styles(nfa, &get_input());
-        }
-        Command::Recalculate => {
-            let start = rdtsc();
-            let mut input = vec![false; unsafe { STATE } + 1];
-            input[nfa.start_state.unwrap_or_default().0] = true;
-            dom.recompute_styles(nfa, &input);
-            let end = rdtsc();
-            println!("{}", end - start);
-        }
-        Command::Remove { path } => {
-            dom.remove_node_by_path(&path);
-            dom.recompute_styles(nfa, &get_input());
-        }
+impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
+    type AttrState = Vec<bool>;
+    fn reset_dom(&mut self) {
+        self.nodes.clear();
+        self.root_node = None;
     }
+    fn json_to_html_node(&mut self, node: &serde_json::Value, parent: Option<u64>, nfa: &NFA) {
+        self.json_to_html_node(node, parent, nfa);
+    }
+    fn add_node_by_path(&mut self, path: &[usize], node: &serde_json::Value, nfa: &NFA) {
+        self.add_node_by_path(path, node, nfa);
+    }
+    fn remove_node_by_path(&mut self, path: &[usize]) {
+        self.remove_node_by_path(path);
+    }
+    fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64> {
+        self.node_id_by_path(path)
+    }
+    fn set_node_dirty(&mut self, node_idx: u64) {
+        self.set_node_dirty(node_idx);
+    }
+    fn recompute_styles(&mut self, nfa: &NFA, input: &[bool]) {
+        self.recompute_styles(nfa, input);
+    }
+    fn attr_state_and_parent_input<F>(
+        &self,
+        node_idx: u64,
+        make_root_input: &F,
+    ) -> (Self::AttrState, Vec<bool>)
+    where
+        F: Fn() -> Vec<bool>,
+    {
+        let node = &self.nodes[&node_idx];
+        let parent_bits = node
+            .parent
+            .and_then(|pid| self.nodes.get(&pid))
+            .map(|parent| parent.output_state.clone())
+            .unwrap_or_else(make_root_input);
+        (node.output_state.clone(), parent_bits)
+    }
+    fn recompute_attr_state(
+        &self,
+        node_idx: u64,
+        parent_bits: &[bool],
+        nfa: &NFA,
+    ) -> Self::AttrState {
+        let node = &self.nodes[&node_idx];
+        self.new_output_state(node, parent_bits, nfa)
+    }
+}
+
+fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
+    let make_input = || get_input();
+    let make_recalc_input = |nfa: &NFA| {
+        let mut input = vec![false; unsafe { STATE } + 1];
+        if let Some(start) = nfa.start_state {
+            input[start.0] = true;
+        }
+        input
+    };
+    apply_frame_common(dom, frame, nfa, make_input, make_recalc_input);
 }
 
 pub fn collect_rule_matches(
@@ -664,15 +865,24 @@ pub fn collect_rule_matches(
 }
 
 fn main() {
-    // 1. 构建 DOM 树
+    // 1. Build the DOM tree
     let mut dom = DOM::new();
-    let selectors = parse_css(
+    let ParsedSelectors {
+        mut selectors,
+        mut pseudo_selectors,
+    } = parse_css_with_pseudo(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
         ))
         .unwrap(),
     );
+    selectors.extend(drain_supported_pseudo_selectors(&mut pseudo_selectors));
+    selectors.sort();
+    selectors.dedup();
+    let (selectors, skipped_simple) = partition_simple_selectors(selectors);
+    report_skipped_selectors("bit", &skipped_simple);
+    report_pseudo_selectors("bit", &pseudo_selectors);
     // dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
@@ -748,6 +958,8 @@ mod tests {
             class_ids: HashSet::new(),
             id_selector_id: None,
             attributes: HashMap::from([("data-test".into(), "foo".into())]),
+            pseudo_classes: HashSet::new(),
+            computed_pseudo_classes: HashSet::new(),
             parent: None,
             children: Vec::new(),
             dirty: false,
@@ -789,6 +1001,7 @@ mod tests {
             Vec::<String>::new(),
             Some("root".to_string()),
             root_attributes,
+            HashSet::new(),
             None,
             &nfa,
         );
@@ -799,6 +1012,7 @@ mod tests {
             vec!["leaf".to_string()],
             None,
             child_attributes,
+            HashSet::new(),
             Some(root_id),
             &nfa,
         );

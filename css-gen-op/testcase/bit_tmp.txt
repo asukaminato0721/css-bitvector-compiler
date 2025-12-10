@@ -1,10 +1,23 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
-1766
+NOT_CONSIDERED[bit] 2 selector(s)
+NOT_CONSIDERED[bit] #b
+NOT_CONSIDERED[bit] #bb
+PSEUDO_SKIPPED[bit] none
 BEGIN
-#b -> [3]
-#bb -> [4]
 [class="aa"] -> [1]
 div p -> [2]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 10
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 10

@@ -1,71 +1,56 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
-2210
-1575
-1170
-2054
-1746
-1665
-1138
-1181
-910
-921
-1979
-858
-2042
-1673
-2014
-1668
-1566
-2390
-2039
-1926
-1452
-2278
-1630
-1154
-1732
-1924
-1340
-1508
-2202
-1239
-1253
-1172
-1028
-913
-1016
-1387
-2145
-2046
-1200
-1020
-1229
-1464
-1107
-1408
-996
-1061
-923
-1389
-1135
-1117
-1401
-1865
-1194
+NOT_CONSIDERED[bit] 21 selector(s)
+NOT_CONSIDERED[bit] #masthead-skeleton-icons
+NOT_CONSIDERED[bit] .autoscrollbody
+NOT_CONSIDERED[bit] .dark.shellytd-masthead
+NOT_CONSIDERED[bit] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[bit] .grecaptcha-badge
+NOT_CONSIDERED[bit] .hidden
+NOT_CONSIDERED[bit] .masthead-skeleton-icon
+NOT_CONSIDERED[bit] .no-scrollbody
+NOT_CONSIDERED[bit] .no-y-scrollbody
+NOT_CONSIDERED[bit] .shellytd-masthead
+NOT_CONSIDERED[bit] .theater.shellytd-masthead
+NOT_CONSIDERED[bit] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[bit] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[bit] body
+NOT_CONSIDERED[bit] dom-bind
+NOT_CONSIDERED[bit] dom-if
+NOT_CONSIDERED[bit] dom-repeat
+NOT_CONSIDERED[bit] html
+NOT_CONSIDERED[bit] ps-dom-if
+NOT_CONSIDERED[bit] ps-dom-repeat
+NOT_CONSIDERED[bit] textarea
+PSEUDO_SKIPPED[bit] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[bit] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[bit] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[bit] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[bit] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[bit] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ytd-masthead.shell > :last-child
 BEGIN
-#masthead-skeleton-icons -> [379]
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
-ytd-masthead #masthead-logo -> [284]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
+.ytd-searchbox-spt#search-input input -> [266]
+ytd-masthead #masthead-logo -> [292]
+ytd-masthead #masthead-logo #country-code -> [362]
+ytd-masthead .external-icon -> [282, 332]
+ytd-masthead .yt-icons-ext -> [286]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 4116
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 20258

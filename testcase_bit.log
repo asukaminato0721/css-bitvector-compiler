@@ -1,37 +1,43 @@
-[bit-debug] recompute start node 1 <div .a>; input=00
-[bit-debug] node 1 <div .a> visit: dirty=true input=00
-[bit-debug] node 1 <div .a> recompute -> output=01 (prev=01)
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+NOT_CONSIDERED[bit] 1 selector(s)
+NOT_CONSIDERED[bit] .a
+PSEUDO_SKIPPED[bit] none
+[bit-debug] recompute start node 1 <div .a>; input=0
+[bit-debug] node 1 <div .a> visit: dirty=true input=0
+[bit-debug] node 1 <div .a> recompute -> output=0 (prev=0)
 [bit-debug] node 1 <div .a> output unchanged; children remain clean
 [bit-debug] node 1 <div .a> propagating to 1 children
-[bit-debug] node 2 <div .a> visit: dirty=true input=01
-[bit-debug] node 2 <div .a> recompute -> output=01 (prev=01)
+[bit-debug] node 2 <div .a> visit: dirty=true input=0
+[bit-debug] node 2 <div .a> recompute -> output=0 (prev=0)
 [bit-debug] node 2 <div .a> output unchanged; children remain clean
 [bit-debug] node 2 <div .a> propagating to 0 children
 [bit-debug] node 2 <div .a> finished; dirty flags cleared
 [bit-debug] node 1 <div .a> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .a>
-[bit-debug] recompute start node 1 <div .a>; input=10
-[bit-debug] node 1 <div .a> ignored: recursive_dirty=false, input=10
+[bit-debug] recompute start node 1 <div .a>; input=0
+[bit-debug] node 1 <div .a> ignored: recursive_dirty=false, input=0
 [bit-debug] recompute done node 1 <div .a>
-33183
-[bit-debug] recompute start node 1 <div .b>; input=00
-[bit-debug] node 1 <div .b> visit: dirty=true input=00
-[bit-debug] node 1 <div .b> recompute -> output=00 (prev=01)
-[bit-debug] node 1 <div .b> output changed; marking 1 children dirty
-[bit-debug] node 1 <div .b> child node 2 <div .a> marked dirty due to parent change -> dirty=true
+[bit-debug] recompute start node 1 <div .b>; input=0
+[bit-debug] node 1 <div .b> visit: dirty=true input=0
+[bit-debug] node 1 <div .b> recompute -> output=0 (prev=0)
+[bit-debug] node 1 <div .b> output unchanged; children remain clean
 [bit-debug] node 1 <div .b> propagating to 1 children
-[bit-debug] node 2 <div .a> visit: dirty=true input=00
-[bit-debug] node 2 <div .a> recompute -> output=01 (prev=01)
-[bit-debug] node 2 <div .a> output unchanged; children remain clean
-[bit-debug] node 2 <div .a> propagating to 0 children
-[bit-debug] node 2 <div .a> finished; dirty flags cleared
+[bit-debug] node 2 <div .a> ignored: recursive_dirty=false, input=0
 [bit-debug] node 1 <div .b> finished; dirty flags cleared
 [bit-debug] recompute done node 1 <div .b>
-[bit-debug] recompute start node 1 <div .b>; input=10
-[bit-debug] node 1 <div .b> ignored: recursive_dirty=false, input=10
+[bit-debug] recompute start node 1 <div .b>; input=0
+[bit-debug] node 1 <div .b> ignored: recursive_dirty=false, input=0
 [bit-debug] recompute done node 1 <div .b>
-33495
 BEGIN
-.a -> [2]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 4
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 3

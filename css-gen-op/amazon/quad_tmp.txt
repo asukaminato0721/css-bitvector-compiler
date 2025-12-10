@@ -1,294 +1,523 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: method `update_attribute` is never used
+   --> src/quad.rs:603:8
+    |
+237 | impl DOM {
+    | -------- method in this implementation
+...
+603 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/quad`
-3928
-3626
-21541
-6266
-3569
-3834
-3996
-5331
-4843
-5011
-6262
-3772
-4777
-5348
-4096
-3716
-3822
-4122
-3845
-4220
-4325
-5431
-3991
-4222
-4294
-4088
-3983
-3808
-4364
-4084
-4386
-4264
-4141
-4414
-3867
-4537
-4005
-3741
-4872
-3729
-5270
-4435
-5461
-3618
-4415
-4361
-3571
-4204
-3895
-3919
-4423
-3873
-3853
-3912
-4396
-3788
-4155
-3985
-4135
-4380
-4947
-3664
-4620
-4121
-4265
-5751
-3713
-22407
-4802
-3630
-4431
-4256
-4063
-4378
-4822
-4631
-4143
-4064
-4749
-3548
-3790
-4760
-4980
-5191
-4209
-4187
-4025
-3758
-4046
-5010
-4078
-4076
-4028
-3529
-4110
-4370
-3867
-4295
-4646
-3504
-3840
-4086
-5152
-5260
-3975
-4378
-4419
-4398
-4500
-3308
-4033
-4508
-4440
-3739
-4347
-4246
-4467
-4319
-3952
-3830
-4279
-3973
-4114
-3725
-4709
-4490
-4422
-4510
-3330
-3599
-3985
-3802
-3869
-3737
-3626
-3907
-2993
-3332
-3630
-3867
-3453
-4110
-3182
-3978
-3755
-4575
-3406
-4625
-3311
-3705
-3696
-4092
-3754
-4140
-3693
-4534
-5605
-3561
-3536
-3869
-4234
-4358
-3634
-3212
-3435
-4199
-4453
-3902
-4303
-3565
-3812
-3451
-4058
-3847
-4351
-3684
-4132
-4260
-3299
-3606
-4051
-4313
-4080
-4538
-3216
-3670
-3879
-3508
-3629
-3369
-3928
-3968
-5420
-3694
-4582
-3913
-3699
-3838
-4256
-3339
-3170
-4199
-4702
-4206
-3930
-4214
-4623
-3905
-4017
-3604
-4725
-4417
-4250
-3358
-4972
-3800
-4127
-4492
-4433
-4749
-4429
-3585
-3727
-4137
-3883
-4110
-3800
-4305
-4459
-5268
-5520
-3635
-3819
-4834
-4161
-4637
-4163
-3526
-4153
-4062
-4376
-4094
-4664
-3950
-4212
-3569
-4246
-3565
-4703
-3977
-4097
-3704
-4307
-4751
-3914
-3729
-4394
-3528
-4484
-3994
-3752
-3944
-4546
-5398
-4055
-4326
-3779
-3423
-4232
-3841
-4108
-4719
-3827
-3530
-3790
-3981
-4337
-4137
-3942
-3792
-3429
+NOT_CONSIDERED[quad] 429 selector(s)
+NOT_CONSIDERED[quad] #gw-desktop-herotator
+NOT_CONSIDERED[quad] #icp-touch-link-cop
+NOT_CONSIDERED[quad] #icp-touch-link-country
+NOT_CONSIDERED[quad] #icp-touch-link-language
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_header__1vGdj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_show-video__xX4WM._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._ameyal-product-shoveler_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._cropped-image-link_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._cropped-image-link_image_asin-container__LRY5p
+NOT_CONSIDERED[quad] ._cropped-image-link_image_round-corners__22iOW
+NOT_CONSIDERED[quad] ._cropped-image-link_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._cropped-image-link_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._cropped-image-link_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._cropped-image-link_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._cropped-image-link_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_centerImage__1rzYI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._cropped-image-link_style_cropped-image-link__3winf
+NOT_CONSIDERED[quad] ._cropped-image-link_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._cropped-image-link_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._cropped-image-link_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._cropped-image-link_style_dt-TextContainer__3nbU9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._cropped-image-link_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._cropped-image-link_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._cropped-image-link_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[quad] ._cropped-image-link_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._cropped-image-link_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._cropped-image-link_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._cropped-image-link_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._cropped-image-link_style_header__1vGdj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._cropped-image-link_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._cropped-image-link_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._cropped-image-link_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._cropped-image-link_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._cropped-image-link_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._cropped-image-link_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._cropped-image-link_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._cropped-image-link_style_show-video__xX4WM._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._cropped-image-link_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._cropped-image-link_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._cropped-image-link_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._cropped-image-link_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._cropped-image-link_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._cropped-image-link_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._cropped-image-link_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._cropped-image-link_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._cropped-image-link_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._cropped-image-link_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._cropped-image-link_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._cropped-image-link_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_singleLinkStyle_bodyFooterLink__9LvH0
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_centerImage__30wh-
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidFatImageLinkBody__1LsOX
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_header__1vGdj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mergedLinks__10JqZ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_show-video__xX4WM._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._fluid-fat-image-link-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_centerImage__30wh-
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_close-text__2-gwn
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_cta-link__2xo74
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_displayCount__1MVut
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gridRowOne__1t0zL
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gridRowTwo__15woW
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_header-link__cUhOK
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_header__1vGdj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_image-container__2OiZA
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_leftQuadrant__21nVp
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_rightQuadrant__PI01n
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_show-video__xX4WM._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_smartText__ubpEw
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-link__38lTa
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_truncation__x9-69
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[quad] ._fluid-quad-image-label-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_cardBody__3Rdh1
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_categoryImage__35jKN
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_category__3flCQ
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroCategory__3KS3k
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroImage__2V8-9
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_heroLink__1EhW2
+NOT_CONSIDERED[quad] ._quad-category-card_desktopStyle_leftMost__1LmQB
+NOT_CONSIDERED[quad] ._quad-category-card_fluid_fluidCardBody__3TzJ4
+NOT_CONSIDERED[quad] ._quad-category-card_fluid_fluidCard__3hmFA
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[quad] ._quad-category-card_image_asin-container__LRY5p
+NOT_CONSIDERED[quad] ._quad-category-card_image_round-corners__22iOW
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_cardBody__3ODbW
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_categoryContainer__2xY0I
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_categoryImage__3hSFw
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_category__1amt4
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_heroImage__1SewP
+NOT_CONSIDERED[quad] ._quad-category-card_mobileStyle_leftMost__3WtU6
+NOT_CONSIDERED[quad] ._quad-category-card_style_dashboard-card-with-border__1e4z_
+NOT_CONSIDERED[quad] ._quad-category-card_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[quad] ._quad-category-card_style_gwm-link-footer__3EX7d
+NOT_CONSIDERED[quad] ._quad-category-card_style_heading__1mnEu
+NOT_CONSIDERED[quad] ._quad-category-card_style_themingTextColor__1w6Ut
+NOT_CONSIDERED[quad] ._text-link-stripe-v2_style_textlinkstripe__3aQhz
+NOT_CONSIDERED[quad] .a-size-base-plus.truncate-2line
+NOT_CONSIDERED[quad] .a-size-base.truncate-2line
+NOT_CONSIDERED[quad] .a-size-large.truncate-2line
+NOT_CONSIDERED[quad] .a-size-medium.truncate-2line
+NOT_CONSIDERED[quad] .a-size-small.truncate-2line
+NOT_CONSIDERED[quad] .gw-card-layout
+NOT_CONSIDERED[quad] .nav-access-image
+NOT_CONSIDERED[quad] .nav-focus#navSwmHolidaydiv
+NOT_CONSIDERED[quad] .nav-spinner
+NOT_CONSIDERED[quad] .nav-timeline-icon
+NOT_CONSIDERED[quad] .nav-timeline-prime-icon
+NOT_CONSIDERED[quad] .single-slide-hero.tall#gw-desktop-herotator
+NOT_CONSIDERED[quad] .tall#gw-desktop-herotator
+NOT_CONSIDERED[quad] .truncate-1line
+NOT_CONSIDERED[quad] .truncate-2line
+NOT_CONSIDERED[quad] .truncate-2lineh2
+PSEUDO_SKIPPED[quad] :after -> 25 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p._ameyal-product-shoveler_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :before -> 21 selector(s)
+PSEUDO_SKIPPED[quad]    eg #gw-desktop-herotator.tall .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad]    eg #gw-desktop-herotator.tall.single-slide-hero .a-carousel-viewport:before
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_image_asin-container-white-box__3Stwp:before
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :nth-child -> 16 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :active -> 12 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :first-child -> 8 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[quad]    ...
+PSEUDO_SKIPPED[quad] :focus-visible -> 5 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_centerImage-focusable__1JvMN:focus-visible:before
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-panel -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-panel-container -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[quad] ::-webkit-media-controls-start-playback-button -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[quad] ::-webkit-scrollbar -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[quad] :first-letter -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[quad] :not -> 4 selector(s)
+PSEUDO_SKIPPED[quad]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[quad] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
+PSEUDO_SKIPPED[quad]    eg .gw-card-layout .a-cardui:last-child
 BEGIN
-#gw-desktop-herotator -> [1600]
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
-#icp-touch-link-cop -> [6278]
-#icp-touch-link-country -> [6295]
-#icp-touch-link-language -> [6252]
-._cropped-image-link_style_cropped-image-link__3winf -> [1662]
-.gw-card-layout -> [1814, 2940]
 .gw-card-layout .a-cardui -> [1844, 1906, 2035, 2164, 2303, 2484, 2613, 2742, 2867, 3354, 3483, 3612, 3746, 4265, 4394, 4528, 4657, 5176, 5239, 5367, 5495]
 .gw-card-layout .a-cardui .a-cardui-body -> [2324]
 .gw-card-layout .a-cardui .a-cardui-footer -> [1866, 1994, 2123, 2252, 2444, 2572, 2701, 2830, 2889, 3442, 3571, 3700, 3834, 4353, 4482, 4616, 4745, 5198, 5327, 5455, 5583]
@@ -311,8 +540,19 @@ BEGIN
 .gw-card-layout h2 -> [1851, 1913, 2042, 2171, 2310, 2491, 2620, 2749, 2874, 2978, 3173, 3361, 3490, 3619, 3753, 3892, 4084, 4272, 4401, 4535, 4664, 4803, 4995, 5183, 5246, 5374, 5502, 5641]
 .nav-sprite-v1 .nav-icon -> [910, 1234, 1268, 1287, 1323]
 .nav-sprite-v1 .nav-sprite -> [771, 774, 804, 898, 1164, 1167, 1306, 1340, 1361, 6237, 6833]
-.truncate-2line -> [1851, 1913, 1935, 1953, 1973, 1991, 2042, 2064, 2082, 2102, 2120, 2171, 2193, 2211, 2231, 2249, 2491, 2513, 2531, 2551, 2569, 2620, 2642, 2660, 2680, 2698, 2749, 2771, 2789, 2809, 2827, 2874, 3361, 3383, 3401, 3421, 3439, 3490, 3512, 3530, 3550, 3568, 3619, 3641, 3659, 3679, 3697, 3753, 3775, 3793, 3813, 3831, 4272, 4294, 4312, 4332, 4350, 4401, 4423, 4441, 4461, 4479, 4535, 4557, 4575, 4595, 4613, 4664, 4686, 4704, 4724, 4742, 5183, 5246, 5268, 5286, 5306, 5324, 5374, 5396, 5414, 5434, 5452, 5502, 5524, 5542, 5562, 5580]
+.tall#gw-desktop-herotator .a-carousel-container -> [1605]
+.tall#gw-desktop-herotator .a-carousel-controls -> [1617]
+.tall#gw-desktop-herotator .a-carousel-left -> [1621]
+.tall#gw-desktop-herotator .a-carousel-right -> [1748]
+.tall#gw-desktop-herotator .a-carousel-viewport -> [1634]
+[data-flow-dir="h"].gw-card-layout -> [1814, 2940]
+[data-flow-dir="h"].gw-card-layout .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout .gw-auto-height -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-flow-dir="h"].gw-card-layout > .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout > .gw-col -> [1822, 1884, 2016, 2145, 2281, 2465, 2594, 2723, 2859, 2945, 3143, 3335, 3464, 3593, 3727, 3862, 4054, 4246, 4375, 4509, 4638, 4773, 4965, 5157, 5221, 5349, 5477, 5611]
+[data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 3757
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 3899
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 3899
+[src/quad.rs:1072:5] unsafe { MISS_CNT } = 3757
+[src/quad.rs:1073:5] unsafe { INPUT_CHANGE_COUNT } = 3899
+[src/quad.rs:1074:5] unsafe { INPUT_SKIP_COUNT } = 3899

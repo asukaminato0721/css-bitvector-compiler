@@ -1,0 +1,1085 @@
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+     Running `target/release/bit`
+NOT_CONSIDERED[bit] 866 selector(s)
+NOT_CONSIDERED[bit] .accordion
+NOT_CONSIDERED[bit] .accordion-body
+NOT_CONSIDERED[bit] .accordion-button
+NOT_CONSIDERED[bit] .accordion-header
+NOT_CONSIDERED[bit] .accordion-item
+NOT_CONSIDERED[bit] .active.breadcrumb-item
+NOT_CONSIDERED[bit] .active.btn
+NOT_CONSIDERED[bit] .active.carousel-item
+NOT_CONSIDERED[bit] .active.dropdown-item
+NOT_CONSIDERED[bit] .active.list-group-item
+NOT_CONSIDERED[bit] .active.page-link
+NOT_CONSIDERED[bit] .alert
+NOT_CONSIDERED[bit] .alert-danger
+NOT_CONSIDERED[bit] .alert-dark
+NOT_CONSIDERED[bit] .alert-dismissible
+NOT_CONSIDERED[bit] .alert-heading
+NOT_CONSIDERED[bit] .alert-info
+NOT_CONSIDERED[bit] .alert-light
+NOT_CONSIDERED[bit] .alert-link
+NOT_CONSIDERED[bit] .alert-primary
+NOT_CONSIDERED[bit] .alert-secondary
+NOT_CONSIDERED[bit] .alert-success
+NOT_CONSIDERED[bit] .alert-warning
+NOT_CONSIDERED[bit] .align-baseline
+NOT_CONSIDERED[bit] .align-bottom
+NOT_CONSIDERED[bit] .align-content-around
+NOT_CONSIDERED[bit] .align-content-between
+NOT_CONSIDERED[bit] .align-content-center
+NOT_CONSIDERED[bit] .align-content-end
+NOT_CONSIDERED[bit] .align-content-start
+NOT_CONSIDERED[bit] .align-content-stretch
+NOT_CONSIDERED[bit] .align-items-baseline
+NOT_CONSIDERED[bit] .align-items-center
+NOT_CONSIDERED[bit] .align-items-end
+NOT_CONSIDERED[bit] .align-items-start
+NOT_CONSIDERED[bit] .align-items-stretch
+NOT_CONSIDERED[bit] .align-middle
+NOT_CONSIDERED[bit] .align-self-auto
+NOT_CONSIDERED[bit] .align-self-baseline
+NOT_CONSIDERED[bit] .align-self-center
+NOT_CONSIDERED[bit] .align-self-end
+NOT_CONSIDERED[bit] .align-self-start
+NOT_CONSIDERED[bit] .align-self-stretch
+NOT_CONSIDERED[bit] .align-text-bottom
+NOT_CONSIDERED[bit] .align-text-top
+NOT_CONSIDERED[bit] .align-top
+NOT_CONSIDERED[bit] .badge
+NOT_CONSIDERED[bit] .bg-black
+NOT_CONSIDERED[bit] .bg-body
+NOT_CONSIDERED[bit] .bg-body-secondary
+NOT_CONSIDERED[bit] .bg-body-tertiary
+NOT_CONSIDERED[bit] .bg-danger
+NOT_CONSIDERED[bit] .bg-danger-subtle
+NOT_CONSIDERED[bit] .bg-dark
+NOT_CONSIDERED[bit] .bg-dark-subtle
+NOT_CONSIDERED[bit] .bg-gradient
+NOT_CONSIDERED[bit] .bg-info
+NOT_CONSIDERED[bit] .bg-info-subtle
+NOT_CONSIDERED[bit] .bg-light
+NOT_CONSIDERED[bit] .bg-light-subtle
+NOT_CONSIDERED[bit] .bg-opacity-10
+NOT_CONSIDERED[bit] .bg-opacity-100
+NOT_CONSIDERED[bit] .bg-opacity-25
+NOT_CONSIDERED[bit] .bg-opacity-50
+NOT_CONSIDERED[bit] .bg-opacity-75
+NOT_CONSIDERED[bit] .bg-primary
+NOT_CONSIDERED[bit] .bg-primary-subtle
+NOT_CONSIDERED[bit] .bg-secondary
+NOT_CONSIDERED[bit] .bg-secondary-subtle
+NOT_CONSIDERED[bit] .bg-success
+NOT_CONSIDERED[bit] .bg-success-subtle
+NOT_CONSIDERED[bit] .bg-transparent
+NOT_CONSIDERED[bit] .bg-warning
+NOT_CONSIDERED[bit] .bg-warning-subtle
+NOT_CONSIDERED[bit] .bg-white
+NOT_CONSIDERED[bit] .blockquote
+NOT_CONSIDERED[bit] .blockquote-footer
+NOT_CONSIDERED[bit] .border
+NOT_CONSIDERED[bit] .border-0
+NOT_CONSIDERED[bit] .border-1
+NOT_CONSIDERED[bit] .border-2
+NOT_CONSIDERED[bit] .border-3
+NOT_CONSIDERED[bit] .border-4
+NOT_CONSIDERED[bit] .border-5
+NOT_CONSIDERED[bit] .border-black
+NOT_CONSIDERED[bit] .border-bottom
+NOT_CONSIDERED[bit] .border-bottom-0
+NOT_CONSIDERED[bit] .border-danger
+NOT_CONSIDERED[bit] .border-danger-subtle
+NOT_CONSIDERED[bit] .border-dark
+NOT_CONSIDERED[bit] .border-dark-subtle
+NOT_CONSIDERED[bit] .border-end
+NOT_CONSIDERED[bit] .border-end-0
+NOT_CONSIDERED[bit] .border-info
+NOT_CONSIDERED[bit] .border-info-subtle
+NOT_CONSIDERED[bit] .border-light
+NOT_CONSIDERED[bit] .border-light-subtle
+NOT_CONSIDERED[bit] .border-opacity-10
+NOT_CONSIDERED[bit] .border-opacity-100
+NOT_CONSIDERED[bit] .border-opacity-25
+NOT_CONSIDERED[bit] .border-opacity-50
+NOT_CONSIDERED[bit] .border-opacity-75
+NOT_CONSIDERED[bit] .border-primary
+NOT_CONSIDERED[bit] .border-primary-subtle
+NOT_CONSIDERED[bit] .border-secondary
+NOT_CONSIDERED[bit] .border-secondary-subtle
+NOT_CONSIDERED[bit] .border-start
+NOT_CONSIDERED[bit] .border-start-0
+NOT_CONSIDERED[bit] .border-success
+NOT_CONSIDERED[bit] .border-success-subtle
+NOT_CONSIDERED[bit] .border-top
+NOT_CONSIDERED[bit] .border-top-0
+NOT_CONSIDERED[bit] .border-warning
+NOT_CONSIDERED[bit] .border-warning-subtle
+NOT_CONSIDERED[bit] .border-white
+NOT_CONSIDERED[bit] .bottom-0
+NOT_CONSIDERED[bit] .bottom-100
+NOT_CONSIDERED[bit] .bottom-50
+NOT_CONSIDERED[bit] .breadcrumb
+NOT_CONSIDERED[bit] .breadcrumb-item
+NOT_CONSIDERED[bit] .btn
+NOT_CONSIDERED[bit] .btn-check
+NOT_CONSIDERED[bit] .btn-close
+NOT_CONSIDERED[bit] .btn-close-white
+NOT_CONSIDERED[bit] .btn-danger
+NOT_CONSIDERED[bit] .btn-dark
+NOT_CONSIDERED[bit] .btn-group
+NOT_CONSIDERED[bit] .btn-group-vertical
+NOT_CONSIDERED[bit] .btn-info
+NOT_CONSIDERED[bit] .btn-lg
+NOT_CONSIDERED[bit] .btn-light
+NOT_CONSIDERED[bit] .btn-link
+NOT_CONSIDERED[bit] .btn-outline-danger
+NOT_CONSIDERED[bit] .btn-outline-dark
+NOT_CONSIDERED[bit] .btn-outline-info
+NOT_CONSIDERED[bit] .btn-outline-light
+NOT_CONSIDERED[bit] .btn-outline-primary
+NOT_CONSIDERED[bit] .btn-outline-secondary
+NOT_CONSIDERED[bit] .btn-outline-success
+NOT_CONSIDERED[bit] .btn-outline-warning
+NOT_CONSIDERED[bit] .btn-primary
+NOT_CONSIDERED[bit] .btn-secondary
+NOT_CONSIDERED[bit] .btn-sm
+NOT_CONSIDERED[bit] .btn-success
+NOT_CONSIDERED[bit] .btn-toolbar
+NOT_CONSIDERED[bit] .btn-warning
+NOT_CONSIDERED[bit] .caption-top
+NOT_CONSIDERED[bit] .card
+NOT_CONSIDERED[bit] .card-body
+NOT_CONSIDERED[bit] .card-footer
+NOT_CONSIDERED[bit] .card-header
+NOT_CONSIDERED[bit] .card-header-pills
+NOT_CONSIDERED[bit] .card-header-tabs
+NOT_CONSIDERED[bit] .card-img
+NOT_CONSIDERED[bit] .card-img-bottom
+NOT_CONSIDERED[bit] .card-img-overlay
+NOT_CONSIDERED[bit] .card-img-top
+NOT_CONSIDERED[bit] .card-link
+NOT_CONSIDERED[bit] .card-subtitle
+NOT_CONSIDERED[bit] .card-title
+NOT_CONSIDERED[bit] .carousel
+NOT_CONSIDERED[bit] .carousel-caption
+NOT_CONSIDERED[bit] .carousel-control-next
+NOT_CONSIDERED[bit] .carousel-control-next-icon
+NOT_CONSIDERED[bit] .carousel-control-prev
+NOT_CONSIDERED[bit] .carousel-control-prev-icon
+NOT_CONSIDERED[bit] .carousel-dark
+NOT_CONSIDERED[bit] .carousel-indicators
+NOT_CONSIDERED[bit] .carousel-inner
+NOT_CONSIDERED[bit] .carousel-item
+NOT_CONSIDERED[bit] .carousel-item-end.active
+NOT_CONSIDERED[bit] .carousel-item-next
+NOT_CONSIDERED[bit] .carousel-item-prev
+NOT_CONSIDERED[bit] .carousel-item-start.active
+NOT_CONSIDERED[bit] .col
+NOT_CONSIDERED[bit] .col-1
+NOT_CONSIDERED[bit] .col-10
+NOT_CONSIDERED[bit] .col-11
+NOT_CONSIDERED[bit] .col-12
+NOT_CONSIDERED[bit] .col-2
+NOT_CONSIDERED[bit] .col-3
+NOT_CONSIDERED[bit] .col-4
+NOT_CONSIDERED[bit] .col-5
+NOT_CONSIDERED[bit] .col-6
+NOT_CONSIDERED[bit] .col-7
+NOT_CONSIDERED[bit] .col-8
+NOT_CONSIDERED[bit] .col-9
+NOT_CONSIDERED[bit] .col-auto
+NOT_CONSIDERED[bit] .col-form-label
+NOT_CONSIDERED[bit] .col-form-label-lg
+NOT_CONSIDERED[bit] .col-form-label-sm
+NOT_CONSIDERED[bit] .collapse-horizontal.collapsing
+NOT_CONSIDERED[bit] .collapsing
+NOT_CONSIDERED[bit] .column-gap-0
+NOT_CONSIDERED[bit] .column-gap-1
+NOT_CONSIDERED[bit] .column-gap-2
+NOT_CONSIDERED[bit] .column-gap-3
+NOT_CONSIDERED[bit] .column-gap-4
+NOT_CONSIDERED[bit] .column-gap-5
+NOT_CONSIDERED[bit] .container
+NOT_CONSIDERED[bit] .container-fluid
+NOT_CONSIDERED[bit] .container-lg
+NOT_CONSIDERED[bit] .container-md
+NOT_CONSIDERED[bit] .container-sm
+NOT_CONSIDERED[bit] .container-xl
+NOT_CONSIDERED[bit] .container-xxl
+NOT_CONSIDERED[bit] .d-block
+NOT_CONSIDERED[bit] .d-flex
+NOT_CONSIDERED[bit] .d-grid
+NOT_CONSIDERED[bit] .d-inline
+NOT_CONSIDERED[bit] .d-inline-block
+NOT_CONSIDERED[bit] .d-inline-flex
+NOT_CONSIDERED[bit] .d-inline-grid
+NOT_CONSIDERED[bit] .d-none
+NOT_CONSIDERED[bit] .d-table
+NOT_CONSIDERED[bit] .d-table-cell
+NOT_CONSIDERED[bit] .d-table-row
+NOT_CONSIDERED[bit] .disabled.btn
+NOT_CONSIDERED[bit] .disabled.btn-close
+NOT_CONSIDERED[bit] .disabled.dropdown-item
+NOT_CONSIDERED[bit] .disabled.list-group-item
+NOT_CONSIDERED[bit] .disabled.nav-link
+NOT_CONSIDERED[bit] .disabled.page-link
+NOT_CONSIDERED[bit] .display-1
+NOT_CONSIDERED[bit] .display-2
+NOT_CONSIDERED[bit] .display-3
+NOT_CONSIDERED[bit] .display-4
+NOT_CONSIDERED[bit] .display-5
+NOT_CONSIDERED[bit] .display-6
+NOT_CONSIDERED[bit] .dropdown
+NOT_CONSIDERED[bit] .dropdown-center
+NOT_CONSIDERED[bit] .dropdown-divider
+NOT_CONSIDERED[bit] .dropdown-header
+NOT_CONSIDERED[bit] .dropdown-item
+NOT_CONSIDERED[bit] .dropdown-item-text
+NOT_CONSIDERED[bit] .dropdown-menu
+NOT_CONSIDERED[bit] .dropdown-menu-dark
+NOT_CONSIDERED[bit] .dropdown-menu-end
+NOT_CONSIDERED[bit] .dropdown-menu-start
+NOT_CONSIDERED[bit] .dropdown-toggle
+NOT_CONSIDERED[bit] .dropdown-toggle-split
+NOT_CONSIDERED[bit] .dropend
+NOT_CONSIDERED[bit] .dropstart
+NOT_CONSIDERED[bit] .dropup
+NOT_CONSIDERED[bit] .dropup-center
+NOT_CONSIDERED[bit] .end-0
+NOT_CONSIDERED[bit] .end-100
+NOT_CONSIDERED[bit] .end-50
+NOT_CONSIDERED[bit] .fade
+NOT_CONSIDERED[bit] .fade.modal-backdrop
+NOT_CONSIDERED[bit] .fade.offcanvas-backdrop
+NOT_CONSIDERED[bit] .figure
+NOT_CONSIDERED[bit] .figure-caption
+NOT_CONSIDERED[bit] .figure-img
+NOT_CONSIDERED[bit] .fixed-bottom
+NOT_CONSIDERED[bit] .fixed-top
+NOT_CONSIDERED[bit] .flex-column
+NOT_CONSIDERED[bit] .flex-column-reverse
+NOT_CONSIDERED[bit] .flex-fill
+NOT_CONSIDERED[bit] .flex-grow-0
+NOT_CONSIDERED[bit] .flex-grow-1
+NOT_CONSIDERED[bit] .flex-nowrap
+NOT_CONSIDERED[bit] .flex-row
+NOT_CONSIDERED[bit] .flex-row-reverse
+NOT_CONSIDERED[bit] .flex-shrink-0
+NOT_CONSIDERED[bit] .flex-shrink-1
+NOT_CONSIDERED[bit] .flex-wrap
+NOT_CONSIDERED[bit] .flex-wrap-reverse
+NOT_CONSIDERED[bit] .float-end
+NOT_CONSIDERED[bit] .float-none
+NOT_CONSIDERED[bit] .float-start
+NOT_CONSIDERED[bit] .focus-ring-danger
+NOT_CONSIDERED[bit] .focus-ring-dark
+NOT_CONSIDERED[bit] .focus-ring-info
+NOT_CONSIDERED[bit] .focus-ring-light
+NOT_CONSIDERED[bit] .focus-ring-primary
+NOT_CONSIDERED[bit] .focus-ring-secondary
+NOT_CONSIDERED[bit] .focus-ring-success
+NOT_CONSIDERED[bit] .focus-ring-warning
+NOT_CONSIDERED[bit] .font-monospace
+NOT_CONSIDERED[bit] .form-check
+NOT_CONSIDERED[bit] .form-check-inline
+NOT_CONSIDERED[bit] .form-check-input
+NOT_CONSIDERED[bit] .form-check-reverse
+NOT_CONSIDERED[bit] .form-check-reverse.form-switch
+NOT_CONSIDERED[bit] .form-control
+NOT_CONSIDERED[bit] .form-control-color
+NOT_CONSIDERED[bit] .form-control-lg
+NOT_CONSIDERED[bit] .form-control-lg.form-control-color
+NOT_CONSIDERED[bit] .form-control-lg.form-control-plaintext
+NOT_CONSIDERED[bit] .form-control-lgtextarea
+NOT_CONSIDERED[bit] .form-control-plaintext
+NOT_CONSIDERED[bit] .form-control-sm
+NOT_CONSIDERED[bit] .form-control-sm.form-control-color
+NOT_CONSIDERED[bit] .form-control-sm.form-control-plaintext
+NOT_CONSIDERED[bit] .form-control-smtextarea
+NOT_CONSIDERED[bit] .form-controltextarea
+NOT_CONSIDERED[bit] .form-floating
+NOT_CONSIDERED[bit] .form-label
+NOT_CONSIDERED[bit] .form-range
+NOT_CONSIDERED[bit] .form-select
+NOT_CONSIDERED[bit] .form-select-lg
+NOT_CONSIDERED[bit] .form-select-sm
+NOT_CONSIDERED[bit] .form-switch
+NOT_CONSIDERED[bit] .form-text
+NOT_CONSIDERED[bit] .fs-1
+NOT_CONSIDERED[bit] .fs-2
+NOT_CONSIDERED[bit] .fs-3
+NOT_CONSIDERED[bit] .fs-4
+NOT_CONSIDERED[bit] .fs-5
+NOT_CONSIDERED[bit] .fs-6
+NOT_CONSIDERED[bit] .fst-italic
+NOT_CONSIDERED[bit] .fst-normal
+NOT_CONSIDERED[bit] .fw-bold
+NOT_CONSIDERED[bit] .fw-bolder
+NOT_CONSIDERED[bit] .fw-light
+NOT_CONSIDERED[bit] .fw-lighter
+NOT_CONSIDERED[bit] .fw-medium
+NOT_CONSIDERED[bit] .fw-normal
+NOT_CONSIDERED[bit] .fw-semibold
+NOT_CONSIDERED[bit] .g-0
+NOT_CONSIDERED[bit] .g-1
+NOT_CONSIDERED[bit] .g-2
+NOT_CONSIDERED[bit] .g-3
+NOT_CONSIDERED[bit] .g-4
+NOT_CONSIDERED[bit] .g-5
+NOT_CONSIDERED[bit] .gap-0
+NOT_CONSIDERED[bit] .gap-1
+NOT_CONSIDERED[bit] .gap-2
+NOT_CONSIDERED[bit] .gap-3
+NOT_CONSIDERED[bit] .gap-4
+NOT_CONSIDERED[bit] .gap-5
+NOT_CONSIDERED[bit] .gx-0
+NOT_CONSIDERED[bit] .gx-1
+NOT_CONSIDERED[bit] .gx-2
+NOT_CONSIDERED[bit] .gx-3
+NOT_CONSIDERED[bit] .gx-4
+NOT_CONSIDERED[bit] .gx-5
+NOT_CONSIDERED[bit] .gy-0
+NOT_CONSIDERED[bit] .gy-1
+NOT_CONSIDERED[bit] .gy-2
+NOT_CONSIDERED[bit] .gy-3
+NOT_CONSIDERED[bit] .gy-4
+NOT_CONSIDERED[bit] .gy-5
+NOT_CONSIDERED[bit] .h-100
+NOT_CONSIDERED[bit] .h-25
+NOT_CONSIDERED[bit] .h-50
+NOT_CONSIDERED[bit] .h-75
+NOT_CONSIDERED[bit] .h-auto
+NOT_CONSIDERED[bit] .h1
+NOT_CONSIDERED[bit] .h2
+NOT_CONSIDERED[bit] .h3
+NOT_CONSIDERED[bit] .h4
+NOT_CONSIDERED[bit] .h5
+NOT_CONSIDERED[bit] .h6
+NOT_CONSIDERED[bit] .hiding.offcanvas
+NOT_CONSIDERED[bit] .hstack
+NOT_CONSIDERED[bit] .icon-link
+NOT_CONSIDERED[bit] .img-fluid
+NOT_CONSIDERED[bit] .img-thumbnail
+NOT_CONSIDERED[bit] .initialism
+NOT_CONSIDERED[bit] .input-group
+NOT_CONSIDERED[bit] .input-group-text
+NOT_CONSIDERED[bit] .invalid-feedback
+NOT_CONSIDERED[bit] .invalid-tooltip
+NOT_CONSIDERED[bit] .invisible
+NOT_CONSIDERED[bit] .is-invalid
+NOT_CONSIDERED[bit] .is-invalid.form-check-input
+NOT_CONSIDERED[bit] .is-invalid.form-control
+NOT_CONSIDERED[bit] .is-invalid.form-control-color
+NOT_CONSIDERED[bit] .is-invalid.form-controltextarea
+NOT_CONSIDERED[bit] .is-invalid.form-select
+NOT_CONSIDERED[bit] .is-valid
+NOT_CONSIDERED[bit] .is-valid.form-check-input
+NOT_CONSIDERED[bit] .is-valid.form-control
+NOT_CONSIDERED[bit] .is-valid.form-control-color
+NOT_CONSIDERED[bit] .is-valid.form-controltextarea
+NOT_CONSIDERED[bit] .is-valid.form-select
+NOT_CONSIDERED[bit] .justify-content-around
+NOT_CONSIDERED[bit] .justify-content-between
+NOT_CONSIDERED[bit] .justify-content-center
+NOT_CONSIDERED[bit] .justify-content-end
+NOT_CONSIDERED[bit] .justify-content-evenly
+NOT_CONSIDERED[bit] .justify-content-start
+NOT_CONSIDERED[bit] .lead
+NOT_CONSIDERED[bit] .lh-1
+NOT_CONSIDERED[bit] .lh-base
+NOT_CONSIDERED[bit] .lh-lg
+NOT_CONSIDERED[bit] .lh-sm
+NOT_CONSIDERED[bit] .link-body-emphasis
+NOT_CONSIDERED[bit] .link-danger
+NOT_CONSIDERED[bit] .link-dark
+NOT_CONSIDERED[bit] .link-info
+NOT_CONSIDERED[bit] .link-light
+NOT_CONSIDERED[bit] .link-offset-1
+NOT_CONSIDERED[bit] .link-offset-2
+NOT_CONSIDERED[bit] .link-offset-3
+NOT_CONSIDERED[bit] .link-opacity-10
+NOT_CONSIDERED[bit] .link-opacity-100
+NOT_CONSIDERED[bit] .link-opacity-25
+NOT_CONSIDERED[bit] .link-opacity-50
+NOT_CONSIDERED[bit] .link-opacity-75
+NOT_CONSIDERED[bit] .link-primary
+NOT_CONSIDERED[bit] .link-secondary
+NOT_CONSIDERED[bit] .link-success
+NOT_CONSIDERED[bit] .link-underline
+NOT_CONSIDERED[bit] .link-underline-danger
+NOT_CONSIDERED[bit] .link-underline-dark
+NOT_CONSIDERED[bit] .link-underline-info
+NOT_CONSIDERED[bit] .link-underline-light
+NOT_CONSIDERED[bit] .link-underline-opacity-0
+NOT_CONSIDERED[bit] .link-underline-opacity-10
+NOT_CONSIDERED[bit] .link-underline-opacity-100
+NOT_CONSIDERED[bit] .link-underline-opacity-25
+NOT_CONSIDERED[bit] .link-underline-opacity-50
+NOT_CONSIDERED[bit] .link-underline-opacity-75
+NOT_CONSIDERED[bit] .link-underline-primary
+NOT_CONSIDERED[bit] .link-underline-secondary
+NOT_CONSIDERED[bit] .link-underline-success
+NOT_CONSIDERED[bit] .link-underline-warning
+NOT_CONSIDERED[bit] .link-warning
+NOT_CONSIDERED[bit] .list-group
+NOT_CONSIDERED[bit] .list-group-flush
+NOT_CONSIDERED[bit] .list-group-horizontal
+NOT_CONSIDERED[bit] .list-group-item
+NOT_CONSIDERED[bit] .list-group-item-action
+NOT_CONSIDERED[bit] .list-group-item-danger
+NOT_CONSIDERED[bit] .list-group-item-dark
+NOT_CONSIDERED[bit] .list-group-item-info
+NOT_CONSIDERED[bit] .list-group-item-light
+NOT_CONSIDERED[bit] .list-group-item-primary
+NOT_CONSIDERED[bit] .list-group-item-secondary
+NOT_CONSIDERED[bit] .list-group-item-success
+NOT_CONSIDERED[bit] .list-group-item-warning
+NOT_CONSIDERED[bit] .list-group-numbered
+NOT_CONSIDERED[bit] .list-inline
+NOT_CONSIDERED[bit] .list-inline-item
+NOT_CONSIDERED[bit] .list-unstyled
+NOT_CONSIDERED[bit] .m-0
+NOT_CONSIDERED[bit] .m-1
+NOT_CONSIDERED[bit] .m-2
+NOT_CONSIDERED[bit] .m-3
+NOT_CONSIDERED[bit] .m-4
+NOT_CONSIDERED[bit] .m-5
+NOT_CONSIDERED[bit] .m-auto
+NOT_CONSIDERED[bit] .mark
+NOT_CONSIDERED[bit] .mb-0
+NOT_CONSIDERED[bit] .mb-1
+NOT_CONSIDERED[bit] .mb-2
+NOT_CONSIDERED[bit] .mb-3
+NOT_CONSIDERED[bit] .mb-4
+NOT_CONSIDERED[bit] .mb-5
+NOT_CONSIDERED[bit] .mb-auto
+NOT_CONSIDERED[bit] .me-0
+NOT_CONSIDERED[bit] .me-1
+NOT_CONSIDERED[bit] .me-2
+NOT_CONSIDERED[bit] .me-3
+NOT_CONSIDERED[bit] .me-4
+NOT_CONSIDERED[bit] .me-5
+NOT_CONSIDERED[bit] .me-auto
+NOT_CONSIDERED[bit] .mh-100
+NOT_CONSIDERED[bit] .min-vh-100
+NOT_CONSIDERED[bit] .min-vw-100
+NOT_CONSIDERED[bit] .modal
+NOT_CONSIDERED[bit] .modal-backdrop
+NOT_CONSIDERED[bit] .modal-body
+NOT_CONSIDERED[bit] .modal-content
+NOT_CONSIDERED[bit] .modal-dialog
+NOT_CONSIDERED[bit] .modal-dialog-centered
+NOT_CONSIDERED[bit] .modal-dialog-scrollable
+NOT_CONSIDERED[bit] .modal-footer
+NOT_CONSIDERED[bit] .modal-fullscreen
+NOT_CONSIDERED[bit] .modal-header
+NOT_CONSIDERED[bit] .modal-title
+NOT_CONSIDERED[bit] .ms-0
+NOT_CONSIDERED[bit] .ms-1
+NOT_CONSIDERED[bit] .ms-2
+NOT_CONSIDERED[bit] .ms-3
+NOT_CONSIDERED[bit] .ms-4
+NOT_CONSIDERED[bit] .ms-5
+NOT_CONSIDERED[bit] .ms-auto
+NOT_CONSIDERED[bit] .mt-0
+NOT_CONSIDERED[bit] .mt-1
+NOT_CONSIDERED[bit] .mt-2
+NOT_CONSIDERED[bit] .mt-3
+NOT_CONSIDERED[bit] .mt-4
+NOT_CONSIDERED[bit] .mt-5
+NOT_CONSIDERED[bit] .mt-auto
+NOT_CONSIDERED[bit] .mw-100
+NOT_CONSIDERED[bit] .mx-0
+NOT_CONSIDERED[bit] .mx-1
+NOT_CONSIDERED[bit] .mx-2
+NOT_CONSIDERED[bit] .mx-3
+NOT_CONSIDERED[bit] .mx-4
+NOT_CONSIDERED[bit] .mx-5
+NOT_CONSIDERED[bit] .mx-auto
+NOT_CONSIDERED[bit] .my-0
+NOT_CONSIDERED[bit] .my-1
+NOT_CONSIDERED[bit] .my-2
+NOT_CONSIDERED[bit] .my-3
+NOT_CONSIDERED[bit] .my-4
+NOT_CONSIDERED[bit] .my-5
+NOT_CONSIDERED[bit] .my-auto
+NOT_CONSIDERED[bit] .nav
+NOT_CONSIDERED[bit] .nav-link
+NOT_CONSIDERED[bit] .nav-pills
+NOT_CONSIDERED[bit] .nav-tabs
+NOT_CONSIDERED[bit] .nav-underline
+NOT_CONSIDERED[bit] .navbar
+NOT_CONSIDERED[bit] .navbar-brand
+NOT_CONSIDERED[bit] .navbar-collapse
+NOT_CONSIDERED[bit] .navbar-dark
+NOT_CONSIDERED[bit] .navbar-expand
+NOT_CONSIDERED[bit] .navbar-nav
+NOT_CONSIDERED[bit] .navbar-nav-scroll
+NOT_CONSIDERED[bit] .navbar-text
+NOT_CONSIDERED[bit] .navbar-toggler
+NOT_CONSIDERED[bit] .navbar-toggler-icon
+NOT_CONSIDERED[bit] .object-fit-contain
+NOT_CONSIDERED[bit] .object-fit-cover
+NOT_CONSIDERED[bit] .object-fit-fill
+NOT_CONSIDERED[bit] .object-fit-none
+NOT_CONSIDERED[bit] .object-fit-scale
+NOT_CONSIDERED[bit] .offcanvas
+NOT_CONSIDERED[bit] .offcanvas-backdrop
+NOT_CONSIDERED[bit] .offcanvas-body
+NOT_CONSIDERED[bit] .offcanvas-bottom.offcanvas
+NOT_CONSIDERED[bit] .offcanvas-end.offcanvas
+NOT_CONSIDERED[bit] .offcanvas-header
+NOT_CONSIDERED[bit] .offcanvas-lg
+NOT_CONSIDERED[bit] .offcanvas-md
+NOT_CONSIDERED[bit] .offcanvas-sm
+NOT_CONSIDERED[bit] .offcanvas-start.offcanvas
+NOT_CONSIDERED[bit] .offcanvas-title
+NOT_CONSIDERED[bit] .offcanvas-top.offcanvas
+NOT_CONSIDERED[bit] .offcanvas-xl
+NOT_CONSIDERED[bit] .offcanvas-xxl
+NOT_CONSIDERED[bit] .offset-1
+NOT_CONSIDERED[bit] .offset-10
+NOT_CONSIDERED[bit] .offset-11
+NOT_CONSIDERED[bit] .offset-2
+NOT_CONSIDERED[bit] .offset-3
+NOT_CONSIDERED[bit] .offset-4
+NOT_CONSIDERED[bit] .offset-5
+NOT_CONSIDERED[bit] .offset-6
+NOT_CONSIDERED[bit] .offset-7
+NOT_CONSIDERED[bit] .offset-8
+NOT_CONSIDERED[bit] .offset-9
+NOT_CONSIDERED[bit] .opacity-0
+NOT_CONSIDERED[bit] .opacity-100
+NOT_CONSIDERED[bit] .opacity-25
+NOT_CONSIDERED[bit] .opacity-50
+NOT_CONSIDERED[bit] .opacity-75
+NOT_CONSIDERED[bit] .order-0
+NOT_CONSIDERED[bit] .order-1
+NOT_CONSIDERED[bit] .order-2
+NOT_CONSIDERED[bit] .order-3
+NOT_CONSIDERED[bit] .order-4
+NOT_CONSIDERED[bit] .order-5
+NOT_CONSIDERED[bit] .order-first
+NOT_CONSIDERED[bit] .order-last
+NOT_CONSIDERED[bit] .overflow-auto
+NOT_CONSIDERED[bit] .overflow-hidden
+NOT_CONSIDERED[bit] .overflow-scroll
+NOT_CONSIDERED[bit] .overflow-visible
+NOT_CONSIDERED[bit] .overflow-x-auto
+NOT_CONSIDERED[bit] .overflow-x-hidden
+NOT_CONSIDERED[bit] .overflow-x-scroll
+NOT_CONSIDERED[bit] .overflow-x-visible
+NOT_CONSIDERED[bit] .overflow-y-auto
+NOT_CONSIDERED[bit] .overflow-y-hidden
+NOT_CONSIDERED[bit] .overflow-y-scroll
+NOT_CONSIDERED[bit] .overflow-y-visible
+NOT_CONSIDERED[bit] .p-0
+NOT_CONSIDERED[bit] .p-1
+NOT_CONSIDERED[bit] .p-2
+NOT_CONSIDERED[bit] .p-3
+NOT_CONSIDERED[bit] .p-4
+NOT_CONSIDERED[bit] .p-5
+NOT_CONSIDERED[bit] .page-link
+NOT_CONSIDERED[bit] .pagination
+NOT_CONSIDERED[bit] .pagination-lg
+NOT_CONSIDERED[bit] .pagination-sm
+NOT_CONSIDERED[bit] .pb-0
+NOT_CONSIDERED[bit] .pb-1
+NOT_CONSIDERED[bit] .pb-2
+NOT_CONSIDERED[bit] .pb-3
+NOT_CONSIDERED[bit] .pb-4
+NOT_CONSIDERED[bit] .pb-5
+NOT_CONSIDERED[bit] .pe-0
+NOT_CONSIDERED[bit] .pe-1
+NOT_CONSIDERED[bit] .pe-2
+NOT_CONSIDERED[bit] .pe-3
+NOT_CONSIDERED[bit] .pe-4
+NOT_CONSIDERED[bit] .pe-5
+NOT_CONSIDERED[bit] .pe-auto
+NOT_CONSIDERED[bit] .pe-none
+NOT_CONSIDERED[bit] .placeholder
+NOT_CONSIDERED[bit] .placeholder-lg
+NOT_CONSIDERED[bit] .placeholder-sm
+NOT_CONSIDERED[bit] .placeholder-wave
+NOT_CONSIDERED[bit] .placeholder-xs
+NOT_CONSIDERED[bit] .pointer-event.carousel
+NOT_CONSIDERED[bit] .popover
+NOT_CONSIDERED[bit] .popover-body
+NOT_CONSIDERED[bit] .popover-header
+NOT_CONSIDERED[bit] .position-absolute
+NOT_CONSIDERED[bit] .position-fixed
+NOT_CONSIDERED[bit] .position-relative
+NOT_CONSIDERED[bit] .position-static
+NOT_CONSIDERED[bit] .position-sticky
+NOT_CONSIDERED[bit] .progress
+NOT_CONSIDERED[bit] .progress-bar
+NOT_CONSIDERED[bit] .progress-bar-animated
+NOT_CONSIDERED[bit] .progress-bar-striped
+NOT_CONSIDERED[bit] .progress-stacked
+NOT_CONSIDERED[bit] .ps-0
+NOT_CONSIDERED[bit] .ps-1
+NOT_CONSIDERED[bit] .ps-2
+NOT_CONSIDERED[bit] .ps-3
+NOT_CONSIDERED[bit] .ps-4
+NOT_CONSIDERED[bit] .ps-5
+NOT_CONSIDERED[bit] .pt-0
+NOT_CONSIDERED[bit] .pt-1
+NOT_CONSIDERED[bit] .pt-2
+NOT_CONSIDERED[bit] .pt-3
+NOT_CONSIDERED[bit] .pt-4
+NOT_CONSIDERED[bit] .pt-5
+NOT_CONSIDERED[bit] .px-0
+NOT_CONSIDERED[bit] .px-1
+NOT_CONSIDERED[bit] .px-2
+NOT_CONSIDERED[bit] .px-3
+NOT_CONSIDERED[bit] .px-4
+NOT_CONSIDERED[bit] .px-5
+NOT_CONSIDERED[bit] .py-0
+NOT_CONSIDERED[bit] .py-1
+NOT_CONSIDERED[bit] .py-2
+NOT_CONSIDERED[bit] .py-3
+NOT_CONSIDERED[bit] .py-4
+NOT_CONSIDERED[bit] .py-5
+NOT_CONSIDERED[bit] .ratio
+NOT_CONSIDERED[bit] .ratio-16x9
+NOT_CONSIDERED[bit] .ratio-1x1
+NOT_CONSIDERED[bit] .ratio-21x9
+NOT_CONSIDERED[bit] .ratio-4x3
+NOT_CONSIDERED[bit] .rounded
+NOT_CONSIDERED[bit] .rounded-0
+NOT_CONSIDERED[bit] .rounded-1
+NOT_CONSIDERED[bit] .rounded-2
+NOT_CONSIDERED[bit] .rounded-3
+NOT_CONSIDERED[bit] .rounded-4
+NOT_CONSIDERED[bit] .rounded-5
+NOT_CONSIDERED[bit] .rounded-bottom
+NOT_CONSIDERED[bit] .rounded-bottom-0
+NOT_CONSIDERED[bit] .rounded-bottom-1
+NOT_CONSIDERED[bit] .rounded-bottom-2
+NOT_CONSIDERED[bit] .rounded-bottom-3
+NOT_CONSIDERED[bit] .rounded-bottom-4
+NOT_CONSIDERED[bit] .rounded-bottom-5
+NOT_CONSIDERED[bit] .rounded-bottom-circle
+NOT_CONSIDERED[bit] .rounded-bottom-pill
+NOT_CONSIDERED[bit] .rounded-circle
+NOT_CONSIDERED[bit] .rounded-end
+NOT_CONSIDERED[bit] .rounded-end-0
+NOT_CONSIDERED[bit] .rounded-end-1
+NOT_CONSIDERED[bit] .rounded-end-2
+NOT_CONSIDERED[bit] .rounded-end-3
+NOT_CONSIDERED[bit] .rounded-end-4
+NOT_CONSIDERED[bit] .rounded-end-5
+NOT_CONSIDERED[bit] .rounded-end-circle
+NOT_CONSIDERED[bit] .rounded-end-pill
+NOT_CONSIDERED[bit] .rounded-pill
+NOT_CONSIDERED[bit] .rounded-start
+NOT_CONSIDERED[bit] .rounded-start-0
+NOT_CONSIDERED[bit] .rounded-start-1
+NOT_CONSIDERED[bit] .rounded-start-2
+NOT_CONSIDERED[bit] .rounded-start-3
+NOT_CONSIDERED[bit] .rounded-start-4
+NOT_CONSIDERED[bit] .rounded-start-5
+NOT_CONSIDERED[bit] .rounded-start-circle
+NOT_CONSIDERED[bit] .rounded-start-pill
+NOT_CONSIDERED[bit] .rounded-top
+NOT_CONSIDERED[bit] .rounded-top-0
+NOT_CONSIDERED[bit] .rounded-top-1
+NOT_CONSIDERED[bit] .rounded-top-2
+NOT_CONSIDERED[bit] .rounded-top-3
+NOT_CONSIDERED[bit] .rounded-top-4
+NOT_CONSIDERED[bit] .rounded-top-5
+NOT_CONSIDERED[bit] .rounded-top-circle
+NOT_CONSIDERED[bit] .rounded-top-pill
+NOT_CONSIDERED[bit] .row
+NOT_CONSIDERED[bit] .row-gap-0
+NOT_CONSIDERED[bit] .row-gap-1
+NOT_CONSIDERED[bit] .row-gap-2
+NOT_CONSIDERED[bit] .row-gap-3
+NOT_CONSIDERED[bit] .row-gap-4
+NOT_CONSIDERED[bit] .row-gap-5
+NOT_CONSIDERED[bit] .shadow
+NOT_CONSIDERED[bit] .shadow-lg
+NOT_CONSIDERED[bit] .shadow-none
+NOT_CONSIDERED[bit] .shadow-sm
+NOT_CONSIDERED[bit] .show.btn
+NOT_CONSIDERED[bit] .show.dropdown-menu
+NOT_CONSIDERED[bit] .show.modal-backdrop
+NOT_CONSIDERED[bit] .show.offcanvas
+NOT_CONSIDERED[bit] .show.offcanvas-backdrop
+NOT_CONSIDERED[bit] .show.tooltip
+NOT_CONSIDERED[bit] .showing.offcanvas
+NOT_CONSIDERED[bit] .showing.toast
+NOT_CONSIDERED[bit] .small
+NOT_CONSIDERED[bit] .spinner-border
+NOT_CONSIDERED[bit] .spinner-border-sm
+NOT_CONSIDERED[bit] .spinner-grow
+NOT_CONSIDERED[bit] .spinner-grow-sm
+NOT_CONSIDERED[bit] .start-0
+NOT_CONSIDERED[bit] .start-100
+NOT_CONSIDERED[bit] .start-50
+NOT_CONSIDERED[bit] .sticky-bottom
+NOT_CONSIDERED[bit] .sticky-top
+NOT_CONSIDERED[bit] .table
+NOT_CONSIDERED[bit] .table-active
+NOT_CONSIDERED[bit] .table-danger
+NOT_CONSIDERED[bit] .table-dark
+NOT_CONSIDERED[bit] .table-group-divider
+NOT_CONSIDERED[bit] .table-info
+NOT_CONSIDERED[bit] .table-light
+NOT_CONSIDERED[bit] .table-primary
+NOT_CONSIDERED[bit] .table-responsive
+NOT_CONSIDERED[bit] .table-secondary
+NOT_CONSIDERED[bit] .table-success
+NOT_CONSIDERED[bit] .table-warning
+NOT_CONSIDERED[bit] .text-bg-danger
+NOT_CONSIDERED[bit] .text-bg-dark
+NOT_CONSIDERED[bit] .text-bg-info
+NOT_CONSIDERED[bit] .text-bg-light
+NOT_CONSIDERED[bit] .text-bg-primary
+NOT_CONSIDERED[bit] .text-bg-secondary
+NOT_CONSIDERED[bit] .text-bg-success
+NOT_CONSIDERED[bit] .text-bg-warning
+NOT_CONSIDERED[bit] .text-black
+NOT_CONSIDERED[bit] .text-black-50
+NOT_CONSIDERED[bit] .text-body
+NOT_CONSIDERED[bit] .text-body-emphasis
+NOT_CONSIDERED[bit] .text-body-secondary
+NOT_CONSIDERED[bit] .text-body-tertiary
+NOT_CONSIDERED[bit] .text-break
+NOT_CONSIDERED[bit] .text-capitalize
+NOT_CONSIDERED[bit] .text-center
+NOT_CONSIDERED[bit] .text-danger
+NOT_CONSIDERED[bit] .text-danger-emphasis
+NOT_CONSIDERED[bit] .text-dark
+NOT_CONSIDERED[bit] .text-dark-emphasis
+NOT_CONSIDERED[bit] .text-decoration-line-through
+NOT_CONSIDERED[bit] .text-decoration-none
+NOT_CONSIDERED[bit] .text-decoration-underline
+NOT_CONSIDERED[bit] .text-end
+NOT_CONSIDERED[bit] .text-info
+NOT_CONSIDERED[bit] .text-info-emphasis
+NOT_CONSIDERED[bit] .text-light
+NOT_CONSIDERED[bit] .text-light-emphasis
+NOT_CONSIDERED[bit] .text-lowercase
+NOT_CONSIDERED[bit] .text-muted
+NOT_CONSIDERED[bit] .text-nowrap
+NOT_CONSIDERED[bit] .text-opacity-100
+NOT_CONSIDERED[bit] .text-opacity-25
+NOT_CONSIDERED[bit] .text-opacity-50
+NOT_CONSIDERED[bit] .text-opacity-75
+NOT_CONSIDERED[bit] .text-primary
+NOT_CONSIDERED[bit] .text-primary-emphasis
+NOT_CONSIDERED[bit] .text-reset
+NOT_CONSIDERED[bit] .text-secondary
+NOT_CONSIDERED[bit] .text-secondary-emphasis
+NOT_CONSIDERED[bit] .text-start
+NOT_CONSIDERED[bit] .text-success
+NOT_CONSIDERED[bit] .text-success-emphasis
+NOT_CONSIDERED[bit] .text-truncate
+NOT_CONSIDERED[bit] .text-uppercase
+NOT_CONSIDERED[bit] .text-warning
+NOT_CONSIDERED[bit] .text-warning-emphasis
+NOT_CONSIDERED[bit] .text-white
+NOT_CONSIDERED[bit] .text-white-50
+NOT_CONSIDERED[bit] .text-wrap
+NOT_CONSIDERED[bit] .toast
+NOT_CONSIDERED[bit] .toast-body
+NOT_CONSIDERED[bit] .toast-container
+NOT_CONSIDERED[bit] .toast-header
+NOT_CONSIDERED[bit] .tooltip
+NOT_CONSIDERED[bit] .tooltip-inner
+NOT_CONSIDERED[bit] .top-0
+NOT_CONSIDERED[bit] .top-100
+NOT_CONSIDERED[bit] .top-50
+NOT_CONSIDERED[bit] .translate-middle
+NOT_CONSIDERED[bit] .translate-middle-x
+NOT_CONSIDERED[bit] .translate-middle-y
+NOT_CONSIDERED[bit] .user-select-all
+NOT_CONSIDERED[bit] .user-select-auto
+NOT_CONSIDERED[bit] .user-select-none
+NOT_CONSIDERED[bit] .valid-feedback
+NOT_CONSIDERED[bit] .valid-tooltip
+NOT_CONSIDERED[bit] .vh-100
+NOT_CONSIDERED[bit] .visible
+NOT_CONSIDERED[bit] .visually-hidden
+NOT_CONSIDERED[bit] .vr
+NOT_CONSIDERED[bit] .vstack
+NOT_CONSIDERED[bit] .vw-100
+NOT_CONSIDERED[bit] .w-100
+NOT_CONSIDERED[bit] .w-25
+NOT_CONSIDERED[bit] .w-50
+NOT_CONSIDERED[bit] .w-75
+NOT_CONSIDERED[bit] .w-auto
+NOT_CONSIDERED[bit] .z-0
+NOT_CONSIDERED[bit] .z-1
+NOT_CONSIDERED[bit] .z-2
+NOT_CONSIDERED[bit] .z-3
+NOT_CONSIDERED[bit] .z-n1
+NOT_CONSIDERED[bit] a
+NOT_CONSIDERED[bit] abbr
+NOT_CONSIDERED[bit] address
+NOT_CONSIDERED[bit] b
+NOT_CONSIDERED[bit] blockquote
+NOT_CONSIDERED[bit] body
+NOT_CONSIDERED[bit] button
+NOT_CONSIDERED[bit] caption
+NOT_CONSIDERED[bit] code
+NOT_CONSIDERED[bit] dd
+NOT_CONSIDERED[bit] dl
+NOT_CONSIDERED[bit] dt
+NOT_CONSIDERED[bit] fieldset
+NOT_CONSIDERED[bit] figure
+NOT_CONSIDERED[bit] h1
+NOT_CONSIDERED[bit] h2
+NOT_CONSIDERED[bit] h3
+NOT_CONSIDERED[bit] h4
+NOT_CONSIDERED[bit] h5
+NOT_CONSIDERED[bit] h6
+NOT_CONSIDERED[bit] hr
+NOT_CONSIDERED[bit] iframe
+NOT_CONSIDERED[bit] img
+NOT_CONSIDERED[bit] input
+NOT_CONSIDERED[bit] kbd
+NOT_CONSIDERED[bit] label
+NOT_CONSIDERED[bit] legend
+NOT_CONSIDERED[bit] mark
+NOT_CONSIDERED[bit] ol
+NOT_CONSIDERED[bit] optgroup
+NOT_CONSIDERED[bit] output
+NOT_CONSIDERED[bit] p
+NOT_CONSIDERED[bit] pre
+NOT_CONSIDERED[bit] progress
+NOT_CONSIDERED[bit] samp
+NOT_CONSIDERED[bit] select
+NOT_CONSIDERED[bit] small
+NOT_CONSIDERED[bit] strong
+NOT_CONSIDERED[bit] sub
+NOT_CONSIDERED[bit] summary
+NOT_CONSIDERED[bit] sup
+NOT_CONSIDERED[bit] svg
+NOT_CONSIDERED[bit] table
+NOT_CONSIDERED[bit] tbody
+NOT_CONSIDERED[bit] td
+NOT_CONSIDERED[bit] textarea
+NOT_CONSIDERED[bit] tfoot
+NOT_CONSIDERED[bit] th
+NOT_CONSIDERED[bit] thead
+NOT_CONSIDERED[bit] tr
+NOT_CONSIDERED[bit] ul
+PSEUDO_SKIPPED[bit] :not -> 88 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-button:not(.collapsed)
+PSEUDO_SKIPPED[bit]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[bit]    eg .accordion-item:not(:first-of-type)
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn-group:not(:first-child)
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn-group:not(:first-child) > .btn
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :after -> 30 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-button:after
+PSEUDO_SKIPPED[bit]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:after
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :before -> 27 selector(s)
+PSEUDO_SKIPPED[bit]    eg .blockquote-footer:before
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
+PSEUDO_SKIPPED[bit]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :disabled -> 18 selector(s)
+PSEUDO_SKIPPED[bit]    eg .btn-check:disabled + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-close:disabled
+PSEUDO_SKIPPED[bit]    eg .btn:disabled
+PSEUDO_SKIPPED[bit]    eg .dropdown-item:disabled
+PSEUDO_SKIPPED[bit]    eg .form-check-input:disabled
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :invalid -> 17 selector(s)
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:invalid
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:invalid ~ .form-check-label
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:invalid:checked
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:invalid:focus
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-control-color:invalid
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :valid -> 17 selector(s)
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:valid
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:valid ~ .form-check-label
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:valid:checked
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-check-input:valid:focus
+PSEUDO_SKIPPED[bit]    eg .was-validated .form-control-color:valid
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :checked -> 13 selector(s)
+PSEUDO_SKIPPED[bit]    eg .btn-check:checked + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[bit]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn-check:checked + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-group-vertical > .btn-check:checked + .btn
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :active -> 11 selector(s)
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn:active
+PSEUDO_SKIPPED[bit]    eg .btn-group-vertical > .btn:active
+PSEUDO_SKIPPED[bit]    eg .btn:first-child:active
+PSEUDO_SKIPPED[bit]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[bit]    eg .dropdown-item:active
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :focus-visible -> 11 selector(s)
+PSEUDO_SKIPPED[bit]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[bit]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-check:focus-visible + .btn
+PSEUDO_SKIPPED[bit]    eg .btn-link:focus-visible
+PSEUDO_SKIPPED[bit]    eg .btn.active:focus-visible
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :first-child -> 9 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-flush > .accordion-item:first-child
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn.dropdown-toggle-split:first-child
+PSEUDO_SKIPPED[bit]    eg .btn:first-child:active
+PSEUDO_SKIPPED[bit]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[bit]    eg .card > .list-group:first-child
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :last-child -> 9 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-flush > .accordion-item:last-child
+PSEUDO_SKIPPED[bit]    eg .blockquote > :last-child
+PSEUDO_SKIPPED[bit]    eg .card > .list-group:last-child
+PSEUDO_SKIPPED[bit]    eg .card-footer:last-child
+PSEUDO_SKIPPED[bit]    eg .card-text:last-child
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :empty -> 6 selector(s)
+PSEUDO_SKIPPED[bit]    eg .badge:empty
+PSEUDO_SKIPPED[bit]    eg .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[bit]    eg .dropend .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[bit]    eg .dropstart .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[bit]    eg .dropup .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] ::-webkit-file-upload-button -> 5 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control-lg::-webkit-file-upload-button
+PSEUDO_SKIPPED[bit]    eg .form-control-sm::-webkit-file-upload-button
+PSEUDO_SKIPPED[bit]    eg .form-control::-webkit-file-upload-button
+PSEUDO_SKIPPED[bit]    eg .form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button
+PSEUDO_SKIPPED[bit]    eg ::-webkit-file-upload-button
+PSEUDO_SKIPPED[bit] ::file-selector-button -> 5 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control-lg::file-selector-button
+PSEUDO_SKIPPED[bit]    eg .form-control-sm::file-selector-button
+PSEUDO_SKIPPED[bit]    eg .form-control::file-selector-button
+PSEUDO_SKIPPED[bit]    eg .form-control:hover:not(:disabled):not([readonly])::file-selector-button
+PSEUDO_SKIPPED[bit]    eg ::file-selector-button
+PSEUDO_SKIPPED[bit] :nth-last-child -> 5 selector(s)
+PSEUDO_SKIPPED[bit]    eg .input-group.has-validation > .dropdown-toggle:nth-last-child(n+4)
+PSEUDO_SKIPPED[bit]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-control
+PSEUDO_SKIPPED[bit]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-select
+PSEUDO_SKIPPED[bit]    eg .input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
+PSEUDO_SKIPPED[bit]    eg .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3)
+PSEUDO_SKIPPED[bit] ::-moz-range-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-range::-moz-range-thumb
+PSEUDO_SKIPPED[bit]    eg .form-range::-moz-range-thumb:active
+PSEUDO_SKIPPED[bit]    eg .form-range:disabled::-moz-range-thumb
+PSEUDO_SKIPPED[bit]    eg .form-range:focus::-moz-range-thumb
+PSEUDO_SKIPPED[bit] ::-webkit-slider-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-range::-webkit-slider-thumb
+PSEUDO_SKIPPED[bit]    eg .form-range::-webkit-slider-thumb:active
+PSEUDO_SKIPPED[bit]    eg .form-range:disabled::-webkit-slider-thumb
+PSEUDO_SKIPPED[bit]    eg .form-range:focus::-webkit-slider-thumb
+PSEUDO_SKIPPED[bit] :-webkit-autofill -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-floating > .form-control-plaintext:-webkit-autofill
+PSEUDO_SKIPPED[bit]    eg .form-floating > .form-control:-webkit-autofill
+PSEUDO_SKIPPED[bit]    eg .form-floating > .form-control:-webkit-autofill ~ label
+PSEUDO_SKIPPED[bit] ::placeholder -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control::placeholder
+PSEUDO_SKIPPED[bit]    eg .form-floating > .form-control-plaintext::placeholder
+PSEUDO_SKIPPED[bit]    eg .form-floating > .form-control::placeholder
+PSEUDO_SKIPPED[bit] :last-of-type -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-item:last-of-type
+PSEUDO_SKIPPED[bit]    eg .accordion-item:last-of-type > .accordion-collapse
+PSEUDO_SKIPPED[bit]    eg .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed
+PSEUDO_SKIPPED[bit] :nth-child -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .btn-group > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[bit]    eg .btn-group-vertical > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[bit]    eg .table-striped-columns > :not(caption) > tr > :nth-child(2n)
+PSEUDO_SKIPPED[bit] :first-of-type -> 2 selector(s)
+PSEUDO_SKIPPED[bit]    eg .accordion-item:first-of-type
+PSEUDO_SKIPPED[bit]    eg .accordion-item:first-of-type > .accordion-header .accordion-button
+PSEUDO_SKIPPED[bit] :-moz-focusring -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-select:-moz-focusring
+PSEUDO_SKIPPED[bit] ::-moz-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control-color::-moz-color-swatch
+PSEUDO_SKIPPED[bit] ::-moz-focus-inner -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-moz-focus-inner
+PSEUDO_SKIPPED[bit] ::-moz-focus-outer -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-range::-moz-focus-outer
+PSEUDO_SKIPPED[bit] ::-moz-range-track -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-range::-moz-range-track
+PSEUDO_SKIPPED[bit] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg [list]:not([type="date"]):not([type="datetime-local"]):not([type="month"]):not([type="week"]):not([type="time"])::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[bit] ::-webkit-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control-color::-webkit-color-swatch
+PSEUDO_SKIPPED[bit] ::-webkit-color-swatch-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-color-swatch-wrapper
+PSEUDO_SKIPPED[bit] ::-webkit-date-and-time-value -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control::-webkit-date-and-time-value
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-control::-webkit-datetime-edit
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-day-field -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-day-field
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-fields-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-fields-wrapper
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-hour-field -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-hour-field
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-minute -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-minute
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-month-field -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-month-field
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-text -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-text
+PSEUDO_SKIPPED[bit] ::-webkit-datetime-edit-year-field -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-datetime-edit-year-field
+PSEUDO_SKIPPED[bit] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-inner-spin-button
+PSEUDO_SKIPPED[bit] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg [type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[bit] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg ::-webkit-search-decoration
+PSEUDO_SKIPPED[bit] ::-webkit-slider-runnable-track -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-range::-webkit-slider-runnable-track
+PSEUDO_SKIPPED[bit] :indeterminate -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .form-check-input[type="checkbox"]:indeterminate
+PSEUDO_SKIPPED[bit] :nth-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .table-striped > tbody > tr:nth-of-type(odd) > *
+PSEUDO_SKIPPED[bit] :root -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg :root
+BEGIN
+* -> [4, 5, 6, 9, 10, 12, 15, 18, 21, 24, 27, 30, 33, 37, 38, 39, 41, 46, 50, 55, 60, 63, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 110, 114, 116, 119, 121, 122, 125, 126, 129, 133, 137, 142, 146, 151, 155, 159, 163, 167, 171, 175, 179, 184, 188, 192, 196, 201, 205, 209, 213, 216, 220, 224, 228, 232, 235, 239, 243, 247, 251, 255, 259, 263, 267, 272, 276, 280, 284, 288, 292, 295, 299, 303, 306, 310, 314, 319, 323, 327, 331, 335, 339, 343, 347, 351, 355, 360, 363, 367, 371, 376, 383, 384, 385, 386, 387, 392, 395, 398, 403, 411, 414, 415, 417, 421, 427, 433, 436, 439, 441, 449, 452, 455, 458, 461, 464, 467, 470, 473, 476, 479, 484, 487, 490, 495, 499, 502, 505, 508, 513, 514, 521, 522, 523, 524, 525, 529, 530, 531, 533, 534, 537, 540, 545, 546, 553, 554, 555, 556, 557, 560, 561, 562, 564, 565, 568, 571, 576, 577, 586, 587, 588, 589, 590, 593, 594, 596, 597, 598, 600, 601, 604, 607, 610, 614, 617, 624, 627, 628, 630, 631, 632, 634, 637, 640, 641, 643, 645, 647, 651, 652, 655, 656, 658, 662, 668, 670, 673, 676, 678, 681, 684, 686, 689, 692, 693, 696, 697, 699, 701, 702, 705, 707, 708, 711, 713, 714, 717, 719, 720, 723, 724, 727, 731, 734, 737, 741, 744, 753, 756, 757, 759, 762, 763, 765, 767, 770, 773, 777, 779, 785, 788, 789, 791, 795, 798, 799, 802, 803, 805, 809, 815, 817, 823, 826, 827, 829, 833, 836, 839, 840, 843, 844, 846, 850, 856, 858, 864, 867, 868, 870, 874, 877, 878, 881, 882, 884, 888, 901, 903, 907, 910, 913, 919, 921, 922, 926, 927, 929, 932, 933, 936, 940, 948, 950, 952, 954, 956, 959, 962, 966, 969, 971, 972, 976, 980, 981, 982, 984, 987, 988, 990, 991, 993, 994, 996, 998, 1001, 1003, 1005, 1007, 1009, 1010, 1015, 1019, 1022, 1023, 1025, 1028, 1029, 1031, 1032, 1035, 1037, 1038, 1039, 1040, 1041, 1043, 1044, 1045, 1048, 1049, 1050, 1052, 1053, 1054, 1057, 1058, 1060, 1068, 1071, 1074, 1077, 1078, 1081, 1082, 1084, 1087, 1088, 1090, 1091, 1093, 1095, 1097, 1099, 1101, 1104, 1107, 1108, 1111, 1112, 1114, 1117, 1118, 1121, 1126, 1129, 1132, 1135, 1136, 1138, 1141, 1142, 1144, 1146, 1148, 1150, 1152, 1153, 1155, 1156, 1158, 1161, 1164, 1168, 1172, 1173, 1174, 1176, 1179, 1180, 1182, 1183, 1185, 1186, 1190, 1193, 1195, 1197, 1199, 1201, 1202, 1203, 1205, 1206, 1210, 1213, 1216, 1220, 1224, 1225, 1226, 1228, 1231, 1232, 1234, 1235, 1237, 1238, 1242, 1245, 1247, 1249, 1251, 1252, 1254, 1255, 1256, 1258, 1259, 1260, 1262, 1263, 1267, 1268, 1269, 1271, 1272, 1275, 1278, 1281, 1282, 1284, 1287, 1288, 1290, 1292, 1294, 1296, 1298, 1299, 1301, 1302, 1303, 1305, 1306, 1307, 1309, 1310, 1311, 1313, 1314, 1316, 1319, 1322, 1326, 1330, 1331, 1332, 1334, 1337, 1338, 1340, 1341, 1343, 1344, 1348, 1351, 1353, 1355, 1357, 1359, 1361, 1362, 1363, 1364, 1366, 1367, 1369, 1371, 1372, 1374, 1375, 1376, 1378, 1379, 1380, 1382, 1383, 1385, 1387, 1388, 1390, 1391, 1392, 1394, 1395, 1396, 1398, 1399, 1401, 1403, 1404, 1406, 1407, 1408, 1410, 1411, 1412, 1414, 1415, 1417, 1419, 1420, 1422, 1423, 1424, 1426, 1427, 1429, 1433, 1436, 1439, 1443, 1447, 1448, 1449, 1451, 1454, 1455, 1457, 1458, 1460, 1461, 1465, 1468, 1470, 1472, 1474, 1476, 1478, 1479, 1480, 1481, 1483, 1484, 1486, 1488, 1489, 1491, 1492, 1493, 1495, 1496, 1497, 1499, 1500, 1502, 1504, 1505, 1507, 1508, 1509, 1511, 1512, 1513, 1515, 1516, 1518, 1520, 1521, 1523, 1524, 1525, 1527, 1528, 1530, 1531, 1533, 1535, 1537, 1539, 1540, 1541, 1543, 1548, 1551, 1553, 1555, 1556, 1558, 1561, 1565, 1573, 1575, 1578, 1582, 1590, 1592, 1595, 1599, 1607, 1609, 1615, 1618, 1621, 1622, 1625, 1626, 1628, 1631, 1632, 1634, 1635, 1637, 1638, 1640, 1642, 1644, 1646, 1648, 1651, 1654, 1655, 1658, 1659, 1661, 1664, 1665, 1668, 1673, 1676, 1679, 1680, 1682, 1683, 1685, 1688, 1691, 1695, 1699, 1700, 1701, 1703, 1706, 1707, 1709, 1710, 1712, 1713, 1717, 1720, 1722, 1724, 1726, 1727, 1728, 1730, 1732, 1733, 1735, 1736, 1737, 1739, 1740, 1741, 1743, 1745, 1746, 1748, 1749, 1750, 1752, 1753, 1755, 1756, 1757, 1759, 1761, 1762, 1764, 1765, 1766, 1768, 1769, 1771, 1772, 1773, 1775, 1776, 1777, 1779, 1780, 1781, 1783, 1784, 1786, 1790, 1791, 1792, 1794, 1795, 1798, 1801, 1802, 1804, 1805, 1807, 1810, 1813, 1817, 1821, 1822, 1823, 1825, 1828, 1829, 1831, 1832, 1834, 1835, 1839, 1842, 1844, 1846, 1848, 1849, 1850, 1852, 1853, 1854, 1856, 1857, 1859, 1860, 1861, 1863, 1864, 1865, 1867, 1869, 1870, 1872, 1873, 1874, 1876, 1877, 1878, 1880, 1882, 1883, 1885, 1886, 1887, 1889, 1890, 1892, 1893, 1894, 1896, 1898, 1899, 1901, 1902, 1903, 1905, 1906, 1908, 1909, 1910, 1912, 1913, 1914, 1916, 1917, 1918, 1920, 1921, 1923, 1924, 1925, 1927, 1928, 1929, 1931, 1932, 1934, 1935, 1936, 1938, 1939, 1940, 1942, 1943, 1945, 1946, 1947, 1949, 1950, 1951, 1953, 1954, 1956, 1957, 1958, 1960, 1961, 1962, 1964, 1965, 1967, 1968, 1969, 1971, 1972, 1973, 1975, 1976, 1977, 1979, 1980, 1982, 1983, 1984, 1986, 1987, 1988, 1990, 1991, 1993, 1994, 1995, 1997, 1998, 1999, 2001, 2002, 2004, 2005, 2006, 2008, 2009, 2010, 2012, 2013, 2015, 2016, 2017, 2019, 2020, 2021, 2023, 2024, 2026, 2027, 2028, 2030, 2031, 2032, 2034, 2035, 2037, 2041, 2042, 2043, 2045, 2046, 2050, 2053, 2056, 2059, 2060, 2063, 2064, 2066, 2069, 2070, 2072, 2073, 2075, 2077, 2079, 2081, 2082, 2083, 2084, 2086, 2089, 2092, 2093, 2096, 2097, 2099, 2102, 2103, 2106, 2111, 2114, 2117, 2119, 2121, 2122, 2123, 2125, 2126, 2127, 2128, 2129, 2130, 2131, 2132, 2134, 2137, 2140, 2144, 2148, 2149, 2150, 2152, 2155, 2156, 2158, 2159, 2161, 2162, 2166, 2169, 2171, 2173, 2175, 2176, 2178, 2179, 2180, 2182, 2183, 2185, 2186, 2187, 2189, 2190, 2192, 2193, 2194, 2196, 2197, 2199, 2200, 2201, 2203, 2204, 2206, 2207, 2208, 2210, 2211, 2213, 2214, 2215, 2217, 2218, 2220, 2221, 2222, 2224, 2225, 2227, 2228, 2229, 2231, 2232, 2234, 2235, 2236, 2238, 2239, 2241, 2242, 2243, 2245, 2246, 2248, 2249, 2250, 2252, 2253, 2254, 2256, 2257, 2258, 2260, 2261, 2263, 2264, 2265, 2267, 2268, 2270, 2271, 2272, 2274, 2275, 2277, 2278, 2279, 2281, 2282, 2284, 2285, 2286, 2288, 2293, 2296, 2298, 2300, 2301, 2303, 2306, 2309, 2313, 2317, 2318, 2319, 2321, 2324, 2325, 2327, 2328, 2330, 2331, 2335, 2338, 2340, 2342, 2344, 2345, 2347, 2348, 2349, 2351, 2352, 2354, 2355, 2356, 2358, 2359, 2361, 2362, 2363, 2365, 2366, 2368, 2369, 2370, 2372, 2373, 2375, 2376, 2377, 2379, 2380, 2381, 2383, 2384, 2386, 2387, 2388, 2390, 2391, 2393, 2394, 2395, 2397, 2398, 2400, 2401, 2402, 2404, 2405, 2406, 2408, 2409, 2411, 2412, 2413, 2415, 2416, 2418, 2419, 2420, 2422, 2423, 2425, 2426, 2427, 2429, 2430, 2432, 2433, 2434, 2436, 2437, 2439, 2440, 2441, 2443, 2444, 2446, 2447, 2448, 2450, 2451, 2453, 2454, 2455, 2457, 2458, 2460, 2461, 2462, 2464, 2465, 2466, 2468, 2475, 2478, 2481, 2484, 2485, 2488, 2489, 2491, 2494, 2495, 2497, 2498, 2500, 2503, 2504, 2506, 2509, 2510, 2512, 2514, 2517, 2518, 2521, 2522, 2524, 2527, 2528, 2531, 2532, 2534, 2536, 2538, 2540, 2541, 2543, 2544, 2547, 2550, 2553, 2555, 2557, 2558, 2559, 2561, 2562, 2563, 2565, 2566, 2567, 2569, 2570, 2571, 2573, 2574, 2576, 2579, 2584, 2588, 2595, 2598, 2602, 2609, 2612, 2616, 2623, 2627, 2633, 2637, 2644, 2647, 2651, 2658, 2661, 2665, 2672, 2677, 2680, 2683, 2687, 2691, 2692, 2693, 2695, 2698, 2699, 2701, 2702, 2704, 2705, 2709, 2712, 2714, 2716, 2718, 2720, 2722, 2723, 2724, 2725, 2727, 2728, 2730, 2732, 2733, 2735, 2736, 2737, 2739, 2740, 2741, 2743, 2744, 2746, 2748, 2749, 2751, 2752, 2753, 2755, 2756, 2757, 2759, 2760, 2762, 2764, 2765, 2767, 2768, 2769, 2771, 2772, 2773, 2775, 2777, 2778, 2780, 2782, 2783, 2785, 2786, 2788, 2790, 2791, 2793, 2794, 2795, 2797, 2798, 2800, 2801, 2802, 2804, 2805, 2807, 2808, 2809, 2811, 2812, 2814, 2815, 2816, 2818, 2819, 2821, 2822, 2823, 2825, 2826, 2828, 2829, 2830, 2832, 2833, 2835, 2836, 2837, 2839, 2840, 2842, 2843, 2844, 2846, 2847, 2849, 2850, 2852, 2853, 2855, 2856, 2857, 2859, 2861, 2863, 2864, 2865, 2866, 2868, 2869, 2871, 2873, 2874, 2876, 2877, 2878, 2880, 2881, 2882, 2884, 2885, 2887, 2889, 2890, 2892, 2893, 2894, 2896, 2897, 2899, 2900, 2901, 2903, 2905, 2907, 2908, 2909, 2910, 2912, 2913, 2915, 2917, 2918, 2920, 2921, 2922, 2924, 2925, 2926, 2928, 2929, 2931, 2933, 2934, 2936, 2937, 2938, 2940, 2941, 2942, 2944, 2945, 2947, 2949, 2950, 2952, 2953, 2954, 2956, 2957, 2958, 2960, 2961, 2963, 2965, 2966, 2968, 2969, 2970, 2972, 2973, 2974, 2976, 2977, 2979, 2981, 2982, 2984, 2985, 2986, 2988, 2989, 2990, 2992, 2993, 2995, 2997, 2998, 3000, 3001, 3002, 3004, 3005, 3007, 3008, 3009, 3011, 3013, 3015, 3016, 3017, 3019, 3020, 3021, 3023, 3025, 3027, 3028, 3029, 3031, 3032, 3033, 3035, 3037, 3039, 3040, 3041, 3042, 3044, 3045, 3047, 3049, 3050, 3052, 3053, 3054, 3056, 3057, 3058, 3060, 3061, 3063, 3065, 3066, 3068, 3069, 3070, 3072, 3073, 3075, 3076, 3077, 3079, 3081, 3083, 3084, 3085, 3086, 3088, 3089, 3091, 3093, 3094, 3096, 3097, 3098, 3100, 3101, 3102, 3104, 3105, 3107, 3109, 3110, 3112, 3113, 3114, 3116, 3117, 3118, 3120, 3121, 3123, 3125, 3126, 3128, 3129, 3130, 3132, 3133, 3134, 3136, 3137, 3139, 3141, 3142, 3144, 3145, 3146, 3148, 3149, 3150, 3152, 3153, 3155, 3157, 3158, 3160, 3161, 3162, 3164, 3165, 3166, 3168, 3169, 3171, 3173, 3174, 3176, 3177, 3178, 3180, 3181, 3183, 3184, 3185, 3187, 3189, 3191, 3192, 3193, 3195, 3196, 3197, 3199, 3201, 3203, 3204, 3205, 3207, 3208, 3209, 3211, 3213, 3215, 3216, 3217, 3218, 3220, 3221, 3223, 3225, 3226, 3228, 3229, 3230, 3232, 3233, 3234, 3236, 3237, 3239, 3241, 3242, 3244, 3245, 3246, 3248, 3249, 3251, 3252, 3253, 3255, 3257, 3259, 3260, 3261, 3262, 3264, 3265, 3267, 3269, 3270, 3272, 3273, 3274, 3276, 3277, 3278, 3280, 3281, 3283, 3285, 3286, 3288, 3289, 3290, 3292, 3293, 3294, 3296, 3297, 3299, 3301, 3302, 3304, 3305, 3306, 3308, 3309, 3310, 3312, 3313, 3315, 3317, 3318, 3320, 3321, 3322, 3324, 3325, 3326, 3328, 3329, 3331, 3333, 3334, 3336, 3337, 3338, 3340, 3341, 3342, 3344, 3345, 3347, 3349, 3350, 3352, 3353, 3354, 3356, 3357, 3359, 3360, 3361, 3363, 3365, 3367, 3368, 3369, 3371, 3372, 3373, 3375, 3377, 3379, 3380, 3381, 3383, 3384, 3385, 3387, 3389, 3391, 3392, 3393, 3395, 3399, 3402, 3405, 3406, 3409, 3410, 3412, 3415, 3416, 3419, 3424, 3427, 3429, 3431, 3432, 3434, 3437, 3440, 3444, 3448, 3449, 3450, 3452, 3455, 3456, 3458, 3459, 3461, 3462, 3466, 3469, 3471, 3473, 3475, 3476, 3477, 3479, 3480, 3482, 3483, 3484, 3486, 3488, 3489, 3491, 3492, 3493, 3495, 3496, 3498, 3499, 3500, 3502, 3503, 3505, 3506, 3507, 3509, 3510, 3511, 3513, 3514, 3516, 3517, 3518, 3520, 3521, 3522, 3524, 3525, 3527, 3528, 3529, 3531, 3532, 3533, 3535, 3536, 3538, 3539, 3540, 3542, 3543, 3544, 3546, 3547, 3549, 3550, 3551, 3553, 3554, 3556, 3557, 3558, 3560, 3561, 3563, 3564, 3565, 3567, 3568, 3569, 3571, 3572, 3573, 3575, 3576, 3577, 3579, 3580, 3582, 3586, 3589, 3592, 3593, 3596, 3597, 3599, 3602, 3603, 3606, 3613, 3616, 3619, 3622, 3623, 3626, 3627, 3629, 3632, 3633, 3636, 3637, 3639, 3641, 3643, 3645, 3646, 3647, 3648, 3650, 3653, 3656, 3657, 3660, 3661, 3663, 3666, 3667, 3670, 3675, 3678, 3681, 3683, 3685, 3686, 3687, 3688, 3689, 3691, 3694, 3696, 3697, 3702, 3703, 3704, 3707, 3708, 3711, 3713, 3714, 3717, 3719, 3720, 3723, 3725, 3728, 3731, 3734, 3738, 3742, 3743, 3744, 3746, 3749, 3750, 3752, 3753, 3755, 3756, 3760, 3763, 3765, 3767, 3769, 3771, 3773, 3774, 3775, 3776, 3778, 3779, 3781, 3783, 3784, 3786, 3787, 3788, 3790, 3791, 3793, 3794, 3795, 3797, 3799, 3801, 3802, 3803, 3804, 3806, 3807, 3809, 3811, 3812, 3814, 3815, 3816, 3818, 3819, 3820, 3822, 3823, 3825, 3827, 3828, 3830, 3831, 3832, 3834, 3835, 3836, 3838, 3839, 3841, 3843, 3844, 3846, 3847, 3848, 3850, 3851, 3852, 3854, 3855, 3857, 3859, 3860, 3862, 3863, 3864, 3866, 3867, 3869, 3870, 3871, 3873, 3875, 3877, 3878, 3879, 3881, 3882, 3883, 3885, 3887, 3889, 3890, 3891, 3892, 3894, 3895, 3897, 3899, 3900, 3902, 3903, 3904, 3906, 3907, 3909, 3910, 3911, 3913, 3915, 3917, 3918, 3919, 3921, 3922, 3924, 3926, 3928, 3929, 3930, 3931, 3933, 3934, 3936, 3938, 3939, 3941, 3942, 3943, 3945, 3946, 3947, 3949, 3950, 3952, 3954, 3955, 3957, 3958, 3959, 3961, 3962, 3964, 3965, 3966, 3968, 3970, 3972, 3973, 3974, 3976, 3977, 3979, 3981, 3983, 3984, 3985, 3987, 3988, 3989, 3991, 3993, 3995, 3996, 3997, 3999, 4000, 4002, 4004, 4006, 4007, 4008, 4009, 4011, 4012, 4014, 4016, 4017, 4019, 4020, 4021, 4023, 4024, 4025, 4027, 4028, 4030, 4032, 4033, 4035, 4036, 4037, 4039, 4040, 4042, 4043, 4044, 4046, 4048, 4050, 4051, 4052, 4054, 4055, 4057, 4059, 4061, 4062, 4063, 4065, 4066, 4067, 4069, 4071, 4073, 4074, 4075, 4077, 4078, 4080, 4082, 4084, 4085, 4086, 4087, 4089, 4090, 4092, 4094, 4095, 4097, 4098, 4099, 4101, 4102, 4103, 4105, 4106, 4108, 4110, 4111, 4113, 4114, 4115, 4117, 4118, 4120, 4121, 4122, 4124, 4126, 4128, 4129, 4130, 4132, 4133, 4135, 4137, 4139, 4140, 4141, 4143, 4144, 4145, 4147, 4149, 4151, 4152, 4153, 4155, 4156, 4157, 4159, 4161, 4163, 4164, 4165, 4167, 4171, 4172, 4173, 4175, 4176, 4177, 4179, 4180, 4183, 4186, 4188, 4190, 4191, 4193, 4196, 4199, 4202, 4206, 4208, 4210, 4212, 4215, 4218, 4222, 4224, 4226, 4228, 4231, 4234, 4238, 4240, 4242, 4244, 4247, 4250, 4254, 4256, 4258, 4260, 4263, 4266, 4270, 4272, 4274, 4276, 4279, 4282, 4286, 4288, 4290, 4292, 4295, 4298, 4302, 4304, 4306, 4308, 4311, 4314, 4318, 4320, 4322, 4324, 4327, 4330, 4334, 4336, 4338, 4340, 4343, 4346, 4350, 4352, 4354, 4356, 4359, 4362, 4366, 4368, 4370, 4372, 4375, 4378, 4382, 4384, 4386, 4388, 4396, 4399, 4402, 4405, 4406, 4413, 4414, 4416, 4417, 4419, 4420, 4422, 4424, 4426, 4428, 4429, 4431, 4432, 4434, 4437, 4440, 4441, 4444, 4445, 4447, 4450, 4451, 4454, 4459, 4462, 4473, 4476, 4479, 4482, 4485, 4490, 4497, 4498, 4499, 4500, 4501, 4506, 4508, 4510, 4513, 4516, 4518, 4519, 4521, 4522, 4523, 4525, 4526, 4528, 4530, 4531, 4535, 4536, 4537, 4541, 4542, 4544, 4546, 4550, 4553, 4554, 4556, 4559, 4561, 4563, 4565, 4567, 4569, 4571, 4573, 4575, 4577, 4579, 4581, 4583, 4585, 4587, 4589, 4591, 4595, 4599, 4602, 4603, 4605, 4608, 4610, 4612, 4614, 4616, 4618, 4620, 4622, 4624, 4626, 4628, 4630, 4632, 4634, 4636, 4640, 4643, 4644, 4646, 4649, 4651, 4652, 4656, 4657, 4659, 4661, 4662, 4666, 4667, 4669, 4671, 4675, 4677, 4679, 4683, 4685, 4687, 4688, 4692, 4693, 4697, 4700, 4701, 4703, 4706, 4708, 4709, 4713, 4714, 4716, 4718, 4719, 4723, 4724, 4726, 4728, 4729, 4733, 4734, 4736, 4738, 4742, 4744, 4746, 4747, 4751, 4752, 4759, 4763, 4767, 4769, 4778, 4782, 4784, 4790, 4797, 4799, 4800, 4813, 4817, 4820, 4823, 4824, 4827, 4828, 4831, 4832, 4834, 4835, 4837, 4838, 4841, 4842, 4844, 4845, 4848, 4849, 4851, 4852, 4854, 4855, 4858, 4859, 4861, 4862, 4866, 4869, 4872, 4873, 4875, 4876, 4879, 4880, 4882, 4883, 4885, 4886, 4890, 4893, 4896, 4897, 4900, 4901, 4904, 4905, 4907, 4908, 4910, 4911, 4914, 4915, 4917, 4918, 4921, 4922, 4924, 4925, 4928, 4929, 4931, 4932, 4934, 4935, 4938, 4939, 4942, 4943, 4946, 4947, 4949, 4950, 4954, 4957, 4961, 4964, 4967, 4968, 4971, 4972, 4975, 4976, 4979, 4980, 4983, 4984, 4986, 4987, 4989, 4990, 4993, 4994, 4996, 4997, 4999, 5000, 5003, 5004, 5006, 5007, 5009, 5010, 5013, 5014, 5017, 5018, 5021, 5022, 5025, 5026, 5029, 5030, 5032, 5033, 5036, 5037, 5039, 5040, 5042, 5043, 5046, 5047, 5050, 5051, 5054, 5055, 5058, 5059, 5062, 5063, 5065, 5066, 5068, 5069, 5072, 5073, 5075, 5076, 5078, 5079, 5082, 5083, 5086, 5087, 5090, 5091, 5093, 5094, 5096, 5097, 5100, 5101, 5103, 5104, 5107, 5108, 5110, 5111, 5113, 5114, 5117, 5118, 5120, 5121, 5123, 5124, 5127, 5128, 5130, 5131, 5134, 5135, 5137, 5138, 5140, 5144, 5150, 5152, 5167, 5170, 5172, 5175, 5204, 5211, 5213, 5215, 5217, 5221, 5227, 5234, 5236, 5237, 5239, 5243, 5246, 5249, 5254, 5256, 5263, 5276, 5277, 5278, 5279, 5280, 5281, 5283, 5289, 5293, 5300, 5304, 5305, 5307, 5309, 5311, 5312, 5314, 5316, 5320, 5322, 5323, 5331, 5332, 5333, 5334, 5337, 5345, 5348, 5351, 5354, 5357, 5360, 5363, 5366, 5368, 5369, 5371, 5376, 5382, 5384, 5386, 5387, 5388, 5390, 5395, 5401, 5403, 5405, 5410, 5416, 5418, 5420, 5421, 5422, 5424, 5429, 5435, 5437, 5439, 5460, 5462, 5464, 5466, 5467, 5471, 5476, 5478, 5480, 5482, 5486, 5492, 5494, 5498, 5499, 5500, 5502, 5504, 5509, 5515, 5517, 5519, 5524, 5526, 5528, 5530, 5534, 5540, 5542, 5546, 5547, 5548, 5550, 5552, 5557, 5563, 5565, 5567, 5572, 5574, 5576, 5578, 5582, 5588, 5590, 5594, 5596, 5598, 5603, 5609, 5611, 5613, 5618, 5620, 5622, 5624, 5628, 5634, 5636, 5640, 5641, 5642, 5643, 5644, 5645, 5647, 5649, 5654, 5660, 5662, 5664, 5669, 5671, 5673, 5675, 5679, 5685, 5687, 5691, 5693, 5695, 5700, 5706, 5708, 5710, 5712, 5714, 5715, 5719, 5724, 5726, 5728, 5730, 5734, 5740, 5742, 5746, 5748, 5750, 5755, 5761, 5763, 5765, 5770, 5772, 5774, 5776, 5780, 5786, 5788, 5792, 5794, 5796, 5801, 5807, 5809, 5811, 5813, 5815, 5816, 5820, 5825, 5827, 5829, 5831, 5835, 5841, 5843, 5847, 5849, 5851, 5856, 5862, 5864, 5866, 5871, 5873, 5875, 5877, 5881, 5887, 5889, 5893, 5895, 5897, 5902, 5908, 5910, 5912, 5914, 5916, 5917, 5921, 5926, 5928, 5930, 5932, 5936, 5942, 5944, 5948, 5950, 5952, 5957, 5963, 5965, 5967, 5972, 5974, 5976, 5978, 5982, 5988, 5990, 5994, 5996, 5998, 6003, 6009, 6011, 6013, 6018, 6020, 6022, 6024, 6028, 6034, 6036, 6040, 6041, 6042, 6043, 6045, 6047, 6052, 6058, 6060, 6062, 6064, 6066, 6067, 6071, 6076, 6078, 6080, 6082, 6086, 6092, 6094, 6098, 6100, 6102, 6107, 6113, 6115, 6117, 6122, 6124, 6126, 6128, 6132, 6138, 6140, 6144, 6146, 6148, 6153, 6159, 6161, 6163, 6165, 6167, 6168, 6172, 6177, 6179, 6181, 6183, 6187, 6193, 6195, 6199, 6201, 6203, 6208, 6214, 6216, 6218, 6223, 6225, 6227, 6229, 6233, 6239, 6241, 6245, 6247, 6249, 6254, 6260, 6262, 6264, 6266, 6268, 6269, 6273, 6278, 6280, 6282, 6284, 6288, 6294, 6296, 6300, 6302, 6304, 6309, 6315, 6317, 6319, 6324, 6326, 6328, 6330, 6334, 6340, 6342, 6346, 6348, 6350, 6355, 6361, 6363, 6365, 6367, 6369, 6370, 6374, 6379, 6381, 6383, 6385, 6389, 6395, 6397, 6401, 6403, 6405, 6410, 6416, 6418, 6420, 6425, 6427, 6429, 6431, 6435, 6441, 6443, 6447, 6449, 6451, 6456, 6462, 6464, 6466, 6496, 6499, 6501, 6504, 6547, 6550, 6552, 6555, 6598, 6601, 6603, 6606, 6649, 6652, 6654, 6657, 6700, 6703, 6705, 6708, 6810, 6813, 6815, 6818, 6861, 6864, 6866, 6869, 6905, 6908, 6910, 6913, 6955, 6958, 6960, 6963, 7006, 7009, 7011, 7014, 7057, 7060, 7062, 7065, 7108, 7111, 7113, 7116, 7164, 7167, 7169, 7172, 7208, 7211, 7213, 7216, 7262, 7265, 7267, 7270, 7313, 7316, 7318, 7321, 7364, 7367, 7369, 7372, 7419, 7422, 7424, 7427, 7439, 7442, 7443, 7445, 7455, 7458, 7459, 7461, 7462, 7464, 7478, 7481, 7482, 7484, 7485, 7487, 7491, 7494, 7495, 7497, 7513, 7516, 7518, 7521]
+.bs-tooltip-auto .tooltip-arrow -> [5170, 6499, 6550, 6601, 6652, 6703, 6813, 6864, 6908, 6958, 7009, 7060, 7111, 7167, 7211, 7265, 7316, 7367, 7422, 7516]
+.icon-link > .bi -> [1108, 1655, 2093, 3406, 3593, 3657, 4441]
+.nav-fill .nav-item -> [2633, 2647, 2661]
+.nav-fill .nav-item .nav-link -> [2637, 2651, 2665]
+.nav-link:focus -> [744]
+.nav-pills .active.nav-link -> [2616, 2637]
+.nav-pills .nav-link -> [2588, 2602, 2616, 2637, 2651, 2665]
+.navbar-nav .dropdown-menu -> [637, 773]
+.navbar > .container-xxl -> [363]
+.offcanvas-header .btn-close -> [441]
+.row > * -> [1129, 1275, 1548, 1676, 1798, 2053, 2111, 2114, 2293, 2550, 3424, 3678, 4183, 4199, 4215, 4231, 4247, 4263, 4279, 4295, 4311, 4327, 4343, 4359, 4375, 4399, 4459, 4482, 4550, 4599, 4640, 4697]
+.tooltip .tooltip-arrow -> [5170, 6499, 6550, 6601, 6652, 6703, 6813, 6864, 6908, 6958, 7009, 7060, 7111, 7167, 7211, 7265, 7316, 7367, 7422, 7516]
+.visually-hidden * -> [630, 634]
+[data-bs-theme="light"] -> [6]
+[role="button"] -> [5204]
+[type="button"] -> [403, 441, 617, 744, 779, 817, 858, 972, 1164, 1216, 1322, 1439, 1691, 1813, 2140, 2309, 2588, 2602, 2616, 2637, 2651, 2665, 2683, 3440, 3697, 3708, 3714, 3720, 3734, 4778]
+[type="reset"] -> [5283, 5300]
+[type="search"] -> [5263]
+a > code -> [2126]
+pre code -> [1003, 1195, 1247, 1353, 1470, 1722, 1844, 2171, 2340, 2714, 3471, 3765]
+ul ul -> [637, 773]
+END
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 9851

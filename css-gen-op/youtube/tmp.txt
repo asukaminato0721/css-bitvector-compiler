@@ -1,17 +1,56 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: field `id` is never read
+   --> src/naive.rs:215:9
+    |
+213 | struct SimpleDomNode {
+    |        ------------- field in this struct
+214 |     pub tag_name: String,
+215 |     pub id: u64,
+    |         ^^
+    |
+    = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/naive`
+NOT_CONSIDERED[naive] 21 selector(s)
+NOT_CONSIDERED[naive] .autoscrollbody
+NOT_CONSIDERED[naive] .grecaptcha-badge
+NOT_CONSIDERED[naive] .hidden
+NOT_CONSIDERED[naive] .masthead-skeleton-icon
+NOT_CONSIDERED[naive] .no-scrollbody
+NOT_CONSIDERED[naive] .no-y-scrollbody
+NOT_CONSIDERED[naive] .shellytd-masthead
+NOT_CONSIDERED[naive] .dark.shellytd-masthead
+NOT_CONSIDERED[naive] .full-window-mode.shellytd-masthead
+NOT_CONSIDERED[naive] .theater.shellytd-masthead
+NOT_CONSIDERED[naive] .ytd-topbar-logo-renderer#logo-red-icon-container
+NOT_CONSIDERED[naive] .ytd-searchbox-spt#search-container
+NOT_CONSIDERED[naive] #masthead-skeleton-icons
+NOT_CONSIDERED[naive] body
+NOT_CONSIDERED[naive] dom-bind
+NOT_CONSIDERED[naive] dom-if
+NOT_CONSIDERED[naive] dom-repeat
+NOT_CONSIDERED[naive] html
+NOT_CONSIDERED[naive] ps-dom-if
+NOT_CONSIDERED[naive] ps-dom-repeat
+NOT_CONSIDERED[naive] textarea
+PSEUDO_SKIPPED[naive] :-ms-placeholder-shown -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search:-ms-placeholder-shown
+PSEUDO_SKIPPED[naive] :-stv-set-elsewhere -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg :-stv-set-elsewhere
+PSEUDO_SKIPPED[naive] ::-moz-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search::-moz-input-placeholder
+PSEUDO_SKIPPED[naive] ::-webkit-input-placeholder -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg #search-input.ytd-searchbox-spt #search::-webkit-input-placeholder
+PSEUDO_SKIPPED[naive] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ytd-masthead.shell > :first-child
+PSEUDO_SKIPPED[naive] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[naive]    eg ytd-masthead.shell > :last-child
 BEGIN
-.hidden -> [7245, 8803, 8862, 8921, 8980, 9039, 13079, 13784, 14120]
-.masthead-skeleton-icon -> [382, 384, 386]
-#masthead-skeleton-icons -> [379]
-body -> [233, 4487, 5866]
-dom-if -> [3659, 3694, 3699, 6035, 6318, 12165, 12212, 13190]
-dom-repeat -> [5129, 5141, 5320, 12772, 13036, 13047, 13614, 13626, 13797]
-html -> [5, 6, 4485, 5864]
-ps-dom-if -> [7640, 13850, 13856]
-ps-dom-repeat -> [12974]
-ytd-masthead .external-icon -> [274, 291, 336]
-ytd-masthead .yt-icons-ext -> [278]
-ytd-masthead #masthead-logo #country-code -> [377]
-ytd-masthead #masthead-logo -> [284]
+.ytd-searchbox-spt#search-input input -> [266]
+ytd-masthead .external-icon -> [282, 332]
+ytd-masthead .yt-icons-ext -> [286]
+ytd-masthead #masthead-logo #country-code -> [362]
+ytd-masthead #masthead-logo -> [292]
 END

@@ -1,118 +1,747 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
      Running `target/release/tri`
-1424
-967
-1071
-1012
-994
-1162
-1076
-1081
-982
-1376
-1344
-947
-1215
-1330
-1028
-1275
-1133
-943
-1209
-1235
-975
-1089
-1367
-963
-1306
-1486
-972
-1204
-1095
-1013
-1192
-1381
-1247
-1326
-1091
-1109
-1130
-1087
-1022
-1533
-1366
-1152
-1245
-971
+NOT_CONSIDERED[tri] 135 selector(s)
+NOT_CONSIDERED[tri] #SIvCob
+NOT_CONSIDERED[tri] #gb
+NOT_CONSIDERED[tri] #gbb
+NOT_CONSIDERED[tri] #gbbw
+NOT_CONSIDERED[tri] #gbg
+NOT_CONSIDERED[tri] #gbg4span
+NOT_CONSIDERED[tri] #gbg5
+NOT_CONSIDERED[tri] #gbg6span
+NOT_CONSIDERED[tri] #gbgs5
+NOT_CONSIDERED[tri] #gbi4i
+NOT_CONSIDERED[tri] #gbi4id
+NOT_CONSIDERED[tri] #gbi4m1
+NOT_CONSIDERED[tri] #gbi4s
+NOT_CONSIDERED[tri] #gbi4s1
+NOT_CONSIDERED[tri] #gbi4t
+NOT_CONSIDERED[tri] #gbi5
+NOT_CONSIDERED[tri] #gbmm
+NOT_CONSIDERED[tri] #gbmpal
+NOT_CONSIDERED[tri] #gbmpas
+NOT_CONSIDERED[tri] #gbmpdv
+NOT_CONSIDERED[tri] #gbmpi
+NOT_CONSIDERED[tri] #gbmpid
+NOT_CONSIDERED[tri] #gbmpiw
+NOT_CONSIDERED[tri] #gbmps
+NOT_CONSIDERED[tri] #gbpm
+NOT_CONSIDERED[tri] #gbpms
+NOT_CONSIDERED[tri] #gbprca
+NOT_CONSIDERED[tri] #gbprcs
+NOT_CONSIDERED[tri] #gbqfb
+NOT_CONSIDERED[tri] #gbqfbw
+NOT_CONSIDERED[tri] #gbqfqw
+NOT_CONSIDERED[tri] #gbs
+NOT_CONSIDERED[tri] #gbx3
+NOT_CONSIDERED[tri] #gbx4
+NOT_CONSIDERED[tri] #gbz
+NOT_CONSIDERED[tri] #gbztms1
+NOT_CONSIDERED[tri] #gog
+NOT_CONSIDERED[tri] #gssb_b
+NOT_CONSIDERED[tri] #gws-output-pages-elements-homepage_additional_languages__als
+NOT_CONSIDERED[tri] .H6sW5
+NOT_CONSIDERED[tri] .ds
+NOT_CONSIDERED[tri] .gbg4a
+NOT_CONSIDERED[tri] .gbgt
+NOT_CONSIDERED[tri] .gbgt-hvr
+NOT_CONSIDERED[tri] .gbgt-hvr#gbg6
+NOT_CONSIDERED[tri] .gbi4p
+NOT_CONSIDERED[tri] .gbibaa
+NOT_CONSIDERED[tri] .gbm
+NOT_CONSIDERED[tri] .gbm0l
+NOT_CONSIDERED[tri] .gbma
+NOT_CONSIDERED[tri] .gbmab
+NOT_CONSIDERED[tri] .gbmac
+NOT_CONSIDERED[tri] .gbmc
+NOT_CONSIDERED[tri] .gbmcc
+NOT_CONSIDERED[tri] .gbmh
+NOT_CONSIDERED[tri] .gbml1
+NOT_CONSIDERED[tri] .gbml1-hvr
+NOT_CONSIDERED[tri] .gbmlb
+NOT_CONSIDERED[tri] .gbmlb-hvr
+NOT_CONSIDERED[tri] .gbmlbw
+NOT_CONSIDERED[tri] .gbmpala
+NOT_CONSIDERED[tri] .gbmpalb
+NOT_CONSIDERED[tri] .gbmpia
+NOT_CONSIDERED[tri] .gbmpiaa
+NOT_CONSIDERED[tri] .gbmpiaw
+NOT_CONSIDERED[tri] .gbmpnw
+NOT_CONSIDERED[tri] .gbmt
+NOT_CONSIDERED[tri] .gbmtc
+NOT_CONSIDERED[tri] .gbp0
+NOT_CONSIDERED[tri] .gbpmc
+NOT_CONSIDERED[tri] .gbpms2
+NOT_CONSIDERED[tri] .gbprcb
+NOT_CONSIDERED[tri] .gbprcd
+NOT_CONSIDERED[tri] .gbprci
+NOT_CONSIDERED[tri] .gbprct
+NOT_CONSIDERED[tri] .gbps#gbmplp
+NOT_CONSIDERED[tri] .gbps2
+NOT_CONSIDERED[tri] .gbqfb
+NOT_CONSIDERED[tri] .gbqfb-hvr
+NOT_CONSIDERED[tri] .gbqfba
+NOT_CONSIDERED[tri] .gbqfba-hvr
+NOT_CONSIDERED[tri] .gbqfbb
+NOT_CONSIDERED[tri] .gbqfbb-hvr
+NOT_CONSIDERED[tri] .gbsb
+NOT_CONSIDERED[tri] .gbsbic
+NOT_CONSIDERED[tri] .gbt
+NOT_CONSIDERED[tri] .gbtb2
+NOT_CONSIDERED[tri] .gbtc
+NOT_CONSIDERED[tri] .gbtcb
+NOT_CONSIDERED[tri] .gbto
+NOT_CONSIDERED[tri] .gbts
+NOT_CONSIDERED[tri] .gbtsa
+NOT_CONSIDERED[tri] .gbxms
+NOT_CONSIDERED[tri] .gbxo
+NOT_CONSIDERED[tri] .gbxv
+NOT_CONSIDERED[tri] .gbxx
+NOT_CONSIDERED[tri] .gbzt
+NOT_CONSIDERED[tri] .gsdd_a
+NOT_CONSIDERED[tri] .gsfi
+NOT_CONSIDERED[tri] .gsfs
+NOT_CONSIDERED[tri] .gsib_a
+NOT_CONSIDERED[tri] .gsib_b
+NOT_CONSIDERED[tri] .gsls_a
+NOT_CONSIDERED[tri] .gsmq_a
+NOT_CONSIDERED[tri] .gsn_a
+NOT_CONSIDERED[tri] .gsn_b
+NOT_CONSIDERED[tri] .gsn_c
+NOT_CONSIDERED[tri] .gspqs_aa
+NOT_CONSIDERED[tri] .gspqs_b
+NOT_CONSIDERED[tri] .gsq_a
+NOT_CONSIDERED[tri] .gss_ifl
+NOT_CONSIDERED[tri] .gssb_a
+NOT_CONSIDERED[tri] .gssb_c
+NOT_CONSIDERED[tri] .gssb_e
+NOT_CONSIDERED[tri] .gssb_f
+NOT_CONSIDERED[tri] .gssb_g
+NOT_CONSIDERED[tri] .gssb_h
+NOT_CONSIDERED[tri] .gssb_i
+NOT_CONSIDERED[tri] .gssb_ja
+NOT_CONSIDERED[tri] .gssb_k
+NOT_CONSIDERED[tri] .gssb_l
+NOT_CONSIDERED[tri] .gssb_m
+NOT_CONSIDERED[tri] .h
+NOT_CONSIDERED[tri] .lsb
+NOT_CONSIDERED[tri] .lsbb
+NOT_CONSIDERED[tri] .lst
+NOT_CONSIDERED[tri] .sblc
+NOT_CONSIDERED[tri] .z4hgWe
+NOT_CONSIDERED[tri] a
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] em
+NOT_CONSIDERED[tri] form
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] p
+NOT_CONSIDERED[tri] td
+PSEUDO_SKIPPED[tri] :active -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[tri]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[tri]    eg .gbqfb:active
+PSEUDO_SKIPPED[tri]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[tri]    eg .gbqfba:active
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[tri]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[tri]    eg .gbm0l:visited
+PSEUDO_SKIPPED[tri]    eg .gbml1:visited
+PSEUDO_SKIPPED[tri]    eg .gbmlb:visited
+PSEUDO_SKIPPED[tri]    eg .gbmt:visited
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :after -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[tri]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[tri]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[tri]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[tri] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[tri]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[tri]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[tri] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[tri]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[tri] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+[tri-match] frame_id=0 command=init miss_delta=225 node_match_changes=33 total_misses=225
+[tri-match] frame_id=1 command=add miss_delta=2 node_match_changes=0 total_misses=227
+[tri-match] frame_id=2 command=recalculate miss_delta=0 node_match_changes=0 total_misses=227
+[tri-match] frame_id=3 command=replace_value miss_delta=0 node_match_changes=0 total_misses=227
+[tri-match] frame_id=4 command=replace_value miss_delta=0 node_match_changes=0 total_misses=227
+[tri-match] frame_id=5 command=recalculate miss_delta=0 node_match_changes=0 total_misses=227
+[tri-match] frame_id=6 command=add miss_delta=3 node_match_changes=0 total_misses=230
+[tri-match] frame_id=7 command=replace_value miss_delta=0 node_match_changes=0 total_misses=230
+[tri-match] frame_id=8 command=replace_value miss_delta=0 node_match_changes=0 total_misses=230
+[tri-match] frame_id=9 command=replace_value miss_delta=11 node_match_changes=1 total_misses=241
+[tri-match] frame_id=10 command=insert_value miss_delta=0 node_match_changes=0 total_misses=241
+[tri-match] frame_id=11 command=insert_value miss_delta=0 node_match_changes=0 total_misses=241
+[tri-match] frame_id=12 command=add miss_delta=2 node_match_changes=0 total_misses=243
+[tri-match] frame_id=13 command=add miss_delta=2 node_match_changes=0 total_misses=245
+[tri-match] frame_id=14 command=add miss_delta=6 node_match_changes=0 total_misses=251
+[tri-match] frame_id=15 command=recalculate miss_delta=0 node_match_changes=0 total_misses=251
+[tri-match] frame_id=16 command=add miss_delta=2 node_match_changes=0 total_misses=253
+[tri-match] frame_id=17 command=recalculate miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=18 command=insert_value miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=19 command=insert_value miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=20 command=replace_value miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=21 command=replace_value miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=22 command=recalculate miss_delta=0 node_match_changes=0 total_misses=253
+[tri-match] frame_id=23 command=add miss_delta=2 node_match_changes=0 total_misses=255
+[tri-match] frame_id=24 command=insert_value miss_delta=0 node_match_changes=0 total_misses=255
+[tri-match] frame_id=25 command=insert_value miss_delta=0 node_match_changes=0 total_misses=255
+[tri-match] frame_id=26 command=recalculate miss_delta=0 node_match_changes=0 total_misses=255
+[tri-match] frame_id=27 command=add miss_delta=2 node_match_changes=0 total_misses=257
+[tri-match] frame_id=28 command=recalculate miss_delta=0 node_match_changes=0 total_misses=257
+[tri-match] frame_id=29 command=add miss_delta=2 node_match_changes=0 total_misses=259
+[tri-match] frame_id=30 command=recalculate miss_delta=0 node_match_changes=0 total_misses=259
+[tri-match] frame_id=31 command=replace_value miss_delta=0 node_match_changes=0 total_misses=259
+[tri-match] frame_id=32 command=insert_value miss_delta=0 node_match_changes=0 total_misses=259
+[tri-match] frame_id=33 command=add miss_delta=110 node_match_changes=10 total_misses=369
+[tri-match] frame_id=34 command=recalculate miss_delta=0 node_match_changes=0 total_misses=369
+[tri-match] frame_id=35 command=add miss_delta=2 node_match_changes=0 total_misses=371
+[tri-match] frame_id=36 command=replace_value miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=37 command=insert_value miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=38 command=recalculate miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=39 command=replace_value miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=40 command=recalculate miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=41 command=replace_value miss_delta=0 node_match_changes=0 total_misses=371
+[tri-match] frame_id=42 command=add miss_delta=17 node_match_changes=0 total_misses=388
+[tri-match] frame_id=43 command=add miss_delta=10 node_match_changes=0 total_misses=398
+[tri-match] frame_id=44 command=add miss_delta=10 node_match_changes=0 total_misses=408
+[tri-match] frame_id=45 command=add miss_delta=10 node_match_changes=0 total_misses=418
+[tri-match] frame_id=46 command=add miss_delta=10 node_match_changes=0 total_misses=428
+[tri-match] frame_id=47 command=add miss_delta=10 node_match_changes=0 total_misses=438
+[tri-match] frame_id=48 command=add miss_delta=10 node_match_changes=0 total_misses=448
+[tri-match] frame_id=49 command=add miss_delta=10 node_match_changes=0 total_misses=458
+[tri-match] frame_id=50 command=add miss_delta=10 node_match_changes=0 total_misses=468
+[tri-match] frame_id=51 command=add miss_delta=10 node_match_changes=0 total_misses=478
+[tri-match] frame_id=52 command=add miss_delta=10 node_match_changes=0 total_misses=488
+[tri-match] frame_id=53 command=recalculate miss_delta=0 node_match_changes=0 total_misses=488
+[tri-match] frame_id=54 command=replace_value miss_delta=0 node_match_changes=0 total_misses=488
+[tri-match] frame_id=55 command=recalculate miss_delta=0 node_match_changes=0 total_misses=488
+[tri-match] frame_id=56 command=replace_value miss_delta=0 node_match_changes=0 total_misses=488
+[tri-match] frame_id=57 command=add miss_delta=17 node_match_changes=0 total_misses=505
+[tri-match] frame_id=58 command=add miss_delta=10 node_match_changes=0 total_misses=515
+[tri-match] frame_id=59 command=add miss_delta=10 node_match_changes=0 total_misses=525
+[tri-match] frame_id=60 command=add miss_delta=10 node_match_changes=0 total_misses=535
+[tri-match] frame_id=61 command=add miss_delta=10 node_match_changes=0 total_misses=545
+[tri-match] frame_id=62 command=add miss_delta=10 node_match_changes=0 total_misses=555
+[tri-match] frame_id=63 command=add miss_delta=10 node_match_changes=0 total_misses=565
+[tri-match] frame_id=64 command=add miss_delta=10 node_match_changes=0 total_misses=575
+[tri-match] frame_id=65 command=add miss_delta=10 node_match_changes=0 total_misses=585
+[tri-match] frame_id=66 command=add miss_delta=10 node_match_changes=0 total_misses=595
+[tri-match] frame_id=67 command=add miss_delta=10 node_match_changes=0 total_misses=605
+[tri-match] frame_id=68 command=recalculate miss_delta=0 node_match_changes=0 total_misses=605
+[tri-match] frame_id=69 command=replace_value miss_delta=0 node_match_changes=0 total_misses=605
+[tri-match] frame_id=70 command=recalculate miss_delta=0 node_match_changes=0 total_misses=605
+[tri-match] frame_id=71 command=replace_value miss_delta=0 node_match_changes=0 total_misses=605
+[tri-match] frame_id=72 command=add miss_delta=17 node_match_changes=0 total_misses=622
+[tri-match] frame_id=73 command=add miss_delta=10 node_match_changes=0 total_misses=632
+[tri-match] frame_id=74 command=add miss_delta=10 node_match_changes=0 total_misses=642
+[tri-match] frame_id=75 command=add miss_delta=10 node_match_changes=0 total_misses=652
+[tri-match] frame_id=76 command=add miss_delta=10 node_match_changes=0 total_misses=662
+[tri-match] frame_id=77 command=add miss_delta=10 node_match_changes=0 total_misses=672
+[tri-match] frame_id=78 command=add miss_delta=10 node_match_changes=0 total_misses=682
+[tri-match] frame_id=79 command=add miss_delta=10 node_match_changes=0 total_misses=692
+[tri-match] frame_id=80 command=add miss_delta=10 node_match_changes=0 total_misses=702
+[tri-match] frame_id=81 command=add miss_delta=10 node_match_changes=0 total_misses=712
+[tri-match] frame_id=82 command=add miss_delta=10 node_match_changes=0 total_misses=722
+[tri-match] frame_id=83 command=recalculate miss_delta=0 node_match_changes=0 total_misses=722
+[tri-match] frame_id=84 command=recalculate miss_delta=0 node_match_changes=0 total_misses=722
+[tri-match] frame_id=85 command=add miss_delta=2 node_match_changes=0 total_misses=724
+[tri-match] frame_id=86 command=recalculate miss_delta=0 node_match_changes=0 total_misses=724
+[tri-match] frame_id=87 command=add miss_delta=2 node_match_changes=0 total_misses=726
+[tri-match] frame_id=88 command=replace_value miss_delta=0 node_match_changes=0 total_misses=726
+[tri-match] frame_id=89 command=recalculate miss_delta=0 node_match_changes=0 total_misses=726
+[tri-match] frame_id=90 command=replace_value miss_delta=0 node_match_changes=0 total_misses=726
+[tri-match] frame_id=91 command=add miss_delta=17 node_match_changes=0 total_misses=743
+[tri-match] frame_id=92 command=add miss_delta=10 node_match_changes=0 total_misses=753
+[tri-match] frame_id=93 command=add miss_delta=10 node_match_changes=0 total_misses=763
+[tri-match] frame_id=94 command=add miss_delta=10 node_match_changes=0 total_misses=773
+[tri-match] frame_id=95 command=add miss_delta=10 node_match_changes=0 total_misses=783
+[tri-match] frame_id=96 command=add miss_delta=10 node_match_changes=0 total_misses=793
+[tri-match] frame_id=97 command=add miss_delta=10 node_match_changes=0 total_misses=803
+[tri-match] frame_id=98 command=add miss_delta=10 node_match_changes=0 total_misses=813
+[tri-match] frame_id=99 command=add miss_delta=10 node_match_changes=0 total_misses=823
+[tri-match] frame_id=100 command=add miss_delta=10 node_match_changes=0 total_misses=833
+[tri-match] frame_id=101 command=add miss_delta=10 node_match_changes=0 total_misses=843
+[tri-match] frame_id=102 command=recalculate miss_delta=0 node_match_changes=0 total_misses=843
+[tri-match] frame_id=103 command=recalculate miss_delta=0 node_match_changes=0 total_misses=843
+[tri-match] frame_id=104 command=add miss_delta=2 node_match_changes=0 total_misses=845
+[tri-match] frame_id=105 command=recalculate miss_delta=0 node_match_changes=0 total_misses=845
+[tri-match] frame_id=106 command=replace_value miss_delta=0 node_match_changes=0 total_misses=845
+[tri-match] frame_id=107 command=recalculate miss_delta=0 node_match_changes=0 total_misses=845
+[tri-match] frame_id=108 command=replace_value miss_delta=0 node_match_changes=0 total_misses=845
+[tri-match] frame_id=109 command=add miss_delta=17 node_match_changes=0 total_misses=862
+[tri-match] frame_id=110 command=add miss_delta=10 node_match_changes=0 total_misses=872
+[tri-match] frame_id=111 command=add miss_delta=10 node_match_changes=0 total_misses=882
+[tri-match] frame_id=112 command=add miss_delta=10 node_match_changes=0 total_misses=892
+[tri-match] frame_id=113 command=add miss_delta=10 node_match_changes=0 total_misses=902
+[tri-match] frame_id=114 command=add miss_delta=10 node_match_changes=0 total_misses=912
+[tri-match] frame_id=115 command=add miss_delta=10 node_match_changes=0 total_misses=922
+[tri-match] frame_id=116 command=add miss_delta=10 node_match_changes=0 total_misses=932
+[tri-match] frame_id=117 command=add miss_delta=10 node_match_changes=0 total_misses=942
+[tri-match] frame_id=118 command=add miss_delta=10 node_match_changes=0 total_misses=952
+[tri-match] frame_id=119 command=add miss_delta=10 node_match_changes=0 total_misses=962
+[tri-match] frame_id=120 command=recalculate miss_delta=0 node_match_changes=0 total_misses=962
+[tri-match] frame_id=121 command=add miss_delta=2 node_match_changes=0 total_misses=964
+[tri-match] frame_id=122 command=replace_value miss_delta=0 node_match_changes=0 total_misses=964
+[tri-match] frame_id=123 command=recalculate miss_delta=0 node_match_changes=0 total_misses=964
+[tri-match] frame_id=124 command=replace_value miss_delta=0 node_match_changes=0 total_misses=964
+[tri-match] frame_id=125 command=add miss_delta=17 node_match_changes=0 total_misses=981
+[tri-match] frame_id=126 command=add miss_delta=10 node_match_changes=0 total_misses=991
+[tri-match] frame_id=127 command=add miss_delta=10 node_match_changes=0 total_misses=1001
+[tri-match] frame_id=128 command=add miss_delta=10 node_match_changes=0 total_misses=1011
+[tri-match] frame_id=129 command=add miss_delta=10 node_match_changes=0 total_misses=1021
+[tri-match] frame_id=130 command=add miss_delta=10 node_match_changes=0 total_misses=1031
+[tri-match] frame_id=131 command=add miss_delta=10 node_match_changes=0 total_misses=1041
+[tri-match] frame_id=132 command=add miss_delta=10 node_match_changes=0 total_misses=1051
+[tri-match] frame_id=133 command=add miss_delta=10 node_match_changes=0 total_misses=1061
+[tri-match] frame_id=134 command=add miss_delta=10 node_match_changes=0 total_misses=1071
+[tri-match] frame_id=135 command=add miss_delta=10 node_match_changes=0 total_misses=1081
+[tri-match] frame_id=136 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1081
+[tri-match] frame_id=137 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1081
+[tri-match] frame_id=138 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1081
+[tri-match] frame_id=139 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1081
+[tri-match] frame_id=140 command=add miss_delta=17 node_match_changes=0 total_misses=1098
+[tri-match] frame_id=141 command=add miss_delta=10 node_match_changes=0 total_misses=1108
+[tri-match] frame_id=142 command=add miss_delta=10 node_match_changes=0 total_misses=1118
+[tri-match] frame_id=143 command=add miss_delta=10 node_match_changes=0 total_misses=1128
+[tri-match] frame_id=144 command=add miss_delta=10 node_match_changes=0 total_misses=1138
+[tri-match] frame_id=145 command=add miss_delta=10 node_match_changes=0 total_misses=1148
+[tri-match] frame_id=146 command=add miss_delta=10 node_match_changes=0 total_misses=1158
+[tri-match] frame_id=147 command=add miss_delta=10 node_match_changes=0 total_misses=1168
+[tri-match] frame_id=148 command=add miss_delta=10 node_match_changes=0 total_misses=1178
+[tri-match] frame_id=149 command=add miss_delta=10 node_match_changes=0 total_misses=1188
+[tri-match] frame_id=150 command=add miss_delta=10 node_match_changes=0 total_misses=1198
+[tri-match] frame_id=151 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1198
+[tri-match] frame_id=152 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1198
+[tri-match] frame_id=153 command=add miss_delta=2 node_match_changes=0 total_misses=1200
+[tri-match] frame_id=154 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1200
+[tri-match] frame_id=155 command=add miss_delta=2 node_match_changes=0 total_misses=1202
+[tri-match] frame_id=156 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1202
+[tri-match] frame_id=157 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1202
+[tri-match] frame_id=158 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1202
+[tri-match] frame_id=159 command=add miss_delta=17 node_match_changes=0 total_misses=1219
+[tri-match] frame_id=160 command=add miss_delta=10 node_match_changes=0 total_misses=1229
+[tri-match] frame_id=161 command=add miss_delta=10 node_match_changes=0 total_misses=1239
+[tri-match] frame_id=162 command=add miss_delta=10 node_match_changes=0 total_misses=1249
+[tri-match] frame_id=163 command=add miss_delta=10 node_match_changes=0 total_misses=1259
+[tri-match] frame_id=164 command=add miss_delta=10 node_match_changes=0 total_misses=1269
+[tri-match] frame_id=165 command=add miss_delta=10 node_match_changes=0 total_misses=1279
+[tri-match] frame_id=166 command=add miss_delta=10 node_match_changes=0 total_misses=1289
+[tri-match] frame_id=167 command=add miss_delta=10 node_match_changes=0 total_misses=1299
+[tri-match] frame_id=168 command=add miss_delta=10 node_match_changes=0 total_misses=1309
+[tri-match] frame_id=169 command=add miss_delta=10 node_match_changes=0 total_misses=1319
+[tri-match] frame_id=170 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1319
+[tri-match] frame_id=171 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1319
+[tri-match] frame_id=172 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1319
+[tri-match] frame_id=173 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1319
+[tri-match] frame_id=174 command=add miss_delta=17 node_match_changes=0 total_misses=1336
+[tri-match] frame_id=175 command=add miss_delta=10 node_match_changes=0 total_misses=1346
+[tri-match] frame_id=176 command=add miss_delta=10 node_match_changes=0 total_misses=1356
+[tri-match] frame_id=177 command=add miss_delta=10 node_match_changes=0 total_misses=1366
+[tri-match] frame_id=178 command=add miss_delta=10 node_match_changes=0 total_misses=1376
+[tri-match] frame_id=179 command=add miss_delta=10 node_match_changes=0 total_misses=1386
+[tri-match] frame_id=180 command=add miss_delta=10 node_match_changes=0 total_misses=1396
+[tri-match] frame_id=181 command=add miss_delta=10 node_match_changes=0 total_misses=1406
+[tri-match] frame_id=182 command=add miss_delta=10 node_match_changes=0 total_misses=1416
+[tri-match] frame_id=183 command=add miss_delta=10 node_match_changes=0 total_misses=1426
+[tri-match] frame_id=184 command=add miss_delta=10 node_match_changes=0 total_misses=1436
+[tri-match] frame_id=185 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1436
+[tri-match] frame_id=186 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1436
+[tri-match] frame_id=187 command=add miss_delta=2 node_match_changes=0 total_misses=1438
+[tri-match] frame_id=188 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1438
+[tri-match] frame_id=189 command=add miss_delta=2 node_match_changes=0 total_misses=1440
+[tri-match] frame_id=190 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1440
+[tri-match] frame_id=191 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1440
+[tri-match] frame_id=192 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1440
+[tri-match] frame_id=193 command=add miss_delta=17 node_match_changes=0 total_misses=1457
+[tri-match] frame_id=194 command=add miss_delta=10 node_match_changes=0 total_misses=1467
+[tri-match] frame_id=195 command=add miss_delta=10 node_match_changes=0 total_misses=1477
+[tri-match] frame_id=196 command=add miss_delta=10 node_match_changes=0 total_misses=1487
+[tri-match] frame_id=197 command=add miss_delta=10 node_match_changes=0 total_misses=1497
+[tri-match] frame_id=198 command=add miss_delta=10 node_match_changes=0 total_misses=1507
+[tri-match] frame_id=199 command=add miss_delta=10 node_match_changes=0 total_misses=1517
+[tri-match] frame_id=200 command=add miss_delta=10 node_match_changes=0 total_misses=1527
+[tri-match] frame_id=201 command=add miss_delta=10 node_match_changes=0 total_misses=1537
+[tri-match] frame_id=202 command=add miss_delta=10 node_match_changes=0 total_misses=1547
+[tri-match] frame_id=203 command=add miss_delta=10 node_match_changes=0 total_misses=1557
+[tri-match] frame_id=204 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1557
+[tri-match] frame_id=205 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1557
+[tri-match] frame_id=206 command=add miss_delta=2 node_match_changes=0 total_misses=1559
+[tri-match] frame_id=207 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1559
+[tri-match] frame_id=208 command=add miss_delta=2 node_match_changes=0 total_misses=1561
+[tri-match] frame_id=209 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1561
+[tri-match] frame_id=210 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1561
+[tri-match] frame_id=211 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1561
+[tri-match] frame_id=212 command=add miss_delta=17 node_match_changes=0 total_misses=1578
+[tri-match] frame_id=213 command=add miss_delta=10 node_match_changes=0 total_misses=1588
+[tri-match] frame_id=214 command=add miss_delta=10 node_match_changes=0 total_misses=1598
+[tri-match] frame_id=215 command=add miss_delta=10 node_match_changes=0 total_misses=1608
+[tri-match] frame_id=216 command=add miss_delta=10 node_match_changes=0 total_misses=1618
+[tri-match] frame_id=217 command=add miss_delta=10 node_match_changes=0 total_misses=1628
+[tri-match] frame_id=218 command=add miss_delta=10 node_match_changes=0 total_misses=1638
+[tri-match] frame_id=219 command=add miss_delta=10 node_match_changes=0 total_misses=1648
+[tri-match] frame_id=220 command=add miss_delta=10 node_match_changes=0 total_misses=1658
+[tri-match] frame_id=221 command=add miss_delta=10 node_match_changes=0 total_misses=1668
+[tri-match] frame_id=222 command=add miss_delta=10 node_match_changes=0 total_misses=1678
+[tri-match] frame_id=223 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1678
+[tri-match] frame_id=224 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1678
+[tri-match] frame_id=225 command=add miss_delta=2 node_match_changes=0 total_misses=1680
+[tri-match] frame_id=226 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1680
+[tri-match] frame_id=227 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1680
+[tri-match] frame_id=228 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1680
+[tri-match] frame_id=229 command=add miss_delta=17 node_match_changes=0 total_misses=1697
+[tri-match] frame_id=230 command=add miss_delta=10 node_match_changes=0 total_misses=1707
+[tri-match] frame_id=231 command=add miss_delta=10 node_match_changes=0 total_misses=1717
+[tri-match] frame_id=232 command=add miss_delta=10 node_match_changes=0 total_misses=1727
+[tri-match] frame_id=233 command=add miss_delta=10 node_match_changes=0 total_misses=1737
+[tri-match] frame_id=234 command=add miss_delta=10 node_match_changes=0 total_misses=1747
+[tri-match] frame_id=235 command=add miss_delta=10 node_match_changes=0 total_misses=1757
+[tri-match] frame_id=236 command=add miss_delta=10 node_match_changes=0 total_misses=1767
+[tri-match] frame_id=237 command=add miss_delta=10 node_match_changes=0 total_misses=1777
+[tri-match] frame_id=238 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1777
+[tri-match] frame_id=239 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1777
+[tri-match] frame_id=240 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1777
+[tri-match] frame_id=241 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1777
+[tri-match] frame_id=242 command=add miss_delta=17 node_match_changes=0 total_misses=1794
+[tri-match] frame_id=243 command=add miss_delta=10 node_match_changes=0 total_misses=1804
+[tri-match] frame_id=244 command=add miss_delta=10 node_match_changes=0 total_misses=1814
+[tri-match] frame_id=245 command=add miss_delta=10 node_match_changes=0 total_misses=1824
+[tri-match] frame_id=246 command=add miss_delta=10 node_match_changes=0 total_misses=1834
+[tri-match] frame_id=247 command=add miss_delta=10 node_match_changes=0 total_misses=1844
+[tri-match] frame_id=248 command=add miss_delta=10 node_match_changes=0 total_misses=1854
+[tri-match] frame_id=249 command=add miss_delta=10 node_match_changes=0 total_misses=1864
+[tri-match] frame_id=250 command=add miss_delta=10 node_match_changes=0 total_misses=1874
+[tri-match] frame_id=251 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1874
+[tri-match] frame_id=252 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1874
+[tri-match] frame_id=253 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1874
+[tri-match] frame_id=254 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1874
+[tri-match] frame_id=255 command=add miss_delta=17 node_match_changes=0 total_misses=1891
+[tri-match] frame_id=256 command=add miss_delta=10 node_match_changes=0 total_misses=1901
+[tri-match] frame_id=257 command=add miss_delta=10 node_match_changes=0 total_misses=1911
+[tri-match] frame_id=258 command=add miss_delta=10 node_match_changes=0 total_misses=1921
+[tri-match] frame_id=259 command=add miss_delta=10 node_match_changes=0 total_misses=1931
+[tri-match] frame_id=260 command=add miss_delta=10 node_match_changes=0 total_misses=1941
+[tri-match] frame_id=261 command=add miss_delta=10 node_match_changes=0 total_misses=1951
+[tri-match] frame_id=262 command=add miss_delta=10 node_match_changes=0 total_misses=1961
+[tri-match] frame_id=263 command=add miss_delta=10 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=264 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=265 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=266 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=267 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=268 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1971
+[tri-match] frame_id=269 command=add miss_delta=17 node_match_changes=0 total_misses=1988
+[tri-match] frame_id=270 command=add miss_delta=10 node_match_changes=0 total_misses=1998
+[tri-match] frame_id=271 command=add miss_delta=10 node_match_changes=0 total_misses=2008
+[tri-match] frame_id=272 command=add miss_delta=10 node_match_changes=0 total_misses=2018
+[tri-match] frame_id=273 command=add miss_delta=10 node_match_changes=0 total_misses=2028
+[tri-match] frame_id=274 command=add miss_delta=10 node_match_changes=0 total_misses=2038
+[tri-match] frame_id=275 command=add miss_delta=10 node_match_changes=0 total_misses=2048
+[tri-match] frame_id=276 command=add miss_delta=10 node_match_changes=0 total_misses=2058
+[tri-match] frame_id=277 command=add miss_delta=10 node_match_changes=0 total_misses=2068
+[tri-match] frame_id=278 command=add miss_delta=10 node_match_changes=0 total_misses=2078
+[tri-match] frame_id=279 command=add miss_delta=10 node_match_changes=0 total_misses=2088
+[tri-match] frame_id=280 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2088
+[tri-match] frame_id=281 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2088
+[tri-match] frame_id=282 command=add miss_delta=2 node_match_changes=0 total_misses=2090
+[tri-match] frame_id=283 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2090
+[tri-match] frame_id=284 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2090
+[tri-match] frame_id=285 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2090
+[tri-match] frame_id=286 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2090
+[tri-match] frame_id=287 command=add miss_delta=17 node_match_changes=0 total_misses=2107
+[tri-match] frame_id=288 command=add miss_delta=10 node_match_changes=0 total_misses=2117
+[tri-match] frame_id=289 command=add miss_delta=10 node_match_changes=0 total_misses=2127
+[tri-match] frame_id=290 command=add miss_delta=10 node_match_changes=0 total_misses=2137
+[tri-match] frame_id=291 command=add miss_delta=10 node_match_changes=0 total_misses=2147
+[tri-match] frame_id=292 command=add miss_delta=10 node_match_changes=0 total_misses=2157
+[tri-match] frame_id=293 command=add miss_delta=10 node_match_changes=0 total_misses=2167
+[tri-match] frame_id=294 command=add miss_delta=10 node_match_changes=0 total_misses=2177
+[tri-match] frame_id=295 command=add miss_delta=10 node_match_changes=0 total_misses=2187
+[tri-match] frame_id=296 command=add miss_delta=10 node_match_changes=0 total_misses=2197
+[tri-match] frame_id=297 command=add miss_delta=10 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=298 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=299 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=300 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=301 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=302 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2207
+[tri-match] frame_id=303 command=add miss_delta=17 node_match_changes=0 total_misses=2224
+[tri-match] frame_id=304 command=add miss_delta=10 node_match_changes=0 total_misses=2234
+[tri-match] frame_id=305 command=add miss_delta=10 node_match_changes=0 total_misses=2244
+[tri-match] frame_id=306 command=add miss_delta=10 node_match_changes=0 total_misses=2254
+[tri-match] frame_id=307 command=add miss_delta=10 node_match_changes=0 total_misses=2264
+[tri-match] frame_id=308 command=add miss_delta=10 node_match_changes=0 total_misses=2274
+[tri-match] frame_id=309 command=add miss_delta=10 node_match_changes=0 total_misses=2284
+[tri-match] frame_id=310 command=add miss_delta=10 node_match_changes=0 total_misses=2294
+[tri-match] frame_id=311 command=add miss_delta=10 node_match_changes=0 total_misses=2304
+[tri-match] frame_id=312 command=add miss_delta=10 node_match_changes=0 total_misses=2314
+[tri-match] frame_id=313 command=add miss_delta=10 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=314 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=315 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=316 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=317 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=318 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2324
+[tri-match] frame_id=319 command=add miss_delta=17 node_match_changes=0 total_misses=2341
+[tri-match] frame_id=320 command=add miss_delta=10 node_match_changes=0 total_misses=2351
+[tri-match] frame_id=321 command=add miss_delta=10 node_match_changes=0 total_misses=2361
+[tri-match] frame_id=322 command=add miss_delta=10 node_match_changes=0 total_misses=2371
+[tri-match] frame_id=323 command=add miss_delta=10 node_match_changes=0 total_misses=2381
+[tri-match] frame_id=324 command=add miss_delta=10 node_match_changes=0 total_misses=2391
+[tri-match] frame_id=325 command=add miss_delta=10 node_match_changes=0 total_misses=2401
+[tri-match] frame_id=326 command=add miss_delta=10 node_match_changes=0 total_misses=2411
+[tri-match] frame_id=327 command=add miss_delta=10 node_match_changes=0 total_misses=2421
+[tri-match] frame_id=328 command=add miss_delta=10 node_match_changes=0 total_misses=2431
+[tri-match] frame_id=329 command=add miss_delta=10 node_match_changes=0 total_misses=2441
+[tri-match] frame_id=330 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2441
+[tri-match] frame_id=331 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2441
+[tri-match] frame_id=332 command=add miss_delta=2 node_match_changes=0 total_misses=2443
+[tri-match] frame_id=333 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2443
+[tri-match] frame_id=334 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2443
+[tri-match] frame_id=335 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2443
+[tri-match] frame_id=336 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2443
+[tri-match] frame_id=337 command=add miss_delta=17 node_match_changes=0 total_misses=2460
+[tri-match] frame_id=338 command=add miss_delta=10 node_match_changes=0 total_misses=2470
+[tri-match] frame_id=339 command=add miss_delta=10 node_match_changes=0 total_misses=2480
+[tri-match] frame_id=340 command=add miss_delta=10 node_match_changes=0 total_misses=2490
+[tri-match] frame_id=341 command=add miss_delta=10 node_match_changes=0 total_misses=2500
+[tri-match] frame_id=342 command=add miss_delta=10 node_match_changes=0 total_misses=2510
+[tri-match] frame_id=343 command=add miss_delta=10 node_match_changes=0 total_misses=2520
+[tri-match] frame_id=344 command=add miss_delta=10 node_match_changes=0 total_misses=2530
+[tri-match] frame_id=345 command=add miss_delta=10 node_match_changes=0 total_misses=2540
+[tri-match] frame_id=346 command=add miss_delta=10 node_match_changes=0 total_misses=2550
+[tri-match] frame_id=347 command=add miss_delta=10 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=348 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=349 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=350 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=351 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=352 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2560
+[tri-match] frame_id=353 command=add miss_delta=17 node_match_changes=0 total_misses=2577
+[tri-match] frame_id=354 command=add miss_delta=10 node_match_changes=0 total_misses=2587
+[tri-match] frame_id=355 command=add miss_delta=10 node_match_changes=0 total_misses=2597
+[tri-match] frame_id=356 command=add miss_delta=10 node_match_changes=0 total_misses=2607
+[tri-match] frame_id=357 command=add miss_delta=10 node_match_changes=0 total_misses=2617
+[tri-match] frame_id=358 command=add miss_delta=10 node_match_changes=0 total_misses=2627
+[tri-match] frame_id=359 command=add miss_delta=10 node_match_changes=0 total_misses=2637
+[tri-match] frame_id=360 command=add miss_delta=10 node_match_changes=0 total_misses=2647
+[tri-match] frame_id=361 command=add miss_delta=10 node_match_changes=0 total_misses=2657
+[tri-match] frame_id=362 command=add miss_delta=10 node_match_changes=0 total_misses=2667
+[tri-match] frame_id=363 command=add miss_delta=10 node_match_changes=0 total_misses=2677
+[tri-match] frame_id=364 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2677
+[tri-match] frame_id=365 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2677
+[tri-match] frame_id=366 command=add miss_delta=2 node_match_changes=0 total_misses=2679
+[tri-match] frame_id=367 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2679
+[tri-match] frame_id=368 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2679
+[tri-match] frame_id=369 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2679
+[tri-match] frame_id=370 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2679
+[tri-match] frame_id=371 command=add miss_delta=2 node_match_changes=0 total_misses=2681
+[tri-match] frame_id=372 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2681
+[tri-match] frame_id=373 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2681
+[tri-match] frame_id=374 command=add miss_delta=17 node_match_changes=0 total_misses=2698
+[tri-match] frame_id=375 command=add miss_delta=10 node_match_changes=0 total_misses=2708
+[tri-match] frame_id=376 command=add miss_delta=10 node_match_changes=0 total_misses=2718
+[tri-match] frame_id=377 command=add miss_delta=10 node_match_changes=0 total_misses=2728
+[tri-match] frame_id=378 command=add miss_delta=10 node_match_changes=0 total_misses=2738
+[tri-match] frame_id=379 command=add miss_delta=10 node_match_changes=0 total_misses=2748
+[tri-match] frame_id=380 command=add miss_delta=10 node_match_changes=0 total_misses=2758
+[tri-match] frame_id=381 command=add miss_delta=10 node_match_changes=0 total_misses=2768
+[tri-match] frame_id=382 command=add miss_delta=10 node_match_changes=0 total_misses=2778
+[tri-match] frame_id=383 command=add miss_delta=10 node_match_changes=0 total_misses=2788
+[tri-match] frame_id=384 command=add miss_delta=10 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=385 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=386 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=387 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=388 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=389 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2798
+[tri-match] frame_id=390 command=add miss_delta=17 node_match_changes=0 total_misses=2815
+[tri-match] frame_id=391 command=add miss_delta=10 node_match_changes=0 total_misses=2825
+[tri-match] frame_id=392 command=add miss_delta=10 node_match_changes=0 total_misses=2835
+[tri-match] frame_id=393 command=add miss_delta=10 node_match_changes=0 total_misses=2845
+[tri-match] frame_id=394 command=add miss_delta=10 node_match_changes=0 total_misses=2855
+[tri-match] frame_id=395 command=add miss_delta=10 node_match_changes=0 total_misses=2865
+[tri-match] frame_id=396 command=add miss_delta=10 node_match_changes=0 total_misses=2875
+[tri-match] frame_id=397 command=add miss_delta=10 node_match_changes=0 total_misses=2885
+[tri-match] frame_id=398 command=add miss_delta=10 node_match_changes=0 total_misses=2895
+[tri-match] frame_id=399 command=add miss_delta=10 node_match_changes=0 total_misses=2905
+[tri-match] frame_id=400 command=add miss_delta=10 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=401 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=402 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=403 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=404 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=405 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2915
+[tri-match] frame_id=406 command=add miss_delta=17 node_match_changes=0 total_misses=2932
+[tri-match] frame_id=407 command=add miss_delta=10 node_match_changes=0 total_misses=2942
+[tri-match] frame_id=408 command=add miss_delta=10 node_match_changes=0 total_misses=2952
+[tri-match] frame_id=409 command=add miss_delta=10 node_match_changes=0 total_misses=2962
+[tri-match] frame_id=410 command=add miss_delta=10 node_match_changes=0 total_misses=2972
+[tri-match] frame_id=411 command=add miss_delta=10 node_match_changes=0 total_misses=2982
+[tri-match] frame_id=412 command=add miss_delta=10 node_match_changes=0 total_misses=2992
+[tri-match] frame_id=413 command=add miss_delta=10 node_match_changes=0 total_misses=3002
+[tri-match] frame_id=414 command=add miss_delta=10 node_match_changes=0 total_misses=3012
+[tri-match] frame_id=415 command=add miss_delta=10 node_match_changes=0 total_misses=3022
+[tri-match] frame_id=416 command=add miss_delta=10 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=417 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=418 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=419 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=420 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=421 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3032
+[tri-match] frame_id=422 command=add miss_delta=17 node_match_changes=0 total_misses=3049
+[tri-match] frame_id=423 command=add miss_delta=10 node_match_changes=0 total_misses=3059
+[tri-match] frame_id=424 command=add miss_delta=10 node_match_changes=0 total_misses=3069
+[tri-match] frame_id=425 command=add miss_delta=10 node_match_changes=0 total_misses=3079
+[tri-match] frame_id=426 command=add miss_delta=10 node_match_changes=0 total_misses=3089
+[tri-match] frame_id=427 command=add miss_delta=10 node_match_changes=0 total_misses=3099
+[tri-match] frame_id=428 command=add miss_delta=10 node_match_changes=0 total_misses=3109
+[tri-match] frame_id=429 command=add miss_delta=10 node_match_changes=0 total_misses=3119
+[tri-match] frame_id=430 command=add miss_delta=10 node_match_changes=0 total_misses=3129
+[tri-match] frame_id=431 command=add miss_delta=10 node_match_changes=0 total_misses=3139
+[tri-match] frame_id=432 command=add miss_delta=10 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=433 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=434 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=435 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=436 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=437 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=438 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=439 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=440 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=441 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=442 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=443 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=444 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=445 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=446 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=447 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=448 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3149
+[tri-match] frame_id=449 command=add miss_delta=17 node_match_changes=0 total_misses=3166
+[tri-match] frame_id=450 command=add miss_delta=10 node_match_changes=0 total_misses=3176
+[tri-match] frame_id=451 command=add miss_delta=10 node_match_changes=0 total_misses=3186
+[tri-match] frame_id=452 command=add miss_delta=10 node_match_changes=0 total_misses=3196
+[tri-match] frame_id=453 command=add miss_delta=10 node_match_changes=0 total_misses=3206
+[tri-match] frame_id=454 command=add miss_delta=10 node_match_changes=0 total_misses=3216
+[tri-match] frame_id=455 command=add miss_delta=10 node_match_changes=0 total_misses=3226
+[tri-match] frame_id=456 command=add miss_delta=10 node_match_changes=0 total_misses=3236
+[tri-match] frame_id=457 command=add miss_delta=10 node_match_changes=0 total_misses=3246
+[tri-match] frame_id=458 command=add miss_delta=10 node_match_changes=0 total_misses=3256
+[tri-match] frame_id=459 command=add miss_delta=10 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=460 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=461 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=462 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=463 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=464 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3266
+[tri-match] frame_id=465 command=add miss_delta=17 node_match_changes=0 total_misses=3283
+[tri-match] frame_id=466 command=add miss_delta=10 node_match_changes=0 total_misses=3293
+[tri-match] frame_id=467 command=add miss_delta=10 node_match_changes=0 total_misses=3303
+[tri-match] frame_id=468 command=add miss_delta=10 node_match_changes=0 total_misses=3313
+[tri-match] frame_id=469 command=add miss_delta=10 node_match_changes=0 total_misses=3323
+[tri-match] frame_id=470 command=add miss_delta=10 node_match_changes=0 total_misses=3333
+[tri-match] frame_id=471 command=add miss_delta=10 node_match_changes=0 total_misses=3343
+[tri-match] frame_id=472 command=add miss_delta=10 node_match_changes=0 total_misses=3353
+[tri-match] frame_id=473 command=add miss_delta=10 node_match_changes=0 total_misses=3363
+[tri-match] frame_id=474 command=add miss_delta=10 node_match_changes=0 total_misses=3373
+[tri-match] frame_id=475 command=add miss_delta=10 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=476 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=477 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=478 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=479 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=480 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3383
+[tri-match] frame_id=481 command=add miss_delta=17 node_match_changes=0 total_misses=3400
+[tri-match] frame_id=482 command=add miss_delta=10 node_match_changes=0 total_misses=3410
+[tri-match] frame_id=483 command=add miss_delta=10 node_match_changes=0 total_misses=3420
+[tri-match] frame_id=484 command=add miss_delta=10 node_match_changes=0 total_misses=3430
+[tri-match] frame_id=485 command=add miss_delta=10 node_match_changes=0 total_misses=3440
+[tri-match] frame_id=486 command=add miss_delta=10 node_match_changes=0 total_misses=3450
+[tri-match] frame_id=487 command=add miss_delta=10 node_match_changes=0 total_misses=3460
+[tri-match] frame_id=488 command=add miss_delta=10 node_match_changes=0 total_misses=3470
+[tri-match] frame_id=489 command=add miss_delta=10 node_match_changes=0 total_misses=3480
+[tri-match] frame_id=490 command=add miss_delta=10 node_match_changes=0 total_misses=3490
+[tri-match] frame_id=491 command=add miss_delta=10 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=492 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=493 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=494 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=495 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=496 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3500
+[tri-match] frame_id=497 command=replace_value miss_delta=7 node_match_changes=1 total_misses=3507
+[tri-match] frame_id=498 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3507
+[tri-match] frame_id=499 command=add miss_delta=6 node_match_changes=0 total_misses=3513
+[tri-match] frame_id=500 command=replace_value miss_delta=8 node_match_changes=1 total_misses=3521
+[tri-match] frame_id=501 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3521
+[tri-match] frame_id=502 command=replace_value miss_delta=18 node_match_changes=4 total_misses=3539
+[tri-match] frame_id=503 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3539
+[tri-match] frame_id=504 command=add miss_delta=6 node_match_changes=1 total_misses=3545
+[tri-match] frame_id=505 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3545
+[tri-match] frame_id=506 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3545
+[tri-match] frame_id=507 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3545
+[tri-match] frame_id=508 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3545
+[tri-match] frame_id=509 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3545
+[tri-match] frame_id=510 command=add miss_delta=5 node_match_changes=0 total_misses=3550
+[tri-match] frame_id=511 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3550
+[tri-match] frame_id=512 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3550
+[tri-match] frame_id=513 command=replace_value miss_delta=4 node_match_changes=1 total_misses=3554
+[tri-match] frame_id=514 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3554
+[tri-match] frame_id=515 command=replace_value miss_delta=27 node_match_changes=5 total_misses=3581
+[tri-match] frame_id=516 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3581
+[tri-match] frame_id=517 command=replace_value miss_delta=4 node_match_changes=1 total_misses=3585
+[tri-match] frame_id=518 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3585
+[tri-match] frame_id=519 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3585
+[tri-match] frame_id=520 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3585
+[tri-match] frame_id=521 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3585
+[tri-match] frame_id=522 command=replace_value miss_delta=45 node_match_changes=3 total_misses=3630
+[tri-match] frame_id=523 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3630
+[tri-match] frame_id=524 command=add miss_delta=6 node_match_changes=1 total_misses=3636
+[tri-match] frame_id=525 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=526 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=527 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=528 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=529 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=530 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3636
+[tri-match] frame_id=531 command=add miss_delta=5 node_match_changes=0 total_misses=3641
+[tri-match] frame_id=532 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3641
+[tri-match] frame_id=533 command=add miss_delta=5 node_match_changes=0 total_misses=3646
+[tri-match] frame_id=534 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3646
+[tri-match] frame_id=535 command=replace_value miss_delta=58 node_match_changes=4 total_misses=3704
+[tri-match] frame_id=536 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3704
+[tri-match] frame_id=537 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3704
+[tri-match] frame_id=538 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3704
+[tri-match] frame_id=539 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3704
+[tri-match] frame_id=540 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3704
+[tri-match] frame_id=541 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3704
 BEGIN
-#gb -> [42]
-#gbg -> [248]
+#SIvCob a -> [452]
+#WqQANb a -> [463, 466, 469, 472]
 #gbg .gbgt -> [259, 279]
 #gbg .gbm -> [296]
 #gbg .gbtcb -> [253]
-#gbg5 -> [279]
-#gbgs5 -> [288]
-#gbi4s1 -> [270]
-#gbi5 -> [291]
-#gbmm -> [172]
-#gbx3 -> [321]
-#gbx4 -> [323]
-#gbz -> [49]
 #gbz .gbgt -> [146]
 #gbz .gbm -> [165]
 #gbz .gbtcb -> [51]
 #gbz .gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
-#gbztms1 -> [157]
-#gws-output-pages-elements-homepage_additional_languages__als -> [445]
-.ds -> [372, 392, 405, 916, 928]
 .fl a -> [431]
-.gbgt -> [146, 259, 279]
-.gbm -> [165, 296]
-.gbma -> [160]
-.gbmc -> [169, 300]
-.gbmcc -> [172, 302]
-.gbmh -> [233, 313]
-.gbmt -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
-.gbmtc -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
-.gbsb -> [169]
+.gbgt:focus -> [146]
 .gbsb .gbsbb -> [246]
-.gbsb .gbsbt -> [244]
-.gbsbic -> [172]
 .gbsbis .gbsbb -> [246]
 .gbsbis .gbsbt -> [244]
-.gbt -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
 .gbtb .gbts -> [275]
-.gbtb2 -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
-.gbtc -> [53, 255]
-.gbtcb -> [51, 253]
-.gbts -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
-.gbtsa -> [154]
-.gbxx -> [250]
 .gbz0l .gbtb2 -> [62]
 .gbz0l .gbts -> [64]
-.gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
 .gbzt .gbts -> [64, 75, 86, 97, 108, 119, 130, 141]
-.gsfs -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gsq_a -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
-.gssb_a -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
-.gssb_c -> [499]
-.gssb_e -> [510]
-.gssb_f -> [507]
-.gssb_g -> [907]
-.gssb_m -> [513]
-.lsb -> [396, 409, 909, 921]
-.lsbb -> [394, 407, 917, 929]
-.lst -> [375]
-.sblc -> [426]
+.gssb_a td -> [566, 602, 637, 672, 707, 742, 777, 812, 847, 882]
 .sblc a -> [431]
-a -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
-body -> [35]
-form -> [343]
-input -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
-p -> [475]
-td -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 END
-[src/tri.rs:862:5] unsafe { MISS_CNT } = 1777
-[src/tri.rs:863:5] unsafe { INPUT_CHANGE_COUNT } = 8099
-[src/tri.rs:864:5] unsafe { INPUT_SKIP_COUNT } = 8099
+[src/tri.rs:1073:5] unsafe { MISS_CNT } = 3704
+[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 152
+[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 8

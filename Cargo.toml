@@ -23,15 +23,25 @@ name = "tri"
 path = "src/tri.rs"
 
 [[bin]]
+name = "rec_tri"
+path = "src/rec_tri.rs"
+
+[[bin]]
 name = "bit"
 path = "src/bit.rs"
 [[bin]]
 name = "naive"
 path = "src/naive.rs"
 
+[[bin]]
+name = "filter_selectors"
+path = "src/filter_selectors.rs"
+
 
 [dependencies]
 cssparser = "0.35.0"
+lightningcss = "1.0.0-alpha.68"
+parcel_selectors = "0.28.2"
 serde_json = "1.0"
 
 [profile.release]

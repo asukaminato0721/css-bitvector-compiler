@@ -1,0 +1,18 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:572:8
+    |
+217 | impl DOM {
+    | -------- method in this implementation
+...
+572 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+     Running `target/release/tri`
+
+thread 'main' (2442166) panicked at src/tri.rs:977:10:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -1,8 +1,70 @@
-use cssparser::{ParseError, Parser, ParserInput, Token};
+use lightningcss::{
+    rules::CssRule,
+    selector::{Combinator as LCombinator, Component as LComponent, Selector as LightningSelector},
+    stylesheet::{ParserOptions, PrinterOptions, StyleSheet},
+    traits::ToCss,
+};
+use parcel_selectors::attr::AttrSelectorOperator;
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, BTreeSet, HashMap, HashSet},
     fmt::Display,
 };
+
+pub mod runtime_shared;
+
+// Helpers used by naive implementation
+mod naive_util {
+    use crate::extract_pseudoclasses;
+    use std::collections::{HashMap, HashSet};
+
+    #[derive(Debug)]
+    pub struct BasicNode {
+        pub tag_name: String,
+        pub id: u64,
+        pub attributes: HashMap<String, String>,
+        pub classes: HashSet<String>,
+        pub html_id: Option<String>,
+        pub pseudo_classes: HashSet<String>,
+    }
+
+    pub fn basic_node_from_json(json_node: &serde_json::Value) -> BasicNode {
+        let tag_name = json_node["name"].as_str().unwrap().to_string();
+        let id = json_node["id"].as_u64().unwrap();
+        let attributes = json_node["attributes"]
+            .as_object()
+            .map(|attrs| {
+                attrs
+                    .iter()
+                    .filter_map(|(name, value)| match value {
+                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+                        _ => None,
+                    })
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
+
+        let html_id = attributes.get("id").cloned();
+        let class_attr = attributes.get("class").cloned().unwrap_or_default();
+        let classes = class_attr
+            .split_whitespace()
+            .filter(|s| !s.is_empty())
+            .map(String::from)
+            .collect::<HashSet<_>>();
+        let pseudo_classes = extract_pseudoclasses(json_node);
+
+        BasicNode {
+            tag_name,
+            id,
+            attributes,
+            classes,
+            html_id,
+            pseudo_classes,
+        }
+    }
+}
+pub use naive_util::*;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct SelectorPart {
     selector: Selector,
@@ -11,9 +73,9 @@ struct SelectorPart {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Combinator {
-    Descendant, // 空格
+    Descendant, // Space combinator
     Child,      // >
-    None,       // 最后一个选择器没有组合器
+    None,       // The last selector has no combinator
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Selector {
@@ -21,6 +83,50 @@ pub enum Selector {
     Class(String),
     Id(String),
     AttributeEquals { name: String, value: String },
+    Compound(CompoundSelector),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub struct CompoundSelector {
+    pub tag: Option<String>,
+    pub id: Option<String>,
+    pub classes: BTreeSet<String>,
+    pub attributes: Vec<(String, String)>,
+    pub pseudos: BTreeSet<String>,
+}
+
+impl CompoundSelector {
+    fn is_simple_class_only(&self) -> bool {
+        self.id.is_none()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+            && self.classes.len() == 1
+            && self.tag.is_none()
+    }
+
+    fn is_simple_tag_only(&self) -> bool {
+        self.tag.as_deref().is_some()
+            && self.id.is_none()
+            && self.classes.is_empty()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+    }
+
+    fn is_simple_id_only(&self) -> bool {
+        self.id.is_some()
+            && self.tag.is_none()
+            && self.classes.is_empty()
+            && self.attributes.is_empty()
+            && self.pseudos.is_empty()
+    }
+
+    fn is_simple_attr_only(&self) -> bool {
+        self.attributes.len() == 1
+            && self.tag.is_none()
+            && self.id.is_none()
+            && self.classes.is_empty()
+            && self.pseudos.is_empty()
+    }
 }
 
 impl Display for Selector {
@@ -32,7 +138,33 @@ impl Display for Selector {
             Selector::AttributeEquals { name, value } => {
                 write!(f, "[{}=\"{}\"]", name, value)
             }
+            Selector::Compound(compound) => write!(f, "{}", compound),
         }
+    }
+}
+
+impl Display for CompoundSelector {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut text = String::new();
+        if let Some(tag) = &self.tag {
+            text.push_str(tag);
+        }
+        if let Some(id) = &self.id {
+            text.push('#');
+            text.push_str(id);
+        }
+        for class in &self.classes {
+            text.push('.');
+            text.push_str(class);
+        }
+        for (name, value) in &self.attributes {
+            text.push_str(&format!("[{}=\"{}\"]", name, value));
+        }
+        for pseudo in &self.pseudos {
+            text.push(':');
+            text.push_str(pseudo);
+        }
+        write!(f, "{}", text)
     }
 }
 impl Display for SelectorPart {
@@ -244,196 +376,379 @@ pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize>
         .unwrap()
 }
 
-pub fn parse_css(css_content: &str) -> Vec<String> {
-    let mut rules = vec![];
-    let mut input = ParserInput::new(css_content);
-    let mut parser = Parser::new(&mut input);
+#[derive(Debug, Default, Clone)]
+pub struct ParsedSelectors {
+    pub selectors: Vec<String>,
+    pub pseudo_selectors: BTreeMap<String, Vec<String>>,
+}
 
-    let mut selector_parts: Vec<SelectorPart> = vec![];
+pub fn parse_css(css_content: &str) -> Vec<String> {
+    parse_css_with_pseudo(css_content).selectors
+}
+
+pub fn drain_supported_pseudo_selectors(
+    pseudo_selectors: &mut BTreeMap<String, Vec<String>>,
+) -> Vec<String> {
+    let keys: Vec<String> = pseudo_selectors
+        .keys()
+        .filter(|name| is_supported_pseudo_class(name))
+        .cloned()
+        .collect();
+    let mut collected = Vec::new();
+    for key in keys {
+        if let Some(mut selectors) = pseudo_selectors.remove(&key) {
+            collected.append(&mut selectors);
+        }
+    }
+    collected
+}
+
+pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
+    let mut parser_options = ParserOptions::default();
+    parser_options.error_recovery = true;
+
+    let stylesheet = match StyleSheet::parse(css_content, parser_options) {
+        Ok(sheet) => sheet,
+        Err(_) => return ParsedSelectors::default(),
+    };
+
+    let mut selectors = Vec::new();
+    let mut pseudo_selectors: BTreeMap<String, Vec<String>> = BTreeMap::new();
+
+    for rule in stylesheet.rules.0 {
+        if let CssRule::Style(style_rule) = rule {
+            for selector in style_rule.selectors.0 {
+                match lightning_selector_to_rule_string(&selector) {
+                    SelectorConversionResult::Keep(s) => selectors.push(s),
+                    SelectorConversionResult::RecordPseudo { selector, pseudos } => {
+                        for pseudo in pseudos {
+                            pseudo_selectors
+                                .entry(pseudo)
+                                .or_default()
+                                .push(selector.clone());
+                        }
+                    }
+                    SelectorConversionResult::Skip => {}
+                }
+            }
+        }
+    }
+
+    selectors.sort();
+    selectors.dedup();
+    for selectors in pseudo_selectors.values_mut() {
+        selectors.sort();
+        selectors.dedup();
+    }
+
+    let mut supported_with_pseudo = Vec::new();
+    pseudo_selectors.retain(|pseudo, sels| {
+        if is_supported_pseudo_class(pseudo) {
+            supported_with_pseudo.extend(sels.iter().cloned());
+            false
+        } else {
+            true
+        }
+    });
+    selectors.extend(supported_with_pseudo);
+    selectors.sort();
+    selectors.dedup();
+
+    ParsedSelectors {
+        selectors,
+        pseudo_selectors,
+    }
+}
+
+/// Returns true if the selector is a single "simple" selector without combinators
+/// (e.g. `a`, `.button`, `#header`). Those selectors consist only of alphanumeric
+/// characters or the symbols `-`, `_`, `.`, and `#`.
+pub fn is_simple_selector(selector: &str) -> bool {
+    let trimmed = selector.trim();
+    if trimmed.is_empty() {
+        return false;
+    }
+    if trimmed.starts_with('@') || trimmed.contains(',') {
+        return false;
+    }
+
+    trimmed
+        .chars()
+        .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.' | '#'))
+}
+
+/// Splits selectors into the ones we keep and the simple ones we skip.
+pub fn partition_simple_selectors(selectors: Vec<String>) -> (Vec<String>, Vec<String>) {
+    let mut considered = Vec::new();
+    let mut skipped = Vec::new();
+
+    for selector in selectors {
+        if is_simple_selector(&selector) {
+            skipped.push(selector);
+        } else {
+            considered.push(selector);
+        }
+    }
+
+    (considered, skipped)
+}
+
+/// Prints the selectors we currently skip so runs can surface missing coverage.
+pub fn report_skipped_selectors(label: &str, selectors: &[String]) {
+    if selectors.is_empty() {
+        println!("NOT_CONSIDERED[{label}] none");
+        return;
+    }
+
+    println!("NOT_CONSIDERED[{label}] {} selector(s)", selectors.len());
+    for selector in selectors {
+        println!("NOT_CONSIDERED[{label}] {selector}");
+    }
+}
+
+pub fn report_pseudo_selectors(label: &str, selectors: &BTreeMap<String, Vec<String>>) {
+    if selectors.is_empty() {
+        println!("PSEUDO_SKIPPED[{label}] none");
+        return;
+    }
+
+    let mut entries: Vec<_> = selectors.iter().collect();
+    entries.sort_by(|a, b| b.1.len().cmp(&a.1.len()).then_with(|| a.0.cmp(b.0)));
+
+    for (pseudo, sels) in entries {
+        println!(
+            "PSEUDO_SKIPPED[{label}] {pseudo} -> {} selector(s)",
+            sels.len()
+        );
+        for example in sels.iter().take(5) {
+            println!("PSEUDO_SKIPPED[{label}]    eg {example}");
+        }
+        if sels.len() > 5 {
+            println!("PSEUDO_SKIPPED[{label}]    ...");
+        }
+    }
+}
+
+fn is_supported_pseudo_class(name: &str) -> bool {
+    matches!(
+        normalize_pseudo_name(name),
+        "hover" | "focus" | "focus-within"
+    )
+}
+
+fn normalize_pseudo_name(name: &str) -> &str {
+    name.trim_start_matches(':')
+}
+
+enum ComponentConversion {
+    Keep(Selector),
+    Skip,
+    Abort,
+}
+
+enum SelectorConversionResult {
+    Keep(String),
+    RecordPseudo {
+        selector: String,
+        pseudos: Vec<String>,
+    },
+    Skip,
+}
+
+fn selector_to_string(selector: &LightningSelector) -> String {
+    selector
+        .to_css_string(PrinterOptions::default())
+        .unwrap_or_else(|_| format!("{:?}", selector))
+}
+
+fn record_pseudo_selector(selector: &LightningSelector) -> SelectorConversionResult {
+    let selector_string = selector_to_string(selector);
+    let mut pseudos = extract_pseudo_tokens(&selector_string);
+    if pseudos.is_empty() {
+        pseudos.push("<pseudo>".to_string());
+    }
+    SelectorConversionResult::RecordPseudo {
+        selector: selector_string,
+        pseudos,
+    }
+}
+
+fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorConversionResult {
+    let mut selector_parts: Vec<SelectorPart> = Vec::new();
     let mut current_selector: Option<Selector> = None;
     let mut pending_combinator = Combinator::None;
-    let mut skip_next_simple_selector = false;
-    let mut skip_at_rule = false;
 
-    #[derive(PartialEq, Eq)]
-    enum NextSelector {
-        Class,
-        Type,
-    }
-    let mut next_selector = NextSelector::Type;
-
-    loop {
-        let token = match parser.next_including_whitespace_and_comments() {
-            Ok(token) => token,
-            Err(_) => {
-                // End of input, finalize any pending rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
+    for component in selector.iter_raw_parse_order_from(0) {
+        match component {
+            LComponent::Combinator(combinator) => match combinator {
+                LCombinator::Descendant => {
+                    if current_selector.is_some() && matches!(pending_combinator, Combinator::None)
+                    {
+                        pending_combinator = Combinator::Descendant;
+                    }
                 }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
+                LCombinator::Child => {
+                    if current_selector.is_some() {
+                        pending_combinator = Combinator::Child;
+                    }
                 }
-                break;
+                LCombinator::PseudoElement => {
+                    return record_pseudo_selector(selector);
+                }
+                _ => break,
+            },
+            LComponent::Negation(_)
+            | LComponent::Root
+            | LComponent::Empty
+            | LComponent::Scope
+            | LComponent::Nth(_)
+            | LComponent::NthOf(_)
+            | LComponent::NonTSPseudoClass(_)
+            | LComponent::Slotted(_)
+            | LComponent::Part(_)
+            | LComponent::Host(_)
+            | LComponent::Where(_)
+            | LComponent::Is(_)
+            | LComponent::Any(_, _)
+            | LComponent::Has(_)
+            | LComponent::PseudoElement(_) => {
+                return record_pseudo_selector(selector);
             }
-        };
-
-        if skip_at_rule {
-            match token {
-                Token::CurlyBracketBlock | Token::Semicolon => {
-                    skip_at_rule = false;
-                    continue;
+            _ => match convert_component(component) {
+                ComponentConversion::Keep(selector) => {
+                    if let Some(prev_selector) = current_selector.take() {
+                        selector_parts.push(SelectorPart {
+                            selector: prev_selector,
+                            combinator: pending_combinator.clone(),
+                        });
+                        pending_combinator = Combinator::None;
+                    }
+                    current_selector = Some(selector);
                 }
-                _ => continue,
-            }
-        }
-
-        match token {
-            Token::Comment(_) => continue,
-            Token::WhiteSpace(_) => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
+                ComponentConversion::Skip => {}
+                ComponentConversion::Abort => {
+                    return SelectorConversionResult::Skip;
                 }
-                if current_selector.is_some() && pending_combinator == Combinator::None {
-                    pending_combinator = Combinator::Descendant;
-                }
-            }
-            Token::Delim('.') => {
-                next_selector = NextSelector::Class;
-            }
-            Token::Delim('>') => {
-                if current_selector.is_some() {
-                    pending_combinator = Combinator::Child;
-                }
-            }
-            Token::AtKeyword(_) => {
-                selector_parts.clear();
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                skip_next_simple_selector = false;
-                skip_at_rule = true;
-                continue;
-            }
-            Token::Colon => {
-                skip_next_simple_selector = true;
-                continue;
-            }
-            Token::Function(_) => {
-                if skip_next_simple_selector {
-                    let _ = parser.parse_nested_block(|nested| -> Result<(), ParseError<'_, ()>> {
-                        while nested.next_including_whitespace_and_comments().is_ok() {}
-                        Ok(())
-                    });
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-            }
-            Token::ParenthesisBlock => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-            }
-            Token::SquareBracketBlock => {
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                }
-                pending_combinator = Combinator::None;
-                if let Some(attribute_selector) = parse_attribute_selector_block(&mut parser) {
-                    current_selector = Some(attribute_selector);
-                }
-                next_selector = NextSelector::Type;
-            }
-            Token::IDHash(id) => {
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(Selector::Id(id.to_string()));
-                next_selector = NextSelector::Type;
-            }
-            Token::Ident(name) => {
-                if skip_next_simple_selector {
-                    skip_next_simple_selector = false;
-                    next_selector = NextSelector::Type;
-                    continue;
-                }
-                let s = match next_selector {
-                    NextSelector::Class => Selector::Class(name.to_string()),
-                    NextSelector::Type => Selector::Type(name.to_string().to_lowercase()),
-                };
-                if let Some(prev_selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector: prev_selector,
-                        combinator: pending_combinator.clone(),
-                    });
-                    pending_combinator = Combinator::None;
-                }
-                current_selector = Some(s);
-                next_selector = NextSelector::Type;
-            }
-            Token::CurlyBracketBlock => {
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
-            _ => {
-                // Any other token (like a comma) finalizes the current rule
-                if let Some(selector) = current_selector.take() {
-                    selector_parts.push(SelectorPart {
-                        selector,
-                        combinator: Combinator::None,
-                    });
-                }
-                if !selector_parts.is_empty() {
-                    // Convert selector parts to string
-                    let rule_string = selector_parts
-                        .iter()
-                        .map(|part| part.to_string())
-                        .collect::<String>();
-                    rules.push(rule_string);
-                }
-                selector_parts = vec![];
-                current_selector = None;
-                pending_combinator = Combinator::None;
-                next_selector = NextSelector::Type;
-            }
+            },
         }
     }
 
-    rules.sort();
-    rules.dedup();
-    rules
+    if let Some(selector) = current_selector {
+        selector_parts.push(SelectorPart {
+            selector,
+            combinator: Combinator::None,
+        });
+    }
+
+    if selector_parts.is_empty() {
+        SelectorConversionResult::Skip
+    } else {
+        SelectorConversionResult::Keep(
+            selector_parts
+                .iter()
+                .map(|part| part.to_string())
+                .collect::<String>(),
+        )
+    }
+}
+
+fn convert_component(component: &LComponent) -> ComponentConversion {
+    match component {
+        LComponent::LocalName(local_name) => {
+            ComponentConversion::Keep(Selector::Type(local_name.name.as_ref().to_lowercase()))
+        }
+        LComponent::ExplicitUniversalType => {
+            ComponentConversion::Keep(Selector::Type("*".to_string()))
+        }
+        LComponent::ID(id) => ComponentConversion::Keep(Selector::Id(id.to_string())),
+        LComponent::Class(class) => ComponentConversion::Keep(Selector::Class(class.to_string())),
+        LComponent::AttributeInNoNamespace {
+            local_name,
+            operator,
+            value,
+            ..
+        } => {
+            if matches!(operator, AttrSelectorOperator::Equal) {
+                ComponentConversion::Keep(Selector::AttributeEquals {
+                    name: local_name.as_ref().to_ascii_lowercase(),
+                    value: value.to_string(),
+                })
+            } else {
+                ComponentConversion::Skip
+            }
+        }
+        LComponent::AttributeInNoNamespaceExists { .. } | LComponent::AttributeOther(_) => {
+            ComponentConversion::Skip
+        }
+        LComponent::Negation(_)
+        | LComponent::Root
+        | LComponent::Empty
+        | LComponent::Scope
+        | LComponent::Nth(_)
+        | LComponent::NthOf(_)
+        | LComponent::NonTSPseudoClass(_)
+        | LComponent::Slotted(_)
+        | LComponent::Part(_)
+        | LComponent::Host(_)
+        | LComponent::Where(_)
+        | LComponent::Is(_)
+        | LComponent::Any(_, _)
+        | LComponent::Has(_)
+        | LComponent::PseudoElement(_) => ComponentConversion::Abort,
+        LComponent::ExplicitAnyNamespace
+        | LComponent::ExplicitNoNamespace
+        | LComponent::DefaultNamespace(..)
+        | LComponent::Namespace(..)
+        | LComponent::Nesting => ComponentConversion::Abort,
+        LComponent::Combinator(_) => ComponentConversion::Skip,
+    }
+}
+
+fn extract_pseudo_tokens(selector: &str) -> Vec<String> {
+    let mut tokens = Vec::new();
+    let chars: Vec<char> = selector.chars().collect();
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i] == ':' {
+            let mut end = i + 1;
+            if end < chars.len() && chars[end] == ':' {
+                end += 1;
+            }
+            while end < chars.len() {
+                let c = chars[end];
+                if c.is_ascii_alphanumeric() || c == '-' || c == '_' {
+                    end += 1;
+                } else {
+                    break;
+                }
+            }
+            if end > i + 1 {
+                let mut token: String = chars[i..end].iter().collect();
+                token.make_ascii_lowercase();
+                tokens.push(token);
+            }
+            if end < chars.len() && chars[end] == '(' {
+                let mut depth = 1;
+                let mut j = end + 1;
+                while j < chars.len() && depth > 0 {
+                    match chars[j] {
+                        '(' => depth += 1,
+                        ')' => depth -= 1,
+                        _ => {}
+                    }
+                    j += 1;
+                }
+                i = j;
+            } else {
+                i = end;
+            }
+            continue;
+        }
+        i += 1;
+    }
+    tokens.sort();
+    tokens.dedup();
+    tokens
 }
 
 fn parse_attribute_selector(raw: &str) -> Option<Selector> {
@@ -455,44 +770,24 @@ fn parse_attribute_selector(raw: &str) -> Option<Selector> {
     Some(Selector::AttributeEquals { name, value })
 }
 
-fn parse_attribute_selector_block(parser: &mut Parser) -> Option<Selector> {
-    parser
-        .parse_nested_block(|nested| -> Result<Selector, ParseError<'_, ()>> {
-            nested.skip_whitespace();
-            let name = nested
-                .expect_ident_cloned()
-                .map_err(ParseError::from)?
-                .to_ascii_lowercase();
-            nested.skip_whitespace();
-            nested.expect_delim('=').map_err(ParseError::from)?;
-            nested.skip_whitespace();
-            let value = nested
-                .expect_string_cloned()
-                .map_err(ParseError::from)?
-                .to_string();
-            nested.skip_whitespace();
-            Ok(Selector::AttributeEquals { name, value })
-        })
-        .ok()
-}
-
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
 pub struct Nfacell(pub usize);
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
 pub struct SelectorId(pub usize);
-/// 转移规则: (输入选择器, 当前状态, 下一个状态)
-/// 其中输入选择器为 None 表示通配符/epsilon 或者特殊匹配；当前状态为 None 可用于起始逻辑
+/// Transition rule: (input selector, current state, next state)
+/// When the input selector is None it represents a wildcard/epsilon or special match; a current
+/// state of None can be used for start logic.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rule(pub Option<SelectorId>, pub Option<Nfacell>, pub Nfacell);
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct NFA {
-    /// NFA 中所有状态的集合。
+    /// Set of all NFA states.
     pub states: HashSet<Option<Nfacell>>,
-    /// 规则列表： (可选谓词, 可选前驱状态, 后继状态)
+    /// Rule list: (optional predicate, optional predecessor state, successor state)
     pub rules: Vec<Rule>,
-    /// 起始状态。
+    /// Start state.
     pub start_state: Option<Nfacell>,
     pub max_state_id: Nfacell,
     // for print match
@@ -561,6 +856,7 @@ impl NFA {
                     Some(Selector::AttributeEquals { name, value }) => {
                         format!("[{}=\"{}\"]", name, value)
                     }
+                    Some(Selector::Compound(comp)) => comp.to_string(),
                     None => format!("sid:{}", sel_id.0),
                 },
             };
@@ -604,7 +900,7 @@ impl SelectorManager {
         id
     }
 
-    /// 根据选择器获取ID
+    /// Get the ID for a selector.
     pub fn get_id(&self, selector: &Selector) -> Option<SelectorId> {
         self.selector_to_id.get(selector).copied()
     }
@@ -726,22 +1022,146 @@ pub fn generate_nfa(selectors: &[String], sm: &mut SelectorManager, state: &mut 
     }
 }
 
-/// 解析CSS选择器字符串并生成对应的选择器对象
+/// Parse a CSS selector string and produce the corresponding selector object.
 pub fn parse_selector(selector_str: &str) -> Selector {
     let trimmed = selector_str.trim();
-
-    if trimmed.starts_with('.') {
-        // 类选择器
-        Selector::Class(trimmed[1..].to_string())
-    } else if trimmed.starts_with('#') {
-        // ID选择器
-        Selector::Id(trimmed[1..].to_string())
-    } else if let Some(attribute_selector) = parse_attribute_selector(trimmed) {
-        attribute_selector
-    } else {
-        // 标签选择器
-        Selector::Type(trimmed.to_string())
+    if trimmed.is_empty() {
+        return Selector::Type("*".to_string());
     }
+
+    let mut compound = CompoundSelector::default();
+    let mut pos = 0;
+    let len = trimmed.len();
+
+    while pos < len {
+        let ch = trimmed[pos..].chars().next().unwrap();
+        match ch {
+            '.' => {
+                pos += ch.len_utf8();
+                let (class_name, next_pos) = consume_identifier(trimmed, pos);
+                if !class_name.is_empty() {
+                    compound.classes.insert(class_name.to_ascii_lowercase());
+                }
+                pos = next_pos;
+            }
+            '#' => {
+                pos += ch.len_utf8();
+                let (id_name, next_pos) = consume_identifier(trimmed, pos);
+                if !id_name.is_empty() {
+                    compound.id = Some(id_name);
+                }
+                pos = next_pos;
+            }
+            ':' => {
+                let (pseudo, next_pos) = consume_pseudo(trimmed, pos);
+                if !pseudo.is_empty() {
+                    compound.pseudos.insert(pseudo);
+                }
+                pos = next_pos;
+            }
+            '[' => {
+                if let Some((attribute, next_pos)) = consume_attribute(trimmed, pos) {
+                    compound.attributes.push(attribute);
+                    pos = next_pos;
+                } else {
+                    break;
+                }
+            }
+            '*' => {
+                compound.tag = Some("*".to_string());
+                pos += ch.len_utf8();
+            }
+            _ => {
+                let (tag_name, next_pos) = consume_identifier(trimmed, pos);
+                if !tag_name.is_empty() {
+                    compound.tag = Some(tag_name.to_ascii_lowercase());
+                }
+                pos = next_pos;
+            }
+        }
+    }
+
+    compound.attributes.sort();
+
+    if compound.is_simple_class_only() {
+        let class_name = compound.classes.iter().next().cloned().unwrap_or_default();
+        Selector::Class(class_name)
+    } else if compound.is_simple_id_only() {
+        Selector::Id(compound.id.unwrap())
+    } else if compound.is_simple_attr_only() {
+        let (name, value) = compound.attributes.into_iter().next().unwrap();
+        Selector::AttributeEquals { name, value }
+    } else if compound.is_simple_tag_only() {
+        Selector::Type(compound.tag.unwrap())
+    } else {
+        Selector::Compound(compound)
+    }
+}
+
+fn consume_identifier(selector: &str, start: usize) -> (String, usize) {
+    let mut pos = start;
+    let mut ident = String::new();
+    while pos < selector.len() {
+        let ch = selector[pos..].chars().next().unwrap();
+        if matches!(ch, '.' | '#' | ':' | '[' | ']' | ' ' | '>') {
+            break;
+        }
+        ident.push(ch);
+        pos += ch.len_utf8();
+    }
+    (ident, pos)
+}
+
+fn consume_attribute(selector: &str, start: usize) -> Option<((String, String), usize)> {
+    let remainder = &selector[start..];
+    let closing = remainder.find(']')?;
+    let end = start + closing + 1;
+    let slice = &selector[start..end];
+    if let Some(Selector::AttributeEquals { name, value }) = parse_attribute_selector(slice) {
+        Some(((name, value), end))
+    } else {
+        None
+    }
+}
+
+fn consume_pseudo(selector: &str, start: usize) -> (String, usize) {
+    let mut idx = start;
+    let mut colon_count = 0;
+    while idx < selector.len() {
+        let ch = selector[idx..].chars().next().unwrap();
+        if ch == ':' {
+            colon_count += 1;
+            idx += ch.len_utf8();
+        } else {
+            break;
+        }
+    }
+
+    let mut name = String::new();
+    let mut paren_depth = 0;
+    while idx < selector.len() {
+        let ch = selector[idx..].chars().next().unwrap();
+        if paren_depth == 0 && matches!(ch, '.' | '#' | ':' | '[' | ']') {
+            break;
+        }
+        if ch == '(' {
+            paren_depth += 1;
+        } else if ch == ')' && paren_depth > 0 {
+            paren_depth -= 1;
+        }
+        name.push(ch);
+        idx += ch.len_utf8();
+    }
+
+    if colon_count == 0 || name.is_empty() {
+        return (String::new(), idx);
+    }
+
+    let mut pseudo = name.to_ascii_lowercase();
+    if colon_count >= 2 {
+        pseudo = format!("::{}", pseudo);
+    }
+    (pseudo, idx)
 }
 
 pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
@@ -754,9 +1174,88 @@ pub fn json_value_to_attr_string(value: &serde_json::Value) -> String {
     }
 }
 
+pub const PSEUDO_CLASS_HOVER: &str = "hover";
+pub const PSEUDO_CLASS_HOVER_ROOT: &str = "hover-root";
+pub const PSEUDO_CLASS_FOCUS: &str = "focus";
+pub const PSEUDO_CLASS_FOCUS_ROOT: &str = "focus-root";
+pub const PSEUDO_CLASS_FOCUS_WITHIN: &str = "focus-within";
+
+pub fn derive_hover_state(pseudo_flags: &HashSet<String>, parent_hover: bool) -> bool {
+    parent_hover
+        || pseudo_flags.contains(PSEUDO_CLASS_HOVER_ROOT)
+        || pseudo_flags.contains(PSEUDO_CLASS_HOVER)
+}
+
+pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
+    fn collect_from_value(value: &serde_json::Value, target: &mut HashSet<String>) {
+        match value {
+            serde_json::Value::Array(items) => {
+                for item in items {
+                    collect_from_value(item, target);
+                }
+            }
+            serde_json::Value::Object(map) => {
+                for (key, val) in map {
+                    let normalized = key.to_ascii_lowercase();
+                    match val {
+                        serde_json::Value::Bool(active) => {
+                            if *active {
+                                target.insert(normalized.clone());
+                            }
+                        }
+                        serde_json::Value::String(s) => {
+                            if !s.is_empty() {
+                                target.insert(s.to_ascii_lowercase());
+                            } else {
+                                target.insert(normalized.clone());
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            serde_json::Value::String(s) => {
+                if !s.is_empty() {
+                    target.insert(s.to_ascii_lowercase());
+                }
+            }
+            _ => {}
+        }
+    }
+
+    let mut result = HashSet::new();
+    for key in [
+        "pseudoclasses",
+        "pseudo_classes",
+        "pseudoclass",
+        "pseudo_class",
+    ] {
+        if let Some(value) = node.get(key) {
+            collect_from_value(value, &mut result);
+        }
+    }
+    if let Some(attrs) = node.get("attributes").and_then(|attrs| attrs.as_object()) {
+        if attrs
+            .get("is_hovered_root")
+            .and_then(|value| value.as_bool())
+            .unwrap_or(false)
+        {
+            result.insert(PSEUDO_CLASS_HOVER_ROOT.to_string());
+        }
+        if attrs
+            .get("is_focus_root")
+            .and_then(|value| value.as_bool())
+            .unwrap_or(false)
+        {
+            result.insert(PSEUDO_CLASS_FOCUS_ROOT.to_string());
+        }
+    }
+    result
+}
+
 pub trait AddNode {
-    /// 向 DOM 中添加一个新节点。
-    /// 返回新节点的索引。
+    /// Add a new node to the DOM.
+    /// Returns the index of the new node.
     fn add_node(
         &mut self,
         id: u64,
@@ -764,6 +1263,7 @@ pub trait AddNode {
         classes: Vec<String>,
         html_id: Option<String>,
         attributes: HashMap<String, String>,
+        pseudo_classes: HashSet<String>,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64;
@@ -798,6 +1298,17 @@ mod tests {
                 assert_eq!(value, "item-1");
             }
             other => panic!("expected attribute selector, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn parse_selector_handles_class_and_pseudo() {
+        match parse_selector(".foo:hover") {
+            Selector::Compound(compound) => {
+                assert!(compound.classes.contains("foo"));
+                assert!(compound.pseudos.contains("hover"));
+            }
+            other => panic!("expected compound selector, got {:?}", other),
         }
     }
 }

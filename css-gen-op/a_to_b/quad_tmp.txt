@@ -1,10 +1,22 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: method `update_attribute` is never used
+   --> src/quad.rs:603:8
+    |
+237 | impl DOM {
+    | -------- method in this implementation
+...
+603 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "quad") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/quad`
-2468
-1496
+NOT_CONSIDERED[quad] 1 selector(s)
+NOT_CONSIDERED[quad] .a
+PSEUDO_SKIPPED[quad] none
 BEGIN
-.a -> [2]
 END
-[src/quad.rs:961:5] unsafe { MISS_CNT } = 3
-[src/quad.rs:962:5] unsafe { INPUT_CHANGE_COUNT } = 1
-[src/quad.rs:963:5] unsafe { INPUT_SKIP_COUNT } = 1
+[src/quad.rs:1072:5] unsafe { MISS_CNT } = 3
+[src/quad.rs:1073:5] unsafe { INPUT_CHANGE_COUNT } = 1
+[src/quad.rs:1074:5] unsafe { INPUT_SKIP_COUNT } = 1

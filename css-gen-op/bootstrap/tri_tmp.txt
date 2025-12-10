@@ -1,0 +1,1675 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+     Running `target/release/tri`
+NOT_CONSIDERED[tri] 866 selector(s)
+NOT_CONSIDERED[tri] .accordion
+NOT_CONSIDERED[tri] .accordion-body
+NOT_CONSIDERED[tri] .accordion-button
+NOT_CONSIDERED[tri] .accordion-header
+NOT_CONSIDERED[tri] .accordion-item
+NOT_CONSIDERED[tri] .active.breadcrumb-item
+NOT_CONSIDERED[tri] .active.btn
+NOT_CONSIDERED[tri] .active.carousel-item
+NOT_CONSIDERED[tri] .active.dropdown-item
+NOT_CONSIDERED[tri] .active.list-group-item
+NOT_CONSIDERED[tri] .active.page-link
+NOT_CONSIDERED[tri] .alert
+NOT_CONSIDERED[tri] .alert-danger
+NOT_CONSIDERED[tri] .alert-dark
+NOT_CONSIDERED[tri] .alert-dismissible
+NOT_CONSIDERED[tri] .alert-heading
+NOT_CONSIDERED[tri] .alert-info
+NOT_CONSIDERED[tri] .alert-light
+NOT_CONSIDERED[tri] .alert-link
+NOT_CONSIDERED[tri] .alert-primary
+NOT_CONSIDERED[tri] .alert-secondary
+NOT_CONSIDERED[tri] .alert-success
+NOT_CONSIDERED[tri] .alert-warning
+NOT_CONSIDERED[tri] .align-baseline
+NOT_CONSIDERED[tri] .align-bottom
+NOT_CONSIDERED[tri] .align-content-around
+NOT_CONSIDERED[tri] .align-content-between
+NOT_CONSIDERED[tri] .align-content-center
+NOT_CONSIDERED[tri] .align-content-end
+NOT_CONSIDERED[tri] .align-content-start
+NOT_CONSIDERED[tri] .align-content-stretch
+NOT_CONSIDERED[tri] .align-items-baseline
+NOT_CONSIDERED[tri] .align-items-center
+NOT_CONSIDERED[tri] .align-items-end
+NOT_CONSIDERED[tri] .align-items-start
+NOT_CONSIDERED[tri] .align-items-stretch
+NOT_CONSIDERED[tri] .align-middle
+NOT_CONSIDERED[tri] .align-self-auto
+NOT_CONSIDERED[tri] .align-self-baseline
+NOT_CONSIDERED[tri] .align-self-center
+NOT_CONSIDERED[tri] .align-self-end
+NOT_CONSIDERED[tri] .align-self-start
+NOT_CONSIDERED[tri] .align-self-stretch
+NOT_CONSIDERED[tri] .align-text-bottom
+NOT_CONSIDERED[tri] .align-text-top
+NOT_CONSIDERED[tri] .align-top
+NOT_CONSIDERED[tri] .badge
+NOT_CONSIDERED[tri] .bg-black
+NOT_CONSIDERED[tri] .bg-body
+NOT_CONSIDERED[tri] .bg-body-secondary
+NOT_CONSIDERED[tri] .bg-body-tertiary
+NOT_CONSIDERED[tri] .bg-danger
+NOT_CONSIDERED[tri] .bg-danger-subtle
+NOT_CONSIDERED[tri] .bg-dark
+NOT_CONSIDERED[tri] .bg-dark-subtle
+NOT_CONSIDERED[tri] .bg-gradient
+NOT_CONSIDERED[tri] .bg-info
+NOT_CONSIDERED[tri] .bg-info-subtle
+NOT_CONSIDERED[tri] .bg-light
+NOT_CONSIDERED[tri] .bg-light-subtle
+NOT_CONSIDERED[tri] .bg-opacity-10
+NOT_CONSIDERED[tri] .bg-opacity-100
+NOT_CONSIDERED[tri] .bg-opacity-25
+NOT_CONSIDERED[tri] .bg-opacity-50
+NOT_CONSIDERED[tri] .bg-opacity-75
+NOT_CONSIDERED[tri] .bg-primary
+NOT_CONSIDERED[tri] .bg-primary-subtle
+NOT_CONSIDERED[tri] .bg-secondary
+NOT_CONSIDERED[tri] .bg-secondary-subtle
+NOT_CONSIDERED[tri] .bg-success
+NOT_CONSIDERED[tri] .bg-success-subtle
+NOT_CONSIDERED[tri] .bg-transparent
+NOT_CONSIDERED[tri] .bg-warning
+NOT_CONSIDERED[tri] .bg-warning-subtle
+NOT_CONSIDERED[tri] .bg-white
+NOT_CONSIDERED[tri] .blockquote
+NOT_CONSIDERED[tri] .blockquote-footer
+NOT_CONSIDERED[tri] .border
+NOT_CONSIDERED[tri] .border-0
+NOT_CONSIDERED[tri] .border-1
+NOT_CONSIDERED[tri] .border-2
+NOT_CONSIDERED[tri] .border-3
+NOT_CONSIDERED[tri] .border-4
+NOT_CONSIDERED[tri] .border-5
+NOT_CONSIDERED[tri] .border-black
+NOT_CONSIDERED[tri] .border-bottom
+NOT_CONSIDERED[tri] .border-bottom-0
+NOT_CONSIDERED[tri] .border-danger
+NOT_CONSIDERED[tri] .border-danger-subtle
+NOT_CONSIDERED[tri] .border-dark
+NOT_CONSIDERED[tri] .border-dark-subtle
+NOT_CONSIDERED[tri] .border-end
+NOT_CONSIDERED[tri] .border-end-0
+NOT_CONSIDERED[tri] .border-info
+NOT_CONSIDERED[tri] .border-info-subtle
+NOT_CONSIDERED[tri] .border-light
+NOT_CONSIDERED[tri] .border-light-subtle
+NOT_CONSIDERED[tri] .border-opacity-10
+NOT_CONSIDERED[tri] .border-opacity-100
+NOT_CONSIDERED[tri] .border-opacity-25
+NOT_CONSIDERED[tri] .border-opacity-50
+NOT_CONSIDERED[tri] .border-opacity-75
+NOT_CONSIDERED[tri] .border-primary
+NOT_CONSIDERED[tri] .border-primary-subtle
+NOT_CONSIDERED[tri] .border-secondary
+NOT_CONSIDERED[tri] .border-secondary-subtle
+NOT_CONSIDERED[tri] .border-start
+NOT_CONSIDERED[tri] .border-start-0
+NOT_CONSIDERED[tri] .border-success
+NOT_CONSIDERED[tri] .border-success-subtle
+NOT_CONSIDERED[tri] .border-top
+NOT_CONSIDERED[tri] .border-top-0
+NOT_CONSIDERED[tri] .border-warning
+NOT_CONSIDERED[tri] .border-warning-subtle
+NOT_CONSIDERED[tri] .border-white
+NOT_CONSIDERED[tri] .bottom-0
+NOT_CONSIDERED[tri] .bottom-100
+NOT_CONSIDERED[tri] .bottom-50
+NOT_CONSIDERED[tri] .breadcrumb
+NOT_CONSIDERED[tri] .breadcrumb-item
+NOT_CONSIDERED[tri] .btn
+NOT_CONSIDERED[tri] .btn-check
+NOT_CONSIDERED[tri] .btn-close
+NOT_CONSIDERED[tri] .btn-close-white
+NOT_CONSIDERED[tri] .btn-danger
+NOT_CONSIDERED[tri] .btn-dark
+NOT_CONSIDERED[tri] .btn-group
+NOT_CONSIDERED[tri] .btn-group-vertical
+NOT_CONSIDERED[tri] .btn-info
+NOT_CONSIDERED[tri] .btn-lg
+NOT_CONSIDERED[tri] .btn-light
+NOT_CONSIDERED[tri] .btn-link
+NOT_CONSIDERED[tri] .btn-outline-danger
+NOT_CONSIDERED[tri] .btn-outline-dark
+NOT_CONSIDERED[tri] .btn-outline-info
+NOT_CONSIDERED[tri] .btn-outline-light
+NOT_CONSIDERED[tri] .btn-outline-primary
+NOT_CONSIDERED[tri] .btn-outline-secondary
+NOT_CONSIDERED[tri] .btn-outline-success
+NOT_CONSIDERED[tri] .btn-outline-warning
+NOT_CONSIDERED[tri] .btn-primary
+NOT_CONSIDERED[tri] .btn-secondary
+NOT_CONSIDERED[tri] .btn-sm
+NOT_CONSIDERED[tri] .btn-success
+NOT_CONSIDERED[tri] .btn-toolbar
+NOT_CONSIDERED[tri] .btn-warning
+NOT_CONSIDERED[tri] .caption-top
+NOT_CONSIDERED[tri] .card
+NOT_CONSIDERED[tri] .card-body
+NOT_CONSIDERED[tri] .card-footer
+NOT_CONSIDERED[tri] .card-header
+NOT_CONSIDERED[tri] .card-header-pills
+NOT_CONSIDERED[tri] .card-header-tabs
+NOT_CONSIDERED[tri] .card-img
+NOT_CONSIDERED[tri] .card-img-bottom
+NOT_CONSIDERED[tri] .card-img-overlay
+NOT_CONSIDERED[tri] .card-img-top
+NOT_CONSIDERED[tri] .card-link
+NOT_CONSIDERED[tri] .card-subtitle
+NOT_CONSIDERED[tri] .card-title
+NOT_CONSIDERED[tri] .carousel
+NOT_CONSIDERED[tri] .carousel-caption
+NOT_CONSIDERED[tri] .carousel-control-next
+NOT_CONSIDERED[tri] .carousel-control-next-icon
+NOT_CONSIDERED[tri] .carousel-control-prev
+NOT_CONSIDERED[tri] .carousel-control-prev-icon
+NOT_CONSIDERED[tri] .carousel-dark
+NOT_CONSIDERED[tri] .carousel-indicators
+NOT_CONSIDERED[tri] .carousel-inner
+NOT_CONSIDERED[tri] .carousel-item
+NOT_CONSIDERED[tri] .carousel-item-end.active
+NOT_CONSIDERED[tri] .carousel-item-next
+NOT_CONSIDERED[tri] .carousel-item-prev
+NOT_CONSIDERED[tri] .carousel-item-start.active
+NOT_CONSIDERED[tri] .col
+NOT_CONSIDERED[tri] .col-1
+NOT_CONSIDERED[tri] .col-10
+NOT_CONSIDERED[tri] .col-11
+NOT_CONSIDERED[tri] .col-12
+NOT_CONSIDERED[tri] .col-2
+NOT_CONSIDERED[tri] .col-3
+NOT_CONSIDERED[tri] .col-4
+NOT_CONSIDERED[tri] .col-5
+NOT_CONSIDERED[tri] .col-6
+NOT_CONSIDERED[tri] .col-7
+NOT_CONSIDERED[tri] .col-8
+NOT_CONSIDERED[tri] .col-9
+NOT_CONSIDERED[tri] .col-auto
+NOT_CONSIDERED[tri] .col-form-label
+NOT_CONSIDERED[tri] .col-form-label-lg
+NOT_CONSIDERED[tri] .col-form-label-sm
+NOT_CONSIDERED[tri] .collapse-horizontal.collapsing
+NOT_CONSIDERED[tri] .collapsing
+NOT_CONSIDERED[tri] .column-gap-0
+NOT_CONSIDERED[tri] .column-gap-1
+NOT_CONSIDERED[tri] .column-gap-2
+NOT_CONSIDERED[tri] .column-gap-3
+NOT_CONSIDERED[tri] .column-gap-4
+NOT_CONSIDERED[tri] .column-gap-5
+NOT_CONSIDERED[tri] .container
+NOT_CONSIDERED[tri] .container-fluid
+NOT_CONSIDERED[tri] .container-lg
+NOT_CONSIDERED[tri] .container-md
+NOT_CONSIDERED[tri] .container-sm
+NOT_CONSIDERED[tri] .container-xl
+NOT_CONSIDERED[tri] .container-xxl
+NOT_CONSIDERED[tri] .d-block
+NOT_CONSIDERED[tri] .d-flex
+NOT_CONSIDERED[tri] .d-grid
+NOT_CONSIDERED[tri] .d-inline
+NOT_CONSIDERED[tri] .d-inline-block
+NOT_CONSIDERED[tri] .d-inline-flex
+NOT_CONSIDERED[tri] .d-inline-grid
+NOT_CONSIDERED[tri] .d-none
+NOT_CONSIDERED[tri] .d-table
+NOT_CONSIDERED[tri] .d-table-cell
+NOT_CONSIDERED[tri] .d-table-row
+NOT_CONSIDERED[tri] .disabled.btn
+NOT_CONSIDERED[tri] .disabled.btn-close
+NOT_CONSIDERED[tri] .disabled.dropdown-item
+NOT_CONSIDERED[tri] .disabled.list-group-item
+NOT_CONSIDERED[tri] .disabled.nav-link
+NOT_CONSIDERED[tri] .disabled.page-link
+NOT_CONSIDERED[tri] .display-1
+NOT_CONSIDERED[tri] .display-2
+NOT_CONSIDERED[tri] .display-3
+NOT_CONSIDERED[tri] .display-4
+NOT_CONSIDERED[tri] .display-5
+NOT_CONSIDERED[tri] .display-6
+NOT_CONSIDERED[tri] .dropdown
+NOT_CONSIDERED[tri] .dropdown-center
+NOT_CONSIDERED[tri] .dropdown-divider
+NOT_CONSIDERED[tri] .dropdown-header
+NOT_CONSIDERED[tri] .dropdown-item
+NOT_CONSIDERED[tri] .dropdown-item-text
+NOT_CONSIDERED[tri] .dropdown-menu
+NOT_CONSIDERED[tri] .dropdown-menu-dark
+NOT_CONSIDERED[tri] .dropdown-menu-end
+NOT_CONSIDERED[tri] .dropdown-menu-start
+NOT_CONSIDERED[tri] .dropdown-toggle
+NOT_CONSIDERED[tri] .dropdown-toggle-split
+NOT_CONSIDERED[tri] .dropend
+NOT_CONSIDERED[tri] .dropstart
+NOT_CONSIDERED[tri] .dropup
+NOT_CONSIDERED[tri] .dropup-center
+NOT_CONSIDERED[tri] .end-0
+NOT_CONSIDERED[tri] .end-100
+NOT_CONSIDERED[tri] .end-50
+NOT_CONSIDERED[tri] .fade
+NOT_CONSIDERED[tri] .fade.modal-backdrop
+NOT_CONSIDERED[tri] .fade.offcanvas-backdrop
+NOT_CONSIDERED[tri] .figure
+NOT_CONSIDERED[tri] .figure-caption
+NOT_CONSIDERED[tri] .figure-img
+NOT_CONSIDERED[tri] .fixed-bottom
+NOT_CONSIDERED[tri] .fixed-top
+NOT_CONSIDERED[tri] .flex-column
+NOT_CONSIDERED[tri] .flex-column-reverse
+NOT_CONSIDERED[tri] .flex-fill
+NOT_CONSIDERED[tri] .flex-grow-0
+NOT_CONSIDERED[tri] .flex-grow-1
+NOT_CONSIDERED[tri] .flex-nowrap
+NOT_CONSIDERED[tri] .flex-row
+NOT_CONSIDERED[tri] .flex-row-reverse
+NOT_CONSIDERED[tri] .flex-shrink-0
+NOT_CONSIDERED[tri] .flex-shrink-1
+NOT_CONSIDERED[tri] .flex-wrap
+NOT_CONSIDERED[tri] .flex-wrap-reverse
+NOT_CONSIDERED[tri] .float-end
+NOT_CONSIDERED[tri] .float-none
+NOT_CONSIDERED[tri] .float-start
+NOT_CONSIDERED[tri] .focus-ring-danger
+NOT_CONSIDERED[tri] .focus-ring-dark
+NOT_CONSIDERED[tri] .focus-ring-info
+NOT_CONSIDERED[tri] .focus-ring-light
+NOT_CONSIDERED[tri] .focus-ring-primary
+NOT_CONSIDERED[tri] .focus-ring-secondary
+NOT_CONSIDERED[tri] .focus-ring-success
+NOT_CONSIDERED[tri] .focus-ring-warning
+NOT_CONSIDERED[tri] .font-monospace
+NOT_CONSIDERED[tri] .form-check
+NOT_CONSIDERED[tri] .form-check-inline
+NOT_CONSIDERED[tri] .form-check-input
+NOT_CONSIDERED[tri] .form-check-reverse
+NOT_CONSIDERED[tri] .form-check-reverse.form-switch
+NOT_CONSIDERED[tri] .form-control
+NOT_CONSIDERED[tri] .form-control-color
+NOT_CONSIDERED[tri] .form-control-lg
+NOT_CONSIDERED[tri] .form-control-lg.form-control-color
+NOT_CONSIDERED[tri] .form-control-lg.form-control-plaintext
+NOT_CONSIDERED[tri] .form-control-lgtextarea
+NOT_CONSIDERED[tri] .form-control-plaintext
+NOT_CONSIDERED[tri] .form-control-sm
+NOT_CONSIDERED[tri] .form-control-sm.form-control-color
+NOT_CONSIDERED[tri] .form-control-sm.form-control-plaintext
+NOT_CONSIDERED[tri] .form-control-smtextarea
+NOT_CONSIDERED[tri] .form-controltextarea
+NOT_CONSIDERED[tri] .form-floating
+NOT_CONSIDERED[tri] .form-label
+NOT_CONSIDERED[tri] .form-range
+NOT_CONSIDERED[tri] .form-select
+NOT_CONSIDERED[tri] .form-select-lg
+NOT_CONSIDERED[tri] .form-select-sm
+NOT_CONSIDERED[tri] .form-switch
+NOT_CONSIDERED[tri] .form-text
+NOT_CONSIDERED[tri] .fs-1
+NOT_CONSIDERED[tri] .fs-2
+NOT_CONSIDERED[tri] .fs-3
+NOT_CONSIDERED[tri] .fs-4
+NOT_CONSIDERED[tri] .fs-5
+NOT_CONSIDERED[tri] .fs-6
+NOT_CONSIDERED[tri] .fst-italic
+NOT_CONSIDERED[tri] .fst-normal
+NOT_CONSIDERED[tri] .fw-bold
+NOT_CONSIDERED[tri] .fw-bolder
+NOT_CONSIDERED[tri] .fw-light
+NOT_CONSIDERED[tri] .fw-lighter
+NOT_CONSIDERED[tri] .fw-medium
+NOT_CONSIDERED[tri] .fw-normal
+NOT_CONSIDERED[tri] .fw-semibold
+NOT_CONSIDERED[tri] .g-0
+NOT_CONSIDERED[tri] .g-1
+NOT_CONSIDERED[tri] .g-2
+NOT_CONSIDERED[tri] .g-3
+NOT_CONSIDERED[tri] .g-4
+NOT_CONSIDERED[tri] .g-5
+NOT_CONSIDERED[tri] .gap-0
+NOT_CONSIDERED[tri] .gap-1
+NOT_CONSIDERED[tri] .gap-2
+NOT_CONSIDERED[tri] .gap-3
+NOT_CONSIDERED[tri] .gap-4
+NOT_CONSIDERED[tri] .gap-5
+NOT_CONSIDERED[tri] .gx-0
+NOT_CONSIDERED[tri] .gx-1
+NOT_CONSIDERED[tri] .gx-2
+NOT_CONSIDERED[tri] .gx-3
+NOT_CONSIDERED[tri] .gx-4
+NOT_CONSIDERED[tri] .gx-5
+NOT_CONSIDERED[tri] .gy-0
+NOT_CONSIDERED[tri] .gy-1
+NOT_CONSIDERED[tri] .gy-2
+NOT_CONSIDERED[tri] .gy-3
+NOT_CONSIDERED[tri] .gy-4
+NOT_CONSIDERED[tri] .gy-5
+NOT_CONSIDERED[tri] .h-100
+NOT_CONSIDERED[tri] .h-25
+NOT_CONSIDERED[tri] .h-50
+NOT_CONSIDERED[tri] .h-75
+NOT_CONSIDERED[tri] .h-auto
+NOT_CONSIDERED[tri] .h1
+NOT_CONSIDERED[tri] .h2
+NOT_CONSIDERED[tri] .h3
+NOT_CONSIDERED[tri] .h4
+NOT_CONSIDERED[tri] .h5
+NOT_CONSIDERED[tri] .h6
+NOT_CONSIDERED[tri] .hiding.offcanvas
+NOT_CONSIDERED[tri] .hstack
+NOT_CONSIDERED[tri] .icon-link
+NOT_CONSIDERED[tri] .img-fluid
+NOT_CONSIDERED[tri] .img-thumbnail
+NOT_CONSIDERED[tri] .initialism
+NOT_CONSIDERED[tri] .input-group
+NOT_CONSIDERED[tri] .input-group-text
+NOT_CONSIDERED[tri] .invalid-feedback
+NOT_CONSIDERED[tri] .invalid-tooltip
+NOT_CONSIDERED[tri] .invisible
+NOT_CONSIDERED[tri] .is-invalid
+NOT_CONSIDERED[tri] .is-invalid.form-check-input
+NOT_CONSIDERED[tri] .is-invalid.form-control
+NOT_CONSIDERED[tri] .is-invalid.form-control-color
+NOT_CONSIDERED[tri] .is-invalid.form-controltextarea
+NOT_CONSIDERED[tri] .is-invalid.form-select
+NOT_CONSIDERED[tri] .is-valid
+NOT_CONSIDERED[tri] .is-valid.form-check-input
+NOT_CONSIDERED[tri] .is-valid.form-control
+NOT_CONSIDERED[tri] .is-valid.form-control-color
+NOT_CONSIDERED[tri] .is-valid.form-controltextarea
+NOT_CONSIDERED[tri] .is-valid.form-select
+NOT_CONSIDERED[tri] .justify-content-around
+NOT_CONSIDERED[tri] .justify-content-between
+NOT_CONSIDERED[tri] .justify-content-center
+NOT_CONSIDERED[tri] .justify-content-end
+NOT_CONSIDERED[tri] .justify-content-evenly
+NOT_CONSIDERED[tri] .justify-content-start
+NOT_CONSIDERED[tri] .lead
+NOT_CONSIDERED[tri] .lh-1
+NOT_CONSIDERED[tri] .lh-base
+NOT_CONSIDERED[tri] .lh-lg
+NOT_CONSIDERED[tri] .lh-sm
+NOT_CONSIDERED[tri] .link-body-emphasis
+NOT_CONSIDERED[tri] .link-danger
+NOT_CONSIDERED[tri] .link-dark
+NOT_CONSIDERED[tri] .link-info
+NOT_CONSIDERED[tri] .link-light
+NOT_CONSIDERED[tri] .link-offset-1
+NOT_CONSIDERED[tri] .link-offset-2
+NOT_CONSIDERED[tri] .link-offset-3
+NOT_CONSIDERED[tri] .link-opacity-10
+NOT_CONSIDERED[tri] .link-opacity-100
+NOT_CONSIDERED[tri] .link-opacity-25
+NOT_CONSIDERED[tri] .link-opacity-50
+NOT_CONSIDERED[tri] .link-opacity-75
+NOT_CONSIDERED[tri] .link-primary
+NOT_CONSIDERED[tri] .link-secondary
+NOT_CONSIDERED[tri] .link-success
+NOT_CONSIDERED[tri] .link-underline
+NOT_CONSIDERED[tri] .link-underline-danger
+NOT_CONSIDERED[tri] .link-underline-dark
+NOT_CONSIDERED[tri] .link-underline-info
+NOT_CONSIDERED[tri] .link-underline-light
+NOT_CONSIDERED[tri] .link-underline-opacity-0
+NOT_CONSIDERED[tri] .link-underline-opacity-10
+NOT_CONSIDERED[tri] .link-underline-opacity-100
+NOT_CONSIDERED[tri] .link-underline-opacity-25
+NOT_CONSIDERED[tri] .link-underline-opacity-50
+NOT_CONSIDERED[tri] .link-underline-opacity-75
+NOT_CONSIDERED[tri] .link-underline-primary
+NOT_CONSIDERED[tri] .link-underline-secondary
+NOT_CONSIDERED[tri] .link-underline-success
+NOT_CONSIDERED[tri] .link-underline-warning
+NOT_CONSIDERED[tri] .link-warning
+NOT_CONSIDERED[tri] .list-group
+NOT_CONSIDERED[tri] .list-group-flush
+NOT_CONSIDERED[tri] .list-group-horizontal
+NOT_CONSIDERED[tri] .list-group-item
+NOT_CONSIDERED[tri] .list-group-item-action
+NOT_CONSIDERED[tri] .list-group-item-danger
+NOT_CONSIDERED[tri] .list-group-item-dark
+NOT_CONSIDERED[tri] .list-group-item-info
+NOT_CONSIDERED[tri] .list-group-item-light
+NOT_CONSIDERED[tri] .list-group-item-primary
+NOT_CONSIDERED[tri] .list-group-item-secondary
+NOT_CONSIDERED[tri] .list-group-item-success
+NOT_CONSIDERED[tri] .list-group-item-warning
+NOT_CONSIDERED[tri] .list-group-numbered
+NOT_CONSIDERED[tri] .list-inline
+NOT_CONSIDERED[tri] .list-inline-item
+NOT_CONSIDERED[tri] .list-unstyled
+NOT_CONSIDERED[tri] .m-0
+NOT_CONSIDERED[tri] .m-1
+NOT_CONSIDERED[tri] .m-2
+NOT_CONSIDERED[tri] .m-3
+NOT_CONSIDERED[tri] .m-4
+NOT_CONSIDERED[tri] .m-5
+NOT_CONSIDERED[tri] .m-auto
+NOT_CONSIDERED[tri] .mark
+NOT_CONSIDERED[tri] .mb-0
+NOT_CONSIDERED[tri] .mb-1
+NOT_CONSIDERED[tri] .mb-2
+NOT_CONSIDERED[tri] .mb-3
+NOT_CONSIDERED[tri] .mb-4
+NOT_CONSIDERED[tri] .mb-5
+NOT_CONSIDERED[tri] .mb-auto
+NOT_CONSIDERED[tri] .me-0
+NOT_CONSIDERED[tri] .me-1
+NOT_CONSIDERED[tri] .me-2
+NOT_CONSIDERED[tri] .me-3
+NOT_CONSIDERED[tri] .me-4
+NOT_CONSIDERED[tri] .me-5
+NOT_CONSIDERED[tri] .me-auto
+NOT_CONSIDERED[tri] .mh-100
+NOT_CONSIDERED[tri] .min-vh-100
+NOT_CONSIDERED[tri] .min-vw-100
+NOT_CONSIDERED[tri] .modal
+NOT_CONSIDERED[tri] .modal-backdrop
+NOT_CONSIDERED[tri] .modal-body
+NOT_CONSIDERED[tri] .modal-content
+NOT_CONSIDERED[tri] .modal-dialog
+NOT_CONSIDERED[tri] .modal-dialog-centered
+NOT_CONSIDERED[tri] .modal-dialog-scrollable
+NOT_CONSIDERED[tri] .modal-footer
+NOT_CONSIDERED[tri] .modal-fullscreen
+NOT_CONSIDERED[tri] .modal-header
+NOT_CONSIDERED[tri] .modal-title
+NOT_CONSIDERED[tri] .ms-0
+NOT_CONSIDERED[tri] .ms-1
+NOT_CONSIDERED[tri] .ms-2
+NOT_CONSIDERED[tri] .ms-3
+NOT_CONSIDERED[tri] .ms-4
+NOT_CONSIDERED[tri] .ms-5
+NOT_CONSIDERED[tri] .ms-auto
+NOT_CONSIDERED[tri] .mt-0
+NOT_CONSIDERED[tri] .mt-1
+NOT_CONSIDERED[tri] .mt-2
+NOT_CONSIDERED[tri] .mt-3
+NOT_CONSIDERED[tri] .mt-4
+NOT_CONSIDERED[tri] .mt-5
+NOT_CONSIDERED[tri] .mt-auto
+NOT_CONSIDERED[tri] .mw-100
+NOT_CONSIDERED[tri] .mx-0
+NOT_CONSIDERED[tri] .mx-1
+NOT_CONSIDERED[tri] .mx-2
+NOT_CONSIDERED[tri] .mx-3
+NOT_CONSIDERED[tri] .mx-4
+NOT_CONSIDERED[tri] .mx-5
+NOT_CONSIDERED[tri] .mx-auto
+NOT_CONSIDERED[tri] .my-0
+NOT_CONSIDERED[tri] .my-1
+NOT_CONSIDERED[tri] .my-2
+NOT_CONSIDERED[tri] .my-3
+NOT_CONSIDERED[tri] .my-4
+NOT_CONSIDERED[tri] .my-5
+NOT_CONSIDERED[tri] .my-auto
+NOT_CONSIDERED[tri] .nav
+NOT_CONSIDERED[tri] .nav-link
+NOT_CONSIDERED[tri] .nav-pills
+NOT_CONSIDERED[tri] .nav-tabs
+NOT_CONSIDERED[tri] .nav-underline
+NOT_CONSIDERED[tri] .navbar
+NOT_CONSIDERED[tri] .navbar-brand
+NOT_CONSIDERED[tri] .navbar-collapse
+NOT_CONSIDERED[tri] .navbar-dark
+NOT_CONSIDERED[tri] .navbar-expand
+NOT_CONSIDERED[tri] .navbar-nav
+NOT_CONSIDERED[tri] .navbar-nav-scroll
+NOT_CONSIDERED[tri] .navbar-text
+NOT_CONSIDERED[tri] .navbar-toggler
+NOT_CONSIDERED[tri] .navbar-toggler-icon
+NOT_CONSIDERED[tri] .object-fit-contain
+NOT_CONSIDERED[tri] .object-fit-cover
+NOT_CONSIDERED[tri] .object-fit-fill
+NOT_CONSIDERED[tri] .object-fit-none
+NOT_CONSIDERED[tri] .object-fit-scale
+NOT_CONSIDERED[tri] .offcanvas
+NOT_CONSIDERED[tri] .offcanvas-backdrop
+NOT_CONSIDERED[tri] .offcanvas-body
+NOT_CONSIDERED[tri] .offcanvas-bottom.offcanvas
+NOT_CONSIDERED[tri] .offcanvas-end.offcanvas
+NOT_CONSIDERED[tri] .offcanvas-header
+NOT_CONSIDERED[tri] .offcanvas-lg
+NOT_CONSIDERED[tri] .offcanvas-md
+NOT_CONSIDERED[tri] .offcanvas-sm
+NOT_CONSIDERED[tri] .offcanvas-start.offcanvas
+NOT_CONSIDERED[tri] .offcanvas-title
+NOT_CONSIDERED[tri] .offcanvas-top.offcanvas
+NOT_CONSIDERED[tri] .offcanvas-xl
+NOT_CONSIDERED[tri] .offcanvas-xxl
+NOT_CONSIDERED[tri] .offset-1
+NOT_CONSIDERED[tri] .offset-10
+NOT_CONSIDERED[tri] .offset-11
+NOT_CONSIDERED[tri] .offset-2
+NOT_CONSIDERED[tri] .offset-3
+NOT_CONSIDERED[tri] .offset-4
+NOT_CONSIDERED[tri] .offset-5
+NOT_CONSIDERED[tri] .offset-6
+NOT_CONSIDERED[tri] .offset-7
+NOT_CONSIDERED[tri] .offset-8
+NOT_CONSIDERED[tri] .offset-9
+NOT_CONSIDERED[tri] .opacity-0
+NOT_CONSIDERED[tri] .opacity-100
+NOT_CONSIDERED[tri] .opacity-25
+NOT_CONSIDERED[tri] .opacity-50
+NOT_CONSIDERED[tri] .opacity-75
+NOT_CONSIDERED[tri] .order-0
+NOT_CONSIDERED[tri] .order-1
+NOT_CONSIDERED[tri] .order-2
+NOT_CONSIDERED[tri] .order-3
+NOT_CONSIDERED[tri] .order-4
+NOT_CONSIDERED[tri] .order-5
+NOT_CONSIDERED[tri] .order-first
+NOT_CONSIDERED[tri] .order-last
+NOT_CONSIDERED[tri] .overflow-auto
+NOT_CONSIDERED[tri] .overflow-hidden
+NOT_CONSIDERED[tri] .overflow-scroll
+NOT_CONSIDERED[tri] .overflow-visible
+NOT_CONSIDERED[tri] .overflow-x-auto
+NOT_CONSIDERED[tri] .overflow-x-hidden
+NOT_CONSIDERED[tri] .overflow-x-scroll
+NOT_CONSIDERED[tri] .overflow-x-visible
+NOT_CONSIDERED[tri] .overflow-y-auto
+NOT_CONSIDERED[tri] .overflow-y-hidden
+NOT_CONSIDERED[tri] .overflow-y-scroll
+NOT_CONSIDERED[tri] .overflow-y-visible
+NOT_CONSIDERED[tri] .p-0
+NOT_CONSIDERED[tri] .p-1
+NOT_CONSIDERED[tri] .p-2
+NOT_CONSIDERED[tri] .p-3
+NOT_CONSIDERED[tri] .p-4
+NOT_CONSIDERED[tri] .p-5
+NOT_CONSIDERED[tri] .page-link
+NOT_CONSIDERED[tri] .pagination
+NOT_CONSIDERED[tri] .pagination-lg
+NOT_CONSIDERED[tri] .pagination-sm
+NOT_CONSIDERED[tri] .pb-0
+NOT_CONSIDERED[tri] .pb-1
+NOT_CONSIDERED[tri] .pb-2
+NOT_CONSIDERED[tri] .pb-3
+NOT_CONSIDERED[tri] .pb-4
+NOT_CONSIDERED[tri] .pb-5
+NOT_CONSIDERED[tri] .pe-0
+NOT_CONSIDERED[tri] .pe-1
+NOT_CONSIDERED[tri] .pe-2
+NOT_CONSIDERED[tri] .pe-3
+NOT_CONSIDERED[tri] .pe-4
+NOT_CONSIDERED[tri] .pe-5
+NOT_CONSIDERED[tri] .pe-auto
+NOT_CONSIDERED[tri] .pe-none
+NOT_CONSIDERED[tri] .placeholder
+NOT_CONSIDERED[tri] .placeholder-lg
+NOT_CONSIDERED[tri] .placeholder-sm
+NOT_CONSIDERED[tri] .placeholder-wave
+NOT_CONSIDERED[tri] .placeholder-xs
+NOT_CONSIDERED[tri] .pointer-event.carousel
+NOT_CONSIDERED[tri] .popover
+NOT_CONSIDERED[tri] .popover-body
+NOT_CONSIDERED[tri] .popover-header
+NOT_CONSIDERED[tri] .position-absolute
+NOT_CONSIDERED[tri] .position-fixed
+NOT_CONSIDERED[tri] .position-relative
+NOT_CONSIDERED[tri] .position-static
+NOT_CONSIDERED[tri] .position-sticky
+NOT_CONSIDERED[tri] .progress
+NOT_CONSIDERED[tri] .progress-bar
+NOT_CONSIDERED[tri] .progress-bar-animated
+NOT_CONSIDERED[tri] .progress-bar-striped
+NOT_CONSIDERED[tri] .progress-stacked
+NOT_CONSIDERED[tri] .ps-0
+NOT_CONSIDERED[tri] .ps-1
+NOT_CONSIDERED[tri] .ps-2
+NOT_CONSIDERED[tri] .ps-3
+NOT_CONSIDERED[tri] .ps-4
+NOT_CONSIDERED[tri] .ps-5
+NOT_CONSIDERED[tri] .pt-0
+NOT_CONSIDERED[tri] .pt-1
+NOT_CONSIDERED[tri] .pt-2
+NOT_CONSIDERED[tri] .pt-3
+NOT_CONSIDERED[tri] .pt-4
+NOT_CONSIDERED[tri] .pt-5
+NOT_CONSIDERED[tri] .px-0
+NOT_CONSIDERED[tri] .px-1
+NOT_CONSIDERED[tri] .px-2
+NOT_CONSIDERED[tri] .px-3
+NOT_CONSIDERED[tri] .px-4
+NOT_CONSIDERED[tri] .px-5
+NOT_CONSIDERED[tri] .py-0
+NOT_CONSIDERED[tri] .py-1
+NOT_CONSIDERED[tri] .py-2
+NOT_CONSIDERED[tri] .py-3
+NOT_CONSIDERED[tri] .py-4
+NOT_CONSIDERED[tri] .py-5
+NOT_CONSIDERED[tri] .ratio
+NOT_CONSIDERED[tri] .ratio-16x9
+NOT_CONSIDERED[tri] .ratio-1x1
+NOT_CONSIDERED[tri] .ratio-21x9
+NOT_CONSIDERED[tri] .ratio-4x3
+NOT_CONSIDERED[tri] .rounded
+NOT_CONSIDERED[tri] .rounded-0
+NOT_CONSIDERED[tri] .rounded-1
+NOT_CONSIDERED[tri] .rounded-2
+NOT_CONSIDERED[tri] .rounded-3
+NOT_CONSIDERED[tri] .rounded-4
+NOT_CONSIDERED[tri] .rounded-5
+NOT_CONSIDERED[tri] .rounded-bottom
+NOT_CONSIDERED[tri] .rounded-bottom-0
+NOT_CONSIDERED[tri] .rounded-bottom-1
+NOT_CONSIDERED[tri] .rounded-bottom-2
+NOT_CONSIDERED[tri] .rounded-bottom-3
+NOT_CONSIDERED[tri] .rounded-bottom-4
+NOT_CONSIDERED[tri] .rounded-bottom-5
+NOT_CONSIDERED[tri] .rounded-bottom-circle
+NOT_CONSIDERED[tri] .rounded-bottom-pill
+NOT_CONSIDERED[tri] .rounded-circle
+NOT_CONSIDERED[tri] .rounded-end
+NOT_CONSIDERED[tri] .rounded-end-0
+NOT_CONSIDERED[tri] .rounded-end-1
+NOT_CONSIDERED[tri] .rounded-end-2
+NOT_CONSIDERED[tri] .rounded-end-3
+NOT_CONSIDERED[tri] .rounded-end-4
+NOT_CONSIDERED[tri] .rounded-end-5
+NOT_CONSIDERED[tri] .rounded-end-circle
+NOT_CONSIDERED[tri] .rounded-end-pill
+NOT_CONSIDERED[tri] .rounded-pill
+NOT_CONSIDERED[tri] .rounded-start
+NOT_CONSIDERED[tri] .rounded-start-0
+NOT_CONSIDERED[tri] .rounded-start-1
+NOT_CONSIDERED[tri] .rounded-start-2
+NOT_CONSIDERED[tri] .rounded-start-3
+NOT_CONSIDERED[tri] .rounded-start-4
+NOT_CONSIDERED[tri] .rounded-start-5
+NOT_CONSIDERED[tri] .rounded-start-circle
+NOT_CONSIDERED[tri] .rounded-start-pill
+NOT_CONSIDERED[tri] .rounded-top
+NOT_CONSIDERED[tri] .rounded-top-0
+NOT_CONSIDERED[tri] .rounded-top-1
+NOT_CONSIDERED[tri] .rounded-top-2
+NOT_CONSIDERED[tri] .rounded-top-3
+NOT_CONSIDERED[tri] .rounded-top-4
+NOT_CONSIDERED[tri] .rounded-top-5
+NOT_CONSIDERED[tri] .rounded-top-circle
+NOT_CONSIDERED[tri] .rounded-top-pill
+NOT_CONSIDERED[tri] .row
+NOT_CONSIDERED[tri] .row-gap-0
+NOT_CONSIDERED[tri] .row-gap-1
+NOT_CONSIDERED[tri] .row-gap-2
+NOT_CONSIDERED[tri] .row-gap-3
+NOT_CONSIDERED[tri] .row-gap-4
+NOT_CONSIDERED[tri] .row-gap-5
+NOT_CONSIDERED[tri] .shadow
+NOT_CONSIDERED[tri] .shadow-lg
+NOT_CONSIDERED[tri] .shadow-none
+NOT_CONSIDERED[tri] .shadow-sm
+NOT_CONSIDERED[tri] .show.btn
+NOT_CONSIDERED[tri] .show.dropdown-menu
+NOT_CONSIDERED[tri] .show.modal-backdrop
+NOT_CONSIDERED[tri] .show.offcanvas
+NOT_CONSIDERED[tri] .show.offcanvas-backdrop
+NOT_CONSIDERED[tri] .show.tooltip
+NOT_CONSIDERED[tri] .showing.offcanvas
+NOT_CONSIDERED[tri] .showing.toast
+NOT_CONSIDERED[tri] .small
+NOT_CONSIDERED[tri] .spinner-border
+NOT_CONSIDERED[tri] .spinner-border-sm
+NOT_CONSIDERED[tri] .spinner-grow
+NOT_CONSIDERED[tri] .spinner-grow-sm
+NOT_CONSIDERED[tri] .start-0
+NOT_CONSIDERED[tri] .start-100
+NOT_CONSIDERED[tri] .start-50
+NOT_CONSIDERED[tri] .sticky-bottom
+NOT_CONSIDERED[tri] .sticky-top
+NOT_CONSIDERED[tri] .table
+NOT_CONSIDERED[tri] .table-active
+NOT_CONSIDERED[tri] .table-danger
+NOT_CONSIDERED[tri] .table-dark
+NOT_CONSIDERED[tri] .table-group-divider
+NOT_CONSIDERED[tri] .table-info
+NOT_CONSIDERED[tri] .table-light
+NOT_CONSIDERED[tri] .table-primary
+NOT_CONSIDERED[tri] .table-responsive
+NOT_CONSIDERED[tri] .table-secondary
+NOT_CONSIDERED[tri] .table-success
+NOT_CONSIDERED[tri] .table-warning
+NOT_CONSIDERED[tri] .text-bg-danger
+NOT_CONSIDERED[tri] .text-bg-dark
+NOT_CONSIDERED[tri] .text-bg-info
+NOT_CONSIDERED[tri] .text-bg-light
+NOT_CONSIDERED[tri] .text-bg-primary
+NOT_CONSIDERED[tri] .text-bg-secondary
+NOT_CONSIDERED[tri] .text-bg-success
+NOT_CONSIDERED[tri] .text-bg-warning
+NOT_CONSIDERED[tri] .text-black
+NOT_CONSIDERED[tri] .text-black-50
+NOT_CONSIDERED[tri] .text-body
+NOT_CONSIDERED[tri] .text-body-emphasis
+NOT_CONSIDERED[tri] .text-body-secondary
+NOT_CONSIDERED[tri] .text-body-tertiary
+NOT_CONSIDERED[tri] .text-break
+NOT_CONSIDERED[tri] .text-capitalize
+NOT_CONSIDERED[tri] .text-center
+NOT_CONSIDERED[tri] .text-danger
+NOT_CONSIDERED[tri] .text-danger-emphasis
+NOT_CONSIDERED[tri] .text-dark
+NOT_CONSIDERED[tri] .text-dark-emphasis
+NOT_CONSIDERED[tri] .text-decoration-line-through
+NOT_CONSIDERED[tri] .text-decoration-none
+NOT_CONSIDERED[tri] .text-decoration-underline
+NOT_CONSIDERED[tri] .text-end
+NOT_CONSIDERED[tri] .text-info
+NOT_CONSIDERED[tri] .text-info-emphasis
+NOT_CONSIDERED[tri] .text-light
+NOT_CONSIDERED[tri] .text-light-emphasis
+NOT_CONSIDERED[tri] .text-lowercase
+NOT_CONSIDERED[tri] .text-muted
+NOT_CONSIDERED[tri] .text-nowrap
+NOT_CONSIDERED[tri] .text-opacity-100
+NOT_CONSIDERED[tri] .text-opacity-25
+NOT_CONSIDERED[tri] .text-opacity-50
+NOT_CONSIDERED[tri] .text-opacity-75
+NOT_CONSIDERED[tri] .text-primary
+NOT_CONSIDERED[tri] .text-primary-emphasis
+NOT_CONSIDERED[tri] .text-reset
+NOT_CONSIDERED[tri] .text-secondary
+NOT_CONSIDERED[tri] .text-secondary-emphasis
+NOT_CONSIDERED[tri] .text-start
+NOT_CONSIDERED[tri] .text-success
+NOT_CONSIDERED[tri] .text-success-emphasis
+NOT_CONSIDERED[tri] .text-truncate
+NOT_CONSIDERED[tri] .text-uppercase
+NOT_CONSIDERED[tri] .text-warning
+NOT_CONSIDERED[tri] .text-warning-emphasis
+NOT_CONSIDERED[tri] .text-white
+NOT_CONSIDERED[tri] .text-white-50
+NOT_CONSIDERED[tri] .text-wrap
+NOT_CONSIDERED[tri] .toast
+NOT_CONSIDERED[tri] .toast-body
+NOT_CONSIDERED[tri] .toast-container
+NOT_CONSIDERED[tri] .toast-header
+NOT_CONSIDERED[tri] .tooltip
+NOT_CONSIDERED[tri] .tooltip-inner
+NOT_CONSIDERED[tri] .top-0
+NOT_CONSIDERED[tri] .top-100
+NOT_CONSIDERED[tri] .top-50
+NOT_CONSIDERED[tri] .translate-middle
+NOT_CONSIDERED[tri] .translate-middle-x
+NOT_CONSIDERED[tri] .translate-middle-y
+NOT_CONSIDERED[tri] .user-select-all
+NOT_CONSIDERED[tri] .user-select-auto
+NOT_CONSIDERED[tri] .user-select-none
+NOT_CONSIDERED[tri] .valid-feedback
+NOT_CONSIDERED[tri] .valid-tooltip
+NOT_CONSIDERED[tri] .vh-100
+NOT_CONSIDERED[tri] .visible
+NOT_CONSIDERED[tri] .visually-hidden
+NOT_CONSIDERED[tri] .vr
+NOT_CONSIDERED[tri] .vstack
+NOT_CONSIDERED[tri] .vw-100
+NOT_CONSIDERED[tri] .w-100
+NOT_CONSIDERED[tri] .w-25
+NOT_CONSIDERED[tri] .w-50
+NOT_CONSIDERED[tri] .w-75
+NOT_CONSIDERED[tri] .w-auto
+NOT_CONSIDERED[tri] .z-0
+NOT_CONSIDERED[tri] .z-1
+NOT_CONSIDERED[tri] .z-2
+NOT_CONSIDERED[tri] .z-3
+NOT_CONSIDERED[tri] .z-n1
+NOT_CONSIDERED[tri] a
+NOT_CONSIDERED[tri] abbr
+NOT_CONSIDERED[tri] address
+NOT_CONSIDERED[tri] b
+NOT_CONSIDERED[tri] blockquote
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] button
+NOT_CONSIDERED[tri] caption
+NOT_CONSIDERED[tri] code
+NOT_CONSIDERED[tri] dd
+NOT_CONSIDERED[tri] dl
+NOT_CONSIDERED[tri] dt
+NOT_CONSIDERED[tri] fieldset
+NOT_CONSIDERED[tri] figure
+NOT_CONSIDERED[tri] h1
+NOT_CONSIDERED[tri] h2
+NOT_CONSIDERED[tri] h3
+NOT_CONSIDERED[tri] h4
+NOT_CONSIDERED[tri] h5
+NOT_CONSIDERED[tri] h6
+NOT_CONSIDERED[tri] hr
+NOT_CONSIDERED[tri] iframe
+NOT_CONSIDERED[tri] img
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] kbd
+NOT_CONSIDERED[tri] label
+NOT_CONSIDERED[tri] legend
+NOT_CONSIDERED[tri] mark
+NOT_CONSIDERED[tri] ol
+NOT_CONSIDERED[tri] optgroup
+NOT_CONSIDERED[tri] output
+NOT_CONSIDERED[tri] p
+NOT_CONSIDERED[tri] pre
+NOT_CONSIDERED[tri] progress
+NOT_CONSIDERED[tri] samp
+NOT_CONSIDERED[tri] select
+NOT_CONSIDERED[tri] small
+NOT_CONSIDERED[tri] strong
+NOT_CONSIDERED[tri] sub
+NOT_CONSIDERED[tri] summary
+NOT_CONSIDERED[tri] sup
+NOT_CONSIDERED[tri] svg
+NOT_CONSIDERED[tri] table
+NOT_CONSIDERED[tri] tbody
+NOT_CONSIDERED[tri] td
+NOT_CONSIDERED[tri] textarea
+NOT_CONSIDERED[tri] tfoot
+NOT_CONSIDERED[tri] th
+NOT_CONSIDERED[tri] thead
+NOT_CONSIDERED[tri] tr
+NOT_CONSIDERED[tri] ul
+PSEUDO_SKIPPED[tri] :not -> 88 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-button:not(.collapsed)
+PSEUDO_SKIPPED[tri]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[tri]    eg .accordion-item:not(:first-of-type)
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn-group:not(:first-child)
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn-group:not(:first-child) > .btn
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :after -> 30 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-button:after
+PSEUDO_SKIPPED[tri]    eg .accordion-button:not(.collapsed):after
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:after
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :before -> 27 selector(s)
+PSEUDO_SKIPPED[tri]    eg .blockquote-footer:before
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
+PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :disabled -> 18 selector(s)
+PSEUDO_SKIPPED[tri]    eg .btn-check:disabled + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-close:disabled
+PSEUDO_SKIPPED[tri]    eg .btn:disabled
+PSEUDO_SKIPPED[tri]    eg .dropdown-item:disabled
+PSEUDO_SKIPPED[tri]    eg .form-check-input:disabled
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :invalid -> 17 selector(s)
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:invalid
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:invalid ~ .form-check-label
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:invalid:checked
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:invalid:focus
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-control-color:invalid
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :valid -> 17 selector(s)
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:valid
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:valid ~ .form-check-label
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:valid:checked
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-check-input:valid:focus
+PSEUDO_SKIPPED[tri]    eg .was-validated .form-control-color:valid
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :checked -> 13 selector(s)
+PSEUDO_SKIPPED[tri]    eg .btn-check:checked + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[tri]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn-check:checked + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-group-vertical > .btn-check:checked + .btn
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :active -> 11 selector(s)
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn:active
+PSEUDO_SKIPPED[tri]    eg .btn-group-vertical > .btn:active
+PSEUDO_SKIPPED[tri]    eg .btn:first-child:active
+PSEUDO_SKIPPED[tri]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[tri]    eg .dropdown-item:active
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :focus-visible -> 11 selector(s)
+PSEUDO_SKIPPED[tri]    eg .btn-check:checked + .btn:focus-visible
+PSEUDO_SKIPPED[tri]    eg .btn-check:checked:focus-visible + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-check:focus-visible + .btn
+PSEUDO_SKIPPED[tri]    eg .btn-link:focus-visible
+PSEUDO_SKIPPED[tri]    eg .btn.active:focus-visible
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :first-child -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-flush > .accordion-item:first-child
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn.dropdown-toggle-split:first-child
+PSEUDO_SKIPPED[tri]    eg .btn:first-child:active
+PSEUDO_SKIPPED[tri]    eg .btn:first-child:active:focus-visible
+PSEUDO_SKIPPED[tri]    eg .card > .list-group:first-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :last-child -> 9 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-flush > .accordion-item:last-child
+PSEUDO_SKIPPED[tri]    eg .blockquote > :last-child
+PSEUDO_SKIPPED[tri]    eg .card > .list-group:last-child
+PSEUDO_SKIPPED[tri]    eg .card-footer:last-child
+PSEUDO_SKIPPED[tri]    eg .card-text:last-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :empty -> 6 selector(s)
+PSEUDO_SKIPPED[tri]    eg .badge:empty
+PSEUDO_SKIPPED[tri]    eg .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[tri]    eg .dropend .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[tri]    eg .dropstart .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[tri]    eg .dropup .dropdown-toggle:empty:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] ::-webkit-file-upload-button -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control-lg::-webkit-file-upload-button
+PSEUDO_SKIPPED[tri]    eg .form-control-sm::-webkit-file-upload-button
+PSEUDO_SKIPPED[tri]    eg .form-control::-webkit-file-upload-button
+PSEUDO_SKIPPED[tri]    eg .form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button
+PSEUDO_SKIPPED[tri]    eg ::-webkit-file-upload-button
+PSEUDO_SKIPPED[tri] ::file-selector-button -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control-lg::file-selector-button
+PSEUDO_SKIPPED[tri]    eg .form-control-sm::file-selector-button
+PSEUDO_SKIPPED[tri]    eg .form-control::file-selector-button
+PSEUDO_SKIPPED[tri]    eg .form-control:hover:not(:disabled):not([readonly])::file-selector-button
+PSEUDO_SKIPPED[tri]    eg ::file-selector-button
+PSEUDO_SKIPPED[tri] :nth-last-child -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg .input-group.has-validation > .dropdown-toggle:nth-last-child(n+4)
+PSEUDO_SKIPPED[tri]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-control
+PSEUDO_SKIPPED[tri]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-select
+PSEUDO_SKIPPED[tri]    eg .input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
+PSEUDO_SKIPPED[tri]    eg .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3)
+PSEUDO_SKIPPED[tri] ::-moz-range-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-range::-moz-range-thumb
+PSEUDO_SKIPPED[tri]    eg .form-range::-moz-range-thumb:active
+PSEUDO_SKIPPED[tri]    eg .form-range:disabled::-moz-range-thumb
+PSEUDO_SKIPPED[tri]    eg .form-range:focus::-moz-range-thumb
+PSEUDO_SKIPPED[tri] ::-webkit-slider-thumb -> 4 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-range::-webkit-slider-thumb
+PSEUDO_SKIPPED[tri]    eg .form-range::-webkit-slider-thumb:active
+PSEUDO_SKIPPED[tri]    eg .form-range:disabled::-webkit-slider-thumb
+PSEUDO_SKIPPED[tri]    eg .form-range:focus::-webkit-slider-thumb
+PSEUDO_SKIPPED[tri] :-webkit-autofill -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-floating > .form-control-plaintext:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .form-floating > .form-control:-webkit-autofill
+PSEUDO_SKIPPED[tri]    eg .form-floating > .form-control:-webkit-autofill ~ label
+PSEUDO_SKIPPED[tri] ::placeholder -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control::placeholder
+PSEUDO_SKIPPED[tri]    eg .form-floating > .form-control-plaintext::placeholder
+PSEUDO_SKIPPED[tri]    eg .form-floating > .form-control::placeholder
+PSEUDO_SKIPPED[tri] :last-of-type -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-item:last-of-type
+PSEUDO_SKIPPED[tri]    eg .accordion-item:last-of-type > .accordion-collapse
+PSEUDO_SKIPPED[tri]    eg .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed
+PSEUDO_SKIPPED[tri] :nth-child -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg .btn-group > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[tri]    eg .btn-group-vertical > .btn:nth-child(n+3)
+PSEUDO_SKIPPED[tri]    eg .table-striped-columns > :not(caption) > tr > :nth-child(2n)
+PSEUDO_SKIPPED[tri] :first-of-type -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .accordion-item:first-of-type
+PSEUDO_SKIPPED[tri]    eg .accordion-item:first-of-type > .accordion-header .accordion-button
+PSEUDO_SKIPPED[tri] :-moz-focusring -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-select:-moz-focusring
+PSEUDO_SKIPPED[tri] ::-moz-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control-color::-moz-color-swatch
+PSEUDO_SKIPPED[tri] ::-moz-focus-inner -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-moz-focus-inner
+PSEUDO_SKIPPED[tri] ::-moz-focus-outer -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-range::-moz-focus-outer
+PSEUDO_SKIPPED[tri] ::-moz-range-track -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-range::-moz-range-track
+PSEUDO_SKIPPED[tri] ::-webkit-calendar-picker-indicator -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg [list]:not([type="date"]):not([type="datetime-local"]):not([type="month"]):not([type="week"]):not([type="time"])::-webkit-calendar-picker-indicator
+PSEUDO_SKIPPED[tri] ::-webkit-color-swatch -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control-color::-webkit-color-swatch
+PSEUDO_SKIPPED[tri] ::-webkit-color-swatch-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-color-swatch-wrapper
+PSEUDO_SKIPPED[tri] ::-webkit-date-and-time-value -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control::-webkit-date-and-time-value
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-control::-webkit-datetime-edit
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-day-field -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-day-field
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-fields-wrapper -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-fields-wrapper
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-hour-field -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-hour-field
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-minute -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-minute
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-month-field -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-month-field
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-text -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-text
+PSEUDO_SKIPPED[tri] ::-webkit-datetime-edit-year-field -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-datetime-edit-year-field
+PSEUDO_SKIPPED[tri] ::-webkit-inner-spin-button -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-inner-spin-button
+PSEUDO_SKIPPED[tri] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg [type="search"]::-webkit-search-cancel-button
+PSEUDO_SKIPPED[tri] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ::-webkit-search-decoration
+PSEUDO_SKIPPED[tri] ::-webkit-slider-runnable-track -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-range::-webkit-slider-runnable-track
+PSEUDO_SKIPPED[tri] :indeterminate -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .form-check-input[type="checkbox"]:indeterminate
+PSEUDO_SKIPPED[tri] :nth-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .table-striped > tbody > tr:nth-of-type(odd) > *
+PSEUDO_SKIPPED[tri] :root -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg :root
+[tri-match] frame_id=0 command=init miss_delta=2425 node_match_changes=2425 total_misses=2425
+[tri-match] frame_id=1 command=add miss_delta=8 node_match_changes=7 total_misses=2433
+[tri-match] frame_id=2 command=add miss_delta=3 node_match_changes=2 total_misses=2436
+[tri-match] frame_id=3 command=add miss_delta=3 node_match_changes=2 total_misses=2439
+[tri-match] frame_id=4 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2439
+[tri-match] frame_id=5 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2439
+[tri-match] frame_id=6 command=add miss_delta=5 node_match_changes=4 total_misses=2444
+[tri-match] frame_id=7 command=replace_value miss_delta=1 node_match_changes=0 total_misses=2445
+[tri-match] frame_id=8 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2445
+[tri-match] frame_id=9 command=add miss_delta=3 node_match_changes=2 total_misses=2448
+[tri-match] frame_id=10 command=add miss_delta=3 node_match_changes=2 total_misses=2451
+[tri-match] frame_id=11 command=add miss_delta=4 node_match_changes=3 total_misses=2455
+[tri-match] frame_id=12 command=add miss_delta=3 node_match_changes=2 total_misses=2458
+[tri-match] frame_id=13 command=replace_value miss_delta=1 node_match_changes=0 total_misses=2459
+[tri-match] frame_id=14 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2459
+[tri-match] frame_id=15 command=add miss_delta=3 node_match_changes=2 total_misses=2462
+[tri-match] frame_id=16 command=add miss_delta=3 node_match_changes=2 total_misses=2465
+[tri-match] frame_id=17 command=add miss_delta=5 node_match_changes=4 total_misses=2470
+[tri-match] frame_id=18 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2470
+[tri-match] frame_id=19 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2470
+[tri-match] frame_id=20 command=add miss_delta=7 node_match_changes=6 total_misses=2477
+[tri-match] frame_id=21 command=add miss_delta=5 node_match_changes=4 total_misses=2482
+[tri-match] frame_id=22 command=add miss_delta=5 node_match_changes=4 total_misses=2487
+[tri-match] frame_id=23 command=add miss_delta=5 node_match_changes=4 total_misses=2492
+[tri-match] frame_id=24 command=add miss_delta=5 node_match_changes=4 total_misses=2497
+[tri-match] frame_id=25 command=add miss_delta=7 node_match_changes=6 total_misses=2504
+[tri-match] frame_id=26 command=add miss_delta=7 node_match_changes=6 total_misses=2511
+[tri-match] frame_id=27 command=add miss_delta=5 node_match_changes=4 total_misses=2516
+[tri-match] frame_id=28 command=add miss_delta=7 node_match_changes=6 total_misses=2523
+[tri-match] frame_id=29 command=add miss_delta=7 node_match_changes=6 total_misses=2530
+[tri-match] frame_id=30 command=add miss_delta=7 node_match_changes=6 total_misses=2537
+[tri-match] frame_id=31 command=add miss_delta=5 node_match_changes=4 total_misses=2542
+[tri-match] frame_id=32 command=add miss_delta=7 node_match_changes=6 total_misses=2549
+[tri-match] frame_id=33 command=add miss_delta=7 node_match_changes=6 total_misses=2556
+[tri-match] frame_id=34 command=add miss_delta=5 node_match_changes=4 total_misses=2561
+[tri-match] frame_id=35 command=add miss_delta=5 node_match_changes=4 total_misses=2566
+[tri-match] frame_id=36 command=add miss_delta=7 node_match_changes=6 total_misses=2573
+[tri-match] frame_id=37 command=add miss_delta=7 node_match_changes=6 total_misses=2580
+[tri-match] frame_id=38 command=add miss_delta=5 node_match_changes=4 total_misses=2585
+[tri-match] frame_id=39 command=add miss_delta=5 node_match_changes=4 total_misses=2590
+[tri-match] frame_id=40 command=add miss_delta=5 node_match_changes=4 total_misses=2595
+[tri-match] frame_id=41 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2595
+[tri-match] frame_id=42 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2595
+[tri-match] frame_id=43 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2595
+[tri-match] frame_id=44 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2595
+[tri-match] frame_id=45 command=add miss_delta=7 node_match_changes=6 total_misses=2602
+[tri-match] frame_id=46 command=add miss_delta=5 node_match_changes=4 total_misses=2607
+[tri-match] frame_id=47 command=add miss_delta=7 node_match_changes=6 total_misses=2614
+[tri-match] frame_id=48 command=add miss_delta=5 node_match_changes=4 total_misses=2619
+[tri-match] frame_id=49 command=add miss_delta=5 node_match_changes=4 total_misses=2624
+[tri-match] frame_id=50 command=add miss_delta=5 node_match_changes=4 total_misses=2629
+[tri-match] frame_id=51 command=add miss_delta=7 node_match_changes=6 total_misses=2636
+[tri-match] frame_id=52 command=add miss_delta=5 node_match_changes=4 total_misses=2641
+[tri-match] frame_id=53 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2641
+[tri-match] frame_id=54 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2641
+[tri-match] frame_id=55 command=add miss_delta=4 node_match_changes=3 total_misses=2645
+[tri-match] frame_id=56 command=add miss_delta=3 node_match_changes=2 total_misses=2648
+[tri-match] frame_id=57 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=58 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=59 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=60 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=61 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=62 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=63 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2648
+[tri-match] frame_id=64 command=add miss_delta=5 node_match_changes=4 total_misses=2653
+[tri-match] frame_id=65 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=66 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=67 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=68 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=69 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=70 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=71 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=72 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=73 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=74 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=75 command=delete_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=76 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=77 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=78 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2653
+[tri-match] frame_id=79 command=replace_value miss_delta=8 node_match_changes=0 total_misses=2661
+[tri-match] frame_id=80 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2661
+[tri-match] frame_id=81 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2661
+[tri-match] frame_id=82 command=add miss_delta=77 node_match_changes=76 total_misses=2738
+[tri-match] frame_id=83 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2738
+[tri-match] frame_id=84 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2738
+[tri-match] frame_id=85 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2738
+[tri-match] frame_id=86 command=replace_value miss_delta=8 node_match_changes=0 total_misses=2746
+[tri-match] frame_id=87 command=replace_value miss_delta=8 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=88 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=89 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=90 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=91 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=92 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=93 command=delete_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=94 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=95 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=96 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=97 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=98 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=99 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=100 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=101 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=102 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=103 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=104 command=insert_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=105 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2754
+[tri-match] frame_id=106 command=add miss_delta=327 node_match_changes=326 total_misses=3081
+[tri-match] frame_id=107 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=108 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=109 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=110 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=111 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=112 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=113 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3081
+[tri-match] frame_id=114 command=add miss_delta=5 node_match_changes=4 total_misses=3086
+[tri-match] frame_id=115 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=116 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=117 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=118 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=119 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=120 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=121 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=122 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=123 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=124 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=125 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=126 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=127 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=128 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=129 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=130 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=131 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3086
+[tri-match] frame_id=132 command=add miss_delta=5 node_match_changes=4 total_misses=3091
+[tri-match] frame_id=133 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=134 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=135 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=136 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=137 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=138 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=139 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=140 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=141 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=142 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=143 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=144 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=145 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=146 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=147 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3091
+[tri-match] frame_id=148 command=add miss_delta=5 node_match_changes=4 total_misses=3096
+[tri-match] frame_id=149 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=150 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=151 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=152 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=153 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=154 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=155 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=156 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=157 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=158 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=159 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=160 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=161 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=162 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=163 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=164 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=165 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3096
+[tri-match] frame_id=166 command=add miss_delta=5 node_match_changes=4 total_misses=3101
+[tri-match] frame_id=167 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=168 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=169 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=170 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=171 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=172 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=173 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=174 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=175 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=176 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=177 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=178 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=179 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=180 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=181 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=182 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=183 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3101
+[tri-match] frame_id=184 command=add miss_delta=5 node_match_changes=4 total_misses=3106
+[tri-match] frame_id=185 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=186 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=187 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=188 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=189 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=190 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=191 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=192 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=193 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=194 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=195 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=196 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=197 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=198 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=199 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=200 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=201 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=202 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=203 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=204 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=205 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=206 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=207 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3106
+[tri-match] frame_id=208 command=add miss_delta=5 node_match_changes=4 total_misses=3111
+[tri-match] frame_id=209 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=210 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=211 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=212 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=213 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=214 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=215 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=216 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=217 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=218 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=219 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=220 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=221 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=222 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=223 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=224 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=225 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3111
+[tri-match] frame_id=226 command=add miss_delta=5 node_match_changes=4 total_misses=3116
+[tri-match] frame_id=227 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=228 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=229 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=230 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=231 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=232 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=233 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=234 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=235 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=236 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=237 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3116
+[tri-match] frame_id=238 command=add miss_delta=5 node_match_changes=4 total_misses=3121
+[tri-match] frame_id=239 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=240 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=241 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=242 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=243 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=244 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=245 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=246 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=247 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=248 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=249 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=250 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=251 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=252 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=253 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=254 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=255 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3121
+[tri-match] frame_id=256 command=add miss_delta=5 node_match_changes=4 total_misses=3126
+[tri-match] frame_id=257 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=258 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=259 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=260 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=261 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=262 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=263 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=264 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=265 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=266 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=267 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=268 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=269 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=270 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=271 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=272 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=273 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3126
+[tri-match] frame_id=274 command=add miss_delta=5 node_match_changes=4 total_misses=3131
+[tri-match] frame_id=275 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=276 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=277 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=278 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=279 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=280 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=281 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=282 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=283 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=284 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=285 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=286 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=287 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=288 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=289 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=290 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=291 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3131
+[tri-match] frame_id=292 command=add miss_delta=5 node_match_changes=4 total_misses=3136
+[tri-match] frame_id=293 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=294 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=295 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=296 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=297 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=298 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=299 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=300 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=301 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=302 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=303 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=304 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=305 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=306 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=307 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=308 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=309 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3136
+[tri-match] frame_id=310 command=add miss_delta=5 node_match_changes=4 total_misses=3141
+[tri-match] frame_id=311 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=312 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=313 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=314 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=315 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=316 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=317 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=318 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=319 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=320 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=321 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=322 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=323 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=324 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=325 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3141
+[tri-match] frame_id=326 command=replace_value miss_delta=1 node_match_changes=1 total_misses=3142
+[tri-match] frame_id=327 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3142
+[tri-match] frame_id=328 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3142
+[tri-match] frame_id=329 command=replace_value miss_delta=1 node_match_changes=1 total_misses=3143
+[tri-match] frame_id=330 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3143
+[tri-match] frame_id=331 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3143
+[tri-match] frame_id=332 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3143
+[tri-match] frame_id=333 command=replace_value miss_delta=9 node_match_changes=1 total_misses=3152
+[tri-match] frame_id=334 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3152
+[tri-match] frame_id=335 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3152
+[tri-match] frame_id=336 command=add miss_delta=5 node_match_changes=4 total_misses=3157
+[tri-match] frame_id=337 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=338 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=339 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=340 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=341 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=342 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=343 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=344 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=345 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=346 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=347 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3157
+[tri-match] frame_id=348 command=add miss_delta=5 node_match_changes=4 total_misses=3162
+[tri-match] frame_id=349 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=350 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=351 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=352 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=353 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=354 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=355 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=356 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=357 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=358 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=359 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=360 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=361 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=362 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3162
+[tri-match] frame_id=363 command=replace_value miss_delta=9 node_match_changes=1 total_misses=3171
+[tri-match] frame_id=364 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3171
+[tri-match] frame_id=365 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3171
+[tri-match] frame_id=366 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3171
+[tri-match] frame_id=367 command=replace_value miss_delta=8 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=368 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=369 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=370 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=371 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=372 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=373 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=374 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=375 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=376 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=377 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=378 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=379 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=380 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=381 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3179
+[tri-match] frame_id=382 command=add miss_delta=5 node_match_changes=4 total_misses=3184
+[tri-match] frame_id=383 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=384 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=385 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=386 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=387 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=388 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=389 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=390 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=391 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=392 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=393 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=394 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=395 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=396 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=397 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=398 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=399 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3184
+[tri-match] frame_id=400 command=add miss_delta=5 node_match_changes=4 total_misses=3189
+[tri-match] frame_id=401 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=402 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=403 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=404 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=405 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=406 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=407 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=408 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=409 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=410 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=411 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=412 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=413 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=414 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3189
+[tri-match] frame_id=415 command=replace_value miss_delta=8 node_match_changes=0 total_misses=3197
+[tri-match] frame_id=416 command=replace_value miss_delta=8 node_match_changes=0 total_misses=3205
+[tri-match] frame_id=417 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3205
+[tri-match] frame_id=418 command=add miss_delta=5 node_match_changes=4 total_misses=3210
+[tri-match] frame_id=419 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=420 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=421 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=422 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=423 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=424 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=425 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=426 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=427 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=428 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=429 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3210
+[tri-match] frame_id=430 command=add miss_delta=5 node_match_changes=4 total_misses=3215
+[tri-match] frame_id=431 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3215
+[tri-match] frame_id=432 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3215
+[tri-match] frame_id=433 command=add miss_delta=5 node_match_changes=4 total_misses=3220
+[tri-match] frame_id=434 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=435 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=436 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=437 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=438 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=439 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=440 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=441 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=442 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=443 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3220
+[tri-match] frame_id=444 command=add miss_delta=7 node_match_changes=6 total_misses=3227
+[tri-match] frame_id=445 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=446 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=447 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=448 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=449 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=450 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=451 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=452 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=453 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=454 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=455 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=456 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=457 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=458 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=459 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=460 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=461 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=462 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=463 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=464 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=465 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=466 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=467 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=468 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=469 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=470 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=471 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=472 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=473 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=474 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=475 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=476 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=477 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=478 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=479 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=480 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=481 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=482 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=483 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=484 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=485 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=486 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=487 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=488 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=489 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=490 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=491 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=492 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=493 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=494 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=495 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=496 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=497 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=498 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=499 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=500 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=501 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=502 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=503 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=504 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=505 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=506 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=507 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=508 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=509 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=510 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=511 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=512 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=513 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=514 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3227
+[tri-match] frame_id=515 command=replace_value miss_delta=7 node_match_changes=1 total_misses=3234
+[tri-match] frame_id=516 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3234
+[tri-match] frame_id=517 command=delete_value miss_delta=0 node_match_changes=0 total_misses=3234
+[tri-match] frame_id=518 command=replace_value miss_delta=8 node_match_changes=0 total_misses=3242
+[tri-match] frame_id=519 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3242
+[tri-match] frame_id=520 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3242
+[tri-match] frame_id=521 command=replace_value miss_delta=1 node_match_changes=1 total_misses=3243
+[tri-match] frame_id=522 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3243
+[tri-match] frame_id=523 command=replace_value miss_delta=0 node_match_changes=0 total_misses=3243
+[tri-match] frame_id=524 command=insert_value miss_delta=0 node_match_changes=0 total_misses=3243
+[tri-match] frame_id=525 command=add miss_delta=2 node_match_changes=1 total_misses=3245
+[tri-match] frame_id=526 command=add miss_delta=2 node_match_changes=1 total_misses=3247
+[tri-match] frame_id=527 command=add miss_delta=2 node_match_changes=1 total_misses=3249
+[tri-match] frame_id=528 command=add miss_delta=2 node_match_changes=1 total_misses=3251
+[tri-match] frame_id=529 command=add miss_delta=2 node_match_changes=1 total_misses=3253
+[tri-match] frame_id=530 command=add miss_delta=2 node_match_changes=1 total_misses=3255
+[tri-match] frame_id=531 command=add miss_delta=2 node_match_changes=1 total_misses=3257
+[tri-match] frame_id=532 command=recalculate miss_delta=0 node_match_changes=0 total_misses=3257
+[tri-match] frame_id=533 command=replace_value miss_delta=3097 node_match_changes=1 total_misses=6354
+[tri-match] frame_id=534 command=replace_value miss_delta=1 node_match_changes=1 total_misses=6355
+[tri-match] frame_id=535 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6355
+[tri-match] frame_id=536 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6355
+[tri-match] frame_id=537 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6355
+[tri-match] frame_id=538 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6355
+[tri-match] frame_id=539 command=add miss_delta=7 node_match_changes=6 total_misses=6362
+[tri-match] frame_id=540 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6362
+[tri-match] frame_id=541 command=delete_value miss_delta=0 node_match_changes=0 total_misses=6362
+[tri-match] frame_id=542 command=replace_value miss_delta=1 node_match_changes=0 total_misses=6363
+[tri-match] frame_id=543 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6363
+[tri-match] frame_id=544 command=replace_value miss_delta=1 node_match_changes=0 total_misses=6364
+[tri-match] frame_id=545 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6364
+[tri-match] frame_id=546 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6364
+[tri-match] frame_id=547 command=recalculate miss_delta=0 node_match_changes=0 total_misses=6364
+[tri-match] frame_id=548 command=replace_value miss_delta=1 node_match_changes=1 total_misses=6365
+[tri-match] frame_id=549 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=550 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=551 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=552 command=insert_value miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=553 command=replace_value miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=554 command=recalculate miss_delta=0 node_match_changes=0 total_misses=6365
+[tri-match] frame_id=555 command=replace_value miss_delta=3103 node_match_changes=1 total_misses=9468
+[tri-match] frame_id=556 command=replace_value miss_delta=1 node_match_changes=1 total_misses=9469
+[tri-match] frame_id=557 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9469
+[tri-match] frame_id=558 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9469
+[tri-match] frame_id=559 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9469
+[tri-match] frame_id=560 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9469
+[tri-match] frame_id=561 command=add miss_delta=5 node_match_changes=4 total_misses=9474
+[tri-match] frame_id=562 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9474
+[tri-match] frame_id=563 command=delete_value miss_delta=0 node_match_changes=0 total_misses=9474
+[tri-match] frame_id=564 command=replace_value miss_delta=1 node_match_changes=0 total_misses=9475
+[tri-match] frame_id=565 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9475
+[tri-match] frame_id=566 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9475
+[tri-match] frame_id=567 command=replace_value miss_delta=1 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=568 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=569 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=570 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=571 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=572 command=insert_value miss_delta=0 node_match_changes=0 total_misses=9476
+[tri-match] frame_id=573 command=add miss_delta=5 node_match_changes=4 total_misses=9481
+[tri-match] frame_id=574 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=575 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=576 command=insert_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=577 command=insert_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=578 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=579 command=insert_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=580 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=581 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=582 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=583 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=584 command=delete_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=585 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=586 command=replace_value miss_delta=0 node_match_changes=0 total_misses=9481
+[tri-match] frame_id=587 command=recalculate miss_delta=0 node_match_changes=0 total_misses=9481
+BEGIN
+* -> [4, 5, 6, 9, 10, 12, 15, 18, 21, 24, 27, 30, 33, 37, 38, 39, 41, 46, 50, 55, 60, 63, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 110, 114, 116, 119, 121, 122, 125, 126, 129, 133, 137, 142, 146, 151, 155, 159, 163, 167, 171, 175, 179, 184, 188, 192, 196, 201, 205, 209, 213, 216, 220, 224, 228, 232, 235, 239, 243, 247, 251, 255, 259, 263, 267, 272, 276, 280, 284, 288, 292, 295, 299, 303, 306, 310, 314, 319, 323, 327, 331, 335, 339, 343, 347, 351, 355, 360, 363, 367, 371, 376, 383, 384, 385, 386, 387, 392, 395, 398, 403, 411, 414, 415, 417, 421, 427, 433, 436, 439, 441, 449, 452, 455, 458, 461, 464, 467, 470, 473, 476, 479, 484, 487, 490, 495, 499, 502, 505, 508, 513, 514, 521, 522, 523, 524, 525, 529, 530, 531, 533, 534, 537, 540, 545, 546, 553, 554, 555, 556, 557, 560, 561, 562, 564, 565, 568, 571, 576, 577, 586, 587, 588, 589, 590, 593, 594, 596, 597, 598, 600, 601, 604, 607, 610, 614, 617, 624, 627, 628, 630, 631, 632, 634, 637, 640, 641, 643, 645, 647, 651, 652, 655, 656, 658, 662, 668, 670, 673, 676, 678, 681, 684, 686, 689, 692, 693, 696, 697, 699, 701, 702, 705, 707, 708, 711, 713, 714, 717, 719, 720, 723, 724, 727, 731, 734, 737, 741, 744, 753, 756, 757, 759, 762, 763, 765, 767, 770, 773, 777, 779, 785, 788, 789, 791, 795, 798, 799, 802, 803, 805, 809, 815, 817, 823, 826, 827, 829, 833, 836, 839, 840, 843, 844, 846, 850, 856, 858, 864, 867, 868, 870, 874, 877, 878, 881, 882, 884, 888, 901, 903, 907, 910, 913, 919, 921, 922, 926, 927, 929, 932, 933, 936, 940, 948, 950, 952, 954, 956, 959, 962, 966, 969, 971, 972, 976, 980, 981, 982, 984, 987, 988, 990, 991, 993, 994, 996, 998, 1001, 1003, 1005, 1007, 1009, 1010, 1015, 1019, 1022, 1023, 1025, 1028, 1029, 1031, 1032, 1035, 1037, 1038, 1039, 1040, 1041, 1043, 1044, 1045, 1048, 1049, 1050, 1052, 1053, 1054, 1057, 1058, 1060, 1068, 1071, 1074, 1077, 1078, 1081, 1082, 1084, 1087, 1088, 1090, 1091, 1093, 1095, 1097, 1099, 1101, 1104, 1107, 1108, 1111, 1112, 1114, 1117, 1118, 1121, 1126, 1129, 1132, 1135, 1136, 1138, 1141, 1142, 1144, 1146, 1148, 1150, 1152, 1153, 1155, 1156, 1158, 1161, 1164, 1168, 1172, 1173, 1174, 1176, 1179, 1180, 1182, 1183, 1185, 1186, 1190, 1193, 1195, 1197, 1199, 1201, 1202, 1203, 1205, 1206, 1210, 1213, 1216, 1220, 1224, 1225, 1226, 1228, 1231, 1232, 1234, 1235, 1237, 1238, 1242, 1245, 1247, 1249, 1251, 1252, 1254, 1255, 1256, 1258, 1259, 1260, 1262, 1263, 1267, 1268, 1269, 1271, 1272, 1275, 1278, 1281, 1282, 1284, 1287, 1288, 1290, 1292, 1294, 1296, 1298, 1299, 1301, 1302, 1303, 1305, 1306, 1307, 1309, 1310, 1311, 1313, 1314, 1316, 1319, 1322, 1326, 1330, 1331, 1332, 1334, 1337, 1338, 1340, 1341, 1343, 1344, 1348, 1351, 1353, 1355, 1357, 1359, 1361, 1362, 1363, 1364, 1366, 1367, 1369, 1371, 1372, 1374, 1375, 1376, 1378, 1379, 1380, 1382, 1383, 1385, 1387, 1388, 1390, 1391, 1392, 1394, 1395, 1396, 1398, 1399, 1401, 1403, 1404, 1406, 1407, 1408, 1410, 1411, 1412, 1414, 1415, 1417, 1419, 1420, 1422, 1423, 1424, 1426, 1427, 1429, 1433, 1436, 1439, 1443, 1447, 1448, 1449, 1451, 1454, 1455, 1457, 1458, 1460, 1461, 1465, 1468, 1470, 1472, 1474, 1476, 1478, 1479, 1480, 1481, 1483, 1484, 1486, 1488, 1489, 1491, 1492, 1493, 1495, 1496, 1497, 1499, 1500, 1502, 1504, 1505, 1507, 1508, 1509, 1511, 1512, 1513, 1515, 1516, 1518, 1520, 1521, 1523, 1524, 1525, 1527, 1528, 1530, 1531, 1533, 1535, 1537, 1539, 1540, 1541, 1543, 1548, 1551, 1553, 1555, 1556, 1558, 1561, 1565, 1573, 1575, 1578, 1582, 1590, 1592, 1595, 1599, 1607, 1609, 1615, 1618, 1621, 1622, 1625, 1626, 1628, 1631, 1632, 1634, 1635, 1637, 1638, 1640, 1642, 1644, 1646, 1648, 1651, 1654, 1655, 1658, 1659, 1661, 1664, 1665, 1668, 1673, 1676, 1679, 1680, 1682, 1683, 1685, 1688, 1691, 1695, 1699, 1700, 1701, 1703, 1706, 1707, 1709, 1710, 1712, 1713, 1717, 1720, 1722, 1724, 1726, 1727, 1728, 1730, 1732, 1733, 1735, 1736, 1737, 1739, 1740, 1741, 1743, 1745, 1746, 1748, 1749, 1750, 1752, 1753, 1755, 1756, 1757, 1759, 1761, 1762, 1764, 1765, 1766, 1768, 1769, 1771, 1772, 1773, 1775, 1776, 1777, 1779, 1780, 1781, 1783, 1784, 1786, 1790, 1791, 1792, 1794, 1795, 1798, 1801, 1802, 1804, 1805, 1807, 1810, 1813, 1817, 1821, 1822, 1823, 1825, 1828, 1829, 1831, 1832, 1834, 1835, 1839, 1842, 1844, 1846, 1848, 1849, 1850, 1852, 1853, 1854, 1856, 1857, 1859, 1860, 1861, 1863, 1864, 1865, 1867, 1869, 1870, 1872, 1873, 1874, 1876, 1877, 1878, 1880, 1882, 1883, 1885, 1886, 1887, 1889, 1890, 1892, 1893, 1894, 1896, 1898, 1899, 1901, 1902, 1903, 1905, 1906, 1908, 1909, 1910, 1912, 1913, 1914, 1916, 1917, 1918, 1920, 1921, 1923, 1924, 1925, 1927, 1928, 1929, 1931, 1932, 1934, 1935, 1936, 1938, 1939, 1940, 1942, 1943, 1945, 1946, 1947, 1949, 1950, 1951, 1953, 1954, 1956, 1957, 1958, 1960, 1961, 1962, 1964, 1965, 1967, 1968, 1969, 1971, 1972, 1973, 1975, 1976, 1977, 1979, 1980, 1982, 1983, 1984, 1986, 1987, 1988, 1990, 1991, 1993, 1994, 1995, 1997, 1998, 1999, 2001, 2002, 2004, 2005, 2006, 2008, 2009, 2010, 2012, 2013, 2015, 2016, 2017, 2019, 2020, 2021, 2023, 2024, 2026, 2027, 2028, 2030, 2031, 2032, 2034, 2035, 2037, 2041, 2042, 2043, 2045, 2046, 2050, 2053, 2056, 2059, 2060, 2063, 2064, 2066, 2069, 2070, 2072, 2073, 2075, 2077, 2079, 2081, 2082, 2083, 2084, 2086, 2089, 2092, 2093, 2096, 2097, 2099, 2102, 2103, 2106, 2111, 2114, 2117, 2119, 2121, 2122, 2123, 2125, 2126, 2127, 2128, 2129, 2130, 2131, 2132, 2134, 2137, 2140, 2144, 2148, 2149, 2150, 2152, 2155, 2156, 2158, 2159, 2161, 2162, 2166, 2169, 2171, 2173, 2175, 2176, 2178, 2179, 2180, 2182, 2183, 2185, 2186, 2187, 2189, 2190, 2192, 2193, 2194, 2196, 2197, 2199, 2200, 2201, 2203, 2204, 2206, 2207, 2208, 2210, 2211, 2213, 2214, 2215, 2217, 2218, 2220, 2221, 2222, 2224, 2225, 2227, 2228, 2229, 2231, 2232, 2234, 2235, 2236, 2238, 2239, 2241, 2242, 2243, 2245, 2246, 2248, 2249, 2250, 2252, 2253, 2254, 2256, 2257, 2258, 2260, 2261, 2263, 2264, 2265, 2267, 2268, 2270, 2271, 2272, 2274, 2275, 2277, 2278, 2279, 2281, 2282, 2284, 2285, 2286, 2288, 2293, 2296, 2298, 2300, 2301, 2303, 2306, 2309, 2313, 2317, 2318, 2319, 2321, 2324, 2325, 2327, 2328, 2330, 2331, 2335, 2338, 2340, 2342, 2344, 2345, 2347, 2348, 2349, 2351, 2352, 2354, 2355, 2356, 2358, 2359, 2361, 2362, 2363, 2365, 2366, 2368, 2369, 2370, 2372, 2373, 2375, 2376, 2377, 2379, 2380, 2381, 2383, 2384, 2386, 2387, 2388, 2390, 2391, 2393, 2394, 2395, 2397, 2398, 2400, 2401, 2402, 2404, 2405, 2406, 2408, 2409, 2411, 2412, 2413, 2415, 2416, 2418, 2419, 2420, 2422, 2423, 2425, 2426, 2427, 2429, 2430, 2432, 2433, 2434, 2436, 2437, 2439, 2440, 2441, 2443, 2444, 2446, 2447, 2448, 2450, 2451, 2453, 2454, 2455, 2457, 2458, 2460, 2461, 2462, 2464, 2465, 2466, 2468, 2475, 2478, 2481, 2484, 2485, 2488, 2489, 2491, 2494, 2495, 2497, 2498, 2500, 2503, 2504, 2506, 2509, 2510, 2512, 2514, 2517, 2518, 2521, 2522, 2524, 2527, 2528, 2531, 2532, 2534, 2536, 2538, 2540, 2541, 2543, 2544, 2547, 2550, 2553, 2555, 2557, 2558, 2559, 2561, 2562, 2563, 2565, 2566, 2567, 2569, 2570, 2571, 2573, 2574, 2576, 2579, 2584, 2588, 2595, 2598, 2602, 2609, 2612, 2616, 2623, 2627, 2633, 2637, 2644, 2647, 2651, 2658, 2661, 2665, 2672, 2677, 2680, 2683, 2687, 2691, 2692, 2693, 2695, 2698, 2699, 2701, 2702, 2704, 2705, 2709, 2712, 2714, 2716, 2718, 2720, 2722, 2723, 2724, 2725, 2727, 2728, 2730, 2732, 2733, 2735, 2736, 2737, 2739, 2740, 2741, 2743, 2744, 2746, 2748, 2749, 2751, 2752, 2753, 2755, 2756, 2757, 2759, 2760, 2762, 2764, 2765, 2767, 2768, 2769, 2771, 2772, 2773, 2775, 2777, 2778, 2780, 2782, 2783, 2785, 2786, 2788, 2790, 2791, 2793, 2794, 2795, 2797, 2798, 2800, 2801, 2802, 2804, 2805, 2807, 2808, 2809, 2811, 2812, 2814, 2815, 2816, 2818, 2819, 2821, 2822, 2823, 2825, 2826, 2828, 2829, 2830, 2832, 2833, 2835, 2836, 2837, 2839, 2840, 2842, 2843, 2844, 2846, 2847, 2849, 2850, 2852, 2853, 2855, 2856, 2857, 2859, 2861, 2863, 2864, 2865, 2866, 2868, 2869, 2871, 2873, 2874, 2876, 2877, 2878, 2880, 2881, 2882, 2884, 2885, 2887, 2889, 2890, 2892, 2893, 2894, 2896, 2897, 2899, 2900, 2901, 2903, 2905, 2907, 2908, 2909, 2910, 2912, 2913, 2915, 2917, 2918, 2920, 2921, 2922, 2924, 2925, 2926, 2928, 2929, 2931, 2933, 2934, 2936, 2937, 2938, 2940, 2941, 2942, 2944, 2945, 2947, 2949, 2950, 2952, 2953, 2954, 2956, 2957, 2958, 2960, 2961, 2963, 2965, 2966, 2968, 2969, 2970, 2972, 2973, 2974, 2976, 2977, 2979, 2981, 2982, 2984, 2985, 2986, 2988, 2989, 2990, 2992, 2993, 2995, 2997, 2998, 3000, 3001, 3002, 3004, 3005, 3007, 3008, 3009, 3011, 3013, 3015, 3016, 3017, 3019, 3020, 3021, 3023, 3025, 3027, 3028, 3029, 3031, 3032, 3033, 3035, 3037, 3039, 3040, 3041, 3042, 3044, 3045, 3047, 3049, 3050, 3052, 3053, 3054, 3056, 3057, 3058, 3060, 3061, 3063, 3065, 3066, 3068, 3069, 3070, 3072, 3073, 3075, 3076, 3077, 3079, 3081, 3083, 3084, 3085, 3086, 3088, 3089, 3091, 3093, 3094, 3096, 3097, 3098, 3100, 3101, 3102, 3104, 3105, 3107, 3109, 3110, 3112, 3113, 3114, 3116, 3117, 3118, 3120, 3121, 3123, 3125, 3126, 3128, 3129, 3130, 3132, 3133, 3134, 3136, 3137, 3139, 3141, 3142, 3144, 3145, 3146, 3148, 3149, 3150, 3152, 3153, 3155, 3157, 3158, 3160, 3161, 3162, 3164, 3165, 3166, 3168, 3169, 3171, 3173, 3174, 3176, 3177, 3178, 3180, 3181, 3183, 3184, 3185, 3187, 3189, 3191, 3192, 3193, 3195, 3196, 3197, 3199, 3201, 3203, 3204, 3205, 3207, 3208, 3209, 3211, 3213, 3215, 3216, 3217, 3218, 3220, 3221, 3223, 3225, 3226, 3228, 3229, 3230, 3232, 3233, 3234, 3236, 3237, 3239, 3241, 3242, 3244, 3245, 3246, 3248, 3249, 3251, 3252, 3253, 3255, 3257, 3259, 3260, 3261, 3262, 3264, 3265, 3267, 3269, 3270, 3272, 3273, 3274, 3276, 3277, 3278, 3280, 3281, 3283, 3285, 3286, 3288, 3289, 3290, 3292, 3293, 3294, 3296, 3297, 3299, 3301, 3302, 3304, 3305, 3306, 3308, 3309, 3310, 3312, 3313, 3315, 3317, 3318, 3320, 3321, 3322, 3324, 3325, 3326, 3328, 3329, 3331, 3333, 3334, 3336, 3337, 3338, 3340, 3341, 3342, 3344, 3345, 3347, 3349, 3350, 3352, 3353, 3354, 3356, 3357, 3359, 3360, 3361, 3363, 3365, 3367, 3368, 3369, 3371, 3372, 3373, 3375, 3377, 3379, 3380, 3381, 3383, 3384, 3385, 3387, 3389, 3391, 3392, 3393, 3395, 3399, 3402, 3405, 3406, 3409, 3410, 3412, 3415, 3416, 3419, 3424, 3427, 3429, 3431, 3432, 3434, 3437, 3440, 3444, 3448, 3449, 3450, 3452, 3455, 3456, 3458, 3459, 3461, 3462, 3466, 3469, 3471, 3473, 3475, 3476, 3477, 3479, 3480, 3482, 3483, 3484, 3486, 3488, 3489, 3491, 3492, 3493, 3495, 3496, 3498, 3499, 3500, 3502, 3503, 3505, 3506, 3507, 3509, 3510, 3511, 3513, 3514, 3516, 3517, 3518, 3520, 3521, 3522, 3524, 3525, 3527, 3528, 3529, 3531, 3532, 3533, 3535, 3536, 3538, 3539, 3540, 3542, 3543, 3544, 3546, 3547, 3549, 3550, 3551, 3553, 3554, 3556, 3557, 3558, 3560, 3561, 3563, 3564, 3565, 3567, 3568, 3569, 3571, 3572, 3573, 3575, 3576, 3577, 3579, 3580, 3582, 3586, 3589, 3592, 3593, 3596, 3597, 3599, 3602, 3603, 3606, 3613, 3616, 3619, 3622, 3623, 3626, 3627, 3629, 3632, 3633, 3636, 3637, 3639, 3641, 3643, 3645, 3646, 3647, 3648, 3650, 3653, 3656, 3657, 3660, 3661, 3663, 3666, 3667, 3670, 3675, 3678, 3681, 3683, 3685, 3686, 3687, 3688, 3689, 3691, 3694, 3696, 3697, 3702, 3703, 3704, 3707, 3708, 3711, 3713, 3714, 3717, 3719, 3720, 3723, 3725, 3728, 3731, 3734, 3738, 3742, 3743, 3744, 3746, 3749, 3750, 3752, 3753, 3755, 3756, 3760, 3763, 3765, 3767, 3769, 3771, 3773, 3774, 3775, 3776, 3778, 3779, 3781, 3783, 3784, 3786, 3787, 3788, 3790, 3791, 3793, 3794, 3795, 3797, 3799, 3801, 3802, 3803, 3804, 3806, 3807, 3809, 3811, 3812, 3814, 3815, 3816, 3818, 3819, 3820, 3822, 3823, 3825, 3827, 3828, 3830, 3831, 3832, 3834, 3835, 3836, 3838, 3839, 3841, 3843, 3844, 3846, 3847, 3848, 3850, 3851, 3852, 3854, 3855, 3857, 3859, 3860, 3862, 3863, 3864, 3866, 3867, 3869, 3870, 3871, 3873, 3875, 3877, 3878, 3879, 3881, 3882, 3883, 3885, 3887, 3889, 3890, 3891, 3892, 3894, 3895, 3897, 3899, 3900, 3902, 3903, 3904, 3906, 3907, 3909, 3910, 3911, 3913, 3915, 3917, 3918, 3919, 3921, 3922, 3924, 3926, 3928, 3929, 3930, 3931, 3933, 3934, 3936, 3938, 3939, 3941, 3942, 3943, 3945, 3946, 3947, 3949, 3950, 3952, 3954, 3955, 3957, 3958, 3959, 3961, 3962, 3964, 3965, 3966, 3968, 3970, 3972, 3973, 3974, 3976, 3977, 3979, 3981, 3983, 3984, 3985, 3987, 3988, 3989, 3991, 3993, 3995, 3996, 3997, 3999, 4000, 4002, 4004, 4006, 4007, 4008, 4009, 4011, 4012, 4014, 4016, 4017, 4019, 4020, 4021, 4023, 4024, 4025, 4027, 4028, 4030, 4032, 4033, 4035, 4036, 4037, 4039, 4040, 4042, 4043, 4044, 4046, 4048, 4050, 4051, 4052, 4054, 4055, 4057, 4059, 4061, 4062, 4063, 4065, 4066, 4067, 4069, 4071, 4073, 4074, 4075, 4077, 4078, 4080, 4082, 4084, 4085, 4086, 4087, 4089, 4090, 4092, 4094, 4095, 4097, 4098, 4099, 4101, 4102, 4103, 4105, 4106, 4108, 4110, 4111, 4113, 4114, 4115, 4117, 4118, 4120, 4121, 4122, 4124, 4126, 4128, 4129, 4130, 4132, 4133, 4135, 4137, 4139, 4140, 4141, 4143, 4144, 4145, 4147, 4149, 4151, 4152, 4153, 4155, 4156, 4157, 4159, 4161, 4163, 4164, 4165, 4167, 4171, 4172, 4173, 4175, 4176, 4177, 4179, 4180, 4183, 4186, 4188, 4190, 4191, 4193, 4196, 4199, 4202, 4206, 4208, 4210, 4212, 4215, 4218, 4222, 4224, 4226, 4228, 4231, 4234, 4238, 4240, 4242, 4244, 4247, 4250, 4254, 4256, 4258, 4260, 4263, 4266, 4270, 4272, 4274, 4276, 4279, 4282, 4286, 4288, 4290, 4292, 4295, 4298, 4302, 4304, 4306, 4308, 4311, 4314, 4318, 4320, 4322, 4324, 4327, 4330, 4334, 4336, 4338, 4340, 4343, 4346, 4350, 4352, 4354, 4356, 4359, 4362, 4366, 4368, 4370, 4372, 4375, 4378, 4382, 4384, 4386, 4388, 4396, 4399, 4402, 4405, 4406, 4413, 4414, 4416, 4417, 4419, 4420, 4422, 4424, 4426, 4428, 4429, 4431, 4432, 4434, 4437, 4440, 4441, 4444, 4445, 4447, 4450, 4451, 4454, 4459, 4462, 4473, 4476, 4479, 4482, 4485, 4490, 4497, 4498, 4499, 4500, 4501, 4506, 4508, 4510, 4513, 4516, 4518, 4519, 4521, 4522, 4523, 4525, 4526, 4528, 4530, 4531, 4535, 4536, 4537, 4541, 4542, 4544, 4546, 4550, 4553, 4554, 4556, 4559, 4561, 4563, 4565, 4567, 4569, 4571, 4573, 4575, 4577, 4579, 4581, 4583, 4585, 4587, 4589, 4591, 4595, 4599, 4602, 4603, 4605, 4608, 4610, 4612, 4614, 4616, 4618, 4620, 4622, 4624, 4626, 4628, 4630, 4632, 4634, 4636, 4640, 4643, 4644, 4646, 4649, 4651, 4652, 4656, 4657, 4659, 4661, 4662, 4666, 4667, 4669, 4671, 4675, 4677, 4679, 4683, 4685, 4687, 4688, 4692, 4693, 4697, 4700, 4701, 4703, 4706, 4708, 4709, 4713, 4714, 4716, 4718, 4719, 4723, 4724, 4726, 4728, 4729, 4733, 4734, 4736, 4738, 4742, 4744, 4746, 4747, 4751, 4752, 4759, 4763, 4767, 4769, 4778, 4782, 4784, 4790, 4797, 4799, 4800, 4813, 4817, 4820, 4823, 4824, 4827, 4828, 4831, 4832, 4834, 4835, 4837, 4838, 4841, 4842, 4844, 4845, 4848, 4849, 4851, 4852, 4854, 4855, 4858, 4859, 4861, 4862, 4866, 4869, 4872, 4873, 4875, 4876, 4879, 4880, 4882, 4883, 4885, 4886, 4890, 4893, 4896, 4897, 4900, 4901, 4904, 4905, 4907, 4908, 4910, 4911, 4914, 4915, 4917, 4918, 4921, 4922, 4924, 4925, 4928, 4929, 4931, 4932, 4934, 4935, 4938, 4939, 4942, 4943, 4946, 4947, 4949, 4950, 4954, 4957, 4961, 4964, 4967, 4968, 4971, 4972, 4975, 4976, 4979, 4980, 4983, 4984, 4986, 4987, 4989, 4990, 4993, 4994, 4996, 4997, 4999, 5000, 5003, 5004, 5006, 5007, 5009, 5010, 5013, 5014, 5017, 5018, 5021, 5022, 5025, 5026, 5029, 5030, 5032, 5033, 5036, 5037, 5039, 5040, 5042, 5043, 5046, 5047, 5050, 5051, 5054, 5055, 5058, 5059, 5062, 5063, 5065, 5066, 5068, 5069, 5072, 5073, 5075, 5076, 5078, 5079, 5082, 5083, 5086, 5087, 5090, 5091, 5093, 5094, 5096, 5097, 5100, 5101, 5103, 5104, 5107, 5108, 5110, 5111, 5113, 5114, 5117, 5118, 5120, 5121, 5123, 5124, 5127, 5128, 5130, 5131, 5134, 5135, 5137, 5138, 5140, 5144, 5150, 5152, 5167, 5170, 5172, 5175, 5204, 5211, 5213, 5215, 5217, 5221, 5227, 5234, 5236, 5237, 5239, 5243, 5246, 5249, 5254, 5256, 5263, 5276, 5277, 5278, 5279, 5280, 5281, 5283, 5289, 5293, 5300, 5304, 5305, 5307, 5309, 5311, 5312, 5314, 5316, 5320, 5322, 5323, 5331, 5332, 5333, 5334, 5337, 5345, 5348, 5351, 5354, 5357, 5360, 5363, 5366, 5368, 5369, 5371, 5376, 5382, 5384, 5386, 5387, 5388, 5390, 5395, 5401, 5403, 5405, 5410, 5416, 5418, 5420, 5421, 5422, 5424, 5429, 5435, 5437, 5439, 5460, 5462, 5464, 5466, 5467, 5471, 5476, 5478, 5480, 5482, 5486, 5492, 5494, 5498, 5499, 5500, 5502, 5504, 5509, 5515, 5517, 5519, 5524, 5526, 5528, 5530, 5534, 5540, 5542, 5546, 5547, 5548, 5550, 5552, 5557, 5563, 5565, 5567, 5572, 5574, 5576, 5578, 5582, 5588, 5590, 5594, 5596, 5598, 5603, 5609, 5611, 5613, 5618, 5620, 5622, 5624, 5628, 5634, 5636, 5640, 5641, 5642, 5643, 5644, 5645, 5647, 5649, 5654, 5660, 5662, 5664, 5669, 5671, 5673, 5675, 5679, 5685, 5687, 5691, 5693, 5695, 5700, 5706, 5708, 5710, 5712, 5714, 5715, 5719, 5724, 5726, 5728, 5730, 5734, 5740, 5742, 5746, 5748, 5750, 5755, 5761, 5763, 5765, 5770, 5772, 5774, 5776, 5780, 5786, 5788, 5792, 5794, 5796, 5801, 5807, 5809, 5811, 5813, 5815, 5816, 5820, 5825, 5827, 5829, 5831, 5835, 5841, 5843, 5847, 5849, 5851, 5856, 5862, 5864, 5866, 5871, 5873, 5875, 5877, 5881, 5887, 5889, 5893, 5895, 5897, 5902, 5908, 5910, 5912, 5914, 5916, 5917, 5921, 5926, 5928, 5930, 5932, 5936, 5942, 5944, 5948, 5950, 5952, 5957, 5963, 5965, 5967, 5972, 5974, 5976, 5978, 5982, 5988, 5990, 5994, 5996, 5998, 6003, 6009, 6011, 6013, 6018, 6020, 6022, 6024, 6028, 6034, 6036, 6040, 6041, 6042, 6043, 6045, 6047, 6052, 6058, 6060, 6062, 6064, 6066, 6067, 6071, 6076, 6078, 6080, 6082, 6086, 6092, 6094, 6098, 6100, 6102, 6107, 6113, 6115, 6117, 6122, 6124, 6126, 6128, 6132, 6138, 6140, 6144, 6146, 6148, 6153, 6159, 6161, 6163, 6165, 6167, 6168, 6172, 6177, 6179, 6181, 6183, 6187, 6193, 6195, 6199, 6201, 6203, 6208, 6214, 6216, 6218, 6223, 6225, 6227, 6229, 6233, 6239, 6241, 6245, 6247, 6249, 6254, 6260, 6262, 6264, 6266, 6268, 6269, 6273, 6278, 6280, 6282, 6284, 6288, 6294, 6296, 6300, 6302, 6304, 6309, 6315, 6317, 6319, 6324, 6326, 6328, 6330, 6334, 6340, 6342, 6346, 6348, 6350, 6355, 6361, 6363, 6365, 6367, 6369, 6370, 6374, 6379, 6381, 6383, 6385, 6389, 6395, 6397, 6401, 6403, 6405, 6410, 6416, 6418, 6420, 6425, 6427, 6429, 6431, 6435, 6441, 6443, 6447, 6449, 6451, 6456, 6462, 6464, 6466, 6496, 6499, 6501, 6504, 6547, 6550, 6552, 6555, 6598, 6601, 6603, 6606, 6649, 6652, 6654, 6657, 6700, 6703, 6705, 6708, 6810, 6813, 6815, 6818, 6861, 6864, 6866, 6869, 6905, 6908, 6910, 6913, 6955, 6958, 6960, 6963, 7006, 7009, 7011, 7014, 7057, 7060, 7062, 7065, 7108, 7111, 7113, 7116, 7164, 7167, 7169, 7172, 7208, 7211, 7213, 7216, 7262, 7265, 7267, 7270, 7313, 7316, 7318, 7321, 7364, 7367, 7369, 7372, 7419, 7422, 7424, 7427, 7439, 7442, 7443, 7445, 7455, 7458, 7459, 7461, 7462, 7464, 7478, 7481, 7482, 7484, 7485, 7487, 7491, 7494, 7495, 7497, 7513, 7516, 7518, 7521]
+.bs-tooltip-auto .tooltip-arrow -> [5170, 6499, 6550, 6601, 6652, 6703, 6813, 6864, 6908, 6958, 7009, 7060, 7111, 7167, 7211, 7265, 7316, 7367, 7422, 7516]
+.icon-link > .bi -> [1108, 1655, 2093, 3406, 3593, 3657, 4441]
+.nav-fill .nav-item -> [2633, 2647, 2661]
+.nav-fill .nav-item .nav-link -> [2637, 2651, 2665]
+.nav-link:focus -> [744]
+.nav-pills .active.nav-link -> [2616, 2637]
+.nav-pills .nav-link -> [2588, 2602, 2616, 2637, 2651, 2665]
+.navbar-nav .dropdown-menu -> [637, 773]
+.navbar > .container-xxl -> [363]
+.offcanvas-header .btn-close -> [441]
+.row > * -> [1129, 1275, 1548, 1676, 1798, 2053, 2111, 2114, 2293, 2550, 3424, 3678, 4183, 4199, 4215, 4231, 4247, 4263, 4279, 4295, 4311, 4327, 4343, 4359, 4375, 4399, 4459, 4482, 4550, 4599, 4640, 4697]
+.tooltip .tooltip-arrow -> [5170, 6499, 6550, 6601, 6652, 6703, 6813, 6864, 6908, 6958, 7009, 7060, 7111, 7167, 7211, 7265, 7316, 7367, 7422, 7516]
+.visually-hidden * -> [630, 634]
+[data-bs-theme="light"] -> [6]
+[role="button"] -> [5204]
+[type="button"] -> [403, 441, 617, 744, 779, 817, 858, 972, 1164, 1216, 1322, 1439, 1691, 1813, 2140, 2309, 2588, 2602, 2616, 2637, 2651, 2665, 2683, 3440, 3697, 3708, 3714, 3720, 3734, 4778]
+[type="reset"] -> [5283, 5300]
+[type="search"] -> [5263]
+a > code -> [2126]
+pre code -> [1003, 1195, 1247, 1353, 1470, 1722, 1844, 2171, 2340, 2714, 3471, 3765]
+ul ul -> [637, 773]
+END
+[src/tri.rs:1073:5] unsafe { MISS_CNT } = 9481
+[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 6230
+[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 32

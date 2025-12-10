@@ -1,8 +1,23 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: field `id` is never read
+   --> src/naive.rs:215:9
+    |
+213 | struct SimpleDomNode {
+    |        ------------- field in this struct
+214 |     pub tag_name: String,
+215 |     pub id: u64,
+    |         ^^
+    |
+    = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/naive`
+NOT_CONSIDERED[naive] 2 selector(s)
+NOT_CONSIDERED[naive] #b
+NOT_CONSIDERED[naive] #bb
+PSEUDO_SKIPPED[naive] none
 BEGIN
 [class="aa"] -> [1]
-#b -> [3]
-#bb -> [4]
 div p -> [2]
 END

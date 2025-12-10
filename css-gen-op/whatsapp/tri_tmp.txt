@@ -1,0 +1,723 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
+     Running `target/release/tri`
+NOT_CONSIDERED[tri] 387 selector(s)
+NOT_CONSIDERED[tri] #content
+NOT_CONSIDERED[tri] .UIFullPage_Container
+NOT_CONSIDERED[tri] .UIStandardFrame_Container
+NOT_CONSIDERED[tri] .UIStandardFrame_Content
+NOT_CONSIDERED[tri] .UIStandardFrame_SidebarAds
+NOT_CONSIDERED[tri] ._1-qs
+NOT_CONSIDERED[tri] ._1m42
+NOT_CONSIDERED[tri] ._1oi3
+NOT_CONSIDERED[tri] ._21op
+NOT_CONSIDERED[tri] ._2ywh
+NOT_CONSIDERED[tri] ._2ywk
+NOT_CONSIDERED[tri] ._2yz0
+NOT_CONSIDERED[tri] ._2yzz
+NOT_CONSIDERED[tri] ._36or
+NOT_CONSIDERED[tri] ._52ju
+NOT_CONSIDERED[tri] ._52jv
+NOT_CONSIDERED[tri] ._52jw
+NOT_CONSIDERED[tri] ._653d
+NOT_CONSIDERED[tri] ._653e
+NOT_CONSIDERED[tri] ._6h7w
+NOT_CONSIDERED[tri] ._6sa9
+NOT_CONSIDERED[tri] ._6sab
+NOT_CONSIDERED[tri] ._6sak
+NOT_CONSIDERED[tri] ._72b0
+NOT_CONSIDERED[tri] ._75u3
+NOT_CONSIDERED[tri] ._7lkk
+NOT_CONSIDERED[tri] ._84dk
+NOT_CONSIDERED[tri] ._8a4a
+NOT_CONSIDERED[tri] ._90f8
+NOT_CONSIDERED[tri] ._9bg-
+NOT_CONSIDERED[tri] ._9bgz
+NOT_CONSIDERED[tri] ._9bh0
+NOT_CONSIDERED[tri] ._9bh1
+NOT_CONSIDERED[tri] ._9bh2
+NOT_CONSIDERED[tri] ._9bh3
+NOT_CONSIDERED[tri] ._9bh4
+NOT_CONSIDERED[tri] ._9bh6
+NOT_CONSIDERED[tri] ._9bh8
+NOT_CONSIDERED[tri] ._9bh9
+NOT_CONSIDERED[tri] ._9bho
+NOT_CONSIDERED[tri] ._9bhp
+NOT_CONSIDERED[tri] ._9bhq
+NOT_CONSIDERED[tri] ._9bhr
+NOT_CONSIDERED[tri] ._9bhs
+NOT_CONSIDERED[tri] ._9bht
+NOT_CONSIDERED[tri] ._9bhv
+NOT_CONSIDERED[tri] ._9bhw
+NOT_CONSIDERED[tri] ._9s6z
+NOT_CONSIDERED[tri] ._9sc-
+NOT_CONSIDERED[tri] ._9sc-._ao--
+NOT_CONSIDERED[tri] ._9sc-._aqzx
+NOT_CONSIDERED[tri] ._9sc_
+NOT_CONSIDERED[tri] ._9sc_._ao--
+NOT_CONSIDERED[tri] ._9sc_._aqzx
+NOT_CONSIDERED[tri] ._9sca
+NOT_CONSIDERED[tri] ._9sca._af-3
+NOT_CONSIDERED[tri] ._9scb
+NOT_CONSIDERED[tri] ._9scc
+NOT_CONSIDERED[tri] ._9scd
+NOT_CONSIDERED[tri] ._9sce
+NOT_CONSIDERED[tri] ._9scf
+NOT_CONSIDERED[tri] ._9scg
+NOT_CONSIDERED[tri] ._9sch
+NOT_CONSIDERED[tri] ._9sci
+NOT_CONSIDERED[tri] ._9scj
+NOT_CONSIDERED[tri] ._9sck
+NOT_CONSIDERED[tri] ._9sco
+NOT_CONSIDERED[tri] ._9scp
+NOT_CONSIDERED[tri] ._9scq
+NOT_CONSIDERED[tri] ._9scr
+NOT_CONSIDERED[tri] ._9scs
+NOT_CONSIDERED[tri] ._9sct
+NOT_CONSIDERED[tri] ._9scy
+NOT_CONSIDERED[tri] ._9scz
+NOT_CONSIDERED[tri] ._9sd0
+NOT_CONSIDERED[tri] ._9sd0._ao--
+NOT_CONSIDERED[tri] ._9sd0._aqzx
+NOT_CONSIDERED[tri] ._9sd1
+NOT_CONSIDERED[tri] ._9sd1._ao--
+NOT_CONSIDERED[tri] ._9sd1._aqzx
+NOT_CONSIDERED[tri] ._9sd2
+NOT_CONSIDERED[tri] ._9sd2._ao--
+NOT_CONSIDERED[tri] ._9sd2._aqzx
+NOT_CONSIDERED[tri] ._9sd3
+NOT_CONSIDERED[tri] ._9sd4
+NOT_CONSIDERED[tri] ._9sd5
+NOT_CONSIDERED[tri] ._9sd6
+NOT_CONSIDERED[tri] ._9sd7
+NOT_CONSIDERED[tri] ._9sd8
+NOT_CONSIDERED[tri] ._9sd9
+NOT_CONSIDERED[tri] ._9sda
+NOT_CONSIDERED[tri] ._9sdb
+NOT_CONSIDERED[tri] ._9sdc
+NOT_CONSIDERED[tri] ._9sdc._ao--
+NOT_CONSIDERED[tri] ._9sdc._aqzx
+NOT_CONSIDERED[tri] ._9sdd
+NOT_CONSIDERED[tri] ._9sdd._ao--
+NOT_CONSIDERED[tri] ._9sdd._aqzx
+NOT_CONSIDERED[tri] ._9sde
+NOT_CONSIDERED[tri] ._9sde._ao--
+NOT_CONSIDERED[tri] ._9sde._aqzx
+NOT_CONSIDERED[tri] ._9sdf
+NOT_CONSIDERED[tri] ._9sdf._ao--
+NOT_CONSIDERED[tri] ._9sdf._aqzx
+NOT_CONSIDERED[tri] ._9se-
+NOT_CONSIDERED[tri] ._9se_
+NOT_CONSIDERED[tri] ._9sep
+NOT_CONSIDERED[tri] ._9sew
+NOT_CONSIDERED[tri] ._9sex
+NOT_CONSIDERED[tri] ._9sey
+NOT_CONSIDERED[tri] ._9sez
+NOT_CONSIDERED[tri] ._9sf0
+NOT_CONSIDERED[tri] ._9t2-
+NOT_CONSIDERED[tri] ._9t2_
+NOT_CONSIDERED[tri] ._9t2b
+NOT_CONSIDERED[tri] ._9t2d
+NOT_CONSIDERED[tri] ._9t2e
+NOT_CONSIDERED[tri] ._9t2f
+NOT_CONSIDERED[tri] ._9t2g
+NOT_CONSIDERED[tri] ._9t2h
+NOT_CONSIDERED[tri] ._9t2i
+NOT_CONSIDERED[tri] ._9t2k
+NOT_CONSIDERED[tri] ._9t2m
+NOT_CONSIDERED[tri] ._9t30
+NOT_CONSIDERED[tri] ._9t31
+NOT_CONSIDERED[tri] ._9t31._ao--
+NOT_CONSIDERED[tri] ._9t31._aqzx
+NOT_CONSIDERED[tri] ._9ta-
+NOT_CONSIDERED[tri] ._9ta2
+NOT_CONSIDERED[tri] ._9ta9
+NOT_CONSIDERED[tri] ._9ta_
+NOT_CONSIDERED[tri] ._9tar
+NOT_CONSIDERED[tri] ._9tat
+NOT_CONSIDERED[tri] ._9tau
+NOT_CONSIDERED[tri] ._9tav
+NOT_CONSIDERED[tri] ._9taw
+NOT_CONSIDERED[tri] ._9tax
+NOT_CONSIDERED[tri] ._9tay
+NOT_CONSIDERED[tri] ._9taz
+NOT_CONSIDERED[tri] ._9tb0
+NOT_CONSIDERED[tri] ._9tb1
+NOT_CONSIDERED[tri] ._9te2
+NOT_CONSIDERED[tri] ._9te3
+NOT_CONSIDERED[tri] ._9te5
+NOT_CONSIDERED[tri] ._9te7
+NOT_CONSIDERED[tri] ._9tg0
+NOT_CONSIDERED[tri] ._9tib
+NOT_CONSIDERED[tri] ._9tic
+NOT_CONSIDERED[tri] ._9tid
+NOT_CONSIDERED[tri] ._9tie
+NOT_CONSIDERED[tri] ._9tpv
+NOT_CONSIDERED[tri] ._9u4c
+NOT_CONSIDERED[tri] ._9u4i
+NOT_CONSIDERED[tri] ._9u4i._advo
+NOT_CONSIDERED[tri] ._9u4j
+NOT_CONSIDERED[tri] ._9u4j._advo
+NOT_CONSIDERED[tri] ._9u4k
+NOT_CONSIDERED[tri] ._9u4l
+NOT_CONSIDERED[tri] ._9u4l._advo
+NOT_CONSIDERED[tri] ._9u4m
+NOT_CONSIDERED[tri] ._9u4n
+NOT_CONSIDERED[tri] ._9u4o
+NOT_CONSIDERED[tri] ._9u4p
+NOT_CONSIDERED[tri] ._9u6l
+NOT_CONSIDERED[tri] ._9usj
+NOT_CONSIDERED[tri] ._9usk
+NOT_CONSIDERED[tri] ._9usl
+NOT_CONSIDERED[tri] ._9ut3
+NOT_CONSIDERED[tri] ._9ut4
+NOT_CONSIDERED[tri] ._9v11
+NOT_CONSIDERED[tri] ._9v12
+NOT_CONSIDERED[tri] ._9v7q
+NOT_CONSIDERED[tri] ._9vcv
+NOT_CONSIDERED[tri] ._9vcx
+NOT_CONSIDERED[tri] ._9vd5
+NOT_CONSIDERED[tri] ._9vd6
+NOT_CONSIDERED[tri] ._9vx6
+NOT_CONSIDERED[tri] ._9vx7
+NOT_CONSIDERED[tri] ._9vx8
+NOT_CONSIDERED[tri] ._9wiy
+NOT_CONSIDERED[tri] ._9wmd
+NOT_CONSIDERED[tri] ._9y16
+NOT_CONSIDERED[tri] ._9ydm
+NOT_CONSIDERED[tri] ._9ydn
+NOT_CONSIDERED[tri] ._a0g4
+NOT_CONSIDERED[tri] ._a1fe
+NOT_CONSIDERED[tri] ._a4qm
+NOT_CONSIDERED[tri] ._a6z9
+NOT_CONSIDERED[tri] ._a7e7
+NOT_CONSIDERED[tri] ._a805
+NOT_CONSIDERED[tri] ._a805._9u4o
+NOT_CONSIDERED[tri] ._a80k
+NOT_CONSIDERED[tri] ._a80k._9u4o
+NOT_CONSIDERED[tri] ._a80l
+NOT_CONSIDERED[tri] ._a83h
+NOT_CONSIDERED[tri] ._a83i
+NOT_CONSIDERED[tri] ._a83j
+NOT_CONSIDERED[tri] ._a83k
+NOT_CONSIDERED[tri] ._a83l
+NOT_CONSIDERED[tri] ._a83v
+NOT_CONSIDERED[tri] ._a83w
+NOT_CONSIDERED[tri] ._a84f
+NOT_CONSIDERED[tri] ._a8o-
+NOT_CONSIDERED[tri] ._a8o_
+NOT_CONSIDERED[tri] ._a8oj
+NOT_CONSIDERED[tri] ._a8ok
+NOT_CONSIDERED[tri] ._a8ol
+NOT_CONSIDERED[tri] ._a8ou
+NOT_CONSIDERED[tri] ._a8ov
+NOT_CONSIDERED[tri] ._a8ow
+NOT_CONSIDERED[tri] ._a8ox
+NOT_CONSIDERED[tri] ._a8oy
+NOT_CONSIDERED[tri] ._a8oz
+NOT_CONSIDERED[tri] ._a8p0
+NOT_CONSIDERED[tri] ._a96c
+NOT_CONSIDERED[tri] ._a96d
+NOT_CONSIDERED[tri] ._a96y
+NOT_CONSIDERED[tri] ._a9d4
+NOT_CONSIDERED[tri] ._abjp
+NOT_CONSIDERED[tri] ._abjq
+NOT_CONSIDERED[tri] ._abjr
+NOT_CONSIDERED[tri] ._abp_._9t2k
+NOT_CONSIDERED[tri] ._ad_0
+NOT_CONSIDERED[tri] ._ad_1._ad_0
+NOT_CONSIDERED[tri] ._ad_8._ad_0
+NOT_CONSIDERED[tri] ._ad_9._ad_0
+NOT_CONSIDERED[tri] ._ad_a._ad_0
+NOT_CONSIDERED[tri] ._ad_b._ad_0
+NOT_CONSIDERED[tri] ._adch
+NOT_CONSIDERED[tri] ._adhk._9t2b
+NOT_CONSIDERED[tri] ._adid
+NOT_CONSIDERED[tri] ._adie
+NOT_CONSIDERED[tri] ._adif
+NOT_CONSIDERED[tri] ._adif._ad_c
+NOT_CONSIDERED[tri] ._adig
+NOT_CONSIDERED[tri] ._adig._ad_c
+NOT_CONSIDERED[tri] ._advm
+NOT_CONSIDERED[tri] ._advn
+NOT_CONSIDERED[tri] ._advq
+NOT_CONSIDERED[tri] ._ae_r
+NOT_CONSIDERED[tri] ._ae_s
+NOT_CONSIDERED[tri] ._aeal
+NOT_CONSIDERED[tri] ._aenq._9vd5
+NOT_CONSIDERED[tri] ._aenr._9vd5
+NOT_CONSIDERED[tri] ._aens._9vd5
+NOT_CONSIDERED[tri] ._aent._9vd5
+NOT_CONSIDERED[tri] ._aenu._ad_0
+NOT_CONSIDERED[tri] ._aeo8._asxh
+NOT_CONSIDERED[tri] ._aeok
+NOT_CONSIDERED[tri] ._aeom
+NOT_CONSIDERED[tri] ._aeq_
+NOT_CONSIDERED[tri] ._af05
+NOT_CONSIDERED[tri] ._afax
+NOT_CONSIDERED[tri] ._afbm
+NOT_CONSIDERED[tri] ._afbn
+NOT_CONSIDERED[tri] ._afce
+NOT_CONSIDERED[tri] ._affq
+NOT_CONSIDERED[tri] ._afht._9t2b
+NOT_CONSIDERED[tri] ._afhu
+NOT_CONSIDERED[tri] ._afo4
+NOT_CONSIDERED[tri] ._afo9
+NOT_CONSIDERED[tri] ._afoa
+NOT_CONSIDERED[tri] ._afoc
+NOT_CONSIDERED[tri] ._afwh
+NOT_CONSIDERED[tri] ._ag3-
+NOT_CONSIDERED[tri] ._ag3y
+NOT_CONSIDERED[tri] ._ag3z
+NOT_CONSIDERED[tri] ._ain3
+NOT_CONSIDERED[tri] ._ain8
+NOT_CONSIDERED[tri] ._aina
+NOT_CONSIDERED[tri] ._ainb
+NOT_CONSIDERED[tri] ._aj1a
+NOT_CONSIDERED[tri] ._aj1b
+NOT_CONSIDERED[tri] ._aj3e
+NOT_CONSIDERED[tri] ._aj3h
+NOT_CONSIDERED[tri] ._akgv._af-3
+NOT_CONSIDERED[tri] ._allg
+NOT_CONSIDERED[tri] ._ao8r._9t2e
+NOT_CONSIDERED[tri] ._aoa0
+NOT_CONSIDERED[tri] ._aofv
+NOT_CONSIDERED[tri] ._apbs
+NOT_CONSIDERED[tri] ._apin
+NOT_CONSIDERED[tri] ._aqqu
+NOT_CONSIDERED[tri] ._aqqv
+NOT_CONSIDERED[tri] ._aqub._ad_0
+NOT_CONSIDERED[tri] ._aqut._9sc-
+NOT_CONSIDERED[tri] ._aqut._9sc_
+NOT_CONSIDERED[tri] ._aqut._9sd0
+NOT_CONSIDERED[tri] ._aqut._9sd1
+NOT_CONSIDERED[tri] ._aqut._9sd2
+NOT_CONSIDERED[tri] ._aqut._9sdc
+NOT_CONSIDERED[tri] ._aqut._9sdd
+NOT_CONSIDERED[tri] ._aqut._9sde
+NOT_CONSIDERED[tri] ._aqut._9sdf
+NOT_CONSIDERED[tri] ._aqut._9t31
+NOT_CONSIDERED[tri] ._aqut._asem
+NOT_CONSIDERED[tri] ._aqv8
+NOT_CONSIDERED[tri] ._aqxl
+NOT_CONSIDERED[tri] ._aqxm
+NOT_CONSIDERED[tri] ._arcn
+NOT_CONSIDERED[tri] ._ari4
+NOT_CONSIDERED[tri] ._as9p
+NOT_CONSIDERED[tri] ._as9r
+NOT_CONSIDERED[tri] ._as9s
+NOT_CONSIDERED[tri] ._as9t
+NOT_CONSIDERED[tri] ._as9u
+NOT_CONSIDERED[tri] ._as9z
+NOT_CONSIDERED[tri] ._asa0
+NOT_CONSIDERED[tri] ._asal
+NOT_CONSIDERED[tri] ._asam
+NOT_CONSIDERED[tri] ._asan
+NOT_CONSIDERED[tri] ._asem
+NOT_CONSIDERED[tri] ._asen
+NOT_CONSIDERED[tri] ._asge._adid
+NOT_CONSIDERED[tri] ._asgf._adid
+NOT_CONSIDERED[tri] ._asgg._adid
+NOT_CONSIDERED[tri] ._asxh
+NOT_CONSIDERED[tri] ._asxs
+NOT_CONSIDERED[tri] ._asxt
+NOT_CONSIDERED[tri] ._asxu
+NOT_CONSIDERED[tri] ._asxv
+NOT_CONSIDERED[tri] ._asxw
+NOT_CONSIDERED[tri] ._asxw._ao--
+NOT_CONSIDERED[tri] ._asxw._aqzx
+NOT_CONSIDERED[tri] ._asxx
+NOT_CONSIDERED[tri] ._asxy
+NOT_CONSIDERED[tri] ._asxz
+NOT_CONSIDERED[tri] ._asxz._ao--
+NOT_CONSIDERED[tri] ._asxz._aqzx
+NOT_CONSIDERED[tri] ._asz5
+NOT_CONSIDERED[tri] ._atp7
+NOT_CONSIDERED[tri] ._atz6
+NOT_CONSIDERED[tri] ._li._li._li
+NOT_CONSIDERED[tri] ._li._li._li._aowd
+NOT_CONSIDERED[tri] .aero
+NOT_CONSIDERED[tri] .async_saving.standard_status_element
+NOT_CONSIDERED[tri] .auto_resize_iframe
+NOT_CONSIDERED[tri] .center
+NOT_CONSIDERED[tri] .column
+NOT_CONSIDERED[tri] .datawrap
+NOT_CONSIDERED[tri] .direction_ltr
+NOT_CONSIDERED[tri] .direction_rtl
+NOT_CONSIDERED[tri] .ellipsis
+NOT_CONSIDERED[tri] .empty_message
+NOT_CONSIDERED[tri] .inputaux
+NOT_CONSIDERED[tri] .inputbutton
+NOT_CONSIDERED[tri] .inputcheckbox
+NOT_CONSIDERED[tri] .inputpassword
+NOT_CONSIDERED[tri] .inputradio
+NOT_CONSIDERED[tri] .inputsearch
+NOT_CONSIDERED[tri] .inputsubmit
+NOT_CONSIDERED[tri] .inputtext
+NOT_CONSIDERED[tri] .labeltd
+NOT_CONSIDERED[tri] .mini_iframe
+NOT_CONSIDERED[tri] .pipe
+NOT_CONSIDERED[tri] .see_all
+NOT_CONSIDERED[tri] .standard_status_element
+NOT_CONSIDERED[tri] .text_align_ltr
+NOT_CONSIDERED[tri] .text_align_rtl
+NOT_CONSIDERED[tri] .tracking_pixelimg
+NOT_CONSIDERED[tri] .word_break
+NOT_CONSIDERED[tri] a
+NOT_CONSIDERED[tri] abbr
+NOT_CONSIDERED[tri] b
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] button
+NOT_CONSIDERED[tri] dd
+NOT_CONSIDERED[tri] dt
+NOT_CONSIDERED[tri] form
+NOT_CONSIDERED[tri] h1
+NOT_CONSIDERED[tri] h2
+NOT_CONSIDERED[tri] h3
+NOT_CONSIDERED[tri] h4
+NOT_CONSIDERED[tri] h5
+NOT_CONSIDERED[tri] h6
+NOT_CONSIDERED[tri] hr
+NOT_CONSIDERED[tri] html
+NOT_CONSIDERED[tri] img
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] label
+NOT_CONSIDERED[tri] p
+NOT_CONSIDERED[tri] select
+NOT_CONSIDERED[tri] strong
+NOT_CONSIDERED[tri] svg
+NOT_CONSIDERED[tri] td
+NOT_CONSIDERED[tri] textarea
+NOT_CONSIDERED[tri] ul
+PSEUDO_SKIPPED[tri] :after -> 47 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._2yy_:after
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._2yyk:after
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._2yz3:after
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._2yz5:after
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._2yz6:after
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :last-child -> 23 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._-pj h1:last-child
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._-pj h2:last-child
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._-pj h3:last-child
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._-pj h4:last-child
+PSEUDO_SKIPPED[tri]    eg ._2ywk ._-pj h5:last-child
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :before -> 20 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._1m42:before
+PSEUDO_SKIPPED[tri]    eg ._2yzz blockquote:before
+PSEUDO_SKIPPED[tri]    eg ._2yzz q:before
+PSEUDO_SKIPPED[tri]    eg ._5v3q ._1m42:before
+PSEUDO_SKIPPED[tri]    eg ._ain8 ._aq-4 ._9v95:before
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :disabled -> 19 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._9u4i:disabled
+PSEUDO_SKIPPED[tri]    eg ._9u4j:disabled
+PSEUDO_SKIPPED[tri]    eg ._9u4l:disabled
+PSEUDO_SKIPPED[tri]    eg ._9u4l:disabled ._advp:after
+PSEUDO_SKIPPED[tri]    eg ._ad_c._adif:disabled
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :has -> 5 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._9t2b:has(._atp7)
+PSEUDO_SKIPPED[tri]    eg ._adhc:has(._asz5)
+PSEUDO_SKIPPED[tri]    eg ._afhl:has( > ._9vcv)
+PSEUDO_SKIPPED[tri]    eg ._aqv8 > span:first-child:has(._9u4c)
+PSEUDO_SKIPPED[tri]    eg ._asxh._aeo9:has(svg)
+PSEUDO_SKIPPED[tri] :first-child -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._9t2i ._9t2j ._9t2l ._9vd6:first-child
+PSEUDO_SKIPPED[tri]    eg ._aeom:first-child
+PSEUDO_SKIPPED[tri]    eg ._aqv8 > span:first-child:has(._9u4c)
+PSEUDO_SKIPPED[tri] :active -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._2yzz a:active
+PSEUDO_SKIPPED[tri]    eg ._abpp ._aj8r:active
+PSEUDO_SKIPPED[tri] :invalid -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg .inputpassword:invalid
+PSEUDO_SKIPPED[tri]    eg .inputtext:invalid
+PSEUDO_SKIPPED[tri] :nth-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg ._aeom:nth-child(2)
+[tri-match] frame_id=0 command=init miss_delta=1594 node_match_changes=282 total_misses=1594
+[tri-match] frame_id=1 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=2 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=3 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=4 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=5 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=6 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=7 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=8 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=9 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=10 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=11 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=12 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=13 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=14 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=15 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=16 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=17 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=18 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=19 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=20 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=21 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=22 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=23 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=24 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=25 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=26 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=27 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=28 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=29 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=30 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=31 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=32 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=33 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=34 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=35 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=36 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=37 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=38 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=39 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=40 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=41 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=42 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=43 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=44 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=45 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=46 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=47 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=48 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=49 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=50 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=51 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=52 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=53 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=54 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=55 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=56 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=57 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=58 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=59 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=60 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=61 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=62 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=63 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=64 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=65 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=66 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1594
+[tri-match] frame_id=67 command=replace_value miss_delta=13 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=68 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=69 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=70 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=71 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=72 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=73 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=74 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=75 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=76 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=77 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=78 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=79 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=80 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=81 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=82 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=83 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=84 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=85 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=86 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=87 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=88 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=89 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=90 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=91 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=92 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=93 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=94 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=95 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=96 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=97 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=98 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=99 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=100 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=101 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=102 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=103 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=104 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=105 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=106 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=107 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=108 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=109 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=110 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=111 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=112 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=113 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=114 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=115 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=116 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=117 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=118 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=119 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=120 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=121 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=122 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=123 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=124 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=125 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=126 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=127 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=128 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=129 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=130 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=131 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=132 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=133 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=134 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=135 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=136 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=137 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=138 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=139 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=140 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=141 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=142 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=143 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=144 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=145 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=146 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=147 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=148 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=149 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=150 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=151 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=152 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=153 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=154 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=155 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=156 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=157 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=158 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=159 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=160 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=161 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=162 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=163 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=164 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=165 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=166 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=167 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=168 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=169 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=170 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=171 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=172 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=173 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=174 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=175 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=176 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=177 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=178 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=179 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=180 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=181 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=182 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=183 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=184 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=185 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=186 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=187 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=188 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=189 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=190 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=191 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=192 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=193 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=194 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=195 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=196 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=197 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=198 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=199 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=200 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=201 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=202 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=203 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=204 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=205 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=206 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=207 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=208 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=209 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=210 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=211 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=212 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=213 command=replace_value miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=214 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=215 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=216 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+[tri-match] frame_id=217 command=recalculate miss_delta=0 node_match_changes=0 total_misses=1607
+BEGIN
+._2ywk ._2y_d button -> [394, 436, 513, 1546]
+._8l_f p -> [1603, 1644, 1685, 1726, 1766, 1807, 1848, 2086, 2418, 2464, 2613, 2699, 2969, 3055]
+._9sca ._9kh2 -> [368]
+._9sep ._aeam -> [492, 502, 814, 824, 834, 844, 862, 969, 1949, 1970, 2103, 2134, 2471, 2620, 2706, 2976, 3063, 3169, 3301, 3337, 3348, 3359, 3370, 3392, 3404, 3415, 3426, 3448, 3459, 3470, 3481, 3504, 3515, 3526, 3537, 3554, 3665]
+._9sep._9vcx ._aeam -> [3665]
+._9sep._9vg3 p -> [2086, 2418, 2464, 2613, 2699, 2969, 3055]
+._9t2b ._9t2c -> [2025, 2061, 2428, 2531, 2653, 2811, 3009, 3136]
+._9t2b ._aiy9 -> [3136]
+._9t2i ._9t2j -> [3262]
+._9t2i ._9t2k -> [3647]
+._9t2i ._9t2l -> [3277]
+._9t2i ._9t2l ._9vd6 > ._9vd5 -> [3324, 3379, 3435, 3490]
+._9t2i ._9t2m ._9vd7 -> [3657]
+._9t2i ._ae_t -> [3189]
+._9t2i ._aeol -> [3543]
+._9t2i h4 -> [3330, 3385, 3441, 3496]
+._9t2i p -> [3657]
+._9t2j ._9t2l ._9vcv ._9vd5 -> [3339, 3350, 3361, 3372, 3394, 3406, 3417, 3428, 3450, 3461, 3472, 3483, 3506, 3517, 3528, 3539]
+._9t2j ._9t2l ._9vd6 -> [3279, 3321, 3376, 3432, 3487]
+._9t2l ._ae_s ._9vcv -> [3296]
+._9t2m ._9vd7 -> [3657]
+._9u4i ._advp -> [1970, 2103, 3169, 3301, 3554]
+._9u4j ._advp -> [1949, 2134]
+._9u4l ._advp -> [2471, 2620, 2706, 2976, 3063]
+._9vcv ._abjs -> [1953, 2138, 2475, 2624, 2710, 2980]
+._9vg3 p -> [1603, 1644, 1685, 1726, 1766, 1807, 1848, 2086, 2418, 2464, 2613, 2699, 2969, 3055]
+._ad_0 b -> [2605]
+._ad_0._9vd5 h2 -> [2456, 2602, 2689, 2959, 3045]
+._ad_0._9vd5 h4 -> [3330, 3385, 3441, 3496]
+._adhc ._9vcx -> [3660]
+._adhc a -> [376, 487, 497, 564, 598, 633, 668, 703, 738, 772, 809, 819, 829, 839, 857, 886, 904, 922, 940, 963, 1513, 1527, 1578, 1618, 1659, 1700, 1741, 1781, 1822, 1862, 1877, 1892, 1907, 1922, 1943, 1962, 1992, 2097, 2128, 2466, 2615, 2701, 2971, 3057, 3164, 3191, 3209, 3227, 3245, 3266, 3281, 3296, 3332, 3343, 3354, 3365, 3387, 3398, 3410, 3421, 3443, 3454, 3465, 3476, 3498, 3510, 3521, 3532, 3549, 3576, 3594, 3612, 3630, 3660, 3672, 3686, 3704, 3722, 3740]
+._adhc h1 -> [2076]
+._adhc h2 -> [2456, 2602, 2689, 2959, 3045]
+._adhc h3 -> [555]
+._adhc h4 -> [3330, 3385, 3441, 3496]
+._adhc h5 -> [1594, 1635, 1676, 1717, 1757, 1798, 1839]
+._adhc li -> [485, 495, 505, 511, 807, 817, 827, 837, 1543, 1575, 1615, 1656, 1697, 1738, 1778, 1819, 1860, 1875, 1890, 1905, 1920]
+._adhc li ._9vcv -> [487, 497, 809, 819, 829, 839]
+._adhc p -> [1603, 1644, 1685, 1726, 1766, 1807, 1848, 2086, 2418, 2464, 2613, 2699, 2969, 3055, 3657]
+._adhc ul -> [483, 509, 1541, 1571]
+._ae_r ._ae_s -> [3160]
+._ae_r ._ae_s ._9vcv -> [3164]
+._ae_r ._ae_t -> [3189]
+._aens._9vd5 span -> [570, 581, 582, 584, 604, 616, 617, 619, 639, 651, 652, 654, 674, 686, 687, 689, 709, 721, 722, 724, 744, 755, 756, 758, 778, 790, 791, 793, 1553, 1555, 1868, 1869, 1871, 1883, 1884, 1886, 1898, 1899, 1901, 1913, 1914, 1916, 1928, 1929, 1931]
+._aent._9vd5 p -> [2418]
+._aeo8 ._9u4c -> [866, 1953, 1974, 2107, 2138, 2475, 2624, 2710, 2980, 3067, 3173, 3305, 3558]
+._aeol ._ae_s ._9vcv -> [3549]
+._aeol ._ae_u -> [3574]
+._afoa ._afob -> [1503, 4287]
+._ain8._ain9 ._aina ._9v7q -> [2050]
+._aina ._9v7q -> [2050]
+._allg ._adhc -> [3153]
+END
+[src/tri.rs:1073:5] unsafe { MISS_CNT } = 1607
+[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 0
+[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 0

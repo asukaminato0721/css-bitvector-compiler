@@ -1,116 +1,203 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+warning: method `update_attribute` is never used
+   --> src/bit.rs:535:8
+    |
+169 | impl DOM {
+    | -------- method in this implementation
+...
+535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
      Running `target/release/bit`
-1243
-983
-1314
-995
-926
-1147
-967
-1026
-961
-971
-1375
-1142
-996
-1426
-1703
-1138
-1423
-998
-1133
-1052
-1152
-881
-1377
-833
-1101
-1006
-1675
-953
-1799
-839
-984
-1281
-1199
-1047
-1190
-959
-988
-1326
-941
-1446
-1819
-1616
-1026
-934
+NOT_CONSIDERED[bit] 135 selector(s)
+NOT_CONSIDERED[bit] #SIvCob
+NOT_CONSIDERED[bit] #gb
+NOT_CONSIDERED[bit] #gbb
+NOT_CONSIDERED[bit] #gbbw
+NOT_CONSIDERED[bit] #gbg
+NOT_CONSIDERED[bit] #gbg4span
+NOT_CONSIDERED[bit] #gbg5
+NOT_CONSIDERED[bit] #gbg6span
+NOT_CONSIDERED[bit] #gbgs5
+NOT_CONSIDERED[bit] #gbi4i
+NOT_CONSIDERED[bit] #gbi4id
+NOT_CONSIDERED[bit] #gbi4m1
+NOT_CONSIDERED[bit] #gbi4s
+NOT_CONSIDERED[bit] #gbi4s1
+NOT_CONSIDERED[bit] #gbi4t
+NOT_CONSIDERED[bit] #gbi5
+NOT_CONSIDERED[bit] #gbmm
+NOT_CONSIDERED[bit] #gbmpal
+NOT_CONSIDERED[bit] #gbmpas
+NOT_CONSIDERED[bit] #gbmpdv
+NOT_CONSIDERED[bit] #gbmpi
+NOT_CONSIDERED[bit] #gbmpid
+NOT_CONSIDERED[bit] #gbmpiw
+NOT_CONSIDERED[bit] #gbmps
+NOT_CONSIDERED[bit] #gbpm
+NOT_CONSIDERED[bit] #gbpms
+NOT_CONSIDERED[bit] #gbprca
+NOT_CONSIDERED[bit] #gbprcs
+NOT_CONSIDERED[bit] #gbqfb
+NOT_CONSIDERED[bit] #gbqfbw
+NOT_CONSIDERED[bit] #gbqfqw
+NOT_CONSIDERED[bit] #gbs
+NOT_CONSIDERED[bit] #gbx3
+NOT_CONSIDERED[bit] #gbx4
+NOT_CONSIDERED[bit] #gbz
+NOT_CONSIDERED[bit] #gbztms1
+NOT_CONSIDERED[bit] #gog
+NOT_CONSIDERED[bit] #gssb_b
+NOT_CONSIDERED[bit] #gws-output-pages-elements-homepage_additional_languages__als
+NOT_CONSIDERED[bit] .H6sW5
+NOT_CONSIDERED[bit] .ds
+NOT_CONSIDERED[bit] .gbg4a
+NOT_CONSIDERED[bit] .gbgt
+NOT_CONSIDERED[bit] .gbgt-hvr
+NOT_CONSIDERED[bit] .gbgt-hvr#gbg6
+NOT_CONSIDERED[bit] .gbi4p
+NOT_CONSIDERED[bit] .gbibaa
+NOT_CONSIDERED[bit] .gbm
+NOT_CONSIDERED[bit] .gbm0l
+NOT_CONSIDERED[bit] .gbma
+NOT_CONSIDERED[bit] .gbmab
+NOT_CONSIDERED[bit] .gbmac
+NOT_CONSIDERED[bit] .gbmc
+NOT_CONSIDERED[bit] .gbmcc
+NOT_CONSIDERED[bit] .gbmh
+NOT_CONSIDERED[bit] .gbml1
+NOT_CONSIDERED[bit] .gbml1-hvr
+NOT_CONSIDERED[bit] .gbmlb
+NOT_CONSIDERED[bit] .gbmlb-hvr
+NOT_CONSIDERED[bit] .gbmlbw
+NOT_CONSIDERED[bit] .gbmpala
+NOT_CONSIDERED[bit] .gbmpalb
+NOT_CONSIDERED[bit] .gbmpia
+NOT_CONSIDERED[bit] .gbmpiaa
+NOT_CONSIDERED[bit] .gbmpiaw
+NOT_CONSIDERED[bit] .gbmpnw
+NOT_CONSIDERED[bit] .gbmt
+NOT_CONSIDERED[bit] .gbmtc
+NOT_CONSIDERED[bit] .gbp0
+NOT_CONSIDERED[bit] .gbpmc
+NOT_CONSIDERED[bit] .gbpms2
+NOT_CONSIDERED[bit] .gbprcb
+NOT_CONSIDERED[bit] .gbprcd
+NOT_CONSIDERED[bit] .gbprci
+NOT_CONSIDERED[bit] .gbprct
+NOT_CONSIDERED[bit] .gbps#gbmplp
+NOT_CONSIDERED[bit] .gbps2
+NOT_CONSIDERED[bit] .gbqfb
+NOT_CONSIDERED[bit] .gbqfb-hvr
+NOT_CONSIDERED[bit] .gbqfba
+NOT_CONSIDERED[bit] .gbqfba-hvr
+NOT_CONSIDERED[bit] .gbqfbb
+NOT_CONSIDERED[bit] .gbqfbb-hvr
+NOT_CONSIDERED[bit] .gbsb
+NOT_CONSIDERED[bit] .gbsbic
+NOT_CONSIDERED[bit] .gbt
+NOT_CONSIDERED[bit] .gbtb2
+NOT_CONSIDERED[bit] .gbtc
+NOT_CONSIDERED[bit] .gbtcb
+NOT_CONSIDERED[bit] .gbto
+NOT_CONSIDERED[bit] .gbts
+NOT_CONSIDERED[bit] .gbtsa
+NOT_CONSIDERED[bit] .gbxms
+NOT_CONSIDERED[bit] .gbxo
+NOT_CONSIDERED[bit] .gbxv
+NOT_CONSIDERED[bit] .gbxx
+NOT_CONSIDERED[bit] .gbzt
+NOT_CONSIDERED[bit] .gsdd_a
+NOT_CONSIDERED[bit] .gsfi
+NOT_CONSIDERED[bit] .gsfs
+NOT_CONSIDERED[bit] .gsib_a
+NOT_CONSIDERED[bit] .gsib_b
+NOT_CONSIDERED[bit] .gsls_a
+NOT_CONSIDERED[bit] .gsmq_a
+NOT_CONSIDERED[bit] .gsn_a
+NOT_CONSIDERED[bit] .gsn_b
+NOT_CONSIDERED[bit] .gsn_c
+NOT_CONSIDERED[bit] .gspqs_aa
+NOT_CONSIDERED[bit] .gspqs_b
+NOT_CONSIDERED[bit] .gsq_a
+NOT_CONSIDERED[bit] .gss_ifl
+NOT_CONSIDERED[bit] .gssb_a
+NOT_CONSIDERED[bit] .gssb_c
+NOT_CONSIDERED[bit] .gssb_e
+NOT_CONSIDERED[bit] .gssb_f
+NOT_CONSIDERED[bit] .gssb_g
+NOT_CONSIDERED[bit] .gssb_h
+NOT_CONSIDERED[bit] .gssb_i
+NOT_CONSIDERED[bit] .gssb_ja
+NOT_CONSIDERED[bit] .gssb_k
+NOT_CONSIDERED[bit] .gssb_l
+NOT_CONSIDERED[bit] .gssb_m
+NOT_CONSIDERED[bit] .h
+NOT_CONSIDERED[bit] .lsb
+NOT_CONSIDERED[bit] .lsbb
+NOT_CONSIDERED[bit] .lst
+NOT_CONSIDERED[bit] .sblc
+NOT_CONSIDERED[bit] .z4hgWe
+NOT_CONSIDERED[bit] a
+NOT_CONSIDERED[bit] body
+NOT_CONSIDERED[bit] em
+NOT_CONSIDERED[bit] form
+NOT_CONSIDERED[bit] input
+NOT_CONSIDERED[bit] p
+NOT_CONSIDERED[bit] td
+PSEUDO_SKIPPED[bit] :active -> 9 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcbc:active
+PSEUDO_SKIPPED[bit]    eg #gbprc .gbprcx:active
+PSEUDO_SKIPPED[bit]    eg .gbqfb:active
+PSEUDO_SKIPPED[bit]    eg .gbqfba-hvr:active
+PSEUDO_SKIPPED[bit]    eg .gbqfba:active
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :visited -> 8 selector(s)
+PSEUDO_SKIPPED[bit]    eg .gbf .gbmt:visited
+PSEUDO_SKIPPED[bit]    eg .gbm0l:visited
+PSEUDO_SKIPPED[bit]    eg .gbml1:visited
+PSEUDO_SKIPPED[bit]    eg .gbmlb:visited
+PSEUDO_SKIPPED[bit]    eg .gbmt:visited
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :after -> 4 selector(s)
+PSEUDO_SKIPPED[bit]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[bit]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[bit]    eg .gbsb .gbsbb:after
+PSEUDO_SKIPPED[bit]    eg .gbsb .gbsbt:after
+PSEUDO_SKIPPED[bit] ::-moz-focus-inner -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .gbqfb::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg .gbqfba::-moz-focus-inner
+PSEUDO_SKIPPED[bit]    eg .gbqfbb::-moz-focus-inner
+PSEUDO_SKIPPED[bit] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[bit]    eg #GBMPAL:last-child:after
+PSEUDO_SKIPPED[bit]    eg .GBMCC:last-child:after
+PSEUDO_SKIPPED[bit] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+PSEUDO_SKIPPED[bit] :vertical -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 BEGIN
-#gb -> [42]
-#gbg -> [248]
+#SIvCob a -> [452]
+#WqQANb a -> [463, 466, 469, 472]
 #gbg .gbgt -> [259, 279]
 #gbg .gbm -> [296]
 #gbg .gbtcb -> [253]
-#gbg5 -> [279]
-#gbgs5 -> [288]
-#gbi4s1 -> [270]
-#gbi5 -> [291]
-#gbmm -> [172]
-#gbx3 -> [321]
-#gbx4 -> [323]
-#gbz -> [49]
 #gbz .gbgt -> [146]
 #gbz .gbm -> [165]
 #gbz .gbtcb -> [51]
 #gbz .gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
-#gbztms1 -> [157]
-#gws-output-pages-elements-homepage_additional_languages__als -> [445]
-.ds -> [372, 392, 405, 916, 928]
 .fl a -> [431]
-.gbgt -> [146, 259, 279]
-.gbm -> [165, 296]
-.gbma -> [160]
-.gbmc -> [169, 300]
-.gbmcc -> [172, 302]
-.gbmh -> [233, 313]
-.gbmt -> [177, 184, 191, 198, 205, 212, 219, 226, 233, 237, 307, 313, 317]
-.gbmtc -> [175, 182, 189, 196, 203, 210, 217, 224, 231, 235, 305, 311, 315]
-.gbsb -> [169]
+.gbgt:focus -> [146]
 .gbsb .gbsbb -> [246]
-.gbsb .gbsbt -> [244]
-.gbsbic -> [172]
 .gbsbis .gbsbb -> [246]
 .gbsbis .gbsbt -> [244]
-.gbt -> [56, 67, 78, 89, 100, 111, 122, 133, 144, 257, 273, 277]
 .gbtb .gbts -> [275]
-.gbtb2 -> [62, 73, 84, 95, 106, 117, 128, 139, 152, 265, 286]
-.gbtc -> [53, 255]
-.gbtcb -> [51, 253]
-.gbts -> [64, 75, 86, 97, 108, 119, 130, 141, 154, 267, 275, 288]
-.gbtsa -> [154]
-.gbxx -> [250]
 .gbz0l .gbtb2 -> [62]
 .gbz0l .gbts -> [64]
-.gbzt -> [58, 69, 80, 91, 102, 113, 124, 135]
 .gbzt .gbts -> [64, 75, 86, 97, 108, 119, 130, 141]
-.gsfs -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gsq_a -> [549, 585, 620, 655, 690, 725, 760, 795, 830, 865]
-.gssb_a -> [581, 616, 651, 686, 721, 756, 791, 826, 861, 896, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
-.gssb_a td -> [558, 594, 629, 664, 699, 734, 769, 804, 839, 874]
-.gssb_c -> [499]
-.gssb_e -> [510]
-.gssb_f -> [507]
-.gssb_g -> [907]
-.gssb_m -> [513]
-.lsb -> [396, 409, 909, 921]
-.lsbb -> [394, 407, 917, 929]
-.lst -> [375]
-.sblc -> [426]
+.gssb_a td -> [566, 602, 637, 672, 707, 742, 777, 812, 847, 882]
 .sblc a -> [431]
-a -> [58, 69, 80, 91, 102, 113, 124, 135, 146, 177, 184, 191, 198, 205, 212, 219, 226, 237, 259, 279, 307, 317, 431, 452, 463, 466, 469, 472, 478, 482]
-body -> [35]
-form -> [343]
-input -> [358, 362, 366, 369, 375, 396, 409, 422, 434, 524, 527, 909, 921]
-p -> [475]
-td -> [352, 355, 426, 507, 510, 558, 581, 594, 616, 629, 651, 664, 686, 699, 721, 734, 756, 769, 791, 804, 826, 839, 861, 874, 896, 901, 962, 985, 1008, 1031, 1054, 1077, 1100, 1123, 1146, 1169, 1200, 1223, 1246, 1269, 1292, 1315, 1338, 1361, 1384, 1407, 1438, 1461, 1484, 1507, 1530, 1553, 1576, 1599, 1622, 1645, 1676, 1699, 1722, 1745, 1768, 1791, 1814, 1837, 1860, 1883, 1914, 1937, 1960, 1983, 2006, 2029, 2052, 2075, 2098, 2121, 2152, 2175, 2198, 2221, 2244, 2267, 2290, 2313, 2336, 2359, 2390, 2413, 2436, 2459, 2482, 2505, 2528, 2551, 2574, 2597, 2628, 2651, 2674, 2697, 2720, 2743, 2766, 2789, 2812, 2835, 2866, 2889, 2912, 2935, 2958, 2981, 3004, 3027, 3058, 3081, 3104, 3127, 3150, 3173, 3196, 3219, 3242, 3265, 3296, 3319, 3342, 3365, 3388, 3411, 3434, 3457, 3480, 3511, 3534, 3557, 3580, 3603, 3626, 3649, 3672]
 END
-[src/bit.rs:711:5] unsafe { MISS_CNT } = 1777
+[src/bit.rs:832:5] unsafe { MISS_CNT } = 3814

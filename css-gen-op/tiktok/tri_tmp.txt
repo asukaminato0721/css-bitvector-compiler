@@ -1,0 +1,113 @@
+warning: method `update_attribute` is never used
+   --> src/tri.rs:576:8
+    |
+221 | impl DOM {
+    | -------- method in this implementation
+...
+576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+     Running `target/release/tri`
+NOT_CONSIDERED[tri] 25 selector(s)
+NOT_CONSIDERED[tri] .css-13oovrh-5e6d46e3--ActionItemPlaceHolder
+NOT_CONSIDERED[tri] .css-16mrsy8-5e6d46e3--DivOneColSkeletonCard
+NOT_CONSIDERED[tri] .css-1dc0ofe-5e6d46e3--DivOneColSkeletonContainer
+NOT_CONSIDERED[tri] .css-jbg155-5e6d46e3--SectionActionBarContainer
+NOT_CONSIDERED[tri] .hiddenbody
+NOT_CONSIDERED[tri] .sonner-loader
+NOT_CONSIDERED[tri] .sonner-loading-bar
+NOT_CONSIDERED[tri] .sonner-loading-wrapper
+NOT_CONSIDERED[tri] .sonner-spinner
+NOT_CONSIDERED[tri] blockquote
+NOT_CONSIDERED[tri] body
+NOT_CONSIDERED[tri] button
+NOT_CONSIDERED[tri] dd
+NOT_CONSIDERED[tri] dl
+NOT_CONSIDERED[tri] figure
+NOT_CONSIDERED[tri] h1
+NOT_CONSIDERED[tri] h2
+NOT_CONSIDERED[tri] h3
+NOT_CONSIDERED[tri] h4
+NOT_CONSIDERED[tri] img
+NOT_CONSIDERED[tri] input
+NOT_CONSIDERED[tri] p
+NOT_CONSIDERED[tri] picture
+NOT_CONSIDERED[tri] select
+NOT_CONSIDERED[tri] textarea
+PSEUDO_SKIPPED[tri] :where -> 56 selector(s)
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast])
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-button]):first-of-type
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-button]):focus-visible
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-cancel])
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-close-button])
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :nth-child -> 11 selector(s)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:nth-child(10)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:nth-child(11)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:nth-child(12)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:nth-child(2)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:nth-child(3)
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :before -> 6 selector(s)
+PSEUDO_SKIPPED[tri]    eg :before
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast][data-removed="true"][data-front="false"]):before
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast][data-swiping="false"][data-removed="true"]):before
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast][data-swiping="true"]):before
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast][data-y-position="bottom"][data-swiping="true"]):before
+PSEUDO_SKIPPED[tri]    ...
+PSEUDO_SKIPPED[tri] :active -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg body a:active
+PSEUDO_SKIPPED[tri]    eg body a:where(.tw-only):active
+PSEUDO_SKIPPED[tri]    eg body:where(.tw-only) a:active
+PSEUDO_SKIPPED[tri] :visited -> 3 selector(s)
+PSEUDO_SKIPPED[tri]    eg body a:visited
+PSEUDO_SKIPPED[tri]    eg body a:where(.tw-only):visited
+PSEUDO_SKIPPED[tri]    eg body:where(.tw-only) a:visited
+PSEUDO_SKIPPED[tri] :after -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg :after
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]):after
+PSEUDO_SKIPPED[tri] :focus-visible -> 2 selector(s)
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-button]):focus-visible
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-close-button]):focus-visible
+PSEUDO_SKIPPED[tri] ::-ms-clear -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-ms-clear
+PSEUDO_SKIPPED[tri] ::-ms-reveal -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-ms-reveal
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg html ::-webkit-scrollbar
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-thumb -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg html ::-webkit-scrollbar-thumb
+PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg html ::-webkit-scrollbar-track
+PSEUDO_SKIPPED[tri] ::-webkit-search-cancel-button -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-webkit-search-cancel-button
+PSEUDO_SKIPPED[tri] ::-webkit-search-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-webkit-search-decoration
+PSEUDO_SKIPPED[tri] ::-webkit-search-results-button -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-webkit-search-results-button
+PSEUDO_SKIPPED[tri] ::-webkit-search-results-decoration -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg body input::-webkit-search-results-decoration
+PSEUDO_SKIPPED[tri] :first-child -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg .sonner-loading-bar:first-child
+PSEUDO_SKIPPED[tri] :first-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg :where([data-sonner-toast]) :where([data-button]):first-of-type
+PSEUDO_SKIPPED[tri] :not -> 1 selector(s)
+PSEUDO_SKIPPED[tri]    eg a:not([class])
+[tri-match] frame_id=0 command=init miss_delta=141 node_match_changes=141 total_misses=141
+[tri-match] frame_id=1 command=add miss_delta=2 node_match_changes=1 total_misses=143
+[tri-match] frame_id=2 command=recalculate miss_delta=0 node_match_changes=0 total_misses=143
+[tri-match] frame_id=3 command=add miss_delta=3 node_match_changes=0 total_misses=146
+[tri-match] frame_id=4 command=add miss_delta=3 node_match_changes=0 total_misses=149
+[tri-match] frame_id=5 command=add miss_delta=3 node_match_changes=0 total_misses=152
+[tri-match] frame_id=6 command=add miss_delta=3 node_match_changes=0 total_misses=155
+[tri-match] frame_id=7 command=add miss_delta=3 node_match_changes=0 total_misses=158
+[tri-match] frame_id=8 command=add miss_delta=2 node_match_changes=1 total_misses=160
+[tri-match] frame_id=9 command=add miss_delta=2 node_match_changes=1 total_misses=162
+
+thread 'main' (2460129) panicked at src/tri.rs:421:35:
+no entry found for key
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

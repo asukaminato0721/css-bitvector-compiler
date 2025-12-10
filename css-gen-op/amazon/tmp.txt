@@ -1,7 +1,523 @@
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+warning: field `id` is never read
+   --> src/naive.rs:215:9
+    |
+213 | struct SimpleDomNode {
+    |        ------------- field in this struct
+214 |     pub tag_name: String,
+215 |     pub id: u64,
+    |         ^^
+    |
+    = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
      Running `target/release/naive`
+NOT_CONSIDERED[naive] 429 selector(s)
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_image_asin-container__2jyCM
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_image_round-corners__2y_fS
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-button__7cH_E
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_aspect-text__S4PU1
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_autoplay-span__2CMfc
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_badge-container__20aJ2
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_carouselContainer__3N7M1
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_close-icon__2RJs3
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_close-text__2-gwn
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_cta-link__2xo74
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_displayCount__1MVut
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_empty-footer__2d59h
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_five-pack__1-Tql
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_four-pack__1ufgr
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_haulRibbon__3VZNi
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_header-link__cUhOK
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_header__1vGdj
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_image-container__2OiZA
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoGap__nKNZ9
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoRectangle__1VJwu
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoSquare__3NZyi
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mixed-button__2og-m
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mobile-close-button__3PB07
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_mosaic-card__1C-_R
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_negative-button__1Dvqz
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_overlay__3Sx3u
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_positive-button__3UOC3
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_poster-image__1W0yA
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_smartText__ubpEw
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_stacking-context__3PbQE
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_theming-text-color__2f7xc
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__1YKkf
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__2LCvL
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_three-pack__5s3hP
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_tile-container__1QgAV
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_tile-grid__QMxNY
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_tile-link__38lTa
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_tile-theming__3eeyj
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_truncation__x9-69
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_wdHeader__Edrev
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[naive] ._cropped-image-link_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[naive] ._cropped-image-link_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[naive] ._cropped-image-link_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[naive] ._cropped-image-link_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[naive] ._cropped-image-link_image_asin-container__2jyCM
+NOT_CONSIDERED[naive] ._cropped-image-link_image_asin-container__LRY5p
+NOT_CONSIDERED[naive] ._cropped-image-link_image_round-corners__22iOW
+NOT_CONSIDERED[naive] ._cropped-image-link_image_round-corners__2y_fS
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[naive] ._cropped-image-link_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[naive] ._cropped-image-link_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[naive] ._cropped-image-link_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-button__7cH_E
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[naive] ._cropped-image-link_style_aspect-text__S4PU1
+NOT_CONSIDERED[naive] ._cropped-image-link_style_autoplay-span__2CMfc
+NOT_CONSIDERED[naive] ._cropped-image-link_style_badge-container__20aJ2
+NOT_CONSIDERED[naive] ._cropped-image-link_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[naive] ._cropped-image-link_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[naive] ._cropped-image-link_style_carouselContainer__3N7M1
+NOT_CONSIDERED[naive] ._cropped-image-link_style_centerImage__1rzYI
+NOT_CONSIDERED[naive] ._cropped-image-link_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[naive] ._cropped-image-link_style_close-icon__2RJs3
+NOT_CONSIDERED[naive] ._cropped-image-link_style_close-text__2-gwn
+NOT_CONSIDERED[naive] ._cropped-image-link_style_cropped-image-link__3winf
+NOT_CONSIDERED[naive] ._cropped-image-link_style_cta-link__2xo74
+NOT_CONSIDERED[naive] ._cropped-image-link_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[naive] ._cropped-image-link_style_displayCount__1MVut
+NOT_CONSIDERED[naive] ._cropped-image-link_style_dt-TextContainer__3nbU9
+NOT_CONSIDERED[naive] ._cropped-image-link_style_empty-footer__2d59h
+NOT_CONSIDERED[naive] ._cropped-image-link_style_five-pack__1-Tql
+NOT_CONSIDERED[naive] ._cropped-image-link_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[naive] ._cropped-image-link_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[naive] ._cropped-image-link_style_four-pack__1ufgr
+NOT_CONSIDERED[naive] ._cropped-image-link_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[naive] ._cropped-image-link_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[naive] ._cropped-image-link_style_haulRibbon__3VZNi
+NOT_CONSIDERED[naive] ._cropped-image-link_style_header-link__cUhOK
+NOT_CONSIDERED[naive] ._cropped-image-link_style_header__1vGdj
+NOT_CONSIDERED[naive] ._cropped-image-link_style_image-container__2OiZA
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logoGap__nKNZ9
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logoRectangle__1VJwu
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logoSquare__3NZyi
+NOT_CONSIDERED[naive] ._cropped-image-link_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[naive] ._cropped-image-link_style_mixed-button__2og-m
+NOT_CONSIDERED[naive] ._cropped-image-link_style_mobile-close-button__3PB07
+NOT_CONSIDERED[naive] ._cropped-image-link_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[naive] ._cropped-image-link_style_mosaic-card__1C-_R
+NOT_CONSIDERED[naive] ._cropped-image-link_style_negative-button__1Dvqz
+NOT_CONSIDERED[naive] ._cropped-image-link_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[naive] ._cropped-image-link_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[naive] ._cropped-image-link_style_overlay__3Sx3u
+NOT_CONSIDERED[naive] ._cropped-image-link_style_positive-button__3UOC3
+NOT_CONSIDERED[naive] ._cropped-image-link_style_poster-image__1W0yA
+NOT_CONSIDERED[naive] ._cropped-image-link_style_smartText__ubpEw
+NOT_CONSIDERED[naive] ._cropped-image-link_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._cropped-image-link_style_stacking-context__3PbQE
+NOT_CONSIDERED[naive] ._cropped-image-link_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[naive] ._cropped-image-link_style_theming-text-color__2f7xc
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__1YKkf
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__2LCvL
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._cropped-image-link_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[naive] ._cropped-image-link_style_three-pack__5s3hP
+NOT_CONSIDERED[naive] ._cropped-image-link_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[naive] ._cropped-image-link_style_tile-container__1QgAV
+NOT_CONSIDERED[naive] ._cropped-image-link_style_tile-grid__QMxNY
+NOT_CONSIDERED[naive] ._cropped-image-link_style_tile-link__38lTa
+NOT_CONSIDERED[naive] ._cropped-image-link_style_tile-theming__3eeyj
+NOT_CONSIDERED[naive] ._cropped-image-link_style_truncation__x9-69
+NOT_CONSIDERED[naive] ._cropped-image-link_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[naive] ._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._cropped-image-link_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[naive] ._cropped-image-link_style_wdHeader__Edrev
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_singleLinkStyle_bodyFooterLink__9LvH0
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_centerImage__30wh-
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_close-text__2-gwn
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_cta-link__2xo74
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_displayCount__1MVut
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidFatImageLink__1nw4J
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidFatImageLinkBody__1LsOX
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_fluidImageContainer__2vGwp
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_header-link__cUhOK
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_header__1vGdj
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_image-container__2OiZA
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mergedLinks__10JqZ
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_smartText__ubpEw
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_tile-link__38lTa
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_truncation__x9-69
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-data-sheet-label__3b6X3
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-2021__2Q_3P
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating-sign__1ronK
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-rating__3_0eN
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-shape__1IcJY
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-badge-standard__28gp8
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_energy-efficiency_energy-efficiency-container__1Pkva
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_image_asin-container-white-box__QwmgO
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_image_asin-container__2jyCM
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_image_round-corners__2y_fS
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner-rtl__2BoOY
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-loading-spinnner__1nmZw
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-primary-link__2bIZi
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-sprite-mobile__2_rj8
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-sprite__28uwB
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-text-desktop__q3xp_
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_ad-feedback-text__2HjQ9
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_apexBadgeLabel__2-Vye
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_apexBadgeMessage__1tHvd
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-button-group__1LqUG
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-button__7cH_E
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-1236x1080__3aEzl
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-15x3__1h649
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-16x9__cBPv8
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-4x3__3BewI
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-5x8__2IaNz
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-dynamic-60vh__3N5g_
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-ratio-fill__2Zjfb
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_aspect-text__S4PU1
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_autoplay-span__2CMfc
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_badge-container__20aJ2
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_badgeLabel__pJ5rc
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_badgeMessage__2Dtw7
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_centerImage__30wh-
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_close-icon-wrapper__1zvdC
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_close-icon__2RJs3
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_close-text__2-gwn
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_cta-link__2xo74
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_desktop-close-button__1iL_P
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_displayCount__1MVut
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_empty-footer__2d59h
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_five-pack__1-Tql
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluid-lazy-video__fInMS
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidImageContainer__2SOMr
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidQuadImageLabel__3b-Iv
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_fluidQuadImageLabelBody__3tld0
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_four-pack__1ufgr
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gridRowOne__1t0zL
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gridRowTwo__15woW
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gw-hero-close-button__3svyZ
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_gwm-link-footer__3OF47
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_haulRibbon__3VZNi
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_header-link__cUhOK
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_header__1vGdj
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_image-container__2OiZA
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_imageLabel__3ANSV
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_inlineErrorDetails__1NBx-
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_leftQuadrant__21nVp
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logo__2ZQ-N
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoGap__nKNZ9
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoRectangle__1VJwu
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoSquare__3NZyi
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_logoSquareContainer__3Paoc
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mixed-button__2og-m
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mobile-close-button__3PB07
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mosaic-card-body__1HmTs
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_mosaic-card__1C-_R
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_negative-button__1Dvqz
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_negativeMarginAdjust__1nqu9
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_oneLineTruncation__2WWse
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_overlay__3Sx3u
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_positive-button__3UOC3
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_poster-image__1W0yA
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_quadrantContainer__3TMqG
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_rightQuadrant__PI01n
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_smartText__ubpEw
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_spacer__7Pyg3
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_spCSRFTreatment__-hwVO
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_stacking-context__3PbQE
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_theming-background-override__1HfzJ
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_theming-text-color__2f7xc
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__1oQsI
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__1YKkf
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__2LCvL
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColor__lrzuC
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_themingTextColorWhite__1zryO
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_three-pack__5s3hP
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_threeLineTruncation__UkUjj
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_tile-container__1QgAV
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_tile-grid__QMxNY
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_tile-link__38lTa
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_tile-theming__3eeyj
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_truncation__x9-69
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_twoLineTruncation__16TLV
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_wd-backdrop-data__1znxG
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_wdHeader__Edrev
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_cardBody__3Rdh1
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_category__3flCQ
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_categoryImage__35jKN
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroCategory__3KS3k
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroImage__2V8-9
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_heroLink__1EhW2
+NOT_CONSIDERED[naive] ._quad-category-card_desktopStyle_leftMost__1LmQB
+NOT_CONSIDERED[naive] ._quad-category-card_fluid_fluidCard__3hmFA
+NOT_CONSIDERED[naive] ._quad-category-card_fluid_fluidCardBody__3TzJ4
+NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container-full-height__MOKlF
+NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container-white-box__3Stwp
+NOT_CONSIDERED[naive] ._quad-category-card_image_asin-container__LRY5p
+NOT_CONSIDERED[naive] ._quad-category-card_image_round-corners__22iOW
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_cardBody__3ODbW
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_category__1amt4
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_categoryContainer__2xY0I
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_categoryImage__3hSFw
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_heroImage__1SewP
+NOT_CONSIDERED[naive] ._quad-category-card_mobileStyle_leftMost__3WtU6
+NOT_CONSIDERED[naive] ._quad-category-card_style_dashboard-card-with-border__1e4z_
+NOT_CONSIDERED[naive] ._quad-category-card_style_fluidImageContainer__2jd50
+NOT_CONSIDERED[naive] ._quad-category-card_style_gwm-link-footer__3EX7d
+NOT_CONSIDERED[naive] ._quad-category-card_style_heading__1mnEu
+NOT_CONSIDERED[naive] ._quad-category-card_style_themingTextColor__1w6Ut
+NOT_CONSIDERED[naive] ._text-link-stripe-v2_style_textlinkstripe__3aQhz
+NOT_CONSIDERED[naive] .gw-card-layout
+NOT_CONSIDERED[naive] .nav-access-image
+NOT_CONSIDERED[naive] .nav-spinner
+NOT_CONSIDERED[naive] .nav-timeline-icon
+NOT_CONSIDERED[naive] .nav-timeline-prime-icon
+NOT_CONSIDERED[naive] .truncate-1line
+NOT_CONSIDERED[naive] .truncate-2line
+NOT_CONSIDERED[naive] .truncate-2lineh2
+NOT_CONSIDERED[naive] ._ameyal-product-shoveler_style_show-video__xX4WM._ameyal-product-shoveler_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._cropped-image-link_style_show-video__xX4WM._cropped-image-link_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-fat-image-link-v2_style_show-video__xX4WM._fluid-fat-image-link-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] ._fluid-quad-image-label-v2_style_show-video__xX4WM._fluid-quad-image-label-v2_style_video-container__1hKS1
+NOT_CONSIDERED[naive] .a-size-base.truncate-2line
+NOT_CONSIDERED[naive] .a-size-base-plus.truncate-2line
+NOT_CONSIDERED[naive] .a-size-large.truncate-2line
+NOT_CONSIDERED[naive] .a-size-medium.truncate-2line
+NOT_CONSIDERED[naive] .a-size-small.truncate-2line
+NOT_CONSIDERED[naive] .single-slide-hero.tall#gw-desktop-herotator
+NOT_CONSIDERED[naive] .tall#gw-desktop-herotator
+NOT_CONSIDERED[naive] .nav-focus#navSwmHolidaydiv
+NOT_CONSIDERED[naive] #gw-desktop-herotator
+NOT_CONSIDERED[naive] #icp-touch-link-cop
+NOT_CONSIDERED[naive] #icp-touch-link-country
+NOT_CONSIDERED[naive] #icp-touch-link-language
+PSEUDO_SKIPPED[naive] :after -> 25 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_image_asin-container__2jyCM:after
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p._ameyal-product-shoveler_style_focus-visible__3HkmX:after
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:after
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_wd-card-link-focus__sm6Xn:after
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :before -> 21 selector(s)
+PSEUDO_SKIPPED[naive]    eg #gw-desktop-herotator.tall .a-carousel-viewport:before
+PSEUDO_SKIPPED[naive]    eg #gw-desktop-herotator.tall.single-slide-hero .a-carousel-viewport:before
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_image_force-square__yjzpK:before
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_image_override-square__2e4Zf:before
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_image_asin-container-white-box__3Stwp:before
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :nth-child -> 16 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :active -> 12 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :first-child -> 8 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_three-pack__5s3hP > :first-child
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
+PSEUDO_SKIPPED[naive]    ...
+PSEUDO_SKIPPED[naive] :focus-visible -> 5 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_centerImage-focusable__1JvMN:focus-visible:before
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
+PSEUDO_SKIPPED[naive] ::-webkit-media-controls-panel -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel
+PSEUDO_SKIPPED[naive] ::-webkit-media-controls-panel-container -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-panel-container
+PSEUDO_SKIPPED[naive] ::-webkit-media-controls-start-playback-button -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_lazy-loaded-video__3m5dG video::-webkit-media-controls-start-playback-button
+PSEUDO_SKIPPED[naive] ::-webkit-scrollbar -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1::-webkit-scrollbar
+PSEUDO_SKIPPED[naive] :first-letter -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_aspect-text__S4PU1:first-letter
+PSEUDO_SKIPPED[naive] :not -> 4 selector(s)
+PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
+PSEUDO_SKIPPED[naive] :last-child -> 2 selector(s)
+PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
+PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui:last-child
 BEGIN
-._cropped-image-link_style_cropped-image-link__3winf -> [1662]
 .gw-card-layout [data-order-ws="1"] -> [1822]
 .gw-card-layout [data-order-ws="10"] -> [2852, 4773, 4958]
 .gw-card-layout [data-order-ws="11"] -> [4965, 5150]
@@ -22,13 +538,19 @@ BEGIN
 .gw-card-layout .a-size-base-plus -> [2343, 2374, 2403, 2432]
 .gw-card-layout .a-size-small -> [1935, 1953, 1973, 1991, 2064, 2082, 2102, 2120, 2193, 2211, 2231, 2249, 2513, 2531, 2551, 2569, 2642, 2660, 2680, 2698, 2771, 2789, 2809, 2827, 3383, 3401, 3421, 3439, 3512, 3530, 3550, 3568, 3641, 3659, 3679, 3697, 3775, 3793, 3813, 3831, 4294, 4312, 4332, 4350, 4423, 4441, 4461, 4479, 4557, 4575, 4595, 4613, 4686, 4704, 4724, 4742, 5268, 5286, 5306, 5324, 5396, 5414, 5434, 5452, 5524, 5542, 5562, 5580]
 .gw-card-layout h2 -> [1851, 1913, 2042, 2171, 2310, 2491, 2620, 2749, 2874, 2978, 3173, 3361, 3490, 3619, 3753, 3892, 4084, 4272, 4401, 4535, 4664, 4803, 4995, 5183, 5246, 5374, 5502, 5641]
-.gw-card-layout -> [1814, 2940]
 .nav-sprite-v1 .nav-icon -> [910, 1234, 1268, 1287, 1323]
 .nav-sprite-v1 .nav-sprite -> [771, 774, 804, 898, 1164, 1167, 1306, 1340, 1361, 6237, 6833]
-.truncate-2line -> [1851, 1913, 1935, 1953, 1973, 1991, 2042, 2064, 2082, 2102, 2120, 2171, 2193, 2211, 2231, 2249, 2491, 2513, 2531, 2551, 2569, 2620, 2642, 2660, 2680, 2698, 2749, 2771, 2789, 2809, 2827, 2874, 3361, 3383, 3401, 3421, 3439, 3490, 3512, 3530, 3550, 3568, 3619, 3641, 3659, 3679, 3697, 3753, 3775, 3793, 3813, 3831, 4272, 4294, 4312, 4332, 4350, 4401, 4423, 4441, 4461, 4479, 4535, 4557, 4575, 4595, 4613, 4664, 4686, 4704, 4724, 4742, 5183, 5246, 5268, 5286, 5306, 5324, 5374, 5396, 5414, 5434, 5452, 5502, 5524, 5542, 5562, 5580]
+[data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
+[data-flow-dir="h"].gw-card-layout > .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout > .gw-col -> [1822, 1884, 2016, 2145, 2281, 2465, 2594, 2723, 2859, 2945, 3143, 3335, 3464, 3593, 3727, 3862, 4054, 4246, 4375, 4509, 4638, 4773, 4965, 5157, 5221, 5349, 5477, 5611]
+[data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-flow-dir="h"].gw-card-layout .card-flow-row-break -> [2274, 2852, 3136, 3328, 3722, 3856, 4047, 4239, 4504, 4767, 4958, 5150, 5216, 5605, 5796]
+[data-flow-dir="h"].gw-card-layout .gw-auto-height -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
+[data-flow-dir="h"].gw-card-layout -> [1814, 2940]
+.tall#gw-desktop-herotator .a-carousel-container -> [1605]
+.tall#gw-desktop-herotator .a-carousel-controls -> [1617]
+.tall#gw-desktop-herotator .a-carousel-left -> [1621]
+.tall#gw-desktop-herotator .a-carousel-right -> [1748]
+.tall#gw-desktop-herotator .a-carousel-viewport -> [1634]
 #gw-desktop-herotator .a-carousel-viewport -> [1634]
-#gw-desktop-herotator -> [1600]
-#icp-touch-link-cop -> [6278]
-#icp-touch-link-country -> [6295]
-#icp-touch-link-language -> [6252]
 END
