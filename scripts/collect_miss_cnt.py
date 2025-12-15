@@ -52,10 +52,7 @@ def parse_miss_count(value: str) -> Optional[int]:
     value = value.strip()
     if not value or not value.isdigit():
         return None
-    try:
-        return int(value)
-    except ValueError:
-        return None
+    return int(value)
 
 
 def summarize_states(rows: List[ReportRow], attr: str) -> Dict[str, int]:
