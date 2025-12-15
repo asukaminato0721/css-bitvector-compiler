@@ -380,6 +380,7 @@ pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize>
 pub struct ParsedSelectors {
     pub selectors: Vec<String>,
     pub pseudo_selectors: BTreeMap<String, Vec<String>>,
+    pub unsupported_selectors: Vec<String>,
 }
 
 pub fn parse_css(css_content: &str) -> Vec<String> {
@@ -414,6 +415,7 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
 
     let mut selectors = Vec::new();
     let mut pseudo_selectors: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut unsupported_selectors = Vec::new();
 
     for rule in stylesheet.rules.0 {
         if let CssRule::Style(style_rule) = rule {
@@ -428,7 +430,9 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
                                 .push(selector.clone());
                         }
                     }
-                    SelectorConversionResult::Skip => {}
+                    SelectorConversionResult::Skip => {
+                        unsupported_selectors.push(selector_to_string(&selector));
+                    }
                 }
             }
         }
@@ -440,6 +444,8 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
         selectors.sort();
         selectors.dedup();
     }
+    unsupported_selectors.sort();
+    unsupported_selectors.dedup();
 
     let mut supported_with_pseudo = Vec::new();
     pseudo_selectors.retain(|pseudo, sels| {
@@ -457,6 +463,7 @@ pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
     ParsedSelectors {
         selectors,
         pseudo_selectors,
+        unsupported_selectors,
     }
 }
 
@@ -526,6 +533,21 @@ pub fn report_pseudo_selectors(label: &str, selectors: &BTreeMap<String, Vec<Str
         if sels.len() > 5 {
             println!("PSEUDO_SKIPPED[{label}]    ...");
         }
+    }
+}
+
+pub fn report_unsupported_selectors(label: &str, selectors: &[String]) {
+    if selectors.is_empty() {
+        println!("UNSUPPORTED[{label}] none");
+        return;
+    }
+
+    println!("UNSUPPORTED[{label}] {} selector(s)", selectors.len());
+    for sel in selectors.iter().take(25) {
+        println!("UNSUPPORTED[{label}] {sel}");
+    }
+    if selectors.len() > 25 {
+        println!("UNSUPPORTED[{label}] ...");
     }
 }
 
