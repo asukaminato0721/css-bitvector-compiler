@@ -433,7 +433,7 @@ def write_html(rows: List[ReportRow], base_dir: Path, output_path: Path = Path("
 <body>
   <header>
     <h1>Miss Count Report</h1>
-    <p>Generated {timestamp} from {html.escape(str(base_dir))}</p>
+    <p>Generated {timestamp} from {html.escape(base_dir.name)}</p>
   </header>
   {summary_html}
   <section class="scatter-section">
