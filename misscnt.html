@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Miss Count Report</title>
+  <style>
+:root {
+  color-scheme: light dark;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 2rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+header p {
+  margin: 0.25rem 0 0;
+  color: #475569;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.summary-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+}
+.summary-card.total-card {
+  background: #0f172a;
+  color: #f8fafc;
+}
+.summary-title {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+.total-card .summary-title {
+  color: #cbd5f5;
+}
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 0.15rem 0;
+  color: #0f172a;
+}
+.total-card .summary-line {
+  color: inherit;
+}
+.summary-total {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+.summary-note {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+.table-wrapper {
+  margin-top: 2rem;
+  overflow-x: auto;
+}
+
+.scatter-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+}
+.scatter-section h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+.scatter-section figure {
+  margin: 0;
+  text-align: center;
+}
+.scatter-section img {
+  width: 100%;
+  max-height: 460px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.scatter-section figcaption {
+  margin-top: 0.5rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+}
+thead th {
+  background: #0f172a;
+  color: #f8fafc;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+tbody tr:hover {
+  background: #eef2ff;
+}
+td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.status-ok {
+  background: #dcfce7;
+  color: #166534;
+}
+.status-diff {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.status-missing {
+  background: #fefce8;
+  color: #854d0e;
+}
+.status-unknown {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+td.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Miss Count Report</h1>
+    <p>Generated 2025-12-12 08:23:26Z from /home/w/gitproject/css-bitvector-compiler/css-gen-op</p>
+  </header>
+  <div class="summary-grid"><div class="summary-card"><div class="summary-title">bit vs tmp</div><div class="summary-line"><span>OK</span><strong>13</strong></div></div><div class="summary-card"><div class="summary-title">tri vs tmp</div><div class="summary-line"><span>OK</span><strong>13</strong></div></div><div class="summary-card"><div class="summary-title">rec_tri vs tmp</div><div class="summary-line"><span>OK</span><strong>13</strong></div></div></div><div class="summary-grid totals"><div class="summary-card total-card"><div class="summary-title">bit miss count</div><div class="summary-total">55,023</div><div class="summary-note">across 13 site(s)</div></div><div class="summary-card total-card"><div class="summary-title">tri miss count</div><div class="summary-total">54,924</div><div class="summary-note">across 13 site(s)</div></div><div class="summary-card total-card"><div class="summary-title">rec_tri miss count</div><div class="summary-total">42,045</div><div class="summary-note">across 13 site(s)</div></div></div>
+  <section class="scatter-section">
+    <h2>Miss Count Comparison</h2>
+    <figure>
+      <img src="miss_count_comparison_scatter.png" alt="Scatter plot comparing miss count results across engines" loading="lazy" />
+      <figcaption>miss_count_comparison_scatter.png generated from the latest run.</figcaption>
+    </figure>
+  </section>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Folder</th>
+          <th scope="col">MISS_CNT</th>
+          <th scope="col">TRI MISS_CNT</th>
+          <th scope="col">REC_TRI MISS_CNT</th>
+          <th scope="col">bit vs tmp</th>
+          <th scope="col">tri vs tmp</th>
+          <th scope="col">rec_tri vs tmp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>a_to_b</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>amazon</td><td class="num">2448</td><td class="num">2448</td><td class="num">2448</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>bilibili</td><td class="num">5591</td><td class="num">5591</td><td class="num">5453</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>bing</td><td class="num">310</td><td class="num">310</td><td class="num">310</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>bootstrap</td><td class="num">9513</td><td class="num">9481</td><td class="num">3283</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>google</td><td class="num">3712</td><td class="num">3704</td><td class="num">3580</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>netflix</td><td class="num">2527</td><td class="num">2479</td><td class="num">2388</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>testcase</td><td class="num">10</td><td class="num">7</td><td class="num">7</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>tiktok</td><td class="num">2634</td><td class="num">2634</td><td class="num">2361</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>whatsapp</td><td class="num">1607</td><td class="num">1607</td><td class="num">1607</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>wikipedia</td><td class="num">8778</td><td class="num">8771</td><td class="num">2716</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>yahoo</td><td class="num">489</td><td class="num">488</td><td class="num">488</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+<tr><td>youtube</td><td class="num">17402</td><td class="num">17402</td><td class="num">17402</td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td><td><span class="status-pill status-ok">OK</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <script type="application/json" id="misscnt-data">[
+  {
+    "folder": "a_to_b",
+    "miss_cnt_bit": "2",
+    "miss_cnt_tri": "2",
+    "miss_cnt_rec": "2",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "amazon",
+    "miss_cnt_bit": "2448",
+    "miss_cnt_tri": "2448",
+    "miss_cnt_rec": "2448",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "bilibili",
+    "miss_cnt_bit": "5591",
+    "miss_cnt_tri": "5591",
+    "miss_cnt_rec": "5453",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "bing",
+    "miss_cnt_bit": "310",
+    "miss_cnt_tri": "310",
+    "miss_cnt_rec": "310",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "bootstrap",
+    "miss_cnt_bit": "9513",
+    "miss_cnt_tri": "9481",
+    "miss_cnt_rec": "3283",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "google",
+    "miss_cnt_bit": "3712",
+    "miss_cnt_tri": "3704",
+    "miss_cnt_rec": "3580",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "netflix",
+    "miss_cnt_bit": "2527",
+    "miss_cnt_tri": "2479",
+    "miss_cnt_rec": "2388",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "testcase",
+    "miss_cnt_bit": "10",
+    "miss_cnt_tri": "7",
+    "miss_cnt_rec": "7",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "tiktok",
+    "miss_cnt_bit": "2634",
+    "miss_cnt_tri": "2634",
+    "miss_cnt_rec": "2361",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "whatsapp",
+    "miss_cnt_bit": "1607",
+    "miss_cnt_tri": "1607",
+    "miss_cnt_rec": "1607",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "wikipedia",
+    "miss_cnt_bit": "8778",
+    "miss_cnt_tri": "8771",
+    "miss_cnt_rec": "2716",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "yahoo",
+    "miss_cnt_bit": "489",
+    "miss_cnt_tri": "488",
+    "miss_cnt_rec": "488",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  },
+  {
+    "folder": "youtube",
+    "miss_cnt_bit": "17402",
+    "miss_cnt_tri": "17402",
+    "miss_cnt_rec": "17402",
+    "bit_state": "OK",
+    "tri_state": "OK",
+    "rec_state": "OK"
+  }
+]</script>
+</body>
+</html>
