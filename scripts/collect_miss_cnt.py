@@ -34,16 +34,7 @@ class ReportRow:
     tri_state: str
     rec_state: str
 
-    def as_tuple(self) -> Tuple[str, ...]:
-        return (
-            self.folder,
-            self.miss_cnt_bit,
-            self.miss_cnt_tri,
-            self.miss_cnt_rec,
-            self.bit_state,
-            self.tri_state,
-            self.rec_state,
-        )
+# (as_tuple method removed)
 
 
 def parse_miss_count(value: str) -> Optional[int]:
