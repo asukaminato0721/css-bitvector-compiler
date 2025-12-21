@@ -73,9 +73,10 @@ struct SelectorPart {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Combinator {
-    Descendant, // Space combinator
-    Child,      // >
-    None,       // The last selector has no combinator
+    Descendant,      // Space combinator
+    Child,           // >
+    AdjacentSibling, // +
+    None,            // The last selector has no combinator
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Selector {
@@ -178,6 +179,7 @@ impl Display for Combinator {
         match self {
             Combinator::Descendant => write!(f, " "),
             Combinator::Child => write!(f, ">"),
+            Combinator::AdjacentSibling => write!(f, "+"),
             Combinator::None => write!(f, ""),
         }
     }
@@ -612,6 +614,11 @@ fn lightning_selector_to_rule_string(selector: &LightningSelector) -> SelectorCo
                 LCombinator::Child => {
                     if current_selector.is_some() {
                         pending_combinator = Combinator::Child;
+                    }
+                }
+                LCombinator::NextSibling => {
+                    if current_selector.is_some() {
+                        pending_combinator = Combinator::AdjacentSibling;
                     }
                 }
                 LCombinator::PseudoElement => {
