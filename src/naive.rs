@@ -8,7 +8,7 @@ use css_bitvector_compiler::{
     PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, ParsedSelectors, Selector, basic_node_from_json,
     derive_hover_state, drain_supported_pseudo_selectors, is_simple_selector,
     parse_css_with_pseudo, parse_selector, parse_trace, report_pseudo_selectors,
-    report_skipped_selectors,
+    report_skipped_selectors, report_unsupported_selectors,
     runtime_shared::{BasicDomOps, apply_frame_basic},
 };
 
@@ -62,10 +62,13 @@ impl Display for Combinator {
     }
 }
 
-fn parse_css_rules(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>) {
+fn parse_css_rules(
+    css_content: &str,
+) -> (Vec<CssRule>, BTreeMap<String, Vec<String>>, Vec<String>) {
     let ParsedSelectors {
         mut selectors,
         mut pseudo_selectors,
+        unsupported_selectors,
     } = parse_css_with_pseudo(css_content);
 
     selectors.extend(drain_supported_pseudo_selectors(&mut pseudo_selectors));
@@ -79,7 +82,7 @@ fn parse_css_rules(css_content: &str) -> (Vec<CssRule>, BTreeMap<String, Vec<Str
 
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
-    (rules, pseudo_selectors)
+    (rules, pseudo_selectors, unsupported_selectors)
 }
 
 fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
@@ -634,7 +637,7 @@ fn partition_rules(rules: Vec<CssRule>) -> (Vec<CssRule>, Vec<String>) {
 
 fn main() {
     let mut dom = SimpleDom::default();
-    let (rules, pseudo_selectors) = parse_css_rules(
+    let (rules, pseudo_selectors, unsupported_selectors) = parse_css_rules(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
             std::env::var("WEBSITE_NAME").unwrap(),
@@ -644,6 +647,7 @@ fn main() {
     let (mut css, skipped_simple) = partition_rules(rules);
     report_skipped_selectors("naive", &skipped_simple);
     report_pseudo_selectors("naive", &pseudo_selectors);
+    report_unsupported_selectors("naive", &unsupported_selectors);
     let trace = parse_trace();
 
     for frame in &trace {
@@ -666,7 +670,7 @@ mod tests {
 
     #[test]
     fn parse_attribute_selector() {
-        let (rules, _) = parse_css_rules(r#"[data-role="hero"] { color: red; }"#);
+        let (rules, _, _) = parse_css_rules(r#"[data-role="hero"] { color: red; }"#);
         assert_eq!(rules.len(), 1);
         match &rules[0] {
             CssRule::Complex { parts, .. } => {
@@ -706,7 +710,8 @@ mod tests {
 
     #[test]
     fn parse_css_handles_pseudo_classes() {
-        let (rules, pseudo) = parse_css_rules(".wrapper .item:hover strong { font-weight: bold; }");
+        let (rules, pseudo, _) =
+            parse_css_rules(".wrapper .item:hover strong { font-weight: bold; }");
         assert!(pseudo.get(":hover").is_none());
         assert_eq!(rules.len(), 1);
         match &rules[0] {
@@ -725,7 +730,7 @@ mod tests {
 
     #[test]
     fn parse_css_keeps_descendant_hover_selector() {
-        let (rules, pseudo) = parse_css_rules(".wrapper :hover { color: blue; }");
+        let (rules, pseudo, _) = parse_css_rules(".wrapper :hover { color: blue; }");
         assert!(pseudo.get(":hover").is_none());
         assert_eq!(rules.len(), 1, "hover selector should be preserved");
         match &rules[0] {

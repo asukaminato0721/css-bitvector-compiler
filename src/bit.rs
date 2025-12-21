@@ -4,6 +4,7 @@ use css_bitvector_compiler::{
     Selector, SelectorId, SelectorManager, derive_hover_state, drain_supported_pseudo_selectors,
     extract_pseudoclasses, generate_nfa, parse_css_with_pseudo, parse_trace,
     partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
+    report_unsupported_selectors,
     runtime_shared::{HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common},
 };
 use std::{
@@ -870,6 +871,7 @@ fn main() {
     let ParsedSelectors {
         mut selectors,
         mut pseudo_selectors,
+        unsupported_selectors,
     } = parse_css_with_pseudo(
         &std::fs::read_to_string(format!(
             "css-gen-op/{0}/{0}.css",
@@ -883,6 +885,7 @@ fn main() {
     let (selectors, skipped_simple) = partition_simple_selectors(selectors);
     report_skipped_selectors("bit", &skipped_simple);
     report_pseudo_selectors("bit", &pseudo_selectors);
+    report_unsupported_selectors("bit", &unsupported_selectors);
     // dbg!(&selectors);
     let mut s = unsafe { STATE };
     let nfa = generate_nfa(&selectors, &mut dom.selector_manager, &mut s);
