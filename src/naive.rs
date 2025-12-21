@@ -40,6 +40,7 @@ impl Display for SelectorPart {
         match self.combinator {
             Combinator::Descendant => write!(f, " "),
             Combinator::Child => write!(f, " > "),
+            Combinator::AdjacentSibling => write!(f, " + "),
             Combinator::None => Ok(()),
         }
     }
@@ -47,9 +48,10 @@ impl Display for SelectorPart {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 enum Combinator {
-    Descendant, // Space combinator
-    Child,      // >
-    None,       // The last selector has no combinator
+    Descendant,      // Space combinator
+    Child,           // >
+    AdjacentSibling, // +
+    None,            // The last selector has no combinator
 }
 
 impl Display for Combinator {
@@ -57,6 +59,7 @@ impl Display for Combinator {
         match self {
             Combinator::Descendant => write!(f, " "),
             Combinator::Child => write!(f, ">"),
+            Combinator::AdjacentSibling => write!(f, "+"),
             Combinator::None => write!(f, ""),
         }
     }
@@ -72,6 +75,7 @@ fn parse_css_rules(
     } = parse_css_with_pseudo(css_content);
 
     selectors.extend(drain_supported_pseudo_selectors(&mut pseudo_selectors));
+    selectors.extend(drain_naive_specific_pseudos(&mut pseudo_selectors));
     selectors.sort();
     selectors.dedup();
 
@@ -83,6 +87,43 @@ fn parse_css_rules(
     rules.sort_by(|a, b| format!("{:?}", a).cmp(&format!("{:?}", b)));
     rules.dedup();
     (rules, pseudo_selectors, unsupported_selectors)
+}
+
+const NAIVE_PSEUDO_KEYS: &[&str] = &[
+    ":first-child",
+    ":last-child",
+    ":only-child",
+    ":first-of-type",
+    ":last-of-type",
+    ":only-of-type",
+    ":nth-child",
+    ":nth-last-child",
+    ":nth-of-type",
+    ":nth-last-of-type",
+];
+
+const STATEFUL_PSEUDO_CLASSES: &[&str] = &[
+    PSEUDO_CLASS_HOVER,
+    PSEUDO_CLASS_FOCUS,
+    PSEUDO_CLASS_FOCUS_WITHIN,
+];
+
+fn drain_naive_specific_pseudos(
+    pseudo_selectors: &mut BTreeMap<String, Vec<String>>,
+) -> Vec<String> {
+    let mut collected = Vec::new();
+    for key in NAIVE_PSEUDO_KEYS {
+        if let Some(mut selectors) = pseudo_selectors.remove(*key) {
+            collected.append(&mut selectors);
+        }
+    }
+    collected
+}
+
+fn is_stateful_pseudo(pseudo: &str) -> bool {
+    STATEFUL_PSEUDO_CLASSES
+        .iter()
+        .any(|stateful| *stateful == pseudo)
 }
 
 fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
@@ -109,6 +150,11 @@ fn convert_selector_string_to_rule(selector: &str) -> Option<CssRule> {
             RuleToken::Combinator(Combinator::Child) => {
                 if current_selector.is_some() {
                     pending_combinator = Combinator::Child;
+                }
+            }
+            RuleToken::Combinator(Combinator::AdjacentSibling) => {
+                if current_selector.is_some() {
+                    pending_combinator = Combinator::AdjacentSibling;
                 }
             }
             RuleToken::Combinator(Combinator::Descendant) => {
@@ -180,6 +226,13 @@ fn tokenize_rule(selector: &str) -> Vec<RuleToken> {
                 pending_descendant = false;
                 if matches!(tokens.last(), Some(RuleToken::Selector(_))) {
                     tokens.push(RuleToken::Combinator(Combinator::Child));
+                }
+            }
+            '+' if quote_char.is_none() && !in_brackets => {
+                push_selector(&mut current, &mut tokens);
+                pending_descendant = false;
+                if matches!(tokens.last(), Some(RuleToken::Selector(_))) {
+                    tokens.push(RuleToken::Combinator(Combinator::AdjacentSibling));
                 }
             }
             c if c.is_whitespace() && quote_char.is_none() && !in_brackets => {
@@ -476,7 +529,7 @@ impl SimpleDom {
                 if tag == "*" {
                     true
                 } else {
-                    node.tag_name.to_lowercase() == tag.to_lowercase()
+                    node.tag_name.eq_ignore_ascii_case(tag)
                 }
             }
             Selector::Class(class) => node.classes.contains(class),
@@ -486,11 +539,16 @@ impl SimpleDom {
                 .get(name)
                 .map(|v| v == value)
                 .unwrap_or(false),
-            Selector::Compound(compound) => self.matches_compound_selector(node, compound),
+            Selector::Compound(compound) => self.matches_compound_selector(node_id, node, compound),
         }
     }
 
-    fn matches_compound_selector(&self, node: &SimpleDomNode, compound: &CompoundSelector) -> bool {
+    fn matches_compound_selector(
+        &self,
+        node_id: u64,
+        node: &SimpleDomNode,
+        compound: &CompoundSelector,
+    ) -> bool {
         if let Some(tag) = &compound.tag
             && tag != "*"
             && !node.tag_name.eq_ignore_ascii_case(tag)
@@ -519,11 +577,142 @@ impl SimpleDom {
             return false;
         }
         for pseudo in &compound.pseudos {
-            if !node.computed_pseudo_classes.contains(pseudo) {
+            if is_stateful_pseudo(pseudo) {
+                if !node.computed_pseudo_classes.contains(pseudo) {
+                    return false;
+                }
+            } else if !self.matches_structural_pseudo(node_id, node, pseudo) {
                 return false;
             }
         }
         true
+    }
+
+    fn matches_structural_pseudo(&self, node_id: u64, node: &SimpleDomNode, pseudo: &str) -> bool {
+        match pseudo {
+            "first-child" => self
+                .sibling_index(node_id, |_| true)
+                .map(|(index, _)| index == 1)
+                .unwrap_or(false),
+            "last-child" => self
+                .sibling_index(node_id, |_| true)
+                .map(|(index, total)| index == total)
+                .unwrap_or(false),
+            "only-child" => self
+                .sibling_index(node_id, |_| true)
+                .map(|(_, total)| total == 1)
+                .unwrap_or(false),
+            "first-of-type" => {
+                let target = node.tag_name.to_ascii_lowercase();
+                self.sibling_index(node_id, |child| {
+                    child.tag_name.eq_ignore_ascii_case(&target)
+                })
+                .map(|(index, _)| index == 1)
+                .unwrap_or(false)
+            }
+            "last-of-type" => {
+                let target = node.tag_name.to_ascii_lowercase();
+                self.sibling_index(node_id, |child| {
+                    child.tag_name.eq_ignore_ascii_case(&target)
+                })
+                .map(|(index, total)| index == total)
+                .unwrap_or(false)
+            }
+            "only-of-type" => {
+                let target = node.tag_name.to_ascii_lowercase();
+                self.sibling_index(node_id, |child| {
+                    child.tag_name.eq_ignore_ascii_case(&target)
+                })
+                .map(|(_, total)| total == 1)
+                .unwrap_or(false)
+            }
+            _ => {
+                if let Some(arg) = nth_argument(pseudo, "nth-child(") {
+                    self.matches_nth_with_predicate(node_id, |_| true, arg, false)
+                } else if let Some(arg) = nth_argument(pseudo, "nth-last-child(") {
+                    self.matches_nth_with_predicate(node_id, |_| true, arg, true)
+                } else if let Some(arg) = nth_argument(pseudo, "nth-of-type(") {
+                    let target = node.tag_name.to_ascii_lowercase();
+                    self.matches_nth_with_predicate(
+                        node_id,
+                        |child| child.tag_name.eq_ignore_ascii_case(&target),
+                        arg,
+                        false,
+                    )
+                } else if let Some(arg) = nth_argument(pseudo, "nth-last-of-type(") {
+                    let target = node.tag_name.to_ascii_lowercase();
+                    self.matches_nth_with_predicate(
+                        node_id,
+                        |child| child.tag_name.eq_ignore_ascii_case(&target),
+                        arg,
+                        true,
+                    )
+                } else {
+                    false
+                }
+            }
+        }
+    }
+
+    fn matches_nth_with_predicate<F>(
+        &self,
+        node_id: u64,
+        predicate: F,
+        argument: &str,
+        from_end: bool,
+    ) -> bool
+    where
+        F: Fn(&SimpleDomNode) -> bool,
+    {
+        let Some(expr) = parse_nth_expression(argument) else {
+            return false;
+        };
+        let Some((index, total)) = self.sibling_index(node_id, predicate) else {
+            return false;
+        };
+        let position = if from_end { total - index + 1 } else { index };
+        matches_nth_value(position, expr)
+    }
+
+    fn sibling_index<F>(&self, node_id: u64, predicate: F) -> Option<(usize, usize)>
+    where
+        F: Fn(&SimpleDomNode) -> bool,
+    {
+        let node = self.nodes.get(&node_id)?;
+        let parent_id = node.parent?;
+        let parent = self.nodes.get(&parent_id)?;
+        let mut current_index = 0usize;
+        let mut total = 0usize;
+        for &child_id in &parent.children {
+            let Some(child_node) = self.nodes.get(&child_id) else {
+                continue;
+            };
+            if predicate(child_node) {
+                total += 1;
+                if child_id == node_id {
+                    current_index = total;
+                }
+            }
+        }
+        if current_index == 0 {
+            None
+        } else {
+            Some((current_index, total))
+        }
+    }
+
+    fn previous_sibling_id(&self, node_id: u64) -> Option<u64> {
+        let node = self.nodes.get(&node_id)?;
+        let parent_id = node.parent?;
+        let parent = self.nodes.get(&parent_id)?;
+        let mut prev = None;
+        for &child_id in &parent.children {
+            if child_id == node_id {
+                return prev;
+            }
+            prev = Some(child_id);
+        }
+        None
     }
 
     fn matches_complex_selector(&self, node_id: u64, parts: &[SelectorPart]) -> bool {
@@ -556,6 +745,10 @@ impl SimpleDom {
                 .unwrap_or(false),
             Combinator::Descendant => parent_id
                 .map(|pid| self.matches_complex_selector_recursive(pid, &parts[..parts.len() - 1]))
+                .unwrap_or(false),
+            Combinator::AdjacentSibling => self
+                .previous_sibling_id(node_id)
+                .map(|sid| self.matches_complex_selector(sid, &parts[..parts.len() - 1]))
                 .unwrap_or(false),
         }
     }
@@ -598,6 +791,87 @@ impl SimpleDom {
             let printable = rule.to_string().replace('>', " > ");
             println!("{} -> {:?}", printable, matches);
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+struct NthExpression {
+    step: i64,
+    offset: i64,
+}
+
+fn nth_argument<'a>(pseudo: &'a str, prefix: &str) -> Option<&'a str> {
+    pseudo
+        .strip_prefix(prefix)
+        .and_then(|rest| rest.strip_suffix(')'))
+        .map(|arg| arg.trim())
+        .filter(|arg| !arg.is_empty())
+}
+
+fn parse_nth_expression(input: &str) -> Option<NthExpression> {
+    let trimmed = input.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    let lowered = trimmed.to_ascii_lowercase();
+    if lowered == "odd" {
+        return Some(NthExpression { step: 2, offset: 1 });
+    }
+    if lowered == "even" {
+        return Some(NthExpression { step: 2, offset: 0 });
+    }
+    let normalized: String = lowered.chars().filter(|c| !c.is_whitespace()).collect();
+    if normalized.is_empty() {
+        return None;
+    }
+    if let Some(n_pos) = normalized.find('n') {
+        let (a_part, b_part) = normalized.split_at(n_pos);
+        let step = if a_part.is_empty() || a_part == "+" {
+            1
+        } else if a_part == "-" {
+            -1
+        } else {
+            a_part.parse().ok()?
+        };
+        let offset = if b_part.len() == 1 {
+            0
+        } else {
+            b_part[1..].parse().ok()?
+        };
+        Some(NthExpression { step, offset })
+    } else {
+        Some(NthExpression {
+            step: 0,
+            offset: normalized.parse().ok()?,
+        })
+    }
+}
+
+fn matches_nth_value(position: usize, expr: NthExpression) -> bool {
+    let index = position as i64;
+    if index < 1 {
+        return false;
+    }
+    let step = expr.step;
+    let offset = expr.offset;
+    if step == 0 {
+        return index == offset && offset >= 1;
+    }
+    if step > 0 {
+        if index < offset {
+            return false;
+        }
+        let diff = index - offset;
+        diff % step == 0
+    } else {
+        let mut value = offset;
+        while value >= 1 {
+            if value == index {
+                return true;
+            }
+            value += step;
+        }
+        false
     }
 }
 
@@ -744,5 +1018,80 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn matches_adjacent_sibling_and_first_child() {
+        let (mut rules, _, _) = parse_css_rules(".lead:first-child + .target { color: red; }");
+        assert_eq!(rules.len(), 1);
+        let rule = rules.pop().unwrap();
+
+        let mut dom = SimpleDom::default();
+        let mut root = SimpleDomNode::default();
+        root.id = 1;
+        root.tag_name = "div".into();
+        root.children = vec![2, 3];
+        dom.root_id = Some(1);
+
+        let mut first = SimpleDomNode::default();
+        first.id = 2;
+        first.tag_name = "div".into();
+        first.parent = Some(1);
+        first.classes.insert("lead".into());
+
+        let mut second = SimpleDomNode::default();
+        second.id = 3;
+        second.tag_name = "div".into();
+        second.parent = Some(1);
+        second.classes.insert("target".into());
+
+        dom.nodes.insert(1, root);
+        dom.nodes.insert(2, first);
+        dom.nodes.insert(3, second);
+
+        let matches = dom.collect_rule_matches(&rule);
+        assert_eq!(matches, vec![3]);
+    }
+
+    #[test]
+    fn supports_nth_child_and_of_type() {
+        let (mut nth_child_rules, _, _) = parse_css_rules("span:nth-child(2) { color: red; }");
+        let nth_child_rule = nth_child_rules.pop().unwrap();
+
+        let (mut nth_of_type_rules, _, _) = parse_css_rules("div:nth-of-type(2) { color: blue; }");
+        let nth_of_type_rule = nth_of_type_rules.pop().unwrap();
+
+        let mut dom = SimpleDom::default();
+        let mut root = SimpleDomNode::default();
+        root.id = 1;
+        root.tag_name = "ul".into();
+        root.children = vec![2, 3, 4];
+        dom.root_id = Some(1);
+
+        let mut first = SimpleDomNode::default();
+        first.id = 2;
+        first.tag_name = "div".into();
+        first.parent = Some(1);
+
+        let mut second = SimpleDomNode::default();
+        second.id = 3;
+        second.tag_name = "span".into();
+        second.parent = Some(1);
+
+        let mut third = SimpleDomNode::default();
+        third.id = 4;
+        third.tag_name = "div".into();
+        third.parent = Some(1);
+
+        dom.nodes.insert(1, root);
+        dom.nodes.insert(2, first);
+        dom.nodes.insert(3, second);
+        dom.nodes.insert(4, third);
+
+        assert!(dom.matches_css_rule(3, &nth_child_rule));
+        assert!(!dom.matches_css_rule(2, &nth_child_rule));
+
+        assert!(dom.matches_css_rule(4, &nth_of_type_rule));
+        assert!(!dom.matches_css_rule(2, &nth_of_type_rule));
     }
 }
