@@ -4,9 +4,10 @@ use std::{
 };
 
 use css_bitvector_compiler::{
-    CompoundSelector, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN,
-    PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, ParsedSelectors, Selector, basic_node_from_json,
-    derive_hover_state, drain_supported_pseudo_selectors, is_simple_selector,
+    CompoundSelector, Node, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT,
+    PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, PSEUDO_CLASS_HOVER_ROOT, ParsedSelectors,
+    Selector, basic_node_from_node, derive_hover_state, drain_supported_pseudo_selectors,
+    is_simple_selector,
     parse_css_with_pseudo, parse_selector, parse_trace, report_pseudo_selectors,
     report_skipped_selectors, report_unsupported_selectors,
     runtime_shared::{BasicDomOps, apply_frame_basic},
@@ -279,8 +280,8 @@ struct SimpleDomNode {
 }
 
 impl SimpleDomNode {
-    fn from_json(json_node: &serde_json::Value) -> Self {
-        let basic = basic_node_from_json(json_node);
+    fn from_json(node: &Node) -> Self {
+        let basic = basic_node_from_node(node);
         SimpleDomNode {
             tag_name: basic.tag_name,
             id: basic.id,
@@ -354,22 +355,20 @@ struct SimpleDom {
 }
 
 impl SimpleDom {
-    fn init(&mut self, root: &serde_json::Value) {
+    fn init(&mut self, root: &Node) {
         self.nodes.clear();
         self.root_id = Some(self.build_subtree(root, None));
     }
 
-    fn build_subtree(&mut self, node_json: &serde_json::Value, parent: Option<u64>) -> u64 {
-        let node_id = node_json["id"].as_u64().unwrap();
+    fn build_subtree(&mut self, node_json: &Node, parent: Option<u64>) -> u64 {
+        let node_id = node_json.id;
         let mut node = SimpleDomNode::from_json(node_json);
         node.parent = parent;
         self.nodes.insert(node_id, node);
-        if let Some(children) = node_json["children"].as_array() {
-            for child in children {
-                let child_id = self.build_subtree(child, Some(node_id));
-                if let Some(parent_node) = self.nodes.get_mut(&node_id) {
-                    parent_node.children.push(child_id);
-                }
+        for child in &node_json.children {
+            let child_id = self.build_subtree(child, Some(node_id));
+            if let Some(parent_node) = self.nodes.get_mut(&node_id) {
+                parent_node.children.push(child_id);
             }
         }
         node_id
@@ -387,7 +386,7 @@ impl SimpleDom {
         Some(current)
     }
 
-    fn add_by_path(&mut self, path: &[usize], json_node: &serde_json::Value) {
+    fn add_by_path(&mut self, path: &[usize], json_node: &Node) {
         if path.is_empty() {
             return;
         }
@@ -876,10 +875,10 @@ fn matches_nth_value(position: usize, expr: NthExpression) -> bool {
 }
 
 impl BasicDomOps for SimpleDom {
-    fn init(&mut self, root: &serde_json::Value) {
+    fn init(&mut self, root: &Node) {
         SimpleDom::init(self, root);
     }
-    fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value) {
+    fn add_by_path(&mut self, path: &[usize], node: &Node) {
         self.add_by_path(path, node);
     }
     fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>) {

@@ -12,9 +12,38 @@ use std::{
 
 pub mod runtime_shared;
 
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct Node {
+    pub id: u64,
+    #[serde(rename = "name")]
+    pub tag_name: String,
+    #[serde(rename = "type", default)]
+    pub node_type: Option<String>,
+    #[serde(default)]
+    pub attributes: HashMap<String, serde_json::Value>,
+    #[serde(default)]
+    pub children: Vec<Node>,
+    #[serde(flatten)]
+    pub extra: HashMap<String, serde_json::Value>,
+}
+
+pub fn attributes_to_string_map(
+    attributes: &HashMap<String, serde_json::Value>,
+) -> HashMap<String, String> {
+    attributes
+        .iter()
+        .filter_map(|(name, value)| match value {
+            serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
+            serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
+            serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
+            _ => None,
+        })
+        .collect()
+}
+
 // Helpers used by naive implementation
 mod naive_util {
-    use crate::extract_pseudoclasses;
+    use crate::{Node, attributes_to_string_map, extract_pseudoclasses};
     use std::collections::{HashMap, HashSet};
 
     #[derive(Debug)]
@@ -27,23 +56,10 @@ mod naive_util {
         pub pseudo_classes: HashSet<String>,
     }
 
-    pub fn basic_node_from_json(json_node: &serde_json::Value) -> BasicNode {
-        let tag_name = json_node["name"].as_str().unwrap().to_string();
-        let id = json_node["id"].as_u64().unwrap();
-        let attributes = json_node["attributes"]
-            .as_object()
-            .map(|attrs| {
-                attrs
-                    .iter()
-                    .filter_map(|(name, value)| match value {
-                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
-                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
-                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
-                        _ => None,
-                    })
-                    .collect::<HashMap<_, _>>()
-            })
-            .unwrap_or_default();
+    pub fn basic_node_from_node(node: &Node) -> BasicNode {
+        let tag_name = node.tag_name.clone();
+        let id = node.id;
+        let attributes = attributes_to_string_map(&node.attributes);
 
         let html_id = attributes.get("id").cloned();
         let class_attr = attributes.get("class").cloned().unwrap_or_default();
@@ -52,7 +68,7 @@ mod naive_util {
             .filter(|s| !s.is_empty())
             .map(String::from)
             .collect::<HashSet<_>>();
-        let pseudo_classes = extract_pseudoclasses(json_node);
+        let pseudo_classes = extract_pseudoclasses(node);
 
         BasicNode {
             tag_name,
@@ -232,36 +248,42 @@ pub enum OState {
 
 // Common layout frame structure used across different implementations
 #[derive(Debug, Clone)]
-pub struct LayoutFrame {
+pub struct TraceFrame {
     pub frame_id: usize,
-    pub command_name: String,
-    pub command_data: serde_json::Value,
+    pub command: TraceCommand,
 }
 
-#[derive(Debug, Clone)]
-pub enum Command<'a> {
+#[derive(Debug, Clone, serde::Deserialize)]
+#[serde(tag = "name", rename_all = "snake_case")]
+pub enum TraceCommand {
     Init {
-        node: &'a serde_json::Value,
+        node: Node,
     },
     Add {
         path: Vec<usize>,
-        node: &'a serde_json::Value,
+        node: Node,
     },
     ReplaceValue {
         path: Vec<usize>,
-        key: &'a str,
-        value: Option<&'a serde_json::Value>,
-        old_value: Option<&'a serde_json::Value>,
+        #[serde(rename = "type")]
+        attr_type: Option<String>,
+        key: String,
+        value: Option<serde_json::Value>,
+        old_value: Option<serde_json::Value>,
     },
     InsertValue {
         path: Vec<usize>,
-        key: &'a str,
-        value: Option<&'a serde_json::Value>,
+        #[serde(rename = "type")]
+        attr_type: Option<String>,
+        key: String,
+        value: Option<serde_json::Value>,
     },
     DeleteValue {
         path: Vec<usize>,
-        key: &'a str,
-        old_value: Option<&'a serde_json::Value>,
+        #[serde(rename = "type")]
+        attr_type: Option<String>,
+        key: String,
+        old_value: Option<serde_json::Value>,
     },
     Recalculate,
     Remove {
@@ -269,74 +291,33 @@ pub enum Command<'a> {
     },
 }
 
-pub fn parse_command<'a>(
-    command_name: &'a str,
-    command_data: &'a serde_json::Value,
-) -> Command<'a> {
-    match command_name {
-        "init" => {
-            let node = command_data.get("node").unwrap();
-            Command::Init { node }
+impl TraceCommand {
+    pub fn name(&self) -> &'static str {
+        match self {
+            TraceCommand::Init { .. } => "init",
+            TraceCommand::Add { .. } => "add",
+            TraceCommand::ReplaceValue { .. } => "replace_value",
+            TraceCommand::InsertValue { .. } => "insert_value",
+            TraceCommand::DeleteValue { .. } => "delete_value",
+            TraceCommand::Recalculate => "recalculate",
+            TraceCommand::Remove { .. } => "remove",
         }
-        "add" => {
-            let node = command_data.get("node").unwrap();
-            let path = extract_path_from_command(command_data);
-            Command::Add { path, node }
-        }
-        "replace_value" => {
-            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
-                unreachable!();
-            }
-            let path = extract_path_from_command(command_data);
-            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
-            let value = command_data.get("value");
-            let old_value = command_data.get("old_value");
-            Command::ReplaceValue {
-                path,
-                key,
-                value,
-                old_value,
-            }
-        }
-        "insert_value" => {
-            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
-                unreachable!();
-            }
-            let path = extract_path_from_command(command_data);
-            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
-            let value = command_data.get("value");
-            Command::InsertValue { path, key, value }
-        }
-        "delete_value" => {
-            if command_data.get("type").and_then(|v| v.as_str()) != Some("attributes") {
-                unreachable!();
-            }
-            let path = extract_path_from_command(command_data);
-            let key = command_data.get("key").and_then(|v| v.as_str()).unwrap();
-            let old_value = command_data.get("old_value");
-            Command::DeleteValue {
-                path,
-                key,
-                old_value,
-            }
-        }
-        "recalculate" => Command::Recalculate,
-        "remove" => {
-            let path = extract_path_from_command(command_data);
-            Command::Remove { path }
-        }
-        _ => unreachable!(),
     }
 }
 
-impl LayoutFrame {
-    pub fn as_command(&self) -> Command<'_> {
-        parse_command(&self.command_name, &self.command_data)
+impl TraceFrame {
+    pub fn command_name(&self) -> &'static str {
+        self.command.name()
     }
 }
 
 /// Parse trace from command.json file
-pub fn parse_trace() -> Vec<LayoutFrame> {
+#[derive(serde::Deserialize)]
+struct TraceHeader {
+    name: String,
+}
+
+pub fn parse_trace() -> Vec<TraceFrame> {
     let content = std::fs::read_to_string(format!(
         "css-gen-op/{0}/command.json",
         std::env::var("WEBSITE_NAME").unwrap()
@@ -348,34 +329,16 @@ pub fn parse_trace() -> Vec<LayoutFrame> {
         if line.trim().is_empty() {
             continue;
         }
-        let command_data = serde_json::from_str::<serde_json::Value>(line).unwrap();
-
-        let command_name = command_data["name"].as_str().unwrap().to_string();
-        if command_name.starts_with("layout_") {
+        let header = serde_json::from_str::<TraceHeader>(line).unwrap();
+        if header.name.starts_with("layout_") {
             continue;
         }
+        let command = serde_json::from_str::<TraceCommand>(line).unwrap();
 
-        frames.push(LayoutFrame {
-            frame_id,
-            command_name,
-            command_data,
-        });
+        frames.push(TraceFrame { frame_id, command });
     }
 
     frames
-}
-
-/// Extract path from command data
-pub fn extract_path_from_command(command_data: &serde_json::Value) -> Vec<usize> {
-    command_data
-        .get("path")
-        .and_then(|p| p.as_array())
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|v| v.as_u64().map(|x| x as usize))
-                .collect::<Vec<_>>()
-        })
-        .unwrap()
 }
 
 #[derive(Debug, Default, Clone)]
@@ -1215,7 +1178,7 @@ pub fn derive_hover_state(pseudo_flags: &HashSet<String>, parent_hover: bool) ->
         || pseudo_flags.contains(PSEUDO_CLASS_HOVER)
 }
 
-pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
+pub fn extract_pseudoclasses(node: &Node) -> HashSet<String> {
     fn collect_from_value(value: &serde_json::Value, target: &mut HashSet<String>) {
         match value {
             serde_json::Value::Array(items) => {
@@ -1259,25 +1222,25 @@ pub fn extract_pseudoclasses(node: &serde_json::Value) -> HashSet<String> {
         "pseudoclass",
         "pseudo_class",
     ] {
-        if let Some(value) = node.get(key) {
+        if let Some(value) = node.extra.get(key) {
             collect_from_value(value, &mut result);
         }
     }
-    if let Some(attrs) = node.get("attributes").and_then(|attrs| attrs.as_object()) {
-        if attrs
-            .get("is_hovered_root")
-            .and_then(|value| value.as_bool())
-            .unwrap_or(false)
-        {
-            result.insert(PSEUDO_CLASS_HOVER_ROOT.to_string());
-        }
-        if attrs
-            .get("is_focus_root")
-            .and_then(|value| value.as_bool())
-            .unwrap_or(false)
-        {
-            result.insert(PSEUDO_CLASS_FOCUS_ROOT.to_string());
-        }
+    if node
+        .attributes
+        .get("is_hovered_root")
+        .and_then(|value| value.as_bool())
+        .unwrap_or(false)
+    {
+        result.insert(PSEUDO_CLASS_HOVER_ROOT.to_string());
+    }
+    if node
+        .attributes
+        .get("is_focus_root")
+        .and_then(|value| value.as_bool())
+        .unwrap_or(false)
+    {
+        result.insert(PSEUDO_CLASS_FOCUS_ROOT.to_string());
     }
     result
 }

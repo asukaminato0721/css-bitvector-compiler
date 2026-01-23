@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
 use crate::{
-    Command, LayoutFrame, NFA, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_HOVER_ROOT, Selector,
-    SelectorId, SelectorManager, json_value_to_attr_string, parse_command,
+    NFA, Node, PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_HOVER_ROOT, Selector, SelectorId,
+    SelectorManager, TraceCommand, TraceFrame, json_value_to_attr_string,
 };
 
 /// Access to selector manager from a DOM implementation.
@@ -115,8 +115,8 @@ where
 {
     type AttrState: PartialEq;
     fn reset_dom(&mut self);
-    fn json_to_html_node(&mut self, node: &serde_json::Value, parent: Option<u64>, nfa: &NFA);
-    fn add_node_by_path(&mut self, path: &[usize], node: &serde_json::Value, nfa: &NFA);
+    fn json_to_html_node(&mut self, node: &Node, parent: Option<u64>, nfa: &NFA);
+    fn add_node_by_path(&mut self, path: &[usize], node: &Node, nfa: &NFA);
     fn remove_node_by_path(&mut self, path: &[usize]);
     fn node_id_by_path(&mut self, path: &[usize]) -> Option<u64>;
     fn set_node_dirty(&mut self, node_idx: u64);
@@ -166,7 +166,7 @@ where
 /// Shared apply_frame logic for bit/tri/quad style DOMs.
 pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
     dom: &mut D,
-    frame: &LayoutFrame,
+    frame: &TraceFrame,
     nfa: &NFA,
     make_input: FInput,
     make_recalc_input: FRecalcInput,
@@ -176,22 +176,26 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
     FInput: Fn() -> Vec<bool>,
     FRecalcInput: Fn(&NFA) -> Vec<bool>,
 {
-    match frame.as_command() {
-        crate::Command::Init { node } => {
+    match &frame.command {
+        TraceCommand::Init { node } => {
             dom.reset_dom();
             dom.json_to_html_node(node, None, nfa);
             dom.recompute_styles(nfa, &make_input());
         }
-        crate::Command::Add { path, node } => {
+        TraceCommand::Add { path, node } => {
             dom.add_node_by_path(&path, node, nfa);
             dom.recompute_styles(nfa, &make_input());
         }
-        crate::Command::ReplaceValue {
+        TraceCommand::ReplaceValue {
             path,
             key,
             value,
             old_value,
+            attr_type,
         } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path for ReplaceValue {:?}", path));
@@ -208,29 +212,41 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                     key, path
                 );
             }
-            let new_value = value.map(json_value_to_attr_string);
+            let new_value = value.as_ref().map(json_value_to_attr_string);
             if dom.update_attribute_with_shortcut(node_idx, key, new_value, nfa, &make_input) {
                 dom.set_node_dirty(node_idx);
                 let root_input = make_input();
                 dom.recompute_styles(nfa, &root_input);
             }
         }
-        crate::Command::InsertValue { path, key, value } => {
+        TraceCommand::InsertValue {
+            path,
+            key,
+            value,
+            attr_type,
+        } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path for InsertValue {:?}", path));
-            let new_value = value.map(json_value_to_attr_string);
+            let new_value = value.as_ref().map(json_value_to_attr_string);
             if dom.update_attribute_with_shortcut(node_idx, key, new_value, nfa, &make_input) {
                 dom.set_node_dirty(node_idx);
                 let root_input = make_input();
                 dom.recompute_styles(nfa, &root_input);
             }
         }
-        crate::Command::DeleteValue {
+        TraceCommand::DeleteValue {
             path,
             key,
             old_value,
+            attr_type,
         } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
             let node_idx = dom
                 .node_id_by_path(&path)
                 .unwrap_or_else(|| panic!("invalid path for DeleteValue {:?}", path));
@@ -253,10 +269,10 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                 dom.recompute_styles(nfa, &root_input);
             }
         }
-        crate::Command::Recalculate => {
+        TraceCommand::Recalculate => {
             dom.recompute_styles(nfa, &make_recalc_input(nfa));
         }
-        crate::Command::Remove { path } => {
+        TraceCommand::Remove { path } => {
             dom.remove_node_by_path(&path);
             dom.recompute_styles(nfa, &make_input());
         }
@@ -265,45 +281,61 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
 
 /// Minimal DOM interface for selector-less flows (no NFA/recompute).
 pub trait BasicDomOps {
-    fn init(&mut self, root: &serde_json::Value);
-    fn add_by_path(&mut self, path: &[usize], node: &serde_json::Value);
+    fn init(&mut self, root: &Node);
+    fn add_by_path(&mut self, path: &[usize], node: &Node);
     fn set_attribute(&mut self, path: &[usize], key: &str, new_value: Option<String>);
     fn assert_attribute_value(&self, path: &[usize], key: &str, expected: &str);
     fn remove_by_path(&mut self, path: &[usize]);
 }
 
 /// Shared apply_frame variant that does not rely on NFA or recompute_styles.
-pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &LayoutFrame) {
-    match parse_command(&frame.command_name, &frame.command_data) {
-        Command::Init { node } => dom.init(node),
-        Command::Add { path, node } => dom.add_by_path(&path, node),
-        Command::ReplaceValue {
+pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &TraceFrame) {
+    match &frame.command {
+        TraceCommand::Init { node } => dom.init(node),
+        TraceCommand::Add { path, node } => dom.add_by_path(&path, node),
+        TraceCommand::ReplaceValue {
             path,
             key,
             value,
             old_value,
+            attr_type,
         } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
             if let Some(old_value) = old_value {
                 dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
             }
-            let new_value = value.map(json_value_to_attr_string);
+            let new_value = value.as_ref().map(json_value_to_attr_string);
             dom.set_attribute(&path, key, new_value);
         }
-        Command::InsertValue { path, key, value } => {
-            let new_value = value.map(json_value_to_attr_string);
+        TraceCommand::InsertValue {
+            path,
+            key,
+            value,
+            attr_type,
+        } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
+            let new_value = value.as_ref().map(json_value_to_attr_string);
             dom.set_attribute(&path, key, new_value);
         }
-        Command::DeleteValue {
+        TraceCommand::DeleteValue {
             path,
             key,
             old_value,
+            attr_type,
         } => {
+            if attr_type.as_deref() != Some("attributes") {
+                unreachable!();
+            }
             if let Some(old_value) = old_value {
                 dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
             }
             dom.set_attribute(&path, key, None);
         }
-        Command::Recalculate => {}
-        Command::Remove { path } => dom.remove_by_path(&path),
+        TraceCommand::Recalculate => {}
+        TraceCommand::Remove { path } => dom.remove_by_path(&path),
     }
 }

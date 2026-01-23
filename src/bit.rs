@@ -1,9 +1,9 @@
 use css_bitvector_compiler::{
-    AddNode, CompoundSelector, LayoutFrame, NFA, Nfacell, PSEUDO_CLASS_FOCUS,
-    PSEUDO_CLASS_FOCUS_ROOT, PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, ParsedSelectors, Rule,
-    Selector, SelectorId, SelectorManager, derive_hover_state, drain_supported_pseudo_selectors,
-    extract_pseudoclasses, generate_nfa, parse_css_with_pseudo, parse_trace,
-    partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
+    AddNode, CompoundSelector, NFA, Nfacell, Node, PSEUDO_CLASS_FOCUS, PSEUDO_CLASS_FOCUS_ROOT,
+    PSEUDO_CLASS_FOCUS_WITHIN, PSEUDO_CLASS_HOVER, ParsedSelectors, Rule, Selector, SelectorId,
+    SelectorManager, TraceFrame, attributes_to_string_map, derive_hover_state,
+    drain_supported_pseudo_selectors, extract_pseudoclasses, generate_nfa, parse_css_with_pseudo,
+    parse_trace, partition_simple_selectors, report_pseudo_selectors, report_skipped_selectors,
     report_unsupported_selectors,
     runtime_shared::{HasNodes, HasSelectorManager, NodeAttributes, apply_frame_common},
 };
@@ -429,26 +429,13 @@ impl DOM {
     }
     pub fn json_to_html_node(
         &mut self,
-        json_node: &serde_json::Value,
+        json_node: &Node,
         parent_index: Option<u64>,
         nfa: &NFA,
     ) -> u64 {
-        let tag_name = json_node["name"].as_str().unwrap();
-        let id = json_node["id"].as_u64().unwrap();
-        let attributes = json_node["attributes"]
-            .as_object()
-            .map(|attrs| {
-                attrs
-                    .iter()
-                    .filter_map(|(name, value)| match value {
-                        serde_json::Value::String(s) => Some((name.to_lowercase(), s.to_string())),
-                        serde_json::Value::Number(n) => Some((name.to_lowercase(), n.to_string())),
-                        serde_json::Value::Bool(b) => Some((name.to_lowercase(), b.to_string())),
-                        _ => None,
-                    })
-                    .collect::<HashMap<_, _>>()
-            })
-            .unwrap_or_default();
+        let tag_name = json_node.tag_name.as_str();
+        let id = json_node.id;
+        let attributes = attributes_to_string_map(&json_node.attributes);
 
         let html_id = attributes.get("id").cloned();
         let class_attr = attributes.get("class").cloned().unwrap_or_default();
@@ -476,16 +463,14 @@ impl DOM {
         }
         //
         // Recursively process child nodes
-        if let Some(children_array) = json_node["children"].as_array() {
-            for child_json in children_array {
-                self.json_to_html_node(child_json, Some(current_index), nfa);
-            }
+        for child_json in &json_node.children {
+            self.json_to_html_node(child_json, Some(current_index), nfa);
         }
         current_index
     }
 
     /// Add a node specified by a path.
-    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &serde_json::Value, nfa: &NFA) {
+    pub fn add_node_by_path(&mut self, path: &[usize], json_node: &Node, nfa: &NFA) {
         assert!(!path.is_empty());
         let root_node = self.get_root_node();
 
@@ -786,10 +771,10 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
         self.nodes.clear();
         self.root_node = None;
     }
-    fn json_to_html_node(&mut self, node: &serde_json::Value, parent: Option<u64>, nfa: &NFA) {
+    fn json_to_html_node(&mut self, node: &Node, parent: Option<u64>, nfa: &NFA) {
         self.json_to_html_node(node, parent, nfa);
     }
-    fn add_node_by_path(&mut self, path: &[usize], node: &serde_json::Value, nfa: &NFA) {
+    fn add_node_by_path(&mut self, path: &[usize], node: &Node, nfa: &NFA) {
         self.add_node_by_path(path, node, nfa);
     }
     fn remove_node_by_path(&mut self, path: &[usize]) {
@@ -831,7 +816,7 @@ impl css_bitvector_compiler::runtime_shared::FrameDom<DOMNode> for DOM {
     }
 }
 
-fn apply_frame(dom: &mut DOM, frame: &LayoutFrame, nfa: &NFA) {
+fn apply_frame(dom: &mut DOM, frame: &TraceFrame, nfa: &NFA) {
     let make_input = || get_input();
     let make_recalc_input = |nfa: &NFA| {
         let mut input = vec![false; unsafe { STATE } + 1];
