@@ -37,6 +37,10 @@ path = "src/naive.rs"
 name = "filter_selectors"
 path = "src/filter_selectors.rs"
 
+[[bin]]
+name = "benchmark"
+path = "src/benchmark.rs"
+
 
 [dependencies]
 cssparser = "0.35.0"
