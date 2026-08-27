@@ -1,0 +1,137 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
+     Running `target/release/bit`
+NOT_CONSIDERED[bit] 45 selector(s)
+NOT_CONSIDERED[bit] #b_headerheader
+NOT_CONSIDERED[bit] #bnc-hc
+NOT_CONSIDERED[bit] #carousel
+NOT_CONSIDERED[bit] #dsbflyout
+NOT_CONSIDERED[bit] #dsbflyout_hide
+NOT_CONSIDERED[bit] #dummyIdentifier
+NOT_CONSIDERED[bit] #idCont
+NOT_CONSIDERED[bit] #id_nc
+NOT_CONSIDERED[bit] #id_rbh
+NOT_CONSIDERED[bit] #id_rh
+NOT_CONSIDERED[bit] #id_sc
+NOT_CONSIDERED[bit] #rh_rwm
+NOT_CONSIDERED[bit] #sb_sbi
+NOT_CONSIDERED[bit] #shdlg-main
+NOT_CONSIDERED[bit] #thp_notf_div
+NOT_CONSIDERED[bit] .below_sbox
+NOT_CONSIDERED[bit] .bottom_row
+NOT_CONSIDERED[bit] .cdxConv
+NOT_CONSIDERED[bit] .cdxConv_slsboxl
+NOT_CONSIDERED[bit] .dynamic_footer.footer
+NOT_CONSIDERED[bit] .feedback_button
+NOT_CONSIDERED[bit] .footer
+NOT_CONSIDERED[bit] .hb_section
+NOT_CONSIDERED[bit] .id_vnext
+NOT_CONSIDERED[bit] .image-feed
+NOT_CONSIDERED[bit] .margin_inc#idCont
+NOT_CONSIDERED[bit] .mc_caro
+NOT_CONSIDERED[bit] .no_mod.footer
+NOT_CONSIDERED[bit] .row.vs_cont
+NOT_CONSIDERED[bit] .sb_feedback_button
+NOT_CONSIDERED[bit] .sc_hide.scopes
+NOT_CONSIDERED[bit] .scopes
+NOT_CONSIDERED[bit] .show#carousel
+NOT_CONSIDERED[bit] .show_footer.dynamic_footer.footer
+NOT_CONSIDERED[bit] .skeleton-bg
+NOT_CONSIDERED[bit] .skeleton-container
+NOT_CONSIDERED[bit] .static_footer.footer
+NOT_CONSIDERED[bit] .switch_lang
+NOT_CONSIDERED[bit] .tooltip
+NOT_CONSIDERED[bit] .tooltipCN
+NOT_CONSIDERED[bit] .tooltip_sb
+NOT_CONSIDERED[bit] .vs_cont
+NOT_CONSIDERED[bit] .vsmodule#vert_mbhpf
+NOT_CONSIDERED[bit] body
+NOT_CONSIDERED[bit] html
+PSEUDO_SKIPPED[bit] :after -> 89 selector(s)
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:active:after
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:after
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:focus:after
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:hover:after
+PSEUDO_SKIPPED[bit]    eg #carousel .nav .edit_interests:after
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :before -> 88 selector(s)
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:active:before
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:before
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:focus:before
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:hover:before
+PSEUDO_SKIPPED[bit]    eg #dsbflyout .close:before
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :not -> 47 selector(s)
+PSEUDO_SKIPPED[bit]    eg .b_dark .no_image .below_sbox .cdxPrompt .cdxButton:not(.cdxAltButton)
+PSEUDO_SKIPPED[bit]    eg .below_sbox .cdxPrompt .cdxAcrylic .cdxButton:not(.cdxAltButton)
+PSEUDO_SKIPPED[bit]    eg .below_sbox .cdxPrompt .cdxAcrylic .cdxHeader .cdxPagination .cdxPage.selected:not(.paused) span.cdxPageIndicator
+PSEUDO_SKIPPED[bit]    eg .footer .items .item body:not(.b_dark) .hp_body.no_image #carousel .nav .a_bold
+PSEUDO_SKIPPED[bit]    eg .footer .items .item body:not(.b_dark) .hp_body.no_image #carousel .nav .a_bold .nav-arrow
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :active -> 46 selector(s)
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:active:after
+PSEUDO_SKIPPED[bit]    eg #bnc-hc:active:before
+PSEUDO_SKIPPED[bit]    eg #id_nc:active:after
+PSEUDO_SKIPPED[bit]    eg #id_nc:active:before
+PSEUDO_SKIPPED[bit]    eg #id_rbh:active:after
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :first-child -> 6 selector(s)
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane .itile .crs_item .crs_item_ctnt.crs_wea .deg_switch > :first-child
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane .pntile .crs_item .crs_item_ctnt.crs_wea .deg_switch > :first-child
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane .tile_grp:first-child
+PSEUDO_SKIPPED[bit]    eg #vert_bawcrs.vsmodule .vert_bawcrs .carousel-content .carousel-scroll-wrapper .carousel-scroll-content .items .vscrs_bawtile:first-child
+PSEUDO_SKIPPED[bit]    eg .vsmodule .mit .item:first-child
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] :first-of-type -> 6 selector(s)
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane .itile.no_margin_left:first-of-type
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane .pntile.no_margin_left:first-of-type
+PSEUDO_SKIPPED[bit]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type
+PSEUDO_SKIPPED[bit]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type .card-img
+PSEUDO_SKIPPED[bit]    eg .skeleton-container .skeleton-feed .fixed-size-card:first-of-type .card-label
+PSEUDO_SKIPPED[bit]    ...
+PSEUDO_SKIPPED[bit] ::-webkit-scrollbar -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg #carousel #crs_pane::-webkit-scrollbar
+PSEUDO_SKIPPED[bit]    eg #carousel::-webkit-scrollbar
+PSEUDO_SKIPPED[bit]    eg .bottom_row .scroll_cont::-webkit-scrollbar
+PSEUDO_SKIPPED[bit] :focus-visible -> 3 selector(s)
+PSEUDO_SKIPPED[bit]    eg .below_sbox .cdxPrompt .cdxMain .nudgeFocusEnabled:focus-visible
+PSEUDO_SKIPPED[bit]    eg .hb_section:focus-visible
+PSEUDO_SKIPPED[bit]    eg .vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_img:focus-visible
+PSEUDO_SKIPPED[bit] :last-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .vsmodule .otd .item:last-child
+PSEUDO_SKIPPED[bit] :last-of-type -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .mc_caro .musCard .musCardCont .share li:last-of-type
+PSEUDO_SKIPPED[bit] :nth-child -> 1 selector(s)
+PSEUDO_SKIPPED[bit]    eg .below_sbox .mvs_cont .tileContainer #mvs li:nth-child(-n+3)
+UNSUPPORTED[bit] none
+BEGIN
+#idCont .sw_mktsw -> [520]
+#idCont .sw_mktsw * -> [523, 528]
+.bottom_row .scroll_cont -> [632]
+.bottom_row .show_none.scroll_cont -> [632]
+.scopes .dots.scope -> [236]
+.scopes .dots.scope .dots_tab_selection -> [242]
+.scopes .overflow_menu .try_exp.overflow_item -> [250, 276, 289]
+.scopes .scope -> [158, 184, 197, 210, 223, 236]
+.scopes .scope .overflow_menu -> [247, 347]
+.scopes .scope .overflow_menu .divider.overflow_item -> [302]
+.scopes .scope .overflow_menu .has_sub.overflow_item a -> [336, 356, 373, 390, 407, 424, 441, 458, 475, 492]
+.scopes .scope .overflow_menu .overflow_container -> [343]
+.scopes .scope .overflow_menu .overflow_item -> [250, 263, 276, 289, 302, 315, 328, 350, 367, 384, 401, 418, 435, 452, 469, 486, 503]
+.scopes .scope .overflow_menu .overflow_item a -> [256, 269, 282, 295, 308, 321, 336, 356, 373, 390, 407, 424, 441, 458, 475, 492, 509]
+.scopes .scope .overflow_menu .submenu -> [345]
+.scopes .scope .overflow_menu .submenu .overflow_item .icon -> [362, 379, 396, 413, 430, 447, 464, 481, 498]
+.scopes .scope .overflow_menu .submenu .overflow_item .text -> [364, 381, 398, 415, 432, 449, 466, 483, 500]
+.scopes .scope a -> [163, 189, 202, 215, 228, 256, 269, 282, 295, 308, 321, 336, 356, 373, 390, 407, 424, 441, 458, 475, 492, 509]
+.scopes .try_exp.scope -> [197, 210, 223]
+.vs_cont .five_col.mc_caro -> [638]
+.vs_cont .mc_caro -> [638]
+.vs_cont .module -> [765]
+.vs_cont .vert_make_default -> [842]
+.vs_cont .vert_make_default .button -> [849]
+.vs_cont .vert_make_default .text -> [852]
+.vs_cont .vert_make_default .text .desc -> [857]
+.vs_cont .vert_make_default .text .title -> [854]
+.vs_cont .vert_make_default > * -> [845, 852]
+.vs_cont .vs -> [750]
+END
+[src/bit.rs:909:5] unsafe { MISS_CNT } = 310

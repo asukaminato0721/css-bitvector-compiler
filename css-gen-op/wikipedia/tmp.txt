@@ -1,17 +1,17 @@
 warning: field `id` is never read
-   --> src/naive.rs:215:9
+   --> src/naive.rs:271:9
     |
-213 | struct SimpleDomNode {
+269 | struct SimpleDomNode {
     |        ------------- field in this struct
-214 |     pub tag_name: String,
-215 |     pub id: u64,
+270 |     pub tag_name: String,
+271 |     pub id: u64,
     |         ^^
     |
     = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 139 selector(s)
 NOT_CONSIDERED[naive] .app-badge
@@ -189,16 +189,13 @@ PSEUDO_SKIPPED[naive] ::-webkit-search-results-button -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .search-container input[type="search"]::-webkit-search-results-button
 PSEUDO_SKIPPED[naive] ::-webkit-search-results-decoration -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .search-container input[type="search"]::-webkit-search-results-decoration
-PSEUDO_SKIPPED[naive] :first-child -> 1 selector(s)
-PSEUDO_SKIPPED[naive]    eg .hlist li:first-child:before
 PSEUDO_SKIPPED[naive] :invalid -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .pure-form input:focus:invalid
-PSEUDO_SKIPPED[naive] :last-child -> 1 selector(s)
-PSEUDO_SKIPPED[naive]    eg .site-license small:last-child:after
 PSEUDO_SKIPPED[naive] :not -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg audio:not([controls])
 PSEUDO_SKIPPED[naive] :root -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg :root
+UNSUPPORTED[naive] none
 BEGIN
 .app-badge a -> [4084, 4099]
 .app-badges .footer-sidebar-content -> [4054]

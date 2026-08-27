@@ -1,19 +1,19 @@
 warning: field `id` is never read
-   --> src/naive.rs:215:9
+   --> src/naive.rs:271:9
     |
-213 | struct SimpleDomNode {
+269 | struct SimpleDomNode {
     |        ------------- field in this struct
-214 |     pub tag_name: String,
-215 |     pub id: u64,
+270 |     pub tag_name: String,
+271 |     pub id: u64,
     |         ^^
     |
     = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/naive`
-NOT_CONSIDERED[naive] 866 selector(s)
+NOT_CONSIDERED[naive] 864 selector(s)
 NOT_CONSIDERED[naive] .accordion
 NOT_CONSIDERED[naive] .accordion-body
 NOT_CONSIDERED[naive] .accordion-button
@@ -127,7 +127,6 @@ NOT_CONSIDERED[naive] .bottom-0
 NOT_CONSIDERED[naive] .bottom-100
 NOT_CONSIDERED[naive] .bottom-50
 NOT_CONSIDERED[naive] .breadcrumb
-NOT_CONSIDERED[naive] .breadcrumb-item
 NOT_CONSIDERED[naive] .btn
 NOT_CONSIDERED[naive] .btn-check
 NOT_CONSIDERED[naive] .btn-close
@@ -165,7 +164,6 @@ NOT_CONSIDERED[naive] .card-img
 NOT_CONSIDERED[naive] .card-img-bottom
 NOT_CONSIDERED[naive] .card-img-overlay
 NOT_CONSIDERED[naive] .card-img-top
-NOT_CONSIDERED[naive] .card-link
 NOT_CONSIDERED[naive] .card-subtitle
 NOT_CONSIDERED[naive] .card-title
 NOT_CONSIDERED[naive] .carousel
@@ -894,12 +892,12 @@ PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] > 
 PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
 PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
 PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :before -> 27 selector(s)
+PSEUDO_SKIPPED[naive] :before -> 28 selector(s)
 PSEUDO_SKIPPED[naive]    eg .blockquote-footer:before
+PSEUDO_SKIPPED[naive]    eg .breadcrumb-item + .breadcrumb-item:before
 PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
 PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
 PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
-PSEUDO_SKIPPED[naive]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
 PSEUDO_SKIPPED[naive]    ...
 PSEUDO_SKIPPED[naive] :disabled -> 18 selector(s)
 PSEUDO_SKIPPED[naive]    eg .btn-check:disabled + .btn
@@ -943,20 +941,6 @@ PSEUDO_SKIPPED[naive]    eg .btn-check:focus-visible + .btn
 PSEUDO_SKIPPED[naive]    eg .btn-link:focus-visible
 PSEUDO_SKIPPED[naive]    eg .btn.active:focus-visible
 PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :first-child -> 9 selector(s)
-PSEUDO_SKIPPED[naive]    eg .accordion-flush > .accordion-item:first-child
-PSEUDO_SKIPPED[naive]    eg .btn-group > .btn.dropdown-toggle-split:first-child
-PSEUDO_SKIPPED[naive]    eg .btn:first-child:active
-PSEUDO_SKIPPED[naive]    eg .btn:first-child:active:focus-visible
-PSEUDO_SKIPPED[naive]    eg .card > .list-group:first-child
-PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :last-child -> 9 selector(s)
-PSEUDO_SKIPPED[naive]    eg .accordion-flush > .accordion-item:last-child
-PSEUDO_SKIPPED[naive]    eg .blockquote > :last-child
-PSEUDO_SKIPPED[naive]    eg .card > .list-group:last-child
-PSEUDO_SKIPPED[naive]    eg .card-footer:last-child
-PSEUDO_SKIPPED[naive]    eg .card-text:last-child
-PSEUDO_SKIPPED[naive]    ...
 PSEUDO_SKIPPED[naive] :empty -> 6 selector(s)
 PSEUDO_SKIPPED[naive]    eg .badge:empty
 PSEUDO_SKIPPED[naive]    eg .dropdown-toggle:empty:after
@@ -976,12 +960,6 @@ PSEUDO_SKIPPED[naive]    eg .form-control-sm::file-selector-button
 PSEUDO_SKIPPED[naive]    eg .form-control::file-selector-button
 PSEUDO_SKIPPED[naive]    eg .form-control:hover:not(:disabled):not([readonly])::file-selector-button
 PSEUDO_SKIPPED[naive]    eg ::file-selector-button
-PSEUDO_SKIPPED[naive] :nth-last-child -> 5 selector(s)
-PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .dropdown-toggle:nth-last-child(n+4)
-PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-control
-PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > .form-floating:nth-last-child(n+3) > .form-select
-PSEUDO_SKIPPED[naive]    eg .input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating)
-PSEUDO_SKIPPED[naive]    eg .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3)
 PSEUDO_SKIPPED[naive] ::-moz-range-thumb -> 4 selector(s)
 PSEUDO_SKIPPED[naive]    eg .form-range::-moz-range-thumb
 PSEUDO_SKIPPED[naive]    eg .form-range::-moz-range-thumb:active
@@ -1000,17 +978,6 @@ PSEUDO_SKIPPED[naive] ::placeholder -> 3 selector(s)
 PSEUDO_SKIPPED[naive]    eg .form-control::placeholder
 PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control-plaintext::placeholder
 PSEUDO_SKIPPED[naive]    eg .form-floating > .form-control::placeholder
-PSEUDO_SKIPPED[naive] :last-of-type -> 3 selector(s)
-PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type
-PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type > .accordion-collapse
-PSEUDO_SKIPPED[naive]    eg .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed
-PSEUDO_SKIPPED[naive] :nth-child -> 3 selector(s)
-PSEUDO_SKIPPED[naive]    eg .btn-group > .btn:nth-child(n+3)
-PSEUDO_SKIPPED[naive]    eg .btn-group-vertical > .btn:nth-child(n+3)
-PSEUDO_SKIPPED[naive]    eg .table-striped-columns > :not(caption) > tr > :nth-child(2n)
-PSEUDO_SKIPPED[naive] :first-of-type -> 2 selector(s)
-PSEUDO_SKIPPED[naive]    eg .accordion-item:first-of-type
-PSEUDO_SKIPPED[naive]    eg .accordion-item:first-of-type > .accordion-header .accordion-button
 PSEUDO_SKIPPED[naive] :-moz-focusring -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .form-select:-moz-focusring
 PSEUDO_SKIPPED[naive] ::-moz-color-swatch -> 1 selector(s)
@@ -1055,10 +1022,10 @@ PSEUDO_SKIPPED[naive] ::-webkit-slider-runnable-track -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .form-range::-webkit-slider-runnable-track
 PSEUDO_SKIPPED[naive] :indeterminate -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg .form-check-input[type="checkbox"]:indeterminate
-PSEUDO_SKIPPED[naive] :nth-of-type -> 1 selector(s)
-PSEUDO_SKIPPED[naive]    eg .table-striped > tbody > tr:nth-of-type(odd) > *
 PSEUDO_SKIPPED[naive] :root -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg :root
+UNSUPPORTED[naive] 1 selector(s)
+UNSUPPORTED[naive] [hidden]
 BEGIN
 [data-bs-theme="light"] -> [6]
 [role="button"] -> [5204]

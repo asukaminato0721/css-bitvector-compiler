@@ -1,16 +1,4 @@
-warning: method `update_attribute` is never used
-   --> src/tri.rs:576:8
-    |
-221 | impl DOM {
-    | -------- method in this implementation
-...
-576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-    |        ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 135 selector(s)
 NOT_CONSIDERED[tri] #SIvCob
@@ -178,6 +166,7 @@ PSEUDO_SKIPPED[tri] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[tri] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+UNSUPPORTED[tri] none
 [tri-match] frame_id=0 command=init miss_delta=225 node_match_changes=33 total_misses=225
 [tri-match] frame_id=1 command=add miss_delta=2 node_match_changes=0 total_misses=227
 [tri-match] frame_id=2 command=recalculate miss_delta=0 node_match_changes=0 total_misses=227
@@ -742,6 +731,6 @@ BEGIN
 .gssb_a td -> [566, 602, 637, 672, 707, 742, 777, 812, 847, 882]
 .sblc a -> [431]
 END
-[src/tri.rs:1073:5] unsafe { MISS_CNT } = 3704
-[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 152
-[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 8
+[src/tri.rs:1143:5] unsafe { MISS_CNT } = 3704
+[src/tri.rs:1144:5] unsafe { INPUT_CHANGE_COUNT } = 152
+[src/tri.rs:1145:5] unsafe { INPUT_SKIP_COUNT } = 8

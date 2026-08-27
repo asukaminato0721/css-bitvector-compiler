@@ -33,7 +33,7 @@ for name in "${WEBSITE_NAMES[@]}"; do
     "${DIFF_CMD[@]}" \
        <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/tmp.txt | sort) \
        <(awk '/BEGIN/{flag=1; next} /END/{flag=0} flag' ./css-gen-op/$name/rec_tri_tmp.txt | sort)
-   cargo run -r --bin benchmark -- bit,tri,rec_tri,quad
+   cargo run -r --bin benchmark -- bit,tri,rec_tri
 done
 
 ./scripts/collect_miss_cnt.py

@@ -1,4 +1,4 @@
-use css_bitvector_compiler::{parse_css_with_pseudo, partition_simple_selectors};
+use css_bitvector_compiler::clean::CompiledProgram;
 use std::{error::Error, fs, path::PathBuf};
 
 struct CssInput {
@@ -16,18 +16,23 @@ fn main() {
 fn run() -> Result<(), Box<dyn Error>> {
     let input = resolve_input()?;
     let css = fs::read_to_string(&input.path)?;
-    let parsed = parse_css_with_pseudo(&css);
-    let (supported_selectors, skipped_simple) =
-        partition_simple_selectors(parsed.selectors.clone());
+    let program = CompiledProgram::compile(&css)?;
+    let supported_selectors: Vec<_> = program
+        .selectors
+        .iter()
+        .map(|selector| selector.text.as_str())
+        .collect();
+    let skipped_simple = &program.report.skipped_simple;
 
-    let mut pseudo_breakdown: Vec<(String, usize)> = parsed
-        .pseudo_selectors
+    let mut pseudo_breakdown: Vec<(String, usize)> = program
+        .report
+        .unsupported_pseudos
         .iter()
         .map(|(pseudo, selectors)| (pseudo.clone(), selectors.len()))
         .collect();
     pseudo_breakdown.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
     let pseudo_total: usize = pseudo_breakdown.iter().map(|(_, count)| *count).sum();
-    let unsupported_total = parsed.unsupported_selectors.len();
+    let unsupported_total = program.report.unsupported.len();
 
     let total_unique =
         supported_selectors.len() + skipped_simple.len() + pseudo_total + unsupported_total;
@@ -59,12 +64,12 @@ fn run() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    if !parsed.unsupported_selectors.is_empty() {
+    if !program.report.unsupported.is_empty() {
         println!("\nExamples of unsupported selectors:");
-        for selector in parsed.unsupported_selectors.iter().take(10) {
-            println!("  {selector}");
+        for selector in program.report.unsupported.iter().take(10) {
+            println!("  {} ({})", selector.selector, selector.reason);
         }
-        if parsed.unsupported_selectors.len() > 10 {
+        if program.report.unsupported.len() > 10 {
             println!("  ...");
         }
     }

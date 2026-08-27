@@ -1,17 +1,17 @@
 warning: field `id` is never read
-   --> src/naive.rs:215:9
+   --> src/naive.rs:271:9
     |
-213 | struct SimpleDomNode {
+269 | struct SimpleDomNode {
     |        ------------- field in this struct
-214 |     pub tag_name: String,
-215 |     pub id: u64,
+270 |     pub tag_name: String,
+271 |     pub id: u64,
     |         ^^
     |
     = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.05s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 429 selector(s)
 NOT_CONSIDERED[naive] ._ameyal-product-shoveler_energy-efficiency_energy-efficiency-badge-data-sheet-label-container__2iEi2
@@ -457,26 +457,12 @@ PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_image_force-square__yjzpK:
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_image_override-square__2e4Zf:before
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_image_asin-container-white-box__3Stwp:before
 PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :nth-child -> 16 selector(s)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(3)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(4)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :nth-child(5)
-PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_five-pack__1-Tql > :nth-child(2)
-PSEUDO_SKIPPED[naive]    ...
 PSEUDO_SKIPPED[naive] :active -> 12 selector(s)
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-black-icon__3hkbe
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_gw-hero-close-button__3svyZ:active ._ameyal-product-shoveler_style_close-text__2-gwn
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_gw-hero-close-button__3svyZ:active ._cropped-image-link_style_close-black-icon__3hkbe
-PSEUDO_SKIPPED[naive]    ...
-PSEUDO_SKIPPED[naive] :first-child -> 8 selector(s)
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_five-pack__1-Tql > :first-child
-PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_three-pack__5s3hP > :first-child
-PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_five-pack__1-Tql > :first-child
 PSEUDO_SKIPPED[naive]    ...
 PSEUDO_SKIPPED[naive] :focus-visible -> 5 selector(s)
 PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_mobile-double-border-link-focus__1Oz9p:focus-visible:after
@@ -514,9 +500,7 @@ PSEUDO_SKIPPED[naive]    eg ._ameyal-product-shoveler_style_carouselContainer__3
 PSEUDO_SKIPPED[naive]    eg ._cropped-image-link_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
 PSEUDO_SKIPPED[naive]    eg ._fluid-fat-image-link-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
 PSEUDO_SKIPPED[naive]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3N7M1 li.a-carousel-card:not(:first-child)
-PSEUDO_SKIPPED[naive] :last-child -> 2 selector(s)
-PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
-PSEUDO_SKIPPED[naive]    eg .gw-card-layout .a-cardui:last-child
+UNSUPPORTED[naive] none
 BEGIN
 .gw-card-layout [data-order-ws="1"] -> [1822]
 .gw-card-layout [data-order-ws="10"] -> [2852, 4773, 4958]

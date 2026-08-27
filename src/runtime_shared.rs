@@ -183,7 +183,7 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
             dom.recompute_styles(nfa, &make_input());
         }
         TraceCommand::Add { path, node } => {
-            dom.add_node_by_path(&path, node, nfa);
+            dom.add_node_by_path(path, node, nfa);
             dom.recompute_styles(nfa, &make_input());
         }
         TraceCommand::ReplaceValue {
@@ -197,7 +197,7 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                 unreachable!();
             }
             let node_idx = dom
-                .node_id_by_path(&path)
+                .node_id_by_path(path)
                 .unwrap_or_else(|| panic!("invalid path for ReplaceValue {:?}", path));
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
@@ -229,7 +229,7 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                 unreachable!();
             }
             let node_idx = dom
-                .node_id_by_path(&path)
+                .node_id_by_path(path)
                 .unwrap_or_else(|| panic!("invalid path for InsertValue {:?}", path));
             let new_value = value.as_ref().map(json_value_to_attr_string);
             if dom.update_attribute_with_shortcut(node_idx, key, new_value, nfa, &make_input) {
@@ -248,7 +248,7 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
                 unreachable!();
             }
             let node_idx = dom
-                .node_id_by_path(&path)
+                .node_id_by_path(path)
                 .unwrap_or_else(|| panic!("invalid path for DeleteValue {:?}", path));
             if let Some(old_value) = old_value {
                 let expected = json_value_to_attr_string(old_value);
@@ -273,7 +273,7 @@ pub fn apply_frame_common<D, N, FInput, FRecalcInput>(
             dom.recompute_styles(nfa, &make_recalc_input(nfa));
         }
         TraceCommand::Remove { path } => {
-            dom.remove_node_by_path(&path);
+            dom.remove_node_by_path(path);
             dom.recompute_styles(nfa, &make_input());
         }
     }
@@ -292,7 +292,7 @@ pub trait BasicDomOps {
 pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &TraceFrame) {
     match &frame.command {
         TraceCommand::Init { node } => dom.init(node),
-        TraceCommand::Add { path, node } => dom.add_by_path(&path, node),
+        TraceCommand::Add { path, node } => dom.add_by_path(path, node),
         TraceCommand::ReplaceValue {
             path,
             key,
@@ -304,10 +304,10 @@ pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &TraceFrame) {
                 unreachable!();
             }
             if let Some(old_value) = old_value {
-                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
+                dom.assert_attribute_value(path, key, &json_value_to_attr_string(old_value));
             }
             let new_value = value.as_ref().map(json_value_to_attr_string);
-            dom.set_attribute(&path, key, new_value);
+            dom.set_attribute(path, key, new_value);
         }
         TraceCommand::InsertValue {
             path,
@@ -319,7 +319,7 @@ pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &TraceFrame) {
                 unreachable!();
             }
             let new_value = value.as_ref().map(json_value_to_attr_string);
-            dom.set_attribute(&path, key, new_value);
+            dom.set_attribute(path, key, new_value);
         }
         TraceCommand::DeleteValue {
             path,
@@ -331,11 +331,11 @@ pub fn apply_frame_basic<D: BasicDomOps>(dom: &mut D, frame: &TraceFrame) {
                 unreachable!();
             }
             if let Some(old_value) = old_value {
-                dom.assert_attribute_value(&path, key, &json_value_to_attr_string(old_value));
+                dom.assert_attribute_value(path, key, &json_value_to_attr_string(old_value));
             }
-            dom.set_attribute(&path, key, None);
+            dom.set_attribute(path, key, None);
         }
         TraceCommand::Recalculate => {}
-        TraceCommand::Remove { path } => dom.remove_by_path(&path),
+        TraceCommand::Remove { path } => dom.remove_by_path(path),
     }
 }

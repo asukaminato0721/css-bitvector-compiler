@@ -1,0 +1,20 @@
+   Compiling css-bitvector-compiler v0.0.1 (/home/w/gitproject/css-bitvector-compiler)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.57s
+     Running `target/release/rec_tri`
+NOT_CONSIDERED[rec_tri] 2 selector(s)
+NOT_CONSIDERED[rec_tri] #b
+NOT_CONSIDERED[rec_tri] #bb
+PSEUDO_SKIPPED[rec_tri] none
+UNSUPPORTED[rec_tri] none
+[rec-tri-match] frame_id=0 command=init miss_delta=2 node_match_changes=1 total_misses=2
+[rec-tri-match] frame_id=1 command=add miss_delta=2 node_match_changes=0 total_misses=4
+[rec-tri-match] frame_id=2 command=add miss_delta=2 node_match_changes=0 total_misses=6
+[rec-tri-match] frame_id=3 command=replace_value miss_delta=1 node_match_changes=1 total_misses=7
+[rec-tri-match] frame_id=4 command=recalculate miss_delta=0 node_match_changes=0 total_misses=7
+BEGIN
+[class="aa"] -> [1]
+div p -> [2]
+END
+[src/rec_tri.rs:1287:5] unsafe { MISS_CNT } = 7
+[src/rec_tri.rs:1288:5] unsafe { INPUT_CHANGE_COUNT } = 3
+[src/rec_tri.rs:1289:5] unsafe { INPUT_SKIP_COUNT } = 3

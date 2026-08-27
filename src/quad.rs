@@ -1148,7 +1148,7 @@ pub fn collect_rule_matches(
     // Prime root cache if possible; this also ensures STATE has been initialised.
     let _ = dom.get_root_node();
 
-    for (&node_id, _) in dom.nodes.iter() {
+    for &node_id in dom.nodes.keys() {
         let current_state = materialize_node(dom, node_id, &mut state_cache);
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
             if current_state[state_index] {

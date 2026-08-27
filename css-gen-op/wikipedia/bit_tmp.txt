@@ -1,16 +1,4 @@
-warning: method `update_attribute` is never used
-   --> src/bit.rs:535:8
-    |
-169 | impl DOM {
-    | -------- method in this implementation
-...
-535 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-    |        ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `css-bitvector-compiler` (bin "bit") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/bit`
 NOT_CONSIDERED[bit] 139 selector(s)
 NOT_CONSIDERED[bit] #searchInput
@@ -198,6 +186,7 @@ PSEUDO_SKIPPED[bit] :not -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg audio:not([controls])
 PSEUDO_SKIPPED[bit] :root -> 1 selector(s)
 PSEUDO_SKIPPED[bit]    eg :root
+UNSUPPORTED[bit] none
 BEGIN
 #searchInput:focus -> [387]
 .app-badge a -> [4084, 4099]
@@ -268,4 +257,4 @@ BEGIN
 html input -> [372, 387, 1045, 3675, 3685, 3696, 3707, 3718, 3729, 3740, 3751, 3773, 3782]
 input[type="search"]:focus -> [387]
 END
-[src/bit.rs:832:5] unsafe { MISS_CNT } = 8807
+[src/bit.rs:909:5] unsafe { MISS_CNT } = 8778

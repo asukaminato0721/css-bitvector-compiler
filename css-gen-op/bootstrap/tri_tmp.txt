@@ -1,18 +1,6 @@
-warning: method `update_attribute` is never used
-   --> src/tri.rs:576:8
-    |
-221 | impl DOM {
-    | -------- method in this implementation
-...
-576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-    |        ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
-NOT_CONSIDERED[tri] 866 selector(s)
+NOT_CONSIDERED[tri] 864 selector(s)
 NOT_CONSIDERED[tri] .accordion
 NOT_CONSIDERED[tri] .accordion-body
 NOT_CONSIDERED[tri] .accordion-button
@@ -132,7 +120,6 @@ NOT_CONSIDERED[tri] .bottom-0
 NOT_CONSIDERED[tri] .bottom-100
 NOT_CONSIDERED[tri] .bottom-50
 NOT_CONSIDERED[tri] .breadcrumb
-NOT_CONSIDERED[tri] .breadcrumb-item
 NOT_CONSIDERED[tri] .btn
 NOT_CONSIDERED[tri] .btn-check
 NOT_CONSIDERED[tri] .btn-close
@@ -170,7 +157,6 @@ NOT_CONSIDERED[tri] .card-img
 NOT_CONSIDERED[tri] .card-img-bottom
 NOT_CONSIDERED[tri] .card-img-overlay
 NOT_CONSIDERED[tri] .card-img-top
-NOT_CONSIDERED[tri] .card-link
 NOT_CONSIDERED[tri] .card-subtitle
 NOT_CONSIDERED[tri] .card-title
 NOT_CONSIDERED[tri] .carousel
@@ -893,12 +879,12 @@ PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .p
 PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:after
 PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:after
 PSEUDO_SKIPPED[tri]    ...
-PSEUDO_SKIPPED[tri] :before -> 27 selector(s)
+PSEUDO_SKIPPED[tri] :before -> 28 selector(s)
 PSEUDO_SKIPPED[tri]    eg .blockquote-footer:before
+PSEUDO_SKIPPED[tri]    eg .breadcrumb-item + .breadcrumb-item:before
 PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] .popover-header:before
 PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="bottom"] > .popover-arrow:before
 PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow:before
-PSEUDO_SKIPPED[tri]    eg .bs-popover-auto[data-popper-placement^="right"] > .popover-arrow:before
 PSEUDO_SKIPPED[tri]    ...
 PSEUDO_SKIPPED[tri] :disabled -> 18 selector(s)
 PSEUDO_SKIPPED[tri]    eg .btn-check:disabled + .btn
@@ -1058,6 +1044,8 @@ PSEUDO_SKIPPED[tri] :nth-of-type -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg .table-striped > tbody > tr:nth-of-type(odd) > *
 PSEUDO_SKIPPED[tri] :root -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg :root
+UNSUPPORTED[tri] 1 selector(s)
+UNSUPPORTED[tri] [hidden]
 [tri-match] frame_id=0 command=init miss_delta=2425 node_match_changes=2425 total_misses=2425
 [tri-match] frame_id=1 command=add miss_delta=8 node_match_changes=7 total_misses=2433
 [tri-match] frame_id=2 command=add miss_delta=3 node_match_changes=2 total_misses=2436
@@ -1670,6 +1658,6 @@ a > code -> [2126]
 pre code -> [1003, 1195, 1247, 1353, 1470, 1722, 1844, 2171, 2340, 2714, 3471, 3765]
 ul ul -> [637, 773]
 END
-[src/tri.rs:1073:5] unsafe { MISS_CNT } = 9481
-[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 6230
-[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 32
+[src/tri.rs:1143:5] unsafe { MISS_CNT } = 9481
+[src/tri.rs:1144:5] unsafe { INPUT_CHANGE_COUNT } = 6230
+[src/tri.rs:1145:5] unsafe { INPUT_SKIP_COUNT } = 32

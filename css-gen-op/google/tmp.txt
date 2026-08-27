@@ -1,17 +1,17 @@
 warning: field `id` is never read
-   --> src/naive.rs:215:9
+   --> src/naive.rs:271:9
     |
-213 | struct SimpleDomNode {
+269 | struct SimpleDomNode {
     |        ------------- field in this struct
-214 |     pub tag_name: String,
-215 |     pub id: u64,
+270 |     pub tag_name: String,
+271 |     pub id: u64,
     |         ^^
     |
     = note: `SimpleDomNode` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: `css-bitvector-compiler` (bin "naive") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
      Running `target/release/naive`
 NOT_CONSIDERED[naive] 135 selector(s)
 NOT_CONSIDERED[naive] .ds
@@ -172,13 +172,11 @@ PSEUDO_SKIPPED[naive] ::-moz-focus-inner -> 3 selector(s)
 PSEUDO_SKIPPED[naive]    eg .gbqfb::-moz-focus-inner
 PSEUDO_SKIPPED[naive]    eg .gbqfba::-moz-focus-inner
 PSEUDO_SKIPPED[naive]    eg .gbqfbb::-moz-focus-inner
-PSEUDO_SKIPPED[naive] :last-child -> 2 selector(s)
-PSEUDO_SKIPPED[naive]    eg #GBMPAL:last-child:after
-PSEUDO_SKIPPED[naive]    eg .GBMCC:last-child:after
 PSEUDO_SKIPPED[naive] ::-webkit-scrollbar-track -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
 PSEUDO_SKIPPED[naive] :vertical -> 1 selector(s)
 PSEUDO_SKIPPED[naive]    eg #gbd4 .gbsbic::-webkit-scrollbar-track:vertical
+UNSUPPORTED[naive] none
 BEGIN
 .fl a -> [431]
 .gbsb .gbsbb -> [246]

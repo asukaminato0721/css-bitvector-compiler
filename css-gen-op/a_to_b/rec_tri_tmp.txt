@@ -1,0 +1,15 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.03s
+     Running `target/release/rec_tri`
+NOT_CONSIDERED[rec_tri] 1 selector(s)
+NOT_CONSIDERED[rec_tri] .a
+PSEUDO_SKIPPED[rec_tri] none
+UNSUPPORTED[rec_tri] none
+[rec-tri-match] frame_id=0 command=init miss_delta=2 node_match_changes=0 total_misses=2
+[rec-tri-match] frame_id=1 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2
+[rec-tri-match] frame_id=2 command=replace_value miss_delta=0 node_match_changes=0 total_misses=2
+[rec-tri-match] frame_id=3 command=recalculate miss_delta=0 node_match_changes=0 total_misses=2
+BEGIN
+END
+[src/rec_tri.rs:1287:5] unsafe { MISS_CNT } = 2
+[src/rec_tri.rs:1288:5] unsafe { INPUT_CHANGE_COUNT } = 0
+[src/rec_tri.rs:1289:5] unsafe { INPUT_SKIP_COUNT } = 0

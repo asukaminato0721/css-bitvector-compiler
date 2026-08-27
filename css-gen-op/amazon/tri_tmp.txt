@@ -1,16 +1,4 @@
-warning: method `update_attribute` is never used
-   --> src/tri.rs:576:8
-    |
-221 | impl DOM {
-    | -------- method in this implementation
-...
-576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-    |        ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 429 selector(s)
 NOT_CONSIDERED[tri] #gw-desktop-herotator
@@ -516,6 +504,7 @@ PSEUDO_SKIPPED[tri]    eg ._fluid-quad-image-label-v2_style_carouselContainer__3
 PSEUDO_SKIPPED[tri] :last-child -> 2 selector(s)
 PSEUDO_SKIPPED[tri]    eg .gw-card-layout .a-cardui .a-cardui-body:last-child
 PSEUDO_SKIPPED[tri]    eg .gw-card-layout .a-cardui:last-child
+UNSUPPORTED[tri] none
 [tri-match] frame_id=0 command=init miss_delta=39 node_match_changes=0 total_misses=39
 [tri-match] frame_id=2 command=replace_value miss_delta=0 node_match_changes=0 total_misses=39
 [tri-match] frame_id=3 command=insert_value miss_delta=0 node_match_changes=0 total_misses=39
@@ -2185,6 +2174,6 @@ BEGIN
 [data-flow-dir="h"].gw-card-layout > [data-col-span-ws="4"].gw-col -> [2945, 3143, 3862, 4054, 4773, 4965, 5611]
 [data-grid-breakpoint="ws"][data-flow-dir="h"].gw-card-layout -> [1814, 2940]
 END
-[src/tri.rs:1073:5] unsafe { MISS_CNT } = 2448
-[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 0
-[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 0
+[src/tri.rs:1143:5] unsafe { MISS_CNT } = 2448
+[src/tri.rs:1144:5] unsafe { INPUT_CHANGE_COUNT } = 0
+[src/tri.rs:1145:5] unsafe { INPUT_SKIP_COUNT } = 0

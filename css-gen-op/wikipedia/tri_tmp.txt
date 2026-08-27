@@ -1,16 +1,4 @@
-warning: method `update_attribute` is never used
-   --> src/tri.rs:576:8
-    |
-221 | impl DOM {
-    | -------- method in this implementation
-...
-576 |     fn update_attribute(&mut self, node_idx: u64, key: &str, new_value: Option<String>) {
-    |        ^^^^^^^^^^^^^^^^
-    |
-    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `css-bitvector-compiler` (bin "tri") generated 1 warning
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.04s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.02s
      Running `target/release/tri`
 NOT_CONSIDERED[tri] 139 selector(s)
 NOT_CONSIDERED[tri] #searchInput
@@ -198,6 +186,7 @@ PSEUDO_SKIPPED[tri] :not -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg audio:not([controls])
 PSEUDO_SKIPPED[tri] :root -> 1 selector(s)
 PSEUDO_SKIPPED[tri]    eg :root
+UNSUPPORTED[tri] none
 [tri-match] frame_id=0 command=init miss_delta=1950 node_match_changes=955 total_misses=1950
 [tri-match] frame_id=1 command=insert_value miss_delta=1925 node_match_changes=45 total_misses=3875
 [tri-match] frame_id=2 command=remove miss_delta=1 node_match_changes=0 total_misses=3876
@@ -437,6 +426,6 @@ BEGIN
 html input -> [372, 387, 1045, 3675, 3685, 3696, 3707, 3718, 3729, 3740, 3751, 3773, 3782]
 input[type="search"]:focus -> [387]
 END
-[src/tri.rs:1073:5] unsafe { MISS_CNT } = 8771
-[src/tri.rs:1074:5] unsafe { INPUT_CHANGE_COUNT } = 6280
-[src/tri.rs:1075:5] unsafe { INPUT_SKIP_COUNT } = 7
+[src/tri.rs:1143:5] unsafe { MISS_CNT } = 8771
+[src/tri.rs:1144:5] unsafe { INPUT_CHANGE_COUNT } = 6280
+[src/tri.rs:1145:5] unsafe { INPUT_SKIP_COUNT } = 7
