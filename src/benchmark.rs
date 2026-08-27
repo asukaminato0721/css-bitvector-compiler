@@ -7,11 +7,7 @@ mod bit {
         let mut dom = DOM::new();
         let website_name = super::website_name();
         let parsed = parse_css_with_pseudo(
-            &std::fs::read_to_string(format!(
-                "css-gen-op/{0}/{0}.css",
-                website_name,
-            ))
-            .unwrap(),
+            &std::fs::read_to_string(format!("css-gen-op/{0}/{0}.css", website_name,)).unwrap(),
         );
         let ParsedSelectors {
             mut selectors,
@@ -119,11 +115,7 @@ mod naive {
         let mut dom = SimpleDom::default();
         let website_name = super::website_name();
         let (rules, _, _) = parse_css_rules(
-            &std::fs::read_to_string(format!(
-                "css-gen-op/{0}/{0}.css",
-                website_name,
-            ))
-            .unwrap(),
+            &std::fs::read_to_string(format!("css-gen-op/{0}/{0}.css", website_name,)).unwrap(),
         );
         let (css, _) = partition_rules(rules);
         let trace = parse_trace();
@@ -204,7 +196,7 @@ fn main() {
     let (site_arg, targets) = parse_args();
     if let Some(site) = site_arg {
         unsafe {
-        env::set_var("WEBSITE_NAME", site);
+            env::set_var("WEBSITE_NAME", site);
         }
     }
     let _ = website_name();
