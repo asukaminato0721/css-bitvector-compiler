@@ -6,6 +6,11 @@ license = "MIT"
 readme = "README.md"
 description = "CSS Compiler with HTML/CSS parsing capabilities"
 
+[workspace]
+members = ["xtask"]
+default-members = ["."]
+resolver = "3"
+
 [lib]
 name = "css_bitvector_compiler"
 path = "src/lib.rs"
