@@ -1,0 +1,217 @@
+\documentclass[UTF8,11pt]{ctexart}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black}
+\setlist{nosep}
+
+\newcommand{\Bool}{\ensuremath{\mathbb{B}}}
+\newcommand{\Clean}{\ensuremath{\mathsf{Clean}}}
+\newcommand{\InputChanged}{\ensuremath{\mathsf{InputChanged}}}
+\newcommand{\NodeChanged}{\ensuremath{\mathsf{NodeChanged}}}
+\newcommand{\compat}{\ensuremath{\operatorname{compatible}}}
+\newcommand{\mat}{\ensuremath{\operatorname{M}}}
+
+\title{CSS 增量匹配器：四种变体、Hoare Logic 与 Kani 验证}
+\author{css-bitvector-compiler}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本文给出 bit、tri、recursive-tri 与 quad 四种增量 CSS selector
+匹配器的统一语义。四种算法共享同一 selector 状态机、DOM arena 和 mutation
+模型，只在缓存抽象与失效处理上不同。本文使用 Hoare triple 描述关键优化的
+正确性条件，并说明 Kani model checking harness 所证明的局部转换定律。
+\end{abstract}
+
+\section{共享状态机}
+
+令编译后的状态集合为 $Q$。每个 DOM 节点 $n$ 接收 parent 与 previous-sibling
+两个输入通道，并产生物化输出：
+\[
+P_n,S_n,O_n\in\Bool^{|Q|},\qquad \Bool=\{0,1\}.
+\]
+
+例如 selector \texttt{.a .b > .c} 产生状态 $q_0,q_1,q_2$：
+\[
+\begin{aligned}
+q_0(n)&=p_{\mathtt{.a}}(n),\\
+q_1(n)&=P_n[q_0]\land p_{\mathtt{.b}}(n),\\
+q_2(n)&=P_n[q_1]\land p_{\mathtt{.c}}(n),
+\qquad q_2\in Q_{\mathrm{accept}}.
+\end{aligned}
+\]
+descendant combinator 对中间状态增加传播：
+\[
+O_n[q_i]=q_i(n)\lor P_n[q_i].
+\]
+child 不传播；adjacent sibling 从 $S_n$ 读取 predecessor state。
+
+节点 dirty 状态构成全序：
+\[
+\Clean<\InputChanged<\NodeChanged.
+\]
+\NodeChanged 表示本地事实变化，不能被输入缓存跳过；\InputChanged 表示仅
+$P_n$ 或 $S_n$ 变化。
+
+\section{Bit：物化输出缓存}
+
+Bit 缓存 $O_n$，对 \NodeChanged 和 \InputChanged 均完整执行节点程序 $F_n$：
+\[
+\mathsf{step}_{\mathrm{bit}}(n)=
+\begin{cases}
+F_n(P_n,S_n),&d_n\in\{\NodeChanged,\InputChanged\},\\
+O_n,&d_n=\Clean.
+\end{cases}
+\]
+只有当新旧 $O_n$ 不同时，children 的 parent input 与下一个 sibling 的
+sibling input 才会被标记为失效。
+
+\section{Tri：输入依赖抽象}
+
+Tri 为每个输入 bit 保存 requirement：
+\[
+\mathcal R=\{\bot,0,1\},
+\]
+其中 $\bot$ 表示本次执行未读取。具体化关系为：
+\[
+\gamma(\bot)=\{0,1\},\qquad
+\gamma(0)=\{0\},\qquad
+\gamma(1)=\{1\}.
+\]
+因此：
+\[
+\compat(R,I')\iff\forall i,\ I'[i]\in\gamma(R[i]).
+\]
+
+Tri skip 的 Hoare triple 是：
+\[
+\left\{
+\begin{array}{l}
+O_n=F_n(I)\\
+\land\ R\text{ 记录了执行 }F_n(I)\text{ 时所有实际读取}\\
+\land\ \compat(R,I')
+\end{array}
+\right\}
+\quad\mathsf{skip}\quad
+\left\{F_n(I')=O_n\right\}.
+\]
+
+该规则要求严格保持短路求值。例如
+$p_{\mathtt{.b}}(n)\land P_n[q]$ 在左侧为 false 时不能读取 $P_n[q]$，
+否则会把无关输入错误记录为依赖并损失优化。
+
+\section{Recursive-tri：调度前检查}
+
+Tri 在访问节点后决定 skip；recursive-tri 在父输出变化时先检查 child：
+\[
+P_c\ne P'_c\Longrightarrow
+\begin{cases}
+\text{不调度 }c,&\compat(R_c,P'_c),\\
+d_c\gets\InputChanged,&\text{otherwise}.
+\end{cases}
+\]
+
+其 Hoare triple 为：
+\[
+\begin{aligned}
+&\left\{d_c=\Clean\land\compat(R_c,P'_c)\right\}\\
+&\qquad\mathsf{do\_not\_schedule}(c)\\
+&\left\{O'_c=O_c\land
+\neg\operatorname{invalidate}(\operatorname{desc}(c))\right\}.
+\end{aligned}
+\]
+
+当前实现采用逐层 admission check。child 不被调度意味着其输出不变，所以失效
+不会继续进入 descendants。显式 folded subtree requirement 是可选的未来优化，
+不是当前正确性的前提。
+
+\section{Quad：输出函数抽象}
+
+Quad 的抽象域为：
+\[
+\mathcal Q=\{\mathbf0,\mathbf1\}
+\cup\{\pi^P_i\mid 0\le i<|Q|\}
+\cup\{\pi^S_i\mid 0\le i<|Q|\}.
+\]
+物化函数为：
+\[
+\begin{aligned}
+\mat(\mathbf0,P,S)&=0,&\mat(\mathbf1,P,S)&=1,\\
+\mat(\pi^P_i,P,S)&=P[i],&\mat(\pi^S_i,P,S)&=S[i].
+\end{aligned}
+\]
+
+计算分两阶段：先求 local/predecessor transition $r$，再组合 descendant
+传播 $r\lor\pi^P_i$。由于 $\mathcal Q$ 不能表示任意 OR，按当前输入专门化：
+\[
+\operatorname{specializeOr}(r,c,I)=
+\begin{cases}
+(r,r=1),&\mat(r,I)=1,\\
+(c,r=0),&\mat(r,I)=0.
+\end{cases}
+\]
+
+令结果和 decision 为 $(q,d)$，则 OR refinement 的 Hoare triple 是：
+\[
+\left\{(q,d)=\operatorname{specializeOr}(r,c,I)
+\land\operatorname{holds}(d,I')\right\}
+\quad x\gets\mat(q,I')\quad
+\left\{x=\mat(r,I')\lor\mat(c,I')\right\}.
+\]
+
+accept state 必须具体化。若
+$(b,d)=\operatorname{specializeConcrete}(q,I)$，则：
+\[
+\left\{\operatorname{holds}(d,I')\right\}
+\quad x\gets\mat(b,I')\quad
+\left\{x=\mat(q,I')\right\}.
+\]
+
+decision 失效时执行完整重算；decision 仍成立时只重新 materialize abstract
+output。这样纯传播节点无需重新执行 selector predicates。
+
+\section{Mutation 与结构不变量}
+
+\begin{itemize}
+  \item class、id、attribute 和派生 pseudo 变化属于 \NodeChanged。
+  \item \texttt{:hover} 向下派生，\texttt{:focus-within} 向上派生。
+  \item sibling 插入/删除使后续节点的 nth position 失效。
+  \item accept bit 只表示当前节点匹配，不能从祖先直接传播。
+  \item attribute shortcut 仅在局部输出与匹配集合均不变时停止传播。
+\end{itemize}
+
+\section{Kani proof harness}
+
+proof harness 直接调用生产代码中的纯函数。Kani 固定 parent/sibling vector
+长度为 2，但 index、所有输入 bit 和 Quad tag 都是符号值。
+
+\begin{enumerate}
+  \item \nolinkurl{tri_requirement_reuse_is_sound}：compatible 的 Zero/One requirement 保证被读取 bit 不变。
+  \item \nolinkurl{quad_projection_materializes_current_input}：parent/sibling projection 精确读取对应输入。
+  \item \nolinkurl{specialized_or_refines_boolean_or}：decision 成立时专门化结果等价于原布尔 OR。
+  \item \nolinkurl{concrete_accept_reuse_is_sound}：decision 成立时 concrete accept 可安全复用。
+\end{enumerate}
+
+运行：
+\begin{verbatim}
+cargo xtask verify
+cargo xtask check
+cargo xtask corpus
+\end{verbatim}
+
+形式化证明覆盖逐 bit 的局部转换定律。完整 parser、无界 DOM 和递归树结构尚未
+被归纳证明；端到端组合由 13 个真实站点与独立 naive oracle 做 differential
+validation。
+
+\section{当前限制}
+
+当前不支持 \texttt{:has}、general sibling、\texttt{:last-*}、
+\texttt{:nth-last-*} 和 selector-list pseudo。无界 DOM 的归纳证明适合后续用
+Verus、Lean 或 Coq 建模。
+
+\end{document}

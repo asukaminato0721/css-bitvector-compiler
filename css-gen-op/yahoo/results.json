@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "yahoo",
   "parity": true,
   "matches": {
@@ -21,29 +21,31 @@
       "recomputed_nodes": 606,
       "input_changes": 2,
       "input_skips": 0,
-      "visited_nodes": 650,
-      "cycles": 12594380
+      "visited_nodes": 650
     },
     "naive": {
       "recomputed_nodes": 606,
       "input_changes": 2,
       "input_skips": 0,
-      "visited_nodes": 650,
-      "cycles": 15000120
+      "visited_nodes": 650
+    },
+    "quad": {
+      "recomputed_nodes": 604,
+      "input_changes": 2,
+      "input_skips": 2,
+      "visited_nodes": 650
     },
     "rec_tri": {
       "recomputed_nodes": 604,
       "input_changes": 0,
       "input_skips": 2,
-      "visited_nodes": 648,
-      "cycles": 12581980
+      "visited_nodes": 648
     },
     "tri": {
       "recomputed_nodes": 604,
       "input_changes": 2,
       "input_skips": 2,
-      "visited_nodes": 650,
-      "cycles": 12654160
+      "visited_nodes": 650
     }
   }
 }

@@ -26,7 +26,7 @@ pub enum EngineKind {
     Bit,
     Tri,
     RecursiveTri,
-    ExperimentalQuad,
+    Quad,
 }
 
 impl EngineKind {
@@ -36,12 +36,12 @@ impl EngineKind {
             Self::Bit => "bit",
             Self::Tri => "tri",
             Self::RecursiveTri => "rec_tri",
-            Self::ExperimentalQuad => "quad",
+            Self::Quad => "quad",
         }
     }
 
     pub(crate) fn uses_dependencies(self) -> bool {
-        matches!(self, Self::Tri | Self::RecursiveTri)
+        matches!(self, Self::Tri | Self::RecursiveTri | Self::Quad)
     }
 }
 

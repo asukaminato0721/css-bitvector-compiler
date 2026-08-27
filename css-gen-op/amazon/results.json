@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "amazon",
   "parity": true,
   "matches": {
@@ -549,29 +549,31 @@
       "recomputed_nodes": 2409,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2632,
-      "cycles": 765821700
+      "visited_nodes": 2632
     },
     "naive": {
       "recomputed_nodes": 2409,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2632,
-      "cycles": 820444460
+      "visited_nodes": 2632
+    },
+    "quad": {
+      "recomputed_nodes": 2409,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2632
     },
     "rec_tri": {
       "recomputed_nodes": 2409,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2632,
-      "cycles": 803211080
+      "visited_nodes": 2632
     },
     "tri": {
       "recomputed_nodes": 2409,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2632,
-      "cycles": 746570320
+      "visited_nodes": 2632
     }
   }
 }

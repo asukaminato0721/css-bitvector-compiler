@@ -132,7 +132,12 @@ fn engines_agree_on_sibling_and_nth_invalidation() {
         .run(&trace)
         .unwrap();
     let mut tri_stats = None;
-    for kind in [EngineKind::Bit, EngineKind::Tri, EngineKind::RecursiveTri] {
+    for kind in [
+        EngineKind::Bit,
+        EngineKind::Tri,
+        EngineKind::RecursiveTri,
+        EngineKind::Quad,
+    ] {
         let result = Engine::new(kind, program.clone()).run(&trace).unwrap();
         assert_eq!(result.matches, naive.matches, "engine {kind:?}");
         if kind == EngineKind::Tri {
@@ -147,15 +152,115 @@ fn engines_agree_on_sibling_and_nth_invalidation() {
 }
 
 #[test]
+fn quad_composes_descendant_propagation_without_recompute() {
+    let program = compile_rule(".a .b .c");
+    let trace = Trace {
+        frames: vec![
+            TraceFrame {
+                frame_id: 0,
+                command: TraceCommand::Init {
+                    node: node(
+                        1,
+                        "div",
+                        Some("a"),
+                        vec![node(
+                            2,
+                            "div",
+                            Some("x"),
+                            vec![node(3, "div", Some("c"), vec![])],
+                        )],
+                    ),
+                },
+            },
+            TraceFrame {
+                frame_id: 1,
+                command: TraceCommand::ReplaceValue {
+                    path: vec![],
+                    value_type: Some("attributes".into()),
+                    key: "class".into(),
+                    value: Some(serde_json::Value::String("x".into())),
+                    old_value: Some(serde_json::Value::String("a".into())),
+                },
+            },
+        ],
+    };
+    let naive = Engine::new(EngineKind::Naive, program.clone())
+        .run(&trace)
+        .unwrap();
+    let tri = Engine::new(EngineKind::Tri, program.clone())
+        .run(&trace)
+        .unwrap();
+    let quad = Engine::new(EngineKind::Quad, program).run(&trace).unwrap();
+    assert_eq!(quad.matches, naive.matches);
+    assert_eq!(tri.matches, naive.matches);
+    assert!(quad.stats.recomputed_nodes < tri.stats.recomputed_nodes);
+    assert!(quad.stats.input_skips > 0);
+}
+
+#[test]
+fn tri_and_recursive_tri_skip_unread_parent_input() {
+    let program = compile_rule(".a > .b");
+    let trace = Trace {
+        frames: vec![
+            TraceFrame {
+                frame_id: 0,
+                command: TraceCommand::Init {
+                    node: node(
+                        1,
+                        "div",
+                        Some("a"),
+                        vec![node(2, "div", Some("not-b"), vec![])],
+                    ),
+                },
+            },
+            TraceFrame {
+                frame_id: 1,
+                command: TraceCommand::ReplaceValue {
+                    path: vec![],
+                    value_type: Some("attributes".into()),
+                    key: "class".into(),
+                    value: Some(serde_json::Value::String("x".into())),
+                    old_value: Some(serde_json::Value::String("a".into())),
+                },
+            },
+        ],
+    };
+    let bit = Engine::new(EngineKind::Bit, program.clone())
+        .run(&trace)
+        .unwrap();
+    let tri = Engine::new(EngineKind::Tri, program.clone())
+        .run(&trace)
+        .unwrap();
+    let recursive = Engine::new(EngineKind::RecursiveTri, program)
+        .run(&trace)
+        .unwrap();
+    assert_eq!(bit.matches, tri.matches);
+    assert_eq!(tri.matches, recursive.matches);
+    assert!(tri.stats.recomputed_nodes < bit.stats.recomputed_nodes);
+    assert!(recursive.stats.visited_nodes < tri.stats.visited_nodes);
+}
+
+#[test]
 fn checked_in_testcase_has_engine_parity() {
     let input = SiteInput::named("testcase");
     let (program, trace) = load_site(&input).unwrap();
     let naive = Engine::new(EngineKind::Naive, program.clone())
         .run(&trace)
         .unwrap();
-    for kind in [EngineKind::Bit, EngineKind::Tri, EngineKind::RecursiveTri] {
+    let mut tri_misses = None;
+    for kind in [
+        EngineKind::Bit,
+        EngineKind::Tri,
+        EngineKind::RecursiveTri,
+        EngineKind::Quad,
+    ] {
         let result = Engine::new(kind, program.clone()).run(&trace).unwrap();
         assert_eq!(result.matches, naive.matches, "engine {kind:?}");
+        if kind == EngineKind::Tri {
+            tri_misses = Some(result.stats.recomputed_nodes);
+        } else if kind == EngineKind::Quad {
+            assert!(result.stats.recomputed_nodes <= tri_misses.unwrap());
+        }
     }
 }
 
@@ -182,12 +287,26 @@ fn checked_in_corpus_has_engine_parity() {
         let naive = Engine::new(EngineKind::Naive, program.clone())
             .run(&trace)
             .unwrap();
-        for kind in [EngineKind::Bit, EngineKind::Tri, EngineKind::RecursiveTri] {
+        let mut tri_misses = None;
+        for kind in [
+            EngineKind::Bit,
+            EngineKind::Tri,
+            EngineKind::RecursiveTri,
+            EngineKind::Quad,
+        ] {
             let result = Engine::new(kind, program.clone()).run(&trace).unwrap();
             assert_eq!(
                 result.matches, naive.matches,
                 "site {site}, engine {kind:?}"
             );
+            if kind == EngineKind::Tri {
+                tri_misses = Some(result.stats.recomputed_nodes);
+            } else if kind == EngineKind::Quad {
+                assert!(
+                    result.stats.recomputed_nodes <= tri_misses.unwrap(),
+                    "site {site}: quad recomputed more nodes than tri"
+                );
+            }
         }
     }
 }

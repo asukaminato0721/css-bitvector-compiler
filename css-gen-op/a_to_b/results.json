@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "a_to_b",
   "parity": true,
   "matches": {},
@@ -8,29 +8,31 @@
       "recomputed_nodes": 2,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2,
-      "cycles": 7020
+      "visited_nodes": 2
     },
     "naive": {
       "recomputed_nodes": 2,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2,
-      "cycles": 41920
+      "visited_nodes": 2
+    },
+    "quad": {
+      "recomputed_nodes": 2,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2
     },
     "rec_tri": {
       "recomputed_nodes": 2,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2,
-      "cycles": 3560
+      "visited_nodes": 2
     },
     "tri": {
       "recomputed_nodes": 2,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 2,
-      "cycles": 3740
+      "visited_nodes": 2
     }
   }
 }

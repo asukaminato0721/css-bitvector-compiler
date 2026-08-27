@@ -42,7 +42,7 @@ fn collect_results(base: &std::path::Path) -> Result<Vec<SiteResult>, Box<dyn Er
             continue;
         }
         let result: SiteResult = serde_json::from_slice(&fs::read(&path)?)?;
-        if result.schema_version != 2 {
+        if result.schema_version != 3 {
             return Err(format!(
                 "{} uses unsupported results schema {}",
                 path.display(),
@@ -63,12 +63,14 @@ fn html(results: &[SiteResult]) -> String {
             let bit = &result.engines["bit"];
             let tri = &result.engines["tri"];
             let rec_tri = &result.engines["rec_tri"];
+            let quad = &result.engines["quad"];
             format!(
-                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td><span class=\"pill {}\">{}</span></td></tr>",
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td><span class=\"pill {}\">{}</span></td></tr>",
                 escape(&result.site),
                 bit.recomputed_nodes,
                 tri.recomputed_nodes,
                 rec_tri.recomputed_nodes,
+                quad.recomputed_nodes,
                 tri.input_skips,
                 rec_tri.input_skips,
                 if result.parity { "ok" } else { "diff" },
@@ -78,7 +80,7 @@ fn html(results: &[SiteResult]) -> String {
         .collect::<Vec<_>>()
         .join("\n");
     format!(
-        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>CSS Bitvector Results</title><style>{STYLE}</style></head><body><main><h1>CSS Bitvector Results</h1><p>One consolidated results.json per site.</p><table><thead><tr><th>Site</th><th>Bit misses</th><th>Tri misses</th><th>Rec tri misses</th><th>Tri skips</th><th>Rec tri skips</th><th>Parity</th></tr></thead><tbody>{body}</tbody></table></main></body></html>"
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>CSS Bitvector Results</title><style>{STYLE}</style></head><body><main><h1>CSS Bitvector Results</h1><p>One consolidated results.json per site.</p><table><thead><tr><th>Site</th><th>Bit misses</th><th>Tri misses</th><th>Rec tri misses</th><th>Quad misses</th><th>Tri skips</th><th>Rec tri skips</th><th>Parity</th></tr></thead><tbody>{body}</tbody></table></main></body></html>"
     )
 }
 

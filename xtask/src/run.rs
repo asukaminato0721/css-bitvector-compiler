@@ -23,7 +23,6 @@ pub(crate) struct EngineResult {
     pub input_changes: usize,
     pub input_skips: usize,
     pub visited_nodes: usize,
-    pub cycles: u64,
 }
 
 pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dyn Error>> {
@@ -39,7 +38,10 @@ pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dy
     };
     for site in &sites {
         let result = evaluate_site(site)?;
-        println!("==> {}: naive == bit == tri == rec_tri", result.site);
+        println!(
+            "==> {}: naive == bit == tri == rec_tri == quad",
+            result.site
+        );
         if update {
             write_result(workspace.root(), &result)?;
         }
@@ -87,6 +89,7 @@ fn evaluate_site(site: &str) -> Result<SiteResult, Box<dyn Error>> {
         ("bit", EngineKind::Bit),
         ("tri", EngineKind::Tri),
         ("rec_tri", EngineKind::RecursiveTri),
+        ("quad", EngineKind::Quad),
     ] {
         let result = Engine::new(kind, program.clone()).run(&trace)?;
         if let Some(expected) = &baseline {
@@ -103,12 +106,11 @@ fn evaluate_site(site: &str) -> Result<SiteResult, Box<dyn Error>> {
                 input_changes: result.stats.input_changes,
                 input_skips: result.stats.input_skips,
                 visited_nodes: result.stats.visited_nodes,
-                cycles: result.stats.cycles,
             },
         );
     }
     Ok(SiteResult {
-        schema_version: 2,
+        schema_version: 3,
         site: site.to_string(),
         parity: true,
         matches: baseline.unwrap_or_default(),
@@ -146,7 +148,7 @@ mod tests {
     #[test]
     fn result_schema_round_trips() {
         let result = SiteResult {
-            schema_version: 2,
+            schema_version: 3,
             site: "testcase".into(),
             parity: true,
             matches: BTreeMap::new(),
@@ -157,7 +159,6 @@ mod tests {
                     input_changes: 0,
                     input_skips: 0,
                     visited_nodes: 1,
-                    cycles: 10,
                 },
             )]),
         };

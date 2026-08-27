@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "bing",
   "parity": true,
   "matches": {
@@ -385,29 +385,31 @@
       "recomputed_nodes": 313,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 353,
-      "cycles": 56455780
+      "visited_nodes": 353
     },
     "naive": {
       "recomputed_nodes": 313,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 353,
-      "cycles": 68103940
+      "visited_nodes": 353
+    },
+    "quad": {
+      "recomputed_nodes": 313,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 353
     },
     "rec_tri": {
       "recomputed_nodes": 313,
       "input_changes": 0,
       "input_skips": 2,
-      "visited_nodes": 353,
-      "cycles": 57777980
+      "visited_nodes": 353
     },
     "tri": {
       "recomputed_nodes": 313,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 353,
-      "cycles": 59055540
+      "visited_nodes": 353
     }
   }
 }

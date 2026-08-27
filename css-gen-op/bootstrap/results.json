@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "bootstrap",
   "parity": true,
   "matches": {
@@ -206,29 +206,31 @@
       "recomputed_nodes": 12116,
       "input_changes": 6245,
       "input_skips": 0,
-      "visited_nodes": 13837,
-      "cycles": 573403220
+      "visited_nodes": 13837
     },
     "naive": {
       "recomputed_nodes": 12116,
       "input_changes": 6245,
       "input_skips": 0,
-      "visited_nodes": 13837,
-      "cycles": 739087700
+      "visited_nodes": 13837
+    },
+    "quad": {
+      "recomputed_nodes": 5871,
+      "input_changes": 6245,
+      "input_skips": 6245,
+      "visited_nodes": 13837
     },
     "rec_tri": {
-      "recomputed_nodes": 12089,
-      "input_changes": 6218,
-      "input_skips": 27,
-      "visited_nodes": 13810,
-      "cycles": 587562560
+      "recomputed_nodes": 12069,
+      "input_changes": 6198,
+      "input_skips": 47,
+      "visited_nodes": 13790
     },
     "tri": {
-      "recomputed_nodes": 12089,
+      "recomputed_nodes": 12069,
       "input_changes": 6245,
-      "input_skips": 27,
-      "visited_nodes": 13837,
-      "cycles": 581098920
+      "input_skips": 47,
+      "visited_nodes": 13837
     }
   }
 }

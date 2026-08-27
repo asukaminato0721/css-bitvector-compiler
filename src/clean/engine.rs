@@ -1,6 +1,10 @@
 use super::{
     Combinator, CompiledProgram, Compound, DynamicPseudo, EngineKind, NodeId, Nth, RunError,
     SelectorChain, Trace, TraceCommand, TraceFrame,
+    logic::{
+        QuadValue, Requirement, materialize_quad, materialize_quad_value, record_decision,
+        specialize_concrete, specialize_or,
+    },
 };
 use crate::{Node, attributes_to_string_map, rdtsc};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -23,28 +27,10 @@ impl Dirty {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-enum Requirement {
-    #[default]
-    Unused,
-    Zero,
-    One,
-}
-
-impl Requirement {
-    fn from_bit(bit: bool) -> Self {
-        if bit { Self::One } else { Self::Zero }
-    }
-
-    fn accepts(self, bit: bool) -> bool {
-        matches!(self, Self::Unused | Self::Zero if !bit)
-            || matches!(self, Self::Unused | Self::One if bit)
-    }
-}
-
 #[derive(Debug, Clone, Default)]
 struct NodeState {
     output: Vec<bool>,
+    quad_output: Vec<QuadValue>,
     matches: Vec<bool>,
     parent_input: Vec<bool>,
     sibling_input: Vec<bool>,
@@ -108,6 +94,7 @@ impl Dom {
                 children: Vec::new(),
                 state: NodeState {
                     output: vec![false; program.state_count],
+                    quad_output: vec![QuadValue::Zero; program.state_count],
                     matches: vec![false; program.selectors.len()],
                     parent_input: vec![false; program.state_count],
                     sibling_input: vec![false; program.state_count],
@@ -309,24 +296,13 @@ pub struct RunStats {
     pub input_changes: usize,
     pub input_skips: usize,
     pub visited_nodes: usize,
-    pub match_changes: usize,
     pub cycles: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct FrameStats {
-    pub frame_id: usize,
-    pub command: &'static str,
-    pub miss_delta: usize,
-    pub node_match_changes: usize,
-    pub total_misses: usize,
 }
 
 #[derive(Debug, Clone)]
 pub struct RunResult {
     pub matches: BTreeMap<String, Vec<u64>>,
     pub stats: RunStats,
-    pub frames: Vec<FrameStats>,
 }
 
 #[derive(Debug, Clone)]
@@ -335,8 +311,6 @@ pub struct Engine {
     program: CompiledProgram,
     dom: Dom,
     stats: RunStats,
-    frame_stats: Vec<FrameStats>,
-    track_frame_stats: bool,
 }
 
 impl Engine {
@@ -346,42 +320,19 @@ impl Engine {
             program,
             dom: Dom::default(),
             stats: RunStats::default(),
-            frame_stats: Vec::new(),
-            track_frame_stats: false,
         }
-    }
-
-    pub fn with_frame_stats(mut self, enabled: bool) -> Self {
-        self.track_frame_stats = enabled;
-        self
     }
 
     pub fn run(mut self, trace: &Trace) -> Result<RunResult, RunError> {
         let start = rdtsc();
-        let mut previous = BTreeMap::new();
         for frame in &trace.frames {
-            let before = self.stats.recomputed_nodes;
             self.apply(frame)
                 .map_err(|error| RunError::at(frame.frame_id, error.message))?;
-            if self.track_frame_stats {
-                let current = self.collect_matches();
-                let changed = count_node_match_changes(&previous, &current);
-                self.stats.match_changes += changed;
-                self.frame_stats.push(FrameStats {
-                    frame_id: frame.frame_id,
-                    command: frame.command.name(),
-                    miss_delta: self.stats.recomputed_nodes - before,
-                    node_match_changes: changed,
-                    total_misses: self.stats.recomputed_nodes,
-                });
-                previous = current;
-            }
         }
         self.stats.cycles = rdtsc().wrapping_sub(start);
         Ok(RunResult {
             matches: self.collect_matches(),
             stats: self.stats,
-            frames: self.frame_stats,
         })
     }
 
@@ -545,6 +496,7 @@ impl Engine {
             let evaluation = self.evaluate(id, &parent_input, &sibling_input);
             if evaluation.output == old_output && evaluation.matches == old_matches {
                 let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
+                state.quad_output = evaluation.quad_output;
                 state.require_parent = evaluation.require_parent;
                 state.require_sibling = evaluation.require_sibling;
                 state.parent_input = parent_input;
@@ -590,10 +542,26 @@ impl Engine {
             }
             if can_skip {
                 self.stats.input_skips += 1;
-                let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
-                state.parent_input = parent_input;
-                state.sibling_input = sibling_input;
-                state.dirty = Dirty::Clean;
+                let old_output = self.dom.nodes[&id].state.output.clone();
+                let new_output = if self.kind == EngineKind::Quad {
+                    materialize_quad(
+                        &self.dom.nodes[&id].state.quad_output,
+                        &parent_input,
+                        &sibling_input,
+                    )
+                } else {
+                    old_output.clone()
+                };
+                {
+                    let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
+                    state.output = new_output.clone();
+                    state.parent_input = parent_input;
+                    state.sibling_input = sibling_input;
+                    state.dirty = Dirty::Clean;
+                }
+                if old_output != new_output {
+                    self.propagate_output_change(id, new_output);
+                }
             } else {
                 self.stats.recomputed_nodes += 1;
                 let evaluation = self.evaluate(id, &parent_input, &sibling_input);
@@ -601,6 +569,7 @@ impl Engine {
                 {
                     let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
                     state.output = evaluation.output;
+                    state.quad_output = evaluation.quad_output;
                     state.matches = evaluation.matches;
                     state.require_parent = evaluation.require_parent;
                     state.require_sibling = evaluation.require_sibling;
@@ -610,34 +579,7 @@ impl Engine {
                 }
                 if old_output != self.dom.nodes[&id].state.output {
                     let new_output = self.dom.nodes[&id].state.output.clone();
-                    let children = self.dom.nodes[&id].children.clone();
-                    for child in children {
-                        let recursive_skip = self.kind == EngineKind::RecursiveTri
-                            && self.dom.nodes.get(&child).is_some_and(|node| {
-                                node.state.dirty == Dirty::Clean
-                                    && requirements_accept(&node.state.require_parent, &new_output)
-                            });
-                        if recursive_skip {
-                            self.dom.nodes.get_mut(&child).unwrap().state.parent_input =
-                                new_output.clone();
-                            self.stats.input_skips += 1;
-                        } else {
-                            self.dom.mark(child, Dirty::InputChanged);
-                        }
-                    }
-                    if let Some(next) = self.dom.next_sibling(id) {
-                        let recursive_skip = self.kind == EngineKind::RecursiveTri
-                            && self.dom.nodes.get(&next).is_some_and(|node| {
-                                node.state.dirty == Dirty::Clean
-                                    && requirements_accept(&node.state.require_sibling, &new_output)
-                            });
-                        if recursive_skip {
-                            self.dom.nodes.get_mut(&next).unwrap().state.sibling_input = new_output;
-                            self.stats.input_skips += 1;
-                        } else {
-                            self.dom.mark(next, Dirty::InputChanged);
-                        }
-                    }
+                    self.propagate_output_change(id, new_output);
                 }
             }
         }
@@ -649,7 +591,45 @@ impl Engine {
         self.dom.nodes.get_mut(&id).unwrap().state.subtree_dirty = false;
     }
 
+    fn propagate_output_change(&mut self, id: NodeId, new_output: Vec<bool>) {
+        let children = self.dom.nodes[&id].children.clone();
+        for child in children {
+            let recursive_skip = self.kind == EngineKind::RecursiveTri
+                && self.dom.nodes.get(&child).is_some_and(|node| {
+                    node.state.dirty == Dirty::Clean
+                        && requirements_accept(&node.state.require_parent, &new_output)
+                });
+            if recursive_skip {
+                self.dom.nodes.get_mut(&child).unwrap().state.parent_input = new_output.clone();
+                self.stats.input_skips += 1;
+            } else {
+                self.dom.mark(child, Dirty::InputChanged);
+            }
+        }
+        if let Some(next) = self.dom.next_sibling(id) {
+            let recursive_skip = self.kind == EngineKind::RecursiveTri
+                && self.dom.nodes.get(&next).is_some_and(|node| {
+                    node.state.dirty == Dirty::Clean
+                        && requirements_accept(&node.state.require_sibling, &new_output)
+                });
+            if recursive_skip {
+                self.dom.nodes.get_mut(&next).unwrap().state.sibling_input = new_output;
+                self.stats.input_skips += 1;
+            } else {
+                self.dom.mark(next, Dirty::InputChanged);
+            }
+        }
+    }
+
     fn evaluate(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
+        if self.kind == EngineKind::Quad {
+            self.evaluate_quad(id, parent, sibling)
+        } else {
+            self.evaluate_bits(id, parent, sibling)
+        }
+    }
+
+    fn evaluate_bits(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
         let mut output = vec![false; self.program.state_count];
         let mut matches = vec![false; self.program.selectors.len()];
         let mut require_parent = vec![Requirement::Unused; self.program.state_count];
@@ -665,12 +645,21 @@ impl Engine {
                     let previous = selector.state(part - 1).0;
                     match selector.combinators[part - 1] {
                         Combinator::Descendant | Combinator::Child => {
-                            require_parent[previous] = Requirement::from_bit(parent[previous]);
-                            local_match && parent[previous]
+                            if local_match {
+                                require_parent[previous] = Requirement::from_bit(parent[previous]);
+                                parent[previous]
+                            } else {
+                                false
+                            }
                         }
                         Combinator::AdjacentSibling => {
-                            require_sibling[previous] = Requirement::from_bit(sibling[previous]);
-                            local_match && sibling[previous]
+                            if local_match {
+                                require_sibling[previous] =
+                                    Requirement::from_bit(sibling[previous]);
+                                sibling[previous]
+                            } else {
+                                false
+                            }
                         }
                     }
                 };
@@ -693,7 +682,87 @@ impl Engine {
             }
         }
         Evaluation {
+            quad_output: output
+                .iter()
+                .map(|bit| {
+                    if *bit {
+                        QuadValue::One
+                    } else {
+                        QuadValue::Zero
+                    }
+                })
+                .collect(),
             output,
+            matches,
+            require_parent,
+            require_sibling,
+        }
+    }
+
+    /// Evaluate the selector program as a compositional function. The two
+    /// passes from the original quad design are explicit here: local and
+    /// predecessor transitions are formed first, then descendant propagation
+    /// is composed without overwriting those transition results.
+    fn evaluate_quad(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
+        let mut output = vec![false; self.program.state_count];
+        let mut quad_output = vec![QuadValue::Zero; self.program.state_count];
+        let mut matches = vec![false; self.program.selectors.len()];
+        let mut require_parent = vec![Requirement::Unused; self.program.state_count];
+        let mut require_sibling = vec![Requirement::Unused; self.program.state_count];
+
+        for (selector_index, selector) in self.program.selectors.iter().enumerate() {
+            for part in 0..selector.compounds.len() {
+                let state = selector.state(part).0;
+                let local_match = self.matches_compound(id, &selector.compounds[part]);
+
+                // Non-propagate transition pass.
+                let raw = if part == 0 {
+                    if local_match {
+                        QuadValue::One
+                    } else {
+                        QuadValue::Zero
+                    }
+                } else if !local_match {
+                    QuadValue::Zero
+                } else {
+                    let previous = selector.state(part - 1).0;
+                    match selector.combinators[part - 1] {
+                        Combinator::Descendant | Combinator::Child => {
+                            QuadValue::FromParent(previous)
+                        }
+                        Combinator::AdjacentSibling => QuadValue::FromSibling(previous),
+                    }
+                };
+                // Propagate pass. Specialize the OR branch using the current
+                // input, and record only the branch decision as a dependency.
+                let propagate = selector
+                    .combinators
+                    .get(part)
+                    .is_some_and(|combinator| *combinator == Combinator::Descendant);
+                let mut abstract_output = if propagate {
+                    let (specialized, decision) =
+                        specialize_or(raw, QuadValue::FromParent(state), parent, sibling);
+                    record_decision(decision, &mut require_parent, &mut require_sibling);
+                    specialized
+                } else {
+                    raw
+                };
+
+                // Accept states must be concrete because they are observable
+                // CSS match results, not inputs to a later transition.
+                if part + 1 == selector.compounds.len() {
+                    let (concrete, decision) = specialize_concrete(raw, parent, sibling);
+                    record_decision(decision, &mut require_parent, &mut require_sibling);
+                    matches[selector_index] = materialize_quad_value(concrete, parent, sibling);
+                    abstract_output = concrete;
+                }
+                output[state] = materialize_quad_value(abstract_output, parent, sibling);
+                quad_output[state] = abstract_output;
+            }
+        }
+        Evaluation {
+            output,
+            quad_output,
             matches,
             require_parent,
             require_sibling,
@@ -795,6 +864,7 @@ impl Engine {
 
 struct Evaluation {
     output: Vec<bool>,
+    quad_output: Vec<QuadValue>,
     matches: Vec<bool>,
     require_parent: Vec<Requirement>,
     require_sibling: Vec<Requirement>,
@@ -840,33 +910,4 @@ fn scalar_attribute(value: &serde_json::Value) -> Result<String, RunError> {
             "attribute values must be JSON scalars".into(),
         )),
     }
-}
-
-fn count_node_match_changes(
-    previous: &BTreeMap<String, Vec<u64>>,
-    current: &BTreeMap<String, Vec<u64>>,
-) -> usize {
-    let previous_by_node = matches_by_node(previous);
-    let current_by_node = matches_by_node(current);
-    previous_by_node
-        .keys()
-        .chain(current_by_node.keys())
-        .copied()
-        .collect::<HashSet<_>>()
-        .into_iter()
-        .filter(|id| previous_by_node.get(id) != current_by_node.get(id))
-        .count()
-}
-
-fn matches_by_node(matches: &BTreeMap<String, Vec<u64>>) -> HashMap<u64, Vec<&str>> {
-    let mut result: HashMap<u64, Vec<&str>> = HashMap::new();
-    for (selector, ids) in matches {
-        for id in ids {
-            result.entry(*id).or_default().push(selector);
-        }
-    }
-    for selectors in result.values_mut() {
-        selectors.sort_unstable();
-    }
-    result
 }
