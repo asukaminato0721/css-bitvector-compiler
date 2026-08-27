@@ -29,17 +29,26 @@ WEBSITE_NAME=google cargo run -r --bin rec_tri
 WEBSITE_NAME=google cargo run -r --bin naive
 ```
 
-Run the default correctness/report pipeline:
+The repository ships a typed development driver through Cargo:
 
 ```sh
-./run.sh
+cargo xtask check
+cargo xtask corpus
+cargo xtask run --site google
+cargo xtask benchmark --site google
+cargo xtask report
 ```
+
+`cargo xtask run` compares the oracle, bit, tri, and recursive-tri outputs in
+memory. Pass `--all` to check every captured site. Existing logs are never
+overwritten unless `--update` is supplied explicitly; run `cargo xtask report`
+after an update to regenerate `misscnt.md` and `misscnt.html`.
 
 Run repeated median-cycle benchmarks. Parsing, trace decoding, logging, DOT
 generation, and report writing are outside the measured region.
 
 ```sh
-cargo run -r --bin benchmark -- --site google bit,tri,rec_tri
+cargo xtask benchmark --site google bit,tri,rec_tri
 ```
 
 Inspect selector coverage for a CSS file:
@@ -54,11 +63,13 @@ Set `CSS_BV_NO_DOT=1` to suppress DOT output during ad-hoc validation.
 ## Validation
 
 ```sh
-cargo fmt --all -- --check
-cargo clippy --all-targets --all-features -- -D warnings
-cargo test --all-targets
-cargo test -r clean::tests::checked_in_corpus_has_engine_parity -- --ignored
+cargo xtask check
+cargo xtask corpus
+cargo xtask all
 ```
 
 The ignored corpus test replays every checked-in trace and requires exact
 final-match parity between the oracle, bit, tri, and recursive-tri engines.
+
+The only remaining Python utilities are `css-gen-op/generate.py` and
+`css-gen-op/common.py`, which convert raw browser captures into trace commands.
