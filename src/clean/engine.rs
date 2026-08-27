@@ -1,6 +1,10 @@
 use super::{
     Combinator, CompiledProgram, Compound, DynamicPseudo, EngineKind, NodeId, Nth, RunError,
     SelectorChain, Trace, TraceCommand, TraceFrame,
+    logic::{
+        QuadValue, Requirement, materialize_quad, materialize_quad_value, record_decision,
+        specialize_concrete, specialize_or,
+    },
 };
 use crate::{Node, attributes_to_string_map, rdtsc};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -21,37 +25,6 @@ impl Dirty {
             other
         }
     }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-enum Requirement {
-    #[default]
-    Unused,
-    Zero,
-    One,
-}
-
-impl Requirement {
-    fn from_bit(bit: bool) -> Self {
-        if bit { Self::One } else { Self::Zero }
-    }
-
-    fn accepts(self, bit: bool) -> bool {
-        matches!(self, Self::Unused | Self::Zero if !bit)
-            || matches!(self, Self::Unused | Self::One if bit)
-    }
-}
-
-/// A compositional output bit. Unlike a materialized boolean, a forwarded bit
-/// keeps its relationship to the current input and can be re-materialized
-/// without running the selector program again.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-enum QuadValue {
-    #[default]
-    Zero,
-    One,
-    FromParent(usize),
-    FromSibling(usize),
 }
 
 #[derive(Debug, Clone, Default)]
@@ -672,12 +645,21 @@ impl Engine {
                     let previous = selector.state(part - 1).0;
                     match selector.combinators[part - 1] {
                         Combinator::Descendant | Combinator::Child => {
-                            require_parent[previous] = Requirement::from_bit(parent[previous]);
-                            local_match && parent[previous]
+                            if local_match {
+                                require_parent[previous] = Requirement::from_bit(parent[previous]);
+                                parent[previous]
+                            } else {
+                                false
+                            }
                         }
                         Combinator::AdjacentSibling => {
-                            require_sibling[previous] = Requirement::from_bit(sibling[previous]);
-                            local_match && sibling[previous]
+                            if local_match {
+                                require_sibling[previous] =
+                                    Requirement::from_bit(sibling[previous]);
+                                sibling[previous]
+                            } else {
+                                false
+                            }
                         }
                     }
                 };
@@ -751,8 +733,6 @@ impl Engine {
                         Combinator::AdjacentSibling => QuadValue::FromSibling(previous),
                     }
                 };
-                let raw_value = materialize_quad_value(raw, parent, sibling);
-
                 // Propagate pass. Specialize the OR branch using the current
                 // input, and record only the branch decision as a dependency.
                 let propagate = selector
@@ -760,25 +740,10 @@ impl Engine {
                     .get(part)
                     .is_some_and(|combinator| *combinator == Combinator::Descendant);
                 let mut abstract_output = if propagate {
-                    if raw_value {
-                        record_quad_requirement(
-                            raw,
-                            parent,
-                            sibling,
-                            &mut require_parent,
-                            &mut require_sibling,
-                        );
-                        raw
-                    } else {
-                        record_quad_requirement(
-                            raw,
-                            parent,
-                            sibling,
-                            &mut require_parent,
-                            &mut require_sibling,
-                        );
-                        QuadValue::FromParent(state)
-                    }
+                    let (specialized, decision) =
+                        specialize_or(raw, QuadValue::FromParent(state), parent, sibling);
+                    record_decision(decision, &mut require_parent, &mut require_sibling);
+                    specialized
                 } else {
                     raw
                 };
@@ -786,19 +751,10 @@ impl Engine {
                 // Accept states must be concrete because they are observable
                 // CSS match results, not inputs to a later transition.
                 if part + 1 == selector.compounds.len() {
-                    record_quad_requirement(
-                        raw,
-                        parent,
-                        sibling,
-                        &mut require_parent,
-                        &mut require_sibling,
-                    );
-                    matches[selector_index] = raw_value;
-                    abstract_output = if raw_value {
-                        QuadValue::One
-                    } else {
-                        QuadValue::Zero
-                    };
+                    let (concrete, decision) = specialize_concrete(raw, parent, sibling);
+                    record_decision(decision, &mut require_parent, &mut require_sibling);
+                    matches[selector_index] = materialize_quad_value(concrete, parent, sibling);
+                    abstract_output = concrete;
                 }
                 output[state] = materialize_quad_value(abstract_output, parent, sibling);
                 quad_output[state] = abstract_output;
@@ -912,41 +868,6 @@ struct Evaluation {
     matches: Vec<bool>,
     require_parent: Vec<Requirement>,
     require_sibling: Vec<Requirement>,
-}
-
-fn materialize_quad(values: &[QuadValue], parent: &[bool], sibling: &[bool]) -> Vec<bool> {
-    values
-        .iter()
-        .copied()
-        .map(|value| materialize_quad_value(value, parent, sibling))
-        .collect()
-}
-
-fn materialize_quad_value(value: QuadValue, parent: &[bool], sibling: &[bool]) -> bool {
-    match value {
-        QuadValue::Zero => false,
-        QuadValue::One => true,
-        QuadValue::FromParent(index) => parent[index],
-        QuadValue::FromSibling(index) => sibling[index],
-    }
-}
-
-fn record_quad_requirement(
-    value: QuadValue,
-    parent: &[bool],
-    sibling: &[bool],
-    require_parent: &mut [Requirement],
-    require_sibling: &mut [Requirement],
-) {
-    match value {
-        QuadValue::FromParent(index) => {
-            require_parent[index] = Requirement::from_bit(parent[index]);
-        }
-        QuadValue::FromSibling(index) => {
-            require_sibling[index] = Requirement::from_bit(sibling[index]);
-        }
-        QuadValue::Zero | QuadValue::One => {}
-    }
 }
 
 fn requirements_accept(requirements: &[Requirement], input: &[bool]) -> bool {

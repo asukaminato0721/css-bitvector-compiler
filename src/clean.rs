@@ -1,5 +1,6 @@
 mod compiler;
 mod engine;
+mod logic;
 mod runner;
 mod trace;
 

@@ -1643,15 +1643,15 @@
       "visited_nodes": 13636
     },
     "rec_tri": {
-      "recomputed_nodes": 13122,
-      "input_changes": 5955,
-      "input_skips": 168,
-      "visited_nodes": 13468
+      "recomputed_nodes": 13120,
+      "input_changes": 5953,
+      "input_skips": 170,
+      "visited_nodes": 13466
     },
     "tri": {
-      "recomputed_nodes": 13122,
+      "recomputed_nodes": 13120,
       "input_changes": 6123,
-      "input_skips": 168,
+      "input_skips": 170,
       "visited_nodes": 13636
     }
   }

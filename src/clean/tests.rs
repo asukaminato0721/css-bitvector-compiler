@@ -198,6 +198,49 @@ fn quad_composes_descendant_propagation_without_recompute() {
 }
 
 #[test]
+fn tri_and_recursive_tri_skip_unread_parent_input() {
+    let program = compile_rule(".a > .b");
+    let trace = Trace {
+        frames: vec![
+            TraceFrame {
+                frame_id: 0,
+                command: TraceCommand::Init {
+                    node: node(
+                        1,
+                        "div",
+                        Some("a"),
+                        vec![node(2, "div", Some("not-b"), vec![])],
+                    ),
+                },
+            },
+            TraceFrame {
+                frame_id: 1,
+                command: TraceCommand::ReplaceValue {
+                    path: vec![],
+                    value_type: Some("attributes".into()),
+                    key: "class".into(),
+                    value: Some(serde_json::Value::String("x".into())),
+                    old_value: Some(serde_json::Value::String("a".into())),
+                },
+            },
+        ],
+    };
+    let bit = Engine::new(EngineKind::Bit, program.clone())
+        .run(&trace)
+        .unwrap();
+    let tri = Engine::new(EngineKind::Tri, program.clone())
+        .run(&trace)
+        .unwrap();
+    let recursive = Engine::new(EngineKind::RecursiveTri, program)
+        .run(&trace)
+        .unwrap();
+    assert_eq!(bit.matches, tri.matches);
+    assert_eq!(tri.matches, recursive.matches);
+    assert!(tri.stats.recomputed_nodes < bit.stats.recomputed_nodes);
+    assert!(recursive.stats.visited_nodes < tri.stats.visited_nodes);
+}
+
+#[test]
 fn checked_in_testcase_has_engine_parity() {
     let input = SiteInput::named("testcase");
     let (program, trace) = load_site(&input).unwrap();

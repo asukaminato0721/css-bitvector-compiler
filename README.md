@@ -4,6 +4,10 @@ This repository evaluates incremental CSS selector matching over captured DOM
 traces. CSS is compiled into typed state transitions once, then replayed with
 several cache policies over one shared DOM implementation.
 
+Detailed algorithm, Hoare-logic, and Kani verification notes are in
+[docs/design.md](docs/design.md). A typeset copy is available as
+[docs/design.pdf](docs/design.pdf) and can be rebuilt with `cargo xtask docs`.
+
 ## Engines
 
 - `naive`: an independent selector-chain oracle used for correctness checks.
@@ -30,6 +34,7 @@ cargo xtask run --site google
 cargo xtask benchmark --site google
 cargo xtask stats --site google
 cargo xtask report
+cargo xtask verify
 ```
 
 `cargo xtask run` compares the oracle, bit, tri, and recursive-tri outputs in

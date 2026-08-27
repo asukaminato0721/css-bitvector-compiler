@@ -2,9 +2,11 @@ mod benchmark;
 mod check;
 mod context;
 mod corpus;
+mod docs;
 mod report;
 mod run;
 mod stats;
+mod verification;
 
 use context::Workspace;
 use std::{env, error::Error};
@@ -27,9 +29,11 @@ fn dispatch() -> Result<(), Box<dyn Error>> {
     match command.as_str() {
         "check" => check::execute(&workspace),
         "corpus" => corpus::execute(&workspace),
+        "docs" => docs::execute(&workspace),
         "run" => run::execute(&workspace, &rest),
         "benchmark" | "bench" => benchmark::execute(&rest),
         "stats" => stats::execute(&workspace, &rest),
+        "verify" => verification::execute(&workspace),
         "report" => report::execute(&workspace, &rest),
         "all" => {
             check::execute(&workspace)?;
@@ -52,11 +56,13 @@ CSS bitvector development tasks
 Usage:
   cargo xtask check
   cargo xtask corpus
+  cargo xtask docs
   cargo xtask run --site <name> [--update]
   cargo xtask run --all [--update]
   cargo xtask benchmark --site <name> [engine,...]
   cargo xtask stats --site <name>
   cargo xtask stats --css <path>
+  cargo xtask verify
   cargo xtask report [--base <directory>] [--output-dir <directory>]
   cargo xtask all
 
