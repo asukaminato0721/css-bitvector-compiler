@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "site": "tiktok",
+  "parity": true,
+  "matches": {
+    "body a": [
+      1414,
+      1575,
+      1639,
+      1675,
+      1711,
+      1745,
+      1783,
+      1816,
+      3030,
+      3102,
+      3298,
+      3348,
+      3372,
+      3389,
+      3474,
+      3670
+    ],
+    "body a:hover": [
+      3030,
+      3102,
+      3298
+    ],
+    "body strong": [
+      1412,
+      1573,
+      3185,
+      3208,
+      3233,
+      3286,
+      3557,
+      3580,
+      3605,
+      3658
+    ],
+    "html body": [
+      309
+    ]
+  },
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 57128,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 59613,
+      "cycles": 266906540
+    },
+    "naive": {
+      "recomputed_nodes": 57128,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 59613,
+      "cycles": 292602120
+    },
+    "rec_tri": {
+      "recomputed_nodes": 57128,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 59613,
+      "cycles": 220196620
+    },
+    "tri": {
+      "recomputed_nodes": 57128,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 59613,
+      "cycles": 244245300
+    }
+  }
+}

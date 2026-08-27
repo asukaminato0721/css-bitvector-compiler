@@ -3,7 +3,7 @@ on:
   workflow_call:
   pull_request:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 permissions:
   contents: read
 
@@ -21,11 +21,14 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: autofix-${{ hashFiles('**/Cargo.lock') }}
-          
+          key: autofix-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            autofix-${{ runner.os }}-
+
       - run: rustup toolchain install stable --profile minimal --component rustfmt --component clippy
       - run: rustup default stable
 
-      - run: cargo fmt --all
+      - name: Format workspace
+        run: cargo fmt --all
 
       - uses: autofix-ci/action@551dded8c6cc8a1054039c8bc0b8b48c51dfc6ef

@@ -1,0 +1,127 @@
+{
+  "schema_version": 2,
+  "site": "google",
+  "parity": true,
+  "matches": {
+    "#SIvCob a": [
+      452
+    ],
+    "#WqQANb a": [
+      463,
+      466,
+      469,
+      472
+    ],
+    "#gbg .gbgt": [
+      259,
+      279
+    ],
+    "#gbg .gbm": [
+      296
+    ],
+    "#gbg .gbtcb": [
+      253
+    ],
+    "#gbz .gbgt": [
+      146
+    ],
+    "#gbz .gbm": [
+      165
+    ],
+    "#gbz .gbtcb": [
+      51
+    ],
+    "#gbz .gbzt": [
+      58,
+      69,
+      80,
+      91,
+      102,
+      113,
+      124,
+      135
+    ],
+    ".fl a": [
+      431
+    ],
+    ".gbgt:focus": [
+      146
+    ],
+    ".gbsb .gbsbb": [
+      246
+    ],
+    ".gbsbis .gbsbb": [
+      246
+    ],
+    ".gbsbis .gbsbt": [
+      244
+    ],
+    ".gbtb .gbts": [
+      275
+    ],
+    ".gbz0l .gbtb2": [
+      62
+    ],
+    ".gbz0l .gbts": [
+      64
+    ],
+    ".gbzt .gbts": [
+      64,
+      75,
+      86,
+      97,
+      108,
+      119,
+      130,
+      141
+    ],
+    ".gssb_a td": [
+      566,
+      602,
+      637,
+      672,
+      707,
+      742,
+      777,
+      812,
+      847,
+      882
+    ],
+    ".sblc a": [
+      431
+    ],
+    "a:hover": [
+      431
+    ]
+  },
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 3904,
+      "input_changes": 155,
+      "input_skips": 0,
+      "visited_nodes": 7071,
+      "cycles": 182680360
+    },
+    "naive": {
+      "recomputed_nodes": 3904,
+      "input_changes": 155,
+      "input_skips": 0,
+      "visited_nodes": 7071,
+      "cycles": 193820300
+    },
+    "rec_tri": {
+      "recomputed_nodes": 3893,
+      "input_changes": 144,
+      "input_skips": 11,
+      "visited_nodes": 7060,
+      "cycles": 186423620
+    },
+    "tri": {
+      "recomputed_nodes": 3893,
+      "input_changes": 155,
+      "input_skips": 11,
+      "visited_nodes": 7071,
+      "cycles": 185808900
+    }
+  }
+}

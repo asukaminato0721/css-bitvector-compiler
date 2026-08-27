@@ -948,6 +948,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "xtask"
+version = "0.0.0"
+dependencies = [
+ "css-bitvector-compiler",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "zerocopy"
 version = "0.8.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"

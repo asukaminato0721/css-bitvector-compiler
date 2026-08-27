@@ -7,3 +7,15 @@ guide.txt
 perf.data
 perf.data.old
 *.trace
+
+# Legacy generated artifacts. Consolidated site output is results.json.
+css-gen-op/**/tmp.txt
+css-gen-op/**/*_tmp.txt
+css-gen-op/**/*.dot
+css-gen-op/**/*.png
+/dot.dot
+/flamegraph.svg
+/miss_count_comparison_scatter.png
+/misscnt.md
+/testcase_*.log
+/tmp

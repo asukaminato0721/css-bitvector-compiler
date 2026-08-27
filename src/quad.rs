@@ -8,7 +8,6 @@ use css_bitvector_compiler::{
 };
 use std::{
     collections::{HashMap, HashSet},
-    fs,
     sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
@@ -1148,7 +1147,7 @@ pub fn collect_rule_matches(
     // Prime root cache if possible; this also ensures STATE has been initialised.
     let _ = dom.get_root_node();
 
-    for (&node_id, _) in dom.nodes.iter() {
+    for &node_id in dom.nodes.keys() {
         let current_state = materialize_node(dom, node_id, &mut state_cache);
         for (idx, &Nfacell(state_index)) in nfas.accept_states.iter().enumerate() {
             if current_state[state_index] {
@@ -1182,13 +1181,6 @@ fn main() {
     unsafe {
         STATE = s;
     }
-    let _ = fs::write(
-        format!(
-            "css-gen-op/{0}/dot_quad.dot",
-            std::env::var("WEBSITE_NAME").unwrap(),
-        ),
-        nfa.to_dot(&dom.selector_manager),
-    );
     // dbg!(&nfa);
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);

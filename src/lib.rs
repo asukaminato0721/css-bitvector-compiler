@@ -10,6 +10,7 @@ use std::{
     fmt::Display,
 };
 
+pub mod clean;
 pub mod runtime_shared;
 
 #[derive(Debug, Clone, serde::Deserialize)]
@@ -370,8 +371,10 @@ pub fn drain_supported_pseudo_selectors(
 }
 
 pub fn parse_css_with_pseudo(css_content: &str) -> ParsedSelectors {
-    let mut parser_options = ParserOptions::default();
-    parser_options.error_recovery = true;
+    let parser_options = ParserOptions {
+        error_recovery: true,
+        ..ParserOptions::default()
+    };
 
     let stylesheet = match StyleSheet::parse(css_content, parser_options) {
         Ok(sheet) => sheet,
@@ -1206,11 +1209,10 @@ pub fn extract_pseudoclasses(node: &Node) -> HashSet<String> {
                     }
                 }
             }
-            serde_json::Value::String(s) => {
-                if !s.is_empty() {
-                    target.insert(s.to_ascii_lowercase());
-                }
+            serde_json::Value::String(s) if !s.is_empty() => {
+                target.insert(s.to_ascii_lowercase());
             }
+            serde_json::Value::String(_) => {}
             _ => {}
         }
     }
@@ -1245,6 +1247,7 @@ pub fn extract_pseudoclasses(node: &Node) -> HashSet<String> {
     result
 }
 
+#[allow(clippy::too_many_arguments)]
 pub trait AddNode {
     /// Add a new node to the DOM.
     /// Returns the index of the new node.
