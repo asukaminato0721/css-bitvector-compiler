@@ -226,7 +226,7 @@ $$
 
 ### 5.1 两阶段计算
 
-聊天记录要求 non-propagate rule 必须先于 propagate rule，避免传播结果污染本地
+non-propagate rule 必须先于 propagate rule，避免传播结果污染本地
 transition。当前实现显式分两步：
 
 1. 计算 local/predecessor transition，得到 `raw`。
