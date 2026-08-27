@@ -154,6 +154,7 @@ dependencies = [
  "cssparser 0.35.0",
  "lightningcss",
  "parcel_selectors",
+ "serde",
  "serde_json",
 ]
 
