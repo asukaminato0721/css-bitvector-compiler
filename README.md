@@ -10,6 +10,8 @@ several cache policies over one shared DOM implementation.
 - `bit`: cached output bitvectors with dirty-subtree traversal.
 - `tri`: bitvectors plus zero/one/unused input requirements.
 - `rec_tri`: the recursive-tri experiment, using the same typed runtime API.
+- `quad`: compositional `0 / 1 / FromInput` outputs that avoid recomputing
+  pure propagation nodes.
 
 All active engines support descendant (` `), child (`>`), adjacent sibling
 (`+`), equality attributes, `:hover`, `:focus`, `:focus-within`, `:first-child`,
@@ -31,7 +33,7 @@ cargo xtask report
 ```
 
 `cargo xtask run` compares the oracle, bit, tri, and recursive-tri outputs in
-memory. Pass `--all` to check every captured site. With `--update`, it writes
+memory, including quad. Pass `--all` to check every captured site. With `--update`, it writes
 one consolidated `results.json` per site; no per-engine logs or DOT copies are
 created. Run `cargo xtask report` afterward to regenerate the single
 `misscnt.html` summary.
@@ -40,7 +42,7 @@ Run repeated median-cycle benchmarks. Parsing, trace decoding, result
 serialization, and report writing are outside the measured region.
 
 ```sh
-cargo xtask benchmark --site google bit,tri,rec_tri
+cargo xtask benchmark --site google bit,tri,rec_tri,quad
 ```
 
 Inspect selector coverage for a site or CSS file:
@@ -59,7 +61,7 @@ cargo xtask all
 ```
 
 The ignored corpus test replays every checked-in trace and requires exact
-final-match parity between the oracle, bit, tri, and recursive-tri engines.
+final-match parity between the oracle, bit, tri, recursive-tri, and quad engines.
 
 The only remaining Python utilities are `css-gen-op/generate.py` and
 `css-gen-op/common.py`, which convert raw browser captures into trace commands.

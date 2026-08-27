@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "bilibili",
   "parity": true,
   "matches": {
@@ -36,29 +36,31 @@
       "recomputed_nodes": 6747,
       "input_changes": 154,
       "input_skips": 0,
-      "visited_nodes": 14113,
-      "cycles": 1887788500
+      "visited_nodes": 14113
     },
     "naive": {
       "recomputed_nodes": 6747,
       "input_changes": 154,
       "input_skips": 0,
-      "visited_nodes": 14113,
-      "cycles": 2470860500
+      "visited_nodes": 14113
+    },
+    "quad": {
+      "recomputed_nodes": 6599,
+      "input_changes": 154,
+      "input_skips": 148,
+      "visited_nodes": 14113
     },
     "rec_tri": {
       "recomputed_nodes": 6745,
       "input_changes": 152,
       "input_skips": 2,
-      "visited_nodes": 14111,
-      "cycles": 1816254160
+      "visited_nodes": 14111
     },
     "tri": {
       "recomputed_nodes": 6745,
       "input_changes": 154,
       "input_skips": 2,
-      "visited_nodes": 14113,
-      "cycles": 1841758040
+      "visited_nodes": 14113
     }
   }
 }

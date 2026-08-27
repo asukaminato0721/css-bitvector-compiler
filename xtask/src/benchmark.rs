@@ -10,7 +10,7 @@ pub fn execute(arguments: &[String]) -> Result<(), Box<dyn Error>> {
         .iter()
         .rfind(|argument| !argument.starts_with('-') && argument.as_str() != site)
         .map(String::as_str)
-        .unwrap_or("bit,tri,rec_tri");
+        .unwrap_or("bit,tri,rec_tri,quad");
     let kinds = targets
         .split(',')
         .map(parse_kind)
@@ -47,6 +47,9 @@ fn parse_kind(name: &str) -> Result<(&str, EngineKind), Box<dyn Error>> {
         "bit" => Ok((name, EngineKind::Bit)),
         "tri" => Ok((name, EngineKind::Tri)),
         "rec_tri" | "rec-tri" => Ok((name, EngineKind::RecursiveTri)),
-        _ => Err(format!("unknown engine `{name}`; expected naive, bit, tri, or rec_tri").into()),
+        "quad" => Ok((name, EngineKind::Quad)),
+        _ => Err(
+            format!("unknown engine `{name}`; expected naive, bit, tri, rec_tri, or quad").into(),
+        ),
     }
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "netflix",
   "parity": true,
   "matches": {
@@ -3053,29 +3053,31 @@
       "recomputed_nodes": 5848,
       "input_changes": 134,
       "input_skips": 0,
-      "visited_nodes": 10293,
-      "cycles": 695574040
+      "visited_nodes": 10293
     },
     "naive": {
       "recomputed_nodes": 5848,
       "input_changes": 134,
       "input_skips": 0,
-      "visited_nodes": 10293,
-      "cycles": 1244176220
+      "visited_nodes": 10293
+    },
+    "quad": {
+      "recomputed_nodes": 5714,
+      "input_changes": 134,
+      "input_skips": 134,
+      "visited_nodes": 10293
     },
     "rec_tri": {
       "recomputed_nodes": 5758,
       "input_changes": 44,
       "input_skips": 90,
-      "visited_nodes": 10203,
-      "cycles": 679270000
+      "visited_nodes": 10203
     },
     "tri": {
       "recomputed_nodes": 5758,
       "input_changes": 134,
       "input_skips": 90,
-      "visited_nodes": 10293,
-      "cycles": 720853700
+      "visited_nodes": 10293
     }
   }
 }

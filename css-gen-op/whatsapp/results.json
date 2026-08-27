@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "site": "whatsapp",
   "parity": true,
   "matches": {
@@ -492,29 +492,31 @@
       "recomputed_nodes": 11414,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 12205,
-      "cycles": 936590360
+      "visited_nodes": 12205
     },
     "naive": {
       "recomputed_nodes": 11414,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 12205,
-      "cycles": 1423300080
+      "visited_nodes": 12205
+    },
+    "quad": {
+      "recomputed_nodes": 11414,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 12205
     },
     "rec_tri": {
       "recomputed_nodes": 11414,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 12205,
-      "cycles": 954438560
+      "visited_nodes": 12205
     },
     "tri": {
       "recomputed_nodes": 11414,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 12205,
-      "cycles": 942557420
+      "visited_nodes": 12205
     }
   }
 }

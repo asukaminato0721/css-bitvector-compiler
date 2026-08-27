@@ -60,7 +60,7 @@ Usage:
   cargo xtask report [--base <directory>] [--output-dir <directory>]
   cargo xtask all
 
-`run` compares naive, bit, tri, and rec_tri in memory. It writes consolidated
-results only when --update is present."
+`run` compares naive, bit, tri, rec_tri, and quad in memory. It writes
+consolidated results only when --update is present."
     );
 }

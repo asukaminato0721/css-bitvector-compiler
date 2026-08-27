@@ -42,9 +42,22 @@ impl Requirement {
     }
 }
 
+/// A compositional output bit. Unlike a materialized boolean, a forwarded bit
+/// keeps its relationship to the current input and can be re-materialized
+/// without running the selector program again.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+enum QuadValue {
+    #[default]
+    Zero,
+    One,
+    FromParent(usize),
+    FromSibling(usize),
+}
+
 #[derive(Debug, Clone, Default)]
 struct NodeState {
     output: Vec<bool>,
+    quad_output: Vec<QuadValue>,
     matches: Vec<bool>,
     parent_input: Vec<bool>,
     sibling_input: Vec<bool>,
@@ -108,6 +121,7 @@ impl Dom {
                 children: Vec::new(),
                 state: NodeState {
                     output: vec![false; program.state_count],
+                    quad_output: vec![QuadValue::Zero; program.state_count],
                     matches: vec![false; program.selectors.len()],
                     parent_input: vec![false; program.state_count],
                     sibling_input: vec![false; program.state_count],
@@ -509,6 +523,7 @@ impl Engine {
             let evaluation = self.evaluate(id, &parent_input, &sibling_input);
             if evaluation.output == old_output && evaluation.matches == old_matches {
                 let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
+                state.quad_output = evaluation.quad_output;
                 state.require_parent = evaluation.require_parent;
                 state.require_sibling = evaluation.require_sibling;
                 state.parent_input = parent_input;
@@ -554,10 +569,26 @@ impl Engine {
             }
             if can_skip {
                 self.stats.input_skips += 1;
-                let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
-                state.parent_input = parent_input;
-                state.sibling_input = sibling_input;
-                state.dirty = Dirty::Clean;
+                let old_output = self.dom.nodes[&id].state.output.clone();
+                let new_output = if self.kind == EngineKind::Quad {
+                    materialize_quad(
+                        &self.dom.nodes[&id].state.quad_output,
+                        &parent_input,
+                        &sibling_input,
+                    )
+                } else {
+                    old_output.clone()
+                };
+                {
+                    let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
+                    state.output = new_output.clone();
+                    state.parent_input = parent_input;
+                    state.sibling_input = sibling_input;
+                    state.dirty = Dirty::Clean;
+                }
+                if old_output != new_output {
+                    self.propagate_output_change(id, new_output);
+                }
             } else {
                 self.stats.recomputed_nodes += 1;
                 let evaluation = self.evaluate(id, &parent_input, &sibling_input);
@@ -565,6 +596,7 @@ impl Engine {
                 {
                     let state = &mut self.dom.nodes.get_mut(&id).unwrap().state;
                     state.output = evaluation.output;
+                    state.quad_output = evaluation.quad_output;
                     state.matches = evaluation.matches;
                     state.require_parent = evaluation.require_parent;
                     state.require_sibling = evaluation.require_sibling;
@@ -574,34 +606,7 @@ impl Engine {
                 }
                 if old_output != self.dom.nodes[&id].state.output {
                     let new_output = self.dom.nodes[&id].state.output.clone();
-                    let children = self.dom.nodes[&id].children.clone();
-                    for child in children {
-                        let recursive_skip = self.kind == EngineKind::RecursiveTri
-                            && self.dom.nodes.get(&child).is_some_and(|node| {
-                                node.state.dirty == Dirty::Clean
-                                    && requirements_accept(&node.state.require_parent, &new_output)
-                            });
-                        if recursive_skip {
-                            self.dom.nodes.get_mut(&child).unwrap().state.parent_input =
-                                new_output.clone();
-                            self.stats.input_skips += 1;
-                        } else {
-                            self.dom.mark(child, Dirty::InputChanged);
-                        }
-                    }
-                    if let Some(next) = self.dom.next_sibling(id) {
-                        let recursive_skip = self.kind == EngineKind::RecursiveTri
-                            && self.dom.nodes.get(&next).is_some_and(|node| {
-                                node.state.dirty == Dirty::Clean
-                                    && requirements_accept(&node.state.require_sibling, &new_output)
-                            });
-                        if recursive_skip {
-                            self.dom.nodes.get_mut(&next).unwrap().state.sibling_input = new_output;
-                            self.stats.input_skips += 1;
-                        } else {
-                            self.dom.mark(next, Dirty::InputChanged);
-                        }
-                    }
+                    self.propagate_output_change(id, new_output);
                 }
             }
         }
@@ -613,7 +618,45 @@ impl Engine {
         self.dom.nodes.get_mut(&id).unwrap().state.subtree_dirty = false;
     }
 
+    fn propagate_output_change(&mut self, id: NodeId, new_output: Vec<bool>) {
+        let children = self.dom.nodes[&id].children.clone();
+        for child in children {
+            let recursive_skip = self.kind == EngineKind::RecursiveTri
+                && self.dom.nodes.get(&child).is_some_and(|node| {
+                    node.state.dirty == Dirty::Clean
+                        && requirements_accept(&node.state.require_parent, &new_output)
+                });
+            if recursive_skip {
+                self.dom.nodes.get_mut(&child).unwrap().state.parent_input = new_output.clone();
+                self.stats.input_skips += 1;
+            } else {
+                self.dom.mark(child, Dirty::InputChanged);
+            }
+        }
+        if let Some(next) = self.dom.next_sibling(id) {
+            let recursive_skip = self.kind == EngineKind::RecursiveTri
+                && self.dom.nodes.get(&next).is_some_and(|node| {
+                    node.state.dirty == Dirty::Clean
+                        && requirements_accept(&node.state.require_sibling, &new_output)
+                });
+            if recursive_skip {
+                self.dom.nodes.get_mut(&next).unwrap().state.sibling_input = new_output;
+                self.stats.input_skips += 1;
+            } else {
+                self.dom.mark(next, Dirty::InputChanged);
+            }
+        }
+    }
+
     fn evaluate(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
+        if self.kind == EngineKind::Quad {
+            self.evaluate_quad(id, parent, sibling)
+        } else {
+            self.evaluate_bits(id, parent, sibling)
+        }
+    }
+
+    fn evaluate_bits(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
         let mut output = vec![false; self.program.state_count];
         let mut matches = vec![false; self.program.selectors.len()];
         let mut require_parent = vec![Requirement::Unused; self.program.state_count];
@@ -657,7 +700,113 @@ impl Engine {
             }
         }
         Evaluation {
+            quad_output: output
+                .iter()
+                .map(|bit| {
+                    if *bit {
+                        QuadValue::One
+                    } else {
+                        QuadValue::Zero
+                    }
+                })
+                .collect(),
             output,
+            matches,
+            require_parent,
+            require_sibling,
+        }
+    }
+
+    /// Evaluate the selector program as a compositional function. The two
+    /// passes from the original quad design are explicit here: local and
+    /// predecessor transitions are formed first, then descendant propagation
+    /// is composed without overwriting those transition results.
+    fn evaluate_quad(&self, id: NodeId, parent: &[bool], sibling: &[bool]) -> Evaluation {
+        let mut output = vec![false; self.program.state_count];
+        let mut quad_output = vec![QuadValue::Zero; self.program.state_count];
+        let mut matches = vec![false; self.program.selectors.len()];
+        let mut require_parent = vec![Requirement::Unused; self.program.state_count];
+        let mut require_sibling = vec![Requirement::Unused; self.program.state_count];
+
+        for (selector_index, selector) in self.program.selectors.iter().enumerate() {
+            for part in 0..selector.compounds.len() {
+                let state = selector.state(part).0;
+                let local_match = self.matches_compound(id, &selector.compounds[part]);
+
+                // Non-propagate transition pass.
+                let raw = if part == 0 {
+                    if local_match {
+                        QuadValue::One
+                    } else {
+                        QuadValue::Zero
+                    }
+                } else if !local_match {
+                    QuadValue::Zero
+                } else {
+                    let previous = selector.state(part - 1).0;
+                    match selector.combinators[part - 1] {
+                        Combinator::Descendant | Combinator::Child => {
+                            QuadValue::FromParent(previous)
+                        }
+                        Combinator::AdjacentSibling => QuadValue::FromSibling(previous),
+                    }
+                };
+                let raw_value = materialize_quad_value(raw, parent, sibling);
+
+                // Propagate pass. Specialize the OR branch using the current
+                // input, and record only the branch decision as a dependency.
+                let propagate = selector
+                    .combinators
+                    .get(part)
+                    .is_some_and(|combinator| *combinator == Combinator::Descendant);
+                let mut abstract_output = if propagate {
+                    if raw_value {
+                        record_quad_requirement(
+                            raw,
+                            parent,
+                            sibling,
+                            &mut require_parent,
+                            &mut require_sibling,
+                        );
+                        raw
+                    } else {
+                        record_quad_requirement(
+                            raw,
+                            parent,
+                            sibling,
+                            &mut require_parent,
+                            &mut require_sibling,
+                        );
+                        QuadValue::FromParent(state)
+                    }
+                } else {
+                    raw
+                };
+
+                // Accept states must be concrete because they are observable
+                // CSS match results, not inputs to a later transition.
+                if part + 1 == selector.compounds.len() {
+                    record_quad_requirement(
+                        raw,
+                        parent,
+                        sibling,
+                        &mut require_parent,
+                        &mut require_sibling,
+                    );
+                    matches[selector_index] = raw_value;
+                    abstract_output = if raw_value {
+                        QuadValue::One
+                    } else {
+                        QuadValue::Zero
+                    };
+                }
+                output[state] = materialize_quad_value(abstract_output, parent, sibling);
+                quad_output[state] = abstract_output;
+            }
+        }
+        Evaluation {
+            output,
+            quad_output,
             matches,
             require_parent,
             require_sibling,
@@ -759,9 +908,45 @@ impl Engine {
 
 struct Evaluation {
     output: Vec<bool>,
+    quad_output: Vec<QuadValue>,
     matches: Vec<bool>,
     require_parent: Vec<Requirement>,
     require_sibling: Vec<Requirement>,
+}
+
+fn materialize_quad(values: &[QuadValue], parent: &[bool], sibling: &[bool]) -> Vec<bool> {
+    values
+        .iter()
+        .copied()
+        .map(|value| materialize_quad_value(value, parent, sibling))
+        .collect()
+}
+
+fn materialize_quad_value(value: QuadValue, parent: &[bool], sibling: &[bool]) -> bool {
+    match value {
+        QuadValue::Zero => false,
+        QuadValue::One => true,
+        QuadValue::FromParent(index) => parent[index],
+        QuadValue::FromSibling(index) => sibling[index],
+    }
+}
+
+fn record_quad_requirement(
+    value: QuadValue,
+    parent: &[bool],
+    sibling: &[bool],
+    require_parent: &mut [Requirement],
+    require_sibling: &mut [Requirement],
+) {
+    match value {
+        QuadValue::FromParent(index) => {
+            require_parent[index] = Requirement::from_bit(parent[index]);
+        }
+        QuadValue::FromSibling(index) => {
+            require_sibling[index] = Requirement::from_bit(sibling[index]);
+        }
+        QuadValue::Zero | QuadValue::One => {}
+    }
 }
 
 fn requirements_accept(requirements: &[Requirement], input: &[bool]) -> bool {
