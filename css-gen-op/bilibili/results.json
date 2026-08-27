@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "site": "bilibili",
+  "parity": true,
+  "matches": {
+    ".bpx-player-cmd-dm-wrap .bpx-player-cmd-dm-inside": [
+      6873,
+      13628,
+      18546
+    ],
+    ".bpx-player-container[data-ctrl-hidden=\"false\"] .bpx-player-control-bottom": [
+      7001,
+      13756
+    ],
+    ".bpx-player-container[data-ctrl-hidden=\"false\"] .bpx-player-control-mask": [
+      6992,
+      13747
+    ],
+    ".bpx-player-container[data-ctrl-hidden=\"false\"] .bpx-player-top-wrap": [
+      6898,
+      13653
+    ],
+    ".bpx-player-video-wrap video": [
+      7058,
+      13813,
+      18731
+    ],
+    ".bpx-player-visual-wrap .bpx-player-visual-pixel": [
+      6854,
+      13609,
+      18527
+    ]
+  },
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 6747,
+      "input_changes": 154,
+      "input_skips": 0,
+      "visited_nodes": 14113,
+      "cycles": 1887788500
+    },
+    "naive": {
+      "recomputed_nodes": 6747,
+      "input_changes": 154,
+      "input_skips": 0,
+      "visited_nodes": 14113,
+      "cycles": 2470860500
+    },
+    "rec_tri": {
+      "recomputed_nodes": 6745,
+      "input_changes": 152,
+      "input_skips": 2,
+      "visited_nodes": 14111,
+      "cycles": 1816254160
+    },
+    "tri": {
+      "recomputed_nodes": 6745,
+      "input_changes": 154,
+      "input_skips": 2,
+      "visited_nodes": 14113,
+      "cycles": 1841758040
+    }
+  }
+}

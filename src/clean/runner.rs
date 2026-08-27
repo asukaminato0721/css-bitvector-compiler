@@ -96,7 +96,7 @@ pub fn report_selectors(label: &str, report: &SelectorReport) {
     }
 }
 
-pub fn binary_main(kind: EngineKind, dot_name: Option<&str>) -> Result<(), Box<dyn Error>> {
+pub fn binary_main(kind: EngineKind) -> Result<(), Box<dyn Error>> {
     let input = SiteInput::from_environment()?;
     let log_frame_stats = env_flag("TRI_LOG_MATCH_DELTAS");
     let (program, result) = if log_frame_stats {
@@ -105,12 +105,6 @@ pub fn binary_main(kind: EngineKind, dot_name: Option<&str>) -> Result<(), Box<d
         run_site(kind, &input)?
     };
     report_selectors(kind.label(), &program.report);
-    if let Some(dot_name) = dot_name.filter(|_| !env_flag("CSS_BV_NO_DOT")) {
-        fs::write(
-            format!("css-gen-op/{}/{dot_name}", input.name),
-            program.to_dot(),
-        )?;
-    }
     if log_frame_stats {
         for frame in &result.frames {
             println!(

@@ -950,6 +950,11 @@ dependencies = [
 [[package]]
 name = "xtask"
 version = "0.0.0"
+dependencies = [
+ "css-bitvector-compiler",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "zerocopy"

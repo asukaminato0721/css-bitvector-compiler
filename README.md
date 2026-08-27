@@ -40,9 +40,10 @@ cargo xtask report
 ```
 
 `cargo xtask run` compares the oracle, bit, tri, and recursive-tri outputs in
-memory. Pass `--all` to check every captured site. Existing logs are never
-overwritten unless `--update` is supplied explicitly; run `cargo xtask report`
-after an update to regenerate `misscnt.md` and `misscnt.html`.
+memory. Pass `--all` to check every captured site. With `--update`, it writes
+one consolidated `results.json` per site; no per-engine logs or DOT copies are
+created. Run `cargo xtask report` afterward to regenerate the single
+`misscnt.html` summary.
 
 Run repeated median-cycle benchmarks. Parsing, trace decoding, logging, DOT
 generation, and report writing are outside the measured region.
@@ -58,7 +59,6 @@ cargo run --bin main -- path/to/input.css
 ```
 
 Set `TRI_LOG_MATCH_DELTAS=1` for per-frame miss and match-change diagnostics.
-Set `CSS_BV_NO_DOT=1` to suppress DOT output during ad-hoc validation.
 
 ## Validation
 

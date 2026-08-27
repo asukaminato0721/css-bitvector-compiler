@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "site": "a_to_b",
+  "parity": true,
+  "matches": {},
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 2,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2,
+      "cycles": 7020
+    },
+    "naive": {
+      "recomputed_nodes": 2,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2,
+      "cycles": 41920
+    },
+    "rec_tri": {
+      "recomputed_nodes": 2,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2,
+      "cycles": 3560
+    },
+    "tri": {
+      "recomputed_nodes": 2,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 2,
+      "cycles": 3740
+    }
+  }
+}

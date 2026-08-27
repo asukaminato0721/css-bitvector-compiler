@@ -8,7 +8,6 @@ use css_bitvector_compiler::{
 };
 use std::{
     collections::{HashMap, HashSet},
-    fs,
     sync::OnceLock,
 };
 static mut MISS_CNT: usize = 0;
@@ -1182,13 +1181,6 @@ fn main() {
     unsafe {
         STATE = s;
     }
-    let _ = fs::write(
-        format!(
-            "css-gen-op/{0}/dot_quad.dot",
-            std::env::var("WEBSITE_NAME").unwrap(),
-        ),
-        nfa.to_dot(&dom.selector_manager),
-    );
     // dbg!(&nfa);
     for f in parse_trace() {
         apply_frame(&mut dom, &f, &nfa);

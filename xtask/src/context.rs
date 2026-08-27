@@ -1,7 +1,7 @@
 use std::{
     error::Error,
     path::{Path, PathBuf},
-    process::{Command, Output},
+    process::Command,
 };
 
 pub struct Workspace {
@@ -35,21 +35,6 @@ impl Workspace {
             Ok(())
         } else {
             Err(format!("{label} exited with {status}").into())
-        }
-    }
-
-    pub fn capture(&self, label: &str, command: &mut Command) -> Result<Output, Box<dyn Error>> {
-        let output = command.output()?;
-        if output.status.success() {
-            Ok(output)
-        } else {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            Err(format!(
-                "{label} exited with {}\nstdout:\n{}\nstderr:\n{}",
-                output.status, stdout, stderr
-            )
-            .into())
         }
     }
 }

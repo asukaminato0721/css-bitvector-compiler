@@ -1,0 +1,413 @@
+{
+  "schema_version": 2,
+  "site": "bing",
+  "parity": true,
+  "matches": {
+    "#idCont .sw_mktsw": [
+      520
+    ],
+    "#idCont .sw_mktsw *": [
+      523,
+      528
+    ],
+    ".bottom_row .scroll_cont": [
+      632
+    ],
+    ".bottom_row .scroll_cont.show_none": [
+      632
+    ],
+    ".cdxConv_slsboxl .cdxCopilotIconBg": [
+      622
+    ],
+    ".cdxConv_slsboxl .cdxCopilotIconBg .cdxCopilotIcon": [
+      624
+    ],
+    ".mc_caro .musCard": [
+      640
+    ],
+    ".mc_caro .musCard .headline": [
+      694
+    ],
+    ".mc_caro .musCard .headline *": [
+      696,
+      698,
+      702,
+      704,
+      711,
+      714,
+      716,
+      719,
+      720,
+      722,
+      733,
+      736,
+      747
+    ],
+    ".mc_caro .musCard .headline .icon": [
+      702
+    ],
+    ".mc_caro .musCard .headline .icon_text .text": [
+      716
+    ],
+    ".mc_caro .musCard .headline .leftNav": [
+      722
+    ],
+    ".mc_caro .musCard .headline .nav": [
+      720
+    ],
+    ".mc_caro .musCard .headline .nav .leftNav": [
+      722
+    ],
+    ".mc_caro .musCard .headline .nav .leftNav .nav-arrow": [
+      733
+    ],
+    ".mc_caro .musCard .headline .nav .rightNav": [
+      736
+    ],
+    ".mc_caro .musCard .headline .nav .rightNav .nav-arrow": [
+      747
+    ],
+    ".mc_caro .musCard .headline .nav > *": [
+      722,
+      736
+    ],
+    ".mc_caro .musCard .headline .nav a": [
+      722,
+      736
+    ],
+    ".mc_caro .musCard .headline .nav a .nav-arrow": [
+      733,
+      747
+    ],
+    ".mc_caro .musCard .headline .nav a.disabled": [
+      722,
+      736
+    ],
+    ".mc_caro .musCard .headline .nav a.disabled .nav-arrow": [
+      733,
+      747
+    ],
+    ".mc_caro .musCard .headline .nav div": [
+      733,
+      747
+    ],
+    ".mc_caro .musCard .headline .rightNav": [
+      736
+    ],
+    ".mc_caro .musCard .headline > *": [
+      696,
+      720
+    ],
+    ".mc_caro .musCard .headline svg": [
+      704
+    ],
+    ".mc_caro .musCard .musCardCont": [
+      643
+    ],
+    ".mc_caro .musCard .musCardCont .bingwpapptext": [
+      645
+    ],
+    ".mc_caro .musCard .musCardCont .copyright": [
+      668
+    ],
+    ".mc_caro .musCard .musCardCont .copyright-container": [
+      666
+    ],
+    ".mc_caro .musCard .musCardCont .hr": [
+      656
+    ],
+    ".mc_caro .musCard .musCardCont .share": [
+      672
+    ],
+    ".mc_caro .musCard .musCardCont .share .downloadLink": [
+      675
+    ],
+    ".mc_caro .musCard .musCardCont .share .downloadLink .downloadIcon": [
+      684
+    ],
+    ".mc_caro .musCard .musCardCont .share li": [
+      674
+    ],
+    ".mc_caro .musCard .musCardCont .share li > *": [
+      675
+    ],
+    ".mc_caro .musCard .musCardCont .title": [
+      659
+    ],
+    ".mc_caro .musCard .musCardCont a": [
+      647,
+      659,
+      675
+    ],
+    ".scopes .customIcon": [
+      163
+    ],
+    ".scopes .customIcon .icon": [
+      169
+    ],
+    ".scopes .customIcon .icon .rms_img": [
+      172
+    ],
+    ".scopes .overflow_menu .overflow_item.try_exp": [
+      250,
+      276,
+      289
+    ],
+    ".scopes .scope": [
+      158,
+      184,
+      197,
+      210,
+      223,
+      236
+    ],
+    ".scopes .scope .overflow_menu": [
+      247,
+      347
+    ],
+    ".scopes .scope .overflow_menu .overflow_container": [
+      343
+    ],
+    ".scopes .scope .overflow_menu .overflow_item": [
+      250,
+      263,
+      276,
+      289,
+      302,
+      315,
+      328,
+      350,
+      367,
+      384,
+      401,
+      418,
+      435,
+      452,
+      469,
+      486,
+      503
+    ],
+    ".scopes .scope .overflow_menu .overflow_item a": [
+      256,
+      269,
+      282,
+      295,
+      308,
+      321,
+      336,
+      356,
+      373,
+      390,
+      407,
+      424,
+      441,
+      458,
+      475,
+      492,
+      509
+    ],
+    ".scopes .scope .overflow_menu .overflow_item.divider": [
+      302
+    ],
+    ".scopes .scope .overflow_menu .overflow_item.has_sub a": [
+      336,
+      356,
+      373,
+      390,
+      407,
+      424,
+      441,
+      458,
+      475,
+      492
+    ],
+    ".scopes .scope .overflow_menu .submenu": [
+      345
+    ],
+    ".scopes .scope .overflow_menu .submenu .overflow_item .icon": [
+      362,
+      379,
+      396,
+      413,
+      430,
+      447,
+      464,
+      481,
+      498
+    ],
+    ".scopes .scope .overflow_menu .submenu .overflow_item .text": [
+      364,
+      381,
+      398,
+      415,
+      432,
+      449,
+      466,
+      483,
+      500
+    ],
+    ".scopes .scope a": [
+      163,
+      189,
+      202,
+      215,
+      228,
+      256,
+      269,
+      282,
+      295,
+      308,
+      321,
+      336,
+      356,
+      373,
+      390,
+      407,
+      424,
+      441,
+      458,
+      475,
+      492,
+      509
+    ],
+    ".scopes .scope.dots": [
+      236
+    ],
+    ".scopes .scope.dots .dots_tab_selection": [
+      242
+    ],
+    ".scopes .scope.try_exp": [
+      197,
+      210,
+      223
+    ],
+    ".vs_cont .mc_caro": [
+      638
+    ],
+    ".vs_cont .mc_caro.five_col": [
+      638
+    ],
+    ".vs_cont .module": [
+      765
+    ],
+    ".vs_cont .moduleCont": [
+      763
+    ],
+    ".vs_cont .moduleCont .module": [
+      765
+    ],
+    ".vs_cont .moduleCont .module .vsmodule": [
+      767
+    ],
+    ".vs_cont .moduleCont .module .vsmodule .vs_row": [
+      775
+    ],
+    ".vs_cont .moduleCont .module .vsmodule .vs_row .vs_rowitem": [
+      777,
+      788,
+      833
+    ],
+    ".vs_cont .moduleCont .module .vsmodule .vs_title": [
+      770
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd": [
+      773
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem": [
+      777,
+      788,
+      833
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs": [
+      788
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .learn_more": [
+      803
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_controls": [
+      809
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_controls .item": [
+      812
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_controls .item a": [
+      814
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_credit": [
+      794
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_desc": [
+      797
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_bs .vs_bs_title": [
+      790
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_img": [
+      777
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_img .img": [
+      782
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_mod": [
+      833
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd .vs_rowitem.vs_iotd_mod .map": [
+      835
+    ],
+    ".vs_cont .moduleCont .module .vsmodule.vert_iotd .vs_iotd > *": [
+      775
+    ],
+    ".vs_cont .vert_make_default": [
+      842
+    ],
+    ".vs_cont .vert_make_default .button": [
+      849
+    ],
+    ".vs_cont .vert_make_default .text": [
+      852
+    ],
+    ".vs_cont .vert_make_default .text .desc": [
+      857
+    ],
+    ".vs_cont .vert_make_default .text .title": [
+      854
+    ],
+    ".vs_cont .vert_make_default > *": [
+      845,
+      852
+    ],
+    ".vs_cont .vs": [
+      750
+    ]
+  },
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 313,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 353,
+      "cycles": 56455780
+    },
+    "naive": {
+      "recomputed_nodes": 313,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 353,
+      "cycles": 68103940
+    },
+    "rec_tri": {
+      "recomputed_nodes": 313,
+      "input_changes": 0,
+      "input_skips": 2,
+      "visited_nodes": 353,
+      "cycles": 57777980
+    },
+    "tri": {
+      "recomputed_nodes": 313,
+      "input_changes": 0,
+      "input_skips": 0,
+      "visited_nodes": 353,
+      "cycles": 59055540
+    }
+  }
+}

@@ -1,39 +1,30 @@
 use crate::context::{Workspace, has_flag, value_after};
+use css_bitvector_compiler::clean::{Engine, EngineKind, SiteInput, load_site};
+use serde::{Deserialize, Serialize};
 use std::{
+    collections::BTreeMap,
     error::Error,
     fs,
     path::{Path, PathBuf},
-    process::Command,
 };
 
-struct EngineSpec {
-    binary: &'static str,
-    log_name: &'static str,
-    frame_stats: bool,
+#[derive(Debug, Serialize, Deserialize)]
+pub(crate) struct SiteResult {
+    pub schema_version: u32,
+    pub site: String,
+    pub parity: bool,
+    pub matches: BTreeMap<String, Vec<u64>>,
+    pub engines: BTreeMap<String, EngineResult>,
 }
 
-const ENGINES: &[EngineSpec] = &[
-    EngineSpec {
-        binary: "naive",
-        log_name: "tmp.txt",
-        frame_stats: false,
-    },
-    EngineSpec {
-        binary: "bit",
-        log_name: "bit_tmp.txt",
-        frame_stats: false,
-    },
-    EngineSpec {
-        binary: "tri",
-        log_name: "tri_tmp.txt",
-        frame_stats: true,
-    },
-    EngineSpec {
-        binary: "rec_tri",
-        log_name: "rec_tri_tmp.txt",
-        frame_stats: true,
-    },
-];
+#[derive(Debug, Serialize, Deserialize)]
+pub(crate) struct EngineResult {
+    pub recomputed_nodes: usize,
+    pub input_changes: usize,
+    pub input_skips: usize,
+    pub visited_nodes: usize,
+    pub cycles: u64,
+}
 
 pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dyn Error>> {
     let update = has_flag(arguments, "--update");
@@ -47,17 +38,25 @@ pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dy
         ]
     };
     for site in &sites {
-        run_site(workspace, site, update)?;
+        let result = evaluate_site(site)?;
+        println!("==> {}: naive == bit == tri == rec_tri", result.site);
+        if update {
+            write_result(workspace.root(), &result)?;
+        }
     }
     println!(
         "checked {} site(s){}",
         sites.len(),
-        if update { " and updated logs" } else { "" }
+        if update {
+            " and updated one results.json per site"
+        } else {
+            ""
+        }
     );
     Ok(())
 }
 
-fn discover_sites(root: &Path) -> Result<Vec<String>, Box<dyn Error>> {
+pub(crate) fn discover_sites(root: &Path) -> Result<Vec<String>, Box<dyn Error>> {
     let mut sites = Vec::new();
     for entry in fs::read_dir(root.join("css-gen-op"))? {
         let entry = entry?;
@@ -79,106 +78,51 @@ fn discover_sites(root: &Path) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(sites)
 }
 
-fn run_site(workspace: &Workspace, site: &str, update: bool) -> Result<(), Box<dyn Error>> {
-    println!("==> compare {site}");
-    let mut outputs = Vec::new();
-    for engine in ENGINES {
-        let output = run_engine(workspace, site, engine)?;
-        let matches = extract_matches(&output)?;
-        if update {
-            let path = workspace
-                .root()
-                .join("css-gen-op")
-                .join(site)
-                .join(engine.log_name);
-            atomic_write(&path, output.as_bytes())?;
-        }
-        outputs.push((engine.binary, matches));
-    }
-    let baseline = &outputs[0].1;
-    for (engine, matches) in &outputs[1..] {
-        if matches != baseline {
-            return Err(format!(
-                "{site}: {engine} differs from naive\n{}",
-                first_difference(baseline, matches)
-            )
-            .into());
-        }
-    }
-    println!("    OK: naive == bit == tri == rec_tri");
-    Ok(())
-}
-
-fn run_engine(
-    workspace: &Workspace,
-    site: &str,
-    engine: &EngineSpec,
-) -> Result<String, Box<dyn Error>> {
-    let mut command = workspace.cargo();
-    command
-        .args([
-            "run",
-            "--quiet",
-            "--release",
-            "--package",
-            "css-bitvector-compiler",
-            "--bin",
-            engine.binary,
-        ])
-        .env("WEBSITE_NAME", site)
-        .env("CSS_BV_NO_DOT", "1");
-    if engine.frame_stats {
-        command.env("TRI_LOG_MATCH_DELTAS", "1");
-    }
-    capture_combined(workspace, engine.binary, &mut command)
-}
-
-fn capture_combined(
-    workspace: &Workspace,
-    label: &str,
-    command: &mut Command,
-) -> Result<String, Box<dyn Error>> {
-    let output = workspace.capture(label, command)?;
-    let mut combined = String::from_utf8(output.stdout)?;
-    combined.push_str(&String::from_utf8(output.stderr)?);
-    Ok(combined)
-}
-
-fn extract_matches(output: &str) -> Result<Vec<String>, Box<dyn Error>> {
-    let mut collecting = false;
-    let mut saw_begin = false;
-    let mut matches = Vec::new();
-    for line in output.lines() {
-        match line {
-            "BEGIN" => {
-                collecting = true;
-                saw_begin = true;
+fn evaluate_site(site: &str) -> Result<SiteResult, Box<dyn Error>> {
+    let (program, trace) = load_site(&SiteInput::named(site))?;
+    let mut engines = BTreeMap::new();
+    let mut baseline = None;
+    for (name, kind) in [
+        ("naive", EngineKind::Naive),
+        ("bit", EngineKind::Bit),
+        ("tri", EngineKind::Tri),
+        ("rec_tri", EngineKind::RecursiveTri),
+    ] {
+        let result = Engine::new(kind, program.clone()).run(&trace)?;
+        if let Some(expected) = &baseline {
+            if result.matches != *expected {
+                return Err(format!("{site}: {name} differs from naive").into());
             }
-            "END" => collecting = false,
-            _ if collecting => matches.push(line.to_string()),
-            _ => {}
+        } else {
+            baseline = Some(result.matches);
         }
+        engines.insert(
+            name.to_string(),
+            EngineResult {
+                recomputed_nodes: result.stats.recomputed_nodes,
+                input_changes: result.stats.input_changes,
+                input_skips: result.stats.input_skips,
+                visited_nodes: result.stats.visited_nodes,
+                cycles: result.stats.cycles,
+            },
+        );
     }
-    if !saw_begin {
-        return Err("engine output does not contain BEGIN/END markers".into());
-    }
-    matches.sort();
-    Ok(matches)
+    Ok(SiteResult {
+        schema_version: 2,
+        site: site.to_string(),
+        parity: true,
+        matches: baseline.unwrap_or_default(),
+        engines,
+    })
 }
 
-fn first_difference(expected: &[String], actual: &[String]) -> String {
-    let length = expected.len().max(actual.len());
-    for index in 0..length {
-        if expected.get(index) != actual.get(index) {
-            return format!(
-                "first difference at line {}: naive={:?}, actual={:?}",
-                index + 1,
-                expected.get(index),
-                actual.get(index)
-            );
-        }
-    }
-    "outputs have different metadata".into()
+fn write_result(root: &Path, result: &SiteResult) -> Result<(), Box<dyn Error>> {
+    let path = root
+        .join("css-gen-op")
+        .join(&result.site)
+        .join("results.json");
+    let contents = serde_json::to_vec_pretty(result)?;
+    atomic_write(&path, &contents)
 }
 
 fn atomic_write(path: &Path, contents: &[u8]) -> Result<(), Box<dyn Error>> {
@@ -196,11 +140,30 @@ fn temporary_path(path: &Path) -> PathBuf {
 
 #[cfg(test)]
 mod tests {
-    use super::extract_matches;
+    use super::{EngineResult, SiteResult};
+    use std::collections::BTreeMap;
 
     #[test]
-    fn extracts_and_sorts_match_section() {
-        let matches = extract_matches("noise\nBEGIN\nb\na\nEND\nmore").unwrap();
-        assert_eq!(matches, ["a", "b"]);
+    fn result_schema_round_trips() {
+        let result = SiteResult {
+            schema_version: 2,
+            site: "testcase".into(),
+            parity: true,
+            matches: BTreeMap::new(),
+            engines: BTreeMap::from([(
+                "bit".into(),
+                EngineResult {
+                    recomputed_nodes: 1,
+                    input_changes: 0,
+                    input_skips: 0,
+                    visited_nodes: 1,
+                    cycles: 10,
+                },
+            )]),
+        };
+        let encoded = serde_json::to_string(&result).unwrap();
+        let decoded: SiteResult = serde_json::from_str(&encoded).unwrap();
+        assert_eq!(decoded.site, "testcase");
+        assert!(decoded.parity);
     }
 }

@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "site": "testcase",
+  "parity": true,
+  "matches": {
+    "[class=\"aa\"]": [
+      1
+    ],
+    "div p": [
+      2
+    ]
+  },
+  "engines": {
+    "bit": {
+      "recomputed_nodes": 9,
+      "input_changes": 3,
+      "input_skips": 0,
+      "visited_nodes": 11,
+      "cycles": 16060
+    },
+    "naive": {
+      "recomputed_nodes": 9,
+      "input_changes": 3,
+      "input_skips": 0,
+      "visited_nodes": 11,
+      "cycles": 38440
+    },
+    "rec_tri": {
+      "recomputed_nodes": 6,
+      "input_changes": 0,
+      "input_skips": 3,
+      "visited_nodes": 8,
+      "cycles": 12800
+    },
+    "tri": {
+      "recomputed_nodes": 6,
+      "input_changes": 3,
+      "input_skips": 3,
+      "visited_nodes": 11,
+      "cycles": 13280
+    }
+  }
+}
