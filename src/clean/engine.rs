@@ -309,24 +309,13 @@ pub struct RunStats {
     pub input_changes: usize,
     pub input_skips: usize,
     pub visited_nodes: usize,
-    pub match_changes: usize,
     pub cycles: u64,
-}
-
-#[derive(Debug, Clone)]
-pub struct FrameStats {
-    pub frame_id: usize,
-    pub command: &'static str,
-    pub miss_delta: usize,
-    pub node_match_changes: usize,
-    pub total_misses: usize,
 }
 
 #[derive(Debug, Clone)]
 pub struct RunResult {
     pub matches: BTreeMap<String, Vec<u64>>,
     pub stats: RunStats,
-    pub frames: Vec<FrameStats>,
 }
 
 #[derive(Debug, Clone)]
@@ -335,8 +324,6 @@ pub struct Engine {
     program: CompiledProgram,
     dom: Dom,
     stats: RunStats,
-    frame_stats: Vec<FrameStats>,
-    track_frame_stats: bool,
 }
 
 impl Engine {
@@ -346,42 +333,19 @@ impl Engine {
             program,
             dom: Dom::default(),
             stats: RunStats::default(),
-            frame_stats: Vec::new(),
-            track_frame_stats: false,
         }
-    }
-
-    pub fn with_frame_stats(mut self, enabled: bool) -> Self {
-        self.track_frame_stats = enabled;
-        self
     }
 
     pub fn run(mut self, trace: &Trace) -> Result<RunResult, RunError> {
         let start = rdtsc();
-        let mut previous = BTreeMap::new();
         for frame in &trace.frames {
-            let before = self.stats.recomputed_nodes;
             self.apply(frame)
                 .map_err(|error| RunError::at(frame.frame_id, error.message))?;
-            if self.track_frame_stats {
-                let current = self.collect_matches();
-                let changed = count_node_match_changes(&previous, &current);
-                self.stats.match_changes += changed;
-                self.frame_stats.push(FrameStats {
-                    frame_id: frame.frame_id,
-                    command: frame.command.name(),
-                    miss_delta: self.stats.recomputed_nodes - before,
-                    node_match_changes: changed,
-                    total_misses: self.stats.recomputed_nodes,
-                });
-                previous = current;
-            }
         }
         self.stats.cycles = rdtsc().wrapping_sub(start);
         Ok(RunResult {
             matches: self.collect_matches(),
             stats: self.stats,
-            frames: self.frame_stats,
         })
     }
 
@@ -840,33 +804,4 @@ fn scalar_attribute(value: &serde_json::Value) -> Result<String, RunError> {
             "attribute values must be JSON scalars".into(),
         )),
     }
-}
-
-fn count_node_match_changes(
-    previous: &BTreeMap<String, Vec<u64>>,
-    current: &BTreeMap<String, Vec<u64>>,
-) -> usize {
-    let previous_by_node = matches_by_node(previous);
-    let current_by_node = matches_by_node(current);
-    previous_by_node
-        .keys()
-        .chain(current_by_node.keys())
-        .copied()
-        .collect::<HashSet<_>>()
-        .into_iter()
-        .filter(|id| previous_by_node.get(id) != current_by_node.get(id))
-        .count()
-}
-
-fn matches_by_node(matches: &BTreeMap<String, Vec<u64>>) -> HashMap<u64, Vec<&str>> {
-    let mut result: HashMap<u64, Vec<&str>> = HashMap::new();
-    for (selector, ids) in matches {
-        for id in ids {
-            result.entry(*id).or_default().push(selector);
-        }
-    }
-    for selectors in result.values_mut() {
-        selectors.sort_unstable();
-    }
-    result
 }

@@ -10,7 +10,6 @@ several cache policies over one shared DOM implementation.
 - `bit`: cached output bitvectors with dirty-subtree traversal.
 - `tri`: bitvectors plus zero/one/unused input requirements.
 - `rec_tri`: the recursive-tri experiment, using the same typed runtime API.
-- `quad`: retained as an experimental legacy target and excluded from defaults.
 
 All active engines support descendant (` `), child (`>`), adjacent sibling
 (`+`), equality attributes, `:hover`, `:focus`, `:focus-within`, `:first-child`,
@@ -20,15 +19,6 @@ reported consistently as unsupported.
 
 ## Running
 
-Run an engine against a checked-in site capture:
-
-```sh
-WEBSITE_NAME=google cargo run -r --bin bit
-WEBSITE_NAME=google cargo run -r --bin tri
-WEBSITE_NAME=google cargo run -r --bin rec_tri
-WEBSITE_NAME=google cargo run -r --bin naive
-```
-
 The repository ships a typed development driver through Cargo:
 
 ```sh
@@ -36,6 +26,7 @@ cargo xtask check
 cargo xtask corpus
 cargo xtask run --site google
 cargo xtask benchmark --site google
+cargo xtask stats --site google
 cargo xtask report
 ```
 
@@ -45,20 +36,19 @@ one consolidated `results.json` per site; no per-engine logs or DOT copies are
 created. Run `cargo xtask report` afterward to regenerate the single
 `misscnt.html` summary.
 
-Run repeated median-cycle benchmarks. Parsing, trace decoding, logging, DOT
-generation, and report writing are outside the measured region.
+Run repeated median-cycle benchmarks. Parsing, trace decoding, result
+serialization, and report writing are outside the measured region.
 
 ```sh
 cargo xtask benchmark --site google bit,tri,rec_tri
 ```
 
-Inspect selector coverage for a CSS file:
+Inspect selector coverage for a site or CSS file:
 
 ```sh
-cargo run --bin main -- path/to/input.css
+cargo xtask stats --site google
+cargo xtask stats --css path/to/input.css
 ```
-
-Set `TRI_LOG_MATCH_DELTAS=1` for per-frame miss and match-change diagnostics.
 
 ## Validation
 

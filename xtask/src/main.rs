@@ -4,6 +4,7 @@ mod context;
 mod corpus;
 mod report;
 mod run;
+mod stats;
 
 use context::Workspace;
 use std::{env, error::Error};
@@ -27,12 +28,13 @@ fn dispatch() -> Result<(), Box<dyn Error>> {
         "check" => check::execute(&workspace),
         "corpus" => corpus::execute(&workspace),
         "run" => run::execute(&workspace, &rest),
-        "benchmark" | "bench" => benchmark::execute(&workspace, &rest),
+        "benchmark" | "bench" => benchmark::execute(&rest),
+        "stats" => stats::execute(&workspace, &rest),
         "report" => report::execute(&workspace, &rest),
         "all" => {
             check::execute(&workspace)?;
             corpus::execute(&workspace)?;
-            benchmark::execute(&workspace, &["--site".into(), "testcase".into()])
+            benchmark::execute(&["--site".into(), "testcase".into()])
         }
         "help" | "--help" | "-h" => {
             print_help();
@@ -53,10 +55,12 @@ Usage:
   cargo xtask run --site <name> [--update]
   cargo xtask run --all [--update]
   cargo xtask benchmark --site <name> [engine,...]
+  cargo xtask stats --site <name>
+  cargo xtask stats --css <path>
   cargo xtask report [--base <directory>] [--output-dir <directory>]
   cargo xtask all
 
-`run` compares naive, bit, tri, and rec_tri in memory. It writes result logs
-only when --update is present. Quad remains an explicit experimental target."
+`run` compares naive, bit, tri, and rec_tri in memory. It writes consolidated
+results only when --update is present."
     );
 }

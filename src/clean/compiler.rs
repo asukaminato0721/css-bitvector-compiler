@@ -26,7 +26,6 @@ pub enum EngineKind {
     Bit,
     Tri,
     RecursiveTri,
-    ExperimentalQuad,
 }
 
 impl EngineKind {
@@ -36,7 +35,6 @@ impl EngineKind {
             Self::Bit => "bit",
             Self::Tri => "tri",
             Self::RecursiveTri => "rec_tri",
-            Self::ExperimentalQuad => "quad",
         }
     }
 

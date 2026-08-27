@@ -49,21 +49,6 @@ pub enum TraceCommand {
     Recalculate,
 }
 
-impl TraceCommand {
-    pub fn name(&self) -> &'static str {
-        match self {
-            Self::Init { .. } => "init",
-            Self::Add { .. } => "add",
-            Self::Remove { .. } => "remove",
-            Self::Replace { .. } => "replace",
-            Self::ReplaceValue { .. } => "replace_value",
-            Self::InsertValue { .. } => "insert_value",
-            Self::DeleteValue { .. } => "delete_value",
-            Self::Recalculate => "recalculate",
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct TraceFrame {
     pub frame_id: usize,
