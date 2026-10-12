@@ -2,6 +2,7 @@ import CssProofs.Requirements
 import CssProofs.Tri
 import CssProofs.Quad
 import CssProofs.Selectors
+import CssProofs.Incremental
 import Lean
 
 -- Reject proof gaps and extra axioms in every project declaration.

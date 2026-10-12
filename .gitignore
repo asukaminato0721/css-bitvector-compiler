@@ -20,3 +20,4 @@ css-gen-op/**/*.png
 /testcase_*.log
 /tmp
 /formal/.lake/
+/formal/rust/.lake/

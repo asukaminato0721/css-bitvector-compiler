@@ -265,6 +265,178 @@ fn checked_in_testcase_has_engine_parity() {
 }
 
 #[test]
+fn removing_old_move_reference_keeps_same_parent_destination() {
+    let program = compile_rule("main > .moved");
+    let trace = Trace {
+        frames: vec![
+            TraceFrame {
+                frame_id: 0,
+                command: TraceCommand::Init {
+                    node: node(
+                        1,
+                        "main",
+                        None,
+                        vec![
+                            node(2, "span", Some("moved"), vec![]),
+                            node(3, "span", None, vec![]),
+                        ],
+                    ),
+                },
+            },
+            TraceFrame {
+                frame_id: 1,
+                command: TraceCommand::Add {
+                    path: vec![2],
+                    node: node(2, "span", Some("moved"), vec![]),
+                },
+            },
+            TraceFrame {
+                frame_id: 2,
+                command: TraceCommand::Remove { path: vec![0] },
+            },
+        ],
+    };
+    for kind in [
+        EngineKind::Naive,
+        EngineKind::Bit,
+        EngineKind::Tri,
+        EngineKind::RecursiveTri,
+        EngineKind::Quad,
+    ] {
+        let result = Engine::new(kind, program.clone()).run(&trace).unwrap();
+        assert_eq!(
+            result.matches.get("main > .moved"),
+            Some(&vec![2]),
+            "{kind:?}"
+        );
+    }
+}
+
+#[test]
+fn moved_slots_do_not_count_as_css_siblings() {
+    let program = CompiledProgram::compile(
+        ".lead:first-child + .moved:nth-child(2) {} \
+         .moved:nth-of-type(2) {} .moved > .inner {}",
+    )
+    .unwrap();
+    // Move within one parent, in both directions. Check the intermediate frame,
+    // before the old trace slot is removed, against explicit CSS results.
+    for (children, insertion, obsolete) in [
+        (
+            vec![
+                node(
+                    2,
+                    "span",
+                    Some("moved"),
+                    vec![node(4, "b", Some("inner"), vec![])],
+                ),
+                node(3, "span", Some("lead"), vec![]),
+            ],
+            2,
+            0,
+        ),
+        (
+            vec![
+                node(3, "span", Some("lead"), vec![]),
+                node(
+                    2,
+                    "span",
+                    Some("moved"),
+                    vec![node(4, "b", Some("inner"), vec![])],
+                ),
+            ],
+            1,
+            2,
+        ),
+    ] {
+        let mut trace = Trace {
+            frames: vec![
+                TraceFrame {
+                    frame_id: 0,
+                    command: TraceCommand::Init {
+                        node: node(1, "main", None, children),
+                    },
+                },
+                TraceFrame {
+                    frame_id: 1,
+                    command: TraceCommand::Add {
+                        path: vec![insertion],
+                        node: node(
+                            2,
+                            "span",
+                            Some("moved"),
+                            vec![node(4, "b", Some("inner"), vec![])],
+                        ),
+                    },
+                },
+            ],
+        };
+        for after_removal in [false, true] {
+            if after_removal {
+                trace.frames.push(TraceFrame {
+                    frame_id: 2,
+                    command: TraceCommand::Remove {
+                        path: vec![obsolete],
+                    },
+                });
+            }
+            for kind in [
+                EngineKind::Naive,
+                EngineKind::Bit,
+                EngineKind::Tri,
+                EngineKind::RecursiveTri,
+                EngineKind::Quad,
+            ] {
+                let result = Engine::new(kind, program.clone()).run(&trace).unwrap();
+                assert_eq!(result.matches.len(), 3, "{kind:?}, removed={after_removal}");
+                assert_eq!(
+                    result.matches[".lead:first-child + .moved:nth-child(2)"],
+                    [2]
+                );
+                assert_eq!(result.matches[".moved:nth-of-type(2)"], [2]);
+                assert_eq!(result.matches[".moved > .inner"], [4]);
+            }
+        }
+    }
+}
+
+#[test]
+fn invalid_node_ownership_is_rejected() {
+    let program = compile_rule("*");
+    let duplicate = Trace {
+        frames: vec![TraceFrame {
+            frame_id: 0,
+            command: TraceCommand::Init {
+                node: node(1, "main", None, vec![node(1, "span", None, vec![])]),
+            },
+        }],
+    };
+    assert!(
+        Engine::new(EngineKind::Quad, program.clone())
+            .run(&duplicate)
+            .is_err()
+    );
+    let cycle = Trace {
+        frames: vec![
+            TraceFrame {
+                frame_id: 0,
+                command: TraceCommand::Init {
+                    node: node(1, "main", None, vec![node(2, "div", None, vec![])]),
+                },
+            },
+            TraceFrame {
+                frame_id: 1,
+                command: TraceCommand::Add {
+                    path: vec![0, 0],
+                    node: node(1, "main", None, vec![]),
+                },
+            },
+        ],
+    };
+    assert!(Engine::new(EngineKind::Quad, program).run(&cycle).is_err());
+}
+
+#[test]
 #[ignore = "full corpus regression; run explicitly before release"]
 fn checked_in_corpus_has_engine_parity() {
     for site in [

@@ -53,6 +53,7 @@ pub(crate) struct NodeFacts {
 
 #[derive(Debug, Clone, Default)]
 struct DomNode {
+    trace_id: u64,
     facts: NodeFacts,
     parent: Option<NodeId>,
     children: Vec<NodeId>,
@@ -63,12 +64,15 @@ struct DomNode {
 pub struct Dom {
     nodes: HashMap<NodeId, DomNode>,
     root: Option<NodeId>,
+    trace_nodes: HashMap<u64, NodeId>,
+    next_instance: u64,
 }
 
 impl Dom {
     fn clear(&mut self) {
         self.nodes.clear();
         self.root = None;
+        self.trace_nodes.clear();
     }
 
     fn build_subtree(
@@ -77,18 +81,26 @@ impl Dom {
         parent: Option<NodeId>,
         program: &CompiledProgram,
     ) -> Result<NodeId, RunError> {
-        let id = NodeId(node.id);
-        // The trace generator can encode a move as an add of an existing ID.
-        // Keep the old parent reference until its later remove command, while
-        // replacing the arena entry with the node at its new location.
-        if self.nodes.contains_key(&id) {
-            self.remove_subtree(id);
+        // A move leaves an obsolete slot until the trace removes it. Give the
+        // replacement a fresh instance so that slot cannot delete the new node.
+        if let Some(old_id) = self.trace_nodes.get(&node.id).copied() {
+            let following = self.following_siblings(old_id);
+            self.remove_subtree(old_id);
+            for sibling in following {
+                self.mark(sibling, Dirty::NodeChanged);
+            }
         }
+        let id = NodeId(self.next_instance);
+        self.next_instance = self
+            .next_instance
+            .checked_add(1)
+            .ok_or_else(|| RunError::new("DOM instance counter exhausted".into()))?;
         let attributes = attributes_to_string_map(&node.attributes);
         let facts = facts_from_parts(&node.tag_name, attributes);
         self.nodes.insert(
             id,
             DomNode {
+                trace_id: node.id,
                 facts,
                 parent,
                 children: Vec::new(),
@@ -105,6 +117,7 @@ impl Dom {
                 },
             },
         );
+        self.trace_nodes.insert(node.id, id);
         for child in &node.children {
             let child_id = self.build_subtree(child, Some(id), program)?;
             self.nodes.get_mut(&id).unwrap().children.push(child_id);
@@ -123,7 +136,11 @@ impl Dom {
                 .and_then(|node| node.children.get(index))
                 .ok_or_else(|| RunError::new(format!("invalid DOM path {path:?}")))?;
         }
-        Ok(current)
+        if self.nodes.contains_key(&current) {
+            Ok(current)
+        } else {
+            Err(RunError::new(format!("obsolete node at path {path:?}")))
+        }
     }
 
     fn mark(&mut self, id: NodeId, dirty: Dirty) {
@@ -150,7 +167,13 @@ impl Dom {
         children
             .iter()
             .position(|child| *child == id)
-            .map(|index| children[index + 1..].to_vec())
+            .map(|index| {
+                children[index + 1..]
+                    .iter()
+                    .copied()
+                    .filter(|child| self.nodes.contains_key(child))
+                    .collect()
+            })
             .unwrap_or_default()
     }
 
@@ -162,11 +185,18 @@ impl Dom {
         let parent = self.nodes.get(&id)?.parent?;
         let siblings = &self.nodes.get(&parent)?.children;
         let index = siblings.iter().position(|sibling| *sibling == id)?;
-        index.checked_sub(1).map(|previous| siblings[previous])
+        siblings[..index]
+            .iter()
+            .rev()
+            .copied()
+            .find(|sibling| self.nodes.contains_key(sibling))
     }
 
     fn remove_subtree(&mut self, id: NodeId) {
         if let Some(node) = self.nodes.remove(&id) {
+            if self.trace_nodes.get(&node.trace_id) == Some(&id) {
+                self.trace_nodes.remove(&node.trace_id);
+            }
             for child in node.children {
                 self.remove_subtree(child);
             }
@@ -180,8 +210,11 @@ impl Dom {
         let mut all = 0;
         let mut of_type = 0;
         for sibling in siblings {
+            let Some(sibling_node) = self.nodes.get(sibling) else {
+                continue;
+            };
             all += 1;
-            if self.nodes.get(sibling)?.facts.tag == node.facts.tag {
+            if sibling_node.facts.tag == node.facts.tag {
                 of_type += 1;
             }
             if *sibling == id {
@@ -192,21 +225,34 @@ impl Dom {
     }
 
     fn previous_sibling_output(&self, id: NodeId, state_count: usize) -> Vec<bool> {
-        let Some(parent) = self.nodes.get(&id).and_then(|node| node.parent) else {
-            return vec![false; state_count];
-        };
-        let siblings = &self.nodes[&parent].children;
-        let Some(index) = siblings.iter().position(|sibling| *sibling == id) else {
-            return vec![false; state_count];
-        };
-        if index == 0 {
-            vec![false; state_count]
-        } else {
-            self.nodes
-                .get(&siblings[index - 1])
-                .map(|node| node.state.output.clone())
-                .unwrap_or_else(|| vec![false; state_count])
+        self.previous_sibling(id)
+            .map(|previous| self.nodes[&previous].state.output.clone())
+            .unwrap_or_else(|| vec![false; state_count])
+    }
+
+    fn validate_subtree(&self, root: &Node, parent: Option<NodeId>) -> Result<(), RunError> {
+        let mut ids = HashSet::new();
+        let mut pending = vec![root];
+        while let Some(node) = pending.pop() {
+            if !ids.insert(node.id) {
+                return Err(RunError::new(format!(
+                    "duplicate node ID {} in subtree",
+                    node.id
+                )));
+            }
+            pending.extend(&node.children);
         }
+        let mut ancestor = parent;
+        while let Some(id) = ancestor {
+            let node = &self.nodes[&id];
+            if ids.contains(&node.trace_id) {
+                return Err(RunError::new(
+                    "cannot move an ancestor into its descendant".into(),
+                ));
+            }
+            ancestor = node.parent;
+        }
+        Ok(())
     }
 
     fn refresh_pseudos(&mut self) {
@@ -339,6 +385,7 @@ impl Engine {
     fn apply(&mut self, frame: &TraceFrame) -> Result<(), RunError> {
         match &frame.command {
             TraceCommand::Init { node } => {
+                self.dom.validate_subtree(node, None)?;
                 self.dom.clear();
                 let root = self.dom.build_subtree(node, None, &self.program)?;
                 self.dom.root = Some(root);
@@ -389,12 +436,12 @@ impl Engine {
             .split_last()
             .ok_or_else(|| RunError::new("cannot add a second root".into()))?;
         let parent = self.dom.id_at_path(parent_path)?;
-        let new_id = self.dom.build_subtree(node, Some(parent), &self.program)?;
-        let children = &mut self.dom.nodes.get_mut(&parent).unwrap().children;
-        if position > children.len() {
-            self.dom.remove_subtree(new_id);
+        if position > self.dom.nodes[&parent].children.len() {
             return Err(RunError::new(format!("invalid insertion path {path:?}")));
         }
+        self.dom.validate_subtree(node, Some(parent))?;
+        let new_id = self.dom.build_subtree(node, Some(parent), &self.program)?;
+        let children = &mut self.dom.nodes.get_mut(&parent).unwrap().children;
         children.insert(position, new_id);
         let following = children[position + 1..].to_vec();
         self.dom.mark(new_id, Dirty::NodeChanged);
@@ -416,14 +463,7 @@ impl Engine {
             }
             children.remove(position)
         };
-        let owns_arena_node = self
-            .dom
-            .nodes
-            .get(&removed)
-            .is_none_or(|node| node.parent == Some(parent));
-        if owns_arena_node {
-            self.dom.remove_subtree(removed);
-        }
+        self.dom.remove_subtree(removed);
         let following = self.dom.nodes[&parent].children[position..].to_vec();
         for sibling in following {
             self.dom.mark(sibling, Dirty::NodeChanged);
@@ -845,13 +885,13 @@ impl Engine {
 
     fn collect_matches(&self) -> BTreeMap<String, Vec<u64>> {
         let mut result: BTreeMap<String, Vec<u64>> = BTreeMap::new();
-        for (id, node) in &self.dom.nodes {
+        for node in self.dom.nodes.values() {
             for (selector_index, matched) in node.state.matches.iter().enumerate() {
                 if *matched {
                     result
                         .entry(self.program.selectors[selector_index].text.clone())
                         .or_default()
-                        .push(id.0);
+                        .push(node.trace_id);
                 }
             }
         }
