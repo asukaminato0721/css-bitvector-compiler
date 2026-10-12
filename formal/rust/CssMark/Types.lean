@@ -20,44 +20,22 @@ set_option maxRecDepth 2048
 
 namespace CssDom
 
-/-- Trait declaration: [core::borrow::Borrow]
-    Source: '/rustc/library/core/src/borrow.rs', lines 158:0-158:40
-    Name pattern: [core::borrow::Borrow]
-    Visibility: public -/
-@[rust_trait "core::borrow::Borrow"]
-structure core.borrow.Borrow (Self : Type) (Borrowed : Type) where
-  borrow : Self → Result Borrowed
-
-/-- Trait declaration: [core::hash::BuildHasher]
-    Source: '/rustc/library/core/src/hash/mod.rs', lines 637:0-637:21
-    Name pattern: [core::hash::BuildHasher]
-    Visibility: public -/
-@[rust_trait "core::hash::BuildHasher" (parentClauses := ["HasherInst"])]
-structure core.hash.BuildHasher (Self : Type) (Self_Hasher : Type) where
-  HasherInst : core.hash.Hasher Self_Hasher
-  build_hasher : Self → Result Self_Hasher
-
-/-- [rustc_hash::FxBuildHasher]
-    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 320:0-320:24
-    Name pattern: [rustc_hash::FxBuildHasher]
-    Visibility: public -/
-@[reducible, rust_type "rustc_hash::FxBuildHasher"]
-def rustc_hash.FxBuildHasher := Unit
-
 /-- [css_bitvector_compiler::clean::compiler::NodeId]
     Source: 'src/clean/compiler.rs', lines 18:0-18:27
     Visibility: public -/
 @[reducible]
 def clean.compiler.NodeId := Std.U64
 
-/-- [css_bitvector_compiler::clean::compiler::DynamicPseudo]
-    Source: 'src/clean/compiler.rs', lines 63:0-67:1
-    Visibility: public -/
-@[discriminant isize]
-inductive clean.compiler.DynamicPseudo where
-| Hover : clean.compiler.DynamicPseudo
-| Focus : clean.compiler.DynamicPseudo
-| FocusWithin : clean.compiler.DynamicPseudo
+/-- [css_bitvector_compiler::clean::engine::names::Names]
+    Source: 'src/clean/engine/names.rs', lines 3:0-6:1 -/
+structure clean.engine.names.Names where
+  values : alloc.vec.Vec String
+  sorted : alloc.vec.Vec Std.Usize
+
+/-- [css_bitvector_compiler::clean::engine::names::Attributes]
+    Source: 'src/clean/engine/names.rs', lines 45:0-47:1 -/
+structure clean.engine.names.Attributes where
+  entries : alloc.vec.Vec (Std.Usize × String)
 
 /-- [css_bitvector_compiler::clean::logic::QuadValue]
     Source: 'src/clean/logic.rs', lines 41:0-47:1 -/
@@ -85,7 +63,7 @@ inductive clean.logic.Dirty where
 | NodeChanged : clean.logic.Dirty
 
 /-- [css_bitvector_compiler::clean::engine::NodeState]
-    Source: 'src/clean/engine.rs', lines 20:0-30:1 -/
+    Source: 'src/clean/engine.rs', lines 23:0-33:1 -/
 structure clean.engine.NodeState where
   output : alloc.vec.Vec Bool
   quad_output : alloc.vec.Vec clean.logic.QuadValue
@@ -98,21 +76,18 @@ structure clean.engine.NodeState where
   subtree_dirty : Bool
 
 /-- [css_bitvector_compiler::clean::engine::NodeFacts]
-    Source: 'src/clean/engine.rs', lines 33:0-41:1 -/
+    Source: 'src/clean/engine.rs', lines 36:0-44:1 -/
 structure clean.engine.NodeFacts where
   tag : String
-  classes : std.collections.hash.set.HashSet String rustc_hash.FxBuildHasher
-    Global
+  classes : alloc.vec.Vec Std.Usize
   html_id : Option String
-  attributes : std.collections.hash.map.HashMap String String
-    rustc_hash.FxBuildHasher Global
+  attributes : clean.engine.names.Attributes
   hover_root : Bool
   focus_root : Bool
-  pseudos : std.collections.hash.set.HashSet clean.compiler.DynamicPseudo
-    rustc_hash.FxBuildHasher Global
+  pseudos : Std.U8
 
 /-- [css_bitvector_compiler::clean::engine::DomNode]
-    Source: 'src/clean/engine.rs', lines 44:0-50:1 -/
+    Source: 'src/clean/engine.rs', lines 47:0-53:1 -/
 structure clean.engine.DomNode where
   trace_id : Std.U64
   facts : clean.engine.NodeFacts
@@ -121,13 +96,13 @@ structure clean.engine.DomNode where
   state : clean.engine.NodeState
 
 /-- [css_bitvector_compiler::clean::engine::Dom]
-    Source: 'src/clean/engine.rs', lines 53:0-58:1
+    Source: 'src/clean/engine.rs', lines 56:0-62:1
     Visibility: public -/
 structure clean.engine.Dom where
   nodes : clean.engine.arena.NodeArena clean.engine.DomNode
   root : Option clean.compiler.NodeId
-  trace_nodes : std.collections.hash.map.HashMap Std.U64 clean.compiler.NodeId
-    rustc_hash.FxBuildHasher Global
+  trace_nodes : clean.engine.trace_index.TraceIndex
+  names : clean.engine.names.Names
   next_instance : Std.U64
 
 /-- [css_bitvector_compiler::clean::logic::Decision]

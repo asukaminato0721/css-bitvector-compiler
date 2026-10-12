@@ -26,7 +26,7 @@ type CssImpl<'i> = <Selector<'i> as Implementation<'i>>::Impl;
 #[derive(Clone, Copy, Debug)]
 struct ElementRef<'a> {
     dom: &'a Dom,
-    links: &'a HashMap<NodeId, (Option<NodeId>, Option<NodeId>)>,
+    links: &'a [(Option<NodeId>, Option<NodeId>)],
     id: NodeId,
 }
 
@@ -61,14 +61,18 @@ impl<'i> Element<'i> for ElementRef<'_> {
         false
     }
     fn prev_sibling_element(&self) -> Option<Self> {
-        self.links
-            .get(&self.id)
+        self.dom
+            .nodes
+            .slot(&self.id)
+            .and_then(|slot| self.links.get(slot))
             .and_then(|pair| pair.0)
             .map(|id| self.at(id))
     }
     fn next_sibling_element(&self) -> Option<Self> {
-        self.links
-            .get(&self.id)
+        self.dom
+            .nodes
+            .slot(&self.id)
+            .and_then(|slot| self.links.get(slot))
             .and_then(|pair| pair.1)
             .map(|id| self.at(id))
     }
@@ -95,7 +99,7 @@ impl<'i> Element<'i> for ElementRef<'_> {
         }
         self.facts()
             .attributes
-            .get(name.as_ref())
+            .get_named(&self.dom.names, name.as_ref())
             .is_some_and(|value| operation.eval_str(value))
     }
     fn match_non_ts_pseudo_class<F>(
@@ -113,7 +117,7 @@ impl<'i> Element<'i> for ElementRef<'_> {
             PseudoClass::FocusWithin => DynamicPseudo::FocusWithin,
             _ => return false,
         };
-        self.facts().pseudos.contains(&pseudo)
+        self.facts().pseudos & pseudo_bit(pseudo) != 0
     }
     fn match_pseudo_element(
         &self,
@@ -143,14 +147,12 @@ impl<'i> Element<'i> for ElementRef<'_> {
         class: &<Self::Impl as SelectorImpl<'i>>::Identifier,
         case: CaseSensitivity,
     ) -> bool {
-        match case {
-            CaseSensitivity::CaseSensitive => self.facts().classes.contains(class.as_ref()),
-            CaseSensitivity::AsciiCaseInsensitive => self
-                .facts()
-                .classes
-                .iter()
-                .any(|value| case.eq(value.as_bytes(), class.as_ref().as_bytes())),
-        }
+        self.facts().classes.iter().any(|&id| {
+            case.eq(
+                self.dom.names.name(id).as_bytes(),
+                class.as_ref().as_bytes(),
+            )
+        })
     }
     fn imported_part(
         &self,
@@ -222,24 +224,24 @@ impl<'i> ParcelProgram<'i> {
     fn rematch(&self, engine: &mut Engine) {
         // Constant-time sibling access keeps the adapter from adding a linear
         // scan to every library traversal. Index construction is timed.
-        let mut links: HashMap<NodeId, (Option<NodeId>, Option<NodeId>)> =
-            HashMap::with_capacity(engine.dom.nodes.len());
+        let mut links = vec![(None, None); engine.dom.nodes.slot_count()];
         for node in engine.dom.nodes.values() {
             let mut previous = None;
             for &child in &node.children {
                 if !engine.dom.nodes.contains_key(&child) {
                     continue;
                 }
-                links.entry(child).or_default().0 = previous;
+                links[engine.dom.nodes.slot(&child).unwrap()].0 = previous;
                 if let Some(prev) = previous {
-                    links.entry(prev).or_default().1 = Some(child);
+                    links[engine.dom.nodes.slot(&prev).unwrap()].1 = Some(child);
                 }
                 previous = Some(child);
             }
         }
         // Cache nth positions within this DOM version. Never retain it across a mutation.
         let mut nth = NthIndexCache::default();
-        let ids: Vec<_> = engine.dom.nodes.keys().collect();
+        let mut ids = Vec::with_capacity(engine.dom.nodes.len());
+        ids.extend(engine.dom.nodes.keys());
         for id in ids {
             let element = ElementRef {
                 dom: &engine.dom,

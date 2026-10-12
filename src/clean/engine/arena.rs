@@ -24,8 +24,12 @@ impl<T> NodeArena<T> {
         self.live += 1;
     }
 
-    fn slot(&self, id: &NodeId) -> Option<usize> {
+    pub(super) fn slot(&self, id: &NodeId) -> Option<usize> {
         usize::try_from(id.0.checked_sub(self.base)?).ok()
+    }
+
+    pub(super) fn slot_count(&self) -> usize {
+        self.slots.len()
     }
 
     pub(super) fn get(&self, id: &NodeId) -> Option<&T> {

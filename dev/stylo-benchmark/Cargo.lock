@@ -314,7 +314,6 @@ version = "0.0.1"
 dependencies = [
  "lightningcss",
  "parcel_selectors",
- "rustc-hash",
  "serde",
  "serde_json",
 ]

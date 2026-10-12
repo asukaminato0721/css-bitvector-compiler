@@ -44,34 +44,34 @@
   },
   "engines": {
     "bit": {
-      "recomputed_nodes": 57128,
+      "recomputed_nodes": 57139,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 59613
+      "visited_nodes": 59636
     },
     "naive": {
-      "recomputed_nodes": 57128,
+      "recomputed_nodes": 57139,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 59613
+      "visited_nodes": 59636
     },
     "quad": {
-      "recomputed_nodes": 57128,
+      "recomputed_nodes": 57139,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 59613
+      "visited_nodes": 59636
     },
     "rec_tri": {
-      "recomputed_nodes": 57128,
+      "recomputed_nodes": 57139,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 59613
+      "visited_nodes": 59636
     },
     "tri": {
-      "recomputed_nodes": 57128,
+      "recomputed_nodes": 57139,
       "input_changes": 0,
       "input_skips": 0,
-      "visited_nodes": 59613
+      "visited_nodes": 59636
     }
   }
 }

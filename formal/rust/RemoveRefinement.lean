@@ -30,11 +30,11 @@ theorem remove_step (dom : Dom) (id : NodeId) :
       | some node => Dom.remove_subtree_loop node.children (eraseNode dom id node) := by
   classical
   rw [Dom.remove_subtree.eq_def]
-  simp only [std.collections.hash.map.HashMap.remove, CssDom.clean.engine.arena.NodeArena.remove, std.collections.hash.map.HashMap.get,
-    std.collections.hash.map.HashMap.get_mut, ↓reduceDIte, bind_ok]
+  simp only [CssDom.clean.engine.trace_index.TraceIndex.remove, CssDom.clean.engine.arena.NodeArena.remove, CssDom.clean.engine.trace_index.TraceIndex.get,
+    bind_ok]
   cases hn : dom.nodes id with
   | none =>
-    simp [bind_ok]
+    simp
     congr 1
     funext key
     simp only [Function.update_apply]
@@ -43,9 +43,6 @@ theorem remove_step (dom : Dom) (id : NodeId) :
     simp only [option_eq, alloc.vec.IntoIteratorVec.into_iter, bind_ok]
     by_cases ht : dom.trace_nodes node.trace_id = some id <;>
       simp [ht, eraseNode]
-    congr 2
-    funext key
-    by_cases hk : key = node.trace_id <;> simp [hk]
 
 /-- Removal never changes surviving node records. -/
 def Submap (after before : Dom) : Prop :=

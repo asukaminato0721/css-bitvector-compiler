@@ -96,34 +96,34 @@
   },
   "engines": {
     "bit": {
-      "recomputed_nodes": 3904,
+      "recomputed_nodes": 3640,
       "input_changes": 155,
       "input_skips": 0,
-      "visited_nodes": 7071
+      "visited_nodes": 6543
     },
     "naive": {
-      "recomputed_nodes": 3904,
+      "recomputed_nodes": 3640,
       "input_changes": 155,
       "input_skips": 0,
-      "visited_nodes": 7071
+      "visited_nodes": 6543
     },
     "quad": {
-      "recomputed_nodes": 3769,
+      "recomputed_nodes": 3505,
       "input_changes": 155,
       "input_skips": 135,
-      "visited_nodes": 7071
+      "visited_nodes": 6543
     },
     "rec_tri": {
-      "recomputed_nodes": 3893,
+      "recomputed_nodes": 3629,
       "input_changes": 144,
       "input_skips": 11,
-      "visited_nodes": 7060
+      "visited_nodes": 6532
     },
     "tri": {
-      "recomputed_nodes": 3893,
+      "recomputed_nodes": 3629,
       "input_changes": 155,
       "input_skips": 11,
-      "visited_nodes": 7071
+      "visited_nodes": 6543
     }
   }
 }

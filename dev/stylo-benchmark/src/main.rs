@@ -300,7 +300,7 @@ fn main() -> Result<()> {
         "cpu4_governor": fs::read_to_string("/sys/devices/system/cpu/cpu4/cpufreq/scaling_governor").ok().map(|s|s.trim().to_owned()),
         "cpu_affinity": fs::read_to_string("/proc/self/status")?.lines().find(|s| s.starts_with("Cpus_allowed_list:")).unwrap_or("unknown"),
         "source_hashes": command_output("sha256sum", &[
-            "src/clean/engine.rs", "src/clean/engine/arena.rs", "Cargo.toml", "Cargo.lock", "src/clean/engine/comparison.rs", "src/clean/compiler.rs", "src/clean/logic.rs",
+            "src/clean/engine.rs", "src/clean/engine/arena.rs", "src/clean/engine/names.rs", "src/clean/engine/trace_index.rs", "Cargo.toml", "Cargo.lock", "src/clean/engine/comparison.rs", "src/clean/compiler.rs", "src/clean/logic.rs",
             "dev/stylo-benchmark/src/main.rs", "dev/stylo-benchmark/Cargo.toml", "dev/stylo-benchmark/Cargo.lock", &input]),
         "results": []
     });

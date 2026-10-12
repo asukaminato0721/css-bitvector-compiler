@@ -33,34 +33,34 @@
   },
   "engines": {
     "bit": {
-      "recomputed_nodes": 6747,
+      "recomputed_nodes": 6757,
       "input_changes": 154,
       "input_skips": 0,
-      "visited_nodes": 14113
+      "visited_nodes": 14117
     },
     "naive": {
-      "recomputed_nodes": 6747,
+      "recomputed_nodes": 6757,
       "input_changes": 154,
       "input_skips": 0,
-      "visited_nodes": 14113
+      "visited_nodes": 14117
     },
     "quad": {
-      "recomputed_nodes": 6599,
+      "recomputed_nodes": 6609,
       "input_changes": 154,
       "input_skips": 148,
-      "visited_nodes": 14113
+      "visited_nodes": 14117
     },
     "rec_tri": {
-      "recomputed_nodes": 6745,
+      "recomputed_nodes": 6755,
       "input_changes": 152,
       "input_skips": 2,
-      "visited_nodes": 14111
+      "visited_nodes": 14115
     },
     "tri": {
-      "recomputed_nodes": 6745,
+      "recomputed_nodes": 6755,
       "input_changes": 154,
       "input_skips": 2,
-      "visited_nodes": 14113
+      "visited_nodes": 14117
     }
   }
 }

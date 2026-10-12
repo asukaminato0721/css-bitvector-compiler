@@ -18,24 +18,27 @@
     "-loops-to-rec"
   ],
   "opaque_containers": [
-    "crate::clean::engine::arena"
+    "crate::clean::engine::arena",
+    "crate::clean::engine::trace_index"
   ],
   "sources": {
-    "Cargo.toml": "40281b6f198241599027508e12a6f74e5eb00dc24a63dd2f3c7e87801efc521c",
-    "Cargo.lock": "d4a144b7645d66d02958d1be26a16d579ba2bb5f47e2363bece028ea9637a1ec",
+    "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+    "Cargo.lock": "1ffaa8f9efe7ebe3fa12bcb2674512da21cff3ce4e02f0bf73b4369559991a19",
     "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
-    "src/clean/engine/arena.rs": "445534cf9d093a242fff74e5b68235ff27918b65c11b319cb501bfa01594ae09",
-    "src/clean/engine/comparison.rs": "1b37b17c44d58d3b8834c7a19c348b1ea580638f9895a1cfdd89c799083b3fdd",
-    "src/clean/engine.rs": "a7970398cc869c7c69b3abfd633d8c6bf10b421eaa2d6f5f92db95bcfaa2675b",
+    "src/clean/engine/arena.rs": "042bdad9cd3fef481276a437786dbd9041a11b29f6f42036befef0e1cbb384a3",
+    "src/clean/engine/comparison.rs": "d3a8dbc6f8fae0e4d9954cd39ab41778088534f9a09ed3b526443d33863fe2f9",
+    "src/clean/engine/names.rs": "9e12a55b30f35405e0843e341aea95076ae02964bdb272ae49b43e49e3c7ef59",
+    "src/clean/engine/trace_index.rs": "b91574e96e680ba1a5e8613fd0e9aee6b31f33f1955c90a3153a65fd565b6c81",
+    "src/clean/engine.rs": "7df02c8f8c1fe3a8fa3ad7adba2837d2e207faccec6d5c1020e2a96e93038c27",
     "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
     "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
-    "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+    "src/clean/tests.rs": "e09f35b8730015fb06afda9399226779520b336f2eea9b6907b17bf80660d6f8",
     "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
     "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
     "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724"
   },
   "generated": {
-    "CssMark/Types.lean": "dfbfc51bdbf6253a734e59136cd2d9ab9e8a0a19a949ea1fd778fce13105ac5d",
-    "CssMark/Funs.lean": "f0321e774c5db79a027e88130defa2a1c63d8a041eb5760fab930d4f69d244af"
+    "CssMark/Types.lean": "548a4965a27a86e725ef5e8b8141b6e29000778952d4491e702142691e215c59",
+    "CssMark/Funs.lean": "dbbc08678b377d53a5d5a8fbb755ef57863e14af739144542551ea8e0da19e58"
   }
 }

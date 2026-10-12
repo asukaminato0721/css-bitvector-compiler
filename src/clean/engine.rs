@@ -6,12 +6,15 @@ use super::{
         requirements_accept, specialize_concrete, specialize_or,
     },
 };
-use crate::{Node, attributes_to_string_map, rdtsc};
-use rustc_hash::{FxHashMap, FxHashSet};
-use std::collections::{BTreeMap, HashMap};
+use crate::{Node, rdtsc};
+use std::collections::BTreeMap;
 
 mod arena;
 use arena::NodeArena;
+mod names;
+use names::{Attributes, Names};
+mod trace_index;
+use trace_index::TraceIndex;
 
 mod comparison;
 pub use comparison::{ComparisonSample, ParcelProgram};
@@ -32,12 +35,12 @@ struct NodeState {
 #[derive(Debug, Clone, Default)]
 pub(crate) struct NodeFacts {
     tag: String,
-    classes: FxHashSet<String>,
+    classes: Vec<usize>,
     html_id: Option<String>,
-    attributes: FxHashMap<String, String>,
+    attributes: Attributes,
     pub(crate) hover_root: bool,
     focus_root: bool,
-    pseudos: FxHashSet<DynamicPseudo>,
+    pseudos: u8,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -53,7 +56,8 @@ struct DomNode {
 pub struct Dom {
     nodes: NodeArena<DomNode>,
     root: Option<NodeId>,
-    trace_nodes: FxHashMap<u64, NodeId>,
+    trace_nodes: TraceIndex,
+    names: Names,
     next_instance: u64,
 }
 
@@ -91,8 +95,17 @@ impl Dom {
                 self.mark(sibling, Dirty::NodeChanged);
             }
         }
-        let attributes = attributes_to_string_map(&node.attributes);
-        let facts = facts_from_parts(&node.tag_name, attributes);
+        let attributes = node
+            .attributes
+            .iter()
+            .filter_map(|(key, value)| match value {
+                serde_json::Value::String(value) => Some((key.to_ascii_lowercase(), value.clone())),
+                serde_json::Value::Number(_) | serde_json::Value::Bool(_) => {
+                    Some((key.to_ascii_lowercase(), value.to_string()))
+                }
+                _ => None,
+            });
+        let facts = facts_from_entries(&node.tag_name, attributes, &mut self.names);
         let id = self
             .insert_instance(DomNode {
                 trace_id: node.id,
@@ -244,21 +257,23 @@ impl Dom {
     }
 
     fn validate_subtree(&self, root: &Node, parent: Option<NodeId>) -> Result<(), RunError> {
-        let mut ids = FxHashSet::default();
+        let mut ids = Vec::new();
         let mut pending = vec![root];
         while let Some(node) = pending.pop() {
-            if !ids.insert(node.id) {
-                return Err(RunError::new(format!(
-                    "duplicate node ID {} in subtree",
-                    node.id
-                )));
-            }
+            ids.push(node.id);
             pending.extend(&node.children);
+        }
+        ids.sort_unstable();
+        if let Some(pair) = ids.windows(2).find(|pair| pair[0] == pair[1]) {
+            return Err(RunError::new(format!(
+                "duplicate node ID {} in subtree",
+                pair[0]
+            )));
         }
         let mut ancestor = parent;
         while let Some(id) = ancestor {
             let node = &self.nodes[&id];
-            if ids.contains(&node.trace_id) {
+            if ids.binary_search(&node.trace_id).is_ok() {
                 return Err(RunError::new(
                     "cannot move an ancestor into its descendant".into(),
                 ));
@@ -314,39 +329,68 @@ impl Dom {
     }
 }
 
-fn set_pseudo(set: &mut FxHashSet<DynamicPseudo>, pseudo: DynamicPseudo, active: bool) -> bool {
-    if active {
-        set.insert(pseudo)
-    } else {
-        set.remove(&pseudo)
-    }
+fn pseudo_bit(pseudo: DynamicPseudo) -> u8 {
+    1 << (pseudo as u8)
 }
 
-pub(crate) fn facts_from_parts(tag: &str, mut attributes: HashMap<String, String>) -> NodeFacts {
-    let classes = attributes
-        .get("class")
-        .map(|value| value.split_whitespace().map(str::to_string).collect())
+fn set_pseudo(bits: &mut u8, pseudo: DynamicPseudo, active: bool) -> bool {
+    let before = *bits;
+    let mask = pseudo_bit(pseudo);
+    if active {
+        *bits |= mask;
+    } else {
+        *bits &= !mask;
+    }
+    before != *bits
+}
+
+fn facts_from_entries(
+    tag: &str,
+    entries: impl IntoIterator<Item = (String, String)>,
+    names: &mut Names,
+) -> NodeFacts {
+    let mut attributes = Attributes::default();
+    for (key, value) in entries {
+        attributes.insert(names.intern(&key), value);
+    }
+    let classes = names
+        .find("class")
+        .and_then(|id| attributes.get(id))
+        .map(|value| names.classes(value))
         .unwrap_or_default();
-    let html_id = attributes.get("id").cloned();
-    let hover_root = take_boolean_alias(&mut attributes, &["is_hover_root", "is_hovered_root"]);
-    let focus_root = take_boolean_alias(&mut attributes, &["is_focus_root"]);
+    let html_id = names.find("id").and_then(|id| attributes.get(id)).cloned();
+    let boolean = |key| {
+        names
+            .find(key)
+            .and_then(|id| attributes.get(id))
+            .is_some_and(|value| value.eq_ignore_ascii_case("true"))
+    };
+    let hover_root = boolean("is_hover_root") || boolean("is_hovered_root");
+    let focus_root = boolean("is_focus_root");
     NodeFacts {
         tag: tag.to_ascii_lowercase(),
         classes,
         html_id,
-        attributes: attributes.into_iter().collect(),
+        attributes,
         hover_root,
         focus_root,
-        pseudos: FxHashSet::default(),
+        pseudos: 0,
     }
 }
 
-fn take_boolean_alias(attributes: &mut HashMap<String, String>, keys: &[&str]) -> bool {
-    keys.iter().any(|key| {
-        attributes
-            .get(*key)
-            .is_some_and(|value| value.eq_ignore_ascii_case("true"))
-    })
+#[cfg(test)]
+pub(crate) fn facts_from_parts(
+    tag: &str,
+    attributes: std::collections::HashMap<String, String>,
+) -> NodeFacts {
+    facts_from_entries(tag, attributes, &mut Names::default())
+}
+
+#[derive(Debug, Clone, Default)]
+struct IndexedCompound {
+    classes: Vec<usize>,
+    attributes: Vec<usize>,
+    pseudos: u8,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -368,16 +412,40 @@ pub struct RunResult {
 pub struct Engine {
     kind: EngineKind,
     program: CompiledProgram,
+    conditions: Vec<IndexedCompound>,
     dom: Dom,
     stats: RunStats,
 }
 
 impl Engine {
     pub fn new(kind: EngineKind, program: CompiledProgram) -> Self {
+        let mut dom = Dom::default();
+        let mut conditions = vec![IndexedCompound::default(); program.state_count];
+        for selector in &program.selectors {
+            for (part, compound) in selector.compounds.iter().enumerate() {
+                conditions[selector.state(part).0] = IndexedCompound {
+                    classes: compound
+                        .classes
+                        .iter()
+                        .map(|name| dom.names.intern(name))
+                        .collect(),
+                    attributes: compound
+                        .attributes
+                        .iter()
+                        .map(|(name, _)| dom.names.intern(name))
+                        .collect(),
+                    pseudos: compound
+                        .pseudos
+                        .iter()
+                        .fold(0, |bits, &pseudo| bits | pseudo_bit(pseudo)),
+                };
+            }
+        }
         Self {
             kind,
             program,
-            dom: Dom::default(),
+            conditions,
+            dom,
             stats: RunStats::default(),
         }
     }
@@ -498,7 +566,10 @@ impl Engine {
     ) -> Result<(), RunError> {
         let id = self.dom.id_at_path(path)?;
         let key = key.to_ascii_lowercase();
-        let old = self.dom.nodes[&id].facts.attributes.get(&key).cloned();
+        let known_key = self.dom.names.find(&key);
+        let old = known_key
+            .and_then(|key| self.dom.nodes[&id].facts.attributes.get(key))
+            .cloned();
         let old_output = self.dom.nodes[&id].state.output.clone();
         let old_matches = self.dom.nodes[&id].state.matches.clone();
         if let Some(expected) = expected_old {
@@ -511,12 +582,13 @@ impl Engine {
             }
         }
         let value = value.map(scalar_attribute).transpose()?;
+        let key_id = known_key.unwrap_or_else(|| self.dom.names.intern(&key));
         let node = self.dom.nodes.get_mut(&id).unwrap();
         match key.as_str() {
             "class" => {
                 node.facts.classes = value
                     .as_deref()
-                    .map(|value| value.split_whitespace().map(str::to_string).collect())
+                    .map(|value| self.dom.names.classes(value))
                     .unwrap_or_default();
             }
             "id" => node.facts.html_id = value.clone(),
@@ -533,9 +605,9 @@ impl Engine {
             _ => {}
         }
         if let Some(value) = value {
-            node.facts.attributes.insert(key.clone(), value);
+            node.facts.attributes.insert(key_id, value);
         } else {
-            node.facts.attributes.remove(&key);
+            node.facts.attributes.remove(key_id);
         }
 
         let pseudo_event = matches!(
@@ -696,7 +768,8 @@ impl Engine {
         for (selector_index, selector) in self.program.selectors.iter().enumerate() {
             for part in 0..selector.compounds.len() {
                 let state = selector.state(part).0;
-                let local_match = self.matches_compound(id, &selector.compounds[part]);
+                let local_match =
+                    self.matches_compound(id, &selector.compounds[part], selector.state(part).0);
                 let raw = if part == 0 {
                     local_match
                 } else {
@@ -771,7 +844,8 @@ impl Engine {
         for (selector_index, selector) in self.program.selectors.iter().enumerate() {
             for part in 0..selector.compounds.len() {
                 let state = selector.state(part).0;
-                let local_match = self.matches_compound(id, &selector.compounds[part]);
+                let local_match =
+                    self.matches_compound(id, &selector.compounds[part], selector.state(part).0);
 
                 // Non-propagate transition pass.
                 let raw = if part == 0 {
@@ -827,7 +901,8 @@ impl Engine {
         }
     }
 
-    fn matches_compound(&self, id: NodeId, compound: &Compound) -> bool {
+    fn matches_compound(&self, id: NodeId, compound: &Compound, state: usize) -> bool {
+        let indexed = &self.conditions[state];
         let node = &self.dom.nodes[&id];
         if compound
             .tag
@@ -843,26 +918,27 @@ impl Engine {
         {
             return false;
         }
-        if !compound
+        if !indexed
             .classes
             .iter()
-            .all(|class| node.facts.classes.contains(class))
+            .all(|class| node.facts.classes.binary_search(class).is_ok())
         {
             return false;
         }
-        if !compound.attributes.iter().all(|(name, value)| {
-            node.facts
-                .attributes
-                .get(name)
-                .is_some_and(|actual| actual == value)
-        }) {
-            return false;
-        }
-        if !compound
-            .pseudos
+        if !indexed
+            .attributes
             .iter()
-            .all(|pseudo| node.facts.pseudos.contains(pseudo))
+            .zip(&compound.attributes)
+            .all(|(&name, (_, value))| {
+                node.facts
+                    .attributes
+                    .get(name)
+                    .is_some_and(|actual| actual == value)
+            })
         {
+            return false;
+        }
+        if node.facts.pseudos & indexed.pseudos != indexed.pseudos {
             return false;
         }
         let position = self.dom.position(id);
@@ -874,7 +950,7 @@ impl Engine {
     }
 
     fn matches_selector_part(&self, id: NodeId, selector: &SelectorChain, part: usize) -> bool {
-        if !self.matches_compound(id, &selector.compounds[part]) {
+        if !self.matches_compound(id, &selector.compounds[part], selector.state(part).0) {
             return false;
         }
         if part == 0 {

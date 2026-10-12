@@ -402,7 +402,7 @@
     "rec_tri": {
       "recomputed_nodes": 313,
       "input_changes": 0,
-      "input_skips": 2,
+      "input_skips": 0,
       "visited_nodes": 353
     },
     "tri": {

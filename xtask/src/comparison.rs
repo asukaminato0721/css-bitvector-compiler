@@ -120,6 +120,8 @@ pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dy
                 "Cargo.lock",
                 "src/clean/engine.rs",
                 "src/clean/engine/arena.rs",
+                "src/clean/engine/names.rs",
+                "src/clean/engine/trace_index.rs",
                 "Cargo.toml",
                 "src/clean/engine/comparison.rs",
                 "src/clean/compiler.rs",

@@ -110,6 +110,96 @@ fn hover_aliases_are_equivalent() {
 }
 
 #[test]
+fn indexed_names_preserve_raw_attributes_and_survive_new_names_and_reinit() {
+    let rules = [
+        ".a.b[data-k=\"v\"]",
+        "[class=\"b a a\"]",
+        ".new[data-added=\"1\"]",
+        ".new:focus",
+    ];
+    let css = rules
+        .iter()
+        .map(|rule| format!("{rule} {{ color: red }}"))
+        .collect::<String>();
+    let program = CompiledProgram::compile(&css).unwrap();
+    let names: Vec<_> = rules
+        .iter()
+        .map(|rule| compile_rule(rule).selectors[0].text.clone())
+        .collect();
+    let mut child = node(0, "div", Some("b a a"), vec![]);
+    child
+        .attributes
+        .insert("data-k".into(), serde_json::json!("v"));
+    let mut replacement = node(0, "div", Some("a b"), vec![]);
+    replacement
+        .attributes
+        .insert("data-k".into(), serde_json::json!("v"));
+    let commands = vec![
+        TraceCommand::Init {
+            node: node(u64::MAX, "main", None, vec![child]),
+        },
+        TraceCommand::ReplaceValue {
+            path: vec![0],
+            value_type: Some("attributes".into()),
+            key: "class".into(),
+            value: Some(serde_json::json!("new runtime-only")),
+            old_value: Some(serde_json::json!("b a a")),
+        },
+        TraceCommand::InsertValue {
+            path: vec![0],
+            value_type: Some("attributes".into()),
+            key: "data-added".into(),
+            value: Some(serde_json::json!("1")),
+        },
+        TraceCommand::InsertValue {
+            path: vec![0],
+            value_type: Some("attributes".into()),
+            key: "is_focus_root".into(),
+            value: Some(serde_json::json!(true)),
+        },
+        TraceCommand::DeleteValue {
+            path: vec![0],
+            value_type: Some("attributes".into()),
+            key: "data-added".into(),
+            old_value: Some(serde_json::json!("1")),
+        },
+        TraceCommand::Init { node: replacement },
+    ];
+    let trace = Trace {
+        frames: commands
+            .into_iter()
+            .enumerate()
+            .map(|(frame_id, command)| TraceFrame { frame_id, command })
+            .collect(),
+    };
+    let expected: [&[usize]; 6] = [&[0, 1], &[], &[2], &[2, 3], &[3], &[0]];
+    for kind in [
+        EngineKind::Bit,
+        EngineKind::Tri,
+        EngineKind::RecursiveTri,
+        EngineKind::Quad,
+    ] {
+        let mut engine = Engine::new(kind, program.clone());
+        for (frame, indices) in trace.frames.iter().zip(expected) {
+            let wanted: std::collections::BTreeMap<String, Vec<u64>> = indices
+                .iter()
+                .map(|&index| (names[index].clone(), vec![0]))
+                .collect();
+            assert_eq!(
+                engine.comparison_step(frame).unwrap(),
+                wanted,
+                "{kind:?}, frame {}",
+                frame.frame_id
+            );
+        }
+    }
+    ParcelProgram::parse(&css, &program)
+        .unwrap()
+        .check(&program, &trace)
+        .unwrap();
+}
+
+#[test]
 fn engines_agree_on_sibling_and_nth_invalidation() {
     let program = compile_rule(".lead:first-child + .target");
     let trace = Trace {

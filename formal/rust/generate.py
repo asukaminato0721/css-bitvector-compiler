@@ -27,9 +27,9 @@ ENTRY_POINTS = [
     "clean::logic::requirements_accept",
 ]
 GENERATED = ["CssMark/Types.lean", "CssMark/Funs.lean"]
-# Container operations use an extensional map contract. The concrete Vec layout
-# is outside these local algorithm proofs, just as HashMap buckets were before.
-OPAQUE_CONTAINERS = ["crate::clean::engine::arena"]
+# Container operations use extensional map contracts. Concrete Vec layouts
+# and sorted-key invariants remain outside these local algorithm proofs.
+OPAQUE_CONTAINERS = ["crate::clean::engine::arena", "crate::clean::engine::trace_index"]
 
 
 def run(args):

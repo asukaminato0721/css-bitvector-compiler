@@ -6,12 +6,12 @@ from pathlib import Path
 import hashlib
 import json
 import statistics
-import sys
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import TwoSlopeNorm
+from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,13 +21,10 @@ PLOTS.mkdir(exist_ok=True)
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 10, "axes.spines.top": False,
                      "axes.spines.right": False, "savefig.dpi": 160})
 KINDS = ["bit", "tri", "rec_tri", "quad"]
-SKIP_HISTORICAL = "--skip-historical" in sys.argv[1:]
+colours = ["#4477AA", "#66CCEE", "#228833", "#CCBB44", "#AA3377"]
 
 
 def save(fig, name):
-    if SKIP_HISTORICAL and name == "browser-total":
-        plt.close(fig)
-        return
     for suffix in ["svg", "png"]:
         path = PLOTS / f"{name}.{suffix}"
         fig.savefig(path, bbox_inches="tight")
@@ -89,14 +86,15 @@ lines = [
     "本次对照使用已发布的 [parcel_selectors 0.28.2](https://docs.rs/parcel_selectors/0.28.2/parcel_selectors/)。",
     "两侧使用同一 DOM、同一修改序列和本项目支持的同一选择器子集。",
     "对照库在每个修改帧后完整匹配。本项目使用增量更新。此结果不代表与浏览器完整样式引擎的比较。", "",
-    "本轮四个算法共用 Vec 节点表，其余运行时映射使用 FxHash。parcel_selectors 适配器也使用这份 DOM，因此两侧都获得存储优化。",
-    "结果均来自本轮重测。旧测量的 CPU 状态不同，不用于计算本次改动的加速倍数。", "",
+    "本轮四个算法共用 Vec 节点表、名称索引和外部 ID 索引。parcel_selectors 适配器也使用这份 DOM，因此两侧都使用新的存储实现。",
+    "适配器直接扫描节点的类和属性 Vec，按 ID 读取名称文本。它不反复搜索全局名称表。",
+    "结果均来自当前源码的本轮重测。不同批次存在耗时漂移，不用历史耗时计算本次改动的加速比。", "",
     "## 测试方法", "",
     "- release 构建，单线程，固定 CPU 4。",
     "- 每个实现预热一次，测量七次。每轮轮换运行顺序。",
     "- 使用 std::time::Instant。下表显示中位数。原始 JSON 保留全部样本、最小值和最大值。",
     "- 计时包含 DOM 构造或修改、派生伪类刷新、匹配和运行时状态维护。",
-    "- CSS 解析、trace 读取、program 复制、结果集合导出和结果校验不计时。",
+    "- CSS 解析、trace 读取、program 复制、Engine::new 中的选择器名称编码、结果集合导出和结果校验不计时。",
     "- initial 只执行首个初始化帧。trace 执行完整修改序列，包含初始化。",
     "- 所有数据集都先逐帧检查匹配集合。对照同时检查 naive、bit、tri、rec_tri、quad。",
     "- 对照适配器为每个 DOM 版本重建兄弟索引，并启用该版本内的 nth 缓存。索引构建计入耗时。",
@@ -107,7 +105,7 @@ lines = [
     f"- CPU：{corpus['cpu'].split(':', 1)[-1].strip()}。CPU 4 调速模式：`{corpus.get('cpu4_governor', '未记录')}`。",
     f"- 系统：`{corpus['kernel']}`。",
     f"- Rust：`{corpus['rustc'].splitlines()[0]}`。",
-    f"- 基础提交：`{corpus['revision']}`。包含本次未提交改动，源码指纹保存在原始 JSON。", "",
+    f"- 测量时的基础提交：`{corpus['revision']}`。本轮改动由原始 JSON 中的源码指纹标识。", "",
     "## 汇总", "",
     "共有 13 个数据集。a_to_b 有零个参与匹配的选择器，保留原始数据，但不计入以下 12 个数据集的汇总。",
     "表中数值是各数据集“对照耗时 ÷ 本项目耗时”的几何平均。大于 1 表示本项目较快。", "",
@@ -119,7 +117,7 @@ for workload, title in [("initial", "首次构造与匹配"), ("trace", "完整�
     lines.append(f"| {title} | " + " | ".join(f"{v:.2f}×" for v in ratios) + " |")
 lines += ["", "![初始化和完整修改序列的耗时倍率](benchmark-plots/matcher-speedup.svg)", "",
           "增量引擎测试见[原生 Stylo／Blitz 对比](stylo-benchmark.md)和[真实网站数据对比](website-benchmark.md)。",
-          "存储优化的隔离实验见[性能分析](performance-analysis.md)。另保留[早期 Blink 测量](browser-benchmark.md)，供检查跨接口测量的限制。"]
+          "存储布局、输入转换成本和计时边界见[存储说明](storage-performance.md)。"]
 for workload, title in [("initial", "首次构造与匹配"), ("trace", "完整修改序列")]:
     lines += ["", f"## {title}", "", "中位耗时，单位为毫秒。数值越小越快。", "",
               "| 数据集 | 选择器 | 帧数 | parcel_selectors | bit | tri | rec_tri | quad |",
@@ -135,112 +133,11 @@ lines += ["", "## 解释范围", "",
           "短至数微秒的测试易受计时和分配开销影响。七次样本不能用于推断其他机器、浏览器或页面的性能。", "",
           "## 复现", "", "```sh", "cargo build --release --locked -p xtask",
           "taskset -c 4 target/release/xtask compare --all --samples 7 --output docs/benchmark-results.json",
-          "uv run dev/plot-benchmarks.py --skip-historical", "```", "",
+          "uv run dev/plot-benchmarks.py", "```", "",
           "绘图还需要当前源码对应的受控 Stylo 基准 JSON。若 CPU 4 不可用，请选择可用 CPU。",
           "[原始结果](benchmark-results.json)包含全部耗时、环境、版本、源码指纹和测试覆盖数量。", ""]
 (DOCS / "benchmark.md").write_text("\n".join(lines))
 print("Wrote matcher report and figures.")
-
-native = json.loads((DOCS / "browser-native-results.json").read_text())
-browser = json.loads((DOCS / "browser-results.json").read_text())
-assert len(native["results"]) == len(browser["results"]) == 8, "browser benchmark is incomplete"
-browser_sites = {x["name"]: x for x in browser["results"]}
-labels = [x["name"] for x in native["results"]]
-advantages = []
-for site in native["results"]:
-    best = min(x["median_ns"] for x in measurements(site, "trace").values())
-    blink = next(x for x in browser_sites[site["name"]]["scenarios"] if x["workload"] == "trace")
-    advantages.append(best / blink["median_ns"])
-colours = ["#4477AA", "#66CCEE", "#228833", "#CCBB44", "#AA3377"]
-fig, ax = plt.subplots(figsize=(11, 10), layout="constrained")
-for index, engine in enumerate(KINDS + ["Blink"]):
-    medians, lower, upper = [], [], []
-    for site in native["results"]:
-        if engine == "Blink":
-            item = next(x for x in browser_sites[site["name"]]["scenarios"] if x["workload"] == "trace")
-            samples = [x["elapsed_ns"] for x in item["samples"]]
-        else:
-            item = measurements(site, "trace")[engine]
-            samples = item["samples_ns"]
-        median = item["median_ns"]
-        medians.append(median / 1e6)
-        lower.append((median - min(samples)) / 1e6)
-        upper.append((max(samples) - median) / 1e6)
-    ax.barh(np.arange(8) + (index - 2) * .15, medians, height=.135,
-            xerr=[lower, upper], label=engine, color=colours[index], capsize=1.5, error_kw={"elinewidth": .7})
-ax.set(yticks=range(8), yticklabels=labels, xscale="log", xlabel="Total milliseconds (log scale); lower is faster",
-       title="Historical cross-boundary measurement: unequal output contracts\nInitial DOM + 100 mutations; 32 rules; median and min–max of 7 samples")
-ax.invert_yaxis()
-ax.grid(axis="x", alpha=.2)
-ax.set_axisbelow(True)
-ax.legend(ncols=5, loc="upper right")
-save(fig, "browser-total")
-
-lines = ["# 浏览器增量 CSS 对比", "",
-"此页保留早期 Blink 测量。优先参阅[原生 Stylo／Blitz 对比](stylo-benchmark.md)。新基准统一计时器、输出要求和修改阶段。", "",
-f"原测量中，Rust 与 Blink 的总耗时比为 {min(advantages):.1f}–{max(advantages):.1f}。此比值不能作为算法速度结论。",
-"两侧的输出要求不同，计时包含初始化，且分别在原生程序与 JavaScript 中运行。",
-"808 帧的结果校验通过，只能说明结果一致，不能消除这些测量差异。", "",
-"| 实现 | 修改后的处理 | 复用内容 | 本次覆盖 |", "|---|---|---|---|",
-"| 本项目 | 标记 dirty，沿父节点和前驱兄弟依赖传播 | 匹配状态、输入条件、quad 表达式 | 算法证明和性能实测 |",
-"| Blink | 按选择器特征形成失效集合，定位需要重算的节点 | 已有计算样式及引擎内部缓存 | 真实浏览器性能实测 |",
-"| Stylo | 按状态、属性和选择器依赖进行失效，再执行样式遍历 | 已有元素样式及引擎内部缓存 | 另见原生 Stylo／Blitz 实测 |", "",
-"机制依据：[Blink 失效流程](https://chromium.googlesource.com/chromium/src/+/master/third_party/blink/renderer/core/css/style-invalidation.md)、"
-"[Stylo 失效模块](https://doc.servo.org/style/invalidation/element/invalidator/index.html)、"
-"[Firefox 对 Stylo 的说明](https://firefox-source-docs.mozilla.org/layout/StyleSystemOverview.html)。", "",
-"## 实验条件", "",
-f"- 浏览器：`{browser['version']['product']}`，通过 `{browser['executable']}` 启动。完整版本见原始 JSON。",
-f"- CPU：{browser['cpu']}。两侧顺序执行，固定 CPU 4。",
-"- 8 个确定性用例。每例包含 32 个选择器、初始化和 100 次修改。",
-"- 每例有 256 或 1024 个子节点，外加一个根节点。位置修改最多增加一个子节点。",
-"- local：修改单个子节点的 class。ancestor：切换根节点 class，影响后代。",
-"- sibling：修改 class，影响相邻兄弟。position：交替在首位插入和删除，改变 nth-child 结果。",
-"- 同一份输入分别交给 Rust 和浏览器。逐帧核对所有选择器的完整匹配集合。",
-"- 浏览器还逐帧核对 background-color，确保真实样式计算与预期相同。校验不计时。",
-"- 全节点样式校验的重算次数必须恰好等于帧数，确认校验没有补做计时路径遗漏的刷新。",
-"- 每例预热一次，记录七次。Rust 内部轮换四个实现的执行顺序。浏览器在独立阶段运行。",
-"- CSS 解析、输入读取、协议传输、结果导出和校验均不计入总耗时。",
-"- 总耗时包含 DOM 构造、修改和同步刷新。浏览器使用真实 DOM、级联和样式重算；Rust 维护匹配状态。",
-"- 每次修改后读取非布局属性，强制提交待处理样式。没有使用动画帧来合并多次修改。",
-"- 刷新读取修改节点及其子节点或相邻兄弟。检查内部重算次数至少等于输入帧数，拒绝跳过刷新或合并计算的测量。",
-"- 使用不继承的 background-color。规则分别命中不同 class，不使用网页原始声明。",
-"- 该实验不测 hover/focus 事件、继承或 Shadow DOM。结果不能代表完整网页速度。",
-"- 不主动请求布局或绘制。CDP 采集区间内的布局耗时另存 JSON，不用于修正总耗时。", "",
-"Rust 的总耗时还包含每帧的派生伪类刷新，以及按需执行的兄弟位置查询。",
-"当前实现分别遍历 DOM 和兄弟前缀。因此，这些数字不能单独衡量 tri/quad 缓存规则的成本。",
-"实现见 [engine.rs](../src/clean/engine.rs) 中的 `refresh_pseudos` 和 `position`。", "",
-"浏览器总耗时使用 `performance.now()`。内部重算耗时使用 CDP 的 `RecalcStyleDuration` 差值。",
-"该指标来自样式重算探针，不能代表全部 DOM 修改和失效维护成本。",
-"CDP 采集区间比 JavaScript 计时区间略宽，两个指标独立展示。",
-"依据：[CDP Performance](https://chromedevtools.github.io/devtools-protocol/tot/Performance/)、"
-"[Chromium 计时实现](https://github.com/chromium/chromium/blob/main/third_party/blink/renderer/core/inspector/inspector_performance_agent.cc)。", "",
-"## 完整修改序列", "", "![浏览器和本项目的完整序列耗时](benchmark-plots/browser-total.svg)", "",
-"中位耗时，单位为毫秒。数值越小越快。内部样式耗时是浏览器诊断项，不是与 Rust 等价的计时范围。", "",
-"| 用例 | bit | tri | rec_tri | quad | Blink 总耗时 | Blink 内部样式 | 重算次数 |",
-"|---|---:|---:|---:|---:|---:|---:|---:|"]
-for site in native["results"]:
-    row = measurements(site, "trace")
-    blink = next(x for x in browser_sites[site["name"]]["scenarios"] if x["workload"] == "trace")
-    values = [row[e]["median_ns"] / 1e6 for e in KINDS] + [blink["median_ns"] / 1e6, blink["median_style_ns"] / 1e6]
-    lines.append(f"| {site['name']} | " + " | ".join(f"{x:.3f}" for x in values) + f" | {blink['median_style_count']} |")
-lines += ["", "## 首次构造与匹配", "", "中位耗时，单位为毫秒。", "",
-          "| 用例 | bit | tri | rec_tri | quad | Blink 总耗时 |", "|---|---:|---:|---:|---:|---:|"]
-for site in native["results"]:
-    row = measurements(site, "initial")
-    blink = next(x for x in browser_sites[site["name"]]["scenarios"] if x["workload"] == "initial")
-    values = [row[e]["median_ns"] / 1e6 for e in KINDS] + [blink["median_ns"] / 1e6]
-    lines.append(f"| {site['name']} | " + " | ".join(f"{x:.3f}" for x in values) + " |")
-lines += ["", "## 复现", "", "```sh", "cargo build --release -p xtask",
-          "node dev/browser-benchmark.mjs --generate /tmp/css-browser-fixtures.json",
-          "taskset -c 4 target/release/xtask browser-native --input /tmp/css-browser-fixtures.json --output docs/browser-native-results.json --oracle /tmp/css-browser-oracle.json --samples 7",
-          "taskset -c 4 node dev/browser-benchmark.mjs --oracle /tmp/css-browser-oracle.json --output docs/browser-results.json --samples 7 --browser /usr/bin/brave",
-          "uv run dev/plot-benchmarks.py", "```", "",
-          "Node.js 需提供内置 WebSocket。请按本机环境修改浏览器路径和 CPU 编号。绘图还需要完整的 matcher 基准 JSON。", "",
-          "原始数据：[Rust](browser-native-results.json)、[浏览器](browser-results.json)。",
-          "图形提供 SVG 和 PNG，位于 [benchmark-plots](benchmark-plots/)。", ""]
-if not SKIP_HISTORICAL:
-    (DOCS / "browser-benchmark.md").write_text("\n".join(lines))
-    print("Wrote historical browser report and figures.")
 
 stylo = json.loads((DOCS / "stylo-results.json").read_text())
 assert stylo["protocol"] == "native-incremental-rgba-v1"
@@ -276,6 +173,10 @@ for ax, phase, title in zip(axes, ["update", "output"], ["Mutation + incremental
                 capsize=1.5, error_kw={"elinewidth": .7})
     ax.set(yticks=range(8), yticklabels=[x["name"] for x in stylo["results"]], xscale="log",
            xlabel="Milliseconds for 100 updates (log scale)", title=title)
+    if phase == "output":
+        ax.xaxis.set_major_locator(LogLocator(base=10, subs=[1, 2, 5]))
+        ax.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}"))
+        ax.xaxis.set_minor_formatter(NullFormatter())
     ax.grid(axis="x", alpha=.2)
     ax.set_axisbelow(True)
 axes[0].invert_yaxis()
@@ -287,7 +188,7 @@ lines = [
     "# 原生增量引擎对比", "",
     "本次直接比较本项目与 Stylo／Blitz。两侧在同一个 Rust 程序内运行。",
     "计时只覆盖初始化后的 100 次修改。两侧每次修改后都输出全节点颜色。", "",
-    "这比原来的 Blink 跨接口测量更可比。但它仍是实现层基准，不是纯算法成本测量。",
+    "此基准统一输出要求和计时范围，衡量两个实现的更新成本。内部数据结构及匹配器仍各自保留。",
     "Stylo 使用 Blitz 的 DOM 和失效接口。结果不能代表 Firefox，也不能替代 Blink 的原生引擎测试。", "",
     "## 对齐的条件", "",
     "| 条件 | 本项目 | Stylo／Blitz |",
@@ -302,7 +203,7 @@ lines = [
     "| 校验 | 每帧比较所有节点 ID 和 RGBA 通道 | 相同 |",
     "| 执行顺序 | 五个实现同轮轮换 | 参与相同轮换 |", "",
     f"每例先预热一次，再记录 {stylo['samples']} 次。每轮新建 DOM，并完成首次更新后再计时。",
-    "计时包含 DOM 修改、失效维护和同步更新。全节点结果读取单独计时。",
+    "计时包含 DOM 修改、新输入名称编码、失效维护和同步更新。全节点结果读取单独计时。",
     "总耗时是两个计时区间之和。逐帧比较、结果数组释放和后端析构不计时。",
     "使用逐帧计时器，不做空循环扣除。误差线表示最小值至最大值，不是置信区间。", "",
     "## 输出为何可比", "",
@@ -346,8 +247,8 @@ lines += ["", "local 修改单个子节点的 class。ancestor 切换根节点 c
           f"- Stylo：{stylo['stylo']}。Blitz DOM：{stylo['blitz_dom']}。",
           f"- CPU：{stylo['cpu'].split(':', 1)[-1].strip()}。",
           f"- 编译器：{stylo['rustc'].splitlines()[0]}。",
-          "- 使用独立 Cargo.lock 固定基准依赖。主引擎使用 rustc-hash 2.1.3。",
-          "- 四个算法共用 Vec 节点表，其余运行时映射使用 FxHash。求值和失效流程保持原实现。",
+          "- 使用独立 Cargo.lock 固定基准依赖。主引擎已移除直接的 rustc-hash 依赖。",
+          "- 四个算法共用 Vec 节点表、名称索引和外部 ID 索引。求值和失效流程保持原实现。",
           f"- CPU 4 调速模式：{stylo.get('cpu4_governor', '未记录')}。本轮同时重测四个算法与 Stylo／Blitz。", "",
           "```sh", "node dev/browser-benchmark.mjs --generate /tmp/css-browser-fixtures.json",
           "cargo build --release --locked --manifest-path dev/stylo-benchmark/Cargo.toml",
@@ -355,6 +256,6 @@ lines += ["", "local 修改单个子节点的 class。ancestor 切换根节点 c
           "uv run dev/plot-benchmarks.py", "```", "",
           "Node.js 仅用于生成输入。计时程序不启动 Node.js 或浏览器。请按本机环境修改 CPU 编号。",
           "绘图脚本同时读取已有 matcher 和 Blink 结果。", "",
-          "[基准代码](../dev/stylo-benchmark/src/main.rs) · [原始数据](stylo-results.json) · [真实网站数据对比](website-benchmark.md) · [早期 Blink 测量](browser-benchmark.md)", ""]
+          "[基准代码](../dev/stylo-benchmark/src/main.rs) · [原始数据](stylo-results.json) · [真实网站数据对比](website-benchmark.md)", ""]
 (DOCS / "stylo-benchmark.md").write_text("\n".join(lines))
 print("Wrote native Stylo report and phase plot (SVG and PNG).")

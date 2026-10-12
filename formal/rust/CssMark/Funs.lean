@@ -24,45 +24,6 @@ noncomputable section
 
 namespace CssDom
 
-/-- Trait implementation: [core::borrow::{impl core::borrow::Borrow<T> for T}]
-    Source: '/rustc/library/core/src/borrow.rs', lines 212:0-212:37
-    Name pattern: [core::borrow::Borrow<@T, @T>] -/
-@[reducible, rust_trait_impl "core::borrow::Borrow<@T, @T>"]
-def core.borrow.Borrow.Blanket (T : Type) : core.borrow.Borrow T T := {
-  borrow := core.borrow.Borrow.Blanket.borrow
-}
-
-/-- Trait implementation: [core::hash::impls::{impl core::hash::Hash for u64}]
-    Source: '/rustc/library/core/src/hash/mod.rs', lines 811:12-811:29
-    Name pattern: [core::hash::Hash<u64>] -/
-@[reducible, rust_trait_impl "core::hash::Hash<u64>"]
-def U64.Insts.CoreHashHash : core.hash.Hash Std.U64 := {
-  hash := fun {H : Type} (HasherInst : core.hash.Hasher H) =>
-    U64.Insts.CoreHashHash.hash HasherInst
-}
-
-/-- Trait implementation: [rustc_hash::{impl core::hash::Hasher for rustc_hash::FxHasher}]
-    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 102:0-102:24
-    Name pattern: [core::hash::Hasher<rustc_hash::FxHasher>] -/
-@[reducible, rust_trait_impl "core::hash::Hasher<rustc_hash::FxHasher>"]
-def rustc_hash.FxHasher.Insts.CoreHashHasher : core.hash.Hasher
-  rustc_hash.FxHasher := {
-  finish := rustc_hash.FxHasher.Insts.CoreHashHasher.finish
-  write := rustc_hash.FxHasher.Insts.CoreHashHasher.write
-}
-
-/-- Trait implementation: [rustc_hash::{impl core::hash::BuildHasher<rustc_hash::FxHasher> for rustc_hash::FxBuildHasher}]
-    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 322:0-322:34
-    Name pattern: [core::hash::BuildHasher<rustc_hash::FxBuildHasher, rustc_hash::FxHasher>] -/
-@[reducible, rust_trait_impl
-  "core::hash::BuildHasher<rustc_hash::FxBuildHasher, rustc_hash::FxHasher>"]
-def rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher :
-  core.hash.BuildHasher rustc_hash.FxBuildHasher rustc_hash.FxHasher := {
-  HasherInst := rustc_hash.FxHasher.Insts.CoreHashHasher
-  build_hasher :=
-    rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher.build_hasher
-}
-
 /-- [css_bitvector_compiler::clean::compiler::{impl core::cmp::PartialEq<css_bitvector_compiler::clean::compiler::NodeId> for css_bitvector_compiler::clean::compiler::NodeId}::eq]:
     Source: 'src/clean/compiler.rs', lines 17:29-17:38
     Visibility: public -/
@@ -81,15 +42,15 @@ def clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId : core.cmp.PartialEq
 }
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::clear]:
-    Source: 'src/clean/engine.rs', lines 61:4-65:5 -/
+    Source: 'src/clean/engine.rs', lines 65:4-69:5 -/
 def clean.engine.Dom.clear
   (self : clean.engine.Dom) : Result clean.engine.Dom := do
   let na ← clean.engine.arena.NodeArena.clear self.nodes
-  let hm ← std.collections.hash.map.HashMap.clear self.trace_nodes
-  ok { self with nodes := na, root := none, trace_nodes := hm }
+  let ti ← clean.engine.trace_index.TraceIndex.clear self.trace_nodes
+  ok { self with nodes := na, root := none, trace_nodes := ti }
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::insert_instance]:
-    Source: 'src/clean/engine.rs', lines 68:4-77:5 -/
+    Source: 'src/clean/engine.rs', lines 72:4-81:5 -/
 def clean.engine.Dom.insert_instance
   (self : clean.engine.Dom) (node : clean.engine.DomNode) :
   Result ((Option clean.compiler.NodeId) × clean.engine.Dom)
@@ -98,15 +59,13 @@ def clean.engine.Dom.insert_instance
   match o with
   | none => ok (none, self)
   | some next =>
-    let (_, hm) ←
-      std.collections.hash.map.HashMap.insert core.cmp.EqU64
-        U64.Insts.CoreHashHash
-        rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
-        self.trace_nodes node.trace_id self.next_instance
+    let (_, ti) ←
+      clean.engine.trace_index.TraceIndex.insert self.trace_nodes node.trace_id
+        self.next_instance
     let na ←
       clean.engine.arena.NodeArena.insert self.nodes self.next_instance node
     ok (some self.next_instance,
-      { self with nodes := na, trace_nodes := hm, next_instance := next })
+      { self with nodes := na, trace_nodes := ti, next_instance := next })
 
 /-- [css_bitvector_compiler::clean::logic::{css_bitvector_compiler::clean::logic::Dirty}::merge]:
     Source: 'src/clean/logic.rs', lines 10:4-16:5 -/
@@ -128,7 +87,7 @@ def clean.logic.Dirty.merge
   | clean.logic.Dirty.NodeChanged => ok clean.logic.Dirty.NodeChanged
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop 0:
-    Source: 'src/clean/engine.rs', lines 143:8-154:5 -/
+    Source: 'src/clean/engine.rs', lines 156:8-167:5 -/
 @[rust_loop]
 def clean.engine.Dom.mark_loop
   (current : Option clean.compiler.NodeId) (self : clean.engine.Dom)
@@ -165,7 +124,7 @@ def clean.engine.Dom.mark_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]:
-    Source: 'src/clean/engine.rs', lines 140:4-154:5 -/
+    Source: 'src/clean/engine.rs', lines 153:4-167:5 -/
 @[reducible]
 def clean.engine.Dom.mark
   (self : clean.engine.Dom) (id : clean.compiler.NodeId)
@@ -175,7 +134,7 @@ def clean.engine.Dom.mark
   clean.engine.Dom.mark_loop (some id) self dirty true
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]: loop 0:
-    Source: 'src/clean/engine.rs', lines 195:8-206:5 -/
+    Source: 'src/clean/engine.rs', lines 208:8-219:5 -/
 @[rust_loop]
 def clean.engine.Dom.previous_sibling_loop
   (na : clean.engine.arena.NodeArena clean.engine.DomNode)
@@ -203,7 +162,7 @@ def clean.engine.Dom.previous_sibling_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]:
-    Source: 'src/clean/engine.rs', lines 182:4-206:5 -/
+    Source: 'src/clean/engine.rs', lines 195:4-219:5 -/
 def clean.engine.Dom.previous_sibling
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result (Option clean.compiler.NodeId)
@@ -225,7 +184,7 @@ def clean.engine.Dom.previous_sibling
 mutual
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]: loop 0:
-    Source: 'src/clean/engine.rs', lines 213:12-215:13 -/
+    Source: 'src/clean/engine.rs', lines 226:12-228:13 -/
 @[rust_loop]
 def clean.engine.Dom.remove_subtree_loop
   (iter : alloc.vec.into_iter.IntoIter clean.compiler.NodeId)
@@ -241,7 +200,7 @@ def clean.engine.Dom.remove_subtree_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]:
-    Source: 'src/clean/engine.rs', lines 208:4-217:5 -/
+    Source: 'src/clean/engine.rs', lines 221:4-230:5 -/
 def clean.engine.Dom.remove_subtree
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result clean.engine.Dom
@@ -251,30 +210,23 @@ def clean.engine.Dom.remove_subtree
   | none => ok { self with nodes := na }
   | some node =>
     let o1 ←
-      std.collections.hash.map.HashMap.get core.cmp.EqU64
-        U64.Insts.CoreHashHash
-        rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
-        (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
-        core.cmp.EqU64 self.trace_nodes node.trace_id
+      clean.engine.trace_index.TraceIndex.get self.trace_nodes node.trace_id
     let b ←
       core.option.Option.Insts.CoreCmpPartialEqOption.eq
         (core.cmp.PartialEqShared
         clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId) o1 (some id)
-    let hm ←
+    let ti ←
       if b
       then
         do
-        let (_, hm1) ←
-          std.collections.hash.map.HashMap.remove core.cmp.EqU64
-            U64.Insts.CoreHashHash
-            rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
-            (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
-            core.cmp.EqU64 self.trace_nodes node.trace_id
-        ok hm1
+        let (_, ti1) ←
+          clean.engine.trace_index.TraceIndex.remove self.trace_nodes
+            node.trace_id
+        ok ti1
       else ok self.trace_nodes
     let iter ← alloc.vec.IntoIteratorVec.into_iter node.children
     clean.engine.Dom.remove_subtree_loop iter
-      { self with nodes := na, trace_nodes := hm }
+      { self with nodes := na, trace_nodes := ti }
 partial_fixpoint
 
 end

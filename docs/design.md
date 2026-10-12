@@ -326,7 +326,7 @@ cargo xtask run --all
 - `engines_agree_on_sibling_and_nth_invalidation`
 - `checked_in_corpus_has_engine_parity`
 
-完整 corpus 要求 13 个站点上四种变体与 naive 的最终匹配完全一致，并额外断言
+完整 corpus 要求 13 个数据集（11 个网站及 2 个测试用例）上四种变体与 naive 的最终匹配完全一致，并额外断言
 `quad.recomputed_nodes <= tri.recomputed_nodes`。
 
 ## 9. Lean 4 归纳证明
@@ -350,7 +350,7 @@ Lean 版本固定为 `v4.31.0`。算法模型只依赖 `Std`。
 这些定理由 Lean 内核检查。构建还检查项目声明的公理依赖。
 [源码证明](../formal/rust/README.md) 已覆盖 quad 局部转换、输入条件检查和 `Dom::mark`。
 输入条件检查显式拒绝长度不等的数组。证明包含循环终止与边界安全。
-`Dom::mark` 的证明要求父节点内部 ID 小于子节点 ID，并使用 HashMap 接口模型。
+`Dom::mark` 的证明要求父节点内部 ID 小于子节点 ID，并使用 NodeArena 和 TraceIndex 的接口模型。具体 Vec 存储和名称编码不在证明范围内。
 源码证明还覆盖实例分配、清空、递归删除和前驱兄弟查询。
 分配保留 ID 新鲜性，清空保留计数器。删除在子 ID 递增的前提下终止，并保留未删除节点的记录。
 兄弟查询忽略失效槽位。调度器转换检查使用不展开的求值器，因此不构成调度器证明。
