@@ -332,7 +332,8 @@ cargo xtask run --all
 ## 9. Lean 4 归纳证明
 
 [formal/README.md](../formal/README.md) 给出可执行的证明、构建命令和完整证明边界。
-Lean 版本固定为 `v4.24.0`，证明只依赖自带的 `Std`。
+Lean 版本固定为 `v4.31.0`。算法模型只依赖 `Std`。
+源码证明使用固定版本的 Charon、Aeneas 及其 Lean 后端。
 
 已证明的算法模型性质：
 
@@ -341,14 +342,18 @@ Lean 版本固定为 `v4.24.0`，证明只依赖自带的 `Std`。
 - recursive-tri 在另一输入通道不变时，可只检查变化通道。
 - quad 的 OR 专门化、接受状态具体化及任意有限状态列表的组合正确。
 - 对任意有限 parent/sibling 上下文，选择器状态递推与直接解释器一致。
+- 节点事实修改、插入、删除和有限修改序列保持森林模型的失效不变量。
+- 一次 dirty 遍历终止，并修复全部待处理缓存。
 
 这些定理由 Lean 内核检查。构建还检查项目声明的公理依赖。
-Rust 到模型的精化、mutation 失效维护和 dirty 子树遍历尚未证明。
+[源码证明](../formal/rust/README.md) 已覆盖 quad 局部转换、输入条件检查和 `Dom::mark`。
+输入条件检查显式拒绝长度不等的数组。证明包含循环终止与边界安全。
+`Dom::mark` 的证明要求父节点内部 ID 小于子节点 ID，并使用 HashMap 接口模型。
+完整 arena 构造、实际 mutation 和 `recompute_node` 到森林模型的精化仍未完成。
 Kani 与差分测试仍保留各自的作用。
 
 ## 10. 当前非目标
 
 - `:has`、general sibling、`:last-*`、`:nth-last-*` 和 selector-list pseudo。
 - 对 CSS parser 的形式化证明。
-- 对可变 Rust DOM arena 与 dirty 调度器的端到端证明。
 - 并发 mutation；当前 runner 是单线程顺序 trace 语义。

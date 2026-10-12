@@ -1,4 +1,22 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub(crate) enum Dirty {
+    #[default]
+    Clean,
+    InputChanged,
+    NodeChanged,
+}
+
+impl Dirty {
+    pub(crate) fn merge(self, other: Self) -> Self {
+        match (self, other) {
+            (Self::NodeChanged, _) | (_, Self::NodeChanged) => Self::NodeChanged,
+            (Self::InputChanged, _) | (_, Self::InputChanged) => Self::InputChanged,
+            (Self::Clean, Self::Clean) => Self::Clean,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub(crate) enum Requirement {
     #[default]
     Unused,
@@ -39,11 +57,26 @@ pub(crate) fn materialize_quad(
     parent: &[bool],
     sibling: &[bool],
 ) -> Vec<bool> {
-    values
-        .iter()
-        .copied()
-        .map(|value| materialize_quad_value(value, parent, sibling))
-        .collect()
+    let mut output = Vec::new();
+    let mut index = 0;
+    while index < values.len() {
+        output.push(materialize_quad_value(values[index], parent, sibling));
+        index += 1;
+    }
+    output
+}
+
+pub(crate) fn requirements_accept(requirements: &[Requirement], input: &[bool]) -> bool {
+    if requirements.len() != input.len() {
+        return false;
+    }
+    let mut accepted = true;
+    let mut index = 0;
+    while index < requirements.len() && accepted {
+        accepted = requirements[index].accepts(input[index]);
+        index += 1;
+    }
+    accepted
 }
 
 pub(crate) fn materialize_quad_value(value: QuadValue, parent: &[bool], sibling: &[bool]) -> bool {

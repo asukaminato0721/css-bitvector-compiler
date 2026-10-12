@@ -52,6 +52,19 @@ jobs:
       - name: Check full corpus parity
         run: cargo xtask corpus
 
+  lean-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source and generated file hashes
+        run: python3 formal/rust/generate.py --check-snapshot
+      - name: Check translated source proofs and axiom audit
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal/rust
+          auto-config: false
+          build: true
+
   kani:
     needs: check
     runs-on: ubuntu-latest

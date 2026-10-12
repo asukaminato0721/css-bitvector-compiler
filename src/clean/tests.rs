@@ -3,6 +3,15 @@ use super::*;
 use crate::Node;
 use std::collections::HashMap;
 
+#[test]
+fn cache_requirements_reject_length_mismatch() {
+    use super::logic::{Requirement, requirements_accept};
+    assert!(!requirements_accept(&[Requirement::One], &[]));
+    assert!(!requirements_accept(&[], &[true]));
+    assert!(!requirements_accept(&[Requirement::Unused], &[true, false]));
+    assert!(requirements_accept(&[], &[]));
+}
+
 fn node(id: u64, tag: &str, class: Option<&str>, children: Vec<Node>) -> Node {
     let mut attributes = HashMap::new();
     if let Some(class) = class {

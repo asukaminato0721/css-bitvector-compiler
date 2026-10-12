@@ -2,30 +2,12 @@ use super::{
     Combinator, CompiledProgram, Compound, DynamicPseudo, EngineKind, NodeId, Nth, RunError,
     SelectorChain, Trace, TraceCommand, TraceFrame,
     logic::{
-        QuadValue, Requirement, materialize_quad, materialize_quad_value, record_decision,
-        specialize_concrete, specialize_or,
+        Dirty, QuadValue, Requirement, materialize_quad, materialize_quad_value, record_decision,
+        requirements_accept, specialize_concrete, specialize_or,
     },
 };
 use crate::{Node, attributes_to_string_map, rdtsc};
 use std::collections::{BTreeMap, HashMap, HashSet};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-enum Dirty {
-    #[default]
-    Clean,
-    InputChanged,
-    NodeChanged,
-}
-
-impl Dirty {
-    fn merge(self, other: Self) -> Self {
-        if self as u8 >= other as u8 {
-            self
-        } else {
-            other
-        }
-    }
-}
 
 #[derive(Debug, Clone, Default)]
 struct NodeState {
@@ -164,17 +146,20 @@ impl Dom {
             return Vec::new();
         };
         let children = &self.nodes[&parent].children;
-        children
-            .iter()
-            .position(|child| *child == id)
-            .map(|index| {
-                children[index + 1..]
-                    .iter()
-                    .copied()
-                    .filter(|child| self.nodes.contains_key(child))
-                    .collect()
-            })
-            .unwrap_or_default()
+        let mut following = Vec::new();
+        let mut found = false;
+        let mut index = 0;
+        while index < children.len() {
+            let child = children[index];
+            if found && self.nodes.contains_key(&child) {
+                following.push(child);
+            }
+            if child == id {
+                found = true;
+            }
+            index += 1;
+        }
+        following
     }
 
     fn next_sibling(&self, id: NodeId) -> Option<NodeId> {
@@ -184,12 +169,21 @@ impl Dom {
     fn previous_sibling(&self, id: NodeId) -> Option<NodeId> {
         let parent = self.nodes.get(&id)?.parent?;
         let siblings = &self.nodes.get(&parent)?.children;
-        let index = siblings.iter().position(|sibling| *sibling == id)?;
-        siblings[..index]
-            .iter()
-            .rev()
-            .copied()
-            .find(|sibling| self.nodes.contains_key(sibling))
+        let mut previous = id;
+        let mut has_previous = false;
+        let mut index = 0;
+        while index < siblings.len() {
+            let sibling = siblings[index];
+            if sibling == id {
+                return if has_previous { Some(previous) } else { None };
+            }
+            if self.nodes.contains_key(&sibling) {
+                previous = sibling;
+                has_previous = true;
+            }
+            index += 1;
+        }
+        None
     }
 
     fn remove_subtree(&mut self, id: NodeId) {
@@ -908,14 +902,6 @@ struct Evaluation {
     matches: Vec<bool>,
     require_parent: Vec<Requirement>,
     require_sibling: Vec<Requirement>,
-}
-
-fn requirements_accept(requirements: &[Requirement], input: &[bool]) -> bool {
-    requirements
-        .iter()
-        .copied()
-        .zip(input.iter().copied())
-        .all(|(requirement, bit)| requirement.accepts(bit))
 }
 
 pub(crate) fn matches_nth(position: usize, nth: Nth) -> bool {

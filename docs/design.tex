@@ -220,11 +220,16 @@ cd formal
 lake build
 \end{verbatim}
 
-构建固定使用 Lean 4.24.0，并检查项目声明的公理依赖。
+构建固定使用 Lean 4.31.0，并检查项目声明的公理依赖。
 
 定理列表与证明边界见 \nolinkurl{formal/README.md}。
 
-这些是算法模型证明。Rust 到模型的精化、修改后的失效维护和 dirty 遍历尚未证明。
+森林模型还证明修改失效维护、有限修改序列和 dirty 遍历的正确性与终止性。
+\texttt{formal/rust/} 使用 Charon/Aeneas 从生产 Rust 生成 Lean 定义。
+源码证明覆盖 quad 局部转换、输入条件检查和 \texttt{Dom::mark}。
+输入条件检查拒绝长度不等的数组，证明包含循环终止和边界安全。
+标记证明使用 HashMap 接口模型，并要求父节点内部 ID 小于子节点 ID。
+实际 arena 构造、mutation 与完整调度器的源码精化仍未完成。
 
 \section{当前限制}
 

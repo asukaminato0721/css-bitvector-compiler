@@ -1,14 +1,17 @@
 # 算法的 Lean 4 证明
 
-本目录证明 CSS 状态递推、tri 缓存复用和 quad 专门化的数学性质。
+本目录证明 CSS 状态递推、tri 缓存复用、quad 专门化、修改失效和 dirty 遍历的数学性质。
 Lean 内核检查证明项。证明不限制状态数、表达式长度或有限上下文的深度。
-这些是算法模型的证明。它们不是 Rust 源码的端到端验证。
+`CssProofs/` 包含算法模型证明。
+[rust/](rust/README.md) 包含生产 Rust 经 Charon/Aeneas 转换后的局部源码证明。
+完整 Rust 引擎的端到端验证尚未完成。
 
 ## 选择 Lean 4
 
 三个证明器都能表达本项目所需的归纳定义和正确性定理。
 本项目选择 Lean 4，主要考虑归纳证明、交互式证明和独立构建的需要。
-当前证明只使用 Lean 自带的 `Std`，不依赖 Mathlib。
+算法模型只使用 Lean 自带的 `Std`。源码证明另依赖 Aeneas 后端及其 Mathlib 依赖。
+本项目使用 Lean 4 作为主证明器。保留已有 Kani 检查，不引入 Verus。
 
 | 证明器 | 本项目的适用方向 | 选择依据 |
 |---|---|---|
@@ -31,7 +34,7 @@ cd formal
 lake build
 ```
 
-`lean-toolchain` 固定 Lean 版本为 `v4.24.0`。
+`lean-toolchain` 固定 Lean 版本为 `v4.31.0`。
 `lake build` 检查全部证明，并运行公理检查。
 CI 的 `lean` job 执行同一构建。
 
@@ -51,9 +54,11 @@ CI 的 `lean` job 执行同一构建。
 | [Quad.lean](CssProofs/Quad.lean) | `specialized_or_sound`、`concrete_accept_sound` | `specialize_or`、`specialize_concrete` |
 | [Quad.lean](CssProofs/Quad.lean) | `quad_step_sound`、`quad_program_reuse`、`quad_initial_correct` | `evaluate_quad`、`materialize_quad` |
 | [Selectors.lean](CssProofs/Selectors.lean) | `compiled_correct`、`accept_correct` | 状态递推、`matches_selector_part` |
+| [Incremental.lean](CssProofs/Incremental.lean) | `sweep_correct`、`trace_then_sweep` | 修改失效与前序 dirty 遍历的模型 |
 
 Rust 文件位于 [logic.rs](../src/clean/logic.rs) 和 [engine.rs](../src/clean/engine.rs)。
-表中的对应关系由人工审查维护。当前没有 Rust 到 Lean 的自动翻译或精化证明。
+此表描述算法模型与 Rust 的对应关系，不代表所有函数已有源码精化证明。
+源码证明的具体覆盖范围见 [rust/README.md](rust/README.md)。
 
 ## 证明内容
 
@@ -140,25 +145,40 @@ descendant 读取祖先匹配位，child 与 adjacent sibling 读取本地匹配
 对 `Context` 归纳，`compiled_correct` 同时证明两个结果与直接解释器一致。
 `accept_correct` 排除把祖先匹配误当作当前节点匹配的情况。
 
+## 修改失效与 dirty 遍历
+
+[Incremental.lean](CssProofs/Incremental.lean) 使用 first-child/next-sibling 有限森林。
+`Ready` 表示缓存与当前缓存输入一致，或者节点已有 dirty 标记。
+`subtreeDirty = false` 还要求后代没有待处理修改。
+
+- `edit_facts_preserves_ready` 证明节点谓词修改会标记该节点及祖先。
+- `invalidate_suffix_ready` 证明后续兄弟可以同时改变谓词和 sibling 输入。
+- 插入、删除和任意有限修改序列都保持 `Ready`。
+- `sweep_correct` 证明一次前序遍历终止，并使所有缓存输出正确。
+- `trace_then_sweep` 组合混合修改序列与遍历证明。
+
+遍历只在输出改变时传播输入变化。节点输出不变时，遍历仍处理已有 dirty 后代。
+模型把待传播变化作为递归参数。Rust 会写入节点标记。
+两种表示之间的完整源码精化尚未完成。
+
 ## 证明边界
 
-当前已完成的定理没有未证明占位项。
-但这些定理尚未组成 Rust 增量引擎的端到端正确性证明。
-以下工作仍需独立证明：
+已完成的定理没有未证明占位项。两套构建均检查公理依赖。
+完整 Rust 引擎仍需以下连接证明：
 
-1. CSS parser 输出与 `Selector` 模型一致，包括过滤规则、状态偏移和索引分配。
-2. `matches_compound` 正确实现属性、pseudo 与 `nth-*` 语义。
-3. 实际状态数组与模型的前缀状态及 `Step` 列表一致。
-4. DOM arena 可正确展开为有限 `Context`，并保持 parent 与 sibling 关系。
-5. 每种 mutation 都正确维护 `dirty`、`subtree_dirty`、pseudo 与兄弟位置。
-6. 遍历会处理所有必须处理的节点，且保留已有的后代失效状态。
-7. 每次复用前，缓存输出和条件确实来自同一次有效求值。
-8. Rust 的向量长度、索引和整数运算满足模型的前提。
+1. CSS parser、索引分配和节点谓词与选择器模型一致。
+2. 实际状态数组及缓存条件来自同一次有效求值，并满足复用定理的前提。
+3. Rust arena 能展开为有限森林，且实际构造和修改维护节点所有权及父子关系。
+4. `build_subtree`、`add`、`remove`、属性及 pseudo 更新维护模型不变量。
+5. 实际 `recompute_node`、传播逻辑与已证明的森林遍历一致。
 
-尤其是 `requirements_accept` 使用 `zip`。
-模型以相同的 `n` 表示输入与条件，因此假定长度相等。
-Lean 证明不覆盖 Rust 中长度不等时的截断行为。
+源码证明已覆盖输入条件检查、quad 局部转换和 `Dom::mark`。
+`requirements_accept` 现在显式拒绝长度不等的数组。
+其源码证明覆盖任意合法 slice 长度、循环终止、索引安全和整数加法安全。
 
-Kani 继续直接检查 Rust 的局部函数。
-差分测试继续检查 mutation trace 与独立 oracle 的输出。
-两者补充模型证明，但不能替代以上尚未完成的精化与不变量证明。
+`Dom::mark` 的证明要求父节点内部 ID 小于子节点 ID。
+证明还使用 HashMap 的函数式接口模型。它不验证标准库的哈希表实现。
+构造和修改代码维护上述 ID 前提的源码证明仍待完成。
+
+Kani 保留固定长度局部检查。差分测试检查 mutation trace 与 naive oracle 的输出。
+测试不能替代上述剩余源码证明。

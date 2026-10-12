@@ -8,15 +8,21 @@ Detailed algorithm, Hoare-logic, and Kani verification notes are in
 [docs/design.md](docs/design.md). A typeset copy is available as
 [docs/design.pdf](docs/design.pdf) and can be rebuilt with `cargo xtask docs`.
 
-[Lean 4 proofs](formal/README.md) cover selector recurrence, tri reuse, and
-quad specialization for arbitrary state counts and finite contexts. These
-proofs verify an algorithm model. The Rust refinement and mutation scheduler
-invariants remain outside their scope. Build the proofs with:
+[Lean 4 proofs](formal/README.md) cover selector recurrence, cache reuse,
+mutation invalidation, and dirty traversal in a finite forest model.
+[Source proofs](formal/rust/README.md) verify selected production Rust functions
+translated by Charon and Aeneas. Full arena and scheduler refinement remains incomplete.
+Lean is the main prover. Existing Kani checks remain. This project does not use Verus.
+
+Build both proof packages from the repository root:
 
 ```sh
-cd formal
-lake build
+lake -d formal build
+python3 formal/rust/generate.py --check-snapshot
+lake -d formal/rust build
 ```
+
+The snapshot check detects source changes. It does not run the Rust translators.
 
 ## Engines
 

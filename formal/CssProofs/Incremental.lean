@@ -260,4 +260,49 @@ theorem mutation_then_sweep {α : Type} [DecidableEq α] (zero : α)
   sweep_correct zero _ p s p s false false
     (edit_many_ready zero tree updates p s hr) (fun _ => rfl) (fun _ => rfl)
 
+/-- A finite trace can mix fact changes, insertion, and removal. Insertion
+    and removal supply the changed predicates of the following siblings. -/
+inductive Mutation (α : Type) where
+  | facts (path : List Bool) (eval : α → α → α)
+  | insert (path : List Bool) (state : State α) (children : Forest α)
+      (followingFacts : State α → α → α → α)
+  | remove (path : List Bool) (followingFacts : State α → α → α → α)
+
+def applyMutation {α : Type} (tree : Forest α) : Mutation α → Forest α
+  | .facts path eval => editFacts tree path eval
+  | .insert path state children facts =>
+    editAt tree path (fun rest => insertFirst state children rest facts)
+  | .remove path facts => editAt tree path (removeFirst facts)
+
+theorem mutation_preserves_ready {α : Type} (zero : α) (tree : Forest α)
+    (mutation : Mutation α) (p s : α) (hr : Ready zero tree p s) :
+    Ready zero (applyMutation tree mutation) p s := by
+  cases mutation with
+  | facts path eval => exact edit_facts_preserves_ready zero tree path eval p s hr
+  | insert path state children facts =>
+    exact edit_at_preserves_ready zero tree path _
+      (fun rest p s h => insert_preserves_ready zero state children rest facts p s h) p s hr
+  | remove path facts =>
+    exact edit_at_preserves_ready zero tree path _
+      (fun rest p s h => remove_preserves_ready zero rest facts p s h) p s hr
+
+def applyTrace {α : Type} (tree : Forest α) : List (Mutation α) → Forest α
+  | [] => tree
+  | mutation :: rest => applyTrace (applyMutation tree mutation) rest
+
+theorem trace_preserves_ready {α : Type} (zero : α) (tree : Forest α)
+    (trace : List (Mutation α)) (p s : α) (hr : Ready zero tree p s) :
+    Ready zero (applyTrace tree trace) p s := by
+  induction trace generalizing tree with
+  | nil => exact hr
+  | cons mutation rest ih =>
+    exact ih _ (mutation_preserves_ready zero tree mutation p s hr)
+
+theorem trace_then_sweep {α : Type} [DecidableEq α] (zero : α)
+    (tree : Forest α) (trace : List (Mutation α)) (p s : α)
+    (hr : Ready zero tree p s) :
+    Done zero (sweep zero (applyTrace tree trace) p s false false) p s :=
+  sweep_correct zero _ p s p s false false
+    (trace_preserves_ready zero tree trace p s hr) (fun _ => rfl) (fun _ => rfl)
+
 end CssProofs.Incremental
