@@ -3571,6 +3571,364 @@
       "skipped_simple": 821,
       "unsupported": 88,
       "updates": 85
+    },
+    {
+      "checked_frames_per_run": 5713,
+      "command_counts": {
+        "add": 2245,
+        "delete_value": 285,
+        "init": 1,
+        "insert_value": 1644,
+        "recalculate": 510,
+        "remove": 86,
+        "replace_value": 942
+      },
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "initial_nodes": 37,
+      "input_hashes": "0a640f4b28130486362ffc7f4883ba289705a50c84d325327548a159c3b252a8  css-gen-op/youtube/youtube.css\n246f3fbcb574c56b25e399cebbafa6b07bc09319f4d9b554e9e5a13c5e40a963  css-gen-op/youtube/command.json\n",
+      "matched_node_frames": 5932,
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 3787039995,
+            "median_ns": 3512387988,
+            "min_ns": 3274863382
+          },
+          "samples": [
+            {
+              "output_ns": 3327000557,
+              "total_ns": 16333804867,
+              "update_ns": 13006804310
+            },
+            {
+              "output_ns": 3318751303,
+              "total_ns": 16468289132,
+              "update_ns": 13149537829
+            },
+            {
+              "output_ns": 3274863382,
+              "total_ns": 16256482062,
+              "update_ns": 12981618680
+            },
+            {
+              "output_ns": 3576034155,
+              "total_ns": 17653738382,
+              "update_ns": 14077704227
+            },
+            {
+              "output_ns": 3787039995,
+              "total_ns": 17825245619,
+              "update_ns": 14038205624
+            },
+            {
+              "output_ns": 3680971124,
+              "total_ns": 17392553865,
+              "update_ns": 13711582741
+            },
+            {
+              "output_ns": 3512387988,
+              "total_ns": 16861954867,
+              "update_ns": 13349566879
+            }
+          ],
+          "total": {
+            "max_ns": 17825245619,
+            "median_ns": 16861954867,
+            "min_ns": 16256482062
+          },
+          "update": {
+            "max_ns": 14077704227,
+            "median_ns": 13349566879,
+            "min_ns": 12981618680
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 4023044875,
+            "median_ns": 3341687043,
+            "min_ns": 3275326541
+          },
+          "samples": [
+            {
+              "output_ns": 3275326541,
+              "total_ns": 15954870370,
+              "update_ns": 12679543829
+            },
+            {
+              "output_ns": 3331804526,
+              "total_ns": 16430945368,
+              "update_ns": 13099140842
+            },
+            {
+              "output_ns": 3341687043,
+              "total_ns": 16404064892,
+              "update_ns": 13062377849
+            },
+            {
+              "output_ns": 4023044875,
+              "total_ns": 18960289367,
+              "update_ns": 14937244492
+            },
+            {
+              "output_ns": 3654377425,
+              "total_ns": 17313598151,
+              "update_ns": 13659220726
+            },
+            {
+              "output_ns": 3646979178,
+              "total_ns": 17180202426,
+              "update_ns": 13533223248
+            },
+            {
+              "output_ns": 3326485491,
+              "total_ns": 16001924860,
+              "update_ns": 12675439369
+            }
+          ],
+          "total": {
+            "max_ns": 18960289367,
+            "median_ns": 16430945368,
+            "min_ns": 15954870370
+          },
+          "update": {
+            "max_ns": 14937244492,
+            "median_ns": 13099140842,
+            "min_ns": 12675439369
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 4694344157,
+            "median_ns": 3569020201,
+            "min_ns": 3317922785
+          },
+          "samples": [
+            {
+              "output_ns": 3358404550,
+              "total_ns": 16560939925,
+              "update_ns": 13202535375
+            },
+            {
+              "output_ns": 3353317254,
+              "total_ns": 16480344767,
+              "update_ns": 13127027513
+            },
+            {
+              "output_ns": 3317922785,
+              "total_ns": 16305234005,
+              "update_ns": 12987311220
+            },
+            {
+              "output_ns": 4694344157,
+              "total_ns": 21116816194,
+              "update_ns": 16422472037
+            },
+            {
+              "output_ns": 3615398524,
+              "total_ns": 17081548576,
+              "update_ns": 13466150052
+            },
+            {
+              "output_ns": 3775983394,
+              "total_ns": 17404022891,
+              "update_ns": 13628039497
+            },
+            {
+              "output_ns": 3569020201,
+              "total_ns": 16913226412,
+              "update_ns": 13344206211
+            }
+          ],
+          "total": {
+            "max_ns": 21116816194,
+            "median_ns": 16913226412,
+            "min_ns": 16305234005
+          },
+          "update": {
+            "max_ns": 16422472037,
+            "median_ns": 13344206211,
+            "min_ns": 12987311220
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 3816015744,
+            "median_ns": 3343599259,
+            "min_ns": 3260296417
+          },
+          "samples": [
+            {
+              "output_ns": 3331903785,
+              "total_ns": 16434133794,
+              "update_ns": 13102230009
+            },
+            {
+              "output_ns": 3343599259,
+              "total_ns": 16378296569,
+              "update_ns": 13034697310
+            },
+            {
+              "output_ns": 3322325780,
+              "total_ns": 16384289984,
+              "update_ns": 13061964204
+            },
+            {
+              "output_ns": 3816015744,
+              "total_ns": 17642342807,
+              "update_ns": 13826327063
+            },
+            {
+              "output_ns": 3712294813,
+              "total_ns": 17245581420,
+              "update_ns": 13533286607
+            },
+            {
+              "output_ns": 3260296417,
+              "total_ns": 15894858588,
+              "update_ns": 12634562171
+            },
+            {
+              "output_ns": 3764627117,
+              "total_ns": 17541931451,
+              "update_ns": 13777304334
+            }
+          ],
+          "total": {
+            "max_ns": 17642342807,
+            "median_ns": 16434133794,
+            "min_ns": 15894858588
+          },
+          "update": {
+            "max_ns": 13826327063,
+            "median_ns": 13102230009,
+            "min_ns": 12634562171
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 2868239396,
+            "median_ns": 2634967933,
+            "min_ns": 2613550280
+          },
+          "samples": [
+            {
+              "output_ns": 2615633417,
+              "total_ns": 9039726611,
+              "update_ns": 6424093194
+            },
+            {
+              "output_ns": 2632687705,
+              "total_ns": 9097042453,
+              "update_ns": 6464354748
+            },
+            {
+              "output_ns": 2634967933,
+              "total_ns": 9059449229,
+              "update_ns": 6424481296
+            },
+            {
+              "output_ns": 2613550280,
+              "total_ns": 9038052136,
+              "update_ns": 6424501856
+            },
+            {
+              "output_ns": 2639830696,
+              "total_ns": 8977421400,
+              "update_ns": 6337590704
+            },
+            {
+              "output_ns": 2780371691,
+              "total_ns": 9323035209,
+              "update_ns": 6542663518
+            },
+            {
+              "output_ns": 2868239396,
+              "total_ns": 9522866628,
+              "update_ns": 6654627232
+            }
+          ],
+          "total": {
+            "max_ns": 9522866628,
+            "median_ns": 9059449229,
+            "min_ns": 8977421400
+          },
+          "update": {
+            "max_ns": 6654627232,
+            "median_ns": 6424501856,
+            "min_ns": 6337590704
+          }
+        }
+      ],
+      "name": "youtube",
+      "node_frames": 42795526,
+      "overlapping_node_frames": 114,
+      "peak_nodes": 13667,
+      "selectors": 31,
+      "skipped_simple": 21,
+      "unsupported": 7,
+      "updates": 5712
     }
   ],
   "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)\nbinary: rustc\ncommit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4\ncommit-date: 2026-09-28\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.0\nLLVM version: 23.1.1\n",

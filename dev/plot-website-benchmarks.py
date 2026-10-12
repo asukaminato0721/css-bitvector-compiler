@@ -80,7 +80,7 @@ for ax, ratios, title in zip(axes, all_ratios, ["Update only", "Update + all-nod
             ax.text(col, row, f"{ratios[row,col]:.2f}×", ha="center", va="center", color="white" if abs(math.log2(ratios[row,col])) > limit*.55 else "black")
 fig.suptitle("Stylo / Blitz time ÷ project time\nAbove 1: project is faster. Below 1: Stylo / Blitz is faster.")
 bar = fig.colorbar(im, ax=axes, shrink=.65, label="Time ratio (log scale)")
-bar.set_ticks(range(-limit,limit+1), [f"{2.0**i:g}×" for i in range(-limit,limit+1)])
+bar.set_ticks(range(-limit,limit+1), labels=[f"{2.0**i:g}×" for i in range(-limit,limit+1)])
 save(fig, "website-ratios")
 
 
@@ -101,9 +101,9 @@ stylo_wins = sum(total[:,4] < best)
 project_wins = len(sites) - stylo_wins
 geo_total = [statistics.geometric_mean(all_ratios[1][:,i]) for i in range(4)]
 geo_update = [statistics.geometric_mean(all_ratios[0][:,i]) for i in range(4)]
-size_lines = ["| 网站 | 选择器 | 跳过简单项 | 不支持项 | 初始／峰值节点 | 更新帧 | 有重叠的节点帧 |", "|---|---:|---:|---:|---:|---:|---:|"]
+size_lines = ["| 网站 | 选择器 | 跳过简单项 | 不支持项 | 初始／峰值节点 | 更新帧 | 节点帧命中率 | 有重叠的节点帧 |", "|---|---:|---:|---:|---:|---:|---:|---:|"]
 for s in sites:
-    size_lines.append(f"| {s['name']} | {s['selectors']} | {s['skipped_simple']} | {s['unsupported']} | {s['initial_nodes']}／{s['peak_nodes']} | {s['updates']} | {s['overlapping_node_frames']:,} |")
+    size_lines.append(f"| {s['name']} | {s['selectors']} | {s['skipped_simple']} | {s['unsupported']} | {s['initial_nodes']}／{s['peak_nodes']} | {s['updates']} | {100*s['matched_node_frames']/s['node_frames']:.3f}% | {s['overlapping_node_frames']:,} |")
 text = f'''# 真实网站数据上的增量算法对比
 
 本次使用仓库保存的 11 个网站捕获数据。比较 bit、tri、rec_tri、quad，以及 Stylo 0.22.0／Blitz DOM 0.3.0-beta.3。
@@ -144,13 +144,16 @@ text = f'''# 真实网站数据上的增量算法对比
 “跳过简单项”和“不支持项”使用项目编译器的报告。编译器只读取顶层样式规则。
 嵌套规则、媒体条件、原始声明、原始级联层及 `!important` 不参与测试。
 因此，这些计数不能表示完整网页 CSS 的覆盖率。
+“节点帧命中率”表示至少命中一条被测规则的节点帧比例。它不是完整 CSS 的覆盖率。
+YouTube 的命中率只有 0.014%，Bilibili 为 0.181%。这些输入主要检验不命中的规则和节点处理成本。
+因此，不能把它们的倍率推广到完整网站 CSS。
 “有重叠的节点帧”表示某一帧中一个节点至少命中两个参与测试的选择器。一个节点可以在多帧中重复计数。
 
 ## 共同语义与校验
 
 - 全部记录节点都参与算法树，包括文本、document 和 Shadow DOM 记录。两侧将它们映射为普通 HTML 元素。
-- 标签名采用可逆编码。类型选择器同步转换。通配选择器保持通配含义。
-- 除 class、id 和 trace 状态标记外，属性名采用可逆编码。这会停用内联样式、hidden 等内建行为，并保留属性等值条件。
+- 标签名先按项目规则转成 ASCII 小写，再编码。类型选择器同步转换。通配选择器保持通配含义。
+- 属性名先转成 ASCII 小写。除 class、id 和 trace 状态标记外，其余属性名再编码。这会停用内联样式、hidden 等内建行为，并保留属性等值条件。
 - 每个已接受的选择器保留独立条目和状态位置。相同条件的条目也不合并。
 - 每条规则设置一个唯一的不透明 RGB 颜色。未命中的节点输出透明色。
 - 优先级取转换后条件的 CSS specificity。相同优先级按原编译程序的选择器顺序决定胜者。该顺序不是原网页的声明顺序。
@@ -159,13 +162,13 @@ text = f'''# 真实网站数据上的增量算法对比
 - 项目根节点没有兄弟位置。原生 nth 条件增加零 specificity 的 `:where(:not(:root))`，以保持这个约定。
 - 节点移动保留逻辑旧位置。原生 DOM 只保存活节点。后续删除旧位置不会删除移动后的新实例。
 
-计时前，bit 逐帧检查原始输入与转换后输入的全部选择器匹配位，证明本次数据转换未改变匹配结果。
+计时前，bit 逐帧检查原始输入与转换后输入的全部选择器匹配位，确认本次数据转换未改变匹配结果。
 这里是有限数据上的校验，不是形式化证明。
 然后五个实现逐帧比较全部活节点的 `(trace ID, RGBA8)`。比较在计时区间外执行。
-每轮共检查 {frames:,} 帧、{node_frames:,} 个节点帧。五个实现各运行八轮，共检查 {frames*40:,} 份帧输出。
+每个实现每轮检查 {frames:,} 帧、{node_frames:,} 个节点帧。五个实现各运行八轮，共检查 {frames*40:,} 份帧输出。
 颜色只标识最终获胜规则。规则重叠时，它不能证明每个未获胜规则的匹配位正确。
 已有的 [parcel_selectors 对比](benchmark.md) 单独检查完整匹配集合。
-新增的四个回归测试使用 naive 作为参考，检查规则重叠、移动、位置、动态状态和重复条件。
+新增的四个回归测试检查规则重叠、移动、位置、动态状态和重复条件。其中三项回放测试使用 naive 作为参考。
 
 ## 计时方法与限制
 
