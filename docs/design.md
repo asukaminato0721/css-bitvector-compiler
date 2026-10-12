@@ -329,9 +329,26 @@ cargo xtask run --all
 完整 corpus 要求 13 个站点上四种变体与 naive 的最终匹配完全一致，并额外断言
 `quad.recomputed_nodes <= tri.recomputed_nodes`。
 
-## 9. 当前非目标
+## 9. Lean 4 归纳证明
+
+[formal/README.md](../formal/README.md) 给出可执行的证明、构建命令和完整证明边界。
+Lean 版本固定为 `v4.24.0`，证明只依赖自带的 `Std`。
+
+已证明的算法模型性质：
+
+- 任意状态数下，输入条件等价于所有已读取地址保持不变。
+- tri 对短路表达式和任意有限表达式列表的复用正确。
+- recursive-tri 在另一输入通道不变时，可只检查变化通道。
+- quad 的 OR 专门化、接受状态具体化及任意有限状态列表的组合正确。
+- 对任意有限 parent/sibling 上下文，选择器状态递推与直接解释器一致。
+
+这些定理由 Lean 内核检查。构建还检查项目声明的公理依赖。
+Rust 到模型的精化、mutation 失效维护和 dirty 子树遍历尚未证明。
+Kani 与差分测试仍保留各自的作用。
+
+## 10. 当前非目标
 
 - `:has`、general sibling、`:last-*`、`:nth-last-*` 和 selector-list pseudo。
 - 对 CSS parser 的形式化证明。
-- 对无界 DOM 大小的归纳证明；这更适合 Verus/Lean/Coq 中的递归数据结构模型。
+- 对可变 Rust DOM arena 与 dirty 调度器的端到端证明。
 - 并发 mutation；当前 runner 是单线程顺序 trace 语义。

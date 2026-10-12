@@ -1,0 +1,10 @@
+name = "CssProofs"
+version = "0.1.0"
+defaultTargets = ["CssProofs"]
+
+[leanOptions]
+autoImplicit = false
+warningAsError = true
+
+[[lean_lib]]
+name = "CssProofs"

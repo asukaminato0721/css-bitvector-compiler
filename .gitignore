@@ -19,3 +19,4 @@ css-gen-op/**/*.png
 /misscnt.md
 /testcase_*.log
 /tmp
+/formal/.lake/

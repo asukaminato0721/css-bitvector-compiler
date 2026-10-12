@@ -8,6 +8,16 @@ Detailed algorithm, Hoare-logic, and Kani verification notes are in
 [docs/design.md](docs/design.md). A typeset copy is available as
 [docs/design.pdf](docs/design.pdf) and can be rebuilt with `cargo xtask docs`.
 
+[Lean 4 proofs](formal/README.md) cover selector recurrence, tri reuse, and
+quad specialization for arbitrary state counts and finite contexts. These
+proofs verify an algorithm model. The Rust refinement and mutation scheduler
+invariants remain outside their scope. Build the proofs with:
+
+```sh
+cd formal
+lake build
+```
+
 ## Engines
 
 - `naive`: an independent selector-chain oracle used for correctness checks.

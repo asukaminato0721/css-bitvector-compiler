@@ -204,14 +204,32 @@ cargo xtask check
 cargo xtask corpus
 \end{verbatim}
 
-形式化证明覆盖逐 bit 的局部转换定律。完整 parser、无界 DOM 和递归树结构尚未
-被归纳证明；端到端组合由 13 个真实站点与独立 naive oracle 做 differential
-validation。
+Kani 证明覆盖逐 bit 的局部转换定律。端到端测试使用 13 个真实站点，
+并与独立 naive oracle 做 differential validation。
+
+\section{Lean 4 归纳证明}
+
+\texttt{formal/} 包含由 Lean 内核检查的算法模型证明。
+证明覆盖任意状态数的 tri 复用、quad 专门化与状态列表组合。
+选择器证明对任意有限 parent/sibling 上下文归纳，证明状态递推与直接解释器一致。
+recursive-tri 的 admission 定理要求另一输入通道保持不变。
+
+从项目根目录执行：
+\begin{verbatim}
+cd formal
+lake build
+\end{verbatim}
+
+构建固定使用 Lean 4.24.0，并检查项目声明的公理依赖。
+
+定理列表与证明边界见 \nolinkurl{formal/README.md}。
+
+这些是算法模型证明。Rust 到模型的精化、修改后的失效维护和 dirty 遍历尚未证明。
 
 \section{当前限制}
 
 当前不支持 \texttt{:has}、general sibling、\texttt{:last-*}、
-\texttt{:nth-last-*} 和 selector-list pseudo。无界 DOM 的归纳证明适合后续用
-Verus、Lean 或 Coq 建模。
+\texttt{:nth-last-*} 和 selector-list pseudo。
+CSS parser 与可变 Rust DOM arena 的端到端正确性仍未证明。
 
 \end{document}

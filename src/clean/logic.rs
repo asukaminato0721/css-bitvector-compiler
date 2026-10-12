@@ -70,7 +70,7 @@ fn decision_for(value: QuadValue, parent: &[bool], sibling: &[bool]) -> Option<D
 }
 
 /// Specialize `raw || carry` using the current inputs. The returned decision
-/// is the weakest condition needed for the chosen branch to remain valid.
+/// is a sufficient condition for the chosen branch to remain valid.
 pub(crate) fn specialize_or(
     raw: QuadValue,
     carry: QuadValue,
