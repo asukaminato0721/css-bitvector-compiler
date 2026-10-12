@@ -37,6 +37,10 @@ The snapshot check detects source changes. It does not run the Rust translators.
 - `quad`: compositional `0 / 1 / FromInput` outputs that avoid recomputing
   pure propagation nodes.
 
+The four incremental engines share a `Vec<Option<DomNode>>` node store.
+Internal node IDs select array slots. Removed slots stay empty until the DOM is
+cleared. Sparse trace IDs and runtime string tables use FxHash.
+
 All active engines support descendant (` `), child (`>`), adjacent sibling
 (`+`), equality attributes, `:hover`, `:focus`, `:focus-within`, `:first-child`,
 `:first-of-type`, `:nth-child`, and `:nth-of-type`. Last/nth-last selectors,
@@ -79,6 +83,7 @@ cargo xtask compare --all --samples 7 --output docs/benchmark-results.json
 The comparison checks exact match sets after every frame before timing.
 It reports initialization and trace replay separately. See [benchmark results](docs/benchmark.md) for the method and limits.
 The [website data comparison](docs/website-benchmark.md) replays 11 captured sites through bit, tri, rec_tri, quad, and Stylo/Blitz. It uses normalized trees and synthetic colour declarations.
+The [performance analysis](docs/performance-analysis.md) tests FxHash and indexed node storage in isolated copies. It separates update costs from output costs.
 The [native Stylo comparison](docs/stylo-benchmark.md) measures incremental updates with the same timer and per-node output contract. The [earlier Blink measurements](docs/browser-benchmark.md) use different output contracts and do not establish an algorithm speed ratio.
 
 Inspect selector coverage for a site or CSS file:
@@ -99,5 +104,5 @@ cargo xtask all
 The ignored corpus test replays every checked-in trace and requires exact
 final-match parity between the oracle, bit, tri, recursive-tri, and quad engines.
 
-The only remaining Python utilities are `css-gen-op/generate.py` and
-`css-gen-op/common.py`, which convert raw browser captures into trace commands.
+`css-gen-op/generate.py` and `css-gen-op/common.py` convert raw browser captures
+into trace commands. Benchmark analysis and plotting scripts are in `dev/`.

@@ -17,12 +17,16 @@
     "-split-files",
     "-loops-to-rec"
   ],
+  "opaque_containers": [
+    "crate::clean::engine::arena"
+  ],
   "sources": {
-    "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
-    "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+    "Cargo.toml": "40281b6f198241599027508e12a6f74e5eb00dc24a63dd2f3c7e87801efc521c",
+    "Cargo.lock": "d4a144b7645d66d02958d1be26a16d579ba2bb5f47e2363bece028ea9637a1ec",
     "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
-    "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
-    "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+    "src/clean/engine/arena.rs": "445534cf9d093a242fff74e5b68235ff27918b65c11b319cb501bfa01594ae09",
+    "src/clean/engine/comparison.rs": "1b37b17c44d58d3b8834c7a19c348b1ea580638f9895a1cfdd89c799083b3fdd",
+    "src/clean/engine.rs": "a7970398cc869c7c69b3abfd633d8c6bf10b421eaa2d6f5f92db95bcfaa2675b",
     "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
     "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
     "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
@@ -31,7 +35,7 @@
     "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724"
   },
   "generated": {
-    "CssMark/Types.lean": "8367da0b4d3cb92941711931132abc0072dbb46f6b2f69ed7121438d168b3c70",
-    "CssMark/Funs.lean": "e5b4de1d530b282e7725a33fdb9d086fa212dadf8526c83825e7485417b212d4"
+    "CssMark/Types.lean": "dfbfc51bdbf6253a734e59136cd2d9ab9e8a0a19a949ea1fd778fce13105ac5d",
+    "CssMark/Funs.lean": "f0321e774c5db79a027e88130defa2a1c63d8a041eb5760fab930d4f69d244af"
   }
 }

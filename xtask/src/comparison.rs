@@ -58,6 +58,7 @@ struct Report {
     rustc: String,
     cpu: String,
     cpu_affinity: String,
+    cpu4_governor: Option<String>,
     kernel: String,
     revision: String,
     working_tree_dirty: bool,
@@ -107,6 +108,9 @@ pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dy
             .unwrap_or("unknown")
             .to_owned(),
         kernel: output("uname", &["-srmo"]),
+        cpu4_governor: fs::read_to_string("/sys/devices/system/cpu/cpu4/cpufreq/scaling_governor")
+            .ok()
+            .map(|s| s.trim().to_owned()),
         revision: output("git", &["rev-parse", "HEAD"]),
         working_tree_dirty: !output("git", &["status", "--porcelain"]).is_empty(),
         captured_at_utc: output("date", &["-u", "+%Y-%m-%dT%H:%M:%SZ"]),
@@ -115,6 +119,8 @@ pub fn execute(workspace: &Workspace, arguments: &[String]) -> Result<(), Box<dy
             &[
                 "Cargo.lock",
                 "src/clean/engine.rs",
+                "src/clean/engine/arena.rs",
+                "Cargo.toml",
                 "src/clean/engine/comparison.rs",
                 "src/clean/compiler.rs",
                 "src/clean/logic.rs",

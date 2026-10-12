@@ -49,7 +49,10 @@ def times(phase, field="median_ns"):
 
 def save(fig, name):
     for suffix in ["svg", "png"]:
-        fig.savefig(PLOTS / f"{name}.{suffix}", bbox_inches="tight", dpi=160)
+        path = PLOTS / f"{name}.{suffix}"
+        fig.savefig(path, bbox_inches="tight", dpi=160)
+        if suffix == "svg":
+            path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
 
 
@@ -109,6 +112,10 @@ text = f'''# 真实网站数据上的增量算法对比
 本次使用仓库保存的 11 个网站捕获数据。比较 bit、tri、rec_tri、quad，以及 Stylo 0.22.0／Blitz DOM 0.3.0-beta.3。
 输入保留网站的树结构、选择器条件和 DOM 修改序列。声明统一为可校验的背景颜色。
 因此，结果衡量网站数据在共同算法模型中的回放成本。结果不代表原始网页渲染、Firefox 或 Blink 的性能。
+
+本轮四个算法共用 Vec 节点表，其余运行时映射使用 FxHash。求值和失效流程保持原实现。
+五个实现均已重新测量。旧测量的 CPU 状态不同，不用于计算本次改动的加速倍数。
+存储改动的隔离实验见[性能分析](performance-analysis.md)。
 
 按“更新加输出”的中位数，Stylo／Blitz 在 {stylo_wins} 个网站快于全部四个项目实现。项目实现在 {project_wins} 个网站更快。
 不同网站的工作负载差异较大。请按网站查看结果。
@@ -185,6 +192,7 @@ YouTube 的命中率只有 0.014%，Bilibili 为 0.181%。这些输入主要检�
 
 环境：`{report['cpu'].split(':',1)[-1].strip()}`，`{report['rustc'].splitlines()[0]}`。
 运行开始时间：`{report['captured_at_utc']}`。CPU 亲和性：`{report['cpu_affinity']}`。
+CPU 4 调速模式：`{report.get('cpu4_governor', '未记录')}`。调速模式不等于固定频率。
 
 ## 阶段耗时
 

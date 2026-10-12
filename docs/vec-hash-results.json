@@ -1,0 +1,538 @@
+{
+  "protocol": "storage-ab-v1",
+  "captured_at_utc": "2026-10-12T17:20:34.465303+00:00",
+  "cpu_affinity": 4,
+  "platform": "Linux-6.18.55-1-lts-x86_64-with-glibc2.44",
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+  "warmups": 1,
+  "samples": 7,
+  "manifests": {
+    "vec-std": {
+      "storage": "vec-std",
+      "baseline_revision": "2e4f2414aa37e67d0d51a6a9ff004858b4aa7603",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "abf0e89fdab94aa8f44b254a39dd9aaa64b8aa1d68653ed766142a88d29723db",
+        "dev/analyze-performance.py": "3c1f41be9c4a86523e5c188baee5e6500b4cde3fb7b969be96640879d1048e51"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "1b37b17c44d58d3b8834c7a19c348b1ea580638f9895a1cfdd89c799083b3fdd",
+        "core/src/clean/engine.rs": "6425ced2461a87380f8d5ff2e51998f71e60349091bb065a45aaeb0bc070b327",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "9b7fbf9e7bc994ba1c61ef73ed6527467b2348151685b9c4970f276020cdac64",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "cc0a358bf2c5c58243605d00723bbc134c9b4d2110d070d832a32bb00600ed36",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "fff18eace5f0abc20abab3e0445c4aee99bbc80d43fb9d5f6cc3029a34a21a8d"
+    },
+    "vec-fx": {
+      "storage": "vec-fx",
+      "baseline_revision": "2e4f2414aa37e67d0d51a6a9ff004858b4aa7603",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "abf0e89fdab94aa8f44b254a39dd9aaa64b8aa1d68653ed766142a88d29723db",
+        "dev/analyze-performance.py": "3c1f41be9c4a86523e5c188baee5e6500b4cde3fb7b969be96640879d1048e51"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "1b37b17c44d58d3b8834c7a19c348b1ea580638f9895a1cfdd89c799083b3fdd",
+        "core/src/clean/engine.rs": "c3afc25ff665d6e1a0631de85f4fe27df2c58ce81feab3f7a78eeff43aa25745",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "e6d8b29be1ac8da59528d2230ac80c2b9b14e680b62cd5deee208182d079aace",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "3738859b3e8722caf2cd09804851b163b7c54fecc1767a75967c91a31bd6d56f",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "f8095350abf6114e9baa4bd53c33465f43d369b61036f145bf23ad2274b227dd"
+    }
+  },
+  "timed_engine": "bit",
+  "validation_engines": [
+    "bit",
+    "tri",
+    "rec_tri",
+    "quad"
+  ],
+  "initial_frame_timed": false,
+  "results": [
+    {
+      "site": "bilibili",
+      "input_hashes": {
+        "css-gen-op/bilibili/bilibili.css": "4b3935abd8f1eddaa9a74b26e982a0e08073024a70d6c95b4d6b892b6b528e1d",
+        "css-gen-op/bilibili/command.json": "7cb55fc166e4ee0354e184141e2082453167d55c9ef8be45cf33e5bb6fe4b644"
+      },
+      "validation": {
+        "vec-std": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        },
+        "vec-fx": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        }
+      },
+      "execution_order": [
+        [
+          [
+            "vec-std",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "vec-std",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-std",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "vec-std",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-std",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "vec-std",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-std",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "vec-std",
+            0
+          ]
+        ]
+      ],
+      "measurements": [
+        {
+          "storage": "vec-std",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 587529802,
+              "min_ns": 578183916,
+              "max_ns": 608438000
+            },
+            "output_ns": {
+              "median_ns": 1407623318,
+              "min_ns": 1344298778,
+              "max_ns": 1438252969
+            },
+            "total_ns": {
+              "median_ns": 1994156621,
+              "min_ns": 1922482694,
+              "max_ns": 2046690969
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1344298778,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 578183916,
+              "variant": "baseline",
+              "total_ns": 1922482694
+            },
+            {
+              "output_ns": 1399061149,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 586923474,
+              "variant": "baseline",
+              "total_ns": 1985984623
+            },
+            {
+              "output_ns": 1438181995,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 602324896,
+              "variant": "baseline",
+              "total_ns": 2040506891
+            },
+            {
+              "output_ns": 1407623318,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 586533303,
+              "variant": "baseline",
+              "total_ns": 1994156621
+            },
+            {
+              "output_ns": 1438252969,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 608438000,
+              "variant": "baseline",
+              "total_ns": 2046690969
+            },
+            {
+              "output_ns": 1411325351,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 587529802,
+              "variant": "baseline",
+              "total_ns": 1998855153
+            },
+            {
+              "output_ns": 1388843162,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 593003054,
+              "variant": "baseline",
+              "total_ns": 1981846216
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 396096041,
+              "min_ns": 384242018,
+              "max_ns": 413880382
+            },
+            "output_ns": {
+              "median_ns": 1363867702,
+              "min_ns": 1330364646,
+              "max_ns": 1432166592
+            },
+            "total_ns": {
+              "median_ns": 1759801713,
+              "min_ns": 1715585542,
+              "max_ns": 1846046974
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1338657939,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 384242018,
+              "variant": "baseline",
+              "total_ns": 1722899957
+            },
+            {
+              "output_ns": 1363705672,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 396096041,
+              "variant": "baseline",
+              "total_ns": 1759801713
+            },
+            {
+              "output_ns": 1432166592,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 413880382,
+              "variant": "baseline",
+              "total_ns": 1846046974
+            },
+            {
+              "output_ns": 1330364646,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 385220896,
+              "variant": "baseline",
+              "total_ns": 1715585542
+            },
+            {
+              "output_ns": 1381764844,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 398041440,
+              "variant": "baseline",
+              "total_ns": 1779806284
+            },
+            {
+              "output_ns": 1363867702,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 394490396,
+              "variant": "baseline",
+              "total_ns": 1758358098
+            },
+            {
+              "output_ns": 1381750814,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 400594768,
+              "variant": "baseline",
+              "total_ns": 1782345582
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "baseline_revision": "2e4f2414aa37e67d0d51a6a9ff004858b4aa7603",
+  "script_sources": {
+    "dev/analyze-performance.py": "\"\"\"Build an isolated diagnostic copy. Keep the measured repository unchanged.\n\nUsage: python3 dev/analyze-performance.py\nThe executable accepts --site, --samples, --output, or --profile-variant 0..4.\n\"\"\"\nfrom pathlib import Path\nimport argparse\nimport hashlib\nimport io\nimport json\nimport shutil\nimport subprocess\nimport tarfile\n\nROOT = Path(__file__).resolve().parents[1]\nparser = argparse.ArgumentParser(description=__doc__)\nparser.add_argument('--storage', choices=['std', 'fx-internal', 'fx-all', 'vec-std', 'vec-fx'], default='std')\nparser.add_argument('--revision', default='2e4f241', help='HashMap baseline revision')\nargs = parser.parse_args()\nOUT = Path('/tmp/css-performance-analysis') / args.storage\nSOURCE = OUT / 'baseline'\nSOURCE.mkdir(parents=True, exist_ok=True)\nrevision = subprocess.check_output(['git','rev-parse',args.revision],cwd=ROOT,text=True).strip()\narchive = subprocess.check_output(['git','archive',revision,'src','Cargo.toml','Cargo.lock',\n    'dev/stylo-benchmark/Cargo.toml','dev/stylo-benchmark/Cargo.lock',\n    'dev/stylo-benchmark/src/websites.rs'],cwd=ROOT)\nwith tarfile.open(fileobj=io.BytesIO(archive)) as bundle:\n    bundle.extractall(SOURCE, filter='data')\nCORE = OUT / 'core'\nBENCH = OUT / 'bench'\nREF = OUT / 'reference'\nCORE.mkdir(parents=True, exist_ok=True)\nBENCH.mkdir(parents=True, exist_ok=True)\nREF.mkdir(parents=True, exist_ok=True)\nshutil.copytree(SOURCE / 'src', REF / 'src', dirs_exist_ok=True)\nreference_manifest = (SOURCE / 'Cargo.toml').read_text().replace('members = [\"xtask\"]', 'members = []')\n(REF / 'Cargo.toml').write_text(reference_manifest.replace('name = \"css-bitvector-compiler\"', 'name = \"css-reference-core\"'))\nshutil.copytree(SOURCE / 'src', CORE / 'src', dirs_exist_ok=True)\nshutil.copy2(SOURCE / 'Cargo.lock', CORE / 'Cargo.lock')\ns = (SOURCE / 'Cargo.toml').read_text().replace('members = [\"xtask\"]', 'members = []')\nif args.storage not in ('std', 'vec-std'):\n    s = s.replace('[dependencies]', '[dependencies]\\nrustc-hash = \"=2.1.3\"')\n(CORE / 'Cargo.toml').write_text(s)\n\n\ndef replace_once(s, old, new):\n    assert s.count(old) == 1, old\n    return s.replace(old, new)\n\n\np = CORE / 'src/clean/engine.rs'\ns = p.read_text()\nif args.storage not in ('std', 'vec-std'):\n    s = s.replace('use std::collections::{BTreeMap, HashMap, HashSet};',\n                  'use std::collections::{BTreeMap, HashMap, HashSet};\\nuse rustc_hash::{FxHashMap, FxHashSet};')\n    for old, new in [('nodes: HashMap<NodeId, DomNode>', 'nodes: FxHashMap<NodeId, DomNode>'),\n                     ('trace_nodes: HashMap<u64, NodeId>', 'trace_nodes: FxHashMap<u64, NodeId>'),\n                     ('HashSet<DynamicPseudo>', 'FxHashSet<DynamicPseudo>'),\n                     ('pseudos: HashSet::new()', 'pseudos: FxHashSet::default()'),\n                     ('let mut ids = HashSet::new()', 'let mut ids = FxHashSet::default()')]:\n        s = s.replace(old, new)\nif args.storage in ('fx-all', 'vec-fx'):\n    s = s.replace('use std::collections::{BTreeMap, HashMap, HashSet};', 'use std::collections::{BTreeMap, HashMap};')\n    s = s.replace('classes: HashSet<String>', 'classes: FxHashSet<String>')\n    s = replace_once(s, '    attributes: HashMap<String, String>,', '    attributes: FxHashMap<String, String>,')\n    s = replace_once(s, '        attributes,', '        attributes: attributes.into_iter().collect(),')\nif args.storage in ('vec-std', 'vec-fx'):\n    node_map = 'FxHashMap' if args.storage == 'vec-fx' else 'HashMap'\n    s = replace_once(s, f'nodes: {node_map}<NodeId, DomNode>', 'nodes: NodeArena')\n    s += (ROOT / 'dev/performance-arena.rs').read_text()\n    cp = CORE / 'src/clean/engine/comparison.rs'\n    cp.write_text(cp.read_text().replace('engine.dom.nodes.keys().copied()', 'engine.dom.nodes.keys()'))\ns = replace_once(s, 'pub struct Engine {', 'pub struct Engine {\\n    profile_flags: u8,')\ns = replace_once(s, 'impl Engine {', '''impl Engine {\n    pub fn profile_variant(&mut self, flags: u8) { self.profile_flags = flags; }\n    pub fn profile_stats(&self) -> (usize, usize, usize, usize) {\n        (self.stats.visited_nodes, self.stats.recomputed_nodes,\n         self.stats.input_changes, self.stats.input_skips)\n    }\n''')\ns = replace_once(s, '            stats: RunStats::default(),', '            stats: RunStats::default(),\\n            profile_flags: 0,')\ns = replace_once(s, '        let position = self.dom.position(id);', '''        if self.profile_flags & 1 != 0 && compound.nth.is_empty() { return true; }\n        let position = self.dom.position(id);''')\ns = replace_once(s, '        self.dom.refresh_pseudos();', '''        let needs_pseudos = match &frame.command {\n            TraceCommand::Init {..} | TraceCommand::Add {..} |\n            TraceCommand::Remove {..} | TraceCommand::Replace {..} => true,\n            TraceCommand::Recalculate => false,\n            TraceCommand::InsertValue {key,..} | TraceCommand::ReplaceValue {key,..} |\n            TraceCommand::DeleteValue {key,..} => matches!(key.to_ascii_lowercase().as_str(),\n                \"is_hover_root\" | \"is_hovered_root\" | \"is_focus_root\"),\n        };\n        if self.profile_flags & 2 == 0 || needs_pseudos { self.dom.refresh_pseudos(); }''')\np.write_text(s)\n\ns = (SOURCE / 'dev/stylo-benchmark/Cargo.toml').read_text()\ns = s.replace('path = \"../..\"', 'path = \"../core\"')\ns = s.replace('[dependencies]', '[dependencies]\\nreference-core = { package = \"css-reference-core\", path = \"../reference\" }')\ns = s.replace('name = \"css-stylo-websites\"', 'name = \"css-website-profile\"')\ns = s.replace('path = \"src/websites.rs\"', 'path = \"profile.rs\"')\n(BENCH / 'Cargo.toml').write_text(s)\nshutil.copy2(SOURCE / 'dev/stylo-benchmark/Cargo.lock', BENCH / 'Cargo.lock')\ns = (SOURCE / 'dev/stylo-benchmark/src/websites.rs').read_text()\nreference = s[:s.index('trait Backend {')].replace('use css_bitvector_compiler::', 'use reference_core::')\nreference += '''\npub fn load(site: &str) -> Result<(Engine, Vec<TraceFrame>)> {\n    let (original, trace) = load_site(&SiteInput::named(site))?;\n    let projection = project(&original)?;\n    let mut frames = trace.frames;\n    for frame in &mut frames { normalize_frame(frame); }\n    Ok((Engine::new(EngineKind::Bit, projection.program), frames))\n}\n'''\n(BENCH / 'reference.rs').write_text('#![allow(unused)]\\n'+reference)\ns = replace_once(s, 'struct Project {', 'struct Project {\\n    fast_output: bool,')\ns = replace_once(s, '            engine: Engine::new(kind, projection.program.clone()),', '            fast_output: false,\\n            engine: Engine::new(kind, projection.program.clone()),')\ns = replace_once(s, '''                    self.priority\n                        .iter()\n                        .find(|&&i| matches[i])\n                        .map_or([0; 4], |&i| colour(i)),''', '''                    if self.fast_output && !matches.contains(&true) { [0; 4] } else {\n                        self.priority.iter().find(|&&i| matches[i]).map_or([0; 4], |&i| colour(i))\n                    },''')\ns = replace_once(s, 'fn main() -> Result<()> {', '#[allow(dead_code)]\\nfn original_main() -> Result<()> {')\ns += r'''\n#[allow(unused)]\nmod reference;\n// Diagnostic variants share one binary. Flags are per engine instance.\nconst VARIANTS: [&str; 5] = [\"baseline\", \"lazy_position\", \"event_pseudos\", \"both\", \"both_fast_output\"];\nfn candidate(projection: &Projection, kind: EngineKind, variant: usize) -> Project {\n    let mut p = Project::new(kind, projection);\n    p.engine.profile_variant([0,1,2,3,3][variant]);\n    p.fast_output = variant == 4;\n    p\n}\n#[inline(never)]\nfn measured_update(p: &mut Project, frame: &TraceFrame) -> Result<()> { p.update(frame) }\n#[inline(never)]\nfn measured_output(p: &Project) -> Colours { p.colours() }\nfn main() -> Result<()> {\n    let site = option(\"--site\").ok_or(\"missing --site\")?;\n    let (original,trace) = load_site(&SiteInput::named(&site))?;\n    let projection = project(&original)?;\n    let mut frames = trace.frames;\n    for f in &mut frames { normalize_frame(f); }\n    if let Some(variant) = option(\"--profile-variant\") {\n        let variant: usize = variant.parse()?;\n        let mut p = candidate(&projection,EngineKind::Bit,variant);\n        p.update(&frames[0])?;\n        let mut update_ns = 0;\n        let mut output_ns = 0;\n        for f in &frames[1..] {\n            let now = Instant::now(); measured_update(&mut p,f)?; update_ns += now.elapsed().as_nanos();\n            let now = Instant::now(); let output = black_box(measured_output(&p)); output_ns += now.elapsed().as_nanos();\n            drop(output);\n        }\n        println!(\"{}\",json!({\"site\":site,\"variant\":VARIANTS[variant],\"update_ns\":update_ns,\"output_ns\":output_ns,\"stats\":p.engine.profile_stats()}));\n        return Ok(());\n    }\n    // Validate every match bit, not only the winning colour. Check all four engines.\n    let (mut baseline, reference_frames) = reference::load(&site)?;\n    let mut candidates: Vec<_> = [0,4].into_iter().flat_map(|variant|\n        KINDS.iter().map(move |&kind| (variant,kind)))\n        .map(|(variant,kind)| candidate(&projection,kind,variant)).collect();\n    let mut expected = Vec::new();\n    for (frame, reference_frame) in frames.iter().zip(&reference_frames) {\n        baseline.comparison_update(reference_frame)?;\n        let wanted: BTreeMap<_,_> = baseline.comparison_node_matches().collect();\n        let colours: Colours = wanted.iter().map(|(&id,bits)| (id,\n            projection.priority.iter().find(|&&i| bits[i]).map_or([0;4], |&i| colour(i)))).collect();\n        for p in &mut candidates {\n            p.update(frame)?;\n            let actual: BTreeMap<_,_> = p.engine.comparison_node_matches().collect();\n            assert_eq!(actual,wanted,\"match bits differ at frame {}\",frame.frame_id);\n            check(&p.colours(), &colours, frame)?;\n        }\n        expected.push(colours);\n    }\n    let stats: Vec<_> = candidates.iter().map(|p| p.engine.profile_stats()).collect();\n    eprintln!(\"{site}: all four candidate engines passed full match-bit and RGBA checks\");\n    drop(baseline); drop(candidates);\n    if env::args().any(|s| s == \"--validate-only\") {\n        println!(\"{}\",json!({\"site\":site,\"frames\":frames.len(),\"stats\":stats,\"full_match_bits_validated\":true}));\n        return Ok(());\n    }\n    let samples: usize = option(\"--samples\").unwrap_or(\"3\".into()).parse()?;\n    assert!(samples > 0 && samples % 2 == 1);\n    let selected: Vec<usize> = option(\"--variants\").unwrap_or(\"0,4\".into()).split(',').map(|s|s.parse().unwrap()).collect();\n    assert!(!selected.is_empty() && selected.iter().all(|&i| i < 5));\n    let mut measurements = vec![Vec::new();5];\n    for round in 0..=samples {\n        for index in (0..selected.len()).map(|offset| selected[(round+offset)%selected.len()]) {\n            let sample = run(&mut candidate(&projection,EngineKind::Bit,index),&frames,&expected)?;\n            eprintln!(\"{site} {round}/{samples} {}: update {:.3} ms, output {:.3} ms\",VARIANTS[index],sample.update_ns as f64/1e6,sample.output_ns as f64/1e6);\n            if round > 0 { measurements[index].push(sample); }\n        }\n    }\n    let mut results = Vec::new();\n    for (i,values) in measurements.into_iter().enumerate() {\n        if values.is_empty() { continue; }\n        let summary = |field: fn(&Sample)->u128| {\n            let mut sorted: Vec<_> = values.iter().map(field).collect(); sorted.sort_unstable();\n            json!({\"median_ns\":sorted[samples/2],\"min_ns\":sorted[0],\"max_ns\":sorted[samples-1]})\n        };\n        results.push(json!({\"variant\":VARIANTS[i],\"update\":summary(|s|s.update_ns),\"output\":summary(|s|s.output_ns),\"total\":summary(|s|s.total_ns),\"samples\":values}));\n    }\n    let report = json!({\"site\":site,\"frames\":frames.len(),\"samples\":samples,\"warmups\":1,\"engine\":\"bit\",\"full_match_bits_validated_kinds\":[\"bit\",\"tri\",\"rec_tri\",\"quad\"],\"candidate_stats\":stats,\"results\":results});\n    fs::write(option(\"--output\").ok_or(\"missing --output\")?,serde_json::to_string_pretty(&report)?+\"\\n\")?;\n    Ok(())\n}\n'''\n(BENCH / 'profile.rs').write_text(s)\nsource_files = [*sorted((SOURCE/'src').rglob('*.rs')), SOURCE/'Cargo.toml', SOURCE/'Cargo.lock', SOURCE/'dev/stylo-benchmark/Cargo.toml', SOURCE/'dev/stylo-benchmark/Cargo.lock', SOURCE/'dev/stylo-benchmark/src/websites.rs', ROOT/'dev/performance-arena.rs', Path(__file__).resolve()]\nsubprocess.run(['cargo','build','--release','--offline','--manifest-path',str(BENCH/'Cargo.toml'),'--bin','css-website-profile','--target-dir',str(ROOT/'dev/stylo-benchmark/target')],check=True,cwd=ROOT)\nshutil.copy2(ROOT/'dev/stylo-benchmark/target/release/css-website-profile', OUT/'profile')\ngenerated = [*sorted((CORE/'src').rglob('*.rs')), CORE/'Cargo.toml', BENCH/'Cargo.toml', BENCH/'Cargo.lock', BENCH/'profile.rs', BENCH/'reference.rs']\nmanifest = {'storage':args.storage, 'baseline_revision':revision, 'sources': {str(p.relative_to(SOURCE if p.is_relative_to(SOURCE) else ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in source_files}, 'generated': {str(p.relative_to(OUT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in generated}, 'binary_sha256':hashlib.sha256((OUT/'profile').read_bytes()).hexdigest()}\n(OUT/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\\n')\nprint(OUT/'profile')\n",
+    "dev/performance-arena.rs": "// Diagnostic storage, appended to the copied engine by analyze-performance.py.\n// IDs are monotone. Removed slots stay empty until the next DOM clear.\n#[derive(Debug, Clone, Default)]\nstruct NodeArena {\n    base: u64,\n    slots: Vec<Option<DomNode>>,\n    live: usize,\n}\n\nimpl NodeArena {\n    fn clear(&mut self) {\n        self.slots.clear();\n        self.live = 0;\n    }\n\n    fn insert(&mut self, id: NodeId, node: DomNode) {\n        if self.slots.is_empty() {\n            self.base = id.0;\n        }\n        assert_eq!(id.0.checked_sub(self.base), Some(self.slots.len() as u64));\n        self.slots.push(Some(node));\n        self.live += 1;\n    }\n\n    fn slot(&self, id: &NodeId) -> Option<usize> {\n        usize::try_from(id.0.checked_sub(self.base)?).ok()\n    }\n\n    fn get(&self, id: &NodeId) -> Option<&DomNode> {\n        self.slots.get(self.slot(id)?)?.as_ref()\n    }\n\n    fn get_mut(&mut self, id: &NodeId) -> Option<&mut DomNode> {\n        let slot = self.slot(id)?;\n        self.slots.get_mut(slot)?.as_mut()\n    }\n\n    fn contains_key(&self, id: &NodeId) -> bool {\n        self.get(id).is_some()\n    }\n\n    fn remove(&mut self, id: &NodeId) -> Option<DomNode> {\n        let slot = self.slot(id)?;\n        let node = self.slots.get_mut(slot)?.take()?;\n        self.live -= 1;\n        Some(node)\n    }\n\n    fn len(&self) -> usize {\n        self.live\n    }\n\n    fn values(&self) -> impl Iterator<Item = &DomNode> {\n        self.slots.iter().filter_map(Option::as_ref)\n    }\n\n    fn keys(&self) -> impl Iterator<Item = NodeId> + '_ {\n        self.slots\n            .iter()\n            .enumerate()\n            .filter_map(|(i, node)| node.as_ref().map(|_| NodeId(self.base + i as u64)))\n    }\n}\n\nimpl std::ops::Index<&NodeId> for NodeArena {\n    type Output = DomNode;\n    fn index(&self, id: &NodeId) -> &DomNode {\n        self.get(id).expect(\"live node ID\")\n    }\n}\n\n#[cfg(test)]\nmod arena_tests {\n    use super::*;\n\n    #[test]\n    fn removed_and_cleared_ids_stay_invalid() {\n        let mut nodes = NodeArena::default();\n        nodes.insert(NodeId(10), DomNode::default());\n        nodes.insert(NodeId(11), DomNode::default());\n        assert!(nodes.remove(&NodeId(10)).is_some());\n        assert!(nodes.remove(&NodeId(10)).is_none());\n        nodes.insert(NodeId(12), DomNode::default());\n        assert!(nodes.get(&NodeId(10)).is_none());\n        assert_eq!(nodes.len(), 2);\n        assert_eq!(nodes.values().count(), 2);\n        assert_eq!(nodes.keys().collect::<Vec<_>>(), [NodeId(11), NodeId(12)]);\n        nodes.clear();\n        nodes.insert(NodeId(13), DomNode::default());\n        for id in 0..13 {\n            assert!(nodes.get(&NodeId(id)).is_none());\n        }\n        assert!(nodes.get(&NodeId(u64::MAX)).is_none());\n        assert!(nodes.get(&NodeId(13)).is_some());\n        assert_eq!(nodes.len(), 1);\n    }\n}\n",
+    "dev/measure-performance.py": "\"\"\"Compare the isolated storage variants on captured website traces.\n\nBuild all four variants with analyze-performance.py first.\nThis driver validates all match bits against an unchanged reference engine.\nTimed processes use Bit. Each process creates a new engine and DOM.\n\"\"\"\nimport argparse\nfrom datetime import datetime, timezone\nimport hashlib\nimport json\nfrom pathlib import Path\nimport platform\nimport statistics\nimport subprocess\n\nROOT = Path(__file__).resolve().parents[1]\nOUT = Path('/tmp/css-performance-analysis')\nparser = argparse.ArgumentParser(description=__doc__)\nparser.add_argument('--sites', nargs='+', default=['bilibili', 'youtube', 'netflix'])\nparser.add_argument('--samples', type=int, default=3)\nparser.add_argument('--cpu', type=int, default=4)\nparser.add_argument('--output', type=Path, default=ROOT/'docs/performance-results.json')\nparser.add_argument('--storage', nargs='+', choices=['std', 'fx-internal', 'fx-all', 'vec-std', 'vec-fx'],\n                    default=['std', 'fx-internal', 'fx-all', 'vec-fx'])\nparser.add_argument('--variants', nargs='+', type=int, choices=range(5), default=[0,4])\nargs = parser.parse_args()\nassert args.samples > 0 and args.samples % 2 == 1\nstorage = args.storage\nmanifests = {name: json.loads((OUT/name/'source-manifest.json').read_text()) for name in storage}\nfor name, manifest in manifests.items():\n    assert hashlib.sha256((OUT/name/'profile').read_bytes()).hexdigest() == manifest['binary_sha256']\n    for path, digest in manifest['sources'].items():\n        content = (ROOT/path).read_bytes()\n        if hashlib.sha256(content).hexdigest() != digest:\n            content = subprocess.check_output(['git','show',f'{manifest[\"baseline_revision\"]}:{path}'],cwd=ROOT)\n        assert hashlib.sha256(content).hexdigest() == digest, path\nreport = dict(protocol='storage-ab-v1', captured_at_utc=datetime.now(timezone.utc).isoformat(),\n              cpu_affinity=args.cpu, platform=platform.platform(),\n              rustc=subprocess.check_output(['rustc','--version'], text=True).strip(),\n              warmups=1, samples=args.samples, manifests=manifests,\n              timed_engine='bit', validation_engines=['bit','tri','rec_tri','quad'],\n              initial_frame_timed=False, results=[])\nreport['baseline_revision'] = manifests[storage[0]]['baseline_revision']\nreport['script_sources'] = {name:(ROOT/name).read_text() for name in ['dev/analyze-performance.py','dev/performance-arena.rs','dev/measure-performance.py']}\nreport['cpu'] = next(line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name'))\ngovernor = Path(f'/sys/devices/system/cpu/cpu{args.cpu}/cpufreq/scaling_governor')\nreport['cpu_governor'] = governor.read_text().strip() if governor.exists() else None\n\ndef run(name, site, *options):\n    command = ['taskset','-c',str(args.cpu),str(OUT/name/'profile'),'--site',site,*options]\n    result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE, check=True)\n    return json.loads(result.stdout)\n\ndef save():\n    args.output.write_text(json.dumps(report, indent=2)+'\\n')\n\nfor site in args.sites:\n    data = dict(site=site, input_hashes={}, validation={}, execution_order=[], measurements=[])\n    for path in [ROOT/f'css-gen-op/{site}/{site}.css', ROOT/f'css-gen-op/{site}/command.json']:\n        data['input_hashes'][str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()\n    for name in storage:\n        print(f'{site}: validate {name}', flush=True)\n        data['validation'][name] = run(name, site, '--validate-only')\n    cases = [(name, variant) for variant in args.variants for name in storage]\n    values = {case: [] for case in cases}\n    for round in range(args.samples + 1):\n        offset = round % len(cases)\n        order = cases[offset:] + cases[:offset]\n        data['execution_order'].append(order)\n        for name, variant in order:\n            sample = run(name, site, '--profile-variant', str(variant))\n            sample['total_ns'] = sample['update_ns'] + sample['output_ns']\n            print(f'{site} {round}/{args.samples} {name}/{variant}: '\n                  f'{sample[\"update_ns\"]/1e6:.3f} + {sample[\"output_ns\"]/1e6:.3f} ms', flush=True)\n            if round:\n                values[name,variant].append(sample)\n    for (name,variant), samples in values.items():\n        summary = {field: dict(median_ns=statistics.median(s[field] for s in samples),\n                              min_ns=min(s[field] for s in samples),\n                              max_ns=max(s[field] for s in samples))\n                   for field in ['update_ns','output_ns','total_ns']}\n        data['measurements'].append(dict(storage=name, variant=variant, summary=summary, samples=samples))\n    report['results'].append(data)\n    save()\n"
+  },
+  "cpu": "AMD Ryzen AI 7 H 350 w/ Radeon 860M",
+  "cpu_governor": "performance"
+}

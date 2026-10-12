@@ -41,28 +41,26 @@ def U64.Insts.CoreHashHash : core.hash.Hash Std.U64 := {
     U64.Insts.CoreHashHash.hash HasherInst
 }
 
-/-- Trait implementation: [std::hash::random::{impl core::hash::Hasher for std::hash::random::DefaultHasher}]
-    Source: '/rustc/library/std/src/hash/random.rs', lines 125:0-125:29
-    Name pattern: [core::hash::Hasher<std::hash::random::DefaultHasher>] -/
-@[reducible, rust_trait_impl
-  "core::hash::Hasher<std::hash::random::DefaultHasher>"]
-def std.hash.random.DefaultHasher.Insts.CoreHashHasher : core.hash.Hasher
-  std.hash.random.DefaultHasher := {
-  finish := std.hash.random.DefaultHasher.Insts.CoreHashHasher.finish
-  write := std.hash.random.DefaultHasher.Insts.CoreHashHasher.write
+/-- Trait implementation: [rustc_hash::{impl core::hash::Hasher for rustc_hash::FxHasher}]
+    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 102:0-102:24
+    Name pattern: [core::hash::Hasher<rustc_hash::FxHasher>] -/
+@[reducible, rust_trait_impl "core::hash::Hasher<rustc_hash::FxHasher>"]
+def rustc_hash.FxHasher.Insts.CoreHashHasher : core.hash.Hasher
+  rustc_hash.FxHasher := {
+  finish := rustc_hash.FxHasher.Insts.CoreHashHasher.finish
+  write := rustc_hash.FxHasher.Insts.CoreHashHasher.write
 }
 
-/-- Trait implementation: [std::hash::random::{impl core::hash::BuildHasher<std::hash::random::DefaultHasher> for std::hash::random::RandomState}]
-    Source: '/rustc/library/std/src/hash/random.rs', lines 80:0-80:32
-    Name pattern: [core::hash::BuildHasher<std::hash::random::RandomState, std::hash::random::DefaultHasher>] -/
+/-- Trait implementation: [rustc_hash::{impl core::hash::BuildHasher<rustc_hash::FxHasher> for rustc_hash::FxBuildHasher}]
+    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 322:0-322:34
+    Name pattern: [core::hash::BuildHasher<rustc_hash::FxBuildHasher, rustc_hash::FxHasher>] -/
 @[reducible, rust_trait_impl
-  "core::hash::BuildHasher<std::hash::random::RandomState, std::hash::random::DefaultHasher>"]
-def std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher :
-  core.hash.BuildHasher std.hash.random.RandomState
-  std.hash.random.DefaultHasher := {
-  HasherInst := std.hash.random.DefaultHasher.Insts.CoreHashHasher
+  "core::hash::BuildHasher<rustc_hash::FxBuildHasher, rustc_hash::FxHasher>"]
+def rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher :
+  core.hash.BuildHasher rustc_hash.FxBuildHasher rustc_hash.FxHasher := {
+  HasherInst := rustc_hash.FxHasher.Insts.CoreHashHasher
   build_hasher :=
-    std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher.build_hasher
+    rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher.build_hasher
 }
 
 /-- [css_bitvector_compiler::clean::compiler::{impl core::cmp::PartialEq<css_bitvector_compiler::clean::compiler::NodeId> for css_bitvector_compiler::clean::compiler::NodeId}::eq]:
@@ -82,52 +80,16 @@ def clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId : core.cmp.PartialEq
   eq := clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId.eq
 }
 
-/-- [css_bitvector_compiler::clean::compiler::{impl core::cmp::Eq for css_bitvector_compiler::clean::compiler::NodeId}::assert_fields_are_eq]:
-    Source: 'src/clean/compiler.rs', lines 17:40-17:42
-    Visibility: public -/
-def clean.compiler.NodeId.Insts.CoreCmpEq.assert_fields_are_eq
-  (self : clean.compiler.NodeId) : Result Unit := do
-  ok ()
-
-/-- Trait implementation: [css_bitvector_compiler::clean::compiler::{impl core::cmp::Eq for css_bitvector_compiler::clean::compiler::NodeId}]
-    Source: 'src/clean/compiler.rs', lines 17:40-17:42 -/
-@[reducible]
-def clean.compiler.NodeId.Insts.CoreCmpEq : core.cmp.Eq clean.compiler.NodeId
-  := {
-  partialEqInst := clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId
-  assert_fields_are_eq :=
-    clean.compiler.NodeId.Insts.CoreCmpEq.assert_fields_are_eq
-}
-
-/-- [css_bitvector_compiler::clean::compiler::{impl core::hash::Hash for css_bitvector_compiler::clean::compiler::NodeId}::hash]:
-    Source: 'src/clean/compiler.rs', lines 17:44-17:48
-    Visibility: public -/
-def clean.compiler.NodeId.Insts.CoreHashHash.hash
-  {__H : Type} (corehashHasherInst : core.hash.Hasher __H)
-  (self : clean.compiler.NodeId) (state : __H) :
-  Result __H
-  := do
-  U64.Insts.CoreHashHash.hash corehashHasherInst self state
-
-/-- Trait implementation: [css_bitvector_compiler::clean::compiler::{impl core::hash::Hash for css_bitvector_compiler::clean::compiler::NodeId}]
-    Source: 'src/clean/compiler.rs', lines 17:44-17:48 -/
-@[reducible]
-def clean.compiler.NodeId.Insts.CoreHashHash : core.hash.Hash
-  clean.compiler.NodeId := {
-  hash := fun {H : Type} (corehashHasherInst : core.hash.Hasher H) =>
-    clean.compiler.NodeId.Insts.CoreHashHash.hash corehashHasherInst
-}
-
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::clear]:
-    Source: 'src/clean/engine.rs', lines 57:4-61:5 -/
+    Source: 'src/clean/engine.rs', lines 61:4-65:5 -/
 def clean.engine.Dom.clear
   (self : clean.engine.Dom) : Result clean.engine.Dom := do
-  let hm ← std.collections.hash.map.HashMap.clear self.nodes
-  let hm1 ← std.collections.hash.map.HashMap.clear self.trace_nodes
-  ok { self with nodes := hm, root := none, trace_nodes := hm1 }
+  let na ← clean.engine.arena.NodeArena.clear self.nodes
+  let hm ← std.collections.hash.map.HashMap.clear self.trace_nodes
+  ok { self with nodes := na, root := none, trace_nodes := hm }
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::insert_instance]:
-    Source: 'src/clean/engine.rs', lines 64:4-73:5 -/
+    Source: 'src/clean/engine.rs', lines 68:4-77:5 -/
 def clean.engine.Dom.insert_instance
   (self : clean.engine.Dom) (node : clean.engine.DomNode) :
   Result ((Option clean.compiler.NodeId) × clean.engine.Dom)
@@ -139,16 +101,12 @@ def clean.engine.Dom.insert_instance
     let (_, hm) ←
       std.collections.hash.map.HashMap.insert core.cmp.EqU64
         U64.Insts.CoreHashHash
-        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+        rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
         self.trace_nodes node.trace_id self.next_instance
-    let (_, hm1) ←
-      std.collections.hash.map.HashMap.insert
-        clean.compiler.NodeId.Insts.CoreCmpEq
-        clean.compiler.NodeId.Insts.CoreHashHash
-        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-        self.nodes self.next_instance node
+    let na ←
+      clean.engine.arena.NodeArena.insert self.nodes self.next_instance node
     ok (some self.next_instance,
-      { self with nodes := hm1, trace_nodes := hm, next_instance := next })
+      { self with nodes := na, trace_nodes := hm, next_instance := next })
 
 /-- [css_bitvector_compiler::clean::logic::{css_bitvector_compiler::clean::logic::Dirty}::merge]:
     Source: 'src/clean/logic.rs', lines 10:4-16:5 -/
@@ -170,7 +128,7 @@ def clean.logic.Dirty.merge
   | clean.logic.Dirty.NodeChanged => ok clean.logic.Dirty.NodeChanged
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop 0:
-    Source: 'src/clean/engine.rs', lines 139:8-150:5 -/
+    Source: 'src/clean/engine.rs', lines 143:8-154:5 -/
 @[rust_loop]
 def clean.engine.Dom.mark_loop
   (current : Option clean.compiler.NodeId) (self : clean.engine.Dom)
@@ -181,39 +139,33 @@ def clean.engine.Dom.mark_loop
   | none => ok self
   | some node_id =>
     let (o, get_mut_back) ←
-      std.collections.hash.map.HashMap.get_mut
-        clean.compiler.NodeId.Insts.CoreCmpEq
-        clean.compiler.NodeId.Insts.CoreHashHash
-        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-        (core.borrow.Borrow.Blanket clean.compiler.NodeId)
-        clean.compiler.NodeId.Insts.CoreHashHash
-        clean.compiler.NodeId.Insts.CoreCmpEq self.nodes node_id
+      clean.engine.arena.NodeArena.get_mut self.nodes node_id
     match o with
-    | none => let hm := get_mut_back none
-              ok { self with nodes := hm }
+    | none => let na := get_mut_back none
+              ok { self with nodes := na }
     | some node =>
       if first
       then
         let d ← clean.logic.Dirty.merge node.state.dirty dirty
-        let hm :=
+        let na :=
           get_mut_back (some
             {
               node
                 with
                 state := { node.state with dirty := d, subtree_dirty := true }
             })
-        clean.engine.Dom.mark_loop node.parent { self with nodes := hm } dirty
+        clean.engine.Dom.mark_loop node.parent { self with nodes := na } dirty
           false
       else
-        let hm :=
+        let na :=
           get_mut_back (some
             { node with state := { node.state with subtree_dirty := true } })
-        clean.engine.Dom.mark_loop node.parent { self with nodes := hm } dirty
+        clean.engine.Dom.mark_loop node.parent { self with nodes := na } dirty
           first
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]:
-    Source: 'src/clean/engine.rs', lines 136:4-150:5 -/
+    Source: 'src/clean/engine.rs', lines 140:4-154:5 -/
 @[reducible]
 def clean.engine.Dom.mark
   (self : clean.engine.Dom) (id : clean.compiler.NodeId)
@@ -223,11 +175,10 @@ def clean.engine.Dom.mark
   clean.engine.Dom.mark_loop (some id) self dirty true
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]: loop 0:
-    Source: 'src/clean/engine.rs', lines 191:8-202:5 -/
+    Source: 'src/clean/engine.rs', lines 195:8-206:5 -/
 @[rust_loop]
 def clean.engine.Dom.previous_sibling_loop
-  (hm : std.collections.hash.map.HashMap clean.compiler.NodeId
-  clean.engine.DomNode std.hash.random.RandomState Global)
+  (na : clean.engine.arena.NodeArena clean.engine.DomNode)
   (id : clean.compiler.NodeId) (siblings : alloc.vec.Vec clean.compiler.NodeId)
   (previous : Option clean.compiler.NodeId) (index : Std.Usize) :
   Result (Option clean.compiler.NodeId)
@@ -242,49 +193,29 @@ def clean.engine.Dom.previous_sibling_loop
     if b
     then ok previous
     else
-      let b1 ←
-        std.collections.hash.map.HashMap.contains_key
-          clean.compiler.NodeId.Insts.CoreCmpEq
-          clean.compiler.NodeId.Insts.CoreHashHash
-          std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-          (core.borrow.Borrow.Blanket clean.compiler.NodeId)
-          clean.compiler.NodeId.Insts.CoreHashHash
-          clean.compiler.NodeId.Insts.CoreCmpEq hm sibling
+      let b1 ← clean.engine.arena.NodeArena.contains_key na sibling
       let previous1 ← if b1
                         then ok (some sibling)
                         else ok previous
       let index1 ← index + 1#usize
-      clean.engine.Dom.previous_sibling_loop hm id siblings previous1 index1
+      clean.engine.Dom.previous_sibling_loop na id siblings previous1 index1
   else ok none
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]:
-    Source: 'src/clean/engine.rs', lines 178:4-202:5 -/
+    Source: 'src/clean/engine.rs', lines 182:4-206:5 -/
 def clean.engine.Dom.previous_sibling
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result (Option clean.compiler.NodeId)
   := do
-  let o ←
-    std.collections.hash.map.HashMap.get clean.compiler.NodeId.Insts.CoreCmpEq
-      clean.compiler.NodeId.Insts.CoreHashHash
-      std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-      (core.borrow.Borrow.Blanket clean.compiler.NodeId)
-      clean.compiler.NodeId.Insts.CoreHashHash
-      clean.compiler.NodeId.Insts.CoreCmpEq self.nodes id
+  let o ← clean.engine.arena.NodeArena.get self.nodes id
   match o with
   | none => ok none
   | some node =>
     match node.parent with
     | none => ok none
     | some parent =>
-      let o1 ←
-        std.collections.hash.map.HashMap.get
-          clean.compiler.NodeId.Insts.CoreCmpEq
-          clean.compiler.NodeId.Insts.CoreHashHash
-          std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-          (core.borrow.Borrow.Blanket clean.compiler.NodeId)
-          clean.compiler.NodeId.Insts.CoreHashHash
-          clean.compiler.NodeId.Insts.CoreCmpEq self.nodes parent
+      let o1 ← clean.engine.arena.NodeArena.get self.nodes parent
       match o1 with
       | none => ok none
       | some parent_node =>
@@ -294,7 +225,7 @@ def clean.engine.Dom.previous_sibling
 mutual
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]: loop 0:
-    Source: 'src/clean/engine.rs', lines 209:12-211:13 -/
+    Source: 'src/clean/engine.rs', lines 213:12-215:13 -/
 @[rust_loop]
 def clean.engine.Dom.remove_subtree_loop
   (iter : alloc.vec.into_iter.IntoIter clean.compiler.NodeId)
@@ -310,47 +241,40 @@ def clean.engine.Dom.remove_subtree_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]:
-    Source: 'src/clean/engine.rs', lines 204:4-213:5 -/
+    Source: 'src/clean/engine.rs', lines 208:4-217:5 -/
 def clean.engine.Dom.remove_subtree
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result clean.engine.Dom
   := do
-  let (o, hm) ←
-    std.collections.hash.map.HashMap.remove
-      clean.compiler.NodeId.Insts.CoreCmpEq
-      clean.compiler.NodeId.Insts.CoreHashHash
-      std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
-      (core.borrow.Borrow.Blanket clean.compiler.NodeId)
-      clean.compiler.NodeId.Insts.CoreHashHash
-      clean.compiler.NodeId.Insts.CoreCmpEq self.nodes id
+  let (o, na) ← clean.engine.arena.NodeArena.remove self.nodes id
   match o with
-  | none => ok { self with nodes := hm }
+  | none => ok { self with nodes := na }
   | some node =>
     let o1 ←
       std.collections.hash.map.HashMap.get core.cmp.EqU64
         U64.Insts.CoreHashHash
-        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+        rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
         (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
         core.cmp.EqU64 self.trace_nodes node.trace_id
     let b ←
       core.option.Option.Insts.CoreCmpPartialEqOption.eq
         (core.cmp.PartialEqShared
         clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId) o1 (some id)
-    let hm1 ←
+    let hm ←
       if b
       then
         do
-        let (_, hm2) ←
+        let (_, hm1) ←
           std.collections.hash.map.HashMap.remove core.cmp.EqU64
             U64.Insts.CoreHashHash
-            std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+            rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher
             (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
             core.cmp.EqU64 self.trace_nodes node.trace_id
-        ok hm2
+        ok hm1
       else ok self.trace_nodes
     let iter ← alloc.vec.IntoIteratorVec.into_iter node.children
     clean.engine.Dom.remove_subtree_loop iter
-      { self with nodes := hm, trace_nodes := hm1 }
+      { self with nodes := na, trace_nodes := hm }
 partial_fixpoint
 
 end

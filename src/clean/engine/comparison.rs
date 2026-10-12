@@ -239,7 +239,7 @@ impl<'i> ParcelProgram<'i> {
         }
         // Cache nth positions within this DOM version. Never retain it across a mutation.
         let mut nth = NthIndexCache::default();
-        let ids: Vec<_> = engine.dom.nodes.keys().copied().collect();
+        let ids: Vec<_> = engine.dom.nodes.keys().collect();
         for id in ids {
             let element = ElementRef {
                 dom: &engine.dom,

@@ -39,9 +39,7 @@ theorem previous_loop_spec (nodes : NodeId → Option DomNode) (target : NodeId)
     by_cases same : child = target
     · simp [same]
     · simp only [same, decide_false, Bool.false_eq_true, ↓reduceIte]
-      simp [std.collections.hash.map.HashMap.contains_key,
-        std.collections.hash.map.HashMap.get, std.collections.hash.map.HashMap.get_mut,
-        ↓reduceDIte, bind_ok]
+      simp [CssDom.clean.engine.arena.NodeArena.contains_key, bind_ok]
       have bound : index.val + 1 ≤ Aeneas.Std.Usize.max :=
         Nat.le_trans (by omega) siblings.property
       cases hlive : (nodes child).isSome <;> simp only [Bool.false_eq_true, ↓reduceIte, bind_ok]
@@ -68,8 +66,7 @@ def previousModel (dom : Dom) (target : NodeId) : Option NodeId :=
     No well-formed-tree precondition is needed. -/
 theorem previous_correct (dom : Dom) (target : NodeId) :
     Dom.previous_sibling dom target ⦃ out => out = previousModel dom target ⦄ := by
-  simp only [Dom.previous_sibling, std.collections.hash.map.HashMap.get,
-    std.collections.hash.map.HashMap.get_mut, ↓reduceDIte, bind_ok]
+  simp only [Dom.previous_sibling, CssDom.clean.engine.arena.NodeArena.get, bind_ok]
   cases hn : dom.nodes target with
   | none => simp [previousModel, hn]
   | some node =>

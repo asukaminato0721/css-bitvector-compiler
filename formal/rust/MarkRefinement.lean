@@ -55,15 +55,14 @@ theorem loop_step (dom : Dom) (current : Option NodeId) (d : Dirty) (first : Boo
   | some id =>
     cases hn : dom.nodes id with
     | none =>
-      simp [std.collections.hash.map.HashMap.get_mut, hn]
+      simp [CssDom.clean.engine.arena.NodeArena.get_mut, hn]
       congr 1
       funext key
       simp only [Function.update_apply]
       split <;> simp_all
     | some node =>
       cases first <;>
-        simp [std.collections.hash.map.HashMap.get_mut, hn, merge_eq, touch, put]
-        <;> (congr 1; congr 1; funext key; simp only [Function.update_apply]; split <;> simp_all)
+        simp [CssDom.clean.engine.arena.NodeArena.get_mut, hn, merge_eq, touch, put]
 
 noncomputable def markFuel : Nat → Dom → Option NodeId → Dirty → Bool → Dom
   | 0, dom, _, _, _ => dom

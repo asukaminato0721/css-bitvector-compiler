@@ -29,8 +29,10 @@ theorem insert_step (dom : Dom) (node : DomNode) :
   classical
   simp only [Dom.insert_instance]
   cases hc : Aeneas.Std.U64.checked_add dom.next_instance 1#u64 <;>
-    simp [lift, std.collections.hash.map.HashMap.insert, insertModel]
-  constructor <;> funext key <;> simp only [Function.update_apply] <;> split <;> simp_all
+    simp [lift, std.collections.hash.map.HashMap.insert, CssDom.clean.engine.arena.NodeArena.insert, insertModel]
+  funext key
+  simp only [Function.update_apply]
+  split <;> simp_all
 
 theorem insert_fresh (dom : Dom) (node : DomNode) (next : Aeneas.Std.U64)
     (hf : Fresh dom) (hn : next.val = dom.next_instance.val + 1) :
@@ -92,7 +94,7 @@ theorem insert_correct (dom : Dom) (node : DomNode)
 /-- Clearing the arena retains the allocation counter, so old IDs stay obsolete. -/
 theorem clear_refines (dom : Dom) :
     Dom.clear dom = ok { dom with nodes := (fun _ => none), root := none, trace_nodes := (fun _ => none) } := by
-  simp [Dom.clear, std.collections.hash.map.HashMap.clear]
+  simp [Dom.clear, std.collections.hash.map.HashMap.clear, CssDom.clean.engine.arena.NodeArena.clear]
 
 theorem clear_invariants (dom : Dom) :
     ∃ out, Dom.clear dom = ok out ∧ out.next_instance = dom.next_instance ∧

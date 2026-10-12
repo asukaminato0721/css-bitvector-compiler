@@ -297,9 +297,10 @@ fn main() -> Result<()> {
         "captured_at_utc": command_output("date", &["-u", "+%FT%TZ"]).trim(),
         "rustc": command_output("rustc", &["-Vv"]),
         "cpu": fs::read_to_string("/proc/cpuinfo")?.lines().find(|s| s.starts_with("model name")).unwrap_or("unknown"),
+        "cpu4_governor": fs::read_to_string("/sys/devices/system/cpu/cpu4/cpufreq/scaling_governor").ok().map(|s|s.trim().to_owned()),
         "cpu_affinity": fs::read_to_string("/proc/self/status")?.lines().find(|s| s.starts_with("Cpus_allowed_list:")).unwrap_or("unknown"),
         "source_hashes": command_output("sha256sum", &[
-            "src/clean/engine.rs", "src/clean/engine/comparison.rs", "src/clean/compiler.rs", "src/clean/logic.rs",
+            "src/clean/engine.rs", "src/clean/engine/arena.rs", "Cargo.toml", "Cargo.lock", "src/clean/engine/comparison.rs", "src/clean/compiler.rs", "src/clean/logic.rs",
             "dev/stylo-benchmark/src/main.rs", "dev/stylo-benchmark/Cargo.toml", "dev/stylo-benchmark/Cargo.lock", &input]),
         "results": []
     });

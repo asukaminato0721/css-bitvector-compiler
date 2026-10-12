@@ -37,6 +37,13 @@ structure core.hash.BuildHasher (Self : Type) (Self_Hasher : Type) where
   HasherInst : core.hash.Hasher Self_Hasher
   build_hasher : Self → Result Self_Hasher
 
+/-- [rustc_hash::FxBuildHasher]
+    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.3/src/lib.rs', lines 320:0-320:24
+    Name pattern: [rustc_hash::FxBuildHasher]
+    Visibility: public -/
+@[reducible, rust_type "rustc_hash::FxBuildHasher"]
+def rustc_hash.FxBuildHasher := Unit
+
 /-- [css_bitvector_compiler::clean::compiler::NodeId]
     Source: 'src/clean/compiler.rs', lines 18:0-18:27
     Visibility: public -/
@@ -78,7 +85,7 @@ inductive clean.logic.Dirty where
 | NodeChanged : clean.logic.Dirty
 
 /-- [css_bitvector_compiler::clean::engine::NodeState]
-    Source: 'src/clean/engine.rs', lines 16:0-26:1 -/
+    Source: 'src/clean/engine.rs', lines 20:0-30:1 -/
 structure clean.engine.NodeState where
   output : alloc.vec.Vec Bool
   quad_output : alloc.vec.Vec clean.logic.QuadValue
@@ -91,21 +98,21 @@ structure clean.engine.NodeState where
   subtree_dirty : Bool
 
 /-- [css_bitvector_compiler::clean::engine::NodeFacts]
-    Source: 'src/clean/engine.rs', lines 29:0-37:1 -/
+    Source: 'src/clean/engine.rs', lines 33:0-41:1 -/
 structure clean.engine.NodeFacts where
   tag : String
-  classes : std.collections.hash.set.HashSet String std.hash.random.RandomState
+  classes : std.collections.hash.set.HashSet String rustc_hash.FxBuildHasher
     Global
   html_id : Option String
   attributes : std.collections.hash.map.HashMap String String
-    std.hash.random.RandomState Global
+    rustc_hash.FxBuildHasher Global
   hover_root : Bool
   focus_root : Bool
   pseudos : std.collections.hash.set.HashSet clean.compiler.DynamicPseudo
-    std.hash.random.RandomState Global
+    rustc_hash.FxBuildHasher Global
 
 /-- [css_bitvector_compiler::clean::engine::DomNode]
-    Source: 'src/clean/engine.rs', lines 40:0-46:1 -/
+    Source: 'src/clean/engine.rs', lines 44:0-50:1 -/
 structure clean.engine.DomNode where
   trace_id : Std.U64
   facts : clean.engine.NodeFacts
@@ -114,14 +121,13 @@ structure clean.engine.DomNode where
   state : clean.engine.NodeState
 
 /-- [css_bitvector_compiler::clean::engine::Dom]
-    Source: 'src/clean/engine.rs', lines 49:0-54:1
+    Source: 'src/clean/engine.rs', lines 53:0-58:1
     Visibility: public -/
 structure clean.engine.Dom where
-  nodes : std.collections.hash.map.HashMap clean.compiler.NodeId
-    clean.engine.DomNode std.hash.random.RandomState Global
+  nodes : clean.engine.arena.NodeArena clean.engine.DomNode
   root : Option clean.compiler.NodeId
   trace_nodes : std.collections.hash.map.HashMap Std.U64 clean.compiler.NodeId
-    std.hash.random.RandomState Global
+    rustc_hash.FxBuildHasher Global
   next_instance : Std.U64
 
 /-- [css_bitvector_compiler::clean::logic::Decision]

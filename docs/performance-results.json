@@ -1,0 +1,2784 @@
+{
+  "protocol": "storage-ab-v1",
+  "captured_at_utc": "2026-10-12T16:40:34.160139+00:00",
+  "cpu_affinity": 4,
+  "platform": "Linux-6.18.55-1-lts-x86_64-with-glibc2.44",
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)",
+  "warmups": 1,
+  "samples": 3,
+  "manifests": {
+    "std": {
+      "storage": "std",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "883dd2bec0fe253eb0ca8c359878af535918718850f290ca982cc4444110f30b",
+        "dev/analyze-performance.py": "f139800e8cf869f41b2e912abb5183a5eaec4dfdafd63551efcaf30e3a876f3c"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "core/src/clean/engine.rs": "3c67dd946f8f5d6aeafd84364de917fae7b5bc463e20d6d3f20c251984b2bdf9",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "9b7fbf9e7bc994ba1c61ef73ed6527467b2348151685b9c4970f276020cdac64",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "cc0a358bf2c5c58243605d00723bbc134c9b4d2110d070d832a32bb00600ed36",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "b7793e3b6b5b323b6544a418bc9a24c2a3ed06e3761807f50e2e202f66959097"
+    },
+    "fx-internal": {
+      "storage": "fx-internal",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "883dd2bec0fe253eb0ca8c359878af535918718850f290ca982cc4444110f30b",
+        "dev/analyze-performance.py": "f139800e8cf869f41b2e912abb5183a5eaec4dfdafd63551efcaf30e3a876f3c"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "core/src/clean/engine.rs": "88da1e079e5b4884ad080be6d74867b7ee2bcc79686d059152ea23616ccb6daa",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "e6d8b29be1ac8da59528d2230ac80c2b9b14e680b62cd5deee208182d079aace",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "3738859b3e8722caf2cd09804851b163b7c54fecc1767a75967c91a31bd6d56f",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "bd24e9b4cefc886362f8319e0909e39f88b2c51f72ba03f7219feaa1619d3bf8"
+    },
+    "fx-all": {
+      "storage": "fx-all",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "883dd2bec0fe253eb0ca8c359878af535918718850f290ca982cc4444110f30b",
+        "dev/analyze-performance.py": "f139800e8cf869f41b2e912abb5183a5eaec4dfdafd63551efcaf30e3a876f3c"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "core/src/clean/engine.rs": "fb3d838009c167325b9bfb190eda55bf902016ff096b2ea7d431f59f8eec104d",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "e6d8b29be1ac8da59528d2230ac80c2b9b14e680b62cd5deee208182d079aace",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "3738859b3e8722caf2cd09804851b163b7c54fecc1767a75967c91a31bd6d56f",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "bf178f16ad85430e5dd1cd17004d3b2ef7e9b3066f9151be0f585ce776f6437e"
+    },
+    "vec-fx": {
+      "storage": "vec-fx",
+      "sources": {
+        "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+        "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
+        "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
+        "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
+        "dev/stylo-benchmark/Cargo.toml": "4c1131d6ca0a3805f82545a87c9cba7738d8710e310b6d2d1e7c219bdd834608",
+        "dev/stylo-benchmark/Cargo.lock": "3de4918f47a4e6bca1aba49749f605c067526926a3e2ad0397982d1818380066",
+        "dev/stylo-benchmark/src/websites.rs": "f096bfe30e14f9b81470359fddf22f6b2fc3ee3b5b3c7ec37dfa90a260ef0576",
+        "dev/performance-arena.rs": "883dd2bec0fe253eb0ca8c359878af535918718850f290ca982cc4444110f30b",
+        "dev/analyze-performance.py": "f139800e8cf869f41b2e912abb5183a5eaec4dfdafd63551efcaf30e3a876f3c"
+      },
+      "generated": {
+        "core/src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
+        "core/src/clean/engine/comparison.rs": "1b37b17c44d58d3b8834c7a19c348b1ea580638f9895a1cfdd89c799083b3fdd",
+        "core/src/clean/engine.rs": "b4d43b9a083ffaa4b00e5cd4d1822f36b17d80c1405d6bdc94914421e1f69afb",
+        "core/src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
+        "core/src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
+        "core/src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
+        "core/src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
+        "core/src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
+        "core/src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724",
+        "core/Cargo.toml": "e6d8b29be1ac8da59528d2230ac80c2b9b14e680b62cd5deee208182d079aace",
+        "bench/Cargo.toml": "b6583f511dd26c22409add6933bb6d70ad391dbb2c67d3e0484b049d4463c622",
+        "bench/Cargo.lock": "3738859b3e8722caf2cd09804851b163b7c54fecc1767a75967c91a31bd6d56f",
+        "bench/profile.rs": "48857240ac6a22f1b4bc33537bd5321b03fd5b8cac298124f48d25af401bbb51",
+        "bench/reference.rs": "14f7d3d218ae796f422131f8f2956061000ddb0cc9ebad14a3f87d7951fe402a"
+      },
+      "binary_sha256": "a6425ca2869e7e5bf9a2f0cc6d9ade20cc71be6aa29851fcf07e4448d8278a2e"
+    }
+  },
+  "timed_engine": "bit",
+  "validation_engines": [
+    "bit",
+    "tri",
+    "rec_tri",
+    "quad"
+  ],
+  "initial_frame_timed": false,
+  "results": [
+    {
+      "site": "bilibili",
+      "input_hashes": {
+        "css-gen-op/bilibili/bilibili.css": "4b3935abd8f1eddaa9a74b26e982a0e08073024a70d6c95b4d6b892b6b528e1d",
+        "css-gen-op/bilibili/command.json": "7cb55fc166e4ee0354e184141e2082453167d55c9ef8be45cf33e5bb6fe4b644"
+      },
+      "validation": {
+        "std": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        },
+        "fx-internal": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        },
+        "fx-all": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        },
+        "vec-fx": {
+          "frames": 1187,
+          "full_match_bits_validated": true,
+          "site": "bilibili",
+          "stats": [
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ],
+            [
+              14117,
+              6757,
+              154,
+              0
+            ],
+            [
+              14117,
+              6755,
+              154,
+              2
+            ],
+            [
+              14115,
+              6755,
+              152,
+              2
+            ],
+            [
+              14117,
+              6609,
+              154,
+              148
+            ]
+          ]
+        }
+      },
+      "execution_order": [
+        [
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ]
+        ],
+        [
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ]
+        ],
+        [
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ]
+        ]
+      ],
+      "measurements": [
+        {
+          "storage": "std",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 1079240153,
+              "min_ns": 1078204000,
+              "max_ns": 1088606370
+            },
+            "output_ns": {
+              "median_ns": 1445978945,
+              "min_ns": 1428856525,
+              "max_ns": 1487627843
+            },
+            "total_ns": {
+              "median_ns": 2525219098,
+              "min_ns": 2507060525,
+              "max_ns": 2576234213
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1487627843,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 1088606370,
+              "variant": "baseline",
+              "total_ns": 2576234213
+            },
+            {
+              "output_ns": 1445978945,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 1079240153,
+              "variant": "baseline",
+              "total_ns": 2525219098
+            },
+            {
+              "output_ns": 1428856525,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 1078204000,
+              "variant": "baseline",
+              "total_ns": 2507060525
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 607895163,
+              "min_ns": 580703436,
+              "max_ns": 619344063
+            },
+            "output_ns": {
+              "median_ns": 1655242260,
+              "min_ns": 1523020965,
+              "max_ns": 1657323940
+            },
+            "total_ns": {
+              "median_ns": 2263137423,
+              "min_ns": 2103724401,
+              "max_ns": 2276668003
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1655242260,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 607895163,
+              "variant": "baseline",
+              "total_ns": 2263137423
+            },
+            {
+              "output_ns": 1657323940,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 619344063,
+              "variant": "baseline",
+              "total_ns": 2276668003
+            },
+            {
+              "output_ns": 1523020965,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 580703436,
+              "variant": "baseline",
+              "total_ns": 2103724401
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 446577255,
+              "min_ns": 446523154,
+              "max_ns": 503509813
+            },
+            "output_ns": {
+              "median_ns": 1378704725,
+              "min_ns": 1363566466,
+              "max_ns": 1576870517
+            },
+            "total_ns": {
+              "median_ns": 1825227879,
+              "min_ns": 1810143721,
+              "max_ns": 2080380330
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1576870517,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 503509813,
+              "variant": "baseline",
+              "total_ns": 2080380330
+            },
+            {
+              "output_ns": 1363566466,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 446577255,
+              "variant": "baseline",
+              "total_ns": 1810143721
+            },
+            {
+              "output_ns": 1378704725,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 446523154,
+              "variant": "baseline",
+              "total_ns": 1825227879
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 385798444,
+              "min_ns": 375787136,
+              "max_ns": 388890553
+            },
+            "output_ns": {
+              "median_ns": 1333637206,
+              "min_ns": 1311679432,
+              "max_ns": 1386662017
+            },
+            "total_ns": {
+              "median_ns": 1722527759,
+              "min_ns": 1687466568,
+              "max_ns": 1772460461
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1386662017,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 385798444,
+              "variant": "baseline",
+              "total_ns": 1772460461
+            },
+            {
+              "output_ns": 1311679432,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 375787136,
+              "variant": "baseline",
+              "total_ns": 1687466568
+            },
+            {
+              "output_ns": 1333637206,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 388890553,
+              "variant": "baseline",
+              "total_ns": 1722527759
+            }
+          ]
+        },
+        {
+          "storage": "std",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 867988399,
+              "min_ns": 862193817,
+              "max_ns": 903412217
+            },
+            "output_ns": {
+              "median_ns": 470413586,
+              "min_ns": 456347911,
+              "max_ns": 499810101
+            },
+            "total_ns": {
+              "median_ns": 1332607403,
+              "min_ns": 1324336310,
+              "max_ns": 1403222318
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 499810101,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 903412217,
+              "variant": "both_fast_output",
+              "total_ns": 1403222318
+            },
+            {
+              "output_ns": 470413586,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 862193817,
+              "variant": "both_fast_output",
+              "total_ns": 1332607403
+            },
+            {
+              "output_ns": 456347911,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 867988399,
+              "variant": "both_fast_output",
+              "total_ns": 1324336310
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 536301663,
+              "min_ns": 534544918,
+              "max_ns": 552521541
+            },
+            "output_ns": {
+              "median_ns": 477223779,
+              "min_ns": 459532875,
+              "max_ns": 532519257
+            },
+            "total_ns": {
+              "median_ns": 1011768697,
+              "min_ns": 995834538,
+              "max_ns": 1085040798
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 532519257,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 552521541,
+              "variant": "both_fast_output",
+              "total_ns": 1085040798
+            },
+            {
+              "output_ns": 459532875,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 536301663,
+              "variant": "both_fast_output",
+              "total_ns": 995834538
+            },
+            {
+              "output_ns": 477223779,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 534544918,
+              "variant": "both_fast_output",
+              "total_ns": 1011768697
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 402175448,
+              "min_ns": 379768466,
+              "max_ns": 416908274
+            },
+            "output_ns": {
+              "median_ns": 514890974,
+              "min_ns": 429620385,
+              "max_ns": 549986049
+            },
+            "total_ns": {
+              "median_ns": 917066422,
+              "min_ns": 809388851,
+              "max_ns": 966894323
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 549986049,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 416908274,
+              "variant": "both_fast_output",
+              "total_ns": 966894323
+            },
+            {
+              "output_ns": 514890974,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 402175448,
+              "variant": "both_fast_output",
+              "total_ns": 917066422
+            },
+            {
+              "output_ns": 429620385,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 379768466,
+              "variant": "both_fast_output",
+              "total_ns": 809388851
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 338406450,
+              "min_ns": 328325057,
+              "max_ns": 348575762
+            },
+            "output_ns": {
+              "median_ns": 429936347,
+              "min_ns": 391562348,
+              "max_ns": 478213222
+            },
+            "total_ns": {
+              "median_ns": 768342797,
+              "min_ns": 719887405,
+              "max_ns": 826788984
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 429936347,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 338406450,
+              "variant": "both_fast_output",
+              "total_ns": 768342797
+            },
+            {
+              "output_ns": 478213222,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 348575762,
+              "variant": "both_fast_output",
+              "total_ns": 826788984
+            },
+            {
+              "output_ns": 391562348,
+              "site": "bilibili",
+              "stats": [
+                14117,
+                6757,
+                154,
+                0
+              ],
+              "update_ns": 328325057,
+              "variant": "both_fast_output",
+              "total_ns": 719887405
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "youtube",
+      "input_hashes": {
+        "css-gen-op/youtube/youtube.css": "0a640f4b28130486362ffc7f4883ba289705a50c84d325327548a159c3b252a8",
+        "css-gen-op/youtube/command.json": "246f3fbcb574c56b25e399cebbafa6b07bc09319f4d9b554e9e5a13c5e40a963"
+      },
+      "validation": {
+        "std": {
+          "frames": 5713,
+          "full_match_bits_validated": true,
+          "site": "youtube",
+          "stats": [
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ],
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ]
+          ]
+        },
+        "fx-internal": {
+          "frames": 5713,
+          "full_match_bits_validated": true,
+          "site": "youtube",
+          "stats": [
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ],
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ]
+          ]
+        },
+        "fx-all": {
+          "frames": 5713,
+          "full_match_bits_validated": true,
+          "site": "youtube",
+          "stats": [
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ],
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ]
+          ]
+        },
+        "vec-fx": {
+          "frames": 5713,
+          "full_match_bits_validated": true,
+          "site": "youtube",
+          "stats": [
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ],
+            [
+              113460,
+              71061,
+              102,
+              0
+            ],
+            [
+              113460,
+              71060,
+              102,
+              1
+            ],
+            [
+              113459,
+              71060,
+              101,
+              1
+            ],
+            [
+              113460,
+              70960,
+              102,
+              101
+            ]
+          ]
+        }
+      },
+      "execution_order": [
+        [
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ]
+        ],
+        [
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ]
+        ],
+        [
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ]
+        ]
+      ],
+      "measurements": [
+        {
+          "storage": "std",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 4916710067,
+              "min_ns": 4891865613,
+              "max_ns": 4932883285
+            },
+            "output_ns": {
+              "median_ns": 1263292258,
+              "min_ns": 1260117392,
+              "max_ns": 1265238295
+            },
+            "total_ns": {
+              "median_ns": 6176827459,
+              "min_ns": 6155157871,
+              "max_ns": 6198121580
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1263292258,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 4891865613,
+              "variant": "baseline",
+              "total_ns": 6155157871
+            },
+            {
+              "output_ns": 1260117392,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 4916710067,
+              "variant": "baseline",
+              "total_ns": 6176827459
+            },
+            {
+              "output_ns": 1265238295,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 4932883285,
+              "variant": "baseline",
+              "total_ns": 6198121580
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 2030121534,
+              "min_ns": 2024131198,
+              "max_ns": 2058251293
+            },
+            "output_ns": {
+              "median_ns": 1618358252,
+              "min_ns": 1473428320,
+              "max_ns": 1637454622
+            },
+            "total_ns": {
+              "median_ns": 3642489450,
+              "min_ns": 3531679613,
+              "max_ns": 3667576156
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1637454622,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2030121534,
+              "variant": "baseline",
+              "total_ns": 3667576156
+            },
+            {
+              "output_ns": 1618358252,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2024131198,
+              "variant": "baseline",
+              "total_ns": 3642489450
+            },
+            {
+              "output_ns": 1473428320,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2058251293,
+              "variant": "baseline",
+              "total_ns": 3531679613
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 2082178552,
+              "min_ns": 2035872389,
+              "max_ns": 2111863619
+            },
+            "output_ns": {
+              "median_ns": 1208304489,
+              "min_ns": 1156921002,
+              "max_ns": 1255217446
+            },
+            "total_ns": {
+              "median_ns": 3290483041,
+              "min_ns": 3192793391,
+              "max_ns": 3367081065
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 1255217446,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2111863619,
+              "variant": "baseline",
+              "total_ns": 3367081065
+            },
+            {
+              "output_ns": 1156921002,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2035872389,
+              "variant": "baseline",
+              "total_ns": 3192793391
+            },
+            {
+              "output_ns": 1208304489,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2082178552,
+              "variant": "baseline",
+              "total_ns": 3290483041
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 1237078923,
+              "min_ns": 1219982132,
+              "max_ns": 1245748797
+            },
+            "output_ns": {
+              "median_ns": 948642109,
+              "min_ns": 945191604,
+              "max_ns": 953927137
+            },
+            "total_ns": {
+              "median_ns": 2182270527,
+              "min_ns": 2173909269,
+              "max_ns": 2194390906
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 953927137,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 1219982132,
+              "variant": "baseline",
+              "total_ns": 2173909269
+            },
+            {
+              "output_ns": 945191604,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 1237078923,
+              "variant": "baseline",
+              "total_ns": 2182270527
+            },
+            {
+              "output_ns": 948642109,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 1245748797,
+              "variant": "baseline",
+              "total_ns": 2194390906
+            }
+          ]
+        },
+        {
+          "storage": "std",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 2156446608,
+              "min_ns": 2134078012,
+              "max_ns": 2161826061
+            },
+            "output_ns": {
+              "median_ns": 890165962,
+              "min_ns": 887403222,
+              "max_ns": 902306492
+            },
+            "total_ns": {
+              "median_ns": 3046612570,
+              "min_ns": 3036384504,
+              "max_ns": 3049229283
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 890165962,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2156446608,
+              "variant": "both_fast_output",
+              "total_ns": 3046612570
+            },
+            {
+              "output_ns": 887403222,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2161826061,
+              "variant": "both_fast_output",
+              "total_ns": 3049229283
+            },
+            {
+              "output_ns": 902306492,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 2134078012,
+              "variant": "both_fast_output",
+              "total_ns": 3036384504
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 919583583,
+              "min_ns": 909032225,
+              "max_ns": 930114436
+            },
+            "output_ns": {
+              "median_ns": 877758290,
+              "min_ns": 877325337,
+              "max_ns": 893768547
+            },
+            "total_ns": {
+              "median_ns": 1802800772,
+              "min_ns": 1797341873,
+              "max_ns": 1807439773
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 877758290,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 919583583,
+              "variant": "both_fast_output",
+              "total_ns": 1797341873
+            },
+            {
+              "output_ns": 893768547,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 909032225,
+              "variant": "both_fast_output",
+              "total_ns": 1802800772
+            },
+            {
+              "output_ns": 877325337,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 930114436,
+              "variant": "both_fast_output",
+              "total_ns": 1807439773
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 921012731,
+              "min_ns": 876170225,
+              "max_ns": 931494074
+            },
+            "output_ns": {
+              "median_ns": 872284646,
+              "min_ns": 865674485,
+              "max_ns": 878440302
+            },
+            "total_ns": {
+              "median_ns": 1793297377,
+              "min_ns": 1741844710,
+              "max_ns": 1809934376
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 865674485,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 876170225,
+              "variant": "both_fast_output",
+              "total_ns": 1741844710
+            },
+            {
+              "output_ns": 872284646,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 921012731,
+              "variant": "both_fast_output",
+              "total_ns": 1793297377
+            },
+            {
+              "output_ns": 878440302,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 931494074,
+              "variant": "both_fast_output",
+              "total_ns": 1809934376
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 573609166,
+              "min_ns": 567735024,
+              "max_ns": 574257618
+            },
+            "output_ns": {
+              "median_ns": 689082055,
+              "min_ns": 685121561,
+              "max_ns": 689587007
+            },
+            "total_ns": {
+              "median_ns": 1259379179,
+              "min_ns": 1256817079,
+              "max_ns": 1263196173
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 685121561,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 574257618,
+              "variant": "both_fast_output",
+              "total_ns": 1259379179
+            },
+            {
+              "output_ns": 689587007,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 573609166,
+              "variant": "both_fast_output",
+              "total_ns": 1263196173
+            },
+            {
+              "output_ns": 689082055,
+              "site": "youtube",
+              "stats": [
+                113460,
+                71061,
+                102,
+                0
+              ],
+              "update_ns": 567735024,
+              "variant": "both_fast_output",
+              "total_ns": 1256817079
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "netflix",
+      "input_hashes": {
+        "css-gen-op/netflix/netflix.css": "eb08540b85e995079190160c6f59d54da95652942ee29224126491360d6c1821",
+        "css-gen-op/netflix/command.json": "01fd2b2503bc084933eba85d3e134389e12b99a57d106020fa020c02f77ca808"
+      },
+      "validation": {
+        "std": {
+          "frames": 514,
+          "full_match_bits_validated": true,
+          "site": "netflix",
+          "stats": [
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ],
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ]
+          ]
+        },
+        "fx-internal": {
+          "frames": 514,
+          "full_match_bits_validated": true,
+          "site": "netflix",
+          "stats": [
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ],
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ]
+          ]
+        },
+        "fx-all": {
+          "frames": 514,
+          "full_match_bits_validated": true,
+          "site": "netflix",
+          "stats": [
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ],
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ]
+          ]
+        },
+        "vec-fx": {
+          "frames": 514,
+          "full_match_bits_validated": true,
+          "site": "netflix",
+          "stats": [
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ],
+            [
+              12286,
+              6036,
+              134,
+              0
+            ],
+            [
+              12286,
+              5946,
+              134,
+              90
+            ],
+            [
+              12196,
+              5946,
+              44,
+              90
+            ],
+            [
+              12286,
+              5902,
+              134,
+              134
+            ]
+          ]
+        }
+      },
+      "execution_order": [
+        [
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ]
+        ],
+        [
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ]
+        ],
+        [
+          [
+            "fx-all",
+            0
+          ],
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ]
+        ],
+        [
+          [
+            "vec-fx",
+            0
+          ],
+          [
+            "std",
+            4
+          ],
+          [
+            "fx-internal",
+            4
+          ],
+          [
+            "fx-all",
+            4
+          ],
+          [
+            "vec-fx",
+            4
+          ],
+          [
+            "std",
+            0
+          ],
+          [
+            "fx-internal",
+            0
+          ],
+          [
+            "fx-all",
+            0
+          ]
+        ]
+      ],
+      "measurements": [
+        {
+          "storage": "std",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 360280348,
+              "min_ns": 359555264,
+              "max_ns": 360692555
+            },
+            "output_ns": {
+              "median_ns": 180863847,
+              "min_ns": 180312262,
+              "max_ns": 181363343
+            },
+            "total_ns": {
+              "median_ns": 541004817,
+              "min_ns": 540918607,
+              "max_ns": 541144195
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 180312262,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 360692555,
+              "variant": "baseline",
+              "total_ns": 541004817
+            },
+            {
+              "output_ns": 181363343,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 359555264,
+              "variant": "baseline",
+              "total_ns": 540918607
+            },
+            {
+              "output_ns": 180863847,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 360280348,
+              "variant": "baseline",
+              "total_ns": 541144195
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 170871712,
+              "min_ns": 169670504,
+              "max_ns": 172723526
+            },
+            "output_ns": {
+              "median_ns": 214118194,
+              "min_ns": 209496881,
+              "max_ns": 214223833
+            },
+            "total_ns": {
+              "median_ns": 383894337,
+              "min_ns": 382220407,
+              "max_ns": 384989906
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 214223833,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 169670504,
+              "variant": "baseline",
+              "total_ns": 383894337
+            },
+            {
+              "output_ns": 214118194,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 170871712,
+              "variant": "baseline",
+              "total_ns": 384989906
+            },
+            {
+              "output_ns": 209496881,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 172723526,
+              "variant": "baseline",
+              "total_ns": 382220407
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 147578322,
+              "min_ns": 146240416,
+              "max_ns": 147828354
+            },
+            "output_ns": {
+              "median_ns": 177986417,
+              "min_ns": 177687310,
+              "max_ns": 178126937
+            },
+            "total_ns": {
+              "median_ns": 325265632,
+              "min_ns": 324226833,
+              "max_ns": 325955291
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 177687310,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 147578322,
+              "variant": "baseline",
+              "total_ns": 325265632
+            },
+            {
+              "output_ns": 178126937,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 147828354,
+              "variant": "baseline",
+              "total_ns": 325955291
+            },
+            {
+              "output_ns": 177986417,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 146240416,
+              "variant": "baseline",
+              "total_ns": 324226833
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 0,
+          "summary": {
+            "update_ns": {
+              "median_ns": 122208383,
+              "min_ns": 121317922,
+              "max_ns": 122317806
+            },
+            "output_ns": {
+              "median_ns": 178868576,
+              "min_ns": 176617774,
+              "max_ns": 180266542
+            },
+            "total_ns": {
+              "median_ns": 300186498,
+              "min_ns": 298826157,
+              "max_ns": 302584348
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 176617774,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 122208383,
+              "variant": "baseline",
+              "total_ns": 298826157
+            },
+            {
+              "output_ns": 178868576,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 121317922,
+              "variant": "baseline",
+              "total_ns": 300186498
+            },
+            {
+              "output_ns": 180266542,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 122317806,
+              "variant": "baseline",
+              "total_ns": 302584348
+            }
+          ]
+        },
+        {
+          "storage": "std",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 315102521,
+              "min_ns": 312492517,
+              "max_ns": 315877458
+            },
+            "output_ns": {
+              "median_ns": 172860246,
+              "min_ns": 172092453,
+              "max_ns": 174279584
+            },
+            "total_ns": {
+              "median_ns": 488737704,
+              "min_ns": 484584970,
+              "max_ns": 489382105
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 172092453,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 312492517,
+              "variant": "both_fast_output",
+              "total_ns": 484584970
+            },
+            {
+              "output_ns": 174279584,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 315102521,
+              "variant": "both_fast_output",
+              "total_ns": 489382105
+            },
+            {
+              "output_ns": 172860246,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 315877458,
+              "variant": "both_fast_output",
+              "total_ns": 488737704
+            }
+          ]
+        },
+        {
+          "storage": "fx-internal",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 153556942,
+              "min_ns": 151214346,
+              "max_ns": 154364562
+            },
+            "output_ns": {
+              "median_ns": 200468044,
+              "min_ns": 198705608,
+              "max_ns": 201330658
+            },
+            "total_ns": {
+              "median_ns": 352545004,
+              "min_ns": 352262550,
+              "max_ns": 354832606
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 198705608,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 153556942,
+              "variant": "both_fast_output",
+              "total_ns": 352262550
+            },
+            {
+              "output_ns": 201330658,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 151214346,
+              "variant": "both_fast_output",
+              "total_ns": 352545004
+            },
+            {
+              "output_ns": 200468044,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 154364562,
+              "variant": "both_fast_output",
+              "total_ns": 354832606
+            }
+          ]
+        },
+        {
+          "storage": "fx-all",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 130680425,
+              "min_ns": 128819386,
+              "max_ns": 130688748
+            },
+            "output_ns": {
+              "median_ns": 170492562,
+              "min_ns": 168114572,
+              "max_ns": 170558942
+            },
+            "total_ns": {
+              "median_ns": 299311948,
+              "min_ns": 298794997,
+              "max_ns": 301247690
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 170558942,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 130688748,
+              "variant": "both_fast_output",
+              "total_ns": 301247690
+            },
+            {
+              "output_ns": 170492562,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 128819386,
+              "variant": "both_fast_output",
+              "total_ns": 299311948
+            },
+            {
+              "output_ns": 168114572,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 130680425,
+              "variant": "both_fast_output",
+              "total_ns": 298794997
+            }
+          ]
+        },
+        {
+          "storage": "vec-fx",
+          "variant": 4,
+          "summary": {
+            "update_ns": {
+              "median_ns": 113614449,
+              "min_ns": 111854978,
+              "max_ns": 113727558
+            },
+            "output_ns": {
+              "median_ns": 164053328,
+              "min_ns": 163368656,
+              "max_ns": 165111460
+            },
+            "total_ns": {
+              "median_ns": 277780886,
+              "min_ns": 275223634,
+              "max_ns": 278725909
+            }
+          },
+          "samples": [
+            {
+              "output_ns": 163368656,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 111854978,
+              "variant": "both_fast_output",
+              "total_ns": 275223634
+            },
+            {
+              "output_ns": 164053328,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 113727558,
+              "variant": "both_fast_output",
+              "total_ns": 277780886
+            },
+            {
+              "output_ns": 165111460,
+              "site": "netflix",
+              "stats": [
+                12286,
+                6036,
+                134,
+                0
+              ],
+              "update_ns": 113614449,
+              "variant": "both_fast_output",
+              "total_ns": 278725909
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cpu": "AMD Ryzen AI 7 H 350 w/ Radeon 860M",
+  "baseline_revision": "2e4f2414aa37e67d0d51a6a9ff004858b4aa7603",
+  "script_sources": {
+    "dev/analyze-performance.py": "\"\"\"Build an isolated diagnostic copy. Keep the measured repository unchanged.\n\nUsage: python3 dev/analyze-performance.py\nThe executable accepts --site, --samples, --output, or --profile-variant 0..4.\n\"\"\"\nfrom pathlib import Path\nimport argparse\nimport hashlib\nimport json\nimport shutil\nimport subprocess\n\nROOT = Path(__file__).resolve().parents[1]\nparser = argparse.ArgumentParser(description=__doc__)\nparser.add_argument('--storage', choices=['std', 'fx-internal', 'fx-all', 'vec-fx'], default='std')\nargs = parser.parse_args()\nOUT = Path('/tmp/css-performance-analysis') / args.storage\nCORE = OUT / 'core'\nBENCH = OUT / 'bench'\nREF = OUT / 'reference'\nCORE.mkdir(parents=True, exist_ok=True)\nBENCH.mkdir(parents=True, exist_ok=True)\nREF.mkdir(parents=True, exist_ok=True)\nshutil.copytree(ROOT / 'src', REF / 'src', dirs_exist_ok=True)\nreference_manifest = (ROOT / 'Cargo.toml').read_text().replace('members = [\"xtask\"]', 'members = []')\n(REF / 'Cargo.toml').write_text(reference_manifest.replace('name = \"css-bitvector-compiler\"', 'name = \"css-reference-core\"'))\nshutil.copytree(ROOT / 'src', CORE / 'src', dirs_exist_ok=True)\nshutil.copy2(ROOT / 'Cargo.lock', CORE / 'Cargo.lock')\ns = (ROOT / 'Cargo.toml').read_text().replace('members = [\"xtask\"]', 'members = []')\nif args.storage != 'std':\n    s = s.replace('[dependencies]', '[dependencies]\\nrustc-hash = \"=2.1.3\"')\n(CORE / 'Cargo.toml').write_text(s)\n\n\ndef replace_once(s, old, new):\n    assert s.count(old) == 1, old\n    return s.replace(old, new)\n\n\np = CORE / 'src/clean/engine.rs'\ns = p.read_text()\nif args.storage != 'std':\n    s = s.replace('use std::collections::{BTreeMap, HashMap, HashSet};',\n                  'use std::collections::{BTreeMap, HashMap, HashSet};\\nuse rustc_hash::{FxHashMap, FxHashSet};')\n    for old, new in [('nodes: HashMap<NodeId, DomNode>', 'nodes: FxHashMap<NodeId, DomNode>'),\n                     ('trace_nodes: HashMap<u64, NodeId>', 'trace_nodes: FxHashMap<u64, NodeId>'),\n                     ('HashSet<DynamicPseudo>', 'FxHashSet<DynamicPseudo>'),\n                     ('pseudos: HashSet::new()', 'pseudos: FxHashSet::default()'),\n                     ('let mut ids = HashSet::new()', 'let mut ids = FxHashSet::default()')]:\n        s = s.replace(old, new)\nif args.storage in ('fx-all', 'vec-fx'):\n    s = s.replace('use std::collections::{BTreeMap, HashMap, HashSet};', 'use std::collections::{BTreeMap, HashMap};')\n    s = s.replace('classes: HashSet<String>', 'classes: FxHashSet<String>')\n    s = replace_once(s, '    attributes: HashMap<String, String>,', '    attributes: FxHashMap<String, String>,')\n    s = replace_once(s, '        attributes,', '        attributes: attributes.into_iter().collect(),')\nif args.storage == 'vec-fx':\n    s = replace_once(s, 'nodes: FxHashMap<NodeId, DomNode>', 'nodes: NodeArena')\n    s += (ROOT / 'dev/performance-arena.rs').read_text()\n    cp = CORE / 'src/clean/engine/comparison.rs'\n    cp.write_text(cp.read_text().replace('engine.dom.nodes.keys().copied()', 'engine.dom.nodes.keys()'))\ns = replace_once(s, 'pub struct Engine {', 'pub struct Engine {\\n    profile_flags: u8,')\ns = replace_once(s, 'impl Engine {', '''impl Engine {\n    pub fn profile_variant(&mut self, flags: u8) { self.profile_flags = flags; }\n    pub fn profile_stats(&self) -> (usize, usize, usize, usize) {\n        (self.stats.visited_nodes, self.stats.recomputed_nodes,\n         self.stats.input_changes, self.stats.input_skips)\n    }\n''')\ns = replace_once(s, '            stats: RunStats::default(),', '            stats: RunStats::default(),\\n            profile_flags: 0,')\ns = replace_once(s, '        let position = self.dom.position(id);', '''        if self.profile_flags & 1 != 0 && compound.nth.is_empty() { return true; }\n        let position = self.dom.position(id);''')\ns = replace_once(s, '        self.dom.refresh_pseudos();', '''        let needs_pseudos = match &frame.command {\n            TraceCommand::Init {..} | TraceCommand::Add {..} |\n            TraceCommand::Remove {..} | TraceCommand::Replace {..} => true,\n            TraceCommand::Recalculate => false,\n            TraceCommand::InsertValue {key,..} | TraceCommand::ReplaceValue {key,..} |\n            TraceCommand::DeleteValue {key,..} => matches!(key.to_ascii_lowercase().as_str(),\n                \"is_hover_root\" | \"is_hovered_root\" | \"is_focus_root\"),\n        };\n        if self.profile_flags & 2 == 0 || needs_pseudos { self.dom.refresh_pseudos(); }''')\np.write_text(s)\n\ns = (ROOT / 'dev/stylo-benchmark/Cargo.toml').read_text()\ns = s.replace('path = \"../..\"', 'path = \"../core\"')\ns = s.replace('[dependencies]', '[dependencies]\\nreference-core = { package = \"css-reference-core\", path = \"../reference\" }')\ns = s.replace('name = \"css-stylo-websites\"', 'name = \"css-website-profile\"')\ns = s.replace('path = \"src/websites.rs\"', 'path = \"profile.rs\"')\n(BENCH / 'Cargo.toml').write_text(s)\nshutil.copy2(ROOT / 'dev/stylo-benchmark/Cargo.lock', BENCH / 'Cargo.lock')\ns = (ROOT / 'dev/stylo-benchmark/src/websites.rs').read_text()\nreference = s[:s.index('trait Backend {')].replace('use css_bitvector_compiler::', 'use reference_core::')\nreference += '''\npub fn load(site: &str) -> Result<(Engine, Vec<TraceFrame>)> {\n    let (original, trace) = load_site(&SiteInput::named(site))?;\n    let projection = project(&original)?;\n    let mut frames = trace.frames;\n    for frame in &mut frames { normalize_frame(frame); }\n    Ok((Engine::new(EngineKind::Bit, projection.program), frames))\n}\n'''\n(BENCH / 'reference.rs').write_text('#![allow(unused)]\\n'+reference)\ns = replace_once(s, 'struct Project {', 'struct Project {\\n    fast_output: bool,')\ns = replace_once(s, '            engine: Engine::new(kind, projection.program.clone()),', '            fast_output: false,\\n            engine: Engine::new(kind, projection.program.clone()),')\ns = replace_once(s, '''                    self.priority\n                        .iter()\n                        .find(|&&i| matches[i])\n                        .map_or([0; 4], |&i| colour(i)),''', '''                    if self.fast_output && !matches.contains(&true) { [0; 4] } else {\n                        self.priority.iter().find(|&&i| matches[i]).map_or([0; 4], |&i| colour(i))\n                    },''')\ns = replace_once(s, 'fn main() -> Result<()> {', '#[allow(dead_code)]\\nfn original_main() -> Result<()> {')\ns += r'''\n#[allow(unused)]\nmod reference;\n// Diagnostic variants share one binary. Flags are per engine instance.\nconst VARIANTS: [&str; 5] = [\"baseline\", \"lazy_position\", \"event_pseudos\", \"both\", \"both_fast_output\"];\nfn candidate(projection: &Projection, kind: EngineKind, variant: usize) -> Project {\n    let mut p = Project::new(kind, projection);\n    p.engine.profile_variant([0,1,2,3,3][variant]);\n    p.fast_output = variant == 4;\n    p\n}\n#[inline(never)]\nfn measured_update(p: &mut Project, frame: &TraceFrame) -> Result<()> { p.update(frame) }\n#[inline(never)]\nfn measured_output(p: &Project) -> Colours { p.colours() }\nfn main() -> Result<()> {\n    let site = option(\"--site\").ok_or(\"missing --site\")?;\n    let (original,trace) = load_site(&SiteInput::named(&site))?;\n    let projection = project(&original)?;\n    let mut frames = trace.frames;\n    for f in &mut frames { normalize_frame(f); }\n    if let Some(variant) = option(\"--profile-variant\") {\n        let variant: usize = variant.parse()?;\n        let mut p = candidate(&projection,EngineKind::Bit,variant);\n        p.update(&frames[0])?;\n        let mut update_ns = 0;\n        let mut output_ns = 0;\n        for f in &frames[1..] {\n            let now = Instant::now(); measured_update(&mut p,f)?; update_ns += now.elapsed().as_nanos();\n            let now = Instant::now(); let output = black_box(measured_output(&p)); output_ns += now.elapsed().as_nanos();\n            drop(output);\n        }\n        println!(\"{}\",json!({\"site\":site,\"variant\":VARIANTS[variant],\"update_ns\":update_ns,\"output_ns\":output_ns,\"stats\":p.engine.profile_stats()}));\n        return Ok(());\n    }\n    // Validate every match bit, not only the winning colour. Check all four engines.\n    let (mut baseline, reference_frames) = reference::load(&site)?;\n    let mut candidates: Vec<_> = [0,4].into_iter().flat_map(|variant|\n        KINDS.iter().map(move |&kind| (variant,kind)))\n        .map(|(variant,kind)| candidate(&projection,kind,variant)).collect();\n    let mut expected = Vec::new();\n    for (frame, reference_frame) in frames.iter().zip(&reference_frames) {\n        baseline.comparison_update(reference_frame)?;\n        let wanted: BTreeMap<_,_> = baseline.comparison_node_matches().collect();\n        let colours: Colours = wanted.iter().map(|(&id,bits)| (id,\n            projection.priority.iter().find(|&&i| bits[i]).map_or([0;4], |&i| colour(i)))).collect();\n        for p in &mut candidates {\n            p.update(frame)?;\n            let actual: BTreeMap<_,_> = p.engine.comparison_node_matches().collect();\n            assert_eq!(actual,wanted,\"match bits differ at frame {}\",frame.frame_id);\n            check(&p.colours(), &colours, frame)?;\n        }\n        expected.push(colours);\n    }\n    let stats: Vec<_> = candidates.iter().map(|p| p.engine.profile_stats()).collect();\n    eprintln!(\"{site}: all four candidate engines passed full match-bit and RGBA checks\");\n    drop(baseline); drop(candidates);\n    if env::args().any(|s| s == \"--validate-only\") {\n        println!(\"{}\",json!({\"site\":site,\"frames\":frames.len(),\"stats\":stats,\"full_match_bits_validated\":true}));\n        return Ok(());\n    }\n    let samples: usize = option(\"--samples\").unwrap_or(\"3\".into()).parse()?;\n    assert!(samples > 0 && samples % 2 == 1);\n    let selected: Vec<usize> = option(\"--variants\").unwrap_or(\"0,4\".into()).split(',').map(|s|s.parse().unwrap()).collect();\n    assert!(!selected.is_empty() && selected.iter().all(|&i| i < 5));\n    let mut measurements = vec![Vec::new();5];\n    for round in 0..=samples {\n        for index in (0..selected.len()).map(|offset| selected[(round+offset)%selected.len()]) {\n            let sample = run(&mut candidate(&projection,EngineKind::Bit,index),&frames,&expected)?;\n            eprintln!(\"{site} {round}/{samples} {}: update {:.3} ms, output {:.3} ms\",VARIANTS[index],sample.update_ns as f64/1e6,sample.output_ns as f64/1e6);\n            if round > 0 { measurements[index].push(sample); }\n        }\n    }\n    let mut results = Vec::new();\n    for (i,values) in measurements.into_iter().enumerate() {\n        if values.is_empty() { continue; }\n        let summary = |field: fn(&Sample)->u128| {\n            let mut sorted: Vec<_> = values.iter().map(field).collect(); sorted.sort_unstable();\n            json!({\"median_ns\":sorted[samples/2],\"min_ns\":sorted[0],\"max_ns\":sorted[samples-1]})\n        };\n        results.push(json!({\"variant\":VARIANTS[i],\"update\":summary(|s|s.update_ns),\"output\":summary(|s|s.output_ns),\"total\":summary(|s|s.total_ns),\"samples\":values}));\n    }\n    let report = json!({\"site\":site,\"frames\":frames.len(),\"samples\":samples,\"warmups\":1,\"engine\":\"bit\",\"full_match_bits_validated_kinds\":[\"bit\",\"tri\",\"rec_tri\",\"quad\"],\"candidate_stats\":stats,\"results\":results});\n    fs::write(option(\"--output\").ok_or(\"missing --output\")?,serde_json::to_string_pretty(&report)?+\"\\n\")?;\n    Ok(())\n}\n'''\n(BENCH / 'profile.rs').write_text(s)\nsource_files = [*sorted((ROOT/'src').rglob('*.rs')), ROOT/'Cargo.toml', ROOT/'Cargo.lock', ROOT/'dev/stylo-benchmark/Cargo.toml', ROOT/'dev/stylo-benchmark/Cargo.lock', ROOT/'dev/stylo-benchmark/src/websites.rs', ROOT/'dev/performance-arena.rs', Path(__file__).resolve()]\nsubprocess.run(['cargo','build','--release','--offline','--manifest-path',str(BENCH/'Cargo.toml'),'--bin','css-website-profile','--target-dir',str(ROOT/'dev/stylo-benchmark/target')],check=True,cwd=ROOT)\nshutil.copy2(ROOT/'dev/stylo-benchmark/target/release/css-website-profile', OUT/'profile')\ngenerated = [*sorted((CORE/'src').rglob('*.rs')), CORE/'Cargo.toml', BENCH/'Cargo.toml', BENCH/'Cargo.lock', BENCH/'profile.rs', BENCH/'reference.rs']\nmanifest = {'storage':args.storage, 'sources': {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in source_files}, 'generated': {str(p.relative_to(OUT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in generated}, 'binary_sha256':hashlib.sha256((OUT/'profile').read_bytes()).hexdigest()}\n(OUT/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\\n')\nprint(OUT/'profile')\n",
+    "dev/performance-arena.rs": "// Diagnostic storage, appended to the copied engine by analyze-performance.py.\n// IDs are monotone. Removed slots stay empty until the next DOM clear.\n#[derive(Debug, Clone, Default)]\nstruct NodeArena {\n    base: u64,\n    slots: Vec<Option<DomNode>>,\n    live: usize,\n}\n\nimpl NodeArena {\n    fn clear(&mut self) {\n        self.slots.clear();\n        self.live = 0;\n    }\n\n    fn insert(&mut self, id: NodeId, node: DomNode) {\n        if self.slots.is_empty() {\n            self.base = id.0;\n        }\n        assert_eq!(id.0.checked_sub(self.base), Some(self.slots.len() as u64));\n        self.slots.push(Some(node));\n        self.live += 1;\n    }\n\n    fn slot(&self, id: &NodeId) -> Option<usize> {\n        usize::try_from(id.0.checked_sub(self.base)?).ok()\n    }\n\n    fn get(&self, id: &NodeId) -> Option<&DomNode> {\n        self.slots.get(self.slot(id)?)?.as_ref()\n    }\n\n    fn get_mut(&mut self, id: &NodeId) -> Option<&mut DomNode> {\n        let slot = self.slot(id)?;\n        self.slots.get_mut(slot)?.as_mut()\n    }\n\n    fn contains_key(&self, id: &NodeId) -> bool {\n        self.get(id).is_some()\n    }\n\n    fn remove(&mut self, id: &NodeId) -> Option<DomNode> {\n        let slot = self.slot(id)?;\n        let node = self.slots.get_mut(slot)?.take()?;\n        self.live -= 1;\n        Some(node)\n    }\n\n    fn len(&self) -> usize {\n        self.live\n    }\n\n    fn values(&self) -> impl Iterator<Item = &DomNode> {\n        self.slots.iter().filter_map(Option::as_ref)\n    }\n\n    fn keys(&self) -> impl Iterator<Item = NodeId> + '_ {\n        self.slots.iter().enumerate().filter_map(|(i, node)| {\n            node.as_ref().map(|_| NodeId(self.base + i as u64))\n        })\n    }\n}\n\nimpl std::ops::Index<&NodeId> for NodeArena {\n    type Output = DomNode;\n    fn index(&self, id: &NodeId) -> &DomNode {\n        self.get(id).expect(\"live node ID\")\n    }\n}\n\n#[cfg(test)]\nmod arena_tests {\n    use super::*;\n\n    #[test]\n    fn removed_and_cleared_ids_stay_invalid() {\n        let mut nodes = NodeArena::default();\n        nodes.insert(NodeId(10), DomNode::default());\n        nodes.insert(NodeId(11), DomNode::default());\n        assert!(nodes.remove(&NodeId(10)).is_some());\n        assert!(nodes.remove(&NodeId(10)).is_none());\n        nodes.insert(NodeId(12), DomNode::default());\n        assert!(nodes.get(&NodeId(10)).is_none());\n        assert_eq!(nodes.len(), 2);\n        assert_eq!(nodes.values().count(), 2);\n        assert_eq!(nodes.keys().collect::<Vec<_>>(), [NodeId(11), NodeId(12)]);\n        nodes.clear();\n        nodes.insert(NodeId(13), DomNode::default());\n        for id in 0..13 {\n            assert!(nodes.get(&NodeId(id)).is_none());\n        }\n        assert!(nodes.get(&NodeId(u64::MAX)).is_none());\n        assert!(nodes.get(&NodeId(13)).is_some());\n        assert_eq!(nodes.len(), 1);\n    }\n}\n"
+  },
+  "cpu_observation": {
+    "observed_at_utc": "2026-10-12T16:45:58.072962+00:00",
+    "cpu": 4,
+    "cpufreq": {
+      "scaling_governor": "performance",
+      "scaling_cur_freq": "4978895",
+      "scaling_min_freq": "623377",
+      "scaling_max_freq": "5090910"
+    }
+  }
+}

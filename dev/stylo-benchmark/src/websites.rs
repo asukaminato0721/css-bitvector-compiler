@@ -571,8 +571,9 @@ fn main() -> Result<()> {
         "normalization":"all recorded nodes are generic HTML elements; type selectors use encoded tags; attributes except class, id, and trace state flags are encoded and inert; dynamic state follows the project tree model; synthetic unique background colours; specificity then original compiled selector order; native :active represents derived focus-within because Blitz does not implement FocusWithin matching",
         "captured_at_utc":command("date",&["-u","+%FT%TZ"]).trim(),"rustc":command("rustc",&["-Vv"]),
         "cpu":fs::read_to_string("/proc/cpuinfo")?.lines().find(|s| s.starts_with("model name")).unwrap_or("unknown"),
+        "cpu4_governor": fs::read_to_string("/sys/devices/system/cpu/cpu4/cpufreq/scaling_governor").ok().map(|s|s.trim().to_owned()),
         "cpu_affinity":fs::read_to_string("/proc/self/status")?.lines().find(|s| s.starts_with("Cpus_allowed_list:")).unwrap_or("unknown"),
-        "source_hashes":command("sha256sum",&["src/clean/engine.rs","src/clean/engine/comparison.rs","src/clean/compiler.rs","src/clean/logic.rs","dev/stylo-benchmark/src/websites.rs","dev/stylo-benchmark/Cargo.toml","dev/stylo-benchmark/Cargo.lock"]),"results":[]});
+        "source_hashes":command("sha256sum",&["src/clean/engine.rs", "src/clean/engine/arena.rs", "Cargo.toml", "Cargo.lock","src/clean/engine/comparison.rs","src/clean/compiler.rs","src/clean/logic.rs","dev/stylo-benchmark/src/websites.rs","dev/stylo-benchmark/Cargo.toml","dev/stylo-benchmark/Cargo.lock"]),"results":[]});
     for site in SITES {
         if option("--site").is_some_and(|s| s != *site) {
             continue;

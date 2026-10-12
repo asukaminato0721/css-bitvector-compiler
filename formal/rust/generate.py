@@ -27,6 +27,9 @@ ENTRY_POINTS = [
     "clean::logic::requirements_accept",
 ]
 GENERATED = ["CssMark/Types.lean", "CssMark/Funs.lean"]
+# Container operations use an extensional map contract. The concrete Vec layout
+# is outside these local algorithm proofs, just as HashMap buckets were before.
+OPAQUE_CONTAINERS = ["crate::clean::engine::arena"]
 
 
 def run(args):
@@ -48,6 +51,7 @@ def snapshot(generated):
         "aeneas": AENEAS_REV,
         "entry_points": ENTRY_POINTS,
         "aeneas_options": ["-split-files", "-loops-to-rec"],
+        "opaque_containers": OPAQUE_CONTAINERS,
         "sources": {str(p.relative_to(ROOT)): digest(p) for p in sources},
         "generated": {name: digest(generated / name) for name in GENERATED},
     }
@@ -78,6 +82,8 @@ def main():
         temp = Path(directory)
         llbc = temp / "css_mark.llbc"
         command = [charon, "cargo", "--preset=aeneas", "--sysroot", "default"]
+        for container in OPAQUE_CONTAINERS:
+            command += ["--opaque", container]
         entries = ["clean::engine::Engine::recompute_node"] if args.check_scheduler_translation else ENTRY_POINTS
         for entry in entries:
             command += ["--start-from", f"css_bitvector_compiler::{entry}"]

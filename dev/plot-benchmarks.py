@@ -3,7 +3,10 @@
 # ///
 """Render measured results. Run with: uv run dev/plot-benchmarks.py."""
 from pathlib import Path
+import hashlib
 import json
+import statistics
+import sys
 
 import matplotlib
 matplotlib.use("Agg")
@@ -18,11 +21,18 @@ PLOTS.mkdir(exist_ok=True)
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 10, "axes.spines.top": False,
                      "axes.spines.right": False, "savefig.dpi": 160})
 KINDS = ["bit", "tri", "rec_tri", "quad"]
+SKIP_HISTORICAL = "--skip-historical" in sys.argv[1:]
 
 
 def save(fig, name):
+    if SKIP_HISTORICAL and name == "browser-total":
+        plt.close(fig)
+        return
     for suffix in ["svg", "png"]:
-        fig.savefig(PLOTS / f"{name}.{suffix}", bbox_inches="tight")
+        path = PLOTS / f"{name}.{suffix}"
+        fig.savefig(path, bbox_inches="tight")
+        if suffix == "svg":
+            path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
     plt.close(fig)
 
 
@@ -31,25 +41,105 @@ def measurements(site, workload):
     return {x["engine"]: x for x in scenario["measurements"]}
 
 
+def check_sources(report):
+    for line in report["source_hashes"].splitlines():
+        expected, path = line.split(maxsplit=1)
+        assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected, path
+
+
 corpus = json.loads((DOCS / "benchmark-results.json").read_text())
 assert len(corpus["results"]) == 13, "corpus benchmark is incomplete"
+assert corpus["samples"] == 7 and corpus["warmups"] == 1
+check_sources(corpus)
+for site in corpus["results"]:
+    assert {s["workload"] for s in site["scenarios"]} == {"initial", "trace"}
+    for scenario in site["scenarios"]:
+        assert {m["engine"] for m in scenario["measurements"]} == set(KINDS + ["parcel_selectors"])
+        for item in scenario["measurements"]:
+            samples = item["samples_ns"]
+            assert len(samples) == corpus["samples"]
+            assert (item["min_ns"], item["median_ns"], item["max_ns"]) == (min(samples), statistics.median(samples), max(samples))
 sites = [x for x in corpus["results"] if x["selectors"]]
+matcher_ratios = {
+    workload: np.array([[measurements(site, workload)["parcel_selectors"]["median_ns"] /
+                         measurements(site, workload)[engine]["median_ns"] for engine in KINDS] for site in sites])
+    for workload in ["initial", "trace"]
+}
+ratio_min = min(-1, int(np.floor(min(np.log2(r).min() for r in matcher_ratios.values()))))
+ratio_max = max(1, int(np.ceil(max(np.log2(r).max() for r in matcher_ratios.values()))))
 fig, axes = plt.subplots(1, 2, figsize=(11, 7), layout="constrained")
 for ax, workload, title in zip(axes, ["initial", "trace"], ["Initial construction + matching", "Full mutation trace (includes initial)"]):
-    ratios = np.array([[measurements(site, workload)["parcel_selectors"]["median_ns"] /
-                        measurements(site, workload)[engine]["median_ns"] for engine in KINDS] for site in sites])
-    image = ax.imshow(np.log2(ratios), cmap="RdBu", norm=TwoSlopeNorm(vmin=-2, vcenter=0, vmax=7), aspect="auto")
+    ratios = matcher_ratios[workload]
+    image = ax.imshow(np.log2(ratios), cmap="RdBu", norm=TwoSlopeNorm(vmin=ratio_min, vcenter=0, vmax=ratio_max), aspect="auto")
     ax.set(xticks=range(4), xticklabels=KINDS, yticks=range(len(sites)),
            yticklabels=[x["site"] for x in sites], title=title)
     for row in range(len(sites)):
         for col in range(4):
             ax.text(col, row, f"{ratios[row, col]:.2f}x", ha="center", va="center",
-                    color="white" if np.log2(ratios[row, col]) < -1 or np.log2(ratios[row, col]) > 4.8 else "black")
-bar = fig.colorbar(image, ax=axes, shrink=.75, ticks=[-2, -1, 0, 1, 3, 5, 7])
-bar.ax.set_yticklabels(["0.25x", "0.5x", "1x", "2x", "8x", "32x", "128x"])
+                    color="white" if np.log2(ratios[row, col]) < ratio_min * .6 or np.log2(ratios[row, col]) > ratio_max * .6 else "black")
+ticks = range(ratio_min, ratio_max + 1)
+bar = fig.colorbar(image, ax=axes, shrink=.75)
+bar.set_ticks(ticks, labels=[f"{2.0 ** power:g}x" for power in ticks])
 bar.set_label("parcel_selectors median / project median; >1 favors project")
 fig.suptitle("Released matcher comparison: 7 samples per cell\nBaseline rematches every frame; zero-selector fixture excluded", fontsize=12)
 save(fig, "matcher-speedup")
+
+lines = [
+    "# 与 parcel_selectors 的性能对比", "",
+    "本次对照使用已发布的 [parcel_selectors 0.28.2](https://docs.rs/parcel_selectors/0.28.2/parcel_selectors/)。",
+    "两侧使用同一 DOM、同一修改序列和本项目支持的同一选择器子集。",
+    "对照库在每个修改帧后完整匹配。本项目使用增量更新。此结果不代表与浏览器完整样式引擎的比较。", "",
+    "本轮四个算法共用 Vec 节点表，其余运行时映射使用 FxHash。parcel_selectors 适配器也使用这份 DOM，因此两侧都获得存储优化。",
+    "结果均来自本轮重测。旧测量的 CPU 状态不同，不用于计算本次改动的加速倍数。", "",
+    "## 测试方法", "",
+    "- release 构建，单线程，固定 CPU 4。",
+    "- 每个实现预热一次，测量七次。每轮轮换运行顺序。",
+    "- 使用 std::time::Instant。下表显示中位数。原始 JSON 保留全部样本、最小值和最大值。",
+    "- 计时包含 DOM 构造或修改、派生伪类刷新、匹配和运行时状态维护。",
+    "- CSS 解析、trace 读取、program 复制、结果集合导出和结果校验不计时。",
+    "- initial 只执行首个初始化帧。trace 执行完整修改序列，包含初始化。",
+    "- 所有数据集都先逐帧检查匹配集合。对照同时检查 naive、bit、tri、rec_tri、quad。",
+    "- 对照适配器为每个 DOM 版本重建兄弟索引，并启用该版本内的 nth 缓存。索引构建计入耗时。",
+    "- 没有启用祖先 Bloom filter、样式规则索引、浏览器失效管理、级联或布局。",
+    "- 两侧共享 DOM 修改和派生伪类处理。因此，该检查独立比较匹配器，不独立验证 DOM 修改语义。", "",
+    "## 环境", "",
+    f"- 时间：`{corpus['captured_at_utc']}`。",
+    f"- CPU：{corpus['cpu'].split(':', 1)[-1].strip()}。CPU 4 调速模式：`{corpus.get('cpu4_governor', '未记录')}`。",
+    f"- 系统：`{corpus['kernel']}`。",
+    f"- Rust：`{corpus['rustc'].splitlines()[0]}`。",
+    f"- 基础提交：`{corpus['revision']}`。包含本次未提交改动，源码指纹保存在原始 JSON。", "",
+    "## 汇总", "",
+    "共有 13 个数据集。a_to_b 有零个参与匹配的选择器，保留原始数据，但不计入以下 12 个数据集的汇总。",
+    "表中数值是各数据集“对照耗时 ÷ 本项目耗时”的几何平均。大于 1 表示本项目较快。", "",
+    "| 工作负载 | bit | tri | rec_tri | quad |", "|---|---:|---:|---:|---:|",
+]
+for workload, title in [("initial", "首次构造与匹配"), ("trace", "完整修改序列")]:
+    ratios = [statistics.geometric_mean(measurements(s, workload)["parcel_selectors"]["median_ns"] /
+              measurements(s, workload)[e]["median_ns"] for s in sites) for e in KINDS]
+    lines.append(f"| {title} | " + " | ".join(f"{v:.2f}×" for v in ratios) + " |")
+lines += ["", "![初始化和完整修改序列的耗时倍率](benchmark-plots/matcher-speedup.svg)", "",
+          "增量引擎测试见[原生 Stylo／Blitz 对比](stylo-benchmark.md)和[真实网站数据对比](website-benchmark.md)。",
+          "存储优化的隔离实验见[性能分析](performance-analysis.md)。另保留[早期 Blink 测量](browser-benchmark.md)，供检查跨接口测量的限制。"]
+for workload, title in [("initial", "首次构造与匹配"), ("trace", "完整修改序列")]:
+    lines += ["", f"## {title}", "", "中位耗时，单位为毫秒。数值越小越快。", "",
+              "| 数据集 | 选择器 | 帧数 | parcel_selectors | bit | tri | rec_tri | quad |",
+              "|---|---:|---:|---:|---:|---:|---:|---:|"]
+    for site in corpus["results"]:
+        row = measurements(site, workload)
+        frames = next(s["frames"] for s in site["scenarios"] if s["workload"] == workload)
+        values = " | ".join(f"{row[e]['median_ns'] / 1e6:.3f}" for e in ["parcel_selectors"] + KINDS)
+        lines.append(f"| {site['site']} | {site['selectors']} | {frames} | {values} |")
+lines += ["", "## 解释范围", "",
+          "本次结果区分首次计算成本和增量更新收益。不能把完整修改序列的倍率解释为单次选择器匹配的倍率。",
+          "输入仅覆盖项目支持的选择器。简单单段选择器和不支持的语法按现有编译规则排除。排除数量保存在 JSON。",
+          "短至数微秒的测试易受计时和分配开销影响。七次样本不能用于推断其他机器、浏览器或页面的性能。", "",
+          "## 复现", "", "```sh", "cargo build --release --locked -p xtask",
+          "taskset -c 4 target/release/xtask compare --all --samples 7 --output docs/benchmark-results.json",
+          "uv run dev/plot-benchmarks.py --skip-historical", "```", "",
+          "绘图还需要当前源码对应的受控 Stylo 基准 JSON。若 CPU 4 不可用，请选择可用 CPU。",
+          "[原始结果](benchmark-results.json)包含全部耗时、环境、版本、源码指纹和测试覆盖数量。", ""]
+(DOCS / "benchmark.md").write_text("\n".join(lines))
+print("Wrote matcher report and figures.")
 
 native = json.loads((DOCS / "browser-native-results.json").read_text())
 browser = json.loads((DOCS / "browser-results.json").read_text())
@@ -148,12 +238,15 @@ lines += ["", "## 复现", "", "```sh", "cargo build --release -p xtask",
           "Node.js 需提供内置 WebSocket。请按本机环境修改浏览器路径和 CPU 编号。绘图还需要完整的 matcher 基准 JSON。", "",
           "原始数据：[Rust](browser-native-results.json)、[浏览器](browser-results.json)。",
           "图形提供 SVG 和 PNG，位于 [benchmark-plots](benchmark-plots/)。", ""]
-(DOCS / "browser-benchmark.md").write_text("\n".join(lines))
-print("Wrote browser report and two plots (SVG and PNG).")
+if not SKIP_HISTORICAL:
+    (DOCS / "browser-benchmark.md").write_text("\n".join(lines))
+    print("Wrote historical browser report and figures.")
 
 stylo = json.loads((DOCS / "stylo-results.json").read_text())
 assert stylo["protocol"] == "native-incremental-rgba-v1"
 assert len(stylo["results"]) == 8, "native Stylo benchmark is incomplete"
+assert stylo["samples"] == 7 and stylo["warmups"] == 1
+check_sources(stylo)
 native_kinds = KINDS + ["stylo_blitz"]
 engine_labels = KINDS + ["Stylo / Blitz"]
 for case in stylo["results"]:
@@ -253,8 +346,9 @@ lines += ["", "local 修改单个子节点的 class。ancestor 切换根节点 c
           f"- Stylo：{stylo['stylo']}。Blitz DOM：{stylo['blitz_dom']}。",
           f"- CPU：{stylo['cpu'].split(':', 1)[-1].strip()}。",
           f"- 编译器：{stylo['rustc'].splitlines()[0]}。",
-          "- 使用独立 Cargo.lock 固定基准依赖。项目主工作区的依赖不变。",
-          "- 本次只增加基准接口，没有改变项目的求值或失效算法。", "",
+          "- 使用独立 Cargo.lock 固定基准依赖。主引擎使用 rustc-hash 2.1.3。",
+          "- 四个算法共用 Vec 节点表，其余运行时映射使用 FxHash。求值和失效流程保持原实现。",
+          f"- CPU 4 调速模式：{stylo.get('cpu4_governor', '未记录')}。本轮同时重测四个算法与 Stylo／Blitz。", "",
           "```sh", "node dev/browser-benchmark.mjs --generate /tmp/css-browser-fixtures.json",
           "cargo build --release --locked --manifest-path dev/stylo-benchmark/Cargo.toml",
           "taskset -c 4 dev/stylo-benchmark/target/release/css-stylo-benchmark --input /tmp/css-browser-fixtures.json --output docs/stylo-results.json --samples 7",

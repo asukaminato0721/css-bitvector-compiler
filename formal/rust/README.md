@@ -88,12 +88,22 @@ It does not check a scheduler proof or copy its generated files into this packag
 Lean checks the translated semantics. The connection to Rust depends on Charon and Aeneas.
 The proof also depends on the Aeneas standard-library models.
 
-`TypesExternal.lean` models a HashMap as a function from keys to optional values.
-`FunsExternal.lean` supplies lookup and mutation through that interface.
-Hash state is unobservable in this model. Allocation, hash collisions, and standard-library internals are outside the proof.
+`TypesExternal.lean` models HashMap and NodeArena as functions from keys to optional values.
+`FunsExternal.lean` supplies lookup and mutation contracts through that interface.
+Hash state is unobservable in this model. This includes the FxHash builder.
+Allocation, hash collisions, and container internals are outside the proof.
 The map model supports the homogeneous keys used by the selected entry points.
 Unsupported heterogeneous lookup returns failure.
 These definitions contain no proof axioms, but their agreement with the Rust library is an explicit trust boundary.
+
+The Vec storage change adds the local `engine::arena` module to that boundary.
+The generator explicitly marks this module as opaque and records this choice in the snapshot.
+It still translates the production marking, allocation, deletion, and sibling functions.
+The contracts assume valid arena states and sequential insertion at the next unused ID.
+They do not prove the Vec indexing code, empty-slot handling, or the sequential-append invariant.
+The new Rust arena tests and full trace comparisons check this implementation experimentally.
+They are not formal refinement proofs for the storage layer.
+The algorithm theorems retain their container-contract assumptions. This change does not establish full Rust verification.
 
 Marking, allocation, clearing, and deletion preserve their stated ID invariants.
 Allocation requires all live IDs to be below the next counter value.

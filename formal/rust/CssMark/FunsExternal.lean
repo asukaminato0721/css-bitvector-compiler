@@ -6,6 +6,36 @@ open CssDom
 noncomputable section
 set_option linter.unusedVariables false
 
+-- FxHash only selects buckets. The extensional map model does not observe them.
+def CssDom.rustc_hash.FxHasher.Insts.CoreHashHasher.finish
+    (_ : CssDom.rustc_hash.FxHasher) : Result Aeneas.Std.U64 := ok 0#u64
+def CssDom.rustc_hash.FxHasher.Insts.CoreHashHasher.write
+    (_ : CssDom.rustc_hash.FxHasher) (_ : Slice Aeneas.Std.U8) :
+    Result CssDom.rustc_hash.FxHasher := ok ()
+def CssDom.rustc_hash.FxBuildHasher.Insts.CoreHashBuildHasherFxHasher.build_hasher
+    (_ : CssDom.rustc_hash.FxBuildHasher) : Result CssDom.rustc_hash.FxHasher := ok ()
+
+-- These are the storage API contracts, not an extraction of the Vec methods.
+namespace CssDom.clean.engine.arena.NodeArena
+def get_mut {T : Type} (map : NodeArena T) (key : Aeneas.Std.U64) :
+    Result (Option T × (Option T → NodeArena T)) := by
+  classical
+  exact ok (map key, fun value => Function.update map key value)
+def get {T : Type} (map : NodeArena T) (key : Aeneas.Std.U64) : Result (Option T) :=
+  ok (map key)
+def contains_key {T : Type} (map : NodeArena T) (key : Aeneas.Std.U64) : Result Bool :=
+  ok (map key).isSome
+def insert {T : Type} (map : NodeArena T) (key : Aeneas.Std.U64) (value : T) :
+    Result (NodeArena T) := by
+  classical
+  exact ok (Function.update map key (some value))
+def remove {T : Type} (map : NodeArena T) (key : Aeneas.Std.U64) :
+    Result (Option T × NodeArena T) := by
+  classical
+  exact ok (map key, Function.update map key none)
+def clear {T : Type} (_ : NodeArena T) : Result (NodeArena T) := ok (fun _ => none)
+end CssDom.clean.engine.arena.NodeArena
+
 def core.borrow.Borrow.Blanket.borrow {T : Type} (x : T) : Result T := ok x
 
 -- Hash values are unobservable in the extensional map model.

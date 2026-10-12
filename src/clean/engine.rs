@@ -7,7 +7,11 @@ use super::{
     },
 };
 use crate::{Node, attributes_to_string_map, rdtsc};
-use std::collections::{BTreeMap, HashMap, HashSet};
+use rustc_hash::{FxHashMap, FxHashSet};
+use std::collections::{BTreeMap, HashMap};
+
+mod arena;
+use arena::NodeArena;
 
 mod comparison;
 pub use comparison::{ComparisonSample, ParcelProgram};
@@ -28,12 +32,12 @@ struct NodeState {
 #[derive(Debug, Clone, Default)]
 pub(crate) struct NodeFacts {
     tag: String,
-    classes: HashSet<String>,
+    classes: FxHashSet<String>,
     html_id: Option<String>,
-    attributes: HashMap<String, String>,
+    attributes: FxHashMap<String, String>,
     pub(crate) hover_root: bool,
     focus_root: bool,
-    pseudos: HashSet<DynamicPseudo>,
+    pseudos: FxHashSet<DynamicPseudo>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -47,9 +51,9 @@ struct DomNode {
 
 #[derive(Debug, Clone, Default)]
 pub struct Dom {
-    nodes: HashMap<NodeId, DomNode>,
+    nodes: NodeArena<DomNode>,
     root: Option<NodeId>,
-    trace_nodes: HashMap<u64, NodeId>,
+    trace_nodes: FxHashMap<u64, NodeId>,
     next_instance: u64,
 }
 
@@ -240,7 +244,7 @@ impl Dom {
     }
 
     fn validate_subtree(&self, root: &Node, parent: Option<NodeId>) -> Result<(), RunError> {
-        let mut ids = HashSet::new();
+        let mut ids = FxHashSet::default();
         let mut pending = vec![root];
         while let Some(node) = pending.pop() {
             if !ids.insert(node.id) {
@@ -310,7 +314,7 @@ impl Dom {
     }
 }
 
-fn set_pseudo(set: &mut HashSet<DynamicPseudo>, pseudo: DynamicPseudo, active: bool) -> bool {
+fn set_pseudo(set: &mut FxHashSet<DynamicPseudo>, pseudo: DynamicPseudo, active: bool) -> bool {
     if active {
         set.insert(pseudo)
     } else {
@@ -330,10 +334,10 @@ pub(crate) fn facts_from_parts(tag: &str, mut attributes: HashMap<String, String
         tag: tag.to_ascii_lowercase(),
         classes,
         html_id,
-        attributes,
+        attributes: attributes.into_iter().collect(),
         hover_root,
         focus_root,
-        pseudos: HashSet::new(),
+        pseudos: FxHashSet::default(),
     }
 }
 
