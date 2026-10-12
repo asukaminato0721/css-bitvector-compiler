@@ -57,6 +57,18 @@ impl Dom {
         self.trace_nodes.clear();
     }
 
+    #[allow(clippy::question_mark)] // Keep explicit branches in the Aeneas proof target.
+    fn insert_instance(&mut self, node: DomNode) -> Option<NodeId> {
+        let Some(next) = self.next_instance.checked_add(1) else {
+            return None;
+        };
+        let id = NodeId(self.next_instance);
+        self.next_instance = next;
+        self.trace_nodes.insert(node.trace_id, id);
+        self.nodes.insert(id, node);
+        Some(id)
+    }
+
     fn build_subtree(
         &mut self,
         node: &Node,
@@ -72,16 +84,10 @@ impl Dom {
                 self.mark(sibling, Dirty::NodeChanged);
             }
         }
-        let id = NodeId(self.next_instance);
-        self.next_instance = self
-            .next_instance
-            .checked_add(1)
-            .ok_or_else(|| RunError::new("DOM instance counter exhausted".into()))?;
         let attributes = attributes_to_string_map(&node.attributes);
         let facts = facts_from_parts(&node.tag_name, attributes);
-        self.nodes.insert(
-            id,
-            DomNode {
+        let id = self
+            .insert_instance(DomNode {
                 trace_id: node.id,
                 facts,
                 parent,
@@ -97,9 +103,8 @@ impl Dom {
                     dirty: Dirty::NodeChanged,
                     subtree_dirty: true,
                 },
-            },
-        );
-        self.trace_nodes.insert(node.id, id);
+            })
+            .ok_or_else(|| RunError::new("DOM instance counter exhausted".into()))?;
         for child in &node.children {
             let child_id = self.build_subtree(child, Some(id), program)?;
             self.nodes.get_mut(&id).unwrap().children.push(child_id);
@@ -166,20 +171,27 @@ impl Dom {
         self.following_siblings(id).first().copied()
     }
 
+    #[allow(clippy::question_mark)] // The pinned Aeneas translator cannot merge the `?` branches here.
     fn previous_sibling(&self, id: NodeId) -> Option<NodeId> {
-        let parent = self.nodes.get(&id)?.parent?;
-        let siblings = &self.nodes.get(&parent)?.children;
-        let mut previous = id;
-        let mut has_previous = false;
+        let Some(node) = self.nodes.get(&id) else {
+            return None;
+        };
+        let Some(parent) = node.parent else {
+            return None;
+        };
+        let Some(parent_node) = self.nodes.get(&parent) else {
+            return None;
+        };
+        let siblings = &parent_node.children;
+        let mut previous = None;
         let mut index = 0;
         while index < siblings.len() {
             let sibling = siblings[index];
             if sibling == id {
-                return if has_previous { Some(previous) } else { None };
+                return previous;
             }
             if self.nodes.contains_key(&sibling) {
-                previous = sibling;
-                has_previous = true;
+                previous = Some(sibling);
             }
             index += 1;
         }

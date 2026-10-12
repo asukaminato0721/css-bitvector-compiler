@@ -12,7 +12,7 @@ def core.borrow.Borrow.Blanket.borrow {T : Type} (x : T) : Result T := ok x
 def U64.Insts.CoreHashHash.hash {H : Type} (h : core.hash.Hasher H)
     (x : Aeneas.Std.U64) (state : H) : Result H := ok state
 
-/-- Only equal key types are used by `Dom::mark`. Heterogeneous lookup is not
+/-- The selected source functions use equal key types. Heterogeneous lookup is not
     specified. The backward function writes exactly the borrowed entry. -/
 def std.collections.hash.map.HashMap.get_mut
     {K V S A Q H : Type} (eqK : core.cmp.Eq K) (hashK : core.hash.Hash K)
@@ -35,3 +35,47 @@ def std.hash.random.DefaultHasher.Insts.CoreHashHasher.write
 
 def std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher.build_hasher
     (_ : std.hash.random.RandomState) : Result std.hash.random.DefaultHasher := ok ()
+
+def std.collections.hash.map.HashMap.get
+    {K V S A Q H : Type} (eqK : core.cmp.Eq K) (hashK : core.hash.Hash K)
+    (build : core.hash.BuildHasher S H) (borrow : core.borrow.Borrow K Q)
+    (hashQ : core.hash.Hash Q) (eqQ : core.cmp.Eq Q)
+    (map : std.collections.hash.map.HashMap K V S A) (q : Q) : Result (Option V) := do
+  let (value, _) ← std.collections.hash.map.HashMap.get_mut eqK hashK build borrow hashQ eqQ map q
+  ok value
+
+def std.collections.hash.map.HashMap.contains_key
+    {K V S A Q H : Type} (eqK : core.cmp.Eq K) (hashK : core.hash.Hash K)
+    (build : core.hash.BuildHasher S H) (borrow : core.borrow.Borrow K Q)
+    (hashQ : core.hash.Hash Q) (eqQ : core.cmp.Eq Q)
+    (map : std.collections.hash.map.HashMap K V S A) (q : Q) : Result Bool := do
+  let value ← std.collections.hash.map.HashMap.get eqK hashK build borrow hashQ eqQ map q
+  ok value.isSome
+
+def std.collections.hash.map.HashMap.remove
+    {K V S A Q H : Type} (eqK : core.cmp.Eq K) (hashK : core.hash.Hash K)
+    (build : core.hash.BuildHasher S H) (borrow : core.borrow.Borrow K Q)
+    (hashQ : core.hash.Hash Q) (eqQ : core.cmp.Eq Q)
+    (map : std.collections.hash.map.HashMap K V S A) (q : Q) :
+    Result (Option V × std.collections.hash.map.HashMap K V S A) := do
+  let (value, back) ← std.collections.hash.map.HashMap.get_mut eqK hashK build borrow hashQ eqQ map q
+  ok (value, back none)
+
+def std.collections.hash.map.HashMap.insert
+    {K V S A H : Type} (eqK : core.cmp.Eq K) (hashK : core.hash.Hash K)
+    (build : core.hash.BuildHasher S H)
+    (map : std.collections.hash.map.HashMap K V S A) (key : K) (value : V) :
+    Result (Option V × std.collections.hash.map.HashMap K V S A) := by
+  classical
+  exact ok (map key, Function.update map key (some value))
+
+def std.collections.hash.map.HashMap.clear
+    {K V S A : Type} (_ : std.collections.hash.map.HashMap K V S A) :
+    Result (std.collections.hash.map.HashMap K V S A) := ok (fun _ => none)
+
+def core.option.Option.Insts.CoreCmpPartialEqOption.eq
+    {T : Type} (eqT : core.cmp.PartialEq T T) (a b : Option T) : Result Bool :=
+  match a, b with
+  | none, none => ok true
+  | some x, some y => eqT.eq x y
+  | _, _ => ok false

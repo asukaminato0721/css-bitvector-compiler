@@ -32,6 +32,15 @@ def core.borrow.Borrow.Blanket (T : Type) : core.borrow.Borrow T T := {
   borrow := core.borrow.Borrow.Blanket.borrow
 }
 
+/-- Trait implementation: [core::hash::impls::{impl core::hash::Hash for u64}]
+    Source: '/rustc/library/core/src/hash/mod.rs', lines 811:12-811:29
+    Name pattern: [core::hash::Hash<u64>] -/
+@[reducible, rust_trait_impl "core::hash::Hash<u64>"]
+def U64.Insts.CoreHashHash : core.hash.Hash Std.U64 := {
+  hash := fun {H : Type} (HasherInst : core.hash.Hasher H) =>
+    U64.Insts.CoreHashHash.hash HasherInst
+}
+
 /-- Trait implementation: [std::hash::random::{impl core::hash::Hasher for std::hash::random::DefaultHasher}]
     Source: '/rustc/library/std/src/hash/random.rs', lines 125:0-125:29
     Name pattern: [core::hash::Hasher<std::hash::random::DefaultHasher>] -/
@@ -109,6 +118,38 @@ def clean.compiler.NodeId.Insts.CoreHashHash : core.hash.Hash
     clean.compiler.NodeId.Insts.CoreHashHash.hash corehashHasherInst
 }
 
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::clear]:
+    Source: 'src/clean/engine.rs', lines 54:4-58:5 -/
+def clean.engine.Dom.clear
+  (self : clean.engine.Dom) : Result clean.engine.Dom := do
+  let hm ← std.collections.hash.map.HashMap.clear self.nodes
+  let hm1 ← std.collections.hash.map.HashMap.clear self.trace_nodes
+  ok { self with nodes := hm, root := none, trace_nodes := hm1 }
+
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::insert_instance]:
+    Source: 'src/clean/engine.rs', lines 61:4-70:5 -/
+def clean.engine.Dom.insert_instance
+  (self : clean.engine.Dom) (node : clean.engine.DomNode) :
+  Result ((Option clean.compiler.NodeId) × clean.engine.Dom)
+  := do
+  let o ← lift (U64.checked_add self.next_instance 1#u64)
+  match o with
+  | none => ok (none, self)
+  | some next =>
+    let (_, hm) ←
+      std.collections.hash.map.HashMap.insert core.cmp.EqU64
+        U64.Insts.CoreHashHash
+        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+        self.trace_nodes node.trace_id self.next_instance
+    let (_, hm1) ←
+      std.collections.hash.map.HashMap.insert
+        clean.compiler.NodeId.Insts.CoreCmpEq
+        clean.compiler.NodeId.Insts.CoreHashHash
+        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+        self.nodes self.next_instance node
+    ok (some self.next_instance,
+      { self with nodes := hm1, trace_nodes := hm, next_instance := next })
+
 /-- [css_bitvector_compiler::clean::logic::{css_bitvector_compiler::clean::logic::Dirty}::merge]:
     Source: 'src/clean/logic.rs', lines 10:4-16:5 -/
 def clean.logic.Dirty.merge
@@ -128,17 +169,16 @@ def clean.logic.Dirty.merge
     | clean.logic.Dirty.NodeChanged => ok clean.logic.Dirty.NodeChanged
   | clean.logic.Dirty.NodeChanged => ok clean.logic.Dirty.NodeChanged
 
-/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop body 0:
-    Source: 'src/clean/engine.rs', lines 131:8-142:5 -/
-@[rust_loop_body]
-def clean.engine.Dom.mark_loop.body
-  (dirty : clean.logic.Dirty) (current : Option clean.compiler.NodeId)
-  (self : clean.engine.Dom) (first : Bool) :
-  Result (ControlFlow ((Option clean.compiler.NodeId) × clean.engine.Dom ×
-    Bool) clean.engine.Dom)
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop 0:
+    Source: 'src/clean/engine.rs', lines 136:8-147:5 -/
+@[rust_loop]
+def clean.engine.Dom.mark_loop
+  (current : Option clean.compiler.NodeId) (self : clean.engine.Dom)
+  (dirty : clean.logic.Dirty) (first : Bool) :
+  Result clean.engine.Dom
   := do
   match current with
-  | none => ok (done self)
+  | none => ok self
   | some node_id =>
     let (o, get_mut_back) ←
       std.collections.hash.map.HashMap.get_mut
@@ -150,7 +190,7 @@ def clean.engine.Dom.mark_loop.body
         clean.compiler.NodeId.Insts.CoreCmpEq self.nodes node_id
     match o with
     | none => let hm := get_mut_back none
-              ok (done { self with nodes := hm })
+              ok { self with nodes := hm }
     | some node =>
       if first
       then
@@ -162,28 +202,18 @@ def clean.engine.Dom.mark_loop.body
                 with
                 state := { node.state with dirty := d, subtree_dirty := true }
             })
-        ok (cont (node.parent, { self with nodes := hm }, false))
+        clean.engine.Dom.mark_loop node.parent { self with nodes := hm } dirty
+          false
       else
         let hm :=
           get_mut_back (some
             { node with state := { node.state with subtree_dirty := true } })
-        ok (cont (node.parent, { self with nodes := hm }, first))
-
-/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop 0:
-    Source: 'src/clean/engine.rs', lines 131:8-142:5 -/
-@[rust_loop]
-def clean.engine.Dom.mark_loop
-  (current : Option clean.compiler.NodeId) (self : clean.engine.Dom)
-  (dirty : clean.logic.Dirty) (first : Bool) :
-  Result clean.engine.Dom
-  := do
-  loop
-    (fun (current1, self1, first1) => clean.engine.Dom.mark_loop.body dirty
-      current1 self1 first1)
-    (current, self, first)
+        clean.engine.Dom.mark_loop node.parent { self with nodes := hm } dirty
+          first
+partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]:
-    Source: 'src/clean/engine.rs', lines 128:4-142:5 -/
+    Source: 'src/clean/engine.rs', lines 133:4-147:5 -/
 @[reducible]
 def clean.engine.Dom.mark
   (self : clean.engine.Dom) (id : clean.compiler.NodeId)
@@ -191,6 +221,139 @@ def clean.engine.Dom.mark
   Result clean.engine.Dom
   := do
   clean.engine.Dom.mark_loop (some id) self dirty true
+
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]: loop 0:
+    Source: 'src/clean/engine.rs', lines 188:8-199:5 -/
+@[rust_loop]
+def clean.engine.Dom.previous_sibling_loop
+  (hm : std.collections.hash.map.HashMap clean.compiler.NodeId
+  clean.engine.DomNode std.hash.random.RandomState Global)
+  (id : clean.compiler.NodeId) (siblings : alloc.vec.Vec clean.compiler.NodeId)
+  (previous : Option clean.compiler.NodeId) (index : Std.Usize) :
+  Result (Option clean.compiler.NodeId)
+  := do
+  let i := alloc.vec.Vec.len siblings
+  if index < i
+  then
+    let sibling ←
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+        clean.compiler.NodeId) siblings index
+    let b ← clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId.eq sibling id
+    if b
+    then ok previous
+    else
+      let b1 ←
+        std.collections.hash.map.HashMap.contains_key
+          clean.compiler.NodeId.Insts.CoreCmpEq
+          clean.compiler.NodeId.Insts.CoreHashHash
+          std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+          (core.borrow.Borrow.Blanket clean.compiler.NodeId)
+          clean.compiler.NodeId.Insts.CoreHashHash
+          clean.compiler.NodeId.Insts.CoreCmpEq hm sibling
+      let previous1 ← if b1
+                        then ok (some sibling)
+                        else ok previous
+      let index1 ← index + 1#usize
+      clean.engine.Dom.previous_sibling_loop hm id siblings previous1 index1
+  else ok none
+partial_fixpoint
+
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]:
+    Source: 'src/clean/engine.rs', lines 175:4-199:5 -/
+def clean.engine.Dom.previous_sibling
+  (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
+  Result (Option clean.compiler.NodeId)
+  := do
+  let o ←
+    std.collections.hash.map.HashMap.get clean.compiler.NodeId.Insts.CoreCmpEq
+      clean.compiler.NodeId.Insts.CoreHashHash
+      std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+      (core.borrow.Borrow.Blanket clean.compiler.NodeId)
+      clean.compiler.NodeId.Insts.CoreHashHash
+      clean.compiler.NodeId.Insts.CoreCmpEq self.nodes id
+  match o with
+  | none => ok none
+  | some node =>
+    match node.parent with
+    | none => ok none
+    | some parent =>
+      let o1 ←
+        std.collections.hash.map.HashMap.get
+          clean.compiler.NodeId.Insts.CoreCmpEq
+          clean.compiler.NodeId.Insts.CoreHashHash
+          std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+          (core.borrow.Borrow.Blanket clean.compiler.NodeId)
+          clean.compiler.NodeId.Insts.CoreHashHash
+          clean.compiler.NodeId.Insts.CoreCmpEq self.nodes parent
+      match o1 with
+      | none => ok none
+      | some parent_node =>
+        clean.engine.Dom.previous_sibling_loop self.nodes id
+          parent_node.children none 0#usize
+
+mutual
+
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]: loop 0:
+    Source: 'src/clean/engine.rs', lines 206:12-208:13 -/
+@[rust_loop]
+def clean.engine.Dom.remove_subtree_loop
+  (iter : alloc.vec.into_iter.IntoIter clean.compiler.NodeId)
+  (self : clean.engine.Dom) :
+  Result clean.engine.Dom
+  := do
+  let (o, iter1) ← alloc.vec.into_iter.IteratorIntoIter.next iter
+  match o with
+  | none => ok self
+  | some child =>
+    let self1 ← clean.engine.Dom.remove_subtree self child
+    clean.engine.Dom.remove_subtree_loop iter1 self1
+partial_fixpoint
+
+/-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]:
+    Source: 'src/clean/engine.rs', lines 201:4-210:5 -/
+def clean.engine.Dom.remove_subtree
+  (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
+  Result clean.engine.Dom
+  := do
+  let (o, hm) ←
+    std.collections.hash.map.HashMap.remove
+      clean.compiler.NodeId.Insts.CoreCmpEq
+      clean.compiler.NodeId.Insts.CoreHashHash
+      std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+      (core.borrow.Borrow.Blanket clean.compiler.NodeId)
+      clean.compiler.NodeId.Insts.CoreHashHash
+      clean.compiler.NodeId.Insts.CoreCmpEq self.nodes id
+  match o with
+  | none => ok { self with nodes := hm }
+  | some node =>
+    let o1 ←
+      std.collections.hash.map.HashMap.get core.cmp.EqU64
+        U64.Insts.CoreHashHash
+        std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+        (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
+        core.cmp.EqU64 self.trace_nodes node.trace_id
+    let b ←
+      core.option.Option.Insts.CoreCmpPartialEqOption.eq
+        (core.cmp.PartialEqShared
+        clean.compiler.NodeId.Insts.CoreCmpPartialEqNodeId) o1 (some id)
+    let hm1 ←
+      if b
+      then
+        do
+        let (_, hm2) ←
+          std.collections.hash.map.HashMap.remove core.cmp.EqU64
+            U64.Insts.CoreHashHash
+            std.hash.random.RandomState.Insts.CoreHashBuildHasherDefaultHasher
+            (core.borrow.Borrow.Blanket Std.U64) U64.Insts.CoreHashHash
+            core.cmp.EqU64 self.trace_nodes node.trace_id
+        ok hm2
+      else ok self.trace_nodes
+    let iter ← alloc.vec.IntoIteratorVec.into_iter node.children
+    clean.engine.Dom.remove_subtree_loop iter
+      { self with nodes := hm, trace_nodes := hm1 }
+partial_fixpoint
+
+end
 
 /-- [css_bitvector_compiler::clean::logic::{css_bitvector_compiler::clean::logic::Requirement}::from_bit]:
     Source: 'src/clean/logic.rs', lines 28:4-30:5 -/
@@ -225,13 +388,13 @@ def clean.logic.Requirement.accepts
                                      then ok true
                                      else ok false
 
-/-- [css_bitvector_compiler::clean::logic::requirements_accept]: loop body 0:
+/-- [css_bitvector_compiler::clean::logic::requirements_accept]: loop 0:
     Source: 'src/clean/logic.rs', lines 75:4-78:5 -/
-@[rust_loop_body]
-def clean.logic.requirements_accept_loop.body
+@[rust_loop]
+def clean.logic.requirements_accept_loop
   (requirements : Slice clean.logic.Requirement) (input : Slice Bool)
   (accepted : Bool) (index : Std.Usize) :
-  Result (ControlFlow (Bool × Std.Usize) Bool)
+  Result Bool
   := do
   let i := Slice.len requirements
   if index < i
@@ -242,22 +405,10 @@ def clean.logic.requirements_accept_loop.body
       let b ← Slice.index_usize input index
       let accepted1 ← clean.logic.Requirement.accepts r b
       let index1 ← index + 1#usize
-      ok (cont (accepted1, index1))
-    else ok (done accepted)
-  else ok (done accepted)
-
-/-- [css_bitvector_compiler::clean::logic::requirements_accept]: loop 0:
-    Source: 'src/clean/logic.rs', lines 75:4-78:5 -/
-@[rust_loop]
-def clean.logic.requirements_accept_loop
-  (requirements : Slice clean.logic.Requirement) (input : Slice Bool)
-  (accepted : Bool) (index : Std.Usize) :
-  Result Bool
-  := do
-  loop
-    (fun (accepted1, index1) => clean.logic.requirements_accept_loop.body
-      requirements input accepted1 index1)
-    (accepted, index)
+      clean.logic.requirements_accept_loop requirements input accepted1 index1
+    else ok accepted
+  else ok accepted
+partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::logic::requirements_accept]:
     Source: 'src/clean/logic.rs', lines 69:0-80:1 -/

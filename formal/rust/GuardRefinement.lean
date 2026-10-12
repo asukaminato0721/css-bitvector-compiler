@@ -40,18 +40,13 @@ def GuardInv (r : Slice CssDom.clean.logic.Requirement) (input : Slice Bool)
     (state : Bool × Aeneas.Std.Usize) : Prop :=
   state.2.val ≤ r.length ∧ (state.1 = true ↔ Prefix r input state.2.val)
 
-theorem guard_body_spec (r : Slice CssDom.clean.logic.Requirement) (input : Slice Bool)
-    (hlen : r.length = input.length) (state : Bool × Aeneas.Std.Usize)
-    (inv : GuardInv r input state) :
-    requirements_accept_loop.body r input state.1 state.2 ⦃ result =>
-      match result with
-      | .done out => out = true ↔ Prefix r input r.length
-      | .cont next => GuardInv r input next ∧ r.length - next.2.val < r.length - state.2.val ⦄ := by
-  rcases state with ⟨accepted, index⟩
-  rcases inv with ⟨hindex, hprefix⟩
-  change index.val ≤ r.length at hindex
-  change accepted = true ↔ Prefix r input index.val at hprefix
-  dsimp only [requirements_accept_loop.body]
+theorem guard_loop_spec (r : Slice CssDom.clean.logic.Requirement) (input : Slice Bool)
+    (hlen : r.length = input.length) (accepted : Bool) (index : Aeneas.Std.Usize)
+    (hindex : index.val ≤ r.length)
+    (hprefix : accepted = true ↔ Prefix r input index.val) :
+    requirements_accept_loop r input accepted index ⦃ out =>
+      out = true ↔ Prefix r input r.length ⦄ := by
+  rw [requirements_accept_loop.eq_def]
   by_cases hlt : index < Slice.len r
   · simp only [hlt, ↓reduceIte]
     have ib : index.val < r.length := by scalar_tac
@@ -72,20 +67,19 @@ theorem guard_body_spec (r : Slice CssDom.clean.logic.Requirement) (input : Slic
       step as ⟨bit, hb⟩
       step as ⟨accepted1, haccept⟩
       step as ⟨index1, hi1⟩
-      constructor
-      · constructor
-        · scalar_tac
-        · have he : (requirement value).accepts bit ↔ Entry r input index.val := by
-            simp only [Entry, List.getElem?_eq_getElem ib, hv, hb, Option.getD_some]
-            have ii : index.val < input.length := by omega
-            simp only [List.getElem?_eq_getElem ii, Option.getD_some]
-          rw [hi1, prefix_succ]
-          have hp := hprefix.mp ha
-          simpa only [hp, true_and] using haccept.trans he
-      · scalar_tac
+      have he : (requirement value).accepts bit ↔ Entry r input index.val := by
+        simp only [Entry, List.getElem?_eq_getElem ib, hv, hb, Option.getD_some]
+        have ii : index.val < input.length := by omega
+        simp only [List.getElem?_eq_getElem ii, Option.getD_some]
+      apply guard_loop_spec r input hlen accepted1 index1 (by scalar_tac)
+      rw [hi1, prefix_succ]
+      have hp := hprefix.mp ha
+      simpa only [hp, true_and] using haccept.trans he
   · simp only [hlt, ↓reduceIte]
     have eqend : index.val = r.length := by scalar_tac
     simpa only [spec_ok, eqend] using hprefix
+termination_by r.length - index.val
+decreasing_by scalar_tac
 
 theorem requirements_accept_correct (r : Slice CssDom.clean.logic.Requirement)
     (input : Slice Bool) :
@@ -96,17 +90,9 @@ theorem requirements_accept_correct (r : Slice CssDom.clean.logic.Requirement)
     simp only [requirements_accept, hscalar, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte]
     have hloop : requirements_accept_loop r input true 0#usize ⦃ accepted =>
         accepted = true ↔ Prefix r input r.length ⦄ := by
-      unfold requirements_accept_loop
-      apply loop.spec_decr_nat
-        (fun state : Bool × Aeneas.Std.Usize => r.length - state.2.val)
-        (GuardInv r input)
-        (fun out => out = true ↔ Prefix r input r.length)
-      · intro state inv
-        rcases state with ⟨accepted, index⟩
-        convert guard_body_spec r input hlen (accepted, index) inv using 1
-        funext result
-        cases result <;> rfl
-      · simp [GuardInv, Prefix]
+      apply guard_loop_spec r input hlen true 0#usize
+      · simp
+      · simp [Prefix]
     simpa only [hlen, true_and] using hloop
   · rw [requirements_length_mismatch r input hlen]
     simp [hlen]

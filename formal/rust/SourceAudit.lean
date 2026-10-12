@@ -1,14 +1,14 @@
 import Refinement
 import MarkRefinement
 import GuardRefinement
+import SiblingRefinement
 import CssProofs.Audit
 import Lean
 
 run_cmd do
   let env ← Lean.getEnv
   let names := env.constants.toList.map Prod.fst |>.filter fun declName =>
-    (`CssProofs.Rust).isPrefixOf declName || (`CssRust).isPrefixOf declName ||
-    (`CssProofs.RustMark).isPrefixOf declName || (`CssDom).isPrefixOf declName
+    (`CssProofs).isPrefixOf declName || (`CssDom).isPrefixOf declName
   names.forM fun declName => do
     let axioms ← Lean.collectAxioms declName
     axioms.forM fun ax => do

@@ -11,7 +11,9 @@ Detailed algorithm, Hoare-logic, and Kani verification notes are in
 [Lean 4 proofs](formal/README.md) cover selector recurrence, cache reuse,
 mutation invalidation, and dirty traversal in a finite forest model.
 [Source proofs](formal/rust/README.md) verify selected production Rust functions
-translated by Charon and Aeneas. Full arena and scheduler refinement remains incomplete.
+translated by Charon and Aeneas. Coverage includes marking, allocation, deletion,
+live sibling lookup, input guards, and local quad operations.
+Full arena and scheduler refinement remains incomplete.
 Lean is the main prover. Existing Kani checks remain. This project does not use Verus.
 
 Build both proof packages from the repository root:

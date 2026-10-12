@@ -3,17 +3,25 @@
   "aeneas": "d119a474f852781f8ae88a85424f2f8ba8407b82",
   "entry_points": [
     "clean::engine::Dom::mark",
+    "clean::engine::Dom::insert_instance",
+    "clean::engine::Dom::remove_subtree",
+    "clean::engine::Dom::clear",
+    "clean::engine::Dom::previous_sibling",
     "clean::logic::Requirement::accepts",
     "clean::logic::Requirement::from_bit",
     "clean::logic::specialize_or",
     "clean::logic::specialize_concrete",
     "clean::logic::requirements_accept"
   ],
+  "aeneas_options": [
+    "-split-files",
+    "-loops-to-rec"
+  ],
   "sources": {
     "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
     "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
     "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
-    "src/clean/engine.rs": "48f01c9e3a4fe0634d6bd6c19a9d0a8bcf6f8ff2dfabd0e4d16cbcdee133a9a3",
+    "src/clean/engine.rs": "952772bfe1bcdd18ef8a2cc87486c3acd052ca8c7aa5d174915621e437558003",
     "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
     "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
     "src/clean/tests.rs": "05623c8ce836270e2aea7ad6519e83ebac7d727e09a0803b261586791ffa03b4",
@@ -23,6 +31,6 @@
   },
   "generated": {
     "CssMark/Types.lean": "6f0b3cc2b4b32245d05aa9f54a1080cc6bfe37d185426d47d71f39d25ab2be2c",
-    "CssMark/Funs.lean": "bc9f317acabf23b87378f461fad1080da242bd62e7bd453702c044687eef2c65"
+    "CssMark/Funs.lean": "c2ba18872a8858b7bc3af5fdde2ac9759278c834f9e505fe24d9016f35a94497"
   }
 }

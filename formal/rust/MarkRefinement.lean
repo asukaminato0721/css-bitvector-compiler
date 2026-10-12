@@ -40,30 +40,30 @@ theorem put_preserves_descent (dom : Dom) (id : NodeId) (node : DomNode)
   · simp only [put, Function.update_of_ne same] at hv
     exact hd key value parent hv hp
 
-/-- One extracted Rust loop iteration writes only the current entry. -/
-theorem body_refines (dom : Dom) (current : Option NodeId) (d : Dirty) (first : Bool) :
-    Dom.mark_loop.body d current dom first = ok (
+/-- One source iteration updates the current entry and follows its parent. -/
+theorem loop_step (dom : Dom) (current : Option NodeId) (d : Dirty) (first : Bool) :
+    Dom.mark_loop current dom d first =
       match current with
-      | none => done dom
+      | none => ok dom
       | some id => match dom.nodes id with
-        | none => done dom
-        | some node => cont (node.parent, put dom id (touch node d first), false)) := by
+        | none => ok dom
+        | some node => Dom.mark_loop node.parent (put dom id (touch node d first)) d false := by
   classical
+  rw [Dom.mark_loop.eq_def]
   cases current with
   | none => rfl
   | some id =>
     cases hn : dom.nodes id with
     | none =>
-      simp [Dom.mark_loop.body, std.collections.hash.map.HashMap.get_mut, hn]
+      simp [std.collections.hash.map.HashMap.get_mut, hn]
       congr 1
       funext key
       simp only [Function.update_apply]
       split <;> simp_all
     | some node =>
       cases first <;>
-        simp [Dom.mark_loop.body, std.collections.hash.map.HashMap.get_mut, hn,
-          merge_eq, touch, put]
-        <;> (funext key; simp only [Function.update_apply]; split <;> simp_all)
+        simp [std.collections.hash.map.HashMap.get_mut, hn, merge_eq, touch, put]
+        <;> (congr 1; congr 1; funext key; simp only [Function.update_apply]; split <;> simp_all)
 
 noncomputable def markFuel : Nat → Dom → Option NodeId → Dirty → Bool → Dom
   | 0, dom, _, _, _ => dom
@@ -87,19 +87,19 @@ theorem loop_refines (fuel : Nat) (dom : Dom) (current : Option NodeId)
   | zero =>
     cases current with
     | none =>
-      rw [Dom.mark_loop, loop]
-      simp only [body_refines, bind_ok, markFuel]
+      rw [loop_step]
+      rfl
     | some id => simp [Enough] at enough
   | succ fuel ih =>
     cases current with
     | none =>
-      rw [Dom.mark_loop, loop]
-      simp only [body_refines, bind_ok, markFuel]
+      rw [loop_step]
+      rfl
     | some id =>
       cases hn : dom.nodes id with
       | none =>
-        rw [Dom.mark_loop, loop]
-        simp only [body_refines, hn, bind_ok, markFuel]
+        rw [loop_step]
+        simp only [hn, markFuel]
       | some node =>
         have nextEnough : Enough fuel node.parent := by
           cases hp : node.parent with
@@ -110,9 +110,9 @@ theorem loop_refines (fuel : Nat) (dom : Dom) (current : Option NodeId)
             omega
         have next := ih (put dom id (touch node d first)) node.parent false
           (put_preserves_descent dom id node d first hd hn) nextEnough
-        rw [Dom.mark_loop, loop]
-        simp only [body_refines, hn, bind_ok, markFuel]
-        simpa only [Dom.mark_loop, body_refines] using next
+        rw [loop_step]
+        simp only [hn, markFuel]
+        exact next
 
 theorem mark_refines (dom : Dom) (id : NodeId) (d : Dirty) (hd : Descending dom) :
     Dom.mark dom id d = ok (markFuel (id.val + 1) dom (some id) d true) :=

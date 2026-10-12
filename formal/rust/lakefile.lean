@@ -12,4 +12,7 @@ lean_lib Refinement
 lean_lib CssMark
 lean_lib MarkRefinement
 lean_lib GuardRefinement
+lean_lib ArenaRefinement
+lean_lib RemoveRefinement
+lean_lib SiblingRefinement
 @[default_target] lean_lib SourceAudit

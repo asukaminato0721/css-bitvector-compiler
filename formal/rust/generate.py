@@ -16,6 +16,10 @@ CHARON_REV = "798016509139eb51f0d764645f76d068d34ba5f6"
 AENEAS_REV = "d119a474f852781f8ae88a85424f2f8ba8407b82"
 ENTRY_POINTS = [
     "clean::engine::Dom::mark",
+    "clean::engine::Dom::insert_instance",
+    "clean::engine::Dom::remove_subtree",
+    "clean::engine::Dom::clear",
+    "clean::engine::Dom::previous_sibling",
     "clean::logic::Requirement::accepts",
     "clean::logic::Requirement::from_bit",
     "clean::logic::specialize_or",
@@ -43,6 +47,7 @@ def snapshot(generated):
         "charon": CHARON_REV,
         "aeneas": AENEAS_REV,
         "entry_points": ENTRY_POINTS,
+        "aeneas_options": ["-split-files", "-loops-to-rec"],
         "sources": {str(p.relative_to(ROOT)): digest(p) for p in sources},
         "generated": {name: digest(generated / name) for name in GENERATED},
     }
@@ -53,6 +58,8 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--check", action="store_true", help="Regenerate and compare all outputs.")
     mode.add_argument("--check-snapshot", action="store_true", help="Check hashes without running the translators.")
+    mode.add_argument("--check-scheduler-translation", action="store_true",
+                      help="Test scheduler translation with an opaque evaluator. This does not check a proof.")
     args = parser.parse_args()
     manifest = OUT / "source-manifest.json"
     if args.check_snapshot:
@@ -71,11 +78,17 @@ def main():
         temp = Path(directory)
         llbc = temp / "css_mark.llbc"
         command = [charon, "cargo", "--preset=aeneas", "--sysroot", "default"]
-        for entry in ENTRY_POINTS:
+        entries = ["clean::engine::Engine::recompute_node"] if args.check_scheduler_translation else ENTRY_POINTS
+        for entry in entries:
             command += ["--start-from", f"css_bitvector_compiler::{entry}"]
+        if args.check_scheduler_translation:
+            command += ["--opaque", "crate::clean::engine::_::evaluate"]
         run(command + ["--dest-file", str(llbc), "--", "--lib"])
         run([aeneas, "-backend", "lean", str(llbc), "-dest", str(temp / "CssMark"),
-             "-namespace", "CssDom", "-split-files"])
+             "-namespace", "CssDom", "-split-files", "-loops-to-rec"])
+        if args.check_scheduler_translation:
+            print("Scheduler translation succeeds with an opaque evaluator. No scheduler proof was checked.")
+            return
         new_manifest = snapshot(temp)
         if args.check:
             for name in GENERATED:
