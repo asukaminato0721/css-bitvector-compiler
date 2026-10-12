@@ -1,5 +1,7 @@
 mod benchmark;
+mod browser;
 mod check;
+mod comparison;
 mod context;
 mod corpus;
 mod docs;
@@ -32,6 +34,8 @@ fn dispatch() -> Result<(), Box<dyn Error>> {
         "docs" => docs::execute(&workspace),
         "run" => run::execute(&workspace, &rest),
         "benchmark" | "bench" => benchmark::execute(&rest),
+        "compare" => comparison::execute(&workspace, &rest),
+        "browser-native" => browser::execute(&workspace, &rest),
         "stats" => stats::execute(&workspace, &rest),
         "verify" => verification::execute(&workspace),
         "report" => report::execute(&workspace, &rest),
@@ -60,6 +64,9 @@ Usage:
   cargo xtask run --site <name> [--update]
   cargo xtask run --all [--update]
   cargo xtask benchmark --site <name> [engine,...]
+  cargo xtask compare --site <name> [--samples 7] [--output <file>]
+  cargo xtask compare --all [--samples 7] [--output <file>]
+  cargo xtask browser-native --input <file> --output <file> --oracle <file> [--samples 7]
   cargo xtask stats --site <name>
   cargo xtask stats --css <path>
   cargo xtask verify

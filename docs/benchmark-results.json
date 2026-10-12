@@ -1,0 +1,2250 @@
+{
+  "baseline": "parcel_selectors 0.28.2",
+  "baseline_policy": "full rematch after each frame; per-frame nth cache; no browser style invalidation or ancestor bloom filter",
+  "command": [
+    "target/release/xtask",
+    "compare",
+    "--all",
+    "--samples",
+    "7",
+    "--output",
+    "docs/benchmark-results.json"
+  ],
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)\nbinary: rustc\ncommit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4\ncommit-date: 2026-09-28\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.0\nLLVM version: 23.1.1",
+  "cpu": "model name\t: AMD Ryzen AI 7 H 350 w/ Radeon 860M",
+  "cpu_affinity": "Cpus_allowed_list:\t4",
+  "kernel": "Linux 6.18.55-1-lts x86_64 GNU/Linux",
+  "revision": "b09e3e1a8aa2a295cca7da990004de835bed67ac",
+  "working_tree_dirty": true,
+  "captured_at_utc": "2026-10-12T13:04:27Z",
+  "source_hashes": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c  Cargo.lock\ndedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f  src/clean/engine.rs\n71b8f4e0bf436ba6d3d8c65a38031f741fb0bbd78770b291f554a137fbcb9e74  src/clean/engine/comparison.rs\n4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4  src/clean/compiler.rs\n67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc  src/clean/logic.rs\n8288f4f2a512af9c008292803a5aafbdcb1116e6279f7c294e4267a1cee38ab5  xtask/src/comparison.rs",
+  "timer": "std::time::Instant, nanoseconds",
+  "release_build": true,
+  "warmups": 1,
+  "samples": 7,
+  "results": [
+    {
+      "site": "a_to_b",
+      "selectors": 0,
+      "skipped_simple": 1,
+      "unsupported": 0,
+      "checked_frames": 4,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                2594,
+                2474,
+                2434,
+                2415,
+                2414,
+                2464,
+                2435
+              ],
+              "median_ns": 2435,
+              "min_ns": 2414,
+              "max_ns": 2594
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                2525,
+                2515,
+                2425,
+                2375,
+                2545,
+                2484,
+                2525
+              ],
+              "median_ns": 2515,
+              "min_ns": 2375,
+              "max_ns": 2545
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                2495,
+                2494,
+                2395,
+                2394,
+                2575,
+                2485,
+                2505
+              ],
+              "median_ns": 2494,
+              "min_ns": 2394,
+              "max_ns": 2575
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                2585,
+                2555,
+                2455,
+                2434,
+                2655,
+                2455,
+                2445
+              ],
+              "median_ns": 2455,
+              "min_ns": 2434,
+              "max_ns": 2655
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                1903,
+                1773,
+                1933,
+                1693,
+                1673,
+                1643,
+                1683
+              ],
+              "median_ns": 1693,
+              "min_ns": 1643,
+              "max_ns": 1933
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 4,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                4709,
+                4739,
+                5040,
+                5320,
+                4618,
+                4578,
+                4619
+              ],
+              "median_ns": 4709,
+              "min_ns": 4578,
+              "max_ns": 5320
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                4649,
+                4639,
+                4779,
+                4649,
+                4729,
+                4609,
+                4558
+              ],
+              "median_ns": 4649,
+              "min_ns": 4558,
+              "max_ns": 4779
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                4799,
+                4679,
+                4568,
+                4628,
+                4629,
+                4588,
+                4619
+              ],
+              "median_ns": 4628,
+              "min_ns": 4568,
+              "max_ns": 4799
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                4849,
+                4739,
+                6192,
+                4809,
+                4649,
+                4609,
+                4609
+              ],
+              "median_ns": 4739,
+              "min_ns": 4609,
+              "max_ns": 6192
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                3927,
+                4007,
+                3867,
+                3827,
+                3867,
+                3727,
+                3807
+              ],
+              "median_ns": 3867,
+              "min_ns": 3727,
+              "max_ns": 4007
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "amazon",
+      "selectors": 246,
+      "skipped_simple": 429,
+      "unsupported": 95,
+      "checked_frames": 1632,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                887712,
+                925985,
+                888474,
+                882924,
+                892932,
+                881871,
+                877433
+              ],
+              "median_ns": 887712,
+              "min_ns": 877433,
+              "max_ns": 925985
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                892230,
+                883224,
+                900496,
+                894365,
+                891890,
+                880218,
+                887010
+              ],
+              "median_ns": 891890,
+              "min_ns": 880218,
+              "max_ns": 900496
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                879226,
+                880749,
+                882553,
+                888944,
+                881841,
+                876331,
+                896438
+              ],
+              "median_ns": 881841,
+              "min_ns": 876331,
+              "max_ns": 896438
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                895717,
+                893574,
+                899835,
+                890768,
+                898633,
+                894304,
+                892451
+              ],
+              "median_ns": 894304,
+              "min_ns": 890768,
+              "max_ns": 899835
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                431553,
+                438486,
+                419771,
+                452312,
+                434689,
+                417106,
+                416465
+              ],
+              "median_ns": 431553,
+              "min_ns": 416465,
+              "max_ns": 452312
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 1632,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                974177272,
+                962071333,
+                971040407,
+                989348512,
+                990397013,
+                974570119,
+                988675455
+              ],
+              "median_ns": 974570119,
+              "min_ns": 962071333,
+              "max_ns": 990397013
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                968833590,
+                960374769,
+                960835229,
+                982462193,
+                996582680,
+                973994499,
+                978156158
+              ],
+              "median_ns": 973994499,
+              "min_ns": 960374769,
+              "max_ns": 996582680
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                954564061,
+                966381348,
+                958188675,
+                987447290,
+                986600040,
+                974024746,
+                974811693
+              ],
+              "median_ns": 974024746,
+              "min_ns": 954564061,
+              "max_ns": 987447290
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                962724650,
+                956585345,
+                965632567,
+                988465286,
+                997466743,
+                976431145,
+                980729665
+              ],
+              "median_ns": 976431145,
+              "min_ns": 956585345,
+              "max_ns": 997466743
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                86947359636,
+                87173222994,
+                86321997123,
+                88531678959,
+                87804381343,
+                88180028787,
+                88087726073
+              ],
+              "median_ns": 87804381343,
+              "min_ns": 86321997123,
+              "max_ns": 88531678959
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "bilibili",
+      "selectors": 1545,
+      "skipped_simple": 926,
+      "unsupported": 126,
+      "checked_frames": 1187,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                6859805,
+                6530756,
+                6861568,
+                6645321,
+                6900362,
+                6637807,
+                6821554
+              ],
+              "median_ns": 6821554,
+              "min_ns": 6530756,
+              "max_ns": 6900362
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                6590449,
+                6948523,
+                6905121,
+                6524364,
+                6724260,
+                6775235,
+                6984851
+              ],
+              "median_ns": 6775235,
+              "min_ns": 6524364,
+              "max_ns": 6984851
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                6564489,
+                6722146,
+                6610846,
+                6525195,
+                6622779,
+                7023785,
+                6853013
+              ],
+              "median_ns": 6622779,
+              "min_ns": 6525195,
+              "max_ns": 7023785
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                6711025,
+                6922874,
+                6751251,
+                6541776,
+                6740881,
+                6728208,
+                6811855
+              ],
+              "median_ns": 6740881,
+              "min_ns": 6541776,
+              "max_ns": 6922874
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                2740240,
+                2677151,
+                2921391,
+                2695085,
+                2847732,
+                2684585,
+                2678793
+              ],
+              "median_ns": 2695085,
+              "min_ns": 2677151,
+              "max_ns": 2921391
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 1187,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                2444372437,
+                2466315250,
+                2519315122,
+                2449931547,
+                2451296406,
+                2467240201,
+                2631422095
+              ],
+              "median_ns": 2466315250,
+              "min_ns": 2444372437,
+              "max_ns": 2631422095
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                2433703356,
+                2460150324,
+                2590977175,
+                2445021994,
+                2450619352,
+                2394024683,
+                2662858718
+              ],
+              "median_ns": 2450619352,
+              "min_ns": 2394024683,
+              "max_ns": 2662858718
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                2441432447,
+                2432149084,
+                2588498819,
+                2450216804,
+                2447059850,
+                2390943933,
+                2447458591
+              ],
+              "median_ns": 2447059850,
+              "min_ns": 2390943933,
+              "max_ns": 2588498819
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                2445301539,
+                2420895376,
+                2439826511,
+                2422058944,
+                2432492235,
+                2373719928,
+                2420463368
+              ],
+              "median_ns": 2422058944,
+              "min_ns": 2373719928,
+              "max_ns": 2445301539
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                245555148742,
+                236035953607,
+                240216162601,
+                245945562005,
+                233836865209,
+                233092058334,
+                239323858367
+              ],
+              "median_ns": 239323858367,
+              "min_ns": 233092058334,
+              "max_ns": 245945562005
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "bing",
+      "selectors": 849,
+      "skipped_simple": 45,
+      "unsupported": 241,
+      "checked_frames": 49,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                66739864,
+                68312225,
+                65864627,
+                65918899,
+                65887029,
+                66379846,
+                66334621
+              ],
+              "median_ns": 66334621,
+              "min_ns": 65864627,
+              "max_ns": 68312225
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                68292166,
+                67049598,
+                65834860,
+                66011774,
+                64991733,
+                66299024,
+                65983881
+              ],
+              "median_ns": 66011774,
+              "min_ns": 64991733,
+              "max_ns": 68292166
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                68735381,
+                67982774,
+                65719984,
+                64600137,
+                66210107,
+                64724571,
+                66666647
+              ],
+              "median_ns": 66210107,
+              "min_ns": 64600137,
+              "max_ns": 68735381
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                67524331,
+                70159592,
+                69613936,
+                66516103,
+                67453247,
+                67033748,
+                65653520
+              ],
+              "median_ns": 67453247,
+              "min_ns": 65653520,
+              "max_ns": 70159592
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                20817341,
+                19012533,
+                18469821,
+                18804762,
+                18704674,
+                18279073,
+                19078497
+              ],
+              "median_ns": 18804762,
+              "min_ns": 18279073,
+              "max_ns": 20817341
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 49,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                76941640,
+                74835765,
+                74291791,
+                76113300,
+                77839270,
+                75148675,
+                74580466
+              ],
+              "median_ns": 75148675,
+              "min_ns": 74291791,
+              "max_ns": 77839270
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                75382154,
+                75253192,
+                78473134,
+                76832946,
+                76834709,
+                76279644,
+                73884014
+              ],
+              "median_ns": 76279644,
+              "min_ns": 73884014,
+              "max_ns": 78473134
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                74845334,
+                76206265,
+                75404236,
+                74805238,
+                76327194,
+                75595936,
+                82750797
+              ],
+              "median_ns": 75595936,
+              "min_ns": 74805238,
+              "max_ns": 82750797
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                78470048,
+                75066169,
+                85416154,
+                78723324,
+                75779032,
+                75727735,
+                78717824
+              ],
+              "median_ns": 78470048,
+              "min_ns": 75066169,
+              "max_ns": 85416154
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                788889152,
+                786776816,
+                791394269,
+                784866299,
+                790993313,
+                786287254,
+                790637234
+              ],
+              "median_ns": 788889152,
+              "min_ns": 784866299,
+              "max_ns": 791394269
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "bootstrap",
+      "selectors": 257,
+      "skipped_simple": 862,
+      "unsupported": 298,
+      "checked_frames": 588,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                69368373,
+                69639253,
+                67976592,
+                68942580,
+                69262183,
+                69002084,
+                69387580
+              ],
+              "median_ns": 69262183,
+              "min_ns": 67976592,
+              "max_ns": 69639253
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                68656282,
+                68593724,
+                69925381,
+                70219685,
+                69061726,
+                70807342,
+                69328989
+              ],
+              "median_ns": 69328989,
+              "min_ns": 68593724,
+              "max_ns": 70807342
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                69083166,
+                69392018,
+                69801699,
+                69733480,
+                69705538,
+                69264657,
+                69873133
+              ],
+              "median_ns": 69705538,
+              "min_ns": 69083166,
+              "max_ns": 69873133
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                70338219,
+                69430219,
+                70976621,
+                69482047,
+                70179409,
+                70830536,
+                70734284
+              ],
+              "median_ns": 70338219,
+              "min_ns": 69430219,
+              "max_ns": 70976621
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                40770404,
+                44404986,
+                43399384,
+                42582056,
+                42958524,
+                43063061,
+                42053600
+              ],
+              "median_ns": 42958524,
+              "min_ns": 40770404,
+              "max_ns": 44404986
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 588,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                728602897,
+                744046482,
+                742205515,
+                736973285,
+                738135964,
+                737847802,
+                739168307
+              ],
+              "median_ns": 738135964,
+              "min_ns": 728602897,
+              "max_ns": 744046482
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                773073618,
+                742005328,
+                738209723,
+                739174529,
+                730747765,
+                738629032,
+                742165038
+              ],
+              "median_ns": 739174529,
+              "min_ns": 730747765,
+              "max_ns": 773073618
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                788386787,
+                744063113,
+                735255130,
+                749849706,
+                738240982,
+                760190603,
+                741400510
+              ],
+              "median_ns": 744063113,
+              "min_ns": 735255130,
+              "max_ns": 788386787
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                642338567,
+                609862116,
+                616795709,
+                614163242,
+                616232750,
+                608709405,
+                602046692
+              ],
+              "median_ns": 614163242,
+              "min_ns": 602046692,
+              "max_ns": 642338567
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                27368441076,
+                26623635943,
+                26557285798,
+                26413691505,
+                26374421110,
+                26124858462,
+                26599844887
+              ],
+              "median_ns": 26557285798,
+              "min_ns": 26124858462,
+              "max_ns": 27368441076
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "google",
+      "selectors": 98,
+      "skipped_simple": 135,
+      "unsupported": 25,
+      "checked_frames": 542,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                2261036,
+                2322553,
+                2260305,
+                2383517,
+                2279592,
+                2607418,
+                2266166
+              ],
+              "median_ns": 2279592,
+              "min_ns": 2260305,
+              "max_ns": 2607418
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                2346277,
+                2419585,
+                2351326,
+                2290553,
+                2331770,
+                2265435,
+                2293948
+              ],
+              "median_ns": 2331770,
+              "min_ns": 2265435,
+              "max_ns": 2419585
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                2260465,
+                2248844,
+                2347269,
+                2258131,
+                2451645,
+                2364953,
+                2465311
+              ],
+              "median_ns": 2347269,
+              "min_ns": 2248844,
+              "max_ns": 2465311
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                2390651,
+                2319146,
+                2303376,
+                2274702,
+                2571641,
+                2498004,
+                2280874
+              ],
+              "median_ns": 2319146,
+              "min_ns": 2274702,
+              "max_ns": 2571641
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                1619919,
+                1615271,
+                1617425,
+                1606795,
+                1629287,
+                2092410,
+                1595894
+              ],
+              "median_ns": 1617425,
+              "min_ns": 1595894,
+              "max_ns": 2092410
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 542,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                118004005,
+                117900119,
+                115248377,
+                117254635,
+                119651657,
+                117474116,
+                116465267
+              ],
+              "median_ns": 117474116,
+              "min_ns": 115248377,
+              "max_ns": 119651657
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                117015845,
+                116502005,
+                117587429,
+                118500257,
+                126787821,
+                119847735,
+                117818335
+              ],
+              "median_ns": 117818335,
+              "min_ns": 116502005,
+              "max_ns": 126787821
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                116826407,
+                117475729,
+                117184171,
+                128599031,
+                129276545,
+                116899325,
+                115998449
+              ],
+              "median_ns": 117184171,
+              "min_ns": 115998449,
+              "max_ns": 129276545
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                115670592,
+                118855027,
+                115871180,
+                124599470,
+                125962808,
+                117155496,
+                115362821
+              ],
+              "median_ns": 117155496,
+              "min_ns": 115362821,
+              "max_ns": 125962808
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                1805583167,
+                1804446828,
+                1796431248,
+                1811445714,
+                1854567054,
+                1793535778,
+                1790915114
+              ],
+              "median_ns": 1804446828,
+              "min_ns": 1790915114,
+              "max_ns": 1854567054
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "netflix",
+      "selectors": 985,
+      "skipped_simple": 149,
+      "unsupported": 452,
+      "checked_frames": 514,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                4067167,
+                3882609,
+                3963272,
+                3942061,
+                4273215,
+                4226387,
+                4134693
+              ],
+              "median_ns": 4067167,
+              "min_ns": 3882609,
+              "max_ns": 4273215
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                4132459,
+                3891236,
+                4119145,
+                4097995,
+                3957600,
+                3921552,
+                3866880
+              ],
+              "median_ns": 3957600,
+              "min_ns": 3866880,
+              "max_ns": 4132459
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                3944275,
+                4107312,
+                3999279,
+                4151275,
+                3942242,
+                4079049,
+                3884483
+              ],
+              "median_ns": 3999279,
+              "min_ns": 3884483,
+              "max_ns": 4151275
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                4030879,
+                4054773,
+                4032020,
+                4120146,
+                3975695,
+                4187062,
+                3985082
+              ],
+              "median_ns": 4032020,
+              "min_ns": 3975695,
+              "max_ns": 4187062
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                1815909,
+                1994856,
+                2167601,
+                2354141,
+                1834524,
+                1836327,
+                1810729
+              ],
+              "median_ns": 1836327,
+              "min_ns": 1810729,
+              "max_ns": 2354141
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 514,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                847173787,
+                843457862,
+                935379423,
+                867409703,
+                865558858,
+                915898989,
+                915093903
+              ],
+              "median_ns": 867409703,
+              "min_ns": 843457862,
+              "max_ns": 935379423
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                843587807,
+                837193348,
+                890349530,
+                847475475,
+                850503666,
+                854332694,
+                902914374
+              ],
+              "median_ns": 850503666,
+              "min_ns": 837193348,
+              "max_ns": 902914374
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                874092575,
+                835853116,
+                904326913,
+                846561294,
+                855237017,
+                855857234,
+                905736927
+              ],
+              "median_ns": 855857234,
+              "min_ns": 835853116,
+              "max_ns": 905736927
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                844416187,
+                852519250,
+                842981926,
+                861856279,
+                864589244,
+                868847670,
+                908614245
+              ],
+              "median_ns": 861856279,
+              "min_ns": 842981926,
+              "max_ns": 908614245
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                68133841857,
+                68322442245,
+                72942411598,
+                70966127081,
+                69688891642,
+                73011459012,
+                73119509231
+              ],
+              "median_ns": 70966127081,
+              "min_ns": 68133841857,
+              "max_ns": 73119509231
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "testcase",
+      "selectors": 3,
+      "skipped_simple": 2,
+      "unsupported": 0,
+      "checked_frames": 5,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                3637,
+                3637,
+                3456,
+                3356,
+                3667,
+                3346,
+                3216
+              ],
+              "median_ns": 3456,
+              "min_ns": 3216,
+              "max_ns": 3667
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                3517,
+                3627,
+                3397,
+                3456,
+                3646,
+                3457,
+                3457
+              ],
+              "median_ns": 3457,
+              "min_ns": 3397,
+              "max_ns": 3646
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                4098,
+                3828,
+                3316,
+                3326,
+                3487,
+                3777,
+                3477
+              ],
+              "median_ns": 3487,
+              "min_ns": 3316,
+              "max_ns": 4098
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                4579,
+                3798,
+                3707,
+                3757,
+                4218,
+                3737,
+                3427
+              ],
+              "median_ns": 3757,
+              "min_ns": 3427,
+              "max_ns": 4579
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                2574,
+                2465,
+                2204,
+                2204,
+                2635,
+                2535,
+                2234
+              ],
+              "median_ns": 2465,
+              "min_ns": 2204,
+              "max_ns": 2635
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 5,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                15670,
+                15399,
+                15329,
+                15168,
+                15329,
+                15019,
+                15199
+              ],
+              "median_ns": 15329,
+              "min_ns": 15019,
+              "max_ns": 15670
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                15078,
+                14337,
+                14597,
+                14458,
+                14307,
+                14567,
+                13796
+              ],
+              "median_ns": 14458,
+              "min_ns": 13796,
+              "max_ns": 15078
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                13856,
+                13586,
+                13155,
+                13445,
+                13446,
+                13566,
+                13295
+              ],
+              "median_ns": 13446,
+              "min_ns": 13155,
+              "max_ns": 13856
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                15650,
+                14908,
+                14658,
+                14628,
+                14918,
+                14978,
+                14628
+              ],
+              "median_ns": 14908,
+              "min_ns": 14628,
+              "max_ns": 15650
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                13055,
+                13215,
+                12574,
+                12393,
+                13706,
+                13165,
+                12583
+              ],
+              "median_ns": 13055,
+              "min_ns": 12393,
+              "max_ns": 13706
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "tiktok",
+      "selectors": 22,
+      "skipped_simple": 26,
+      "unsupported": 94,
+      "checked_frames": 1130,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                610179,
+                596633,
+                580092,
+                595120,
+                620719,
+                584110,
+                586134
+              ],
+              "median_ns": 595120,
+              "min_ns": 580092,
+              "max_ns": 620719
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                645656,
+                592385,
+                621721,
+                580944,
+                591023,
+                625638,
+                586103
+              ],
+              "median_ns": 592385,
+              "min_ns": 580944,
+              "max_ns": 645656
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                688045,
+                595671,
+                598798,
+                588859,
+                591142,
+                593598,
+                923568
+              ],
+              "median_ns": 595671,
+              "min_ns": 588859,
+              "max_ns": 923568
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                599519,
+                630647,
+                582446,
+                588528,
+                586294,
+                661114,
+                608255
+              ],
+              "median_ns": 599519,
+              "min_ns": 582446,
+              "max_ns": 661114
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                888011,
+                350680,
+                344348,
+                869307,
+                340882,
+                348035,
+                346572
+              ],
+              "median_ns": 348035,
+              "min_ns": 340882,
+              "max_ns": 888011
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 1130,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                500541088,
+                484691488,
+                474758359,
+                538043800,
+                472820460,
+                484542548,
+                478908551
+              ],
+              "median_ns": 484542548,
+              "min_ns": 472820460,
+              "max_ns": 538043800
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                538300723,
+                475731230,
+                474205337,
+                510749916,
+                477031719,
+                477842394,
+                483962647
+              ],
+              "median_ns": 477842394,
+              "min_ns": 474205337,
+              "max_ns": 538300723
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                523712200,
+                494482282,
+                478156195,
+                485431551,
+                477503818,
+                478984815,
+                477962310
+              ],
+              "median_ns": 478984815,
+              "min_ns": 477503818,
+              "max_ns": 523712200
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                480896013,
+                503415819,
+                475554537,
+                485478431,
+                481863014,
+                478121209,
+                478115108
+              ],
+              "median_ns": 480896013,
+              "min_ns": 475554537,
+              "max_ns": 503415819
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                1229771694,
+                1299319676,
+                1218434271,
+                1241043194,
+                1221061848,
+                1225661567,
+                1238990670
+              ],
+              "median_ns": 1229771694,
+              "min_ns": 1218434271,
+              "max_ns": 1299319676
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "whatsapp",
+      "selectors": 808,
+      "skipped_simple": 387,
+      "unsupported": 112,
+      "checked_frames": 218,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                164979330,
+                170263117,
+                161723941,
+                161102311,
+                159752159,
+                161295345,
+                163616645
+              ],
+              "median_ns": 161723941,
+              "min_ns": 159752159,
+              "max_ns": 170263117
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                165299753,
+                167931558,
+                164352259,
+                161831264,
+                162685581,
+                165417715,
+                162362012
+              ],
+              "median_ns": 164352259,
+              "min_ns": 161831264,
+              "max_ns": 167931558
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                165586192,
+                166023395,
+                163440612,
+                160078383,
+                161804803,
+                161831053,
+                161865637
+              ],
+              "median_ns": 161865637,
+              "min_ns": 160078383,
+              "max_ns": 166023395
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                167667360,
+                167579234,
+                167018128,
+                160595617,
+                164095336,
+                161397546,
+                161879313
+              ],
+              "median_ns": 164095336,
+              "min_ns": 160595617,
+              "max_ns": 167667360
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                81536621,
+                81063260,
+                81652679,
+                78176646,
+                78655116,
+                79121274,
+                78281452
+              ],
+              "median_ns": 79121274,
+              "min_ns": 78176646,
+              "max_ns": 81652679
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 218,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                1129329783,
+                1135950186,
+                1131804772,
+                1127272109,
+                1128494130,
+                1123585538,
+                1128264087
+              ],
+              "median_ns": 1128494130,
+              "min_ns": 1123585538,
+              "max_ns": 1135950186
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                1186864498,
+                1135525828,
+                1127803690,
+                1127070349,
+                1127611758,
+                1130255635,
+                1161987513
+              ],
+              "median_ns": 1130255635,
+              "min_ns": 1127070349,
+              "max_ns": 1186864498
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                1199887685,
+                1125017083,
+                1125222120,
+                1127103241,
+                1124305043,
+                1127510748,
+                1122678551
+              ],
+              "median_ns": 1125222120,
+              "min_ns": 1122678551,
+              "max_ns": 1199887685
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                1189710114,
+                1144864989,
+                1170890154,
+                1144535238,
+                1138868812,
+                1138239457,
+                1147836353
+              ],
+              "median_ns": 1144864989,
+              "min_ns": 1138239457,
+              "max_ns": 1189710114
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                15389513140,
+                14899237078,
+                14944350648,
+                14875401774,
+                14874407892,
+                14835094261,
+                14760283122
+              ],
+              "median_ns": 14875401774,
+              "min_ns": 14760283122,
+              "max_ns": 15389513140
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "wikipedia",
+      "selectors": 118,
+      "skipped_simple": 138,
+      "unsupported": 31,
+      "checked_frames": 169,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                27129744,
+                38154189,
+                26599536,
+                26142556,
+                27452082,
+                27469053,
+                26709223
+              ],
+              "median_ns": 27129744,
+              "min_ns": 26142556,
+              "max_ns": 38154189
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                25960473,
+                27424259,
+                27614937,
+                26589928,
+                26210024,
+                26558148,
+                26109574
+              ],
+              "median_ns": 26558148,
+              "min_ns": 25960473,
+              "max_ns": 27614937
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                28384045,
+                27551719,
+                27216739,
+                26764948,
+                28840745,
+                27302009,
+                28516775
+              ],
+              "median_ns": 27551719,
+              "min_ns": 26764948,
+              "max_ns": 28840745
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                25916321,
+                33270055,
+                27376209,
+                27001463,
+                26689686,
+                26550553,
+                27202933
+              ],
+              "median_ns": 27001463,
+              "min_ns": 25916321,
+              "max_ns": 33270055
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                15925151,
+                23030477,
+                16960169,
+                16223262,
+                15878913,
+                15427574,
+                15850269
+              ],
+              "median_ns": 15925151,
+              "min_ns": 15427574,
+              "max_ns": 23030477
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 169,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                235018204,
+                236551531,
+                232691415,
+                233978447,
+                234787079,
+                239070053,
+                236956092
+              ],
+              "median_ns": 235018204,
+              "min_ns": 232691415,
+              "max_ns": 239070053
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                237863522,
+                237865896,
+                232388985,
+                234218720,
+                234408518,
+                236923822,
+                237985932
+              ],
+              "median_ns": 236923822,
+              "min_ns": 232388985,
+              "max_ns": 237985932
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                237261427,
+                236201813,
+                233804931,
+                237400419,
+                235352193,
+                237136784,
+                241593823
+              ],
+              "median_ns": 237136784,
+              "min_ns": 233804931,
+              "max_ns": 241593823
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                186063903,
+                188104996,
+                187781607,
+                186843592,
+                184469561,
+                188761221,
+                186774451
+              ],
+              "median_ns": 186843592,
+              "min_ns": 184469561,
+              "max_ns": 188761221
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                2238148110,
+                2249269347,
+                2163541827,
+                2214278033,
+                2178415839,
+                2216229136,
+                2243257590
+              ],
+              "median_ns": 2216229136,
+              "min_ns": 2163541827,
+              "max_ns": 2249269347
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "yahoo",
+      "selectors": 93,
+      "skipped_simple": 821,
+      "unsupported": 88,
+      "checked_frames": 86,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                6366335,
+                6050631,
+                6133507,
+                7701458,
+                6345316,
+                6581831,
+                6387145
+              ],
+              "median_ns": 6366335,
+              "min_ns": 6050631,
+              "max_ns": 7701458
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                6414716,
+                6052525,
+                6793641,
+                6571141,
+                6384790,
+                6241680,
+                6146261
+              ],
+              "median_ns": 6384790,
+              "min_ns": 6052525,
+              "max_ns": 6793641
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                6294710,
+                6676821,
+                6557375,
+                6354383,
+                6194081,
+                6252141,
+                6576711
+              ],
+              "median_ns": 6354383,
+              "min_ns": 6194081,
+              "max_ns": 6676821
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                6156099,
+                6180516,
+                6452307,
+                6244357,
+                6511459,
+                6392114,
+                7427884
+              ],
+              "median_ns": 6392114,
+              "min_ns": 6156099,
+              "max_ns": 7427884
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                3185407,
+                3318357,
+                3122789,
+                3229520,
+                3205876,
+                3325330,
+                3686119
+              ],
+              "median_ns": 3229520,
+              "min_ns": 3122789,
+              "max_ns": 3686119
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 86,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                17357998,
+                17313385,
+                17418603,
+                18203891,
+                18148446,
+                17524562,
+                17474097
+              ],
+              "median_ns": 17474097,
+              "min_ns": 17313385,
+              "max_ns": 18203891
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                18261770,
+                17191635,
+                17558986,
+                16975488,
+                17072932,
+                17366505,
+                17067030
+              ],
+              "median_ns": 17191635,
+              "min_ns": 16975488,
+              "max_ns": 18261770
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                17078472,
+                17585827,
+                17178831,
+                17302493,
+                17491880,
+                17750878,
+                17891442
+              ],
+              "median_ns": 17491880,
+              "min_ns": 17078472,
+              "max_ns": 17891442
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                17799069,
+                18059449,
+                17051201,
+                17656029,
+                17950324,
+                17338401,
+                19400574
+              ],
+              "median_ns": 17799069,
+              "min_ns": 17051201,
+              "max_ns": 19400574
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                207040654,
+                203362779,
+                205658392,
+                204399551,
+                205411126,
+                205004480,
+                206916099
+              ],
+              "median_ns": 205411126,
+              "min_ns": 203362779,
+              "max_ns": 207040654
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "youtube",
+      "selectors": 31,
+      "skipped_simple": 21,
+      "unsupported": 7,
+      "checked_frames": 5713,
+      "scenarios": [
+        {
+          "workload": "initial",
+          "frames": 1,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                173356,
+                174238,
+                175690,
+                171964,
+                171523,
+                171633,
+                171233
+              ],
+              "median_ns": 171964,
+              "min_ns": 171233,
+              "max_ns": 175690
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                180309,
+                174429,
+                172164,
+                171423,
+                170310,
+                169629,
+                171523
+              ],
+              "median_ns": 171523,
+              "min_ns": 169629,
+              "max_ns": 180309
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                173396,
+                176032,
+                171903,
+                181923,
+                171132,
+                171242,
+                174309
+              ],
+              "median_ns": 173396,
+              "min_ns": 171132,
+              "max_ns": 181923
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                174508,
+                174499,
+                172625,
+                173216,
+                172274,
+                171112,
+                170902
+              ],
+              "median_ns": 172625,
+              "min_ns": 170902,
+              "max_ns": 174508
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                98335,
+                97093,
+                98605,
+                98044,
+                95580,
+                94498,
+                94939
+              ],
+              "median_ns": 97093,
+              "min_ns": 94498,
+              "max_ns": 98605
+            }
+          ]
+        },
+        {
+          "workload": "trace",
+          "frames": 5713,
+          "measurements": [
+            {
+              "engine": "bit",
+              "samples_ns": [
+                13664135114,
+                12764695139,
+                12329793147,
+                12540394707,
+                12508154444,
+                12433312558,
+                12547315417
+              ],
+              "median_ns": 12540394707,
+              "min_ns": 12329793147,
+              "max_ns": 13664135114
+            },
+            {
+              "engine": "tri",
+              "samples_ns": [
+                13187382892,
+                12622981728,
+                12350676076,
+                12372380626,
+                12721832370,
+                12302314823,
+                12520110966
+              ],
+              "median_ns": 12520110966,
+              "min_ns": 12302314823,
+              "max_ns": 13187382892
+            },
+            {
+              "engine": "rec_tri",
+              "samples_ns": [
+                13427748393,
+                12655983040,
+                12566736827,
+                12326186579,
+                12828327804,
+                12398991287,
+                12481058132
+              ],
+              "median_ns": 12566736827,
+              "min_ns": 12326186579,
+              "max_ns": 13427748393
+            },
+            {
+              "engine": "quad",
+              "samples_ns": [
+                14182735660,
+                12614539149,
+                12586576215,
+                12398230656,
+                12460685344,
+                12428011511,
+                12820946114
+              ],
+              "median_ns": 12586576215,
+              "min_ns": 12398230656,
+              "max_ns": 14182735660
+            },
+            {
+              "engine": "parcel_selectors",
+              "samples_ns": [
+                130184201696,
+                129396988777,
+                124821308499,
+                122133967058,
+                121579507901,
+                121933828993,
+                121893553661
+              ],
+              "median_ns": 122133967058,
+              "min_ns": 121579507901,
+              "max_ns": 130184201696
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

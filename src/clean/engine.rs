@@ -9,6 +9,9 @@ use super::{
 use crate::{Node, attributes_to_string_map, rdtsc};
 use std::collections::{BTreeMap, HashMap, HashSet};
 
+mod comparison;
+pub use comparison::{ComparisonSample, ParcelProgram};
+
 #[derive(Debug, Clone, Default)]
 struct NodeState {
     output: Vec<bool>,
@@ -389,6 +392,12 @@ impl Engine {
     }
 
     fn apply(&mut self, frame: &TraceFrame) -> Result<(), RunError> {
+        self.apply_mutation(frame)?;
+        self.recompute();
+        Ok(())
+    }
+
+    fn apply_mutation(&mut self, frame: &TraceFrame) -> Result<(), RunError> {
         match &frame.command {
             TraceCommand::Init { node } => {
                 self.dom.validate_subtree(node, None)?;
@@ -433,7 +442,6 @@ impl Engine {
             TraceCommand::Recalculate => {}
         }
         self.dom.refresh_pseudos();
-        self.recompute();
         Ok(())
     }
 

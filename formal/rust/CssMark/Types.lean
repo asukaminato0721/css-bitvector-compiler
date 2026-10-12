@@ -78,7 +78,7 @@ inductive clean.logic.Dirty where
 | NodeChanged : clean.logic.Dirty
 
 /-- [css_bitvector_compiler::clean::engine::NodeState]
-    Source: 'src/clean/engine.rs', lines 13:0-23:1 -/
+    Source: 'src/clean/engine.rs', lines 16:0-26:1 -/
 structure clean.engine.NodeState where
   output : alloc.vec.Vec Bool
   quad_output : alloc.vec.Vec clean.logic.QuadValue
@@ -91,7 +91,7 @@ structure clean.engine.NodeState where
   subtree_dirty : Bool
 
 /-- [css_bitvector_compiler::clean::engine::NodeFacts]
-    Source: 'src/clean/engine.rs', lines 26:0-34:1 -/
+    Source: 'src/clean/engine.rs', lines 29:0-37:1 -/
 structure clean.engine.NodeFacts where
   tag : String
   classes : std.collections.hash.set.HashSet String std.hash.random.RandomState
@@ -105,7 +105,7 @@ structure clean.engine.NodeFacts where
     std.hash.random.RandomState Global
 
 /-- [css_bitvector_compiler::clean::engine::DomNode]
-    Source: 'src/clean/engine.rs', lines 37:0-43:1 -/
+    Source: 'src/clean/engine.rs', lines 40:0-46:1 -/
 structure clean.engine.DomNode where
   trace_id : Std.U64
   facts : clean.engine.NodeFacts
@@ -114,7 +114,7 @@ structure clean.engine.DomNode where
   state : clean.engine.NodeState
 
 /-- [css_bitvector_compiler::clean::engine::Dom]
-    Source: 'src/clean/engine.rs', lines 46:0-51:1
+    Source: 'src/clean/engine.rs', lines 49:0-54:1
     Visibility: public -/
 structure clean.engine.Dom where
   nodes : std.collections.hash.map.HashMap clean.compiler.NodeId

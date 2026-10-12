@@ -1,4 +1,5 @@
 /target
+/dev/stylo-benchmark/target
 result
 __pycache__
 .ruff_cache

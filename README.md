@@ -10,6 +10,8 @@ Detailed algorithm, Hoare-logic, and Kani verification notes are in
 
 [Lean 4 proofs](formal/README.md) cover selector recurrence, cache reuse,
 mutation invalidation, and dirty traversal in a finite forest model.
+The algorithm theorem compares initialization and every subsequent edit with full recomputation.
+Algorithm verification is the proof target. Complete Rust implementation verification is outside that target.
 [Source proofs](formal/rust/README.md) verify selected production Rust functions
 translated by Charon and Aeneas. Coverage includes marking, allocation, deletion,
 live sibling lookup, input guards, and local quad operations.
@@ -67,6 +69,17 @@ serialization, and report writing are outside the measured region.
 ```sh
 cargo xtask benchmark --site google bit,tri,rec_tri,quad
 ```
+
+Compare with the released `parcel_selectors` matcher on the same DOM and selector subset:
+
+```sh
+cargo xtask compare --all --samples 7 --output docs/benchmark-results.json
+```
+
+The comparison checks exact match sets after every frame before timing.
+It reports initialization and trace replay separately. See [benchmark results](docs/benchmark.md) for the method and limits.
+The [website data comparison](docs/website-benchmark.md) replays 11 captured sites through bit, tri, rec_tri, quad, and Stylo/Blitz. It uses normalized trees and synthetic colour declarations.
+The [native Stylo comparison](docs/stylo-benchmark.md) measures incremental updates with the same timer and per-node output contract. The [earlier Blink measurements](docs/browser-benchmark.md) use different output contracts and do not establish an algorithm speed ratio.
 
 Inspect selector coverage for a site or CSS file:
 

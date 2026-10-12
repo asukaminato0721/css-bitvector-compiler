@@ -119,7 +119,7 @@ def clean.compiler.NodeId.Insts.CoreHashHash : core.hash.Hash
 }
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::clear]:
-    Source: 'src/clean/engine.rs', lines 54:4-58:5 -/
+    Source: 'src/clean/engine.rs', lines 57:4-61:5 -/
 def clean.engine.Dom.clear
   (self : clean.engine.Dom) : Result clean.engine.Dom := do
   let hm ← std.collections.hash.map.HashMap.clear self.nodes
@@ -127,7 +127,7 @@ def clean.engine.Dom.clear
   ok { self with nodes := hm, root := none, trace_nodes := hm1 }
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::insert_instance]:
-    Source: 'src/clean/engine.rs', lines 61:4-70:5 -/
+    Source: 'src/clean/engine.rs', lines 64:4-73:5 -/
 def clean.engine.Dom.insert_instance
   (self : clean.engine.Dom) (node : clean.engine.DomNode) :
   Result ((Option clean.compiler.NodeId) × clean.engine.Dom)
@@ -170,7 +170,7 @@ def clean.logic.Dirty.merge
   | clean.logic.Dirty.NodeChanged => ok clean.logic.Dirty.NodeChanged
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]: loop 0:
-    Source: 'src/clean/engine.rs', lines 136:8-147:5 -/
+    Source: 'src/clean/engine.rs', lines 139:8-150:5 -/
 @[rust_loop]
 def clean.engine.Dom.mark_loop
   (current : Option clean.compiler.NodeId) (self : clean.engine.Dom)
@@ -213,7 +213,7 @@ def clean.engine.Dom.mark_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::mark]:
-    Source: 'src/clean/engine.rs', lines 133:4-147:5 -/
+    Source: 'src/clean/engine.rs', lines 136:4-150:5 -/
 @[reducible]
 def clean.engine.Dom.mark
   (self : clean.engine.Dom) (id : clean.compiler.NodeId)
@@ -223,7 +223,7 @@ def clean.engine.Dom.mark
   clean.engine.Dom.mark_loop (some id) self dirty true
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]: loop 0:
-    Source: 'src/clean/engine.rs', lines 188:8-199:5 -/
+    Source: 'src/clean/engine.rs', lines 191:8-202:5 -/
 @[rust_loop]
 def clean.engine.Dom.previous_sibling_loop
   (hm : std.collections.hash.map.HashMap clean.compiler.NodeId
@@ -259,7 +259,7 @@ def clean.engine.Dom.previous_sibling_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::previous_sibling]:
-    Source: 'src/clean/engine.rs', lines 175:4-199:5 -/
+    Source: 'src/clean/engine.rs', lines 178:4-202:5 -/
 def clean.engine.Dom.previous_sibling
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result (Option clean.compiler.NodeId)
@@ -294,7 +294,7 @@ def clean.engine.Dom.previous_sibling
 mutual
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]: loop 0:
-    Source: 'src/clean/engine.rs', lines 206:12-208:13 -/
+    Source: 'src/clean/engine.rs', lines 209:12-211:13 -/
 @[rust_loop]
 def clean.engine.Dom.remove_subtree_loop
   (iter : alloc.vec.into_iter.IntoIter clean.compiler.NodeId)
@@ -310,7 +310,7 @@ def clean.engine.Dom.remove_subtree_loop
 partial_fixpoint
 
 /-- [css_bitvector_compiler::clean::engine::{css_bitvector_compiler::clean::engine::Dom}::remove_subtree]:
-    Source: 'src/clean/engine.rs', lines 201:4-210:5 -/
+    Source: 'src/clean/engine.rs', lines 204:4-213:5 -/
 def clean.engine.Dom.remove_subtree
   (self : clean.engine.Dom) (id : clean.compiler.NodeId) :
   Result clean.engine.Dom

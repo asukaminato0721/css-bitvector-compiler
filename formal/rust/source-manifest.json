@@ -21,16 +21,17 @@
     "Cargo.toml": "7ed362a78af2537f14d70861021d5dc1dd9f34d6096f63d2253791032425edec",
     "Cargo.lock": "a0bba790a672ca7312816394b4de856a7611c12e61f0223e0c0afd96de5e477c",
     "src/clean/compiler.rs": "4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4",
-    "src/clean/engine.rs": "952772bfe1bcdd18ef8a2cc87486c3acd052ca8c7aa5d174915621e437558003",
+    "src/clean/engine/comparison.rs": "b4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62",
+    "src/clean/engine.rs": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f",
     "src/clean/logic.rs": "67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc",
     "src/clean/runner.rs": "c80ec7986cdb628d4ea528dcab5941253fd8c538b908354ac8b62a9b55a4b723",
-    "src/clean/tests.rs": "05623c8ce836270e2aea7ad6519e83ebac7d727e09a0803b261586791ffa03b4",
+    "src/clean/tests.rs": "6e94b7379774eb84f31b9fb6095f9cde3d678f6f3ce2abc0a6835539628cbe72",
     "src/clean/trace.rs": "467c1719609f8630e1c2ba9d0ded42884de61d6f0e96d52bcad6bcbc557f8894",
-    "src/clean.rs": "0f3fa9309c7f953377bf9d7506a2a44385da963b322833a1053b623b8f726771",
+    "src/clean.rs": "2eb1265910f60ef9e508da4bdeb1e3f5fc093122431e32384e5142ee00d519e7",
     "src/lib.rs": "b249f15e3888857f9ab91ea6d0dd96c63c3c68f523482234f17d367bdea27724"
   },
   "generated": {
-    "CssMark/Types.lean": "6f0b3cc2b4b32245d05aa9f54a1080cc6bfe37d185426d47d71f39d25ab2be2c",
-    "CssMark/Funs.lean": "c2ba18872a8858b7bc3af5fdde2ac9759278c834f9e505fe24d9016f35a94497"
+    "CssMark/Types.lean": "8367da0b4d3cb92941711931132abc0072dbb46f6b2f69ed7121438d168b3c70",
+    "CssMark/Funs.lean": "e5b4de1d530b282e7725a33fdb9d086fa212dadf8526c83825e7485417b212d4"
   }
 }

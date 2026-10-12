@@ -2,6 +2,8 @@
 
 本目录证明 CSS 状态递推、tri 缓存复用、quad 专门化、修改失效和 dirty 遍历的数学性质。
 Lean 内核检查证明项。证明不限制状态数、表达式长度或有限上下文的深度。
+本项目的证明目标止于算法层。`Algorithm.algorithm_correct` 从不带缓存的 DOM 开始，
+证明初始化和每次修改后的增量输出均等于完整重新计算。
 `CssProofs/` 包含算法模型证明。
 [rust/](rust/README.md) 包含生产 Rust 经 Charon/Aeneas 转换后的局部源码证明。
 完整 Rust 引擎的端到端验证尚未完成。
@@ -55,6 +57,9 @@ CI 的 `lean` job 执行同一构建。
 | [Quad.lean](CssProofs/Quad.lean) | `quad_step_sound`、`quad_program_reuse`、`quad_initial_correct` | `evaluate_quad`、`materialize_quad` |
 | [Selectors.lean](CssProofs/Selectors.lean) | `compiled_correct`、`accept_correct` | 状态递推、`matches_selector_part` |
 | [Incremental.lean](CssProofs/Incremental.lean) | `sweep_correct`、`trace_then_sweep` | 修改失效与前序 dirty 遍历的模型 |
+| [Algorithm.lean](CssProofs/Algorithm.lean) | `algorithm_correct`、`replay_correct` | 初始化及任意有限修改序列的逐步结果 |
+| [Algorithm.lean](CssProofs/Algorithm.lean) | `reference_matches_selector_oracle`、`done_matches_selector_oracle` | 有限森林上的直接选择器语义 |
+| [Algorithm.lean](CssProofs/Algorithm.lean) | `triEval_correct`、`recursiveTriEval_correct`、`quadEval_correct` | 缓存命中与重新求值两条分支 |
 
 Rust 文件位于 [logic.rs](../src/clean/logic.rs) 和 [engine.rs](../src/clean/engine.rs)。
 此表描述算法模型与 Rust 的对应关系，不代表所有函数已有源码精化证明。
@@ -161,10 +166,26 @@ descendant 读取祖先匹配位，child 与 adjacent sibling 读取本地匹配
 模型把待传播变化作为递归参数。Rust 会写入节点标记。
 两种表示之间的完整源码精化尚未完成。
 
+### 算法总定理
+
+`DOM` 只保存节点求值函数和树结构，不保存缓存或 dirty 标记。
+`reference` 对整棵树重新计算。`referenceTrace` 在每次修改后执行该计算。
+`replay` 则维护缓存、标记失效，并执行 dirty 遍历。
+
+`algorithm_correct` 证明两条路径的全部观察结果相同，包括初始化结果。
+初始化建立 `Ready`，修改保持 `Ready`，遍历建立 `Done`。
+证明没有假设初始缓存正确，也没有在每次修改后重新假设不变量。
+所有递归都由有限树或有限修改列表控制，Lean 检查其终止性。
+
+修改参数不能读取缓存。插入和删除后的兄弟谓词只依赖旧谓词。
+属性和派生伪类的变化作为节点谓词修改输入。模型要求提供全部发生变化的谓词。
+`reference_matches_selector_oracle` 把有限森林的完整状态计算连接到直接选择器解释。
+缓存定理证明局部替换保持求值结果，recursive-tri 保留另一输入通道不变的条件。
+
 ## 证明边界
 
 已完成的定理没有未证明占位项。两套构建均检查公理依赖。
-完整 Rust 引擎仍需以下连接证明：
+以下内容属于 Rust 实现验证，不属于当前算法证明目标：
 
 1. CSS parser、索引分配和节点谓词与选择器模型一致。
 2. 实际状态数组及缓存条件来自同一次有效求值，并满足复用定理的前提。
@@ -186,4 +207,4 @@ descendant 读取祖先匹配位，child 与 adjacent sibling 读取本地匹配
 调度器可以在求值器不展开的条件下完成转换，但该转换不构成调度器证明。
 
 Kani 保留固定长度局部检查。差分测试检查 mutation trace 与 naive oracle 的输出。
-测试不能替代上述剩余源码证明。
+测试不替代形式化证明。现有源码证明保留，但不继续扩大其范围。

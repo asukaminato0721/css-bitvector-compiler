@@ -8,7 +8,7 @@ pub use compiler::{
     Combinator, CompileError, CompiledProgram, Compound, DynamicPseudo, EngineKind, NodeId, Nth,
     SelectorChain, SelectorReport, StateId, UnsupportedSelector,
 };
-pub use engine::{Dom, Engine, RunResult, RunStats};
+pub use engine::{ComparisonSample, Dom, Engine, ParcelProgram, RunResult, RunStats};
 pub use runner::{SiteInput, load_site};
 pub use trace::{RunError, Trace, TraceCommand, TraceFrame};
 

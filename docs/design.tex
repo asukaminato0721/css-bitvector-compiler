@@ -225,6 +225,8 @@ lake build
 定理列表与证明边界见 \nolinkurl{formal/README.md}。
 
 森林模型还证明修改失效维护、有限修改序列和 dirty 遍历的正确性与终止性。
+算法总定理从无缓存 DOM 初始化，证明每次修改后的增量结果都等于完整重新计算。
+有限森林上的完整状态计算与直接选择器解释一致。当前证明目标止于算法层。
 \texttt{formal/rust/} 使用 Charon/Aeneas 从生产 Rust 生成 Lean 定义。
 源码证明覆盖 quad 局部转换、输入条件检查和 \texttt{Dom::mark}。
 输入条件检查拒绝长度不等的数组，证明包含循环终止和边界安全。

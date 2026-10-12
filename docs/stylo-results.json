@@ -1,0 +1,2755 @@
+{
+  "blitz_dom": "0.3.0-beta.3",
+  "captured_at_utc": "2026-10-12T15:37:02Z",
+  "cpu": "model name\t: AMD Ryzen AI 7 H 350 w/ Radeon 860M",
+  "cpu_affinity": "Cpus_allowed_list:\t4",
+  "initialization_timed": false,
+  "output": "all live (trace ID, RGBA8) pairs, sorted by trace ID, after every update",
+  "protocol": "native-incremental-rgba-v1",
+  "results": [
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 974729,
+            "median_ns": 952346,
+            "min_ns": 926432
+          },
+          "samples": [
+            {
+              "output_ns": 974729,
+              "total_ns": 8267746,
+              "update_ns": 7293017
+            },
+            {
+              "output_ns": 952346,
+              "total_ns": 8156449,
+              "update_ns": 7204103
+            },
+            {
+              "output_ns": 970371,
+              "total_ns": 8269229,
+              "update_ns": 7298858
+            },
+            {
+              "output_ns": 958996,
+              "total_ns": 8244292,
+              "update_ns": 7285296
+            },
+            {
+              "output_ns": 926432,
+              "total_ns": 8191493,
+              "update_ns": 7265061
+            },
+            {
+              "output_ns": 951500,
+              "total_ns": 8251711,
+              "update_ns": 7300211
+            },
+            {
+              "output_ns": 943832,
+              "total_ns": 8195285,
+              "update_ns": 7251453
+            }
+          ],
+          "total": {
+            "max_ns": 8269229,
+            "median_ns": 8244292,
+            "min_ns": 8156449
+          },
+          "update": {
+            "max_ns": 7300211,
+            "median_ns": 7285296,
+            "min_ns": 7204103
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 970722,
+            "median_ns": 951882,
+            "min_ns": 930461
+          },
+          "samples": [
+            {
+              "output_ns": 944109,
+              "total_ns": 7845616,
+              "update_ns": 6901507
+            },
+            {
+              "output_ns": 930461,
+              "total_ns": 7812124,
+              "update_ns": 6881663
+            },
+            {
+              "output_ns": 970722,
+              "total_ns": 8036590,
+              "update_ns": 7065868
+            },
+            {
+              "output_ns": 951948,
+              "total_ns": 7908772,
+              "update_ns": 6956824
+            },
+            {
+              "output_ns": 951882,
+              "total_ns": 7825605,
+              "update_ns": 6873723
+            },
+            {
+              "output_ns": 949931,
+              "total_ns": 7876313,
+              "update_ns": 6926382
+            },
+            {
+              "output_ns": 964367,
+              "total_ns": 7824164,
+              "update_ns": 6859797
+            }
+          ],
+          "total": {
+            "max_ns": 8036590,
+            "median_ns": 7845616,
+            "min_ns": 7812124
+          },
+          "update": {
+            "max_ns": 7065868,
+            "median_ns": 6901507,
+            "min_ns": 6859797
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 969284,
+            "median_ns": 949136,
+            "min_ns": 930429
+          },
+          "samples": [
+            {
+              "output_ns": 956690,
+              "total_ns": 7634009,
+              "update_ns": 6677319
+            },
+            {
+              "output_ns": 969284,
+              "total_ns": 7651729,
+              "update_ns": 6682445
+            },
+            {
+              "output_ns": 953990,
+              "total_ns": 7684332,
+              "update_ns": 6730342
+            },
+            {
+              "output_ns": 947537,
+              "total_ns": 7576113,
+              "update_ns": 6628576
+            },
+            {
+              "output_ns": 930429,
+              "total_ns": 7548920,
+              "update_ns": 6618491
+            },
+            {
+              "output_ns": 944268,
+              "total_ns": 7553550,
+              "update_ns": 6609282
+            },
+            {
+              "output_ns": 949136,
+              "total_ns": 7699804,
+              "update_ns": 6750668
+            }
+          ],
+          "total": {
+            "max_ns": 7699804,
+            "median_ns": 7634009,
+            "min_ns": 7548920
+          },
+          "update": {
+            "max_ns": 6750668,
+            "median_ns": 6677319,
+            "min_ns": 6609282
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 986928,
+            "median_ns": 950360,
+            "min_ns": 923750
+          },
+          "samples": [
+            {
+              "output_ns": 950360,
+              "total_ns": 7910505,
+              "update_ns": 6960145
+            },
+            {
+              "output_ns": 986928,
+              "total_ns": 8105819,
+              "update_ns": 7118891
+            },
+            {
+              "output_ns": 923750,
+              "total_ns": 7834932,
+              "update_ns": 6911182
+            },
+            {
+              "output_ns": 954603,
+              "total_ns": 7957834,
+              "update_ns": 7003231
+            },
+            {
+              "output_ns": 945719,
+              "total_ns": 7900569,
+              "update_ns": 6954850
+            },
+            {
+              "output_ns": 934345,
+              "total_ns": 7858227,
+              "update_ns": 6923882
+            },
+            {
+              "output_ns": 958669,
+              "total_ns": 7912487,
+              "update_ns": 6953818
+            }
+          ],
+          "total": {
+            "max_ns": 8105819,
+            "median_ns": 7910505,
+            "min_ns": 7834932
+          },
+          "update": {
+            "max_ns": 7118891,
+            "median_ns": 6954850,
+            "min_ns": 6911182
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 903364,
+            "median_ns": 882494,
+            "min_ns": 834294
+          },
+          "samples": [
+            {
+              "output_ns": 903364,
+              "total_ns": 90269701,
+              "update_ns": 89366337
+            },
+            {
+              "output_ns": 834294,
+              "total_ns": 88792514,
+              "update_ns": 87958220
+            },
+            {
+              "output_ns": 882494,
+              "total_ns": 89795698,
+              "update_ns": 88913204
+            },
+            {
+              "output_ns": 887064,
+              "total_ns": 89234661,
+              "update_ns": 88347597
+            },
+            {
+              "output_ns": 887557,
+              "total_ns": 90269552,
+              "update_ns": 89381995
+            },
+            {
+              "output_ns": 842767,
+              "total_ns": 89030881,
+              "update_ns": 88188114
+            },
+            {
+              "output_ns": 842646,
+              "total_ns": 89191564,
+              "update_ns": 88348918
+            }
+          ],
+          "total": {
+            "max_ns": 90269701,
+            "median_ns": 89234661,
+            "min_ns": 88792514
+          },
+          "update": {
+            "max_ns": 89381995,
+            "median_ns": 88348918,
+            "min_ns": 87958220
+          }
+        }
+      ],
+      "name": "local-256",
+      "nodes": 257,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 2100584,
+            "median_ns": 911125,
+            "min_ns": 810196
+          },
+          "samples": [
+            {
+              "output_ns": 840074,
+              "total_ns": 331255164,
+              "update_ns": 330415090
+            },
+            {
+              "output_ns": 1035725,
+              "total_ns": 353035630,
+              "update_ns": 351999905
+            },
+            {
+              "output_ns": 1201189,
+              "total_ns": 367169430,
+              "update_ns": 365968241
+            },
+            {
+              "output_ns": 862147,
+              "total_ns": 330933353,
+              "update_ns": 330071206
+            },
+            {
+              "output_ns": 810196,
+              "total_ns": 331776444,
+              "update_ns": 330966248
+            },
+            {
+              "output_ns": 2100584,
+              "total_ns": 374690559,
+              "update_ns": 372589975
+            },
+            {
+              "output_ns": 911125,
+              "total_ns": 335632482,
+              "update_ns": 334721357
+            }
+          ],
+          "total": {
+            "max_ns": 374690559,
+            "median_ns": 335632482,
+            "min_ns": 330933353
+          },
+          "update": {
+            "max_ns": 372589975,
+            "median_ns": 334721357,
+            "min_ns": 330071206
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 897441,
+            "median_ns": 849675,
+            "min_ns": 836696
+          },
+          "samples": [
+            {
+              "output_ns": 849675,
+              "total_ns": 332378781,
+              "update_ns": 331529106
+            },
+            {
+              "output_ns": 897309,
+              "total_ns": 335013633,
+              "update_ns": 334116324
+            },
+            {
+              "output_ns": 836696,
+              "total_ns": 333685846,
+              "update_ns": 332849150
+            },
+            {
+              "output_ns": 849013,
+              "total_ns": 335151374,
+              "update_ns": 334302361
+            },
+            {
+              "output_ns": 839169,
+              "total_ns": 332751595,
+              "update_ns": 331912426
+            },
+            {
+              "output_ns": 889130,
+              "total_ns": 337560335,
+              "update_ns": 336671205
+            },
+            {
+              "output_ns": 897441,
+              "total_ns": 338967666,
+              "update_ns": 338070225
+            }
+          ],
+          "total": {
+            "max_ns": 338967666,
+            "median_ns": 335013633,
+            "min_ns": 332378781
+          },
+          "update": {
+            "max_ns": 338070225,
+            "median_ns": 334116324,
+            "min_ns": 331529106
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 2086164,
+            "median_ns": 1220772,
+            "min_ns": 995536
+          },
+          "samples": [
+            {
+              "output_ns": 1001711,
+              "total_ns": 350777229,
+              "update_ns": 349775518
+            },
+            {
+              "output_ns": 1298091,
+              "total_ns": 379570164,
+              "update_ns": 378272073
+            },
+            {
+              "output_ns": 2086164,
+              "total_ns": 442539691,
+              "update_ns": 440453527
+            },
+            {
+              "output_ns": 995536,
+              "total_ns": 336417063,
+              "update_ns": 335421527
+            },
+            {
+              "output_ns": 1220772,
+              "total_ns": 346321755,
+              "update_ns": 345100983
+            },
+            {
+              "output_ns": 1178505,
+              "total_ns": 348919000,
+              "update_ns": 347740495
+            },
+            {
+              "output_ns": 1322221,
+              "total_ns": 361167336,
+              "update_ns": 359845115
+            }
+          ],
+          "total": {
+            "max_ns": 442539691,
+            "median_ns": 350777229,
+            "min_ns": 336417063
+          },
+          "update": {
+            "max_ns": 440453527,
+            "median_ns": 349775518,
+            "min_ns": 335421527
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 1817383,
+            "median_ns": 961410,
+            "min_ns": 807919
+          },
+          "samples": [
+            {
+              "output_ns": 1126820,
+              "total_ns": 349196242,
+              "update_ns": 348069422
+            },
+            {
+              "output_ns": 961410,
+              "total_ns": 335979278,
+              "update_ns": 335017868
+            },
+            {
+              "output_ns": 807919,
+              "total_ns": 337058722,
+              "update_ns": 336250803
+            },
+            {
+              "output_ns": 905443,
+              "total_ns": 336282956,
+              "update_ns": 335377513
+            },
+            {
+              "output_ns": 992481,
+              "total_ns": 342549602,
+              "update_ns": 341557121
+            },
+            {
+              "output_ns": 1817383,
+              "total_ns": 363110296,
+              "update_ns": 361292913
+            },
+            {
+              "output_ns": 925531,
+              "total_ns": 342886065,
+              "update_ns": 341960534
+            }
+          ],
+          "total": {
+            "max_ns": 363110296,
+            "median_ns": 342549602,
+            "min_ns": 335979278
+          },
+          "update": {
+            "max_ns": 361292913,
+            "median_ns": 341557121,
+            "min_ns": 335017868
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 1066152,
+            "median_ns": 912842,
+            "min_ns": 868255
+          },
+          "samples": [
+            {
+              "output_ns": 887753,
+              "total_ns": 92470057,
+              "update_ns": 91582304
+            },
+            {
+              "output_ns": 1056415,
+              "total_ns": 94936904,
+              "update_ns": 93880489
+            },
+            {
+              "output_ns": 868255,
+              "total_ns": 92116263,
+              "update_ns": 91248008
+            },
+            {
+              "output_ns": 1066152,
+              "total_ns": 95516330,
+              "update_ns": 94450178
+            },
+            {
+              "output_ns": 912842,
+              "total_ns": 93172271,
+              "update_ns": 92259429
+            },
+            {
+              "output_ns": 922070,
+              "total_ns": 93311556,
+              "update_ns": 92389486
+            },
+            {
+              "output_ns": 871376,
+              "total_ns": 92422352,
+              "update_ns": 91550976
+            }
+          ],
+          "total": {
+            "max_ns": 95516330,
+            "median_ns": 93172271,
+            "min_ns": 92116263
+          },
+          "update": {
+            "max_ns": 94450178,
+            "median_ns": 92259429,
+            "min_ns": 91248008
+          }
+        }
+      ],
+      "name": "ancestor-256",
+      "nodes": 257,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 1089678,
+            "median_ns": 965099,
+            "min_ns": 949886
+          },
+          "samples": [
+            {
+              "output_ns": 1089678,
+              "total_ns": 20766786,
+              "update_ns": 19677108
+            },
+            {
+              "output_ns": 989332,
+              "total_ns": 19363370,
+              "update_ns": 18374038
+            },
+            {
+              "output_ns": 949886,
+              "total_ns": 18923034,
+              "update_ns": 17973148
+            },
+            {
+              "output_ns": 972427,
+              "total_ns": 19135986,
+              "update_ns": 18163559
+            },
+            {
+              "output_ns": 951333,
+              "total_ns": 19138494,
+              "update_ns": 18187161
+            },
+            {
+              "output_ns": 965099,
+              "total_ns": 19503853,
+              "update_ns": 18538754
+            },
+            {
+              "output_ns": 953677,
+              "total_ns": 19023660,
+              "update_ns": 18069983
+            }
+          ],
+          "total": {
+            "max_ns": 20766786,
+            "median_ns": 19138494,
+            "min_ns": 18923034
+          },
+          "update": {
+            "max_ns": 19677108,
+            "median_ns": 18187161,
+            "min_ns": 17973148
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 1097098,
+            "median_ns": 956577,
+            "min_ns": 943903
+          },
+          "samples": [
+            {
+              "output_ns": 1058524,
+              "total_ns": 19870341,
+              "update_ns": 18811817
+            },
+            {
+              "output_ns": 1097098,
+              "total_ns": 19870022,
+              "update_ns": 18772924
+            },
+            {
+              "output_ns": 956577,
+              "total_ns": 18347710,
+              "update_ns": 17391133
+            },
+            {
+              "output_ns": 943903,
+              "total_ns": 18494558,
+              "update_ns": 17550655
+            },
+            {
+              "output_ns": 954798,
+              "total_ns": 18640957,
+              "update_ns": 17686159
+            },
+            {
+              "output_ns": 1009821,
+              "total_ns": 19164403,
+              "update_ns": 18154582
+            },
+            {
+              "output_ns": 947570,
+              "total_ns": 18266563,
+              "update_ns": 17318993
+            }
+          ],
+          "total": {
+            "max_ns": 19870341,
+            "median_ns": 18640957,
+            "min_ns": 18266563
+          },
+          "update": {
+            "max_ns": 18811817,
+            "median_ns": 17686159,
+            "min_ns": 17318993
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 1102355,
+            "median_ns": 960881,
+            "min_ns": 945685
+          },
+          "samples": [
+            {
+              "output_ns": 1102355,
+              "total_ns": 19917138,
+              "update_ns": 18814783
+            },
+            {
+              "output_ns": 967922,
+              "total_ns": 18684755,
+              "update_ns": 17716833
+            },
+            {
+              "output_ns": 947929,
+              "total_ns": 18299546,
+              "update_ns": 17351617
+            },
+            {
+              "output_ns": 945685,
+              "total_ns": 18143066,
+              "update_ns": 17197381
+            },
+            {
+              "output_ns": 960881,
+              "total_ns": 18312020,
+              "update_ns": 17351139
+            },
+            {
+              "output_ns": 947538,
+              "total_ns": 18049188,
+              "update_ns": 17101650
+            },
+            {
+              "output_ns": 966289,
+              "total_ns": 18189801,
+              "update_ns": 17223512
+            }
+          ],
+          "total": {
+            "max_ns": 19917138,
+            "median_ns": 18299546,
+            "min_ns": 18049188
+          },
+          "update": {
+            "max_ns": 18814783,
+            "median_ns": 17351139,
+            "min_ns": 17101650
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 1125728,
+            "median_ns": 955780,
+            "min_ns": 944791
+          },
+          "samples": [
+            {
+              "output_ns": 1125728,
+              "total_ns": 20084949,
+              "update_ns": 18959221
+            },
+            {
+              "output_ns": 957260,
+              "total_ns": 18461562,
+              "update_ns": 17504302
+            },
+            {
+              "output_ns": 1080555,
+              "total_ns": 20181102,
+              "update_ns": 19100547
+            },
+            {
+              "output_ns": 952892,
+              "total_ns": 18546337,
+              "update_ns": 17593445
+            },
+            {
+              "output_ns": 944791,
+              "total_ns": 19635889,
+              "update_ns": 18691098
+            },
+            {
+              "output_ns": 955780,
+              "total_ns": 18432632,
+              "update_ns": 17476852
+            },
+            {
+              "output_ns": 945963,
+              "total_ns": 18526397,
+              "update_ns": 17580434
+            }
+          ],
+          "total": {
+            "max_ns": 20181102,
+            "median_ns": 18546337,
+            "min_ns": 18432632
+          },
+          "update": {
+            "max_ns": 19100547,
+            "median_ns": 17593445,
+            "min_ns": 17476852
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 1157162,
+            "median_ns": 870861,
+            "min_ns": 854733
+          },
+          "samples": [
+            {
+              "output_ns": 1157162,
+              "total_ns": 103021111,
+              "update_ns": 101863949
+            },
+            {
+              "output_ns": 854733,
+              "total_ns": 96566663,
+              "update_ns": 95711930
+            },
+            {
+              "output_ns": 862698,
+              "total_ns": 96832358,
+              "update_ns": 95969660
+            },
+            {
+              "output_ns": 872566,
+              "total_ns": 97130386,
+              "update_ns": 96257820
+            },
+            {
+              "output_ns": 870861,
+              "total_ns": 96953569,
+              "update_ns": 96082708
+            },
+            {
+              "output_ns": 878541,
+              "total_ns": 96942928,
+              "update_ns": 96064387
+            },
+            {
+              "output_ns": 862626,
+              "total_ns": 96464204,
+              "update_ns": 95601578
+            }
+          ],
+          "total": {
+            "max_ns": 103021111,
+            "median_ns": 96942928,
+            "min_ns": 96464204
+          },
+          "update": {
+            "max_ns": 101863949,
+            "median_ns": 96064387,
+            "min_ns": 95601578
+          }
+        }
+      ],
+      "name": "sibling-256",
+      "nodes": 257,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 1730838,
+            "median_ns": 1156074,
+            "min_ns": 967615
+          },
+          "samples": [
+            {
+              "output_ns": 1730838,
+              "total_ns": 353804473,
+              "update_ns": 352073635
+            },
+            {
+              "output_ns": 967615,
+              "total_ns": 329191053,
+              "update_ns": 328223438
+            },
+            {
+              "output_ns": 1208258,
+              "total_ns": 344116732,
+              "update_ns": 342908474
+            },
+            {
+              "output_ns": 974815,
+              "total_ns": 331405058,
+              "update_ns": 330430243
+            },
+            {
+              "output_ns": 1033043,
+              "total_ns": 333583565,
+              "update_ns": 332550522
+            },
+            {
+              "output_ns": 1156074,
+              "total_ns": 338360481,
+              "update_ns": 337204407
+            },
+            {
+              "output_ns": 1231716,
+              "total_ns": 345643272,
+              "update_ns": 344411556
+            }
+          ],
+          "total": {
+            "max_ns": 353804473,
+            "median_ns": 338360481,
+            "min_ns": 329191053
+          },
+          "update": {
+            "max_ns": 352073635,
+            "median_ns": 337204407,
+            "min_ns": 328223438
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 2098626,
+            "median_ns": 1237424,
+            "min_ns": 967962
+          },
+          "samples": [
+            {
+              "output_ns": 1246314,
+              "total_ns": 336612014,
+              "update_ns": 335365700
+            },
+            {
+              "output_ns": 1213144,
+              "total_ns": 334668563,
+              "update_ns": 333455419
+            },
+            {
+              "output_ns": 967962,
+              "total_ns": 329024074,
+              "update_ns": 328056112
+            },
+            {
+              "output_ns": 979728,
+              "total_ns": 330377395,
+              "update_ns": 329397667
+            },
+            {
+              "output_ns": 1237424,
+              "total_ns": 345985585,
+              "update_ns": 344748161
+            },
+            {
+              "output_ns": 2098626,
+              "total_ns": 379530893,
+              "update_ns": 377432267
+            },
+            {
+              "output_ns": 1710328,
+              "total_ns": 363422043,
+              "update_ns": 361711715
+            }
+          ],
+          "total": {
+            "max_ns": 379530893,
+            "median_ns": 336612014,
+            "min_ns": 329024074
+          },
+          "update": {
+            "max_ns": 377432267,
+            "median_ns": 335365700,
+            "min_ns": 328056112
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 2021499,
+            "median_ns": 1122376,
+            "min_ns": 927765
+          },
+          "samples": [
+            {
+              "output_ns": 954072,
+              "total_ns": 330854560,
+              "update_ns": 329900488
+            },
+            {
+              "output_ns": 1475959,
+              "total_ns": 348657633,
+              "update_ns": 347181674
+            },
+            {
+              "output_ns": 927765,
+              "total_ns": 338573458,
+              "update_ns": 337645693
+            },
+            {
+              "output_ns": 978953,
+              "total_ns": 334099361,
+              "update_ns": 333120408
+            },
+            {
+              "output_ns": 1831634,
+              "total_ns": 359801723,
+              "update_ns": 357970089
+            },
+            {
+              "output_ns": 2021499,
+              "total_ns": 380489454,
+              "update_ns": 378467955
+            },
+            {
+              "output_ns": 1122376,
+              "total_ns": 339866309,
+              "update_ns": 338743933
+            }
+          ],
+          "total": {
+            "max_ns": 380489454,
+            "median_ns": 339866309,
+            "min_ns": 330854560
+          },
+          "update": {
+            "max_ns": 378467955,
+            "median_ns": 338743933,
+            "min_ns": 329900488
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 1570866,
+            "median_ns": 1195076,
+            "min_ns": 992052
+          },
+          "samples": [
+            {
+              "output_ns": 1012092,
+              "total_ns": 332757338,
+              "update_ns": 331745246
+            },
+            {
+              "output_ns": 992052,
+              "total_ns": 334753617,
+              "update_ns": 333761565
+            },
+            {
+              "output_ns": 1195076,
+              "total_ns": 344534239,
+              "update_ns": 343339163
+            },
+            {
+              "output_ns": 1570866,
+              "total_ns": 352271020,
+              "update_ns": 350700154
+            },
+            {
+              "output_ns": 1488870,
+              "total_ns": 348184965,
+              "update_ns": 346696095
+            },
+            {
+              "output_ns": 1266952,
+              "total_ns": 340038109,
+              "update_ns": 338771157
+            },
+            {
+              "output_ns": 1031024,
+              "total_ns": 340054510,
+              "update_ns": 339023486
+            }
+          ],
+          "total": {
+            "max_ns": 352271020,
+            "median_ns": 340054510,
+            "min_ns": 332757338
+          },
+          "update": {
+            "max_ns": 350700154,
+            "median_ns": 339023486,
+            "min_ns": 331745246
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 1122846,
+            "median_ns": 942687,
+            "min_ns": 881005
+          },
+          "samples": [
+            {
+              "output_ns": 944521,
+              "total_ns": 102474574,
+              "update_ns": 101530053
+            },
+            {
+              "output_ns": 899725,
+              "total_ns": 101178301,
+              "update_ns": 100278576
+            },
+            {
+              "output_ns": 942687,
+              "total_ns": 102681031,
+              "update_ns": 101738344
+            },
+            {
+              "output_ns": 881005,
+              "total_ns": 100751319,
+              "update_ns": 99870314
+            },
+            {
+              "output_ns": 1122846,
+              "total_ns": 106634092,
+              "update_ns": 105511246
+            },
+            {
+              "output_ns": 894139,
+              "total_ns": 100979260,
+              "update_ns": 100085121
+            },
+            {
+              "output_ns": 1016207,
+              "total_ns": 106550150,
+              "update_ns": 105533943
+            }
+          ],
+          "total": {
+            "max_ns": 106634092,
+            "median_ns": 102474574,
+            "min_ns": 100751319
+          },
+          "update": {
+            "max_ns": 105533943,
+            "median_ns": 101530053,
+            "min_ns": 99870314
+          }
+        }
+      ],
+      "name": "position-256",
+      "nodes": 257,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 4111442,
+            "median_ns": 4069038,
+            "min_ns": 4023564
+          },
+          "samples": [
+            {
+              "output_ns": 4091684,
+              "total_ns": 30152829,
+              "update_ns": 26061145
+            },
+            {
+              "output_ns": 4069038,
+              "total_ns": 30006873,
+              "update_ns": 25937835
+            },
+            {
+              "output_ns": 4054935,
+              "total_ns": 29753580,
+              "update_ns": 25698645
+            },
+            {
+              "output_ns": 4023564,
+              "total_ns": 29765653,
+              "update_ns": 25742089
+            },
+            {
+              "output_ns": 4111442,
+              "total_ns": 29953981,
+              "update_ns": 25842539
+            },
+            {
+              "output_ns": 4061279,
+              "total_ns": 29852776,
+              "update_ns": 25791497
+            },
+            {
+              "output_ns": 4090744,
+              "total_ns": 29686573,
+              "update_ns": 25595829
+            }
+          ],
+          "total": {
+            "max_ns": 30152829,
+            "median_ns": 29852776,
+            "min_ns": 29686573
+          },
+          "update": {
+            "max_ns": 26061145,
+            "median_ns": 25791497,
+            "min_ns": 25595829
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 7977827,
+            "median_ns": 4076323,
+            "min_ns": 4062717
+          },
+          "samples": [
+            {
+              "output_ns": 7977827,
+              "total_ns": 46621986,
+              "update_ns": 38644159
+            },
+            {
+              "output_ns": 4074876,
+              "total_ns": 29651591,
+              "update_ns": 25576715
+            },
+            {
+              "output_ns": 4062717,
+              "total_ns": 29302166,
+              "update_ns": 25239449
+            },
+            {
+              "output_ns": 4076323,
+              "total_ns": 29473413,
+              "update_ns": 25397090
+            },
+            {
+              "output_ns": 4094279,
+              "total_ns": 29314025,
+              "update_ns": 25219746
+            },
+            {
+              "output_ns": 4091047,
+              "total_ns": 29401682,
+              "update_ns": 25310635
+            },
+            {
+              "output_ns": 4072906,
+              "total_ns": 29567081,
+              "update_ns": 25494175
+            }
+          ],
+          "total": {
+            "max_ns": 46621986,
+            "median_ns": 29473413,
+            "min_ns": 29302166
+          },
+          "update": {
+            "max_ns": 38644159,
+            "median_ns": 25397090,
+            "min_ns": 25219746
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 7933001,
+            "median_ns": 4091212,
+            "min_ns": 4038199
+          },
+          "samples": [
+            {
+              "output_ns": 7933001,
+              "total_ns": 44580456,
+              "update_ns": 36647455
+            },
+            {
+              "output_ns": 4128080,
+              "total_ns": 28594372,
+              "update_ns": 24466292
+            },
+            {
+              "output_ns": 4038199,
+              "total_ns": 28426012,
+              "update_ns": 24387813
+            },
+            {
+              "output_ns": 4091212,
+              "total_ns": 28896571,
+              "update_ns": 24805359
+            },
+            {
+              "output_ns": 4064240,
+              "total_ns": 28279760,
+              "update_ns": 24215520
+            },
+            {
+              "output_ns": 4079128,
+              "total_ns": 28690732,
+              "update_ns": 24611604
+            },
+            {
+              "output_ns": 4216146,
+              "total_ns": 28864556,
+              "update_ns": 24648410
+            }
+          ],
+          "total": {
+            "max_ns": 44580456,
+            "median_ns": 28690732,
+            "min_ns": 28279760
+          },
+          "update": {
+            "max_ns": 36647455,
+            "median_ns": 24611604,
+            "min_ns": 24215520
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 4109040,
+            "median_ns": 4072228,
+            "min_ns": 4042773
+          },
+          "samples": [
+            {
+              "output_ns": 4066470,
+              "total_ns": 29507330,
+              "update_ns": 25440860
+            },
+            {
+              "output_ns": 4109040,
+              "total_ns": 29790998,
+              "update_ns": 25681958
+            },
+            {
+              "output_ns": 4072228,
+              "total_ns": 29366904,
+              "update_ns": 25294676
+            },
+            {
+              "output_ns": 4075966,
+              "total_ns": 29560476,
+              "update_ns": 25484510
+            },
+            {
+              "output_ns": 4042773,
+              "total_ns": 29376508,
+              "update_ns": 25333735
+            },
+            {
+              "output_ns": 4048623,
+              "total_ns": 29605536,
+              "update_ns": 25556913
+            },
+            {
+              "output_ns": 4097261,
+              "total_ns": 29568303,
+              "update_ns": 25471042
+            }
+          ],
+          "total": {
+            "max_ns": 29790998,
+            "median_ns": 29560476,
+            "min_ns": 29366904
+          },
+          "update": {
+            "max_ns": 25681958,
+            "median_ns": 25471042,
+            "min_ns": 25294676
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 3731988,
+            "median_ns": 3460353,
+            "min_ns": 3403282
+          },
+          "samples": [
+            {
+              "output_ns": 3453801,
+              "total_ns": 364778835,
+              "update_ns": 361325034
+            },
+            {
+              "output_ns": 3460353,
+              "total_ns": 365915751,
+              "update_ns": 362455398
+            },
+            {
+              "output_ns": 3447281,
+              "total_ns": 365855648,
+              "update_ns": 362408367
+            },
+            {
+              "output_ns": 3403282,
+              "total_ns": 365779616,
+              "update_ns": 362376334
+            },
+            {
+              "output_ns": 3500931,
+              "total_ns": 366462770,
+              "update_ns": 362961839
+            },
+            {
+              "output_ns": 3731988,
+              "total_ns": 366433001,
+              "update_ns": 362701013
+            },
+            {
+              "output_ns": 3525269,
+              "total_ns": 366427710,
+              "update_ns": 362902441
+            }
+          ],
+          "total": {
+            "max_ns": 366462770,
+            "median_ns": 365915751,
+            "min_ns": 364778835
+          },
+          "update": {
+            "max_ns": 362961839,
+            "median_ns": 362455398,
+            "min_ns": 361325034
+          }
+        }
+      ],
+      "name": "local-1024",
+      "nodes": 1025,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 18649165,
+            "median_ns": 15245363,
+            "min_ns": 10450921
+          },
+          "samples": [
+            {
+              "output_ns": 10450921,
+              "total_ns": 4080547537,
+              "update_ns": 4070096616
+            },
+            {
+              "output_ns": 15245363,
+              "total_ns": 4334997991,
+              "update_ns": 4319752628
+            },
+            {
+              "output_ns": 13689375,
+              "total_ns": 4135357619,
+              "update_ns": 4121668244
+            },
+            {
+              "output_ns": 18649165,
+              "total_ns": 4541723301,
+              "update_ns": 4523074136
+            },
+            {
+              "output_ns": 15065176,
+              "total_ns": 4113930131,
+              "update_ns": 4098864955
+            },
+            {
+              "output_ns": 16178858,
+              "total_ns": 4204621622,
+              "update_ns": 4188442764
+            },
+            {
+              "output_ns": 16408531,
+              "total_ns": 4205719732,
+              "update_ns": 4189311201
+            }
+          ],
+          "total": {
+            "max_ns": 4541723301,
+            "median_ns": 4204621622,
+            "min_ns": 4080547537
+          },
+          "update": {
+            "max_ns": 4523074136,
+            "median_ns": 4188442764,
+            "min_ns": 4070096616
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 17359091,
+            "median_ns": 14699359,
+            "min_ns": 11826495
+          },
+          "samples": [
+            {
+              "output_ns": 12725314,
+              "total_ns": 4152991464,
+              "update_ns": 4140266150
+            },
+            {
+              "output_ns": 14699359,
+              "total_ns": 4181168943,
+              "update_ns": 4166469584
+            },
+            {
+              "output_ns": 13096482,
+              "total_ns": 4181917309,
+              "update_ns": 4168820827
+            },
+            {
+              "output_ns": 11826495,
+              "total_ns": 4126559688,
+              "update_ns": 4114733193
+            },
+            {
+              "output_ns": 15631113,
+              "total_ns": 4271996859,
+              "update_ns": 4256365746
+            },
+            {
+              "output_ns": 17359091,
+              "total_ns": 4272999254,
+              "update_ns": 4255640163
+            },
+            {
+              "output_ns": 16532106,
+              "total_ns": 4208951437,
+              "update_ns": 4192419331
+            }
+          ],
+          "total": {
+            "max_ns": 4272999254,
+            "median_ns": 4181917309,
+            "min_ns": 4126559688
+          },
+          "update": {
+            "max_ns": 4256365746,
+            "median_ns": 4168820827,
+            "min_ns": 4114733193
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 18156659,
+            "median_ns": 16204162,
+            "min_ns": 9999680
+          },
+          "samples": [
+            {
+              "output_ns": 9999680,
+              "total_ns": 4065964332,
+              "update_ns": 4055964652
+            },
+            {
+              "output_ns": 10097171,
+              "total_ns": 4172907899,
+              "update_ns": 4162810728
+            },
+            {
+              "output_ns": 16784936,
+              "total_ns": 4219953363,
+              "update_ns": 4203168427
+            },
+            {
+              "output_ns": 13580371,
+              "total_ns": 4118790904,
+              "update_ns": 4105210533
+            },
+            {
+              "output_ns": 16204162,
+              "total_ns": 4231797662,
+              "update_ns": 4215593500
+            },
+            {
+              "output_ns": 18156659,
+              "total_ns": 4269355916,
+              "update_ns": 4251199257
+            },
+            {
+              "output_ns": 17152000,
+              "total_ns": 4208752824,
+              "update_ns": 4191600824
+            }
+          ],
+          "total": {
+            "max_ns": 4269355916,
+            "median_ns": 4208752824,
+            "min_ns": 4065964332
+          },
+          "update": {
+            "max_ns": 4251199257,
+            "median_ns": 4191600824,
+            "min_ns": 4055964652
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 19660330,
+            "median_ns": 16304341,
+            "min_ns": 12402472
+          },
+          "samples": [
+            {
+              "output_ns": 12402472,
+              "total_ns": 4127550993,
+              "update_ns": 4115148521
+            },
+            {
+              "output_ns": 19660330,
+              "total_ns": 4703674404,
+              "update_ns": 4684014074
+            },
+            {
+              "output_ns": 13555624,
+              "total_ns": 4181295014,
+              "update_ns": 4167739390
+            },
+            {
+              "output_ns": 14594179,
+              "total_ns": 4245289423,
+              "update_ns": 4230695244
+            },
+            {
+              "output_ns": 17078931,
+              "total_ns": 4268236723,
+              "update_ns": 4251157792
+            },
+            {
+              "output_ns": 16921021,
+              "total_ns": 4364741743,
+              "update_ns": 4347820722
+            },
+            {
+              "output_ns": 16304341,
+              "total_ns": 4336250476,
+              "update_ns": 4319946135
+            }
+          ],
+          "total": {
+            "max_ns": 4703674404,
+            "median_ns": 4268236723,
+            "min_ns": 4127550993
+          },
+          "update": {
+            "max_ns": 4684014074,
+            "median_ns": 4251157792,
+            "min_ns": 4115148521
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 5820744,
+            "median_ns": 4853103,
+            "min_ns": 3498994
+          },
+          "samples": [
+            {
+              "output_ns": 3649363,
+              "total_ns": 369407603,
+              "update_ns": 365758240
+            },
+            {
+              "output_ns": 4793573,
+              "total_ns": 383853651,
+              "update_ns": 379060078
+            },
+            {
+              "output_ns": 3498994,
+              "total_ns": 368119617,
+              "update_ns": 364620623
+            },
+            {
+              "output_ns": 4853103,
+              "total_ns": 384172718,
+              "update_ns": 379319615
+            },
+            {
+              "output_ns": 5074177,
+              "total_ns": 382520029,
+              "update_ns": 377445852
+            },
+            {
+              "output_ns": 5820744,
+              "total_ns": 397275000,
+              "update_ns": 391454256
+            },
+            {
+              "output_ns": 5640575,
+              "total_ns": 388605453,
+              "update_ns": 382964878
+            }
+          ],
+          "total": {
+            "max_ns": 397275000,
+            "median_ns": 383853651,
+            "min_ns": 368119617
+          },
+          "update": {
+            "max_ns": 391454256,
+            "median_ns": 379060078,
+            "min_ns": 364620623
+          }
+        }
+      ],
+      "name": "ancestor-1024",
+      "nodes": 1025,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 4805037,
+            "median_ns": 4693198,
+            "min_ns": 4307972
+          },
+          "samples": [
+            {
+              "output_ns": 4307972,
+              "total_ns": 81082111,
+              "update_ns": 76774139
+            },
+            {
+              "output_ns": 4716750,
+              "total_ns": 78327120,
+              "update_ns": 73610370
+            },
+            {
+              "output_ns": 4805037,
+              "total_ns": 77091219,
+              "update_ns": 72286182
+            },
+            {
+              "output_ns": 4500885,
+              "total_ns": 77221215,
+              "update_ns": 72720330
+            },
+            {
+              "output_ns": 4630550,
+              "total_ns": 76968778,
+              "update_ns": 72338228
+            },
+            {
+              "output_ns": 4693198,
+              "total_ns": 77447109,
+              "update_ns": 72753911
+            },
+            {
+              "output_ns": 4789393,
+              "total_ns": 77263755,
+              "update_ns": 72474362
+            }
+          ],
+          "total": {
+            "max_ns": 81082111,
+            "median_ns": 77263755,
+            "min_ns": 76968778
+          },
+          "update": {
+            "max_ns": 76774139,
+            "median_ns": 72720330,
+            "min_ns": 72286182
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 4838834,
+            "median_ns": 4478583,
+            "min_ns": 4383051
+          },
+          "samples": [
+            {
+              "output_ns": 4474468,
+              "total_ns": 74490311,
+              "update_ns": 70015843
+            },
+            {
+              "output_ns": 4478583,
+              "total_ns": 74623832,
+              "update_ns": 70145249
+            },
+            {
+              "output_ns": 4399259,
+              "total_ns": 74701020,
+              "update_ns": 70301761
+            },
+            {
+              "output_ns": 4525517,
+              "total_ns": 74880906,
+              "update_ns": 70355389
+            },
+            {
+              "output_ns": 4383051,
+              "total_ns": 74990887,
+              "update_ns": 70607836
+            },
+            {
+              "output_ns": 4599312,
+              "total_ns": 75448071,
+              "update_ns": 70848759
+            },
+            {
+              "output_ns": 4838834,
+              "total_ns": 76776801,
+              "update_ns": 71937967
+            }
+          ],
+          "total": {
+            "max_ns": 76776801,
+            "median_ns": 74880906,
+            "min_ns": 74490311
+          },
+          "update": {
+            "max_ns": 71937967,
+            "median_ns": 70355389,
+            "min_ns": 70015843
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 6094675,
+            "median_ns": 4547608,
+            "min_ns": 4366847
+          },
+          "samples": [
+            {
+              "output_ns": 6094675,
+              "total_ns": 84358695,
+              "update_ns": 78264020
+            },
+            {
+              "output_ns": 4535974,
+              "total_ns": 74626627,
+              "update_ns": 70090653
+            },
+            {
+              "output_ns": 4668480,
+              "total_ns": 74970554,
+              "update_ns": 70302074
+            },
+            {
+              "output_ns": 4667988,
+              "total_ns": 74526858,
+              "update_ns": 69858870
+            },
+            {
+              "output_ns": 4366847,
+              "total_ns": 73617389,
+              "update_ns": 69250542
+            },
+            {
+              "output_ns": 4547608,
+              "total_ns": 74981623,
+              "update_ns": 70434015
+            },
+            {
+              "output_ns": 4535103,
+              "total_ns": 74012082,
+              "update_ns": 69476979
+            }
+          ],
+          "total": {
+            "max_ns": 84358695,
+            "median_ns": 74626627,
+            "min_ns": 73617389
+          },
+          "update": {
+            "max_ns": 78264020,
+            "median_ns": 70090653,
+            "min_ns": 69250542
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 5161075,
+            "median_ns": 4481114,
+            "min_ns": 4355742
+          },
+          "samples": [
+            {
+              "output_ns": 5161075,
+              "total_ns": 78144714,
+              "update_ns": 72983639
+            },
+            {
+              "output_ns": 4633894,
+              "total_ns": 80800321,
+              "update_ns": 76166427
+            },
+            {
+              "output_ns": 4494418,
+              "total_ns": 79783820,
+              "update_ns": 75289402
+            },
+            {
+              "output_ns": 4359221,
+              "total_ns": 74712856,
+              "update_ns": 70353635
+            },
+            {
+              "output_ns": 4355742,
+              "total_ns": 74780967,
+              "update_ns": 70425225
+            },
+            {
+              "output_ns": 4481114,
+              "total_ns": 74611511,
+              "update_ns": 70130397
+            },
+            {
+              "output_ns": 4458813,
+              "total_ns": 75158819,
+              "update_ns": 70700006
+            }
+          ],
+          "total": {
+            "max_ns": 80800321,
+            "median_ns": 75158819,
+            "min_ns": 74611511
+          },
+          "update": {
+            "max_ns": 76166427,
+            "median_ns": 70700006,
+            "min_ns": 70130397
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 4802770,
+            "median_ns": 4265971,
+            "min_ns": 3987350
+          },
+          "samples": [
+            {
+              "output_ns": 4675514,
+              "total_ns": 426630991,
+              "update_ns": 421955477
+            },
+            {
+              "output_ns": 3987350,
+              "total_ns": 422548463,
+              "update_ns": 418561113
+            },
+            {
+              "output_ns": 4756192,
+              "total_ns": 428845218,
+              "update_ns": 424089026
+            },
+            {
+              "output_ns": 4053325,
+              "total_ns": 424406014,
+              "update_ns": 420352689
+            },
+            {
+              "output_ns": 4132052,
+              "total_ns": 424905539,
+              "update_ns": 420773487
+            },
+            {
+              "output_ns": 4265971,
+              "total_ns": 427417457,
+              "update_ns": 423151486
+            },
+            {
+              "output_ns": 4802770,
+              "total_ns": 432960470,
+              "update_ns": 428157700
+            }
+          ],
+          "total": {
+            "max_ns": 432960470,
+            "median_ns": 426630991,
+            "min_ns": 422548463
+          },
+          "update": {
+            "max_ns": 428157700,
+            "median_ns": 421955477,
+            "min_ns": 418561113
+          }
+        }
+      ],
+      "name": "sibling-1024",
+      "nodes": 1025,
+      "selectors": 32,
+      "updates": 100
+    },
+    {
+      "checked_frames_per_run": 101,
+      "execution_order": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ],
+        [
+          3,
+          4,
+          0,
+          1,
+          2
+        ],
+        [
+          4,
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          0
+        ],
+        [
+          2,
+          3,
+          4,
+          0,
+          1
+        ]
+      ],
+      "measurements": [
+        {
+          "engine": "bit",
+          "output": {
+            "max_ns": 19277663,
+            "median_ns": 17422053,
+            "min_ns": 15730206
+          },
+          "samples": [
+            {
+              "output_ns": 16607954,
+              "total_ns": 4199765349,
+              "update_ns": 4183157395
+            },
+            {
+              "output_ns": 17422053,
+              "total_ns": 4314215885,
+              "update_ns": 4296793832
+            },
+            {
+              "output_ns": 19277663,
+              "total_ns": 4817448744,
+              "update_ns": 4798171081
+            },
+            {
+              "output_ns": 18528751,
+              "total_ns": 4697305449,
+              "update_ns": 4678776698
+            },
+            {
+              "output_ns": 18694266,
+              "total_ns": 4753244338,
+              "update_ns": 4734550072
+            },
+            {
+              "output_ns": 16728239,
+              "total_ns": 4430116988,
+              "update_ns": 4413388749
+            },
+            {
+              "output_ns": 15730206,
+              "total_ns": 4169458853,
+              "update_ns": 4153728647
+            }
+          ],
+          "total": {
+            "max_ns": 4817448744,
+            "median_ns": 4430116988,
+            "min_ns": 4169458853
+          },
+          "update": {
+            "max_ns": 4798171081,
+            "median_ns": 4413388749,
+            "min_ns": 4153728647
+          }
+        },
+        {
+          "engine": "tri",
+          "output": {
+            "max_ns": 20342658,
+            "median_ns": 17450530,
+            "min_ns": 15381985
+          },
+          "samples": [
+            {
+              "output_ns": 17450530,
+              "total_ns": 4225516003,
+              "update_ns": 4208065473
+            },
+            {
+              "output_ns": 20342658,
+              "total_ns": 4573082412,
+              "update_ns": 4552739754
+            },
+            {
+              "output_ns": 17076193,
+              "total_ns": 4554752104,
+              "update_ns": 4537675911
+            },
+            {
+              "output_ns": 16977924,
+              "total_ns": 4497197672,
+              "update_ns": 4480219748
+            },
+            {
+              "output_ns": 17969826,
+              "total_ns": 4388129448,
+              "update_ns": 4370159622
+            },
+            {
+              "output_ns": 15381985,
+              "total_ns": 4324826774,
+              "update_ns": 4309444789
+            },
+            {
+              "output_ns": 18392168,
+              "total_ns": 4203404696,
+              "update_ns": 4185012528
+            }
+          ],
+          "total": {
+            "max_ns": 4573082412,
+            "median_ns": 4388129448,
+            "min_ns": 4203404696
+          },
+          "update": {
+            "max_ns": 4552739754,
+            "median_ns": 4370159622,
+            "min_ns": 4185012528
+          }
+        },
+        {
+          "engine": "rec_tri",
+          "output": {
+            "max_ns": 19357484,
+            "median_ns": 16712279,
+            "min_ns": 15639493
+          },
+          "samples": [
+            {
+              "output_ns": 16395078,
+              "total_ns": 4207346076,
+              "update_ns": 4190950998
+            },
+            {
+              "output_ns": 17761299,
+              "total_ns": 4251138488,
+              "update_ns": 4233377189
+            },
+            {
+              "output_ns": 16712279,
+              "total_ns": 4365951959,
+              "update_ns": 4349239680
+            },
+            {
+              "output_ns": 19357484,
+              "total_ns": 4432867822,
+              "update_ns": 4413510338
+            },
+            {
+              "output_ns": 15639493,
+              "total_ns": 4415395217,
+              "update_ns": 4399755724
+            },
+            {
+              "output_ns": 18836747,
+              "total_ns": 4637601083,
+              "update_ns": 4618764336
+            },
+            {
+              "output_ns": 16632649,
+              "total_ns": 4468120005,
+              "update_ns": 4451487356
+            }
+          ],
+          "total": {
+            "max_ns": 4637601083,
+            "median_ns": 4415395217,
+            "min_ns": 4207346076
+          },
+          "update": {
+            "max_ns": 4618764336,
+            "median_ns": 4399755724,
+            "min_ns": 4190950998
+          }
+        },
+        {
+          "engine": "quad",
+          "output": {
+            "max_ns": 20206784,
+            "median_ns": 18172731,
+            "min_ns": 16850258
+          },
+          "samples": [
+            {
+              "output_ns": 17283460,
+              "total_ns": 4215451980,
+              "update_ns": 4198168520
+            },
+            {
+              "output_ns": 16850258,
+              "total_ns": 4203386244,
+              "update_ns": 4186535986
+            },
+            {
+              "output_ns": 19052248,
+              "total_ns": 4572145894,
+              "update_ns": 4553093646
+            },
+            {
+              "output_ns": 18172731,
+              "total_ns": 4517515280,
+              "update_ns": 4499342549
+            },
+            {
+              "output_ns": 17072796,
+              "total_ns": 4375605449,
+              "update_ns": 4358532653
+            },
+            {
+              "output_ns": 19434663,
+              "total_ns": 4608475029,
+              "update_ns": 4589040366
+            },
+            {
+              "output_ns": 20206784,
+              "total_ns": 4764909065,
+              "update_ns": 4744702281
+            }
+          ],
+          "total": {
+            "max_ns": 4764909065,
+            "median_ns": 4517515280,
+            "min_ns": 4203386244
+          },
+          "update": {
+            "max_ns": 4744702281,
+            "median_ns": 4499342549,
+            "min_ns": 4186535986
+          }
+        },
+        {
+          "engine": "stylo_blitz",
+          "output": {
+            "max_ns": 8455595,
+            "median_ns": 4814696,
+            "min_ns": 4376370
+          },
+          "samples": [
+            {
+              "output_ns": 7025498,
+              "total_ns": 454688695,
+              "update_ns": 447663197
+            },
+            {
+              "output_ns": 4376370,
+              "total_ns": 441041385,
+              "update_ns": 436665015
+            },
+            {
+              "output_ns": 5528653,
+              "total_ns": 487436487,
+              "update_ns": 481907834
+            },
+            {
+              "output_ns": 4701305,
+              "total_ns": 454795648,
+              "update_ns": 450094343
+            },
+            {
+              "output_ns": 4814696,
+              "total_ns": 464121336,
+              "update_ns": 459306640
+            },
+            {
+              "output_ns": 4582314,
+              "total_ns": 460425524,
+              "update_ns": 455843210
+            },
+            {
+              "output_ns": 8455595,
+              "total_ns": 559031220,
+              "update_ns": 550575625
+            }
+          ],
+          "total": {
+            "max_ns": 559031220,
+            "median_ns": 460425524,
+            "min_ns": 441041385
+          },
+          "update": {
+            "max_ns": 550575625,
+            "median_ns": 455843210,
+            "min_ns": 436665015
+          }
+        }
+      ],
+      "name": "position-1024",
+      "nodes": 1025,
+      "selectors": 32,
+      "updates": 100
+    }
+  ],
+  "rustc": "rustc 1.99.0 (b940084d7 2026-09-28)\nbinary: rustc\ncommit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4\ncommit-date: 2026-09-28\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.0\nLLVM version: 23.1.1\n",
+  "samples": 7,
+  "source_hashes": "dedd74a46efd9eb872f4eed06d4dd72e5409b50bf9c818b5b66c2c98082f065f  src/clean/engine.rs\nb4d0f4a63231ea6b7841af8d75807a92cc8c59a11f809237a50e0a7494f5ef62  src/clean/engine/comparison.rs\n4ad533b434f5d7c414f5fbe252bc21325842cb2b1d28b4e6f80b476ce276d2f4  src/clean/compiler.rs\n67fcb6445854ce69a38cfcd316e19e87bf6a9d648008e36b650ff9fd140782fc  src/clean/logic.rs\nde82182fc0ff03f01dd174972e582ca5591829dbeec5be2e32974589d335aac3  dev/stylo-benchmark/src/main.rs\n075fffe5ff9fbf66af0c1016c73b90f3e30142fedef0d945057a9822352d3cc7  dev/stylo-benchmark/Cargo.toml\n75225fb56b6c0b549383ce9017ade19f37acea09969a5dc26ffcabdb9650118a  dev/stylo-benchmark/Cargo.lock\n2841c983c8effe26cfb4070d73c64510501d74ee8145fb0f20333f5c896b3579  /tmp/css-browser-fixtures.json\n",
+  "stylo": "0.22.0",
+  "threading": "sequential",
+  "timer": "std::time::Instant; sums of per-frame update and output intervals",
+  "validation_timed": false,
+  "warmups": 1
+}

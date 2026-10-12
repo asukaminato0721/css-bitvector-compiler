@@ -491,3 +491,74 @@ fn checked_in_corpus_has_engine_parity() {
         }
     }
 }
+
+#[test]
+fn external_matcher_agrees_after_each_mutation() {
+    let css = "main > .lead + section .item {} .target:nth-child(2) {} \
+        .target:first-of-type {} .target:hover > .item {} .item:focus {} \
+        main:focus-within .item[data-tone=blue] {}";
+    let program = CompiledProgram::compile(css).unwrap();
+    let commands = vec![
+        TraceCommand::Init {
+            node: node(
+                1,
+                "main",
+                None,
+                vec![
+                    node(2, "div", Some("lead"), vec![]),
+                    node(
+                        3,
+                        "section",
+                        Some("target"),
+                        vec![node(4, "span", Some("item"), vec![])],
+                    ),
+                ],
+            ),
+        },
+        TraceCommand::InsertValue {
+            path: vec![1],
+            value_type: Some("attributes".into()),
+            key: "is_hover_root".into(),
+            value: Some(serde_json::json!(true)),
+        },
+        TraceCommand::InsertValue {
+            path: vec![1, 0],
+            value_type: Some("attributes".into()),
+            key: "is_focus_root".into(),
+            value: Some(serde_json::json!(true)),
+        },
+        TraceCommand::InsertValue {
+            path: vec![1, 0],
+            value_type: Some("attributes".into()),
+            key: "data-tone".into(),
+            value: Some(serde_json::json!("blue")),
+        },
+        TraceCommand::Add {
+            path: vec![0],
+            node: node(5, "div", Some("prefix"), vec![]),
+        },
+        TraceCommand::Remove { path: vec![1] },
+        // Move the same external ID, then remove its obsolete position.
+        TraceCommand::Add {
+            path: vec![0],
+            node: node(
+                3,
+                "section",
+                Some("target"),
+                vec![node(4, "span", Some("item"), vec![])],
+            ),
+        },
+        TraceCommand::Remove { path: vec![2] },
+    ];
+    let trace = Trace {
+        frames: commands
+            .into_iter()
+            .enumerate()
+            .map(|(frame_id, command)| TraceFrame { frame_id, command })
+            .collect(),
+    };
+    ParcelProgram::parse(css, &program)
+        .unwrap()
+        .check(&program, &trace)
+        .unwrap();
+}

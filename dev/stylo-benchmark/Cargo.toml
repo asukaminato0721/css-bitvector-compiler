@@ -1,0 +1,28 @@
+[package]
+name = "css-stylo-benchmark"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Keep browser dependencies out of the library and its proof build.
+[workspace]
+
+[dependencies]
+css-bitvector-compiler = { path = "../.." }
+# Match the main workspace's parser and matcher versions.
+lightningcss = "=1.0.0-alpha.68"
+parcel_selectors = "=0.28.2"
+blitz-dom = { version = "=0.3.0-beta.3", default-features = false }
+blitz-traits = { version = "=0.3.0-beta.3", default-features = false }
+markup5ever = "=0.40.0"
+stylo = "=0.22.0"
+stylo_dom = "=0.22.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+debug = true
+
+[[bin]]
+name = "css-stylo-websites"
+path = "src/websites.rs"
